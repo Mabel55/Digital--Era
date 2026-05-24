@@ -1,0 +1,5 @@
+CRUD stands for Create, Read, Update, and Delete. In SQL, these map to four core commands:
+1. INSERT INTO: Adds new rows of data to a table.
+2. SELECT: Retrieves specific data from tables using filters like WHERE, ORDER BY, and LIMIT.
+3. UPDATE: Modifies existing records in a table.
+4. DELETE: Removes records permanently from a table.

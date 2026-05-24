@@ -1,0 +1,4 @@
+The RAG pipeline operates in three main steps: 
+1. Retrieval: The system searches the vector database for custom document chunks relevant to the user's query.
+2. Augmentation: The retrieved text chunks are wrapped into a system prompt alongside the user's original question.
+3. Generation: The combined prompt is sent to the LLM, forcing the model to formulate its answer solely using the factual context retrieved.

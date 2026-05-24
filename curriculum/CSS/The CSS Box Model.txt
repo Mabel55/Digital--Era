@@ -1,0 +1,5 @@
+Cascading Style Sheets (CSS) handle the visual presentation, styling, and responsive layout layout designs of an HTML structure. Every single HTML element is viewed by the browser as a rectangular box. The CSS Box Model dictates the layout sizes of these elements and consists of four distinct layers wrapping around each other: 
+1. Content: The actual text or image inside the element.
+2. Padding: The transparent spacing immediately surrounding the content inside the border line.
+3. Border: The line wrapping around the padding and content layers.
+4. Margin: The outermost transparent spacing used to separate this element from neighboring elements on the screen.
