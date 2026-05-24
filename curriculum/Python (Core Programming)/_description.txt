@@ -1,2 +1,0 @@
-Master Python syntax,
-data structures, and advanced OOP foundations

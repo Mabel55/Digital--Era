@@ -1,1 +1,0 @@
-Data manipulation, cleaning, and exploratory data analysis using Pandas and NumPy.

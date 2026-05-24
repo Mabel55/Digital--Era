@@ -1,0 +1,28 @@
+# 1. Security & API Keys (CRITICAL)
+.env
+*.env
+
+# 2. Large Files & Textbooks (Render optimization)
+*.pdf
+
+# 3. Python Virtual Environments
+venv/
+env/
+.venv/
+
+# 4. Python Cache (Junk files Python creates automatically)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# 5. Local Databases & AI Vector Stores (Optional, but recommended)
+study_buddy_brain/
+*.sqlite3
+*.db
+
+# 6. IDE & OS Hidden Files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

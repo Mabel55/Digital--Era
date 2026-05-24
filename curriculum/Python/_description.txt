@@ -1,1 +1,0 @@
-Foundational to advanced Python programming, covering core syntax, memory management, data structures, and Object-Oriented paradigms.

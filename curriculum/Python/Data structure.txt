@@ -1,5 +1,0 @@
-Python has four powerful built-in collections for storing groups of data:
-1. Lists: Ordered, mutable collections that allow duplicate elements, defined using square brackets `[]`.
-2. Tuples: Ordered, immutable collections that cannot be changed after creation, defined using parentheses `()`.
-3. Sets: Unordered collections of unique elements that reject duplicates, defined using curly braces `{}`.
-4. Dictionaries: Unordered, mutable collections of key-value pairs used for high-speed lookups, defined using curly braces with colons `{key: value}`.

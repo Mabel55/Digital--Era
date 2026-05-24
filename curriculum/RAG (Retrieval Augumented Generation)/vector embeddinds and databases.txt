@@ -1,1 +1,0 @@
-Vector embeddings convert raw text paragraphs into long arrays of numbers that capture the deep mathematical meaning of the words. Vector databases, such as FAISS or Chroma, store these coordinates. When a user asks a question, the database performs a similarity search to find paragraphs with closely matching vector patterns, even if they don't share exact keywords.

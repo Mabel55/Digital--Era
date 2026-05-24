@@ -1,1 +1,0 @@
-Styling and layout paradigms for the modern web, including cascading mechanics, the box model, Flexbox, and Grid layouts.

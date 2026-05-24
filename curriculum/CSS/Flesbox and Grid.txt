@@ -1,3 +1,0 @@
-Modern CSS relies on two major layout engines to build highly responsive, mobile-friendly web pages:
-1. Flexbox (Flexible Box Layout): A one-dimensional layout system designed to arrange elements easily in either a single row or a single column. It excels at distributing space fluidly and aligning items inside a navigation bar or list container.
-2. CSS Grid: A powerful two-dimensional layout system designed to manage columns and rows simultaneously. Grid is highly preferred for building complex, complete web page page user interface layouts from scratch.

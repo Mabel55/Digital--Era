@@ -1,2 +1,0 @@
-Python uses indention to define code blocks instead of curly braces.
-Variables are created dynamically without declaring their their type explicitly 

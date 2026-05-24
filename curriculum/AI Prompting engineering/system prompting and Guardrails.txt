@@ -1,1 +1,0 @@
-System prompts sit at the highest level of an LLM's instructions, defining its core persona, behavioral boundaries, and tone. Guardrails are strict formatting or logical constraints injected into these prompts to prevent the model from generating harmful, hallucinated, or off-topic responses, ensuring it safely handles user data in production.
