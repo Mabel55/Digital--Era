@@ -1,0 +1,1 @@
+Deep learning uses multi-layered artificial neural networks to model complex data patterns. The Transformer architecture is the foundation of modern Generative AI. It relies on self-attention mechanisms to weigh the importance of different words in a sentence simultaneously, allowing models to process massive textual datasets in parallel.

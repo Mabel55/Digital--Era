@@ -1,0 +1,1 @@
+Event-driven pipelines process incoming data streams in real-time as they happen. In advanced systems, message brokers or background workers capture these events and pass them straight to autonomous LangChain agents, which process the information, format it, and update your application state dynamically.

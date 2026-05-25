@@ -1,0 +1,1 @@
+LangChain is a framework designed to build application logic around LLMs. A Prompt Template is a reusable string structure that dynamically injects user variables into a standardized prompt. Chains combine these components together, allowing you to link an LLM directly to a prompt template or a database query in a structured, executable pipeline.

@@ -1,0 +1,1 @@
+AI automation focuses on designing systems that run without human intervention. Trigger-based workflows rely on specific backend events—such as a user submitting a form, an API webhook firing, or a database value changing—to automatically kick off a sequence of automated AI tasks, data transformations, or notification systems.
