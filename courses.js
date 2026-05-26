@@ -1965,7 +1965,7 @@ const courseManifest = {
       rubric: "package.json with 4 scripts. webpack.config.js generated. .gitignore correct. 4 files printed."
     }
   ]
-}
+},
 
 
 
