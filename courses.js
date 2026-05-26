@@ -784,7 +784,7 @@ const courseManifest = {
       rubric: "querySelector used. textContent set. style.color changed. classList.add. createElement/appendChild."
     }
   ]
-}
+},
 
 
 
