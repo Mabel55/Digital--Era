@@ -1006,13 +1006,11 @@ function renderDashboard() {
   document.getElementById('avatar-btn').textContent = p.name[0].toUpperCase();
 
   // Ring
-  const totalLessons = Object.keys(curriculum).reduce((sum, track) => {
-    return sum + Object.values(curriculum[track] || {}).flat().length;
-  }, 0);
-  const doneLessons = p.completedCourses.length;
-  const pct = totalLessons ? Math.round((doneLessons / totalLessons) * 100) : 0;
-  document.getElementById('ring-pct').textContent = pct + '%';
-  drawRing(pct);
+const totalCourses = Object.keys(courseManifest).length;
+const doneCourses = p.completedCourses.length;
+const pct = totalCourses ? Math.round((doneCourses / totalCourses) * 100) : 0;
+document.getElementById('ring-pct').textContent = pct + '%';
+drawRing(pct);
 
   // Show API key banner if no key set
   const banner = document.getElementById('api-key-banner');
