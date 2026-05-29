@@ -1019,28 +1019,32 @@ drawRing(pct);
   // Track cards
   const grid = document.getElementById('track-grid');
   grid.innerHTML = '';
-  trackMeta.forEach(t => {
-    const courses = t.levels.flatMap(lvl => curriculum[t.key]?.[lvl] || []);
-    const done = courses.filter(c => p.completedCourses.includes(c)).length;
-    const pctDone = courses.length ? Math.round((done / courses.length) * 100) : 0;
+  // Replace lines 1024-1027 in your index.html with this:
+trackMeta.forEach(t => {
+  // Instead of using 'curriculum', we filter the flat 'courseManifest'
+  const allCourses = Object.keys(courseManifest);
+  const coursesInTrack = allCourses.filter(key => key.includes(t.key));
+  
+  const done = coursesInTrack.filter(c => p.completedCourses.includes(c)).length;
+  const pctDone = coursesInTrack.length ? Math.round((done / coursesInTrack.length) * 100) : 0;
 
-    const card = document.createElement('div');
-    card.className = 'track-card';
-    card.innerHTML = `
-      <div class="track-card-icon">${t.icon}</div>
-      <div class="track-card-name">${t.key}</div>
-      <div class="track-card-desc">${t.desc}</div>
-      <div class="track-card-meta">
-        <span class="track-tag tag-${t.tag}">${t.tag.charAt(0).toUpperCase()+t.tag.slice(1)}</span>
-        <span style="font-size:12px;color:var(--text2);">${done}/${courses.length} courses</span>
-      </div>
-      <div class="track-progress-bar">
-        <div class="bar-bg"><div class="bar-fill" style="width:${pctDone}%"></div></div>
-        <div class="bar-label">${pctDone}% complete</div>
-      </div>`;
-    card.onclick = () => openTrackPicker(t);
-    grid.appendChild(card);
-  });
+  const card = document.createElement('div');
+  card.className = 'track-card';
+  card.innerHTML = `
+    <div class="track-card-icon">${t.icon}</div>
+    <div class="track-card-name">${t.key}</div>
+    <div class="track-card-desc">${t.desc}</div>
+    <div class="track-card-meta">
+      <span class="track-tag tag-${t.tag}">${t.tag.charAt(0).toUpperCase()+t.tag.slice(1)}</span>
+      <span style="font-size:12px;color:var(--text2);">${done}/${coursesInTrack.length} courses</span>
+    </div>
+    <div class="track-progress-bar">
+      <div class="bar-bg"><div class="bar-fill" style="width:${pctDone}%"></div></div>
+      <div class="bar-label">${pctDone}% complete</div>
+    </div>`;
+  card.onclick = () => openTrackPicker(t);
+  grid.appendChild(card);
+});
 
   // Certificates
   if (p.certificates.length) {
