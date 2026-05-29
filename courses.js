@@ -32,14 +32,25 @@ const curriculum = {
     "Beginner":      ["AI & ML Concepts","Python for AI","Working with APIs","Prompt Engineering","AI Use Cases"],
     "Intermediate":  ["LLM Fundamentals","RAG Pipelines","LangChain Basics","Vector Databases","Fine-tuning Concepts"],
     "Advanced":      ["LangChain & Agents","Multi-Agent Systems","LLM Evaluation","Production AI Systems","AI Safety & Ethics"]
+  },
+  "AI Automation": {
+    "Beginner":      ["Intro to AI Automation","Python Automation Basics","Email & Calendar Automation"],
+    "Intermediate":  ["Web Scraping & Data Extraction","API Automation with Python","AI-Powered Bots"],
+    "Advanced":      ["LLM Workflow Automation","Document Processing with AI","Scheduling & Task Automation"]
+  },
+  "Version Control": {
+    "Beginner":      ["Git Fundamentals","Commits & History","Branching Basics","GitHub Essentials","Collaborative Workflows"],
+    "Intermediate":  ["Merging & Rebasing","Pull Requests & Code Review","Tags & Releases","Undoing Changes","Git Internals"],
+    "Advanced":      ["CI/CD with GitHub Actions","Monorepo Strategies","Advanced Git Workflows","Git for Teams"]
   }
 };
 
 const courseManifest = {
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// PYTHON CORE — BEGINNER
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ═══════════════════════════════════════
+// PYTHON CORE
+// ═══════════════════════════════════════
+// Beginner
 
 "Python Fundamentals": {
   aiRubric: "Check variables correctly typed, print statements work, f-strings used.",
@@ -260,10 +271,7 @@ const courseManifest = {
   ]
 },
 
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// PYTHON CORE — INTERMEDIATE
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Intermediate
 
 "OOP in Python": {
   aiRubric: "Check class, __init__, self, methods, inheritance, super().__init__().",
@@ -339,458 +347,6 @@ const courseManifest = {
     }
   ]
 },
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// BACKEND — INTERMEDIATE
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-"REST APIs with FastAPI": {
-  aiRubric: "Check decorators, Pydantic, path/query params, HTTPException.",
-  lessons: [
-    {
-      title: "Your First FastAPI App",
-      theory: "## FastAPI\n```python\nfrom fastapi import FastAPI\napp = FastAPI()\n\n@app.get('/')\ndef root():\n    return {'message': 'Hello!'}\n```\nRun: `uvicorn main:app --reload`\nDocs: `http://localhost:8000/docs`",
-      instructions: "## Task: Student API\n1. GET / → `{message, version}`\n2. GET /student/{name} → `{student, status}`",
-      starterCode: "from fastapi import FastAPI\napp = FastAPI()\n\n@app.get('/')\ndef root():\n    return {'message': ___, 'version': ___}\n\n@app.get('/student/{name}')\ndef get_student(name: ___):\n    return {'student': name, 'status': 'enrolled'}",
-      solution: "from fastapi import FastAPI\napp=FastAPI()\n@app.get('/')\ndef root():\n    return {'message':'Mabel Academy API','version':'1.0'}\n@app.get('/student/{name}')\ndef get_student(name:str):\n    return {'student':name,'status':'enrolled'}",
-      hint: "Path params in {curly braces} in URL and as function params.",
-      rubric: "Both endpoints. Path param correct. Both return dicts."
-    },
-    {
-      title: "POST with Pydantic",
-      theory: "## Request Body\n```python\nfrom pydantic import BaseModel\n\nclass Item(BaseModel):\n    name: str\n    price: float\n    in_stock: bool = True\n\n@app.post('/items/')\ndef create(item: Item):\n    return {'created': item.name}\n```",
-      instructions: "## Task: Enrollment Endpoint\nCreate `EnrollmentRequest(student_name, course, level='Beginner')`\nPOST /enroll → enrolled=True, student, course, welcome message",
-      starterCode: "from fastapi import FastAPI\nfrom pydantic import BaseModel\napp = FastAPI()\n\nclass EnrollmentRequest(BaseModel):\n    student_name: ___\n    course: ___\n    level: str = ___\n\n@app.post('/enroll')\ndef enroll(req: EnrollmentRequest):\n    return {\n        'enrolled': True,\n        'student': req.___,\n        'course': req.___,\n        'message': f'Welcome to {req.course}!'\n    }",
-      solution: "from fastapi import FastAPI\nfrom pydantic import BaseModel\napp=FastAPI()\nclass EnrollmentRequest(BaseModel):\n    student_name:str\n    course:str\n    level:str='Beginner'\n@app.post('/enroll')\ndef enroll(req:EnrollmentRequest):\n    return {'enrolled':True,'student':req.student_name,'course':req.course,'message':f'Welcome to {req.course}!'}",
-      hint: "Fields need type hints. Access with req.field_name.",
-      rubric: "BaseModel used. 3 fields typed. Default level. Fields accessed."
-    },
-    {
-      title: "HTTP Errors & CRUD",
-      theory: "## HTTPException\n```python\nfrom fastapi import HTTPException\n\n@app.get('/item/{id}')\ndef get(id: int):\n    if id not in db:\n        raise HTTPException(404, 'Not found')\n    return db[id]\n```",
-      instructions: "## Task: Student CRUD\n`students = {1:'Ada', 2:'Tunde'}`\n1. GET /students/{id} — 404 if missing\n2. POST /students/ — 400 if ID exists\n3. DELETE /students/{id} — 404 if missing",
-      starterCode: "from fastapi import FastAPI, HTTPException\napp = FastAPI()\nstudents = {1:'Ada', 2:'Tunde'}\n\n@app.get('/students/{sid}')\ndef get_student(sid: int):\n    if sid not in ___:\n        raise HTTPException(status_code=___, detail='Not found')\n    return {'id':sid,'name':students[sid]}\n\n@app.post('/students/', status_code=201)\ndef add_student(sid: int, name: str):\n    if sid in ___:\n        raise HTTPException(status_code=___, detail='ID exists')\n    students[sid] = name\n    return {'created': name}\n\n@app.delete('/students/{sid}')\ndef delete_student(sid: int):\n    if sid not in students:\n        raise HTTPException(status_code=404, detail='Not found')\n    del students[___]\n    return {'deleted': sid}",
-      solution: "from fastapi import FastAPI,HTTPException\napp=FastAPI()\nstudents={1:'Ada',2:'Tunde'}\n@app.get('/students/{sid}')\ndef get_student(sid:int):\n    if sid not in students:\n        raise HTTPException(status_code=404,detail='Not found')\n    return {'id':sid,'name':students[sid]}\n@app.post('/students/',status_code=201)\ndef add_student(sid:int,name:str):\n    if sid in students:\n        raise HTTPException(status_code=400,detail='ID exists')\n    students[sid]=name\n    return {'created':name}\n@app.delete('/students/{sid}')\ndef delete_student(sid:int):\n    if sid not in students:\n        raise HTTPException(status_code=404,detail='Not found')\n    del students[sid]\n    return {'deleted':sid}",
-      hint: "raise HTTPException(status_code=404). Check 'in students' first.",
-      rubric: "404 for missing. 400 for duplicates. All 3 endpoints work."
-    },
-    {
-      title: "Query Params & Validation",
-      theory: "## Query Parameters\n```python\nfrom fastapi import Query\n\n@app.get('/students/')\ndef list_students(skip:int=0, limit:int=10):\n    return data[skip:skip+limit]\n\n@app.get('/search')\ndef search(q: str = Query(min_length=2)):\n    ...\n```",
-      instructions: "## Task: Paginated Courses\n1. In-memory list of 10 courses\n2. GET /courses/ with skip=0, limit=5\n3. GET /courses/search with required `q` param (min 2 chars)",
-      starterCode: "from fastapi import FastAPI, Query\napp = FastAPI()\ncourses = ['Python','FastAPI','SQL','React','Docker','ML','AI','Git','Linux','Testing']\n\n@app.get('/courses/')\ndef list_courses(skip: int = ___, limit: int = ___):\n    return courses[___: ___ + ___]\n\n@app.get('/courses/search')\ndef search(q: str = Query(min_length=___)):\n    results = [c for c in courses if ___.lower() in c.lower()]\n    return {'query':q,'results':results,'count':len(results)}",
-      solution: "from fastapi import FastAPI,Query\napp=FastAPI()\ncourses=['Python','FastAPI','SQL','React','Docker','ML','AI','Git','Linux','Testing']\n@app.get('/courses/')\ndef list_courses(skip:int=0,limit:int=5):\n    return courses[skip:skip+limit]\n@app.get('/courses/search')\ndef search(q:str=Query(min_length=2)):\n    results=[c for c in courses if q.lower() in c.lower()]\n    return {'query':q,'results':results,'count':len(results)}",
-      hint: "Slice: courses[skip:skip+limit]. q.lower() in c.lower() for case-insensitive search.",
-      rubric: "Defaults 0 and 5. Slice correct. Search filters. min_length=2."
-    }
-  ]
-},
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// DJANGO
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-"Django Web Framework": {
-  aiRubric: "Check Django views, urls, models, ORM queries, CBVs.",
-  lessons: [
-    {
-      title: "First Django View & URL",
-      theory: "## Django Setup\n```bash\npip install django\ndjango-admin startproject mysite\npython manage.py startapp students\npython manage.py runserver\n```\n**Key files:** views.py, urls.py, models.py, settings.py",
-      instructions: "## Task: Django Views\n1. `home` view → HttpResponse welcome message\n2. `about` view → instructor info\n3. `student_detail(request, name)` → greeting\n4. Wire all 3 to URLs",
-      starterCode: "# views.py\nfrom django.http import HttpResponse\n\ndef home(request):\n    return HttpResponse(___)\n\ndef about(request):\n    return HttpResponse('Instructor: Ada | Mabel Academy')\n\ndef student_detail(request, name):\n    return HttpResponse(f'Student: {___}')\n\n# urls.py\nfrom django.urls import path\nfrom . import views\n\nurlpatterns = [\n    path('', views.___, name='home'),\n    path('about/', views.___, name='about'),\n    path('student/<str:name>/', views.___, name='student-detail'),\n]",
-      solution: "# views.py\nfrom django.http import HttpResponse\ndef home(request):\n    return HttpResponse('Welcome to Mabel Academy!')\ndef about(request):\n    return HttpResponse('Instructor: Ada | Mabel Academy')\ndef student_detail(request,name):\n    return HttpResponse(f'Student: {name}')\n# urls.py\nfrom django.urls import path\nfrom . import views\nurlpatterns=[\n    path('',views.home,name='home'),\n    path('about/',views.about,name='about'),\n    path('student/<str:name>/',views.student_detail,name='student-detail'),\n]",
-      hint: "HttpResponse wraps string. path() takes url, view, name. <str:name> captures URL param.",
-      rubric: "3 views defined. URLs mapped. Path parameter used."
-    },
-    {
-      title: "Django Models",
-      theory: "## Models\n```python\nfrom django.db import models\n\nclass Student(models.Model):\n    name    = models.CharField(max_length=100)\n    email   = models.EmailField(unique=True)\n    score   = models.IntegerField(default=0)\n    created = models.DateTimeField(auto_now_add=True)\n\n    def __str__(self):\n        return self.name\n\n    class Meta:\n        ordering = ['-score']\n```\nRun: `makemigrations` then `migrate`",
-      instructions: "## Task: Course Model\nCreate `Course` with:\n- `title` (CharField max 200)\n- `description` (TextField)\n- `level` (CharField with choices: Beginner/Intermediate/Advanced)\n- `price` (DecimalField, 2dp)\n- `is_active` (BooleanField, default True)\n- `__str__` returning title, Meta ordering by title",
-      starterCode: "from django.db import models\n\nclass Course(models.Model):\n    LEVEL_CHOICES = [\n        ('BEG', ___),\n        ('INT', 'Intermediate'),\n        ('ADV', ___),\n    ]\n\n    title       = models.CharField(max_length=___)\n    description = models.___Field()\n    level       = models.CharField(max_length=3, choices=___, default='BEG')\n    price       = models.DecimalField(max_digits=8, decimal_places=___)\n    is_active   = models.BooleanField(default=___)\n    created_at  = models.DateTimeField(auto_now_add=True)\n\n    def __str__(self):\n        return ___\n\n    class Meta:\n        ordering = [___]",
-      solution: "from django.db import models\nclass Course(models.Model):\n    LEVEL_CHOICES=[('BEG','Beginner'),('INT','Intermediate'),('ADV','Advanced')]\n    title=models.CharField(max_length=200)\n    description=models.TextField()\n    level=models.CharField(max_length=3,choices=LEVEL_CHOICES,default='BEG')\n    price=models.DecimalField(max_digits=8,decimal_places=2)\n    is_active=models.BooleanField(default=True)\n    created_at=models.DateTimeField(auto_now_add=True)\n    def __str__(self):\n        return self.title\n    class Meta:\n        ordering=['title']",
-      hint: "TextField for long text. DecimalField needs decimal_places=2. ordering=['title'] for A-Z.",
-      rubric: "All 5 fields correct. LEVEL_CHOICES defined. __str__ returns title. Meta ordering."
-    },
-    {
-      title: "Django ORM Queries",
-      theory: "## ORM\n```python\nStudent.objects.create(name='Ada', score=88)\nStudent.objects.all()\nStudent.objects.get(id=1)\nStudent.objects.filter(score__gte=80)\nStudent.objects.order_by('-score')[:5]\nStudent.objects.filter(score__lt=40).delete()\n```",
-      instructions: "## Task: ORM Practice\n1. Get students with score >= 70\n2. Get top 3 by score\n3. Count per course using `values()` + `annotate()`\n4. Update all scores < 50 to 50\n5. get_or_create a student",
-      starterCode: "from django.db.models import Count\n\n# 1. Score >= 70\npassing = Student.objects.filter(score___70)\n\n# 2. Top 3\ntop3 = Student.objects.order_by(___)[___]\n\n# 3. Count per course\nper_course = Student.objects.values(___).annotate(count=Count('id'))\n\n# 4. Update minimums\nStudent.objects.filter(score___50).update(score=50)\n\n# 5. Get or create\nstudent, created = Student.objects.get_or_create(\n    name=___,\n    defaults={'score': 0}\n)\nprint(f'Created: {created}')",
-      solution: "from django.db.models import Count\npassing=Student.objects.filter(score__gte=70)\ntop3=Student.objects.order_by('-score')[:3]\nper_course=Student.objects.values('course').annotate(count=Count('id'))\nStudent.objects.filter(score__lt=50).update(score=50)\nstudent,created=Student.objects.get_or_create(name='New Student',defaults={'score':0})\nprint(f'Created:{created}')",
-      hint: "filter(score__gte=70). order_by('-score')[:3]. __lt for less than.",
-      rubric: "gte/lt lookups. Negative order_by. Slice [:3]. annotate Count. get_or_create."
-    },
-    {
-      title: "Django Class-Based Views",
-      theory: "## CBVs\n```python\nfrom django.views.generic import ListView, DetailView, CreateView\nfrom django.urls import reverse_lazy\n\nclass StudentListView(ListView):\n    model = Student\n    template_name = 'students/list.html'\n    context_object_name = 'students'\n\nclass StudentCreateView(CreateView):\n    model = Student\n    fields = ['name','email','course']\n    success_url = reverse_lazy('student-list')\n```",
-      instructions: "## Task: Course CBVs\n1. `CourseListView` — filter is_active=True in get_queryset\n2. `CourseDetailView`\n3. `CourseCreateView` — fields: title, description, level, price",
-      starterCode: "from django.views.generic import ListView, DetailView, CreateView\nfrom django.urls import reverse_lazy\nfrom .models import Course\n\nclass CourseListView(___):\n    model = ___\n    template_name = 'courses/list.html'\n    context_object_name = 'courses'\n\n    def get_queryset(self):\n        return Course.objects.filter(is_active=___)\n\nclass CourseDetailView(___):\n    model = Course\n    template_name = 'courses/detail.html'\n\nclass CourseCreateView(___):\n    model = Course\n    fields = [___, ___, ___, ___]\n    success_url = reverse_lazy(___)",
-      solution: "from django.views.generic import ListView,DetailView,CreateView\nfrom django.urls import reverse_lazy\nfrom .models import Course\nclass CourseListView(ListView):\n    model=Course\n    template_name='courses/list.html'\n    context_object_name='courses'\n    def get_queryset(self):\n        return Course.objects.filter(is_active=True)\nclass CourseDetailView(DetailView):\n    model=Course\n    template_name='courses/detail.html'\nclass CourseCreateView(CreateView):\n    model=Course\n    fields=['title','description','level','price']\n    success_url=reverse_lazy('course-list')",
-      hint: "Inherit from correct generic view. get_queryset overrides default.",
-      rubric: "All 3 CBVs correct base. get_queryset filters. fields list. success_url."
-    }
-  ]
-},
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// FLASK
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-"Flask Microframework": {
-  aiRubric: "Check Flask app, routes, request, jsonify, error codes.",
-  lessons: [
-    {
-      title: "Your First Flask App",
-      theory: "## Flask\n```python\nfrom flask import Flask\napp = Flask(__name__)\n\n@app.route('/')\ndef home():\n    return 'Hello, Mabel Academy!'\n\n@app.route('/greet/<name>')\ndef greet(name):\n    return f'Hello, {name}!'\n\nif __name__ == '__main__':\n    app.run(debug=True)\n```\nInstall: `pip install flask`",
-      instructions: "## Task: Flask Student API\n1. `/` → welcome message\n2. `/student/<name>` → greeting\n3. `/students/` → JSON list of 3 students\n4. Run in debug mode",
-      starterCode: "from flask import Flask, jsonify\napp = Flask(___)\n\n@app.route('/')\ndef home():\n    return ___\n\n@app.route('/student/<___>')\ndef greet(name):\n    return f'Welcome, {name}!'\n\n@app.route('/students/')\ndef list_students():\n    students = ['Ada','Tunde','Ngozi']\n    return jsonify({___: students, ___: len(students)})\n\nif __name__ == '__main__':\n    app.run(debug=___)",
-      solution: "from flask import Flask,jsonify\napp=Flask(__name__)\n@app.route('/')\ndef home():\n    return 'Welcome to Mabel Academy!'\n@app.route('/student/<name>')\ndef greet(name):\n    return f'Welcome, {name}!'\n@app.route('/students/')\ndef list_students():\n    students=['Ada','Tunde','Ngozi']\n    return jsonify({'students':students,'count':len(students)})\nif __name__=='__main__':\n    app.run(debug=True)",
-      hint: "Flask(__name__). @app.route(). jsonify() returns JSON response.",
-      rubric: "Flask(__name__). 3 routes. jsonify used. debug=True."
-    },
-    {
-      title: "Flask POST & Validation",
-      theory: "## POST Request\n```python\nfrom flask import request, jsonify\n\n@app.route('/login', methods=['POST'])\ndef login():\n    data = request.get_json()\n    username = data.get('username')\n    if username == 'ada':\n        return jsonify({'success': True}), 200\n    return jsonify({'error': 'Invalid'}), 401\n```",
-      instructions: "## Task: Student Registration\nBuild POST `/register`:\n1. Accepts JSON `{name, email, course}`\n2. Validates all fields present (400 if missing)\n3. Stores in in-memory list\n4. Returns `{id, name, message}` with 201\n5. GET `/students/` returns all",
-      starterCode: "from flask import Flask, request, jsonify\napp = Flask(__name__)\nstudents = []\n\n@app.route('/register', methods=[___])\ndef register():\n    data = request.___()\n    name   = data.get(___)\n    email  = data.get(___)\n    course = data.get(___)\n\n    if not name or not email or not course:\n        return jsonify({'error': 'All fields required'}), ___\n\n    student = {'id': len(students)+1, 'name':name, 'email':email, 'course':course}\n    students.append(___)\n    return jsonify({'id':student['id'],'name':name,'message':'Registered!'}), ___\n\n@app.route('/students/')\ndef get_students():\n    return jsonify({'students': ___, 'count': len(students)})\n\nif __name__ == '__main__':\n    app.run(debug=True)",
-      solution: "from flask import Flask,request,jsonify\napp=Flask(__name__)\nstudents=[]\n@app.route('/register',methods=['POST'])\ndef register():\n    data=request.get_json()\n    name=data.get('name')\n    email=data.get('email')\n    course=data.get('course')\n    if not name or not email or not course:\n        return jsonify({'error':'All fields required'}),400\n    student={'id':len(students)+1,'name':name,'email':email,'course':course}\n    students.append(student)\n    return jsonify({'id':student['id'],'name':name,'message':'Registered!'}),201\n@app.route('/students/')\ndef get_students():\n    return jsonify({'students':students,'count':len(students)})\nif __name__=='__main__':\n    app.run(debug=True)",
-      hint: "request.get_json() parses body. Return (jsonify(...), status_code). 400 bad data, 201 created.",
-      rubric: "POST method. get_json(). Validation. 400/201 codes. students list updated."
-    },
-    {
-      title: "Flask Blueprints",
-      theory: "## Blueprints\n```python\n# students/routes.py\nfrom flask import Blueprint\nstudents_bp = Blueprint('students', __name__, url_prefix='/students')\n\n@students_bp.route('/')\ndef list(): return 'All students'\n\n# app.py\napp.register_blueprint(students_bp)\n```",
-      instructions: "## Task: Modular App\n1. `students_bp` prefix `/students` — GET `/` lists, GET `/<id>` returns one\n2. `courses_bp` prefix `/courses` — GET `/` lists\n3. Register both on main app",
-      starterCode: "from flask import Flask, Blueprint, jsonify\n\nstudents_bp = Blueprint(___, __name__, url_prefix=___)\nstudents_data = [{'id':1,'name':'Ada'},{'id':2,'name':'Tunde'}]\n\n@students_bp.route('/')\ndef list_students():\n    return jsonify(students_data)\n\n@students_bp.route('/<int:sid>')\ndef get_student(sid):\n    student = next((s for s in students_data if s['id'] == ___), None)\n    if not student:\n        return jsonify({'error':'Not found'}), 404\n    return jsonify(___)\n\ncourses_bp = Blueprint(___, __name__, url_prefix='/courses')\ncourses_data = [{'id':1,'title':'Python'},{'id':2,'title':'FastAPI'}]\n\n@courses_bp.route('/')\ndef list_courses():\n    return jsonify(___)\n\napp = Flask(__name__)\napp.register_blueprint(___)\napp.register_blueprint(___)\n\nif __name__ == '__main__':\n    app.run(debug=True)",
-      solution: "from flask import Flask,Blueprint,jsonify\nstudents_bp=Blueprint('students',__name__,url_prefix='/students')\nstudents_data=[{'id':1,'name':'Ada'},{'id':2,'name':'Tunde'}]\n@students_bp.route('/')\ndef list_students():\n    return jsonify(students_data)\n@students_bp.route('/<int:sid>')\ndef get_student(sid):\n    student=next((s for s in students_data if s['id']==sid),None)\n    if not student:\n        return jsonify({'error':'Not found'}),404\n    return jsonify(student)\ncourses_bp=Blueprint('courses',__name__,url_prefix='/courses')\ncourses_data=[{'id':1,'title':'Python'},{'id':2,'title':'FastAPI'}]\n@courses_bp.route('/')\ndef list_courses():\n    return jsonify(courses_data)\napp=Flask(__name__)\napp.register_blueprint(students_bp)\napp.register_blueprint(courses_bp)\nif __name__=='__main__':\n    app.run(debug=True)",
-      hint: "Blueprint('name',__name__,url_prefix='/prefix'). register_blueprint() on app.",
-      rubric: "Both blueprints. url_prefix set. Routes correct. Both registered."
-    },
-    {
-      title: "Flask with SQLAlchemy",
-      theory: "## Flask-SQLAlchemy\n```python\nfrom flask_sqlalchemy import SQLAlchemy\n\napp.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///school.db'\ndb = SQLAlchemy(app)\n\nclass Student(db.Model):\n    id   = db.Column(db.Integer, primary_key=True)\n    name = db.Column(db.String(100), nullable=False)\n\n    def to_dict(self):\n        return {'id':self.id,'name':self.name}\n```",
-      instructions: "## Task: Persistent Student DB\n1. `Student(id, name, email, course, score)` model\n2. POST `/students/` creates student\n3. GET `/students/` lists all\n4. GET `/students/<id>` gets one or 404\n5. DELETE `/students/<id>` deletes",
-      starterCode: "from flask import Flask, request, jsonify\nfrom flask_sqlalchemy import SQLAlchemy\n\napp = Flask(__name__)\napp.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///school.db'\ndb = SQLAlchemy(app)\n\nclass Student(db.Model):\n    id     = db.Column(db.Integer, primary_key=True)\n    name   = db.Column(db.String(100), nullable=___)\n    email  = db.Column(db.String(120), unique=___)\n    course = db.Column(db.String(50))\n    score  = db.Column(db.Integer, default=___)\n\n    def to_dict(self):\n        return {'id':self.id,'name':self.name,'email':self.email,'course':self.course}\n\n@app.route('/students/', methods=['GET','POST'])\ndef students():\n    if request.method == 'POST':\n        d = request.get_json()\n        s = Student(name=d[___], email=d[___], course=d.get('course','Python'))\n        db.session.___(s)\n        db.session.commit()\n        return jsonify(s.to_dict()), 201\n    return jsonify([s.to_dict() for s in Student.query.all()])\n\n@app.route('/students/<int:sid>', methods=['GET','DELETE'])\ndef student_detail(sid):\n    s = Student.query.get_or_404(___)\n    if request.method == 'DELETE':\n        db.session.___(s)\n        db.session.commit()\n        return jsonify({'deleted':sid})\n    return jsonify(s.to_dict())\n\nwith app.app_context():\n    db.create_all()\n\nif __name__ == '__main__':\n    app.run(debug=True)",
-      solution: "from flask import Flask,request,jsonify\nfrom flask_sqlalchemy import SQLAlchemy\napp=Flask(__name__)\napp.config['SQLALCHEMY_DATABASE_URI']='sqlite:///school.db'\ndb=SQLAlchemy(app)\nclass Student(db.Model):\n    id=db.Column(db.Integer,primary_key=True)\n    name=db.Column(db.String(100),nullable=False)\n    email=db.Column(db.String(120),unique=True)\n    course=db.Column(db.String(50))\n    score=db.Column(db.Integer,default=0)\n    def to_dict(self):\n        return {'id':self.id,'name':self.name,'email':self.email,'course':self.course}\n@app.route('/students/',methods=['GET','POST'])\ndef students():\n    if request.method=='POST':\n        d=request.get_json()\n        s=Student(name=d['name'],email=d['email'],course=d.get('course','Python'))\n        db.session.add(s)\n        db.session.commit()\n        return jsonify(s.to_dict()),201\n    return jsonify([s.to_dict() for s in Student.query.all()])\n@app.route('/students/<int:sid>',methods=['GET','DELETE'])\ndef student_detail(sid):\n    s=Student.query.get_or_404(sid)\n    if request.method=='DELETE':\n        db.session.delete(s)\n        db.session.commit()\n        return jsonify({'deleted':sid})\n    return jsonify(s.to_dict())\nwith app.app_context():\n    db.create_all()\nif __name__=='__main__':\n    app.run(debug=True)",
-      hint: "db.session.add() then commit(). get_or_404() returns 404 if not found.",
-      rubric: "Model fields correct. session.add/commit. get_or_404. DELETE uses session.delete."
-    }
-  ]
-},
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// BACKEND — ADVANCED
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-"Django REST Framework": {
-  aiRubric: "Check DRF serializers, viewsets, routers, permissions.",
-  lessons: [
-    {
-      title: "DRF Serializers",
-      theory: "## Serializers\n```python\nfrom rest_framework import serializers\nfrom .models import Student\n\nclass StudentSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = Student\n        fields = ['id','name','email','score']\n        read_only_fields = ['id']\n```\nInstall: `pip install djangorestframework`\nAdd `'rest_framework'` to INSTALLED_APPS.",
-      instructions: "## Task: Course Serializer\nCreate `CourseSerializer` with:\n1. All fields\n2. `id` and `created_at` read-only\n3. `validate_price` — price must be > 0\n4. `SerializerMethodField` for `student_count`",
-      starterCode: "from rest_framework import serializers\nfrom .models import Course\n\nclass CourseSerializer(serializers.ModelSerializer):\n    student_count = serializers.___(method_name='get_student_count')\n\n    class Meta:\n        model = ___\n        fields = ___\n        read_only_fields = ['id', ___]\n\n    def validate_price(self, value):\n        if value <= ___:\n            raise serializers.ValidationError('Price must be greater than 0')\n        return value\n\n    def get_student_count(self, obj):\n        return obj.students.___()",
-      solution: "from rest_framework import serializers\nfrom .models import Course\nclass CourseSerializer(serializers.ModelSerializer):\n    student_count=serializers.SerializerMethodField(method_name='get_student_count')\n    class Meta:\n        model=Course\n        fields='__all__'\n        read_only_fields=['id','created_at']\n    def validate_price(self,value):\n        if value<=0:\n            raise serializers.ValidationError('Price must be greater than 0')\n        return value\n    def get_student_count(self,obj):\n        return obj.students.count()",
-      hint: "SerializerMethodField calls get_<field_name>. ValidationError for invalid data.",
-      rubric: "SerializerMethodField. Meta fields. read_only_fields. validate_price. get_student_count."
-    },
-    {
-      title: "DRF ViewSets & Routers",
-      theory: "## ViewSets\n```python\nfrom rest_framework import viewsets\nfrom rest_framework.routers import DefaultRouter\n\nclass StudentViewSet(viewsets.ModelViewSet):\n    queryset = Student.objects.all()\n    serializer_class = StudentSerializer\n\nrouter = DefaultRouter()\nrouter.register('students', StudentViewSet)\nurlpatterns = router.urls\n```",
-      instructions: "## Task: Course ViewSet\n1. `CourseViewSet` extending `ModelViewSet`\n2. get_queryset filters active courses\n3. Custom `@action` POST `/courses/{id}/enroll/`\n4. Register with router",
-      starterCode: "from rest_framework import viewsets, permissions\nfrom rest_framework.decorators import action\nfrom rest_framework.response import Response\nfrom rest_framework.routers import DefaultRouter\nfrom .models import Course\nfrom .serializers import CourseSerializer\n\nclass CourseViewSet(viewsets.___):\n    serializer_class = CourseSerializer\n    permission_classes = [permissions.IsAuthenticatedOrReadOnly]\n\n    def get_queryset(self):\n        return Course.objects.filter(is_active=___)\n\n    @action(detail=___, methods=[___])\n    def enroll(self, request, pk=None):\n        course = self.get_object()\n        return Response({\n            'enrolled': True,\n            'course': course.___,\n            'student': request.user.___\n        })\n\nrouter = DefaultRouter()\nrouter.register(___, CourseViewSet, basename='course')\nurlpatterns = router.urls",
-      solution: "from rest_framework import viewsets,permissions\nfrom rest_framework.decorators import action\nfrom rest_framework.response import Response\nfrom rest_framework.routers import DefaultRouter\nfrom .models import Course\nfrom .serializers import CourseSerializer\nclass CourseViewSet(viewsets.ModelViewSet):\n    serializer_class=CourseSerializer\n    permission_classes=[permissions.IsAuthenticatedOrReadOnly]\n    def get_queryset(self):\n        return Course.objects.filter(is_active=True)\n    @action(detail=True,methods=['post'])\n    def enroll(self,request,pk=None):\n        course=self.get_object()\n        return Response({'enrolled':True,'course':course.title,'student':request.user.username})\nrouter=DefaultRouter()\nrouter.register('courses',CourseViewSet,basename='course')\nurlpatterns=router.urls",
-      hint: "ModelViewSet gives CRUD free. @action(detail=True) for per-object. router.register needs prefix.",
-      rubric: "ModelViewSet. get_queryset filters. @action detail=True. router.register."
-    }
-  ]
-},
-
-"Flask Advanced Patterns": {
-  aiRubric: "Check factory pattern, config, JWT auth, error handlers.",
-  lessons: [
-    {
-      title: "Application Factory",
-      theory: "## Factory Pattern\n```python\ndef create_app(config='development'):\n    app = Flask(__name__)\n    app.config.from_object(config)\n    db.init_app(app)\n    app.register_blueprint(main_bp)\n    return app\n```\nBenefit: multiple configs, easier testing.",
-      instructions: "## Task: Flask Factory\n1. `create_app(config_name='development')` function\n2. Config dict with dev/prod settings\n3. Initialize db inside factory\n4. Register blueprint inside factory",
-      starterCode: "from flask import Flask, Blueprint, jsonify\nfrom flask_sqlalchemy import SQLAlchemy\n\ndb = SQLAlchemy()\n\nCONFIG = {\n    'development': {'DEBUG': True,  'SQLALCHEMY_DATABASE_URI': 'sqlite:///dev.db'},\n    'production':  {'DEBUG': False, 'SQLALCHEMY_DATABASE_URI': 'sqlite:///prod.db'}\n}\n\nmain_bp = Blueprint('main', __name__)\n\n@main_bp.route('/')\ndef index():\n    return jsonify({'status': 'ok'})\n\ndef create_app(config_name=___):\n    app = Flask(___)\n    app.config.update(CONFIG[___])\n    ___.init_app(app)\n    app.register_blueprint(___)\n    with app.app_context():\n        db.create_all()\n    return app\n\napp = create_app()\nif __name__ == '__main__':\n    app.run()",
-      solution: "from flask import Flask,Blueprint,jsonify\nfrom flask_sqlalchemy import SQLAlchemy\ndb=SQLAlchemy()\nCONFIG={'development':{'DEBUG':True,'SQLALCHEMY_DATABASE_URI':'sqlite:///dev.db'},'production':{'DEBUG':False,'SQLALCHEMY_DATABASE_URI':'sqlite:///prod.db'}}\nmain_bp=Blueprint('main',__name__)\n@main_bp.route('/')\ndef index():\n    return jsonify({'status':'ok'})\ndef create_app(config_name='development'):\n    app=Flask(__name__)\n    app.config.update(CONFIG[config_name])\n    db.init_app(app)\n    app.register_blueprint(main_bp)\n    with app.app_context():\n        db.create_all()\n    return app\napp=create_app()\nif __name__=='__main__':\n    app.run()",
-      hint: "db=SQLAlchemy() outside factory. db.init_app(app) inside. Blueprint registered inside.",
-      rubric: "Factory function. CONFIG dict. db.init_app. Blueprint registered. app_context used."
-    },
-    {
-      title: "Flask JWT Authentication",
-      theory: "## Flask-JWT-Extended\n```python\nfrom flask_jwt_extended import (\n    JWTManager, create_access_token,\n    jwt_required, get_jwt_identity\n)\napp.config['JWT_SECRET_KEY'] = 'secret'\njwt = JWTManager(app)\n\n@app.route('/login', methods=['POST'])\ndef login():\n    token = create_access_token(identity='ada')\n    return jsonify(access_token=token)\n\n@app.route('/protected')\n@jwt_required()\ndef protected():\n    return jsonify(user=get_jwt_identity())\n```",
-      instructions: "## Task: JWT Auth System\n1. POST `/login` — validates credentials, returns JWT\n2. POST `/register` — creates user in-memory\n3. GET `/profile` — requires JWT, returns user info",
-      starterCode: "from flask import Flask, request, jsonify\nfrom flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity\n\napp = Flask(__name__)\napp.config['JWT_SECRET_KEY'] = 'mabel-secret-2024'\njwt = JWTManager(___)\n\nusers = {'ada': {'password':'pass123','course':'Python'}}\n\n@app.route('/register', methods=['POST'])\ndef register():\n    d = request.get_json()\n    if d['username'] in ___:\n        return jsonify({'error':'User exists'}), 400\n    users[d['username']] = {'password':d['password'],'course':d.get('course','Python')}\n    return jsonify({'message':'Registered'}), 201\n\n@app.route('/login', methods=['POST'])\ndef login():\n    d = request.get_json()\n    user = users.get(d.get('username'))\n    if not user or user['password'] != d.get('password'):\n        return jsonify({'error':'Invalid credentials'}), 401\n    token = create_access_token(identity=___)\n    return jsonify({'access_token': ___})\n\n@app.route('/profile')\n@___()\ndef profile():\n    username = get_jwt_identity()\n    return jsonify({'username':username,'course':users[username]['course']})\n\nif __name__ == '__main__':\n    app.run(debug=True)",
-      solution: "from flask import Flask,request,jsonify\nfrom flask_jwt_extended import JWTManager,create_access_token,jwt_required,get_jwt_identity\napp=Flask(__name__)\napp.config['JWT_SECRET_KEY']='mabel-secret-2024'\njwt=JWTManager(app)\nusers={'ada':{'password':'pass123','course':'Python'}}\n@app.route('/register',methods=['POST'])\ndef register():\n    d=request.get_json()\n    if d['username'] in users:\n        return jsonify({'error':'User exists'}),400\n    users[d['username']]={'password':d['password'],'course':d.get('course','Python')}\n    return jsonify({'message':'Registered'}),201\n@app.route('/login',methods=['POST'])\ndef login():\n    d=request.get_json()\n    user=users.get(d.get('username'))\n    if not user or user['password']!=d.get('password'):\n        return jsonify({'error':'Invalid credentials'}),401\n    token=create_access_token(identity=d['username'])\n    return jsonify({'access_token':token})\n@app.route('/profile')\n@jwt_required()\ndef profile():\n    username=get_jwt_identity()\n    return jsonify({'username':username,'course':users[username]['course']})\nif __name__=='__main__':\n    app.run(debug=True)",
-      hint: "JWTManager(app). create_access_token(identity=username). @jwt_required() protects route.",
-      rubric: "JWTManager init. create_access_token used. @jwt_required on profile. get_jwt_identity correct."
-    }
-  ]
-},
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// SQL & DATABASES
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-"SQL Fundamentals": {
-  aiRubric: "Check valid SQL syntax, correct keywords.",
-  lessons: [
-    {
-      title: "SELECT & FROM",
-      theory: "## Basic SQL\n```sql\nSELECT column1, column2 FROM table;\nSELECT * FROM students;\nSELECT name AS student_name FROM students;\n```",
-      instructions: "## Task: Query Students\nTable `students(id, name, age, course, score)`\n1. Select all\n2. Select name and course only\n3. Select with aliases: name AS student_name, score AS exam_score",
-      starterCode: "-- 1. All students\n___ * ___ students;\n\n-- 2. Name and course\nSELECT ___, ___ FROM ___;\n\n-- 3. With aliases\nSELECT name ___ student_name, score ___ exam_score FROM ___;",
-      solution: "SELECT * FROM students;\nSELECT name,course FROM students;\nSELECT name AS student_name,score AS exam_score FROM students;",
-      hint: "SELECT then columns, FROM then table. AS for aliases.",
-      rubric: "All 3 queries correct. AS used."
-    },
-    {
-      title: "WHERE & Filtering",
-      theory: "## Filtering\n```sql\nSELECT * FROM students WHERE score >= 70;\nSELECT * FROM students WHERE name LIKE 'A%';\nSELECT * FROM students WHERE score BETWEEN 60 AND 80;\nSELECT * FROM students WHERE course IN ('Python','SQL');\n```",
-      instructions: "## Task: 4 Filter Queries\n1. Score >= 80\n2. Python course AND age < 25\n3. Name starts with 'A'\n4. Score between 60 and 79",
-      starterCode: "-- 1.\nSELECT * FROM students WHERE score ___ 80;\n-- 2.\nSELECT * FROM students WHERE course = ___ ___ age < 25;\n-- 3.\nSELECT * FROM students WHERE name ___ 'A%';\n-- 4.\nSELECT * FROM students WHERE score ___ 60 ___ 79;",
-      solution: "SELECT * FROM students WHERE score>=80;\nSELECT * FROM students WHERE course='Python' AND age<25;\nSELECT * FROM students WHERE name LIKE 'A%';\nSELECT * FROM students WHERE score BETWEEN 60 AND 79;",
-      hint: "LIKE 'A%' starts with A. BETWEEN x AND y inclusive.",
-      rubric: "All 4 queries. LIKE and BETWEEN used."
-    },
-    {
-      title: "ORDER BY & LIMIT",
-      theory: "## Sorting & Limiting\n```sql\nSELECT * FROM students ORDER BY score DESC;\nSELECT * FROM students ORDER BY score DESC LIMIT 3;\nSELECT * FROM students ORDER BY course ASC, score DESC;\n```",
-      instructions: "## Task: Rankings\n1. All students by score descending\n2. Top 5\n3. By course A-Z then score highest within each",
-      starterCode: "-- 1.\nSELECT * FROM students ORDER BY score ___;\n-- 2.\nSELECT * FROM students ORDER BY score DESC ___ 5;\n-- 3.\nSELECT * FROM students ORDER BY course ___, score ___;",
-      solution: "SELECT * FROM students ORDER BY score DESC;\nSELECT * FROM students ORDER BY score DESC LIMIT 5;\nSELECT * FROM students ORDER BY course ASC,score DESC;",
-      hint: "DESC for high-to-low. LIMIT after ORDER BY.",
-      rubric: "DESC correct. LIMIT 5. Multi-sort ASC then DESC."
-    },
-    {
-      title: "Aggregations & GROUP BY",
-      theory: "## Aggregate Functions\n```sql\nSELECT COUNT(*), AVG(score), MAX(score), MIN(score) FROM students;\n\nSELECT course, AVG(score) AS avg\nFROM students\nGROUP BY course\nHAVING AVG(score) > 70;\n```",
-      instructions: "## Task: Course Stats\n1. Count per course\n2. Average per course\n3. Courses with avg > 75\n4. Overall highest and lowest",
-      starterCode: "-- 1.\nSELECT course, ___(*)  AS count FROM students ___ BY course;\n-- 2.\nSELECT course, ___(score) AS avg FROM students GROUP BY course;\n-- 3.\nSELECT course, AVG(score) FROM students GROUP BY course ___ AVG(score)>75;\n-- 4.\nSELECT ___(score) AS highest, ___(score) AS lowest FROM students;",
-      solution: "SELECT course,COUNT(*) AS count FROM students GROUP BY course;\nSELECT course,AVG(score) AS avg FROM students GROUP BY course;\nSELECT course,AVG(score) FROM students GROUP BY course HAVING AVG(score)>75;\nSELECT MAX(score) AS highest,MIN(score) AS lowest FROM students;",
-      hint: "COUNT(*) counts rows. HAVING filters groups (not WHERE).",
-      rubric: "COUNT/AVG/MAX/MIN. GROUP BY. HAVING used."
-    },
-    {
-      title: "JOINs",
-      theory: "## JOIN Types\n```sql\n-- INNER: only matching rows\nSELECT s.name, e.course\nFROM students s\nINNER JOIN enrollments e ON s.id = e.student_id;\n\n-- LEFT: all left rows\nFROM students s\nLEFT JOIN enrollments e ON s.id = e.student_id;\n```",
-      instructions: "## Task: Join Queries\nTables: `students(id,name)`, `enrollments(id,student_id,course,grade)`\n1. INNER JOIN — students with courses\n2. Filter grade = 'A'\n3. LEFT JOIN — all students including unenrolled",
-      starterCode: "-- 1.\nSELECT s.name, e.course FROM students ___\nINNER JOIN enrollments e ON s.___ = e.___;\n-- 2.\nSELECT s.name,e.course,e.grade FROM students s\nINNER JOIN enrollments e ON s.id=e.student_id\nWHERE e.grade = ___;\n-- 3.\nSELECT s.name,e.course FROM students s\n___ JOIN enrollments e ON s.id=e.student_id;",
-      solution: "SELECT s.name,e.course FROM students s INNER JOIN enrollments e ON s.id=e.student_id;\nSELECT s.name,e.course,e.grade FROM students s INNER JOIN enrollments e ON s.id=e.student_id WHERE e.grade='A';\nSELECT s.name,e.course FROM students s LEFT JOIN enrollments e ON s.id=e.student_id;",
-      hint: "INNER returns matches only. LEFT keeps all left rows.",
-      rubric: "INNER JOIN correct. WHERE filter. LEFT JOIN correct."
-    }
-  ]
-},
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// DATA SCIENCE
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-"Pandas & NumPy Basics": {
-  aiRubric: "Check imports, array ops, DataFrame creation, filtering, apply.",
-  lessons: [
-    {
-      title: "NumPy Arrays",
-      theory: "## NumPy\n```python\nimport numpy as np\narr = np.array([1,2,3,4,5])\nprint(arr * 2)     # [2,4,6,8,10]\nprint(arr.mean())  # 3.0\nprint(arr.std())   # std deviation\nprint(arr.shape)   # (5,)\n```",
-      instructions: "## Task: Score Analysis\n`scores = [78,92,65,88,74,91,55,83]`\n1. Convert to NumPy array\n2. Print mean, max, min, std\n3. Count > 80\n4. Print sorted descending",
-      starterCode: "import numpy as np\nscores = [78,92,65,88,74,91,55,83]\narr = np.array(___)\n\nprint(f'Mean: {___.mean():.1f}')\nprint(f'Max:  {___.max()}')\nprint(f'Min:  {___.min()}')\nprint(f'Std:  {___.std():.2f}')\n\nabove = arr[arr > ___]\nprint(f'Above 80: {len(above)}')\nprint('Sorted:', np.sort(arr)[::-1])",
-      solution: "import numpy as np\nscores=[78,92,65,88,74,91,55,83]\narr=np.array(scores)\nprint(f'Mean:{arr.mean():.1f}')\nprint(f'Max:{arr.max()}')\nprint(f'Min:{arr.min()}')\nprint(f'Std:{arr.std():.2f}')\nabove=arr[arr>80]\nprint(f'Above 80:{len(above)}')\nprint('Sorted:',np.sort(arr)[::-1])",
-      hint: "arr.mean(), arr.max(). Boolean index arr[arr>80]. [::-1] reverses.",
-      rubric: "np.array. All stats. Boolean index. Descending sort."
-    },
-    {
-      title: "Pandas DataFrames",
-      theory: "## Pandas\n```python\nimport pandas as pd\ndf = pd.DataFrame({'name':['Ada'],'score':[88]})\nprint(df.describe())\ndf['grade'] = df['score'].apply(lambda s: 'A' if s>=80 else 'B')\n```",
-      instructions: "## Task: Student Report\n5 students (name, course, score):\n1. info()\n2. Average score\n3. Highest scorer\n4. Filter >= 80\n5. Add Pass/Fail column",
-      starterCode: "import pandas as pd\ndata={'name':['Ada','Tunde','Ngozi','Emeka','Amaka'],'course':['Python','FastAPI','Python','SQL','AI'],'score':[88,72,95,58,81]}\ndf = pd.DataFrame(___)\ndf.info()\n\nprint(f'Average: {df[___].mean():.1f}')\ntop = df.loc[df['score'].idxmax(), ___]\nprint(f'Top: {top}')\n\nhigh = df[df['score'] >= ___]\nprint(high[['name','score']])\n\ndf['result'] = df['score'].apply(lambda s: ___ if s>=60 else ___)\nprint(df[['name','score','result']])",
-      solution: "import pandas as pd\ndata={'name':['Ada','Tunde','Ngozi','Emeka','Amaka'],'course':['Python','FastAPI','Python','SQL','AI'],'score':[88,72,95,58,81]}\ndf=pd.DataFrame(data)\ndf.info()\nprint(f'Average:{df[\"score\"].mean():.1f}')\ntop=df.loc[df['score'].idxmax(),'name']\nprint(f'Top:{top}')\nhigh=df[df['score']>=80]\nprint(high[['name','score']])\ndf['result']=df['score'].apply(lambda s:'Pass' if s>=60 else 'Fail')\nprint(df[['name','score','result']])",
-      hint: "idxmax() index of max. df[df['score']>=80] filters. apply with lambda.",
-      rubric: "DataFrame created. info(). idxmax. Filter. apply lambda."
-    },
-    {
-      title: "Data Cleaning",
-      theory: "## Cleaning\n```python\ndf.isnull().sum()       # count NaN\ndf.fillna(0)            # fill NaN\ndf.dropna()             # drop NaN rows\ndf.drop_duplicates()    # remove dupes\ndf['col'].str.strip()   # trim spaces\ndf['col'].astype(int)   # cast type\n```",
-      instructions: "## Task: Clean Messy Data\n1. Report null counts\n2. Fill missing scores with mean\n3. Drop duplicates\n4. Convert score to int\n5. Strip whitespace from names",
-      starterCode: "import pandas as pd\ndata={'name':['Ada ',' Tunde','Ngozi','Ada ','Emeka'],'score':[88,None,95,88,72]}\ndf = pd.DataFrame(data)\n\nprint('Nulls:\\n', df.___().sum())\n\nmean_score = df['score'].mean()\ndf['score'] = df['score'].fillna(___)\n\ndf = df.drop_duplicates()\ndf['score'] = df['score'].astype(___)\ndf['name'] = df['name'].str.___\n\nprint(df)",
-      solution: "import pandas as pd\ndata={'name':['Ada ',' Tunde','Ngozi','Ada ','Emeka'],'score':[88,None,95,88,72]}\ndf=pd.DataFrame(data)\nprint('Nulls:\\n',df.isnull().sum())\nmean_score=df['score'].mean()\ndf['score']=df['score'].fillna(mean_score)\ndf=df.drop_duplicates()\ndf['score']=df['score'].astype(int)\ndf['name']=df['name'].str.strip()\nprint(df)",
-      hint: "isnull().sum(). fillna(mean). drop_duplicates(). astype(int). str.strip().",
-      rubric: "isnull used. fillna mean. drop_duplicates. astype(int). strip names."
-    }
-  ]
-},
-
-"Intro to Machine Learning": {
-  aiRubric: "Check sklearn imports, train_test_split, fit, predict, metrics.",
-  lessons: [
-    {
-      title: "Your First ML Model",
-      theory: "## Scikit-Learn Pattern\n```python\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import accuracy_score\n\nX_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2)\nmodel = LogisticRegression()\nmodel.fit(X_train, y_train)\ny_pred = model.predict(X_test)\nprint(accuracy_score(y_test, y_pred))\n```",
-      instructions: "## Task: Iris Classifier\n1. Load Iris dataset\n2. Split 80/20\n3. Train LogisticRegression\n4. Print accuracy and classification report",
-      starterCode: "from sklearn.datasets import load_iris\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import accuracy_score, classification_report\n\niris = load_iris()\nX, y = iris.___, iris.___\n\nX_train,X_test,y_train,y_test = train_test_split(\n    X, y, test_size=___, random_state=42)\n\nmodel = LogisticRegression(max_iter=200)\nmodel.___(X_train, y_train)\ny_pred = model.___(X_test)\n\nprint(f'Accuracy: {accuracy_score(y_test,y_pred):.2%}')\nprint(classification_report(y_test, y_pred, target_names=iris.target_names))",
-      solution: "from sklearn.datasets import load_iris\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import accuracy_score,classification_report\niris=load_iris()\nX,y=iris.data,iris.target\nX_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=42)\nmodel=LogisticRegression(max_iter=200)\nmodel.fit(X_train,y_train)\ny_pred=model.predict(X_test)\nprint(f'Accuracy:{accuracy_score(y_test,y_pred):.2%}')\nprint(classification_report(y_test,y_pred,target_names=iris.target_names))",
-      hint: "iris.data is X, iris.target is y. test_size=0.2. model.fit() trains.",
-      rubric: "data/target loaded. 0.2 split. fit/predict called. accuracy_score used."
-    }
-  ]
-},
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// AI ENGINEERING
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-"Prompt Engineering": {
-  aiRubric: "Check role, context, task, format in prompts.",
-  lessons: [
-    {
-      title: "Anatomy of a Good Prompt",
-      theory: "## Prompt Structure\n1. **Role** — who the AI is\n2. **Context** — background\n3. **Task** — what exactly to do\n4. **Format** — how to respond\n\n```python\nsystem = 'You are a senior Python tutor. Be concise.'\nuser   = 'Explain Python lists in 2 sentences with 1 code example.'\n```",
-      instructions: "## Task: Design 3 Prompts\nWrite system + user for:\n1. Nigerian cooking assistant\n2. Python code reviewer\n3. Quiz generator\n\nEach must specify: role, task, output format.",
-      starterCode: "cooking_system = 'You are ___, a Nigerian cooking expert. ___'\ncooking_user   = 'Task: explain jollof rice. Format: ___'\n\nreview_system = '___'\nreview_user   = 'Review:{code}. Format: bullet points'\n\nquiz_system = '___'\nquiz_user   = 'Topic: Python loops. Task:___. Format: 5 MCQs A-D'\n\nfor name,s,u in [('Cooking',cooking_system,cooking_user),('Review',review_system,review_user),('Quiz',quiz_system,quiz_user)]:\n    print(f'=== {name} ===')\n    print(f'System: {s[:70]}')\n    print(f'User:   {u[:70]}\\n')",
-      solution: "cooking_system='You are Mama Titi, a Nigerian cooking expert. Be warm and clear.'\ncooking_user='Task: explain jollof rice. Format: numbered steps max 8, include tips.'\nreview_system='You are a senior Python engineer. Give direct actionable feedback.'\nreview_user='Review:{code}. Format: bullet points — Issues, Fixes, Style.'\nquiz_system='You are an expert educator who writes clear MCQs.'\nquiz_user='Topic: Python loops. Task: Create 5 MCQs. Format: Options A-D, mark correct.'\nfor name,s,u in [('Cooking',cooking_system,cooking_user),('Review',review_system,review_user),('Quiz',quiz_system,quiz_user)]:\n    print(f'==={name}===')\n    print(f'System:{s[:70]}')\n    print(f'User:{u[:70]}\\n')",
-      hint: "Be specific in role. Always state output format explicitly.",
-      rubric: "All 3 prompts have role, task, format. System distinct from user."
-    }
-  ]
-},
-
-"LLM Fundamentals": {
-  aiRubric: "Check API call, message roles, response parsing, error handling.",
-  lessons: [
-    {
-      title: "First LLM API Call",
-      theory: "## LLM API Pattern\n```python\nimport requests\nr = requests.post(\n    'https://api.groq.com/openai/v1/chat/completions',\n    headers={'Authorization': f'Bearer {KEY}'},\n    json={\n        'model':'llama3-8b-8192',\n        'messages':[\n            {'role':'system','content':'You are helpful.'},\n            {'role':'user','content':'Hello!'}\n        ]\n    }\n)\nprint(r.json()['choices'][0]['message']['content'])\n```",
-      instructions: "## Task: ask_llm() Function\nWrite `ask_llm(question, system_prompt)` that:\n1. Builds message list\n2. POSTs to Groq API\n3. Returns text response\n4. Handles errors with try/except",
-      starterCode: "import requests, os\nAPI_KEY = os.getenv('GROQ_API_KEY','your-key')\nURL = 'https://api.groq.com/openai/v1/chat/completions'\n\ndef ask_llm(question, system_prompt='You are a helpful tutor.'):\n    messages = [\n        {'role': ___, 'content': ___},\n        {'role': ___, 'content': ___}\n    ]\n    try:\n        r = requests.post(URL,\n            headers={'Authorization': f'Bearer {API_KEY}'},\n            json={'model':'llama3-8b-8192','messages':___})\n        return r.json()[___][0][___][___]\n    except Exception as e:\n        return f'Error: {e}'\n\nprint(ask_llm('What is a Python list?'))",
-      solution: "import requests,os\nAPI_KEY=os.getenv('GROQ_API_KEY','your-key')\nURL='https://api.groq.com/openai/v1/chat/completions'\ndef ask_llm(question,system_prompt='You are a helpful tutor.'):\n    messages=[{'role':'system','content':system_prompt},{'role':'user','content':question}]\n    try:\n        r=requests.post(URL,headers={'Authorization':f'Bearer {API_KEY}'},json={'model':'llama3-8b-8192','messages':messages})\n        return r.json()['choices'][0]['message']['content']\n    except Exception as e:\n        return f'Error:{e}'\nprint(ask_llm('What is a Python list?'))",
-      hint: "Roles: 'system' and 'user'. Response: json()['choices'][0]['message']['content'].",
-      rubric: "Both roles correct. POST URL. Response extracted. try/except present."
-    },
-    {
-      title: "Conversation Memory",
-      theory: "## Multi-turn Conversations\nLLMs are stateless — pass full history each call:\n```python\nhistory = [{'role':'system','content':'...'}]\nhistory.append({'role':'user','content':msg})\n# after reply:\nhistory.append({'role':'assistant','content':reply})\n```",
-      instructions: "## Task: Chatbot Class\nBuild `Chatbot(system)` with:\n- `chat(message)` — appends user, calls API, appends reply, returns reply\n- `reset()` — clears history but keeps system message",
-      starterCode: "import requests, os\n\nclass Chatbot:\n    def __init__(self, system='You are a helpful assistant.'):\n        self.history = [{'role':'system','content':___}]\n        self.api_key = os.getenv('GROQ_API_KEY','')\n\n    def chat(self, message):\n        self.history.append({'role':'user','content':___})\n        r = requests.post(\n            'https://api.groq.com/openai/v1/chat/completions',\n            headers={'Authorization':f'Bearer {self.api_key}'},\n            json={'model':'llama3-8b-8192','messages':self.___}\n        )\n        reply = r.json()['choices'][0]['message']['content']\n        self.history.append({'role':___,'content':reply})\n        return reply\n\n    def reset(self):\n        sys_msg = self.history[0]\n        self.history = [___]\n\nbot = Chatbot('You are a Python tutor.')\nprint(bot.chat('What is a variable?'))\nprint(bot.chat('Show me an example'))\nprint(f'History: {len(bot.history)} messages')",
-      solution: "import requests,os\nclass Chatbot:\n    def __init__(self,system='You are a helpful assistant.'):\n        self.history=[{'role':'system','content':system}]\n        self.api_key=os.getenv('GROQ_API_KEY','')\n    def chat(self,message):\n        self.history.append({'role':'user','content':message})\n        r=requests.post('https://api.groq.com/openai/v1/chat/completions',headers={'Authorization':f'Bearer {self.api_key}'},json={'model':'llama3-8b-8192','messages':self.history})\n        reply=r.json()['choices'][0]['message']['content']\n        self.history.append({'role':'assistant','content':reply})\n        return reply\n    def reset(self):\n        sys_msg=self.history[0]\n        self.history=[sys_msg]\nbot=Chatbot('You are a Python tutor.')\nprint(bot.chat('What is a variable?'))\nprint(bot.chat('Show me an example'))\nprint(f'History:{len(bot.history)} messages')",
-      hint: "Append user then assistant each turn. self.history passed to API. reset() keeps index 0.",
-      rubric: "history initialized. chat() appends both. history passed. reset() keeps system."
-    }
-  ]
-},
-
-"RAG Pipelines": {
-  aiRubric: "Check chunking, similarity, retrieval, context injection.",
-  lessons: [
-    {
-      title: "Simple RAG Pipeline",
-      theory: "## RAG = Retrieve + Generate\n1. **Index** — chunk docs, embed, store\n2. **Retrieve** — find similar chunks to query\n3. **Generate** — pass chunks as context to LLM\n\n```python\nrelevant = retrieve(question, docs)\nprompt   = f'Context: {relevant}\\nQuestion: {question}'\nanswer   = llm(prompt)\n```",
-      instructions: "## Task: Word-Overlap RAG\n1. 5 docs about Python topics\n2. `similarity(query, doc)` — word overlap score\n3. `retrieve(query, docs)` — returns top match\n4. `rag_prompt(q, docs)` — injects context\n5. Test with 2 queries",
-      starterCode: "documents = [\n    'Python lists store ordered mutable collections.',\n    'Dictionaries store key-value pairs for fast lookups.',\n    'Functions let you reuse code and accept parameters.',\n    'Classes define blueprints for objects with attributes.',\n    'Loops iterate over sequences with for and while.'\n]\n\ndef similarity(query, doc):\n    q = set(query.lower().split())\n    d = set(doc.lower().split())\n    return len(q & d) / (len(q) + 1)\n\ndef retrieve(query, docs, top_k=1):\n    scores = [(similarity(___, doc), doc) for doc in ___]\n    scores.sort(reverse=___)\n    return [doc for _, doc in scores[:top_k]]\n\ndef rag_prompt(question, docs):\n    ctx = retrieve(___, docs)[0]\n    return f'Context: {ctx}\\nQuestion: {question}\\nAnswer:'\n\nfor q in ['How do I store key-value data?', 'What is a loop?']:\n    print('Q:', q)\n    print('Context:', retrieve(q, documents)[0])\n    print()",
-      solution: "documents=['Python lists store ordered mutable collections.','Dictionaries store key-value pairs for fast lookups.','Functions let you reuse code and accept parameters.','Classes define blueprints for objects with attributes.','Loops iterate over sequences with for and while.']\ndef similarity(query,doc):\n    q=set(query.lower().split())\n    d=set(doc.lower().split())\n    return len(q&d)/(len(q)+1)\ndef retrieve(query,docs,top_k=1):\n    scores=[(similarity(query,doc),doc) for doc in docs]\n    scores.sort(reverse=True)\n    return [doc for _,doc in scores[:top_k]]\ndef rag_prompt(question,docs):\n    ctx=retrieve(question,docs)[0]\n    return f'Context:{ctx}\\nQuestion:{question}\\nAnswer:'\nfor q in ['How do I store key-value data?','What is a loop?']:\n    print('Q:',q)\n    print('Context:',retrieve(q,documents)[0])\n    print()",
-      hint: "sort(reverse=True) for highest first. context[0] gets top result.",
-      rubric: "similarity correct. retrieve sorts. rag_prompt injects. Both queries tested."
-    }
-  ]
-},
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// FRONTEND
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-"HTML Essentials": {
-  aiRubric: "Check valid HTML structure, semantic tags, nesting.",
-  lessons: [
-    {
-      title: "HTML Document Structure",
-      theory: "## HTML Skeleton\n```html\n<!DOCTYPE html>\n<html lang='en'>\n<head>\n  <meta charset='UTF-8'>\n  <title>Title</title>\n</head>\n<body>\n  <h1>Heading</h1>\n  <p>Paragraph</p>\n</body>\n</html>\n```",
-      instructions: "## Task: Student Profile Page\n1. DOCTYPE + full structure\n2. Title: 'My Profile'\n3. h1 with your name\n4. p with your course\n5. ul with 3 skills\n6. Link to GitHub",
-      starterCode: "<!DOCTYPE ___>\n<html lang='en'>\n<___>\n  <meta charset='UTF-8'>\n  <title>___</title>\n</___>\n<___>\n  <h1>___</h1>\n  <p>Course: ___</p>\n  <ul>\n    <li>___</li>\n    <li>___</li>\n    <li>___</li>\n  </ul>\n  <a href='https://github.com'>GitHub</a>\n</___>\n</html>",
-      solution: "<!DOCTYPE html>\n<html lang='en'>\n<head>\n  <meta charset='UTF-8'>\n  <title>My Profile</title>\n</head>\n<body>\n  <h1>Ada Okonkwo</h1>\n  <p>Course: Computer Science</p>\n  <ul><li>Python</li><li>FastAPI</li><li>SQL</li></ul>\n  <a href='https://github.com'>GitHub</a>\n</body>\n</html>",
-      hint: "head for meta info. body for visible content. ul > li for lists.",
-      rubric: "DOCTYPE. head/body. h1/p/ul/li/a all present."
-    },
-    {
-      title: "Semantic HTML",
-      theory: "## Semantic Tags\n```html\n<header>  — top of page\n<nav>     — navigation\n<main>    — main content\n<article> — self-contained\n<aside>   — sidebar\n<footer>  — bottom\n```\nSemantic HTML improves SEO and accessibility.",
-      instructions: "## Task: Blog Page\n1. `<header>` with site name + `<nav>` 3 links\n2. `<main>` with `<article>` (heading, date, 2 paras)\n3. `<aside>` with Related Posts list\n4. `<footer>` with copyright",
-      starterCode: "<!DOCTYPE html>\n<html lang='en'>\n<head><meta charset='UTF-8'><title>Blog</title></head>\n<body>\n\n  <___>\n    <h1>Mabel's Tech Blog</h1>\n    <___>\n      <a href='/'>Home</a>\n      <a href='/courses'>Courses</a>\n      <a href='/contact'>Contact</a>\n    </___>\n  </___>\n\n  <___>\n    <___>\n      <h2>Getting Started with Python</h2>\n      <time datetime='2024-01-15'>Jan 15, 2024</time>\n      <p>Python is one of the most popular languages...</p>\n      <p>In this article we cover the basics...</p>\n    </___>\n    <___>\n      <h3>Related Posts</h3>\n      <ul>\n        <li><a href='#'>Python Basics</a></li>\n        <li><a href='#'>FastAPI Tutorial</a></li>\n      </ul>\n    </___>\n  </___>\n\n  <___>\n    <p>&copy; 2024 Mabel Academy</p>\n  </___>\n\n</body></html>",
-      solution: "<!DOCTYPE html>\n<html lang='en'>\n<head><meta charset='UTF-8'><title>Blog</title></head>\n<body>\n<header>\n  <h1>Mabel's Tech Blog</h1>\n  <nav><a href='/'>Home</a><a href='/courses'>Courses</a><a href='/contact'>Contact</a></nav>\n</header>\n<main>\n  <article>\n    <h2>Getting Started with Python</h2>\n    <time datetime='2024-01-15'>Jan 15, 2024</time>\n    <p>Python is one of the most popular languages...</p>\n    <p>In this article we cover the basics...</p>\n  </article>\n  <aside>\n    <h3>Related Posts</h3>\n    <ul><li><a href='#'>Python Basics</a></li><li><a href='#'>FastAPI Tutorial</a></li></ul>\n  </aside>\n</main>\n<footer><p>&copy; 2024 Mabel Academy</p></footer>\n</body></html>",
-      hint: "header > nav. main > article + aside. footer at bottom.",
-      rubric: "All 6 semantic tags correct. nav in header. article and aside in main."
-    }
-  ]
-},
-
-"JavaScript Basics": {
-  aiRubric: "Check let/const, functions, array methods.",
-  lessons: [
-    {
-      title: "Variables & Functions",
-      theory: "## JS Basics\n```javascript\nconst name = 'Ada';  // can't reassign\nlet score = 0;       // can reassign\n\nfunction greet(name) {\n  return `Hello, ${name}!`;\n}\nconst add = (a, b) => a + b;  // arrow fn\nconsole.log(greet('Ada'));    // Hello, Ada!\n```",
-      instructions: "## Task: Score Processor\n1. `scores` array of 5 numbers\n2. `getAverage(arr)` using reduce\n3. `getGrade(avg)` → A/B/C/F\n4. Log: `Average: 82.4 | Grade: B`",
-      starterCode: "const scores = [78, 92, 65, 88, ___];\n\nfunction getAverage(arr) {\n  const sum = arr.reduce((___, b) => a + b, 0);\n  return sum / arr.___;\n}\n\nfunction getGrade(avg) {\n  if (avg >= 80) return ___;\n  else if (avg >= 70) return ___;\n  else if (avg >= 60) return ___;\n  else return ___;\n}\n\nconst avg = getAverage(scores);\nconsole.log(`Average: ${avg.toFixed(1)} | Grade: ${getGrade(avg)}`);",
-      solution: "const scores=[78,92,65,88,75];\nfunction getAverage(arr){\n  const sum=arr.reduce((a,b)=>a+b,0);\n  return sum/arr.length;\n}\nfunction getGrade(avg){\n  if(avg>=80)return'A';\n  else if(avg>=70)return'B';\n  else if(avg>=60)return'C';\n  else return'F';\n}\nconst avg=getAverage(scores);\nconsole.log(`Average:${avg.toFixed(1)} | Grade:${getGrade(avg)}`);",
-      hint: "reduce((a,b)=>a+b,0). arr.length for count. toFixed(1).",
-      rubric: "reduce for sum. Division. Grade conditions. Template literal."
-    },
-    {
-      title: "Array Methods",
-      theory: "## Array Methods\n```javascript\nconst nums = [1,2,3,4,5];\nnums.map(x => x*2)         // [2,4,6,8,10]\nnums.filter(x => x>2)      // [3,4,5]\nnums.reduce((a,b)=>a+b, 0) // 15\nnums.find(x => x>3)        // 4\nnums.sort((a,b)=>b-a)      // desc\n```",
-      instructions: "## Task: Student Processing\n`students = [{name, score}]`\n1. `map` to add `grade` field\n2. `filter` passing students (>=60)\n3. `reduce` for total score\n4. `find` student named 'Ngozi'\n5. `sort` by score descending",
-      starterCode: "const students = [\n  {name:'Ada',score:88},{name:'Tunde',score:55},\n  {name:'Ngozi',score:92},{name:'Emeka',score:67},{name:'Amaka',score:45}\n];\n\nconst withGrades = students.___(s => ({...s, grade: s.score>=80?'A':s.score>=70?'B':s.score>=60?'C':'F'}));\nconst passing = students.___(s => s.score >= ___);\nconst total = students.___((acc, s) => acc + s.score, 0);\nconst ngozi = students.___(s => s.name === ___);\nconst ranked = [...students].___((___, b) => b.score - a.score);\n\nconsole.log('Grades:', withGrades.map(s=>`${s.name}:${s.grade}`));\nconsole.log('Passing:', passing.length);\nconsole.log('Total:', total);\nconsole.log('Ngozi:', ngozi);\nconsole.log('Ranked:', ranked.map(s=>s.name));",
-      solution: "const students=[{name:'Ada',score:88},{name:'Tunde',score:55},{name:'Ngozi',score:92},{name:'Emeka',score:67},{name:'Amaka',score:45}];\nconst withGrades=students.map(s=>({...s,grade:s.score>=80?'A':s.score>=70?'B':s.score>=60?'C':'F'}));\nconst passing=students.filter(s=>s.score>=60);\nconst total=students.reduce((acc,s)=>acc+s.score,0);\nconst ngozi=students.find(s=>s.name==='Ngozi');\nconst ranked=[...students].sort((a,b)=>b.score-a.score);\nconsole.log('Grades:',withGrades.map(s=>`${s.name}:${s.grade}`));\nconsole.log('Passing:',passing.length);\nconsole.log('Total:',total);\nconsole.log('Ngozi:',ngozi);\nconsole.log('Ranked:',ranked.map(s=>s.name));",
-      hint: "map returns new array. filter keeps matching. reduce accumulates. find returns first match. spread [...arr] before sort.",
-      rubric: "map/filter/reduce/find/sort all used correctly."
-    }
-  ]
-},
-
-"CSS Styling & Layout": {
-  aiRubric: "Check selectors, box model, flexbox, colors, typography.",
-  lessons: [
-    {
-      title: "Selectors & Box Model",
-      theory: "## CSS Basics\n```css\nh1 { color: #333; }          /* element */\n.card { padding: 16px; }     /* class */\n#header { background: #fff; } /* id */\n\n.box {\n  width: 200px;\n  padding: 16px;   /* inside */\n  border: 2px solid #333;\n  margin: 24px;    /* outside */\n  box-sizing: border-box;\n}\n```",
-      instructions: "## Task: Style a Student Card\n1. `body` — dark background, white text\n2. `.card` — white bg, rounded corners, padding, max-width 400px, box-shadow\n3. `.card h2` — teal color\n4. `.badge` — pill shape (border-radius: 20px)",
-      starterCode: "___ {\n  background: #1e1e1e;\n  color: white;\n  font-family: sans-serif;\n  display: flex;\n  justify-content: center;\n  padding: 40px;\n}\n\n.___ {\n  background: white;\n  color: #1e1e1e;\n  border-radius: ___;\n  padding: ___;\n  max-width: 400px;\n  box-shadow: 0 4px 20px rgba(0,0,0,0.3);\n}\n\n.card ___ {\n  color: #00e5a0;\n}\n\n.___ {\n  background: #00e5a0;\n  color: #1e1e1e;\n  border-radius: 20px;\n  padding: 4px 12px;\n  font-size: 12px;\n}",
-      solution: "body{background:#1e1e1e;color:white;font-family:sans-serif;display:flex;justify-content:center;padding:40px;}\n.card{background:white;color:#1e1e1e;border-radius:8px;padding:24px;max-width:400px;box-shadow:0 4px 20px rgba(0,0,0,0.3);}\n.card h2{color:#00e5a0;}\n.badge{background:#00e5a0;color:#1e1e1e;border-radius:20px;padding:4px 12px;font-size:12px;}",
-      hint: "body selector. .card class. .card h2 descendant. border-radius:20px for pill.",
-      rubric: "body bg set. .card styled. .card h2 teal. .badge pill shape."
-    },
-    {
-      title: "Flexbox Layout",
-      theory: "## Flexbox\n```css\n.container {\n  display: flex;\n  justify-content: space-between;  /* horizontal */\n  align-items: center;             /* vertical */\n  gap: 16px;\n}\n.item { flex: 1; }  /* grow equally */\n```",
-      instructions: "## Task: Navigation Bar\n1. Logo left, links center, button right\n2. All vertically centered\n3. Proper gap between links",
-      starterCode: ".navbar {\n  display: ___;\n  justify-content: ___;\n  align-items: ___;\n  padding: 16px 32px;\n  background: #1e1e1e;\n  gap: 24px;\n}\n\n.logo {\n  font-weight: bold;\n  color: #00e5a0;\n}\n\n.nav-links {\n  display: ___;\n  gap: ___;\n  list-style: none;\n}\n\n.nav-links a { color: white; text-decoration: none; }\n\n.login-btn {\n  padding: 8px 20px;\n  background: #00e5a0;\n  color: #1e1e1e;\n  border: none;\n  border-radius: 6px;\n  cursor: pointer;\n  margin-left: auto;\n}",
-      solution: ".navbar{display:flex;justify-content:space-between;align-items:center;padding:16px 32px;background:#1e1e1e;gap:24px;}\n.logo{font-weight:bold;color:#00e5a0;}\n.nav-links{display:flex;gap:24px;list-style:none;}\n.nav-links a{color:white;text-decoration:none;}\n.login-btn{padding:8px 20px;background:#00e5a0;color:#1e1e1e;border:none;border-radius:6px;cursor:pointer;margin-left:auto;}",
-      hint: "display:flex. justify-content:space-between. align-items:center. nav-links also flex.",
-      rubric: "display:flex on navbar. justify-content. align-items:center. nav-links flex with gap."
-    }
-  ]
-},
-
-"DOM Manipulation": {
-  aiRubric: "Check querySelector, addEventListener, textContent, classList.",
-  lessons: [
-    {
-      title: "Selecting & Modifying Elements",
-      theory: "## DOM API\n```javascript\nconst el  = document.querySelector('.card');\nconst all = document.querySelectorAll('li');\n\nel.textContent = 'New text';\nel.style.color = 'red';\nel.classList.add('active');\nel.classList.toggle('hidden');\n\nconst p = document.createElement('p');\np.textContent = 'Hello';\ndocument.body.appendChild(p);\n```",
-      instructions: "## Task: Dynamic Score Card\n1. Set `#score` text to 88\n2. Set `#status` to 'Pass' (green) if score >= 60\n3. Add class `highlight` to `#card` if score >= 80\n4. Create and append `<p>Grade: A</p>` to `#output`",
-      starterCode: "const score = 88;\n\ndocument.querySelector(___).textContent = ___;\n\nconst statusEl = document.querySelector('___');\nif (score >= 60) {\n  statusEl.___ = 'Pass';\n  statusEl.style.___ = 'green';\n}\n\nif (score >= 80) {\n  document.querySelector('___').classList.add('___');\n}\n\nconst grade = score >= 80 ? 'A' : 'B';\nconst p = document.___(___);  \np.textContent = `Grade: ${grade}`;\ndocument.querySelector('___').appendChild(p);",
-      solution: "const score=88;\ndocument.querySelector('#score').textContent=score;\nconst statusEl=document.querySelector('#status');\nif(score>=60){\n  statusEl.textContent='Pass';\n  statusEl.style.color='green';\n}\nif(score>=80){\n  document.querySelector('#card').classList.add('highlight');\n}\nconst grade=score>=80?'A':'B';\nconst p=document.createElement('p');\np.textContent=`Grade:${grade}`;\ndocument.querySelector('#output').appendChild(p);",
-      hint: "querySelector('#id') for IDs. textContent sets text. createElement then appendChild.",
-      rubric: "querySelector used. textContent set. style.color changed. classList.add. createElement/appendChild."
-    }
-  ]
-},
-
-
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// PYTHON CORE — INTERMEDIATE (missing)
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 "Modules & Packages": {
   aiRubric: "Check import statements, from...import, __name__, module creation.",
@@ -882,9 +438,7 @@ const courseManifest = {
   ]
 },
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// PYTHON CORE — ADVANCED
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Advanced
 
 "Decorators & Closures": {
   aiRubric: "Check closure variable capture, @decorator syntax, functools.wraps.",
@@ -989,10 +543,272 @@ const courseManifest = {
 },
 
 
+// ═══════════════════════════════════════
+// FRONTEND
+// ═══════════════════════════════════════
+// Beginner
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// BACKEND — BEGINNER
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+"HTML Essentials": {
+  aiRubric: "Check valid HTML structure, semantic tags, nesting.",
+  lessons: [
+    {
+      title: "HTML Document Structure",
+      theory: "## HTML Skeleton\n```html\n<!DOCTYPE html>\n<html lang='en'>\n<head>\n  <meta charset='UTF-8'>\n  <title>Title</title>\n</head>\n<body>\n  <h1>Heading</h1>\n  <p>Paragraph</p>\n</body>\n</html>\n```",
+      instructions: "## Task: Student Profile Page\n1. DOCTYPE + full structure\n2. Title: 'My Profile'\n3. h1 with your name\n4. p with your course\n5. ul with 3 skills\n6. Link to GitHub",
+      starterCode: "<!DOCTYPE ___>\n<html lang='en'>\n<___>\n  <meta charset='UTF-8'>\n  <title>___</title>\n</___>\n<___>\n  <h1>___</h1>\n  <p>Course: ___</p>\n  <ul>\n    <li>___</li>\n    <li>___</li>\n    <li>___</li>\n  </ul>\n  <a href='https://github.com'>GitHub</a>\n</___>\n</html>",
+      solution: "<!DOCTYPE html>\n<html lang='en'>\n<head>\n  <meta charset='UTF-8'>\n  <title>My Profile</title>\n</head>\n<body>\n  <h1>Ada Okonkwo</h1>\n  <p>Course: Computer Science</p>\n  <ul><li>Python</li><li>FastAPI</li><li>SQL</li></ul>\n  <a href='https://github.com'>GitHub</a>\n</body>\n</html>",
+      hint: "head for meta info. body for visible content. ul > li for lists.",
+      rubric: "DOCTYPE. head/body. h1/p/ul/li/a all present."
+    },
+    {
+      title: "Semantic HTML",
+      theory: "## Semantic Tags\n```html\n<header>  — top of page\n<nav>     — navigation\n<main>    — main content\n<article> — self-contained\n<aside>   — sidebar\n<footer>  — bottom\n```\nSemantic HTML improves SEO and accessibility.",
+      instructions: "## Task: Blog Page\n1. `<header>` with site name + `<nav>` 3 links\n2. `<main>` with `<article>` (heading, date, 2 paras)\n3. `<aside>` with Related Posts list\n4. `<footer>` with copyright",
+      starterCode: "<!DOCTYPE html>\n<html lang='en'>\n<head><meta charset='UTF-8'><title>Blog</title></head>\n<body>\n\n  <___>\n    <h1>Mabel's Tech Blog</h1>\n    <___>\n      <a href='/'>Home</a>\n      <a href='/courses'>Courses</a>\n      <a href='/contact'>Contact</a>\n    </___>\n  </___>\n\n  <___>\n    <___>\n      <h2>Getting Started with Python</h2>\n      <time datetime='2024-01-15'>Jan 15, 2024</time>\n      <p>Python is one of the most popular languages...</p>\n      <p>In this article we cover the basics...</p>\n    </___>\n    <___>\n      <h3>Related Posts</h3>\n      <ul>\n        <li><a href='#'>Python Basics</a></li>\n        <li><a href='#'>FastAPI Tutorial</a></li>\n      </ul>\n    </___>\n  </___>\n\n  <___>\n    <p>&copy; 2024 Mabel Academy</p>\n  </___>\n\n</body></html>",
+      solution: "<!DOCTYPE html>\n<html lang='en'>\n<head><meta charset='UTF-8'><title>Blog</title></head>\n<body>\n<header>\n  <h1>Mabel's Tech Blog</h1>\n  <nav><a href='/'>Home</a><a href='/courses'>Courses</a><a href='/contact'>Contact</a></nav>\n</header>\n<main>\n  <article>\n    <h2>Getting Started with Python</h2>\n    <time datetime='2024-01-15'>Jan 15, 2024</time>\n    <p>Python is one of the most popular languages...</p>\n    <p>In this article we cover the basics...</p>\n  </article>\n  <aside>\n    <h3>Related Posts</h3>\n    <ul><li><a href='#'>Python Basics</a></li><li><a href='#'>FastAPI Tutorial</a></li></ul>\n  </aside>\n</main>\n<footer><p>&copy; 2024 Mabel Academy</p></footer>\n</body></html>",
+      hint: "header > nav. main > article + aside. footer at bottom.",
+      rubric: "All 6 semantic tags correct. nav in header. article and aside in main."
+    }
+  ]
+},
+
+"CSS Styling & Layout": {
+  aiRubric: "Check selectors, box model, flexbox, colors, typography.",
+  lessons: [
+    {
+      title: "Selectors & Box Model",
+      theory: "## CSS Basics\n```css\nh1 { color: #333; }          /* element */\n.card { padding: 16px; }     /* class */\n#header { background: #fff; } /* id */\n\n.box {\n  width: 200px;\n  padding: 16px;   /* inside */\n  border: 2px solid #333;\n  margin: 24px;    /* outside */\n  box-sizing: border-box;\n}\n```",
+      instructions: "## Task: Style a Student Card\n1. `body` — dark background, white text\n2. `.card` — white bg, rounded corners, padding, max-width 400px, box-shadow\n3. `.card h2` — teal color\n4. `.badge` — pill shape (border-radius: 20px)",
+      starterCode: "___ {\n  background: #1e1e1e;\n  color: white;\n  font-family: sans-serif;\n  display: flex;\n  justify-content: center;\n  padding: 40px;\n}\n\n.___ {\n  background: white;\n  color: #1e1e1e;\n  border-radius: ___;\n  padding: ___;\n  max-width: 400px;\n  box-shadow: 0 4px 20px rgba(0,0,0,0.3);\n}\n\n.card ___ {\n  color: #00e5a0;\n}\n\n.___ {\n  background: #00e5a0;\n  color: #1e1e1e;\n  border-radius: 20px;\n  padding: 4px 12px;\n  font-size: 12px;\n}",
+      solution: "body{background:#1e1e1e;color:white;font-family:sans-serif;display:flex;justify-content:center;padding:40px;}\n.card{background:white;color:#1e1e1e;border-radius:8px;padding:24px;max-width:400px;box-shadow:0 4px 20px rgba(0,0,0,0.3);}\n.card h2{color:#00e5a0;}\n.badge{background:#00e5a0;color:#1e1e1e;border-radius:20px;padding:4px 12px;font-size:12px;}",
+      hint: "body selector. .card class. .card h2 descendant. border-radius:20px for pill.",
+      rubric: "body bg set. .card styled. .card h2 teal. .badge pill shape."
+    },
+    {
+      title: "Flexbox Layout",
+      theory: "## Flexbox\n```css\n.container {\n  display: flex;\n  justify-content: space-between;  /* horizontal */\n  align-items: center;             /* vertical */\n  gap: 16px;\n}\n.item { flex: 1; }  /* grow equally */\n```",
+      instructions: "## Task: Navigation Bar\n1. Logo left, links center, button right\n2. All vertically centered\n3. Proper gap between links",
+      starterCode: ".navbar {\n  display: ___;\n  justify-content: ___;\n  align-items: ___;\n  padding: 16px 32px;\n  background: #1e1e1e;\n  gap: 24px;\n}\n\n.logo {\n  font-weight: bold;\n  color: #00e5a0;\n}\n\n.nav-links {\n  display: ___;\n  gap: ___;\n  list-style: none;\n}\n\n.nav-links a { color: white; text-decoration: none; }\n\n.login-btn {\n  padding: 8px 20px;\n  background: #00e5a0;\n  color: #1e1e1e;\n  border: none;\n  border-radius: 6px;\n  cursor: pointer;\n  margin-left: auto;\n}",
+      solution: ".navbar{display:flex;justify-content:space-between;align-items:center;padding:16px 32px;background:#1e1e1e;gap:24px;}\n.logo{font-weight:bold;color:#00e5a0;}\n.nav-links{display:flex;gap:24px;list-style:none;}\n.nav-links a{color:white;text-decoration:none;}\n.login-btn{padding:8px 20px;background:#00e5a0;color:#1e1e1e;border:none;border-radius:6px;cursor:pointer;margin-left:auto;}",
+      hint: "display:flex. justify-content:space-between. align-items:center. nav-links also flex.",
+      rubric: "display:flex on navbar. justify-content. align-items:center. nav-links flex with gap."
+    }
+  ]
+},
+
+"JavaScript Basics": {
+  aiRubric: "Check let/const, functions, array methods.",
+  lessons: [
+    {
+      title: "Variables & Functions",
+      theory: "## JS Basics\n```javascript\nconst name = 'Ada';  // can't reassign\nlet score = 0;       // can reassign\n\nfunction greet(name) {\n  return `Hello, ${name}!`;\n}\nconst add = (a, b) => a + b;  // arrow fn\nconsole.log(greet('Ada'));    // Hello, Ada!\n```",
+      instructions: "## Task: Score Processor\n1. `scores` array of 5 numbers\n2. `getAverage(arr)` using reduce\n3. `getGrade(avg)` → A/B/C/F\n4. Log: `Average: 82.4 | Grade: B`",
+      starterCode: "const scores = [78, 92, 65, 88, ___];\n\nfunction getAverage(arr) {\n  const sum = arr.reduce((___, b) => a + b, 0);\n  return sum / arr.___;\n}\n\nfunction getGrade(avg) {\n  if (avg >= 80) return ___;\n  else if (avg >= 70) return ___;\n  else if (avg >= 60) return ___;\n  else return ___;\n}\n\nconst avg = getAverage(scores);\nconsole.log(`Average: ${avg.toFixed(1)} | Grade: ${getGrade(avg)}`);",
+      solution: "const scores=[78,92,65,88,75];\nfunction getAverage(arr){\n  const sum=arr.reduce((a,b)=>a+b,0);\n  return sum/arr.length;\n}\nfunction getGrade(avg){\n  if(avg>=80)return'A';\n  else if(avg>=70)return'B';\n  else if(avg>=60)return'C';\n  else return'F';\n}\nconst avg=getAverage(scores);\nconsole.log(`Average:${avg.toFixed(1)} | Grade:${getGrade(avg)}`);",
+      hint: "reduce((a,b)=>a+b,0). arr.length for count. toFixed(1).",
+      rubric: "reduce for sum. Division. Grade conditions. Template literal."
+    },
+    {
+      title: "Array Methods",
+      theory: "## Array Methods\n```javascript\nconst nums = [1,2,3,4,5];\nnums.map(x => x*2)         // [2,4,6,8,10]\nnums.filter(x => x>2)      // [3,4,5]\nnums.reduce((a,b)=>a+b, 0) // 15\nnums.find(x => x>3)        // 4\nnums.sort((a,b)=>b-a)      // desc\n```",
+      instructions: "## Task: Student Processing\n`students = [{name, score}]`\n1. `map` to add `grade` field\n2. `filter` passing students (>=60)\n3. `reduce` for total score\n4. `find` student named 'Ngozi'\n5. `sort` by score descending",
+      starterCode: "const students = [\n  {name:'Ada',score:88},{name:'Tunde',score:55},\n  {name:'Ngozi',score:92},{name:'Emeka',score:67},{name:'Amaka',score:45}\n];\n\nconst withGrades = students.___(s => ({...s, grade: s.score>=80?'A':s.score>=70?'B':s.score>=60?'C':'F'}));\nconst passing = students.___(s => s.score >= ___);\nconst total = students.___((acc, s) => acc + s.score, 0);\nconst ngozi = students.___(s => s.name === ___);\nconst ranked = [...students].___((___, b) => b.score - a.score);\n\nconsole.log('Grades:', withGrades.map(s=>`${s.name}:${s.grade}`));\nconsole.log('Passing:', passing.length);\nconsole.log('Total:', total);\nconsole.log('Ngozi:', ngozi);\nconsole.log('Ranked:', ranked.map(s=>s.name));",
+      solution: "const students=[{name:'Ada',score:88},{name:'Tunde',score:55},{name:'Ngozi',score:92},{name:'Emeka',score:67},{name:'Amaka',score:45}];\nconst withGrades=students.map(s=>({...s,grade:s.score>=80?'A':s.score>=70?'B':s.score>=60?'C':'F'}));\nconst passing=students.filter(s=>s.score>=60);\nconst total=students.reduce((acc,s)=>acc+s.score,0);\nconst ngozi=students.find(s=>s.name==='Ngozi');\nconst ranked=[...students].sort((a,b)=>b.score-a.score);\nconsole.log('Grades:',withGrades.map(s=>`${s.name}:${s.grade}`));\nconsole.log('Passing:',passing.length);\nconsole.log('Total:',total);\nconsole.log('Ngozi:',ngozi);\nconsole.log('Ranked:',ranked.map(s=>s.name));",
+      hint: "map returns new array. filter keeps matching. reduce accumulates. find returns first match. spread [...arr] before sort.",
+      rubric: "map/filter/reduce/find/sort all used correctly."
+    }
+  ]
+},
+
+"Forms & Validation": {
+  aiRubric: "Check form elements, validation logic, error messages.",
+  lessons: [
+    {
+      title: "HTML Forms & JavaScript Validation",
+      theory: "## Forms\n```html\n<form id='myForm'>\n  <input type='text' id='name' required>\n  <input type='email' id='email'>\n  <input type='number' min='0' max='100'>\n  <select id='course'>\n    <option value='python'>Python</option>\n  </select>\n  <button type='submit'>Submit</button>\n</form>\n```\n```javascript\ndocument.getElementById('myForm').addEventListener('submit', (e) => {\n  e.preventDefault();  // stop page reload\n  const name = document.getElementById('name').value;\n  if (!name) { alert('Name required!'); return; }\n});\n```",
+      instructions: "## Task: Student Registration Form\nWrite HTML + JavaScript for a form that:\n1. Has fields: name, email, course (select), score (number 0-100)\n2. Validates: all required, email has @, score in range\n3. Shows inline error messages (not alert)\n4. On success, shows a summary of the registration",
+      starterCode: "// Validation logic (JavaScript)\nfunction validateForm(name, email, course, score) {\n    const errors = {};\n\n    if (!___) errors.name = 'Name is required';\n    if (!email.includes(___)) errors.email = 'Invalid email address';\n    if (!course) errors.course = 'Please select a course';\n    if (score < ___ || score > ___) errors.score = 'Score must be 0-100';\n\n    return errors;\n}\n\nfunction submitForm() {\n    const name  = 'Ada Okonkwo';   // simulate input\n    const email = 'ada@test.com';\n    const course = 'python';\n    const score = 88;\n\n    const errors = validateForm(___, ___, ___, ___);\n\n    if (Object.keys(errors).length > 0) {\n        console.log('Validation errors:', errors);\n        return;\n    }\n\n    console.log('Registration successful!');\n    console.log(`Student: ${name} | Course: ${course} | Score: ${score}`);\n}\n\n// Test with valid data\nsubmitForm();\n\n// Test with invalid data\nconst errors = validateForm('', 'not-an-email', '', 150);\nconsole.log('Expected errors:', errors);",
+      solution: "function validateForm(name,email,course,score){\n    const errors={};\n    if(!name)errors.name='Name is required';\n    if(!email.includes('@'))errors.email='Invalid email';\n    if(!course)errors.course='Please select a course';\n    if(score<0||score>100)errors.score='Score must be 0-100';\n    return errors;\n}\nfunction submitForm(){\n    const name='Ada Okonkwo',email='ada@test.com',course='python',score=88;\n    const errors=validateForm(name,email,course,score);\n    if(Object.keys(errors).length>0){console.log('Errors:',errors);return;}\n    console.log('Success!');\n    console.log(`${name}|${course}|${score}`);\n}\nsubmitForm();\nconst errors=validateForm('','not-an-email','',150);\nconsole.log('Expected errors:',errors);",
+      hint: "!name for empty check. email.includes('@'). score<0||score>100. Object.keys(errors).length.",
+      rubric: "4 validations. Error object built. Length check. Success and error paths tested."
+    }
+  ]
+},
+
+"Responsive Design Basics": {
+  aiRubric: "Check media queries, mobile-first, flexbox/grid for responsive layout.",
+  lessons: [
+    {
+      title: "Mobile-First Responsive CSS",
+      theory: "## Responsive Design\n```css\n/* Mobile first — base styles for small screens */\n.card { width: 100%; padding: 16px; }\n\n/* Tablet (768px+) */\n@media (min-width: 768px) {\n  .card { width: 50%; }\n}\n\n/* Desktop (1024px+) */\n@media (min-width: 1024px) {\n  .card { width: 33.333%; }\n}\n\n/* Grid layout */\n.grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));\n  gap: 20px;\n}\n```",
+      instructions: "## Task: Responsive Card Grid\nWrite CSS for a course card grid that:\n1. 1 column on mobile\n2. 2 columns on tablet (768px+)\n3. 3 columns on desktop (1024px+)\n4. Cards have padding, shadow, rounded corners\n5. Navigation bar stacks vertically on mobile",
+      starterCode: "/* Mobile First — base styles */\n* { box-sizing: border-box; margin: 0; padding: 0; }\nbody { font-family: sans-serif; background: #f5f5f5; }\n\n/* Navbar — stacks on mobile */\n.navbar {\n    display: flex;\n    flex-direction: ___; /* column on mobile */\n    background: #1e1e1e;\n    padding: 16px;\n    gap: 12px;\n}\n\n/* Card grid — 1 col on mobile */\n.grid {\n    display: ___;\n    grid-template-columns: ___; /* 1 col */\n    gap: 16px;\n    padding: 20px;\n}\n\n.card {\n    background: white;\n    border-radius: ___;\n    padding: 20px;\n    box-shadow: 0 2px 8px rgba(0,0,0,0.1);\n}\n\n/* Tablet */\n@media (min-width: ___) {\n    .navbar { flex-direction: ___; }\n    .grid { grid-template-columns: ___ ___ ; }\n}\n\n/* Desktop */\n@media (min-width: 1024px) {\n    .grid { grid-template-columns: ___ ___ ___; }\n}",
+      solution: "*{box-sizing:border-box;margin:0;padding:0}\nbody{font-family:sans-serif;background:#f5f5f5}\n.navbar{display:flex;flex-direction:column;background:#1e1e1e;padding:16px;gap:12px}\n.grid{display:grid;grid-template-columns:1fr;gap:16px;padding:20px}\n.card{background:white;border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}\n@media(min-width:768px){.navbar{flex-direction:row}.grid{grid-template-columns:1fr 1fr}}\n@media(min-width:1024px){.grid{grid-template-columns:1fr 1fr 1fr}}",
+      hint: "column for mobile, row for tablet. 1fr is one column unit. @media(min-width:768px).",
+      rubric: "Mobile: column nav, 1-col grid. Tablet: row nav, 2-col. Desktop: 3-col. card styles present."
+    }
+  ]
+},
+
+// Intermediate
+
+"DOM Manipulation": {
+  aiRubric: "Check querySelector, addEventListener, textContent, classList.",
+  lessons: [
+    {
+      title: "Selecting & Modifying Elements",
+      theory: "## DOM API\n```javascript\nconst el  = document.querySelector('.card');\nconst all = document.querySelectorAll('li');\n\nel.textContent = 'New text';\nel.style.color = 'red';\nel.classList.add('active');\nel.classList.toggle('hidden');\n\nconst p = document.createElement('p');\np.textContent = 'Hello';\ndocument.body.appendChild(p);\n```",
+      instructions: "## Task: Dynamic Score Card\n1. Set `#score` text to 88\n2. Set `#status` to 'Pass' (green) if score >= 60\n3. Add class `highlight` to `#card` if score >= 80\n4. Create and append `<p>Grade: A</p>` to `#output`",
+      starterCode: "const score = 88;\n\ndocument.querySelector(___).textContent = ___;\n\nconst statusEl = document.querySelector('___');\nif (score >= 60) {\n  statusEl.___ = 'Pass';\n  statusEl.style.___ = 'green';\n}\n\nif (score >= 80) {\n  document.querySelector('___').classList.add('___');\n}\n\nconst grade = score >= 80 ? 'A' : 'B';\nconst p = document.___(___);  \np.textContent = `Grade: ${grade}`;\ndocument.querySelector('___').appendChild(p);",
+      solution: "const score=88;\ndocument.querySelector('#score').textContent=score;\nconst statusEl=document.querySelector('#status');\nif(score>=60){\n  statusEl.textContent='Pass';\n  statusEl.style.color='green';\n}\nif(score>=80){\n  document.querySelector('#card').classList.add('highlight');\n}\nconst grade=score>=80?'A':'B';\nconst p=document.createElement('p');\np.textContent=`Grade:${grade}`;\ndocument.querySelector('#output').appendChild(p);",
+      hint: "querySelector('#id') for IDs. textContent sets text. createElement then appendChild.",
+      rubric: "querySelector used. textContent set. style.color changed. classList.add. createElement/appendChild."
+    }
+  ]
+},
+
+"Fetch API & AJAX": {
+  aiRubric: "Check fetch usage, async/await, .then(), error handling, JSON parsing.",
+  lessons: [
+    {
+      title: "Fetch API & Async JS",
+      theory: "## Fetch API\n```javascript\n// With async/await\nasync function getUser(id) {\n  try {\n    const res = await fetch(`/api/users/${id}`);\n    if (!res.ok) throw new Error(`HTTP ${res.status}`);\n    const data = await res.json();\n    return data;\n  } catch (err) {\n    console.error('Fetch failed:', err);\n  }\n}\n\n// POST request\nconst res = await fetch('/api/students', {\n  method: 'POST',\n  headers: {'Content-Type': 'application/json'},\n  body: JSON.stringify({name: 'Ada', score: 88})\n});\n```",
+      instructions: "## Task: Student API Client (JS)\nWrite async JavaScript functions:\n1. `fetchStudents()` — GET all students from JSONPlaceholder /users\n2. `fetchStudent(id)` — GET one user\n3. `createStudent(data)` — POST to /posts\n4. Handle errors properly\n5. Print results",
+      starterCode: "const BASE_URL = 'https://jsonplaceholder.typicode.com';\n\nasync function fetchStudents() {\n    const res = await ___(f`${BASE_URL}/users`);\n    if (!res.ok) throw new Error(`Error: ${res.status}`);\n    return await res.___();\n}\n\nasync function fetchStudent(id) {\n    try {\n        const res = await fetch(`${BASE_URL}/users/${___}`);\n        if (!res.___) throw new Error(`Student ${id} not found`);\n        return await res.json();\n    } catch (err) {\n        console.error(err.message);\n        return null;\n    }\n}\n\nasync function createStudent(data) {\n    const res = await fetch(`${BASE_URL}/posts`, {\n        method: ___,\n        headers: {'Content-Type': 'application/json'},\n        body: JSON.stringify(___)\n    });\n    return await res.___();\n}\n\nasync function main() {\n    const students = await fetchStudents();\n    console.log(`Fetched ${students.length} students`);\n    console.log('First:', students[0].name, students[0].email);\n\n    const one = await fetchStudent(1);\n    console.log('User 1:', one?.name);\n\n    const created = await createStudent({name:'Ada',course:'Python',score:88});\n    console.log('Created:', created);\n}\n\nmain();",
+      solution: "const BASE_URL='https://jsonplaceholder.typicode.com';\nasync function fetchStudents(){\n    const res=await fetch(`${BASE_URL}/users`);\n    if(!res.ok)throw new Error(`Error:${res.status}`);\n    return await res.json();\n}\nasync function fetchStudent(id){\n    try{\n        const res=await fetch(`${BASE_URL}/users/${id}`);\n        if(!res.ok)throw new Error(`Not found:${id}`);\n        return await res.json();\n    }catch(err){console.error(err.message);return null;}\n}\nasync function createStudent(data){\n    const res=await fetch(`${BASE_URL}/posts`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});\n    return await res.json();\n}\nasync function main(){\n    const students=await fetchStudents();\n    console.log(`Fetched ${students.length}`);\n    console.log('First:',students[0].name,students[0].email);\n    const one=await fetchStudent(1);\n    console.log('User 1:',one?.name);\n    const created=await createStudent({name:'Ada',course:'Python',score:88});\n    console.log('Created:',created);\n}\nmain();",
+      hint: "await fetch(url). res.ok checks status. res.json() parses. POST needs method, headers, body.",
+      rubric: "fetch with await. res.ok check. json() called. POST with headers and JSON.stringify."
+    }
+  ]
+},
+
+"ES6+ Modern JS": {
+  aiRubric: "Check destructuring, spread, arrow functions, template literals, modules.",
+  lessons: [
+    {
+      title: "Modern JavaScript Features",
+      theory: "## ES6+ Features\n```javascript\n// Destructuring\nconst {name, score} = student;\nconst [first, ...rest] = array;\n\n// Spread operator\nconst merged = {...obj1, ...obj2};\nconst combined = [...arr1, ...arr2];\n\n// Optional chaining\nconst city = user?.address?.city;\n\n// Nullish coalescing\nconst name = user.name ?? 'Anonymous';\n\n// Template literals\nconst msg = `Hello ${name}, your score is ${score}`;\n\n// Async/await (ES2017)\nconst data = await fetchData();\n```",
+      instructions: "## Task: Modern JS Toolkit\n1. Destructure a student object\n2. Merge two objects with spread\n3. Use optional chaining on nested object\n4. Map an array using arrow functions and destructuring\n5. Use nullish coalescing for defaults",
+      starterCode: "// 1. Destructuring\nconst student = {name:'Ada', score:88, course:'Python', city:'Lagos'};\nconst {___, ___, ...rest} = student;\nconsole.log(name, score);\nconsole.log('Rest:', rest);\n\n// 2. Spread merge\nconst base = {role:'student', active:true};\nconst extra = {name:'Ada', score:88};\nconst merged = {...___, ...___};\nconsole.log('Merged:', merged);\n\n// 3. Optional chaining\nconst user = {profile: {address: {city:'Lagos'}}};\nconst missingUser = null;\nconst city1 = user?.profile?.address?.___;\nconst city2 = missingUser?.___.___; // no error!\nconsole.log(city1, city2); // Lagos undefined\n\n// 4. Array destructuring in map\nconst pairs = [['Ada',88], ['Tunde',72], ['Ngozi',95]];\nconst formatted = pairs.map(([___, ___]) => `${name}: ${score >= 80 ? 'A' : 'B'}`);\nconsole.log(formatted);\n\n// 5. Nullish coalescing\nconst settings = {theme: null, lang: 'en'};\nconst theme = settings.theme ?? ___;\nconst lang  = settings.lang  ?? 'en';\nconsole.log(theme, lang);",
+      solution: "const student={name:'Ada',score:88,course:'Python',city:'Lagos'};\nconst{name,score,...rest}=student;\nconsole.log(name,score);\nconsole.log('Rest:',rest);\nconst base={role:'student',active:true};\nconst extra={name:'Ada',score:88};\nconst merged={...base,...extra};\nconsole.log('Merged:',merged);\nconst user={profile:{address:{city:'Lagos'}}};\nconst missingUser=null;\nconst city1=user?.profile?.address?.city;\nconst city2=missingUser?.profile?.city;\nconsole.log(city1,city2);\nconst pairs=[['Ada',88],['Tunde',72],['Ngozi',95]];\nconst formatted=pairs.map(([name,score])=>`${name}:${score>=80?'A':'B'}`);\nconsole.log(formatted);\nconst settings={theme:null,lang:'en'};\nconst theme=settings.theme??'dark';\nconst lang=settings.lang??'en';\nconsole.log(theme,lang);",
+      hint: "Destructure with {}. Spread: {...obj1,...obj2}. ?. for optional chain. ?? for nullish default.",
+      rubric: "Object destructure with rest. Spread merge. Optional chaining. Array destructure in map. ??."
+    }
+  ]
+},
+
+"CSS Animations": {
+  aiRubric: "Check @keyframes, transition, animation properties.",
+  lessons: [
+    {
+      title: "CSS Transitions & Animations",
+      theory: "## CSS Animations\n```css\n/* Transitions — smooth property changes */\n.btn { transition: background 0.3s ease, transform 0.2s; }\n.btn:hover { background: #00e5a0; transform: translateY(-2px); }\n\n/* Keyframe animations */\n@keyframes fadeIn {\n  from { opacity: 0; transform: translateY(20px); }\n  to   { opacity: 1; transform: translateY(0); }\n}\n\n.card { animation: fadeIn 0.5s ease forwards; }\n\n/* Pulse animation */\n@keyframes pulse {\n  0%, 100% { opacity: 1; }\n  50%       { opacity: 0.4; }\n}\n```",
+      instructions: "## Task: Animated UI Components\nWrite CSS for:\n1. Button with hover transition (color + scale)\n2. Card with fadeIn animation on load\n3. Loading spinner with rotate animation\n4. Pulse effect for a status dot\n5. Slide-in from left animation",
+      starterCode: "/* 1. Button hover transition */\n.btn {\n    padding: 10px 20px;\n    background: #007acc;\n    color: white;\n    border: none;\n    border-radius: 6px;\n    cursor: pointer;\n    transition: background ___ ease, transform ___;\n}\n.btn:hover {\n    background: #005999;\n    transform: ___(-2px);\n}\n\n/* 2. FadeIn keyframe */\n@___ fadeIn {\n    from { opacity: 0; transform: translateY(20px); }\n    to   { opacity: 1; transform: translateY(0); }\n}\n.card { animation: fadeIn ___ ease forwards; }\n\n/* 3. Spinner */\n@keyframes spin {\n    from { transform: rotate(0deg); }\n    to   { transform: rotate(___); }\n}\n.spinner {\n    width: 32px; height: 32px;\n    border: 3px solid #eee;\n    border-top-color: #007acc;\n    border-radius: 50%;\n    animation: spin ___ linear ___;\n}\n\n/* 4. Pulse */\n@keyframes pulse {\n    0%, 100% { opacity: 1; }\n    50% { opacity: ___; }\n}\n.status-dot { animation: pulse 2s infinite; }\n\n/* 5. Slide in */\n@keyframes slideIn {\n    from { transform: translateX(___); opacity: 0; }\n    to   { transform: translateX(0); opacity: 1; }\n}\n.slide { animation: slideIn 0.4s ease; }",
+      solution: ".btn{padding:10px 20px;background:#007acc;color:white;border:none;border-radius:6px;cursor:pointer;transition:background 0.3s ease,transform 0.2s;}\n.btn:hover{background:#005999;transform:translateY(-2px);}\n@keyframes fadeIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}\n.card{animation:fadeIn 0.5s ease forwards;}\n@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}\n.spinner{width:32px;height:32px;border:3px solid #eee;border-top-color:#007acc;border-radius:50%;animation:spin 1s linear infinite;}\n@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}\n.status-dot{animation:pulse 2s infinite;}\n@keyframes slideIn{from{transform:translateX(-100px);opacity:0;}to{transform:translateX(0);opacity:1;}}\n.slide{animation:slideIn 0.4s ease;}",
+      hint: "transition: property duration easing. @keyframes name { from { } to { } }. animation: name duration easing iteration.",
+      rubric: "transition on button. fadeIn @keyframes. spin 360deg infinite. pulse opacity. slideIn from left."
+    }
+  ]
+},
+
+"LocalStorage & State": {
+  aiRubric: "Check localStorage get/set/remove, JSON serialization, state management.",
+  lessons: [
+    {
+      title: "Browser Storage & State",
+      theory: "## localStorage\n```javascript\n// Store\nlocalStorage.setItem('user', JSON.stringify({name:'Ada'}));\n\n// Retrieve\nconst user = JSON.parse(localStorage.getItem('user'));\n\n// Remove\nlocalStorage.removeItem('user');\n\n// Clear all\nlocalStorage.clear();\n\n// Check exists\nconst exists = localStorage.getItem('user') !== null;\n```\n\n**Note:** localStorage stores strings only — always use JSON.stringify/parse for objects.",
+      instructions: "## Task: Student Progress Tracker\nWrite JavaScript that:\n1. Saves student name and progress to localStorage\n2. Loads it on page start (persists across refreshes)\n3. Updates progress when a lesson is completed\n4. Shows total XP and completed lessons\n5. Has a reset function",
+      starterCode: "const STORAGE_KEY = 'mabel_student_v1';\n\nfunction loadProgress() {\n    const raw = localStorage.getItem(___);\n    if (!raw) return {name:'Student', xp:0, completed:[]};\n    return JSON.___(raw);\n}\n\nfunction saveProgress(data) {\n    localStorage.setItem(___, JSON.___(data));\n}\n\nfunction completeLesson(lessonId, xpReward=50) {\n    const progress = loadProgress();\n    if (!progress.completed.includes(___)) {\n        progress.completed.push(lessonId);\n        progress.xp += ___;\n        saveProgress(___);\n        console.log(`Completed ${lessonId}! +${xpReward} XP. Total: ${progress.xp}`);\n    } else {\n        console.log(`${lessonId} already completed.`);\n    }\n}\n\nfunction showStats() {\n    const p = loadProgress();\n    console.log(`Student: ${p.___}`);\n    console.log(`XP:      ${p.___}`);\n    console.log(`Lessons: ${p.___.length}`);\n    console.log(`Done:    ${p.completed.join(', ')}`);\n}\n\nfunction reset() {\n    localStorage.___(STORAGE_KEY);\n    console.log('Progress reset!');\n}\n\n// Test\ncompleteLesson('python-001');\ncompleteLesson('python-002', 75);\ncompleteLesson('python-001');  // duplicate\nshowStats();",
+      solution: "const STORAGE_KEY='mabel_student_v1';\nfunction loadProgress(){\n    const raw=localStorage.getItem(STORAGE_KEY);\n    if(!raw)return{name:'Student',xp:0,completed:[]};\n    return JSON.parse(raw);\n}\nfunction saveProgress(data){\n    localStorage.setItem(STORAGE_KEY,JSON.stringify(data));\n}\nfunction completeLesson(lessonId,xpReward=50){\n    const progress=loadProgress();\n    if(!progress.completed.includes(lessonId)){\n        progress.completed.push(lessonId);\n        progress.xp+=xpReward;\n        saveProgress(progress);\n        console.log(`Completed ${lessonId}! +${xpReward} XP. Total:${progress.xp}`);\n    }else{console.log(`${lessonId} already done.`);}\n}\nfunction showStats(){\n    const p=loadProgress();\n    console.log(`Student:${p.name}`);\n    console.log(`XP:${p.xp}`);\n    console.log(`Lessons:${p.completed.length}`);\n    console.log(`Done:${p.completed.join(', ')}`);\n}\nfunction reset(){\n    localStorage.removeItem(STORAGE_KEY);\n    console.log('Reset!');\n}\ncompleteLesson('python-001');\ncompleteLesson('python-002',75);\ncompleteLesson('python-001');\nshowStats();",
+      hint: "JSON.stringify to save objects. JSON.parse to load. includes() checks duplicates. removeItem to reset.",
+      rubric: "JSON.stringify/parse. includes() duplicate check. xp += reward. removeItem. showStats prints all."
+    }
+  ]
+},
+
+// Advanced
+
+"React Fundamentals": {
+  aiRubric: "Check React components, props, useState, JSX syntax.",
+  lessons: [
+    {
+      title: "React Components & Props",
+      theory: "## React Basics\n```jsx\n// Functional component\nfunction StudentCard({ name, score }) {\n  return (\n    <div className='card'>\n      <h2>{name}</h2>\n      <p>Score: {score}</p>\n    </div>\n  );\n}\n\n// Usage\n<StudentCard name='Ada' score={88} />\n\n// useState hook\nconst [count, setCount] = useState(0);\n// Update: setCount(count + 1);\n```",
+      instructions: "## Task: Student Dashboard Component\nWrite React-style component logic in Python (since we can't render JSX here):\n1. Define component props (name, score, course, xp)\n2. Compute derived state: grade, level badge\n3. Simulate rendering by returning a dict\n4. Create a list of 3 student card components",
+      starterCode: "# Simulating React component logic in Python\n\ndef StudentCard(name, score, course, xp=0):\n    # Derived state\n    grade = 'A' if score >= 90 else 'B' if score >= 80 else 'C' if score >= 70 else 'F'\n    level = 'Expert' if xp >= 1000 else 'Intermediate' if xp >= 500 else ___\n    badge_color = '#00e5a0' if grade in ['A','B'] else ___\n\n    # Simulated JSX render\n    return {\n        'component': 'StudentCard',\n        'props': {'name':name,'score':score,'course':course,'xp':xp},\n        'state': {'grade':grade,'level':___,'badge_color':___},\n        'html': f'<div class=\"card\"><h2>{name}</h2><p>{course} | Grade:{grade}</p><span style=\"color:{badge_color}\">{___}</span></div>'\n    }\n\n# List rendering (like .map() in React)\nstudents_data = [\n    ('Ada',   88, 'Python',  750),\n    ('Tunde', 72, 'SQL',     200),\n    ('Ngozi', 95, 'FastAPI', 1200)\n]\n\ncomponents = [StudentCard(n, s, c, x) for n, s, c, x in ___]\n\nfor comp in components:\n    print(comp['html'])\n    print(f'  State: grade={comp[\"state\"][\"grade\"]}, level={comp[\"state\"][\"level\"]}')\n    print()",
+      solution: "def StudentCard(name,score,course,xp=0):\n    grade='A' if score>=90 else 'B' if score>=80 else 'C' if score>=70 else 'F'\n    level='Expert' if xp>=1000 else 'Intermediate' if xp>=500 else 'Beginner'\n    badge_color='#00e5a0' if grade in['A','B'] else '#ef4444'\n    return{'component':'StudentCard','props':{'name':name,'score':score,'course':course,'xp':xp},'state':{'grade':grade,'level':level,'badge_color':badge_color},'html':f'<div class=\"card\"><h2>{name}</h2><p>{course}|Grade:{grade}</p><span style=\"color:{badge_color}\">{level}</span></div>'}\nstudents_data=[('Ada',88,'Python',750),('Tunde',72,'SQL',200),('Ngozi',95,'FastAPI',1200)]\ncomponents=[StudentCard(n,s,c,x) for n,s,c,x in students_data]\nfor comp in components:\n    print(comp['html'])\n    print(f'  State:grade={comp[\"state\"][\"grade\"]},level={comp[\"state\"][\"level\"]}')\n    print()",
+      hint: "Ternary for grade/level. List comprehension for components. Access dict keys for state.",
+      rubric: "StudentCard returns dict. grade and level computed. badge_color set. List of 3 components."
+    }
+  ]
+},
+
+"React Hooks & Context": {
+  aiRubric: "Check useState, useEffect, useContext patterns.",
+  lessons: [
+    {
+      title: "React Hooks Pattern",
+      theory: "## React Hooks\n```jsx\n// useState — local state\nconst [students, setStudents] = useState([]);\n\n// useEffect — side effects (fetch, subscribe)\nuseEffect(() => {\n  fetchStudents().then(data => setStudents(data));\n}, []);  // [] = run once on mount\n\n// useContext — global state\nconst theme = useContext(ThemeContext);\n\n// Custom hook\nfunction useLocalStorage(key, initial) {\n  const [value, setValue] = useState(\n    () => JSON.parse(localStorage.getItem(key)) ?? initial\n  );\n  // ...\n  return [value, setValue];\n}\n```",
+      instructions: "## Task: Simulate React Hooks\nSimulate React hook behaviour in Python:\n1. `useState` — returns value and setter\n2. `useEffect` — runs callback with cleanup\n3. `useReducer` — state + dispatch pattern\n4. A simple student list reducer",
+      starterCode: "# Simulating React hooks in Python\n\ndef useState(initial):\n    state = [initial]  # list allows mutation in closure\n    def setState(new_val):\n        state[0] = new_val if not callable(new_val) else new_val(state[0])\n    return state, setState\n\ndef useEffect(callback, deps=None):\n    # In React, this runs after render\n    # Here we simulate by calling immediately\n    cleanup = ___()\n    return cleanup\n\ndef useReducer(reducer, initial_state):\n    state = [initial_state]\n    def dispatch(action):\n        state[0] = reducer(state[0], ___)\n    return state, dispatch\n\n# Student list reducer\ndef studentsReducer(state, action):\n    if action['type'] == 'ADD':\n        return state + [action[___]]\n    elif action['type'] == ___:\n        return [s for s in state if s['id'] != action['id']]\n    elif action['type'] == 'UPDATE_SCORE':\n        return [{**s, 'score': action['score']} if s['id'] == action['id'] else s\n                for s in state]\n    return state\n\n# Test\nstudent_state, dispatch = useReducer(studentsReducer, [])\n\ndispatch({'type':'ADD','student':{'id':1,'name':'Ada','score':88}})\ndispatch({'type':'ADD','student':{'id':2,'name':'Tunde','score':72}})\nprint('After adds:', student_state[0])\n\ndispatch({'type':'UPDATE_SCORE','id':1,'score':95})\nprint('After update:', student_state[0])\n\ndispatch({'type':'DELETE','id':2})\nprint('After delete:', student_state[0])",
+      solution: "def useState(initial):\n    state=[initial]\n    def setState(new_val):\n        state[0]=new_val if not callable(new_val) else new_val(state[0])\n    return state,setState\ndef useEffect(callback,deps=None):\n    cleanup=callback()\n    return cleanup\ndef useReducer(reducer,initial_state):\n    state=[initial_state]\n    def dispatch(action):\n        state[0]=reducer(state[0],action)\n    return state,dispatch\ndef studentsReducer(state,action):\n    if action['type']=='ADD':\n        return state+[action['student']]\n    elif action['type']=='DELETE':\n        return[s for s in state if s['id']!=action['id']]\n    elif action['type']=='UPDATE_SCORE':\n        return[{**s,'score':action['score']} if s['id']==action['id'] else s for s in state]\n    return state\nstudent_state,dispatch=useReducer(studentsReducer,[])\ndispatch({'type':'ADD','student':{'id':1,'name':'Ada','score':88}})\ndispatch({'type':'ADD','student':{'id':2,'name':'Tunde','score':72}})\nprint('After adds:',student_state[0])\ndispatch({'type':'UPDATE_SCORE','id':1,'score':95})\nprint('After update:',student_state[0])\ndispatch({'type':'DELETE','id':2})\nprint('After delete:',student_state[0])",
+      hint: "state[0]=reducer(state[0],action). ADD appends. DELETE filters. UPDATE_SCORE maps with spread.",
+      rubric: "useReducer calls reducer. 3 action types handled. ADD/DELETE/UPDATE_SCORE all work."
+    }
+  ]
+},
+
+"Performance Optimization": {
+  aiRubric: "Check lazy loading, debounce, memoization, bundle concepts.",
+  lessons: [
+    {
+      title: "Frontend Performance",
+      theory: "## Performance Techniques\n```javascript\n// Debounce — wait until user stops typing\nfunction debounce(fn, delay) {\n  let timer;\n  return function(...args) {\n    clearTimeout(timer);\n    timer = setTimeout(() => fn(...args), delay);\n  };\n}\n\n// Memoize — cache expensive results\nfunction memoize(fn) {\n  const cache = {};\n  return function(key) {\n    if (cache[key] !== undefined) return cache[key];\n    return (cache[key] = fn(key));\n  };\n}\n\n// Lazy load images\n<img src='placeholder.jpg' data-src='real.jpg' loading='lazy'>\n```",
+      instructions: "## Task: Performance Utilities\n1. `debounce(fn, delay)` — prevents rapid function calls\n2. `throttle(fn, interval)` — limits calls to once per interval\n3. `memoize(fn)` — caches results for same inputs\n4. Test debounce with search simulation\n5. Test memoize with expensive computation",
+      starterCode: "function debounce(fn, delay) {\n    let timer;\n    return function(...args) {\n        clearTimeout(___);\n        timer = setTimeout(() => fn(...args), ___);\n    };\n}\n\nfunction throttle(fn, interval) {\n    let lastCall = 0;\n    return function(...args) {\n        const now = Date.now();\n        if (now - lastCall >= ___) {\n            lastCall = now;\n            return fn(...args);\n        }\n    };\n}\n\nfunction memoize(fn) {\n    const cache = {};\n    return function(...args) {\n        const key = JSON.stringify(args);\n        if (key in ___) return cache[key];\n        return (cache[___] = fn(...args));\n    };\n}\n\n// Test debounce\nconst search = debounce((query) => console.log('Searching:', query), 300);\nsearch('p'); search('py'); search('pyt'); search('pyth');\nsetTimeout(() => search('python'), 400);  // only this fires\n\n// Test memoize\nlet callCount = 0;\nconst expensive = memoize((n) => {\n    callCount++;\n    return n * n;\n});\n\nconsole.log(expensive(5));   // computes\nconsole.log(expensive(5));   // cached\nconsole.log(expensive(10));  // computes\nconsole.log('Total calls:', callCount);  // should be 2",
+      solution: "function debounce(fn,delay){\n    let timer;\n    return function(...args){\n        clearTimeout(timer);\n        timer=setTimeout(()=>fn(...args),delay);\n    };\n}\nfunction throttle(fn,interval){\n    let lastCall=0;\n    return function(...args){\n        const now=Date.now();\n        if(now-lastCall>=interval){\n            lastCall=now;\n            return fn(...args);\n        }\n    };\n}\nfunction memoize(fn){\n    const cache={};\n    return function(...args){\n        const key=JSON.stringify(args);\n        if(key in cache)return cache[key];\n        return(cache[key]=fn(...args));\n    };\n}\nconst search=debounce((q)=>console.log('Searching:',q),300);\nsearch('p');search('py');search('pyt');search('pyth');\nsetTimeout(()=>search('python'),400);\nlet callCount=0;\nconst expensive=memoize((n)=>{callCount++;return n*n;});\nconsole.log(expensive(5));\nconsole.log(expensive(5));\nconsole.log(expensive(10));\nconsole.log('Calls:',callCount);",
+      hint: "clearTimeout(timer) cancels previous. JSON.stringify(args) as cache key. Date.now() for throttle.",
+      rubric: "debounce clears and resets timer. throttle checks interval. memoize uses JSON key. callCount=2."
+    }
+  ]
+},
+
+"Testing Frontend Code": {
+  aiRubric: "Check test function structure, assertions, test runner pattern.",
+  lessons: [
+    {
+      title: "Unit Testing JavaScript",
+      theory: "## Testing Pattern\n```javascript\n// Minimal test runner\nfunction test(name, fn) {\n  try {\n    fn();\n    console.log(`✅ ${name}`);\n  } catch(err) {\n    console.log(`❌ ${name}: ${err.message}`);\n  }\n}\n\nfunction expect(received) {\n  return {\n    toBe: (expected) => {\n      if (received !== expected)\n        throw new Error(`Expected ${expected}, got ${received}`);\n    }\n  };\n}\n\ntest('adds numbers', () => {\n  expect(add(2, 3)).toBe(5);\n});\n```",
+      instructions: "## Task: Test Suite for Utilities\nBuild a mini test framework and test your utility functions:\n1. `test(name, fn)` runner with pass/fail count\n2. `expect(val)` with `toBe`, `toEqual`, `toBeTruthy`, `toContain`\n3. Write 5 tests for: add, getGrade, filterPassingStudents\n4. Show summary: X passed, Y failed",
+      starterCode: "let passed = 0, failed = 0;\n\nfunction test(name, fn) {\n    try {\n        fn();\n        ___ ++;\n        console.log(`OK ${name}`);\n    } catch(err) {\n        ___++;\n        console.log(`FAIL ${name}: ${err.message}`);\n    }\n}\n\nfunction expect(received) {\n    return {\n        toBe(expected) {\n            if (received !== expected)\n                throw new Error(`Expected ${JSON.stringify(expected)}, got ${JSON.stringify(received)}`);\n        },\n        toEqual(expected) {\n            if (JSON.stringify(received) !== JSON.stringify(___)) \n                throw new Error(`Objects not equal`);\n        },\n        toBeTruthy() {\n            if (!received) throw new Error(`Expected truthy, got ${received}`);\n        },\n        toContain(item) {\n            if (!received.___(item)) throw new Error(`Expected to contain ${item}`);\n        }\n    };\n}\n\n// Functions to test\nconst add = (a, b) => a + b;\nconst getGrade = s => s>=90?'A':s>=80?'B':s>=70?'C':'F';\nconst filterPassing = students => students.filter(s => s.score >= 60);\n\n// Tests\ntest('add(2,3) equals 5', () => expect(add(2,3)).toBe(5));\ntest('add(0,0) equals 0', () => expect(add(0,0)).toBe(___));\ntest('score 95 gets grade A', () => expect(getGrade(95)).toBe(___));\ntest('score 55 gets grade F', () => expect(getGrade(55)).toBe(___));\ntest('filters passing students', () => {\n    const students = [{name:'Ada',score:88},{name:'Tunde',score:45}];\n    const result = filterPassing(students);\n    expect(result.length).toBe(___);\n    expect(result[0].name).toBe('Ada');\n});\n\nconsole.log(`\\nResults: ${passed} passed, ${failed} failed`);",
+      solution: "let passed=0,failed=0;\nfunction test(name,fn){\n    try{fn();passed++;console.log(`OK ${name}`);}\n    catch(err){failed++;console.log(`FAIL ${name}:${err.message}`);}\n}\nfunction expect(received){\n    return{\n        toBe(expected){if(received!==expected)throw new Error(`Expected ${JSON.stringify(expected)},got ${JSON.stringify(received)}`);},\n        toEqual(expected){if(JSON.stringify(received)!==JSON.stringify(expected))throw new Error('Not equal');},\n        toBeTruthy(){if(!received)throw new Error(`Expected truthy,got ${received}`);},\n        toContain(item){if(!received.includes(item))throw new Error(`Expected to contain ${item}`);}\n    };\n}\nconst add=(a,b)=>a+b;\nconst getGrade=s=>s>=90?'A':s>=80?'B':s>=70?'C':'F';\nconst filterPassing=students=>students.filter(s=>s.score>=60);\ntest('add(2,3)=5',()=>expect(add(2,3)).toBe(5));\ntest('add(0,0)=0',()=>expect(add(0,0)).toBe(0));\ntest('95->A',()=>expect(getGrade(95)).toBe('A'));\ntest('55->F',()=>expect(getGrade(55)).toBe('F'));\ntest('filter passing',()=>{\n    const students=[{name:'Ada',score:88},{name:'Tunde',score:45}];\n    const result=filterPassing(students);\n    expect(result.length).toBe(1);\n    expect(result[0].name).toBe('Ada');\n});\nconsole.log(`\\n${passed} passed,${failed} failed`);",
+      hint: "passed++ on success, failed++ on catch. toBe uses ===. toEqual uses JSON.stringify comparison.",
+      rubric: "test runner with try/catch. 4 matchers. 5 tests. Pass/fail count shown."
+    }
+  ]
+},
+
+"Build Tools & Webpack": {
+  aiRubric: "Check module system, bundler concepts, npm scripts.",
+  lessons: [
+    {
+      title: "Modern Build Pipeline",
+      theory: "## Build Tools\n```bash\n# Initialize project\nnpm init -y\nnpm install --save-dev webpack webpack-cli\nnpm install react react-dom\n\n# package.json scripts\n\"scripts\": {\n  \"build\": \"webpack --mode production\",\n  \"dev\":   \"webpack serve --mode development\",\n  \"test\":  \"jest\"\n}\n```\n\n**Webpack** bundles all JS files into one.\n**Vite** is faster — modern alternative.\n**npm** manages packages and scripts.",
+      instructions: "## Task: Project Setup Simulation\nWrite Python code that generates a complete project structure:\n1. `package.json` with dependencies and scripts\n2. `webpack.config.js` content\n3. `.gitignore` file\n4. `src/index.js` entry point\n5. Print all files that would be created",
+      starterCode: "import json\n\nfiles = {}\n\n# 1. package.json\nfiles['package.json'] = json.dumps({\n    'name': 'mabel-academy',\n    'version': '1.0.0',\n    'scripts': {\n        'build': ___,\n        'dev':   'webpack serve --mode development --open',\n        'test':  ___\n    },\n    'dependencies': {\n        'react': '^18.0.0',\n        'react-dom': '^18.0.0'\n    },\n    'devDependencies': {\n        'webpack': '^5.0.0',\n        'webpack-cli': ___,\n        'webpack-dev-server': '^4.0.0',\n        'babel-loader': '^9.0.0',\n        '@babel/core': '^7.0.0',\n        '@babel/preset-react': ___\n    }\n}, indent=2)\n\n# 2. webpack.config.js\nfiles['webpack.config.js'] = '''\nconst path = require('path');\nmodule.exports = {\n  entry: './src/index.js',\n  output: { path: path.resolve(__dirname, 'dist'), filename: 'bundle.js' },\n  module: { rules: [{ test: /\\.jsx?$/, use: 'babel-loader' }] }\n};\n'''\n\n# 3. .gitignore\nfiles['.gitignore'] = 'node_modules/\\ndist/\\n.env\\n*.log'\n\n# 4. src/index.js\nfiles['src/index.js'] = '''\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(<h1>Mabel Academy</h1>);\n'''\n\nfor filename, content in files.items():\n    print(f'=== {filename} ===')\n    print(content[:200])\n    print()",
+      solution: "import json\nfiles={}\nfiles['package.json']=json.dumps({'name':'mabel-academy','version':'1.0.0','scripts':{'build':'webpack --mode production','dev':'webpack serve --mode development --open','test':'jest'},'dependencies':{'react':'^18.0.0','react-dom':'^18.0.0'},'devDependencies':{'webpack':'^5.0.0','webpack-cli':'^5.0.0','webpack-dev-server':'^4.0.0','babel-loader':'^9.0.0','@babel/core':'^7.0.0','@babel/preset-react':'^7.0.0'}},indent=2)\nfiles['webpack.config.js']=\"const path=require('path');module.exports={entry:'./src/index.js',output:{path:path.resolve(__dirname,'dist'),filename:'bundle.js'},module:{rules:[{test:/\\.jsx?$/,use:'babel-loader'}]}};\"\nfiles['.gitignore']='node_modules/\\ndist/\\n.env\\n*.log'\nfiles['src/index.js']=\"import React from 'react';import ReactDOM from 'react-dom/client';const root=ReactDOM.createRoot(document.getElementById('root'));root.render(<h1>Mabel Academy</h1>);\"\nfor filename,content in files.items():\n    print(f'==={filename}===')\n    print(content[:200])\n    print()",
+      hint: "'webpack --mode production' for build. 'jest' for test. Version strings like '^5.0.0'.",
+      rubric: "package.json with 4 scripts. webpack.config.js generated. .gitignore correct. 4 files printed."
+    }
+  ]
+},
+
+
+// ═══════════════════════════════════════
+// BACKEND
+// ═══════════════════════════════════════
+// Beginner
 
 "Intro to Backend": {
   aiRubric: "Check understanding of client-server, request-response, server-side code.",
@@ -1069,6 +885,50 @@ const courseManifest = {
   ]
 },
 
+// Intermediate
+
+"REST APIs with FastAPI": {
+  aiRubric: "Check decorators, Pydantic, path/query params, HTTPException.",
+  lessons: [
+    {
+      title: "Your First FastAPI App",
+      theory: "## FastAPI\n```python\nfrom fastapi import FastAPI\napp = FastAPI()\n\n@app.get('/')\ndef root():\n    return {'message': 'Hello!'}\n```\nRun: `uvicorn main:app --reload`\nDocs: `http://localhost:8000/docs`",
+      instructions: "## Task: Student API\n1. GET / → `{message, version}`\n2. GET /student/{name} → `{student, status}`",
+      starterCode: "from fastapi import FastAPI\napp = FastAPI()\n\n@app.get('/')\ndef root():\n    return {'message': ___, 'version': ___}\n\n@app.get('/student/{name}')\ndef get_student(name: ___):\n    return {'student': name, 'status': 'enrolled'}",
+      solution: "from fastapi import FastAPI\napp=FastAPI()\n@app.get('/')\ndef root():\n    return {'message':'Mabel Academy API','version':'1.0'}\n@app.get('/student/{name}')\ndef get_student(name:str):\n    return {'student':name,'status':'enrolled'}",
+      hint: "Path params in {curly braces} in URL and as function params.",
+      rubric: "Both endpoints. Path param correct. Both return dicts."
+    },
+    {
+      title: "POST with Pydantic",
+      theory: "## Request Body\n```python\nfrom pydantic import BaseModel\n\nclass Item(BaseModel):\n    name: str\n    price: float\n    in_stock: bool = True\n\n@app.post('/items/')\ndef create(item: Item):\n    return {'created': item.name}\n```",
+      instructions: "## Task: Enrollment Endpoint\nCreate `EnrollmentRequest(student_name, course, level='Beginner')`\nPOST /enroll → enrolled=True, student, course, welcome message",
+      starterCode: "from fastapi import FastAPI\nfrom pydantic import BaseModel\napp = FastAPI()\n\nclass EnrollmentRequest(BaseModel):\n    student_name: ___\n    course: ___\n    level: str = ___\n\n@app.post('/enroll')\ndef enroll(req: EnrollmentRequest):\n    return {\n        'enrolled': True,\n        'student': req.___,\n        'course': req.___,\n        'message': f'Welcome to {req.course}!'\n    }",
+      solution: "from fastapi import FastAPI\nfrom pydantic import BaseModel\napp=FastAPI()\nclass EnrollmentRequest(BaseModel):\n    student_name:str\n    course:str\n    level:str='Beginner'\n@app.post('/enroll')\ndef enroll(req:EnrollmentRequest):\n    return {'enrolled':True,'student':req.student_name,'course':req.course,'message':f'Welcome to {req.course}!'}",
+      hint: "Fields need type hints. Access with req.field_name.",
+      rubric: "BaseModel used. 3 fields typed. Default level. Fields accessed."
+    },
+    {
+      title: "HTTP Errors & CRUD",
+      theory: "## HTTPException\n```python\nfrom fastapi import HTTPException\n\n@app.get('/item/{id}')\ndef get(id: int):\n    if id not in db:\n        raise HTTPException(404, 'Not found')\n    return db[id]\n```",
+      instructions: "## Task: Student CRUD\n`students = {1:'Ada', 2:'Tunde'}`\n1. GET /students/{id} — 404 if missing\n2. POST /students/ — 400 if ID exists\n3. DELETE /students/{id} — 404 if missing",
+      starterCode: "from fastapi import FastAPI, HTTPException\napp = FastAPI()\nstudents = {1:'Ada', 2:'Tunde'}\n\n@app.get('/students/{sid}')\ndef get_student(sid: int):\n    if sid not in ___:\n        raise HTTPException(status_code=___, detail='Not found')\n    return {'id':sid,'name':students[sid]}\n\n@app.post('/students/', status_code=201)\ndef add_student(sid: int, name: str):\n    if sid in ___:\n        raise HTTPException(status_code=___, detail='ID exists')\n    students[sid] = name\n    return {'created': name}\n\n@app.delete('/students/{sid}')\ndef delete_student(sid: int):\n    if sid not in students:\n        raise HTTPException(status_code=404, detail='Not found')\n    del students[___]\n    return {'deleted': sid}",
+      solution: "from fastapi import FastAPI,HTTPException\napp=FastAPI()\nstudents={1:'Ada',2:'Tunde'}\n@app.get('/students/{sid}')\ndef get_student(sid:int):\n    if sid not in students:\n        raise HTTPException(status_code=404,detail='Not found')\n    return {'id':sid,'name':students[sid]}\n@app.post('/students/',status_code=201)\ndef add_student(sid:int,name:str):\n    if sid in students:\n        raise HTTPException(status_code=400,detail='ID exists')\n    students[sid]=name\n    return {'created':name}\n@app.delete('/students/{sid}')\ndef delete_student(sid:int):\n    if sid not in students:\n        raise HTTPException(status_code=404,detail='Not found')\n    del students[sid]\n    return {'deleted':sid}",
+      hint: "raise HTTPException(status_code=404). Check 'in students' first.",
+      rubric: "404 for missing. 400 for duplicates. All 3 endpoints work."
+    },
+    {
+      title: "Query Params & Validation",
+      theory: "## Query Parameters\n```python\nfrom fastapi import Query\n\n@app.get('/students/')\ndef list_students(skip:int=0, limit:int=10):\n    return data[skip:skip+limit]\n\n@app.get('/search')\ndef search(q: str = Query(min_length=2)):\n    ...\n```",
+      instructions: "## Task: Paginated Courses\n1. In-memory list of 10 courses\n2. GET /courses/ with skip=0, limit=5\n3. GET /courses/search with required `q` param (min 2 chars)",
+      starterCode: "from fastapi import FastAPI, Query\napp = FastAPI()\ncourses = ['Python','FastAPI','SQL','React','Docker','ML','AI','Git','Linux','Testing']\n\n@app.get('/courses/')\ndef list_courses(skip: int = ___, limit: int = ___):\n    return courses[___: ___ + ___]\n\n@app.get('/courses/search')\ndef search(q: str = Query(min_length=___)):\n    results = [c for c in courses if ___.lower() in c.lower()]\n    return {'query':q,'results':results,'count':len(results)}",
+      solution: "from fastapi import FastAPI,Query\napp=FastAPI()\ncourses=['Python','FastAPI','SQL','React','Docker','ML','AI','Git','Linux','Testing']\n@app.get('/courses/')\ndef list_courses(skip:int=0,limit:int=5):\n    return courses[skip:skip+limit]\n@app.get('/courses/search')\ndef search(q:str=Query(min_length=2)):\n    results=[c for c in courses if q.lower() in c.lower()]\n    return {'query':q,'results':results,'count':len(results)}",
+      hint: "Slice: courses[skip:skip+limit]. q.lower() in c.lower() for case-insensitive search.",
+      rubric: "Defaults 0 and 5. Slice correct. Search filters. min_length=2."
+    }
+  ]
+},
+
 "Authentication & JWT": {
   aiRubric: "Check JWT creation, decoding, password hashing, protected routes.",
   lessons: [
@@ -1080,6 +940,90 @@ const courseManifest = {
       solution: "import hashlib,secrets,base64,json\ndef hash_password(password):\n    salt=secrets.token_hex(16)\n    hashed=hashlib.sha256(f'{salt}{password}'.encode()).hexdigest()\n    return f'{salt}:{hashed}'\ndef verify_password(password,stored):\n    salt,hashed=stored.split(':')\n    check=hashlib.sha256(f'{salt}{password}'.encode()).hexdigest()\n    return check==hashed\ndef create_token(username):\n    payload=json.dumps({'user':username,'ts':'now'})\n    return base64.b64encode(payload.encode()).decode()\ndef decode_token(token):\n    payload=base64.b64decode(token.encode()).decode()\n    return json.loads(payload)['user']\npassword='MySecret123'\nstored=hash_password(password)\nprint('Stored:',stored)\nprint('Valid:',verify_password('MySecret123',stored))\nprint('Wrong:',verify_password('WrongPass',stored))\ntoken=create_token('ada')\nprint('Token:',token)\nprint('User:',decode_token(token))",
       hint: "salt:hash split by ':'. base64.b64encode then decode() for string. json.loads for payload.",
       rubric: "hash_password salts correctly. verify_password checks. token base64 encoded. decode works."
+    }
+  ]
+},
+
+"Django Web Framework": {
+  aiRubric: "Check Django views, urls, models, ORM queries, CBVs.",
+  lessons: [
+    {
+      title: "First Django View & URL",
+      theory: "## Django Setup\n```bash\npip install django\ndjango-admin startproject mysite\npython manage.py startapp students\npython manage.py runserver\n```\n**Key files:** views.py, urls.py, models.py, settings.py",
+      instructions: "## Task: Django Views\n1. `home` view → HttpResponse welcome message\n2. `about` view → instructor info\n3. `student_detail(request, name)` → greeting\n4. Wire all 3 to URLs",
+      starterCode: "# views.py\nfrom django.http import HttpResponse\n\ndef home(request):\n    return HttpResponse(___)\n\ndef about(request):\n    return HttpResponse('Instructor: Ada | Mabel Academy')\n\ndef student_detail(request, name):\n    return HttpResponse(f'Student: {___}')\n\n# urls.py\nfrom django.urls import path\nfrom . import views\n\nurlpatterns = [\n    path('', views.___, name='home'),\n    path('about/', views.___, name='about'),\n    path('student/<str:name>/', views.___, name='student-detail'),\n]",
+      solution: "# views.py\nfrom django.http import HttpResponse\ndef home(request):\n    return HttpResponse('Welcome to Mabel Academy!')\ndef about(request):\n    return HttpResponse('Instructor: Ada | Mabel Academy')\ndef student_detail(request,name):\n    return HttpResponse(f'Student: {name}')\n# urls.py\nfrom django.urls import path\nfrom . import views\nurlpatterns=[\n    path('',views.home,name='home'),\n    path('about/',views.about,name='about'),\n    path('student/<str:name>/',views.student_detail,name='student-detail'),\n]",
+      hint: "HttpResponse wraps string. path() takes url, view, name. <str:name> captures URL param.",
+      rubric: "3 views defined. URLs mapped. Path parameter used."
+    },
+    {
+      title: "Django Models",
+      theory: "## Models\n```python\nfrom django.db import models\n\nclass Student(models.Model):\n    name    = models.CharField(max_length=100)\n    email   = models.EmailField(unique=True)\n    score   = models.IntegerField(default=0)\n    created = models.DateTimeField(auto_now_add=True)\n\n    def __str__(self):\n        return self.name\n\n    class Meta:\n        ordering = ['-score']\n```\nRun: `makemigrations` then `migrate`",
+      instructions: "## Task: Course Model\nCreate `Course` with:\n- `title` (CharField max 200)\n- `description` (TextField)\n- `level` (CharField with choices: Beginner/Intermediate/Advanced)\n- `price` (DecimalField, 2dp)\n- `is_active` (BooleanField, default True)\n- `__str__` returning title, Meta ordering by title",
+      starterCode: "from django.db import models\n\nclass Course(models.Model):\n    LEVEL_CHOICES = [\n        ('BEG', ___),\n        ('INT', 'Intermediate'),\n        ('ADV', ___),\n    ]\n\n    title       = models.CharField(max_length=___)\n    description = models.___Field()\n    level       = models.CharField(max_length=3, choices=___, default='BEG')\n    price       = models.DecimalField(max_digits=8, decimal_places=___)\n    is_active   = models.BooleanField(default=___)\n    created_at  = models.DateTimeField(auto_now_add=True)\n\n    def __str__(self):\n        return ___\n\n    class Meta:\n        ordering = [___]",
+      solution: "from django.db import models\nclass Course(models.Model):\n    LEVEL_CHOICES=[('BEG','Beginner'),('INT','Intermediate'),('ADV','Advanced')]\n    title=models.CharField(max_length=200)\n    description=models.TextField()\n    level=models.CharField(max_length=3,choices=LEVEL_CHOICES,default='BEG')\n    price=models.DecimalField(max_digits=8,decimal_places=2)\n    is_active=models.BooleanField(default=True)\n    created_at=models.DateTimeField(auto_now_add=True)\n    def __str__(self):\n        return self.title\n    class Meta:\n        ordering=['title']",
+      hint: "TextField for long text. DecimalField needs decimal_places=2. ordering=['title'] for A-Z.",
+      rubric: "All 5 fields correct. LEVEL_CHOICES defined. __str__ returns title. Meta ordering."
+    },
+    {
+      title: "Django ORM Queries",
+      theory: "## ORM\n```python\nStudent.objects.create(name='Ada', score=88)\nStudent.objects.all()\nStudent.objects.get(id=1)\nStudent.objects.filter(score__gte=80)\nStudent.objects.order_by('-score')[:5]\nStudent.objects.filter(score__lt=40).delete()\n```",
+      instructions: "## Task: ORM Practice\n1. Get students with score >= 70\n2. Get top 3 by score\n3. Count per course using `values()` + `annotate()`\n4. Update all scores < 50 to 50\n5. get_or_create a student",
+      starterCode: "from django.db.models import Count\n\n# 1. Score >= 70\npassing = Student.objects.filter(score___70)\n\n# 2. Top 3\ntop3 = Student.objects.order_by(___)[___]\n\n# 3. Count per course\nper_course = Student.objects.values(___).annotate(count=Count('id'))\n\n# 4. Update minimums\nStudent.objects.filter(score___50).update(score=50)\n\n# 5. Get or create\nstudent, created = Student.objects.get_or_create(\n    name=___,\n    defaults={'score': 0}\n)\nprint(f'Created: {created}')",
+      solution: "from django.db.models import Count\npassing=Student.objects.filter(score__gte=70)\ntop3=Student.objects.order_by('-score')[:3]\nper_course=Student.objects.values('course').annotate(count=Count('id'))\nStudent.objects.filter(score__lt=50).update(score=50)\nstudent,created=Student.objects.get_or_create(name='New Student',defaults={'score':0})\nprint(f'Created:{created}')",
+      hint: "filter(score__gte=70). order_by('-score')[:3]. __lt for less than.",
+      rubric: "gte/lt lookups. Negative order_by. Slice [:3]. annotate Count. get_or_create."
+    },
+    {
+      title: "Django Class-Based Views",
+      theory: "## CBVs\n```python\nfrom django.views.generic import ListView, DetailView, CreateView\nfrom django.urls import reverse_lazy\n\nclass StudentListView(ListView):\n    model = Student\n    template_name = 'students/list.html'\n    context_object_name = 'students'\n\nclass StudentCreateView(CreateView):\n    model = Student\n    fields = ['name','email','course']\n    success_url = reverse_lazy('student-list')\n```",
+      instructions: "## Task: Course CBVs\n1. `CourseListView` — filter is_active=True in get_queryset\n2. `CourseDetailView`\n3. `CourseCreateView` — fields: title, description, level, price",
+      starterCode: "from django.views.generic import ListView, DetailView, CreateView\nfrom django.urls import reverse_lazy\nfrom .models import Course\n\nclass CourseListView(___):\n    model = ___\n    template_name = 'courses/list.html'\n    context_object_name = 'courses'\n\n    def get_queryset(self):\n        return Course.objects.filter(is_active=___)\n\nclass CourseDetailView(___):\n    model = Course\n    template_name = 'courses/detail.html'\n\nclass CourseCreateView(___):\n    model = Course\n    fields = [___, ___, ___, ___]\n    success_url = reverse_lazy(___)",
+      solution: "from django.views.generic import ListView,DetailView,CreateView\nfrom django.urls import reverse_lazy\nfrom .models import Course\nclass CourseListView(ListView):\n    model=Course\n    template_name='courses/list.html'\n    context_object_name='courses'\n    def get_queryset(self):\n        return Course.objects.filter(is_active=True)\nclass CourseDetailView(DetailView):\n    model=Course\n    template_name='courses/detail.html'\nclass CourseCreateView(CreateView):\n    model=Course\n    fields=['title','description','level','price']\n    success_url=reverse_lazy('course-list')",
+      hint: "Inherit from correct generic view. get_queryset overrides default.",
+      rubric: "All 3 CBVs correct base. get_queryset filters. fields list. success_url."
+    }
+  ]
+},
+
+"Flask Microframework": {
+  aiRubric: "Check Flask app, routes, request, jsonify, error codes.",
+  lessons: [
+    {
+      title: "Your First Flask App",
+      theory: "## Flask\n```python\nfrom flask import Flask\napp = Flask(__name__)\n\n@app.route('/')\ndef home():\n    return 'Hello, Mabel Academy!'\n\n@app.route('/greet/<name>')\ndef greet(name):\n    return f'Hello, {name}!'\n\nif __name__ == '__main__':\n    app.run(debug=True)\n```\nInstall: `pip install flask`",
+      instructions: "## Task: Flask Student API\n1. `/` → welcome message\n2. `/student/<name>` → greeting\n3. `/students/` → JSON list of 3 students\n4. Run in debug mode",
+      starterCode: "from flask import Flask, jsonify\napp = Flask(___)\n\n@app.route('/')\ndef home():\n    return ___\n\n@app.route('/student/<___>')\ndef greet(name):\n    return f'Welcome, {name}!'\n\n@app.route('/students/')\ndef list_students():\n    students = ['Ada','Tunde','Ngozi']\n    return jsonify({___: students, ___: len(students)})\n\nif __name__ == '__main__':\n    app.run(debug=___)",
+      solution: "from flask import Flask,jsonify\napp=Flask(__name__)\n@app.route('/')\ndef home():\n    return 'Welcome to Mabel Academy!'\n@app.route('/student/<name>')\ndef greet(name):\n    return f'Welcome, {name}!'\n@app.route('/students/')\ndef list_students():\n    students=['Ada','Tunde','Ngozi']\n    return jsonify({'students':students,'count':len(students)})\nif __name__=='__main__':\n    app.run(debug=True)",
+      hint: "Flask(__name__). @app.route(). jsonify() returns JSON response.",
+      rubric: "Flask(__name__). 3 routes. jsonify used. debug=True."
+    },
+    {
+      title: "Flask POST & Validation",
+      theory: "## POST Request\n```python\nfrom flask import request, jsonify\n\n@app.route('/login', methods=['POST'])\ndef login():\n    data = request.get_json()\n    username = data.get('username')\n    if username == 'ada':\n        return jsonify({'success': True}), 200\n    return jsonify({'error': 'Invalid'}), 401\n```",
+      instructions: "## Task: Student Registration\nBuild POST `/register`:\n1. Accepts JSON `{name, email, course}`\n2. Validates all fields present (400 if missing)\n3. Stores in in-memory list\n4. Returns `{id, name, message}` with 201\n5. GET `/students/` returns all",
+      starterCode: "from flask import Flask, request, jsonify\napp = Flask(__name__)\nstudents = []\n\n@app.route('/register', methods=[___])\ndef register():\n    data = request.___()\n    name   = data.get(___)\n    email  = data.get(___)\n    course = data.get(___)\n\n    if not name or not email or not course:\n        return jsonify({'error': 'All fields required'}), ___\n\n    student = {'id': len(students)+1, 'name':name, 'email':email, 'course':course}\n    students.append(___)\n    return jsonify({'id':student['id'],'name':name,'message':'Registered!'}), ___\n\n@app.route('/students/')\ndef get_students():\n    return jsonify({'students': ___, 'count': len(students)})\n\nif __name__ == '__main__':\n    app.run(debug=True)",
+      solution: "from flask import Flask,request,jsonify\napp=Flask(__name__)\nstudents=[]\n@app.route('/register',methods=['POST'])\ndef register():\n    data=request.get_json()\n    name=data.get('name')\n    email=data.get('email')\n    course=data.get('course')\n    if not name or not email or not course:\n        return jsonify({'error':'All fields required'}),400\n    student={'id':len(students)+1,'name':name,'email':email,'course':course}\n    students.append(student)\n    return jsonify({'id':student['id'],'name':name,'message':'Registered!'}),201\n@app.route('/students/')\ndef get_students():\n    return jsonify({'students':students,'count':len(students)})\nif __name__=='__main__':\n    app.run(debug=True)",
+      hint: "request.get_json() parses body. Return (jsonify(...), status_code). 400 bad data, 201 created.",
+      rubric: "POST method. get_json(). Validation. 400/201 codes. students list updated."
+    },
+    {
+      title: "Flask Blueprints",
+      theory: "## Blueprints\n```python\n# students/routes.py\nfrom flask import Blueprint\nstudents_bp = Blueprint('students', __name__, url_prefix='/students')\n\n@students_bp.route('/')\ndef list(): return 'All students'\n\n# app.py\napp.register_blueprint(students_bp)\n```",
+      instructions: "## Task: Modular App\n1. `students_bp` prefix `/students` — GET `/` lists, GET `/<id>` returns one\n2. `courses_bp` prefix `/courses` — GET `/` lists\n3. Register both on main app",
+      starterCode: "from flask import Flask, Blueprint, jsonify\n\nstudents_bp = Blueprint(___, __name__, url_prefix=___)\nstudents_data = [{'id':1,'name':'Ada'},{'id':2,'name':'Tunde'}]\n\n@students_bp.route('/')\ndef list_students():\n    return jsonify(students_data)\n\n@students_bp.route('/<int:sid>')\ndef get_student(sid):\n    student = next((s for s in students_data if s['id'] == ___), None)\n    if not student:\n        return jsonify({'error':'Not found'}), 404\n    return jsonify(___)\n\ncourses_bp = Blueprint(___, __name__, url_prefix='/courses')\ncourses_data = [{'id':1,'title':'Python'},{'id':2,'title':'FastAPI'}]\n\n@courses_bp.route('/')\ndef list_courses():\n    return jsonify(___)\n\napp = Flask(__name__)\napp.register_blueprint(___)\napp.register_blueprint(___)\n\nif __name__ == '__main__':\n    app.run(debug=True)",
+      solution: "from flask import Flask,Blueprint,jsonify\nstudents_bp=Blueprint('students',__name__,url_prefix='/students')\nstudents_data=[{'id':1,'name':'Ada'},{'id':2,'name':'Tunde'}]\n@students_bp.route('/')\ndef list_students():\n    return jsonify(students_data)\n@students_bp.route('/<int:sid>')\ndef get_student(sid):\n    student=next((s for s in students_data if s['id']==sid),None)\n    if not student:\n        return jsonify({'error':'Not found'}),404\n    return jsonify(student)\ncourses_bp=Blueprint('courses',__name__,url_prefix='/courses')\ncourses_data=[{'id':1,'title':'Python'},{'id':2,'title':'FastAPI'}]\n@courses_bp.route('/')\ndef list_courses():\n    return jsonify(courses_data)\napp=Flask(__name__)\napp.register_blueprint(students_bp)\napp.register_blueprint(courses_bp)\nif __name__=='__main__':\n    app.run(debug=True)",
+      hint: "Blueprint('name',__name__,url_prefix='/prefix'). register_blueprint() on app.",
+      rubric: "Both blueprints. url_prefix set. Routes correct. Both registered."
+    },
+    {
+      title: "Flask with SQLAlchemy",
+      theory: "## Flask-SQLAlchemy\n```python\nfrom flask_sqlalchemy import SQLAlchemy\n\napp.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///school.db'\ndb = SQLAlchemy(app)\n\nclass Student(db.Model):\n    id   = db.Column(db.Integer, primary_key=True)\n    name = db.Column(db.String(100), nullable=False)\n\n    def to_dict(self):\n        return {'id':self.id,'name':self.name}\n```",
+      instructions: "## Task: Persistent Student DB\n1. `Student(id, name, email, course, score)` model\n2. POST `/students/` creates student\n3. GET `/students/` lists all\n4. GET `/students/<id>` gets one or 404\n5. DELETE `/students/<id>` deletes",
+      starterCode: "from flask import Flask, request, jsonify\nfrom flask_sqlalchemy import SQLAlchemy\n\napp = Flask(__name__)\napp.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///school.db'\ndb = SQLAlchemy(app)\n\nclass Student(db.Model):\n    id     = db.Column(db.Integer, primary_key=True)\n    name   = db.Column(db.String(100), nullable=___)\n    email  = db.Column(db.String(120), unique=___)\n    course = db.Column(db.String(50))\n    score  = db.Column(db.Integer, default=___)\n\n    def to_dict(self):\n        return {'id':self.id,'name':self.name,'email':self.email,'course':self.course}\n\n@app.route('/students/', methods=['GET','POST'])\ndef students():\n    if request.method == 'POST':\n        d = request.get_json()\n        s = Student(name=d[___], email=d[___], course=d.get('course','Python'))\n        db.session.___(s)\n        db.session.commit()\n        return jsonify(s.to_dict()), 201\n    return jsonify([s.to_dict() for s in Student.query.all()])\n\n@app.route('/students/<int:sid>', methods=['GET','DELETE'])\ndef student_detail(sid):\n    s = Student.query.get_or_404(___)\n    if request.method == 'DELETE':\n        db.session.___(s)\n        db.session.commit()\n        return jsonify({'deleted':sid})\n    return jsonify(s.to_dict())\n\nwith app.app_context():\n    db.create_all()\n\nif __name__ == '__main__':\n    app.run(debug=True)",
+      solution: "from flask import Flask,request,jsonify\nfrom flask_sqlalchemy import SQLAlchemy\napp=Flask(__name__)\napp.config['SQLALCHEMY_DATABASE_URI']='sqlite:///school.db'\ndb=SQLAlchemy(app)\nclass Student(db.Model):\n    id=db.Column(db.Integer,primary_key=True)\n    name=db.Column(db.String(100),nullable=False)\n    email=db.Column(db.String(120),unique=True)\n    course=db.Column(db.String(50))\n    score=db.Column(db.Integer,default=0)\n    def to_dict(self):\n        return {'id':self.id,'name':self.name,'email':self.email,'course':self.course}\n@app.route('/students/',methods=['GET','POST'])\ndef students():\n    if request.method=='POST':\n        d=request.get_json()\n        s=Student(name=d['name'],email=d['email'],course=d.get('course','Python'))\n        db.session.add(s)\n        db.session.commit()\n        return jsonify(s.to_dict()),201\n    return jsonify([s.to_dict() for s in Student.query.all()])\n@app.route('/students/<int:sid>',methods=['GET','DELETE'])\ndef student_detail(sid):\n    s=Student.query.get_or_404(sid)\n    if request.method=='DELETE':\n        db.session.delete(s)\n        db.session.commit()\n        return jsonify({'deleted':sid})\n    return jsonify(s.to_dict())\nwith app.app_context():\n    db.create_all()\nif __name__=='__main__':\n    app.run(debug=True)",
+      hint: "db.session.add() then commit(). get_or_404() returns 404 if not found.",
+      rubric: "Model fields correct. session.add/commit. get_or_404. DELETE uses session.delete."
     }
   ]
 },
@@ -1099,9 +1043,55 @@ const courseManifest = {
   ]
 },
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// BACKEND — ADVANCED (missing)
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Advanced
+
+"Django REST Framework": {
+  aiRubric: "Check DRF serializers, viewsets, routers, permissions.",
+  lessons: [
+    {
+      title: "DRF Serializers",
+      theory: "## Serializers\n```python\nfrom rest_framework import serializers\nfrom .models import Student\n\nclass StudentSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = Student\n        fields = ['id','name','email','score']\n        read_only_fields = ['id']\n```\nInstall: `pip install djangorestframework`\nAdd `'rest_framework'` to INSTALLED_APPS.",
+      instructions: "## Task: Course Serializer\nCreate `CourseSerializer` with:\n1. All fields\n2. `id` and `created_at` read-only\n3. `validate_price` — price must be > 0\n4. `SerializerMethodField` for `student_count`",
+      starterCode: "from rest_framework import serializers\nfrom .models import Course\n\nclass CourseSerializer(serializers.ModelSerializer):\n    student_count = serializers.___(method_name='get_student_count')\n\n    class Meta:\n        model = ___\n        fields = ___\n        read_only_fields = ['id', ___]\n\n    def validate_price(self, value):\n        if value <= ___:\n            raise serializers.ValidationError('Price must be greater than 0')\n        return value\n\n    def get_student_count(self, obj):\n        return obj.students.___()",
+      solution: "from rest_framework import serializers\nfrom .models import Course\nclass CourseSerializer(serializers.ModelSerializer):\n    student_count=serializers.SerializerMethodField(method_name='get_student_count')\n    class Meta:\n        model=Course\n        fields='__all__'\n        read_only_fields=['id','created_at']\n    def validate_price(self,value):\n        if value<=0:\n            raise serializers.ValidationError('Price must be greater than 0')\n        return value\n    def get_student_count(self,obj):\n        return obj.students.count()",
+      hint: "SerializerMethodField calls get_<field_name>. ValidationError for invalid data.",
+      rubric: "SerializerMethodField. Meta fields. read_only_fields. validate_price. get_student_count."
+    },
+    {
+      title: "DRF ViewSets & Routers",
+      theory: "## ViewSets\n```python\nfrom rest_framework import viewsets\nfrom rest_framework.routers import DefaultRouter\n\nclass StudentViewSet(viewsets.ModelViewSet):\n    queryset = Student.objects.all()\n    serializer_class = StudentSerializer\n\nrouter = DefaultRouter()\nrouter.register('students', StudentViewSet)\nurlpatterns = router.urls\n```",
+      instructions: "## Task: Course ViewSet\n1. `CourseViewSet` extending `ModelViewSet`\n2. get_queryset filters active courses\n3. Custom `@action` POST `/courses/{id}/enroll/`\n4. Register with router",
+      starterCode: "from rest_framework import viewsets, permissions\nfrom rest_framework.decorators import action\nfrom rest_framework.response import Response\nfrom rest_framework.routers import DefaultRouter\nfrom .models import Course\nfrom .serializers import CourseSerializer\n\nclass CourseViewSet(viewsets.___):\n    serializer_class = CourseSerializer\n    permission_classes = [permissions.IsAuthenticatedOrReadOnly]\n\n    def get_queryset(self):\n        return Course.objects.filter(is_active=___)\n\n    @action(detail=___, methods=[___])\n    def enroll(self, request, pk=None):\n        course = self.get_object()\n        return Response({\n            'enrolled': True,\n            'course': course.___,\n            'student': request.user.___\n        })\n\nrouter = DefaultRouter()\nrouter.register(___, CourseViewSet, basename='course')\nurlpatterns = router.urls",
+      solution: "from rest_framework import viewsets,permissions\nfrom rest_framework.decorators import action\nfrom rest_framework.response import Response\nfrom rest_framework.routers import DefaultRouter\nfrom .models import Course\nfrom .serializers import CourseSerializer\nclass CourseViewSet(viewsets.ModelViewSet):\n    serializer_class=CourseSerializer\n    permission_classes=[permissions.IsAuthenticatedOrReadOnly]\n    def get_queryset(self):\n        return Course.objects.filter(is_active=True)\n    @action(detail=True,methods=['post'])\n    def enroll(self,request,pk=None):\n        course=self.get_object()\n        return Response({'enrolled':True,'course':course.title,'student':request.user.username})\nrouter=DefaultRouter()\nrouter.register('courses',CourseViewSet,basename='course')\nurlpatterns=router.urls",
+      hint: "ModelViewSet gives CRUD free. @action(detail=True) for per-object. router.register needs prefix.",
+      rubric: "ModelViewSet. get_queryset filters. @action detail=True. router.register."
+    }
+  ]
+},
+
+"Flask Advanced Patterns": {
+  aiRubric: "Check factory pattern, config, JWT auth, error handlers.",
+  lessons: [
+    {
+      title: "Application Factory",
+      theory: "## Factory Pattern\n```python\ndef create_app(config='development'):\n    app = Flask(__name__)\n    app.config.from_object(config)\n    db.init_app(app)\n    app.register_blueprint(main_bp)\n    return app\n```\nBenefit: multiple configs, easier testing.",
+      instructions: "## Task: Flask Factory\n1. `create_app(config_name='development')` function\n2. Config dict with dev/prod settings\n3. Initialize db inside factory\n4. Register blueprint inside factory",
+      starterCode: "from flask import Flask, Blueprint, jsonify\nfrom flask_sqlalchemy import SQLAlchemy\n\ndb = SQLAlchemy()\n\nCONFIG = {\n    'development': {'DEBUG': True,  'SQLALCHEMY_DATABASE_URI': 'sqlite:///dev.db'},\n    'production':  {'DEBUG': False, 'SQLALCHEMY_DATABASE_URI': 'sqlite:///prod.db'}\n}\n\nmain_bp = Blueprint('main', __name__)\n\n@main_bp.route('/')\ndef index():\n    return jsonify({'status': 'ok'})\n\ndef create_app(config_name=___):\n    app = Flask(___)\n    app.config.update(CONFIG[___])\n    ___.init_app(app)\n    app.register_blueprint(___)\n    with app.app_context():\n        db.create_all()\n    return app\n\napp = create_app()\nif __name__ == '__main__':\n    app.run()",
+      solution: "from flask import Flask,Blueprint,jsonify\nfrom flask_sqlalchemy import SQLAlchemy\ndb=SQLAlchemy()\nCONFIG={'development':{'DEBUG':True,'SQLALCHEMY_DATABASE_URI':'sqlite:///dev.db'},'production':{'DEBUG':False,'SQLALCHEMY_DATABASE_URI':'sqlite:///prod.db'}}\nmain_bp=Blueprint('main',__name__)\n@main_bp.route('/')\ndef index():\n    return jsonify({'status':'ok'})\ndef create_app(config_name='development'):\n    app=Flask(__name__)\n    app.config.update(CONFIG[config_name])\n    db.init_app(app)\n    app.register_blueprint(main_bp)\n    with app.app_context():\n        db.create_all()\n    return app\napp=create_app()\nif __name__=='__main__':\n    app.run()",
+      hint: "db=SQLAlchemy() outside factory. db.init_app(app) inside. Blueprint registered inside.",
+      rubric: "Factory function. CONFIG dict. db.init_app. Blueprint registered. app_context used."
+    },
+    {
+      title: "Flask JWT Authentication",
+      theory: "## Flask-JWT-Extended\n```python\nfrom flask_jwt_extended import (\n    JWTManager, create_access_token,\n    jwt_required, get_jwt_identity\n)\napp.config['JWT_SECRET_KEY'] = 'secret'\njwt = JWTManager(app)\n\n@app.route('/login', methods=['POST'])\ndef login():\n    token = create_access_token(identity='ada')\n    return jsonify(access_token=token)\n\n@app.route('/protected')\n@jwt_required()\ndef protected():\n    return jsonify(user=get_jwt_identity())\n```",
+      instructions: "## Task: JWT Auth System\n1. POST `/login` — validates credentials, returns JWT\n2. POST `/register` — creates user in-memory\n3. GET `/profile` — requires JWT, returns user info",
+      starterCode: "from flask import Flask, request, jsonify\nfrom flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity\n\napp = Flask(__name__)\napp.config['JWT_SECRET_KEY'] = 'mabel-secret-2024'\njwt = JWTManager(___)\n\nusers = {'ada': {'password':'pass123','course':'Python'}}\n\n@app.route('/register', methods=['POST'])\ndef register():\n    d = request.get_json()\n    if d['username'] in ___:\n        return jsonify({'error':'User exists'}), 400\n    users[d['username']] = {'password':d['password'],'course':d.get('course','Python')}\n    return jsonify({'message':'Registered'}), 201\n\n@app.route('/login', methods=['POST'])\ndef login():\n    d = request.get_json()\n    user = users.get(d.get('username'))\n    if not user or user['password'] != d.get('password'):\n        return jsonify({'error':'Invalid credentials'}), 401\n    token = create_access_token(identity=___)\n    return jsonify({'access_token': ___})\n\n@app.route('/profile')\n@___()\ndef profile():\n    username = get_jwt_identity()\n    return jsonify({'username':username,'course':users[username]['course']})\n\nif __name__ == '__main__':\n    app.run(debug=True)",
+      solution: "from flask import Flask,request,jsonify\nfrom flask_jwt_extended import JWTManager,create_access_token,jwt_required,get_jwt_identity\napp=Flask(__name__)\napp.config['JWT_SECRET_KEY']='mabel-secret-2024'\njwt=JWTManager(app)\nusers={'ada':{'password':'pass123','course':'Python'}}\n@app.route('/register',methods=['POST'])\ndef register():\n    d=request.get_json()\n    if d['username'] in users:\n        return jsonify({'error':'User exists'}),400\n    users[d['username']]={'password':d['password'],'course':d.get('course','Python')}\n    return jsonify({'message':'Registered'}),201\n@app.route('/login',methods=['POST'])\ndef login():\n    d=request.get_json()\n    user=users.get(d.get('username'))\n    if not user or user['password']!=d.get('password'):\n        return jsonify({'error':'Invalid credentials'}),401\n    token=create_access_token(identity=d['username'])\n    return jsonify({'access_token':token})\n@app.route('/profile')\n@jwt_required()\ndef profile():\n    username=get_jwt_identity()\n    return jsonify({'username':username,'course':users[username]['course']})\nif __name__=='__main__':\n    app.run(debug=True)",
+      hint: "JWTManager(app). create_access_token(identity=username). @jwt_required() protects route.",
+      rubric: "JWTManager init. create_access_token used. @jwt_required on profile. get_jwt_identity correct."
+    }
+  ]
+},
 
 "Async Python": {
   aiRubric: "Check async def, await, asyncio.gather, aiohttp usage.",
@@ -1149,10 +1139,61 @@ const courseManifest = {
 },
 
 
+// ═══════════════════════════════════════
+// SQL & DATABASES
+// ═══════════════════════════════════════
+// Beginner
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// SQL & DATABASES — ALL MISSING
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+"SQL Fundamentals": {
+  aiRubric: "Check valid SQL syntax, correct keywords.",
+  lessons: [
+    {
+      title: "SELECT & FROM",
+      theory: "## Basic SQL\n```sql\nSELECT column1, column2 FROM table;\nSELECT * FROM students;\nSELECT name AS student_name FROM students;\n```",
+      instructions: "## Task: Query Students\nTable `students(id, name, age, course, score)`\n1. Select all\n2. Select name and course only\n3. Select with aliases: name AS student_name, score AS exam_score",
+      starterCode: "-- 1. All students\n___ * ___ students;\n\n-- 2. Name and course\nSELECT ___, ___ FROM ___;\n\n-- 3. With aliases\nSELECT name ___ student_name, score ___ exam_score FROM ___;",
+      solution: "SELECT * FROM students;\nSELECT name,course FROM students;\nSELECT name AS student_name,score AS exam_score FROM students;",
+      hint: "SELECT then columns, FROM then table. AS for aliases.",
+      rubric: "All 3 queries correct. AS used."
+    },
+    {
+      title: "WHERE & Filtering",
+      theory: "## Filtering\n```sql\nSELECT * FROM students WHERE score >= 70;\nSELECT * FROM students WHERE name LIKE 'A%';\nSELECT * FROM students WHERE score BETWEEN 60 AND 80;\nSELECT * FROM students WHERE course IN ('Python','SQL');\n```",
+      instructions: "## Task: 4 Filter Queries\n1. Score >= 80\n2. Python course AND age < 25\n3. Name starts with 'A'\n4. Score between 60 and 79",
+      starterCode: "-- 1.\nSELECT * FROM students WHERE score ___ 80;\n-- 2.\nSELECT * FROM students WHERE course = ___ ___ age < 25;\n-- 3.\nSELECT * FROM students WHERE name ___ 'A%';\n-- 4.\nSELECT * FROM students WHERE score ___ 60 ___ 79;",
+      solution: "SELECT * FROM students WHERE score>=80;\nSELECT * FROM students WHERE course='Python' AND age<25;\nSELECT * FROM students WHERE name LIKE 'A%';\nSELECT * FROM students WHERE score BETWEEN 60 AND 79;",
+      hint: "LIKE 'A%' starts with A. BETWEEN x AND y inclusive.",
+      rubric: "All 4 queries. LIKE and BETWEEN used."
+    },
+    {
+      title: "ORDER BY & LIMIT",
+      theory: "## Sorting & Limiting\n```sql\nSELECT * FROM students ORDER BY score DESC;\nSELECT * FROM students ORDER BY score DESC LIMIT 3;\nSELECT * FROM students ORDER BY course ASC, score DESC;\n```",
+      instructions: "## Task: Rankings\n1. All students by score descending\n2. Top 5\n3. By course A-Z then score highest within each",
+      starterCode: "-- 1.\nSELECT * FROM students ORDER BY score ___;\n-- 2.\nSELECT * FROM students ORDER BY score DESC ___ 5;\n-- 3.\nSELECT * FROM students ORDER BY course ___, score ___;",
+      solution: "SELECT * FROM students ORDER BY score DESC;\nSELECT * FROM students ORDER BY score DESC LIMIT 5;\nSELECT * FROM students ORDER BY course ASC,score DESC;",
+      hint: "DESC for high-to-low. LIMIT after ORDER BY.",
+      rubric: "DESC correct. LIMIT 5. Multi-sort ASC then DESC."
+    },
+    {
+      title: "Aggregations & GROUP BY",
+      theory: "## Aggregate Functions\n```sql\nSELECT COUNT(*), AVG(score), MAX(score), MIN(score) FROM students;\n\nSELECT course, AVG(score) AS avg\nFROM students\nGROUP BY course\nHAVING AVG(score) > 70;\n```",
+      instructions: "## Task: Course Stats\n1. Count per course\n2. Average per course\n3. Courses with avg > 75\n4. Overall highest and lowest",
+      starterCode: "-- 1.\nSELECT course, ___(*)  AS count FROM students ___ BY course;\n-- 2.\nSELECT course, ___(score) AS avg FROM students GROUP BY course;\n-- 3.\nSELECT course, AVG(score) FROM students GROUP BY course ___ AVG(score)>75;\n-- 4.\nSELECT ___(score) AS highest, ___(score) AS lowest FROM students;",
+      solution: "SELECT course,COUNT(*) AS count FROM students GROUP BY course;\nSELECT course,AVG(score) AS avg FROM students GROUP BY course;\nSELECT course,AVG(score) FROM students GROUP BY course HAVING AVG(score)>75;\nSELECT MAX(score) AS highest,MIN(score) AS lowest FROM students;",
+      hint: "COUNT(*) counts rows. HAVING filters groups (not WHERE).",
+      rubric: "COUNT/AVG/MAX/MIN. GROUP BY. HAVING used."
+    },
+    {
+      title: "JOINs",
+      theory: "## JOIN Types\n```sql\n-- INNER: only matching rows\nSELECT s.name, e.course\nFROM students s\nINNER JOIN enrollments e ON s.id = e.student_id;\n\n-- LEFT: all left rows\nFROM students s\nLEFT JOIN enrollments e ON s.id = e.student_id;\n```",
+      instructions: "## Task: Join Queries\nTables: `students(id,name)`, `enrollments(id,student_id,course,grade)`\n1. INNER JOIN — students with courses\n2. Filter grade = 'A'\n3. LEFT JOIN — all students including unenrolled",
+      starterCode: "-- 1.\nSELECT s.name, e.course FROM students ___\nINNER JOIN enrollments e ON s.___ = e.___;\n-- 2.\nSELECT s.name,e.course,e.grade FROM students s\nINNER JOIN enrollments e ON s.id=e.student_id\nWHERE e.grade = ___;\n-- 3.\nSELECT s.name,e.course FROM students s\n___ JOIN enrollments e ON s.id=e.student_id;",
+      solution: "SELECT s.name,e.course FROM students s INNER JOIN enrollments e ON s.id=e.student_id;\nSELECT s.name,e.course,e.grade FROM students s INNER JOIN enrollments e ON s.id=e.student_id WHERE e.grade='A';\nSELECT s.name,e.course FROM students s LEFT JOIN enrollments e ON s.id=e.student_id;",
+      hint: "INNER returns matches only. LEFT keeps all left rows.",
+      rubric: "INNER JOIN correct. WHERE filter. LEFT JOIN correct."
+    }
+  ]
+},
 
 "Filtering & Sorting": {
   aiRubric: "Check WHERE conditions, ORDER BY, LIMIT, DISTINCT.",
@@ -1232,9 +1273,7 @@ const courseManifest = {
   ]
 },
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// SQL — INTERMEDIATE
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Intermediate
 
 "Indexes & Performance": {
   aiRubric: "Check CREATE INDEX, EXPLAIN QUERY PLAN, index types.",
@@ -1247,6 +1286,21 @@ const courseManifest = {
       solution: "CREATE INDEX idx_score ON students(score);\nCREATE UNIQUE INDEX idx_email ON students(email);\nCREATE INDEX idx_course_score ON students(course,score);\nSELECT * FROM students WHERE score>80;\nSELECT * FROM students WHERE email='ada@example.com';\nSELECT * FROM students WHERE course='Python' ORDER BY score DESC;\nPRAGMA index_list(students);",
       hint: "INDEX keyword. UNIQUE INDEX for unique constraint. Composite: (course, score) order matters.",
       rubric: "Basic index. UNIQUE index. Composite index. 3 queries. PRAGMA index_list."
+    }
+  ]
+},
+
+"Stored Procedures": {
+  aiRubric: "Check parameterized queries, transactions, reusable query functions.",
+  lessons: [
+    {
+      title: "Stored Procedures in Python",
+      theory: "## Stored Procedures\nPre-compiled SQL logic stored in the database:\n```sql\nCREATE OR REPLACE FUNCTION get_top_students(min_score INT)\nRETURNS TABLE(name TEXT, score INT) AS $$\n  SELECT name, score FROM students\n  WHERE score >= min_score\n  ORDER BY score DESC;\n$$ LANGUAGE SQL;\n\nSELECT * FROM get_top_students(80);\n```\nBenefits: reusable, faster (pre-compiled), reduces network traffic.",
+      instructions: "## Task: Procedure-style Functions\nSimulate stored procedures using Python + SQLite:\n1. `get_top_students(conn, min_score)` — parameterized query function\n2. `calculate_grade(score)` — scalar function (A/B/C/F)\n3. `update_student_score(conn, student_id, new_score)` — transactional update\n4. Test all three",
+      starterCode: "import sqlite3\n\nconn = sqlite3.connect(':memory:')\nconn.row_factory = sqlite3.Row\ncursor = conn.cursor()\ncursor.executescript(\"\"\"\n    CREATE TABLE students(id INT, name TEXT, score INT, course TEXT);\n    INSERT INTO students VALUES(1,'Ada',88,'Python');\n    INSERT INTO students VALUES(2,'Tunde',55,'SQL');\n    INSERT INTO students VALUES(3,'Ngozi',95,'FastAPI');\n    INSERT INTO students VALUES(4,'Emeka',72,'Python');\n\"\"\")\n\ndef get_top_students(conn, min_score):\n    return conn.execute(\n        'SELECT name,score FROM students WHERE score>=? ORDER BY score DESC',\n        (___,)\n    ).fetchall()\n\ndef calculate_grade(score):\n    if score >= 90: return 'A'\n    elif score >= 80: return ___\n    elif score >= 70: return 'C'\n    else: return ___\n\ndef update_student_score(conn, student_id, new_score):\n    try:\n        conn.execute('BEGIN')\n        conn.execute('UPDATE students SET score=? WHERE id=?', (___, ___))\n        conn.commit()\n        return True\n    except Exception as e:\n        conn.rollback()\n        return False\n\nprint('Top students (>=80):')\nfor row in get_top_students(conn, ___):\n    print(f'  {row[\"name\"]}: {row[\"score\"]} ({calculate_grade(row[\"score\"])})')\n\nprint('Update result:', update_student_score(conn, 2, 85))\nprint('After update:')\nfor row in get_top_students(conn, 60):\n    print(f'  {row[\"name\"]}: {row[\"score\"]}')",
+      solution: "import sqlite3\nconn=sqlite3.connect(':memory:')\nconn.row_factory=sqlite3.Row\ncursor=conn.cursor()\ncursor.executescript(\"CREATE TABLE students(id INT,name TEXT,score INT,course TEXT);INSERT INTO students VALUES(1,'Ada',88,'Python');INSERT INTO students VALUES(2,'Tunde',55,'SQL');INSERT INTO students VALUES(3,'Ngozi',95,'FastAPI');INSERT INTO students VALUES(4,'Emeka',72,'Python');\")\ndef get_top_students(conn,min_score):\n    return conn.execute('SELECT name,score FROM students WHERE score>=? ORDER BY score DESC',(min_score,)).fetchall()\ndef calculate_grade(score):\n    if score>=90:return 'A'\n    elif score>=80:return 'B'\n    elif score>=70:return 'C'\n    else:return 'F'\ndef update_student_score(conn,student_id,new_score):\n    try:\n        conn.execute('BEGIN')\n        conn.execute('UPDATE students SET score=? WHERE id=?',(new_score,student_id))\n        conn.commit()\n        return True\n    except Exception as e:\n        conn.rollback()\n        return False\nprint('Top>=80:')\nfor row in get_top_students(conn,80):\n    print(f'  {row[\"name\"]}:{row[\"score\"]}({calculate_grade(row[\"score\"])})')\nprint('Update:',update_student_score(conn,2,85))\nprint('After:')\nfor row in get_top_students(conn,60):\n    print(f'  {row[\"name\"]}:{row[\"score\"]}')",
+      hint: "Pass min_score as tuple (min_score,). calculate_grade if/elif. BEGIN/COMMIT/ROLLBACK for transaction.",
+      rubric: "parameterized query with ?. calculate_grade B and F correct. transaction with rollback."
     }
   ]
 },
@@ -1296,9 +1350,7 @@ const courseManifest = {
   ]
 },
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// SQL — ADVANCED
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Advanced
 
 "Query Optimization": {
   aiRubric: "Check EXPLAIN, index usage, query rewriting, avoiding N+1.",
@@ -1311,6 +1363,21 @@ const courseManifest = {
       solution: "SELECT * FROM students;\nSELECT name,score FROM students;\nSELECT name,score FROM students ORDER BY score DESC;\nSELECT name,score FROM students WHERE score>0 ORDER BY score DESC LIMIT 10;\nSELECT name,(SELECT COUNT(*) FROM enrollments e WHERE e.student_id=s.id) AS cnt FROM students s;\nSELECT s.name,COUNT(e.id) AS cnt FROM students s LEFT JOIN enrollments e ON s.id=e.student_id GROUP BY s.name;\nCREATE INDEX IF NOT EXISTS idx_score ON students(score);\nCREATE INDEX IF NOT EXISTS idx_enrol_sid ON enrollments(student_id);",
       hint: "SELECT only needed columns. LEFT JOIN + GROUP BY replaces correlated subquery. Index WHERE columns.",
       rubric: "Column selection. LIMIT added. Correlated replaced with JOIN. Indexes recommended."
+    }
+  ]
+},
+
+"Database Design Patterns": {
+  aiRubric: "Check normalization, foreign keys, indexes, relationships.",
+  lessons: [
+    {
+      title: "Normalization & Schema Design",
+      theory: "## Database Normalization\n**1NF** — no repeating groups, atomic values\n**2NF** — no partial dependencies\n**3NF** — no transitive dependencies\n\n```sql\n-- Unnormalized (BAD)\nCREATE TABLE orders (\n    id INT,\n    customer_name TEXT,\n    customer_email TEXT,  -- repeated every order!\n    items TEXT  -- comma-separated, not atomic!\n);\n\n-- Normalized (GOOD)\nCREATE TABLE customers (id INT PRIMARY KEY, name TEXT, email TEXT UNIQUE);\nCREATE TABLE orders (id INT PRIMARY KEY, customer_id INT REFERENCES customers(id));\nCREATE TABLE order_items (order_id INT, product_id INT, quantity INT);\n```",
+      instructions: "## Task: Design a School Schema\nDesign normalized tables for Mabel Academy:\n1. `students` (id, name, email, enrolled_at)\n2. `courses` (id, title, level, instructor_id)\n3. `instructors` (id, name, email, specialty)\n4. `enrolments` (student_id, course_id, enrolled_at, grade) — many-to-many\n5. Write the CREATE TABLE statements with proper foreign keys",
+      starterCode: "-- Instructors (no foreign keys — parent table)\nCREATE TABLE instructors (\n    id         ___ PRIMARY KEY,\n    name       VARCHAR(100) NOT NULL,\n    email      VARCHAR(120) ___ NOT NULL,\n    specialty  VARCHAR(50)\n);\n\n-- Students\nCREATE TABLE students (\n    id          INTEGER PRIMARY KEY AUTOINCREMENT,\n    name        VARCHAR(100) NOT NULL,\n    email       VARCHAR(120) UNIQUE NOT NULL,\n    enrolled_at DATETIME DEFAULT ___\n);\n\n-- Courses (references instructors)\nCREATE TABLE courses (\n    id            INTEGER PRIMARY KEY AUTOINCREMENT,\n    title         VARCHAR(200) NOT NULL,\n    level         VARCHAR(20) CHECK (level IN (___)),\n    instructor_id INTEGER REFERENCES ___(id) ON DELETE SET NULL\n);\n\n-- Enrolments (many-to-many junction)\nCREATE TABLE enrolments (\n    student_id  INTEGER REFERENCES ___(id) ON DELETE CASCADE,\n    course_id   INTEGER REFERENCES ___(id) ON DELETE CASCADE,\n    enrolled_at DATETIME DEFAULT CURRENT_TIMESTAMP,\n    grade       VARCHAR(2),\n    PRIMARY KEY (student_id, ___)\n);",
+      solution: "CREATE TABLE instructors(id INTEGER PRIMARY KEY,name VARCHAR(100) NOT NULL,email VARCHAR(120) UNIQUE NOT NULL,specialty VARCHAR(50));\nCREATE TABLE students(id INTEGER PRIMARY KEY AUTOINCREMENT,name VARCHAR(100) NOT NULL,email VARCHAR(120) UNIQUE NOT NULL,enrolled_at DATETIME DEFAULT CURRENT_TIMESTAMP);\nCREATE TABLE courses(id INTEGER PRIMARY KEY AUTOINCREMENT,title VARCHAR(200) NOT NULL,level VARCHAR(20) CHECK(level IN('Beginner','Intermediate','Advanced')),instructor_id INTEGER REFERENCES instructors(id) ON DELETE SET NULL);\nCREATE TABLE enrolments(student_id INTEGER REFERENCES students(id) ON DELETE CASCADE,course_id INTEGER REFERENCES courses(id) ON DELETE CASCADE,enrolled_at DATETIME DEFAULT CURRENT_TIMESTAMP,grade VARCHAR(2),PRIMARY KEY(student_id,course_id));",
+      hint: "UNIQUE on email. CHECK for level values. REFERENCES table(id). CASCADE deletes related rows. Composite PK.",
+      rubric: "4 tables. UNIQUE on emails. CHECK constraint. REFERENCES with ON DELETE. Composite PK in enrolments."
     }
   ]
 },
@@ -1345,11 +1412,26 @@ const courseManifest = {
   ]
 },
 
+"Sharding & Replication": {
+  aiRubric: "Check concepts of horizontal scaling, read replicas, sharding strategies.",
+  lessons: [
+    {
+      title: "Scaling Databases",
+      theory: "## Scaling Strategies\n**Vertical** — bigger server (limited)\n**Horizontal** — more servers\n\n**Replication:**\n- Primary → writes\n- Replicas → reads\n- Increases read capacity\n\n**Sharding:**\n- Split data across multiple DBs\n- Each shard holds a subset\n- Shard by: user_id range, geography, hash\n\n**Example:**\n- Shard 0: users 1-1M\n- Shard 1: users 1M-2M\n- Shard 2: users 2M-3M",
+      instructions: "## Task: Simulate a Sharding Router\n1. Write `get_shard(user_id, num_shards=3)` — hash-based routing\n2. Write `ShardRouter` class that routes queries to correct shard\n3. Simulate inserting 10 users and show shard distribution\n4. Show how to query a specific user",
+      starterCode: "import hashlib\n\ndef get_shard(user_id, num_shards=3):\n    # Hash-based sharding: consistent distribution\n    hash_val = int(hashlib.md5(str(user_id).encode()).hexdigest(), 16)\n    return hash_val % ___\n\nclass ShardRouter:\n    def __init__(self, num_shards=3):\n        self.num_shards = num_shards\n        self.shards = {i: {} for i in range(num_shards)}  # shard_id -> {user_id: data}\n\n    def insert(self, user_id, data):\n        shard = get_shard(user_id, self.___)\n        self.shards[shard][user_id] = data\n        return shard\n\n    def find(self, user_id):\n        shard = get_shard(user_id, self.num_shards)\n        return self.shards[shard].get(___, None)\n\n    def stats(self):\n        for i, shard in self.shards.items():\n            print(f'  Shard {i}: {len(shard)} users — {list(shard.keys())}')\n\nrouter = ShardRouter(num_shards=3)\n\nusers = [(1,'Ada','Python'),(2,'Tunde','SQL'),(3,'Ngozi','FastAPI'),\n         (4,'Emeka','React'),(5,'Amaka','AI'),(6,'Bola','Django'),\n         (7,'Kemi','Flask'),(8,'Seun','Docker'),(9,'Tobi','Redis'),(10,'Femi','Mongo')]\n\nfor uid, name, course in users:\n    shard = router.insert(uid, {'name':name,'course':course})\n    print(f'User {uid} ({name}) -> Shard {shard}')\n\nprint('\\nShard distribution:')\nrouter.stats()\n\nprint('\\nFind user 5:', router.find(5))\nprint('Find user 99:', router.find(99))",
+      solution: "import hashlib\ndef get_shard(user_id,num_shards=3):\n    hash_val=int(hashlib.md5(str(user_id).encode()).hexdigest(),16)\n    return hash_val%num_shards\nclass ShardRouter:\n    def __init__(self,num_shards=3):\n        self.num_shards=num_shards\n        self.shards={i:{} for i in range(num_shards)}\n    def insert(self,user_id,data):\n        shard=get_shard(user_id,self.num_shards)\n        self.shards[shard][user_id]=data\n        return shard\n    def find(self,user_id):\n        shard=get_shard(user_id,self.num_shards)\n        return self.shards[shard].get(user_id,None)\n    def stats(self):\n        for i,shard in self.shards.items():\n            print(f'  Shard {i}:{len(shard)} users-{list(shard.keys())}')\nrouter=ShardRouter(num_shards=3)\nusers=[(1,'Ada','Python'),(2,'Tunde','SQL'),(3,'Ngozi','FastAPI'),(4,'Emeka','React'),(5,'Amaka','AI'),(6,'Bola','Django'),(7,'Kemi','Flask'),(8,'Seun','Docker'),(9,'Tobi','Redis'),(10,'Femi','Mongo')]\nfor uid,name,course in users:\n    shard=router.insert(uid,{'name':name,'course':course})\n    print(f'User {uid}({name})->Shard {shard}')\nprint('\\nDistribution:')\nrouter.stats()\nprint('\\nFind 5:',router.find(5))\nprint('Find 99:',router.find(99))",
+      hint: "hash_val % num_shards routes to shard. find uses same hash to locate correct shard.",
+      rubric: "hash-based shard function. ShardRouter inserts to correct shard. find routes correctly. stats shown."
+    }
+  ]
+},
 
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// DATA SCIENCE — ALL MISSING
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ═══════════════════════════════════════
+// DATA SCIENCE
+// ═══════════════════════════════════════
+// Beginner
 
 "Intro to Data Science": {
   aiRubric: "Check data science concepts, Python basics for data, numpy/pandas intro.",
@@ -1371,6 +1453,39 @@ const courseManifest = {
       solution: "import numpy as np\nraw=[[78,92,65],[88,74,91],[55,83,79],[88,67,95]]\nscores=np.array(raw)\nprint('Shape:',scores.shape)\nstudent_means=scores.mean(axis=1)\nprint('Student means:',student_means.round(1))\nexam_means=scores.mean(axis=0)\nprint('Exam means:',exam_means.round(1))\nnormalized=(scores-scores.mean())/scores.std()\nprint('Normalized:\\n',normalized.round(2))\ntotals=scores.sum(axis=1)\nbest_idx=totals.argmax()\nprint(f'Best:#{best_idx+1} total {totals[best_idx]}')",
       hint: "axis=1 for row-wise, axis=0 for column-wise. std() for standard deviation. argmax() for index of max.",
       rubric: "2D array. axis=1 student means. axis=0 exam means. std normalization. argmax for best."
+    }
+  ]
+},
+
+"Pandas & NumPy Basics": {
+  aiRubric: "Check imports, array ops, DataFrame creation, filtering, apply.",
+  lessons: [
+    {
+      title: "NumPy Arrays",
+      theory: "## NumPy\n```python\nimport numpy as np\narr = np.array([1,2,3,4,5])\nprint(arr * 2)     # [2,4,6,8,10]\nprint(arr.mean())  # 3.0\nprint(arr.std())   # std deviation\nprint(arr.shape)   # (5,)\n```",
+      instructions: "## Task: Score Analysis\n`scores = [78,92,65,88,74,91,55,83]`\n1. Convert to NumPy array\n2. Print mean, max, min, std\n3. Count > 80\n4. Print sorted descending",
+      starterCode: "import numpy as np\nscores = [78,92,65,88,74,91,55,83]\narr = np.array(___)\n\nprint(f'Mean: {___.mean():.1f}')\nprint(f'Max:  {___.max()}')\nprint(f'Min:  {___.min()}')\nprint(f'Std:  {___.std():.2f}')\n\nabove = arr[arr > ___]\nprint(f'Above 80: {len(above)}')\nprint('Sorted:', np.sort(arr)[::-1])",
+      solution: "import numpy as np\nscores=[78,92,65,88,74,91,55,83]\narr=np.array(scores)\nprint(f'Mean:{arr.mean():.1f}')\nprint(f'Max:{arr.max()}')\nprint(f'Min:{arr.min()}')\nprint(f'Std:{arr.std():.2f}')\nabove=arr[arr>80]\nprint(f'Above 80:{len(above)}')\nprint('Sorted:',np.sort(arr)[::-1])",
+      hint: "arr.mean(), arr.max(). Boolean index arr[arr>80]. [::-1] reverses.",
+      rubric: "np.array. All stats. Boolean index. Descending sort."
+    },
+    {
+      title: "Pandas DataFrames",
+      theory: "## Pandas\n```python\nimport pandas as pd\ndf = pd.DataFrame({'name':['Ada'],'score':[88]})\nprint(df.describe())\ndf['grade'] = df['score'].apply(lambda s: 'A' if s>=80 else 'B')\n```",
+      instructions: "## Task: Student Report\n5 students (name, course, score):\n1. info()\n2. Average score\n3. Highest scorer\n4. Filter >= 80\n5. Add Pass/Fail column",
+      starterCode: "import pandas as pd\ndata={'name':['Ada','Tunde','Ngozi','Emeka','Amaka'],'course':['Python','FastAPI','Python','SQL','AI'],'score':[88,72,95,58,81]}\ndf = pd.DataFrame(___)\ndf.info()\n\nprint(f'Average: {df[___].mean():.1f}')\ntop = df.loc[df['score'].idxmax(), ___]\nprint(f'Top: {top}')\n\nhigh = df[df['score'] >= ___]\nprint(high[['name','score']])\n\ndf['result'] = df['score'].apply(lambda s: ___ if s>=60 else ___)\nprint(df[['name','score','result']])",
+      solution: "import pandas as pd\ndata={'name':['Ada','Tunde','Ngozi','Emeka','Amaka'],'course':['Python','FastAPI','Python','SQL','AI'],'score':[88,72,95,58,81]}\ndf=pd.DataFrame(data)\ndf.info()\nprint(f'Average:{df[\"score\"].mean():.1f}')\ntop=df.loc[df['score'].idxmax(),'name']\nprint(f'Top:{top}')\nhigh=df[df['score']>=80]\nprint(high[['name','score']])\ndf['result']=df['score'].apply(lambda s:'Pass' if s>=60 else 'Fail')\nprint(df[['name','score','result']])",
+      hint: "idxmax() index of max. df[df['score']>=80] filters. apply with lambda.",
+      rubric: "DataFrame created. info(). idxmax. Filter. apply lambda."
+    },
+    {
+      title: "Data Cleaning",
+      theory: "## Cleaning\n```python\ndf.isnull().sum()       # count NaN\ndf.fillna(0)            # fill NaN\ndf.dropna()             # drop NaN rows\ndf.drop_duplicates()    # remove dupes\ndf['col'].str.strip()   # trim spaces\ndf['col'].astype(int)   # cast type\n```",
+      instructions: "## Task: Clean Messy Data\n1. Report null counts\n2. Fill missing scores with mean\n3. Drop duplicates\n4. Convert score to int\n5. Strip whitespace from names",
+      starterCode: "import pandas as pd\ndata={'name':['Ada ',' Tunde','Ngozi','Ada ','Emeka'],'score':[88,None,95,88,72]}\ndf = pd.DataFrame(data)\n\nprint('Nulls:\\n', df.___().sum())\n\nmean_score = df['score'].mean()\ndf['score'] = df['score'].fillna(___)\n\ndf = df.drop_duplicates()\ndf['score'] = df['score'].astype(___)\ndf['name'] = df['name'].str.___\n\nprint(df)",
+      solution: "import pandas as pd\ndata={'name':['Ada ',' Tunde','Ngozi','Ada ','Emeka'],'score':[88,None,95,88,72]}\ndf=pd.DataFrame(data)\nprint('Nulls:\\n',df.isnull().sum())\nmean_score=df['score'].mean()\ndf['score']=df['score'].fillna(mean_score)\ndf=df.drop_duplicates()\ndf['score']=df['score'].astype(int)\ndf['name']=df['name'].str.strip()\nprint(df)",
+      hint: "isnull().sum(). fillna(mean). drop_duplicates(). astype(int). str.strip().",
+      rubric: "isnull used. fillna mean. drop_duplicates. astype(int). strip names."
     }
   ]
 },
@@ -1429,9 +1544,7 @@ const courseManifest = {
   ]
 },
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// DATA SCIENCE — INTERMEDIATE
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Intermediate
 
 "Statistical Analysis": {
   aiRubric: "Check mean, std, t-test, correlation, hypothesis testing.",
@@ -1444,6 +1557,21 @@ const courseManifest = {
       solution: "import numpy as np\nfrom scipy import stats\ngroup_a=[78,92,65,88,74,91,55,83,79,88]\ngroup_b=[85,90,78,92,88,95,82,89,91,87]\nfor name,g in [('Group A',group_a),('Group B',group_b)]:\n    print(f'{name}:')\n    print(f'  Mean:{np.mean(g):.1f}')\n    print(f'  Median:{np.median(g):.1f}')\n    print(f'  Std:{np.std(g):.1f}')\narr=np.array(group_a)\nQ1=np.percentile(arr,25)\nQ3=np.percentile(arr,75)\nIQR=Q3-Q1\noutliers=arr[(arr<Q1-1.5*IQR)|(arr>Q3+1.5*IQR)]\nprint(f'\\nIQR:{IQR},Outliers:{outliers}')\nt_stat,p_value=stats.ttest_ind(group_a,group_b)\nprint(f'\\nt:{t_stat:.3f}')\nprint(f'p:{p_value:.3f}')\nprint('Significant!' if p_value<0.05 else 'Not significant')",
       hint: "np.mean, np.median, np.std. Percentile 25 and 75. IQR = Q3 - Q1. ttest_ind for two groups. p < 0.05.",
       rubric: "mean/median/std. Q1/Q3/IQR. Outlier detection. ttest_ind. p<0.05 conclusion."
+    }
+  ]
+},
+
+"Intro to Machine Learning": {
+  aiRubric: "Check sklearn imports, train_test_split, fit, predict, metrics.",
+  lessons: [
+    {
+      title: "Your First ML Model",
+      theory: "## Scikit-Learn Pattern\n```python\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import accuracy_score\n\nX_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2)\nmodel = LogisticRegression()\nmodel.fit(X_train, y_train)\ny_pred = model.predict(X_test)\nprint(accuracy_score(y_test, y_pred))\n```",
+      instructions: "## Task: Iris Classifier\n1. Load Iris dataset\n2. Split 80/20\n3. Train LogisticRegression\n4. Print accuracy and classification report",
+      starterCode: "from sklearn.datasets import load_iris\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import accuracy_score, classification_report\n\niris = load_iris()\nX, y = iris.___, iris.___\n\nX_train,X_test,y_train,y_test = train_test_split(\n    X, y, test_size=___, random_state=42)\n\nmodel = LogisticRegression(max_iter=200)\nmodel.___(X_train, y_train)\ny_pred = model.___(X_test)\n\nprint(f'Accuracy: {accuracy_score(y_test,y_pred):.2%}')\nprint(classification_report(y_test, y_pred, target_names=iris.target_names))",
+      solution: "from sklearn.datasets import load_iris\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import accuracy_score,classification_report\niris=load_iris()\nX,y=iris.data,iris.target\nX_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=42)\nmodel=LogisticRegression(max_iter=200)\nmodel.fit(X_train,y_train)\ny_pred=model.predict(X_test)\nprint(f'Accuracy:{accuracy_score(y_test,y_pred):.2%}')\nprint(classification_report(y_test,y_pred,target_names=iris.target_names))",
+      hint: "iris.data is X, iris.target is y. test_size=0.2. model.fit() trains.",
+      rubric: "data/target loaded. 0.2 split. fit/predict called. accuracy_score used."
     }
   ]
 },
@@ -1493,9 +1621,7 @@ const courseManifest = {
   ]
 },
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// DATA SCIENCE — ADVANCED
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Advanced
 
 "Feature Engineering": {
   aiRubric: "Check feature creation, encoding, scaling, selection.",
@@ -1573,10 +1699,10 @@ const courseManifest = {
 },
 
 
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// AI ENGINEERING — ALL MISSING
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ═══════════════════════════════════════
+// AI ENGINEERING
+// ═══════════════════════════════════════
+// Beginner
 
 "AI & ML Concepts": {
   aiRubric: "Check AI vs ML vs DL understanding, types of learning, real-world examples.",
@@ -1623,6 +1749,21 @@ const courseManifest = {
   ]
 },
 
+"Prompt Engineering": {
+  aiRubric: "Check role, context, task, format in prompts.",
+  lessons: [
+    {
+      title: "Anatomy of a Good Prompt",
+      theory: "## Prompt Structure\n1. **Role** — who the AI is\n2. **Context** — background\n3. **Task** — what exactly to do\n4. **Format** — how to respond\n\n```python\nsystem = 'You are a senior Python tutor. Be concise.'\nuser   = 'Explain Python lists in 2 sentences with 1 code example.'\n```",
+      instructions: "## Task: Design 3 Prompts\nWrite system + user for:\n1. Nigerian cooking assistant\n2. Python code reviewer\n3. Quiz generator\n\nEach must specify: role, task, output format.",
+      starterCode: "cooking_system = 'You are ___, a Nigerian cooking expert. ___'\ncooking_user   = 'Task: explain jollof rice. Format: ___'\n\nreview_system = '___'\nreview_user   = 'Review:{code}. Format: bullet points'\n\nquiz_system = '___'\nquiz_user   = 'Topic: Python loops. Task:___. Format: 5 MCQs A-D'\n\nfor name,s,u in [('Cooking',cooking_system,cooking_user),('Review',review_system,review_user),('Quiz',quiz_system,quiz_user)]:\n    print(f'=== {name} ===')\n    print(f'System: {s[:70]}')\n    print(f'User:   {u[:70]}\\n')",
+      solution: "cooking_system='You are Mama Titi, a Nigerian cooking expert. Be warm and clear.'\ncooking_user='Task: explain jollof rice. Format: numbered steps max 8, include tips.'\nreview_system='You are a senior Python engineer. Give direct actionable feedback.'\nreview_user='Review:{code}. Format: bullet points — Issues, Fixes, Style.'\nquiz_system='You are an expert educator who writes clear MCQs.'\nquiz_user='Topic: Python loops. Task: Create 5 MCQs. Format: Options A-D, mark correct.'\nfor name,s,u in [('Cooking',cooking_system,cooking_user),('Review',review_system,review_user),('Quiz',quiz_system,quiz_user)]:\n    print(f'==={name}===')\n    print(f'System:{s[:70]}')\n    print(f'User:{u[:70]}\\n')",
+      hint: "Be specific in role. Always state output format explicitly.",
+      rubric: "All 3 prompts have role, task, format. System distinct from user."
+    }
+  ]
+},
+
 "AI Use Cases": {
   aiRubric: "Check practical AI applications, problem framing, output evaluation.",
   lessons: [
@@ -1638,9 +1779,46 @@ const courseManifest = {
   ]
 },
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// AI ENGINEERING — INTERMEDIATE
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Intermediate
+
+"LLM Fundamentals": {
+  aiRubric: "Check API call, message roles, response parsing, error handling.",
+  lessons: [
+    {
+      title: "First LLM API Call",
+      theory: "## LLM API Pattern\n```python\nimport requests\nr = requests.post(\n    'https://api.groq.com/openai/v1/chat/completions',\n    headers={'Authorization': f'Bearer {KEY}'},\n    json={\n        'model':'llama3-8b-8192',\n        'messages':[\n            {'role':'system','content':'You are helpful.'},\n            {'role':'user','content':'Hello!'}\n        ]\n    }\n)\nprint(r.json()['choices'][0]['message']['content'])\n```",
+      instructions: "## Task: ask_llm() Function\nWrite `ask_llm(question, system_prompt)` that:\n1. Builds message list\n2. POSTs to Groq API\n3. Returns text response\n4. Handles errors with try/except",
+      starterCode: "import requests, os\nAPI_KEY = os.getenv('GROQ_API_KEY','your-key')\nURL = 'https://api.groq.com/openai/v1/chat/completions'\n\ndef ask_llm(question, system_prompt='You are a helpful tutor.'):\n    messages = [\n        {'role': ___, 'content': ___},\n        {'role': ___, 'content': ___}\n    ]\n    try:\n        r = requests.post(URL,\n            headers={'Authorization': f'Bearer {API_KEY}'},\n            json={'model':'llama3-8b-8192','messages':___})\n        return r.json()[___][0][___][___]\n    except Exception as e:\n        return f'Error: {e}'\n\nprint(ask_llm('What is a Python list?'))",
+      solution: "import requests,os\nAPI_KEY=os.getenv('GROQ_API_KEY','your-key')\nURL='https://api.groq.com/openai/v1/chat/completions'\ndef ask_llm(question,system_prompt='You are a helpful tutor.'):\n    messages=[{'role':'system','content':system_prompt},{'role':'user','content':question}]\n    try:\n        r=requests.post(URL,headers={'Authorization':f'Bearer {API_KEY}'},json={'model':'llama3-8b-8192','messages':messages})\n        return r.json()['choices'][0]['message']['content']\n    except Exception as e:\n        return f'Error:{e}'\nprint(ask_llm('What is a Python list?'))",
+      hint: "Roles: 'system' and 'user'. Response: json()['choices'][0]['message']['content'].",
+      rubric: "Both roles correct. POST URL. Response extracted. try/except present."
+    },
+    {
+      title: "Conversation Memory",
+      theory: "## Multi-turn Conversations\nLLMs are stateless — pass full history each call:\n```python\nhistory = [{'role':'system','content':'...'}]\nhistory.append({'role':'user','content':msg})\n# after reply:\nhistory.append({'role':'assistant','content':reply})\n```",
+      instructions: "## Task: Chatbot Class\nBuild `Chatbot(system)` with:\n- `chat(message)` — appends user, calls API, appends reply, returns reply\n- `reset()` — clears history but keeps system message",
+      starterCode: "import requests, os\n\nclass Chatbot:\n    def __init__(self, system='You are a helpful assistant.'):\n        self.history = [{'role':'system','content':___}]\n        self.api_key = os.getenv('GROQ_API_KEY','')\n\n    def chat(self, message):\n        self.history.append({'role':'user','content':___})\n        r = requests.post(\n            'https://api.groq.com/openai/v1/chat/completions',\n            headers={'Authorization':f'Bearer {self.api_key}'},\n            json={'model':'llama3-8b-8192','messages':self.___}\n        )\n        reply = r.json()['choices'][0]['message']['content']\n        self.history.append({'role':___,'content':reply})\n        return reply\n\n    def reset(self):\n        sys_msg = self.history[0]\n        self.history = [___]\n\nbot = Chatbot('You are a Python tutor.')\nprint(bot.chat('What is a variable?'))\nprint(bot.chat('Show me an example'))\nprint(f'History: {len(bot.history)} messages')",
+      solution: "import requests,os\nclass Chatbot:\n    def __init__(self,system='You are a helpful assistant.'):\n        self.history=[{'role':'system','content':system}]\n        self.api_key=os.getenv('GROQ_API_KEY','')\n    def chat(self,message):\n        self.history.append({'role':'user','content':message})\n        r=requests.post('https://api.groq.com/openai/v1/chat/completions',headers={'Authorization':f'Bearer {self.api_key}'},json={'model':'llama3-8b-8192','messages':self.history})\n        reply=r.json()['choices'][0]['message']['content']\n        self.history.append({'role':'assistant','content':reply})\n        return reply\n    def reset(self):\n        sys_msg=self.history[0]\n        self.history=[sys_msg]\nbot=Chatbot('You are a Python tutor.')\nprint(bot.chat('What is a variable?'))\nprint(bot.chat('Show me an example'))\nprint(f'History:{len(bot.history)} messages')",
+      hint: "Append user then assistant each turn. self.history passed to API. reset() keeps index 0.",
+      rubric: "history initialized. chat() appends both. history passed. reset() keeps system."
+    }
+  ]
+},
+
+"RAG Pipelines": {
+  aiRubric: "Check chunking, similarity, retrieval, context injection.",
+  lessons: [
+    {
+      title: "Simple RAG Pipeline",
+      theory: "## RAG = Retrieve + Generate\n1. **Index** — chunk docs, embed, store\n2. **Retrieve** — find similar chunks to query\n3. **Generate** — pass chunks as context to LLM\n\n```python\nrelevant = retrieve(question, docs)\nprompt   = f'Context: {relevant}\\nQuestion: {question}'\nanswer   = llm(prompt)\n```",
+      instructions: "## Task: Word-Overlap RAG\n1. 5 docs about Python topics\n2. `similarity(query, doc)` — word overlap score\n3. `retrieve(query, docs)` — returns top match\n4. `rag_prompt(q, docs)` — injects context\n5. Test with 2 queries",
+      starterCode: "documents = [\n    'Python lists store ordered mutable collections.',\n    'Dictionaries store key-value pairs for fast lookups.',\n    'Functions let you reuse code and accept parameters.',\n    'Classes define blueprints for objects with attributes.',\n    'Loops iterate over sequences with for and while.'\n]\n\ndef similarity(query, doc):\n    q = set(query.lower().split())\n    d = set(doc.lower().split())\n    return len(q & d) / (len(q) + 1)\n\ndef retrieve(query, docs, top_k=1):\n    scores = [(similarity(___, doc), doc) for doc in ___]\n    scores.sort(reverse=___)\n    return [doc for _, doc in scores[:top_k]]\n\ndef rag_prompt(question, docs):\n    ctx = retrieve(___, docs)[0]\n    return f'Context: {ctx}\\nQuestion: {question}\\nAnswer:'\n\nfor q in ['How do I store key-value data?', 'What is a loop?']:\n    print('Q:', q)\n    print('Context:', retrieve(q, documents)[0])\n    print()",
+      solution: "documents=['Python lists store ordered mutable collections.','Dictionaries store key-value pairs for fast lookups.','Functions let you reuse code and accept parameters.','Classes define blueprints for objects with attributes.','Loops iterate over sequences with for and while.']\ndef similarity(query,doc):\n    q=set(query.lower().split())\n    d=set(doc.lower().split())\n    return len(q&d)/(len(q)+1)\ndef retrieve(query,docs,top_k=1):\n    scores=[(similarity(query,doc),doc) for doc in docs]\n    scores.sort(reverse=True)\n    return [doc for _,doc in scores[:top_k]]\ndef rag_prompt(question,docs):\n    ctx=retrieve(question,docs)[0]\n    return f'Context:{ctx}\\nQuestion:{question}\\nAnswer:'\nfor q in ['How do I store key-value data?','What is a loop?']:\n    print('Q:',q)\n    print('Context:',retrieve(q,documents)[0])\n    print()",
+      hint: "sort(reverse=True) for highest first. context[0] gets top result.",
+      rubric: "similarity correct. retrieve sorts. rag_prompt injects. Both queries tested."
+    }
+  ]
+},
 
 "LangChain Basics": {
   aiRubric: "Check LangChain chain setup, prompt templates, output parsers.",
@@ -1687,9 +1865,7 @@ const courseManifest = {
   ]
 },
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// AI ENGINEERING — ADVANCED
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Advanced
 
 "LangChain & Agents": {
   aiRubric: "Check agent tool definition, tool calling pattern, agent loop.",
@@ -1766,223 +1942,386 @@ const courseManifest = {
   ]
 },
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// FRONTEND — ALL MISSING
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-"Forms & Validation": {
-  aiRubric: "Check form elements, validation logic, error messages.",
+// ═══════════════════════════════════════
+// AI AUTOMATION
+// ═══════════════════════════════════════
+// Beginner
+
+"Intro to AI Automation": {
+  aiRubric: "Check automation concepts, task identification, pipeline design.",
   lessons: [
     {
-      title: "HTML Forms & JavaScript Validation",
-      theory: "## Forms\n```html\n<form id='myForm'>\n  <input type='text' id='name' required>\n  <input type='email' id='email'>\n  <input type='number' min='0' max='100'>\n  <select id='course'>\n    <option value='python'>Python</option>\n  </select>\n  <button type='submit'>Submit</button>\n</form>\n```\n```javascript\ndocument.getElementById('myForm').addEventListener('submit', (e) => {\n  e.preventDefault();  // stop page reload\n  const name = document.getElementById('name').value;\n  if (!name) { alert('Name required!'); return; }\n});\n```",
-      instructions: "## Task: Student Registration Form\nWrite HTML + JavaScript for a form that:\n1. Has fields: name, email, course (select), score (number 0-100)\n2. Validates: all required, email has @, score in range\n3. Shows inline error messages (not alert)\n4. On success, shows a summary of the registration",
-      starterCode: "// Validation logic (JavaScript)\nfunction validateForm(name, email, course, score) {\n    const errors = {};\n\n    if (!___) errors.name = 'Name is required';\n    if (!email.includes(___)) errors.email = 'Invalid email address';\n    if (!course) errors.course = 'Please select a course';\n    if (score < ___ || score > ___) errors.score = 'Score must be 0-100';\n\n    return errors;\n}\n\nfunction submitForm() {\n    const name  = 'Ada Okonkwo';   // simulate input\n    const email = 'ada@test.com';\n    const course = 'python';\n    const score = 88;\n\n    const errors = validateForm(___, ___, ___, ___);\n\n    if (Object.keys(errors).length > 0) {\n        console.log('Validation errors:', errors);\n        return;\n    }\n\n    console.log('Registration successful!');\n    console.log(`Student: ${name} | Course: ${course} | Score: ${score}`);\n}\n\n// Test with valid data\nsubmitForm();\n\n// Test with invalid data\nconst errors = validateForm('', 'not-an-email', '', 150);\nconsole.log('Expected errors:', errors);",
-      solution: "function validateForm(name,email,course,score){\n    const errors={};\n    if(!name)errors.name='Name is required';\n    if(!email.includes('@'))errors.email='Invalid email';\n    if(!course)errors.course='Please select a course';\n    if(score<0||score>100)errors.score='Score must be 0-100';\n    return errors;\n}\nfunction submitForm(){\n    const name='Ada Okonkwo',email='ada@test.com',course='python',score=88;\n    const errors=validateForm(name,email,course,score);\n    if(Object.keys(errors).length>0){console.log('Errors:',errors);return;}\n    console.log('Success!');\n    console.log(`${name}|${course}|${score}`);\n}\nsubmitForm();\nconst errors=validateForm('','not-an-email','',150);\nconsole.log('Expected errors:',errors);",
-      hint: "!name for empty check. email.includes('@'). score<0||score>100. Object.keys(errors).length.",
-      rubric: "4 validations. Error object built. Length check. Success and error paths tested."
+      title: "What is AI Automation?",
+      theory: "## AI Automation\nAI Automation = using AI to perform repetitive tasks automatically.\n\n**The Stack:**\n- **Trigger** — what starts it (new email, form submit, schedule)\n- **Action** — what happens (send reply, save to DB, notify)\n- **AI Layer** — makes decisions (classify, summarize, generate)\n\n**Tools:** n8n, Zapier, Make.com, Python scripts, LLMs",
+      instructions: "## Task: Automation Planner\nCreate an AutomationTask dataclass and plan 5 automations for Mabel Academy:\n1. Student Welcome Email\n2. Assignment Auto-Grading\n3. Daily Progress Report\n4. Plagiarism Check\n5. Certificate Generation\n\nFilter AI-enabled tasks. Calculate total daily and monthly time saved.",
+      starterCode: "from dataclasses import dataclass\n\n@dataclass\nclass AutomationTask:\n    name: str\n    trigger: str\n    action: str\n    ai_enabled: bool\n    time_saved_hours: float\n\ntasks = [\n    AutomationTask('Student Welcome Email',  'New enrolment',     'Send personalised email', ___, 0.5),\n    AutomationTask('Assignment Grading',     'Code submitted',    'Grade and give feedback',  True, ___),\n    AutomationTask('Daily Progress Report',  'Every day 6pm',     'Email summary',            False, 0.3),\n    AutomationTask('Plagiarism Check',       'Assignment submit', 'AI similarity check',      ___, 1.0),\n    AutomationTask('Certificate Generation', 'Course complete',   'Generate PDF certificate', False, ___),\n]\n\nai_tasks    = [t for t in tasks if t.___]\ntotal_saved = sum(t.time_saved_hours for t in tasks)\n\nprint('=== Mabel Academy Automation Plan ===')\nfor t in tasks:\n    badge = '[AI]' if t.ai_enabled else '    '\n    print(f'{badge} {t.name:30} | {t.trigger}')\n\nprint(f'\\nAI-powered tasks: {len(ai_tasks)}/{len(tasks)}')\nprint(f'Daily saving:     {total_saved:.1f} hours')\nprint(f'Monthly saving:   {total_saved * 22:.0f} hours')",
+      solution: "from dataclasses import dataclass\n@dataclass\nclass AutomationTask:\n    name:str;trigger:str;action:str;ai_enabled:bool;time_saved_hours:float\ntasks=[AutomationTask('Welcome Email','New enrolment','Send email',True,0.5),AutomationTask('Assignment Grading','Code submitted','Grade code',True,2.0),AutomationTask('Daily Report','6pm','Email summary',False,0.3),AutomationTask('Plagiarism Check','Assignment submit','AI check',True,1.0),AutomationTask('Certificate','Course complete','Generate PDF',False,0.2)]\nai_tasks=[t for t in tasks if t.ai_enabled]\ntotal=sum(t.time_saved_hours for t in tasks)\nprint('=== Automation Plan ===')\nfor t in tasks:\n    badge='[AI]' if t.ai_enabled else '    '\n    print(f'{badge} {t.name:30}|{t.trigger}')\nprint(f'AI tasks:{len(ai_tasks)}/{len(tasks)}')\nprint(f'Daily:{total:.1f}hrs Monthly:{total*22:.0f}hrs')",
+      hint: "ai_enabled is True or False. Filter with list comprehension. sum() for total hours.",
+      rubric: "5 tasks created. ai_enabled boolean. Filter comprehension correct. total_saved computed."
+    },
+    {
+      title: "File Organiser Automation",
+      theory: "## Automating File Tasks\n```python\nimport os\nfrom pathlib import Path\n\n# List files\nfor f in os.listdir('downloads'):\n    print(f)\n\n# Move a file\nimport shutil\nshutil.move('old.txt', 'archive/old.txt')\n\n# Get extension\n_, ext = os.path.splitext('main.py')  # ext = '.py'\n```",
+      instructions: "## Task: Smart File Organiser\n1. Given a list of filenames, categorise by extension\n2. `.py` code, `.csv` data, `.pdf` docs, others misc\n3. Simulate moving to correct subfolders\n4. Log each action with timestamp\n5. Print summary report",
+      starterCode: "import os\nfrom datetime import datetime\nfrom collections import defaultdict\n\nfiles = [\n    'assignment1.py','data_export.csv','lecture_notes.pdf',\n    'solution.py','students.csv','certificate.pdf',\n    'main.py','results.csv','readme.txt','logo.png'\n]\n\nCATEGORIES = {'.py':'code', '.csv':'data', '.pdf':'docs', '.txt':'text', '.png':'images'}\n\ndef get_category(filename):\n    _, ext = os.path.splitext(___)\n    return CATEGORIES.get(ext, ___)\n\ndef organise(file_list):\n    moved = defaultdict(list)\n    log   = []\n    for filename in file_list:\n        cat = get_category(___)\n        moved[___].append(filename)\n        ts  = datetime.now().strftime('%H:%M:%S')\n        log.append(f'[{ts}] MOVED {filename} -> {___}/')\n    return moved, log\n\nmoved, log = organise(files)\nfor entry in log: print(entry)\nprint()\nfor cat, fl in moved.items():\n    print(f'{cat:10}: {len(fl)} files -> {fl}')",
+      solution: "import os\nfrom datetime import datetime\nfrom collections import defaultdict\nfiles=['assignment1.py','data_export.csv','lecture_notes.pdf','solution.py','students.csv','certificate.pdf','main.py','results.csv','readme.txt','logo.png']\nCATEGORIES={'.py':'code','.csv':'data','.pdf':'docs','.txt':'text','.png':'images'}\ndef get_category(f):\n    _,ext=os.path.splitext(f)\n    return CATEGORIES.get(ext,'misc')\ndef organise(fl):\n    moved=defaultdict(list);log=[]\n    for f in fl:\n        cat=get_category(f)\n        moved[cat].append(f)\n        ts=datetime.now().strftime('%H:%M:%S')\n        log.append(f'[{ts}] MOVED {f}->{cat}/')\n    return moved,log\nmoved,log=organise(files)\nfor e in log:print(e)\nprint()\nfor cat,fl in moved.items():print(f'{cat:10}:{len(fl)} files->{fl}')",
+      hint: "os.path.splitext() returns (name, ext). defaultdict(list). 'misc' as default category.",
+      rubric: "splitext for extension. CATEGORIES.get with default. defaultdict groups. Log timestamped."
     }
   ]
 },
 
-"Responsive Design Basics": {
-  aiRubric: "Check media queries, mobile-first, flexbox/grid for responsive layout.",
+"Python Automation Basics": {
+  aiRubric: "Check os module, scheduling, file operations.",
   lessons: [
     {
-      title: "Mobile-First Responsive CSS",
-      theory: "## Responsive Design\n```css\n/* Mobile first — base styles for small screens */\n.card { width: 100%; padding: 16px; }\n\n/* Tablet (768px+) */\n@media (min-width: 768px) {\n  .card { width: 50%; }\n}\n\n/* Desktop (1024px+) */\n@media (min-width: 1024px) {\n  .card { width: 33.333%; }\n}\n\n/* Grid layout */\n.grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));\n  gap: 20px;\n}\n```",
-      instructions: "## Task: Responsive Card Grid\nWrite CSS for a course card grid that:\n1. 1 column on mobile\n2. 2 columns on tablet (768px+)\n3. 3 columns on desktop (1024px+)\n4. Cards have padding, shadow, rounded corners\n5. Navigation bar stacks vertically on mobile",
-      starterCode: "/* Mobile First — base styles */\n* { box-sizing: border-box; margin: 0; padding: 0; }\nbody { font-family: sans-serif; background: #f5f5f5; }\n\n/* Navbar — stacks on mobile */\n.navbar {\n    display: flex;\n    flex-direction: ___; /* column on mobile */\n    background: #1e1e1e;\n    padding: 16px;\n    gap: 12px;\n}\n\n/* Card grid — 1 col on mobile */\n.grid {\n    display: ___;\n    grid-template-columns: ___; /* 1 col */\n    gap: 16px;\n    padding: 20px;\n}\n\n.card {\n    background: white;\n    border-radius: ___;\n    padding: 20px;\n    box-shadow: 0 2px 8px rgba(0,0,0,0.1);\n}\n\n/* Tablet */\n@media (min-width: ___) {\n    .navbar { flex-direction: ___; }\n    .grid { grid-template-columns: ___ ___ ; }\n}\n\n/* Desktop */\n@media (min-width: 1024px) {\n    .grid { grid-template-columns: ___ ___ ___; }\n}",
-      solution: "*{box-sizing:border-box;margin:0;padding:0}\nbody{font-family:sans-serif;background:#f5f5f5}\n.navbar{display:flex;flex-direction:column;background:#1e1e1e;padding:16px;gap:12px}\n.grid{display:grid;grid-template-columns:1fr;gap:16px;padding:20px}\n.card{background:white;border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}\n@media(min-width:768px){.navbar{flex-direction:row}.grid{grid-template-columns:1fr 1fr}}\n@media(min-width:1024px){.grid{grid-template-columns:1fr 1fr 1fr}}",
-      hint: "column for mobile, row for tablet. 1fr is one column unit. @media(min-width:768px).",
-      rubric: "Mobile: column nav, 1-col grid. Tablet: row nav, 2-col. Desktop: 3-col. card styles present."
+      title: "Scheduling Automated Tasks",
+      theory: "## Task Scheduling\n```python\nimport schedule, time\n\nschedule.every().day.at('09:00').do(send_report)\nschedule.every(30).minutes.do(check_emails)\nschedule.every().monday.do(weekly_backup)\n\nwhile True:\n    schedule.run_pending()\n    time.sleep(60)\n```\nInstall: `pip install schedule`",
+      instructions: "## Task: Academy Scheduler\n1. Define `send_welcome_email()`, `generate_daily_report()`, `backup_data()`\n2. Schedule each at different intervals\n3. Run for 5 simulated seconds\n4. Log all executions with timestamps\n5. Print final summary",
+      starterCode: "import schedule, time\nfrom datetime import datetime\n\nexecutions = []\n\ndef send_welcome_email():\n    executions.append(('welcome_email', datetime.now().strftime('%H:%M:%S')))\n    print('[EMAIL] Welcome sent')\n\ndef generate_daily_report():\n    executions.append((___, datetime.now().strftime('%H:%M:%S')))\n    print('[REPORT] Daily report generated')\n\ndef backup_data():\n    executions.append(('backup', ___))\n    print('[BACKUP] Data backed up')\n\nschedule.every(1).seconds.do(generate_daily_report)\nschedule.every(2).seconds.do(___)\nschedule.every(3).seconds.do(send_welcome_email)\n\nstart = time.time()\nwhile time.time() - start < ___:\n    schedule.run_pending()\n    time.sleep(0.5)\n\nprint('\\n=== Execution Log ===')\nfor task, ts in executions:\n    print(f'  [{ts}] {task}')\nprint(f'Total: {len(executions)} executions')\nschedule.___()",
+      solution: "import schedule,time\nfrom datetime import datetime\nexecutions=[]\ndef send_welcome_email():\n    executions.append(('welcome_email',datetime.now().strftime('%H:%M:%S')))\n    print('[EMAIL] Welcome sent')\ndef generate_daily_report():\n    executions.append(('daily_report',datetime.now().strftime('%H:%M:%S')))\n    print('[REPORT] Generated')\ndef backup_data():\n    executions.append(('backup',datetime.now().strftime('%H:%M:%S')))\n    print('[BACKUP] Done')\nschedule.every(1).seconds.do(generate_daily_report)\nschedule.every(2).seconds.do(backup_data)\nschedule.every(3).seconds.do(send_welcome_email)\nstart=time.time()\nwhile time.time()-start<5:\n    schedule.run_pending()\n    time.sleep(0.5)\nprint('\\n=== Log ===')\nfor task,ts in executions:print(f'  [{ts}] {task}')\nprint(f'Total:{len(executions)}')\nschedule.clear()",
+      hint: "schedule.every(n).seconds.do(fn). Run for 5 seconds. schedule.clear() resets.",
+      rubric: "3 tasks defined. schedule.every() for each. while loop 5 seconds. executions logged."
     }
   ]
 },
 
-"Fetch API & AJAX": {
-  aiRubric: "Check fetch usage, async/await, .then(), error handling, JSON parsing.",
+"Email & Calendar Automation": {
+  aiRubric: "Check email templates, personalisation, batch sending.",
   lessons: [
     {
-      title: "Fetch API & Async JS",
-      theory: "## Fetch API\n```javascript\n// With async/await\nasync function getUser(id) {\n  try {\n    const res = await fetch(`/api/users/${id}`);\n    if (!res.ok) throw new Error(`HTTP ${res.status}`);\n    const data = await res.json();\n    return data;\n  } catch (err) {\n    console.error('Fetch failed:', err);\n  }\n}\n\n// POST request\nconst res = await fetch('/api/students', {\n  method: 'POST',\n  headers: {'Content-Type': 'application/json'},\n  body: JSON.stringify({name: 'Ada', score: 88})\n});\n```",
-      instructions: "## Task: Student API Client (JS)\nWrite async JavaScript functions:\n1. `fetchStudents()` — GET all students from JSONPlaceholder /users\n2. `fetchStudent(id)` — GET one user\n3. `createStudent(data)` — POST to /posts\n4. Handle errors properly\n5. Print results",
-      starterCode: "const BASE_URL = 'https://jsonplaceholder.typicode.com';\n\nasync function fetchStudents() {\n    const res = await ___(f`${BASE_URL}/users`);\n    if (!res.ok) throw new Error(`Error: ${res.status}`);\n    return await res.___();\n}\n\nasync function fetchStudent(id) {\n    try {\n        const res = await fetch(`${BASE_URL}/users/${___}`);\n        if (!res.___) throw new Error(`Student ${id} not found`);\n        return await res.json();\n    } catch (err) {\n        console.error(err.message);\n        return null;\n    }\n}\n\nasync function createStudent(data) {\n    const res = await fetch(`${BASE_URL}/posts`, {\n        method: ___,\n        headers: {'Content-Type': 'application/json'},\n        body: JSON.stringify(___)\n    });\n    return await res.___();\n}\n\nasync function main() {\n    const students = await fetchStudents();\n    console.log(`Fetched ${students.length} students`);\n    console.log('First:', students[0].name, students[0].email);\n\n    const one = await fetchStudent(1);\n    console.log('User 1:', one?.name);\n\n    const created = await createStudent({name:'Ada',course:'Python',score:88});\n    console.log('Created:', created);\n}\n\nmain();",
-      solution: "const BASE_URL='https://jsonplaceholder.typicode.com';\nasync function fetchStudents(){\n    const res=await fetch(`${BASE_URL}/users`);\n    if(!res.ok)throw new Error(`Error:${res.status}`);\n    return await res.json();\n}\nasync function fetchStudent(id){\n    try{\n        const res=await fetch(`${BASE_URL}/users/${id}`);\n        if(!res.ok)throw new Error(`Not found:${id}`);\n        return await res.json();\n    }catch(err){console.error(err.message);return null;}\n}\nasync function createStudent(data){\n    const res=await fetch(`${BASE_URL}/posts`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});\n    return await res.json();\n}\nasync function main(){\n    const students=await fetchStudents();\n    console.log(`Fetched ${students.length}`);\n    console.log('First:',students[0].name,students[0].email);\n    const one=await fetchStudent(1);\n    console.log('User 1:',one?.name);\n    const created=await createStudent({name:'Ada',course:'Python',score:88});\n    console.log('Created:',created);\n}\nmain();",
-      hint: "await fetch(url). res.ok checks status. res.json() parses. POST needs method, headers, body.",
-      rubric: "fetch with await. res.ok check. json() called. POST with headers and JSON.stringify."
+      title: "Email Campaign System",
+      theory: "## Email Automation\n```python\nfrom string import Template\n\ntemplate = Template('Hello $name, your $course starts today!')\nresult   = template.safe_substitute(name='Ada', course='Python')\n\n# SMTP sending (real)\nimport smtplib\nfrom email.mime.text import MIMEText\n# with smtplib.SMTP('smtp.gmail.com', 587) as server:\n#     server.starttls()\n#     server.login(user, app_password)\n#     server.send_message(msg)\n```",
+      instructions: "## Task: Email Campaign\nBuild a campaign system:\n1. `create_template(name, subject_tpl, body_tpl)` — email template\n2. `personalise(template, student)` — fills placeholders\n3. `send_batch(template, students, dry_run=True)` — sends to list\n4. Create 3 templates: welcome, reminder, certificate\n5. Test with 3 students",
+      starterCode: "from string import Template\n\ndef create_template(name, subject_tpl, body_tpl):\n    return {'name':name,'subject':Template(___),'body':Template(___)}\n\ndef personalise(template, data):\n    return {\n        'subject': template['subject'].safe_substitute(___),\n        'body':    template['body'].safe_substitute(___)\n    }\n\ndef send_batch(template, students, dry_run=True):\n    results = []\n    for student in ___:\n        email  = personalise(template, student)\n        status = 'SENT (dry run)' if dry_run else 'SENT'\n        results.append({'to':student['email'],'subject':email['subject'],'status':status})\n        print(f\"  {status}: {student['email']} | {email['subject']}\")\n    return results\n\nwelcome = create_template('welcome','Welcome to Mabel Academy, $name!','Hi $name,\\nYour $course course starts today!\\nLogin at mabelacademy.com')\nreminder = create_template('reminder','Reminder: $course assignment due $deadline','Hi $name,\\nDon\\'t forget your $course assignment by $deadline!')\ncertificate = create_template('certificate','Congrats $name — $course Certificate!','Dear $name,\\nYou completed $course with $score%! Download: $cert_url')\n\nstudents = [\n    {'name':'Ada Okonkwo', 'email':'ada@example.com', 'course':'Python', 'score':88, 'deadline':'2024-12-01','cert_url':'academy.com/cert/001'},\n    {'name':'Tunde Bello', 'email':'tunde@gmail.com', 'course':'SQL',    'score':72, 'deadline':'2024-12-01','cert_url':'academy.com/cert/002'},\n    {'name':'Ngozi Eze',   'email':'ngozi@yahoo.com', 'course':'FastAPI','score':95, 'deadline':'2024-12-05','cert_url':'academy.com/cert/003'},\n]\n\nprint('=== Welcome Emails ===')\nsend_batch(___, students)\nprint('\\n=== Certificate Emails ===')\nsend_batch(___, students)",
+      solution: "from string import Template\ndef create_template(name,subject_tpl,body_tpl):\n    return{'name':name,'subject':Template(subject_tpl),'body':Template(body_tpl)}\ndef personalise(template,data):\n    return{'subject':template['subject'].safe_substitute(data),'body':template['body'].safe_substitute(data)}\ndef send_batch(template,students,dry_run=True):\n    results=[]\n    for student in students:\n        email=personalise(template,student)\n        status='SENT (dry run)' if dry_run else 'SENT'\n        results.append({'to':student['email'],'subject':email['subject'],'status':status})\n        print(f\"  {status}:{student['email']}|{email['subject']}\")\n    return results\nwelcome=create_template('welcome','Welcome $name!','Hi $name,\\nYour $course starts today!')\nreminder=create_template('reminder','Reminder: $course due $deadline','Hi $name,\\n$course due $deadline!')\ncertificate=create_template('certificate','Congrats $name — $course!','Dear $name,\\nCompleted $course with $score%! $cert_url')\nstudents=[{'name':'Ada Okonkwo','email':'ada@example.com','course':'Python','score':88,'deadline':'2024-12-01','cert_url':'cert/001'},{'name':'Tunde Bello','email':'tunde@gmail.com','course':'SQL','score':72,'deadline':'2024-12-01','cert_url':'cert/002'},{'name':'Ngozi Eze','email':'ngozi@yahoo.com','course':'FastAPI','score':95,'deadline':'2024-12-05','cert_url':'cert/003'}]\nprint('=== Welcome ===')\nsend_batch(welcome,students)\nprint('\\n=== Certificates ===')\nsend_batch(certificate,students)",
+      hint: "Template() wraps string. safe_substitute(dict) fills $placeholders. Loop students in send_batch.",
+      rubric: "Template with $placeholders. safe_substitute fills data. send_batch loops students. Both batches run."
     }
   ]
 },
 
-"ES6+ Modern JS": {
-  aiRubric: "Check destructuring, spread, arrow functions, template literals, modules.",
+// Intermediate
+
+"Web Scraping & Data Extraction": {
+  aiRubric: "Check BeautifulSoup selectors, data extraction, filtering.",
   lessons: [
     {
-      title: "Modern JavaScript Features",
-      theory: "## ES6+ Features\n```javascript\n// Destructuring\nconst {name, score} = student;\nconst [first, ...rest] = array;\n\n// Spread operator\nconst merged = {...obj1, ...obj2};\nconst combined = [...arr1, ...arr2];\n\n// Optional chaining\nconst city = user?.address?.city;\n\n// Nullish coalescing\nconst name = user.name ?? 'Anonymous';\n\n// Template literals\nconst msg = `Hello ${name}, your score is ${score}`;\n\n// Async/await (ES2017)\nconst data = await fetchData();\n```",
-      instructions: "## Task: Modern JS Toolkit\n1. Destructure a student object\n2. Merge two objects with spread\n3. Use optional chaining on nested object\n4. Map an array using arrow functions and destructuring\n5. Use nullish coalescing for defaults",
-      starterCode: "// 1. Destructuring\nconst student = {name:'Ada', score:88, course:'Python', city:'Lagos'};\nconst {___, ___, ...rest} = student;\nconsole.log(name, score);\nconsole.log('Rest:', rest);\n\n// 2. Spread merge\nconst base = {role:'student', active:true};\nconst extra = {name:'Ada', score:88};\nconst merged = {...___, ...___};\nconsole.log('Merged:', merged);\n\n// 3. Optional chaining\nconst user = {profile: {address: {city:'Lagos'}}};\nconst missingUser = null;\nconst city1 = user?.profile?.address?.___;\nconst city2 = missingUser?.___.___; // no error!\nconsole.log(city1, city2); // Lagos undefined\n\n// 4. Array destructuring in map\nconst pairs = [['Ada',88], ['Tunde',72], ['Ngozi',95]];\nconst formatted = pairs.map(([___, ___]) => `${name}: ${score >= 80 ? 'A' : 'B'}`);\nconsole.log(formatted);\n\n// 5. Nullish coalescing\nconst settings = {theme: null, lang: 'en'};\nconst theme = settings.theme ?? ___;\nconst lang  = settings.lang  ?? 'en';\nconsole.log(theme, lang);",
-      solution: "const student={name:'Ada',score:88,course:'Python',city:'Lagos'};\nconst{name,score,...rest}=student;\nconsole.log(name,score);\nconsole.log('Rest:',rest);\nconst base={role:'student',active:true};\nconst extra={name:'Ada',score:88};\nconst merged={...base,...extra};\nconsole.log('Merged:',merged);\nconst user={profile:{address:{city:'Lagos'}}};\nconst missingUser=null;\nconst city1=user?.profile?.address?.city;\nconst city2=missingUser?.profile?.city;\nconsole.log(city1,city2);\nconst pairs=[['Ada',88],['Tunde',72],['Ngozi',95]];\nconst formatted=pairs.map(([name,score])=>`${name}:${score>=80?'A':'B'}`);\nconsole.log(formatted);\nconst settings={theme:null,lang:'en'};\nconst theme=settings.theme??'dark';\nconst lang=settings.lang??'en';\nconsole.log(theme,lang);",
-      hint: "Destructure with {}. Spread: {...obj1,...obj2}. ?. for optional chain. ?? for nullish default.",
-      rubric: "Object destructure with rest. Spread merge. Optional chaining. Array destructure in map. ??."
+      title: "BeautifulSoup Web Scraping",
+      theory: "## BeautifulSoup\n```python\nfrom bs4 import BeautifulSoup\nimport requests\n\nres  = requests.get('https://example.com')\nsoup = BeautifulSoup(res.text, 'html.parser')\n\ntitle = soup.find('h1').text\nlinks = soup.find_all('a', class_='post-link')\nfor item in soup.select('.product'):\n    name  = item.select_one('.name').text\n    price = item.select_one('.price').text\n```\nInstall: `pip install requests beautifulsoup4`",
+      instructions: "## Task: Scraper Simulator\nParse a fake HTML string with BeautifulSoup:\n1. Extract all course names and prices\n2. Filter courses under a price threshold\n3. Sort by price ascending\n4. Print a formatted catalogue",
+      starterCode: "from bs4 import BeautifulSoup\n\nhtml = '''\n<div class=\"catalog\">\n  <div class=\"course\"><h2 class=\"title\">Python Fundamentals</h2><span class=\"price\">5000</span><span class=\"level\">Beginner</span></div>\n  <div class=\"course\"><h2 class=\"title\">FastAPI Mastery</h2><span class=\"price\">12000</span><span class=\"level\">Intermediate</span></div>\n  <div class=\"course\"><h2 class=\"title\">AI Engineering</h2><span class=\"price\">25000</span><span class=\"level\">Advanced</span></div>\n  <div class=\"course\"><h2 class=\"title\">SQL Basics</h2><span class=\"price\">4000</span><span class=\"level\">Beginner</span></div>\n</div>\n'''\n\nsoup = BeautifulSoup(___, 'html.parser')\n\ncourses = []\nfor card in soup.select(___):\n    title  = card.select_one('___').text.strip()\n    price  = int(card.select_one('___').text)\n    level  = card.select_one('___').text\n    courses.append({'title':title,'price':price,'level':level})\n\ncourses.sort(key=lambda c: c[___])\n\nprint('=== Course Catalogue ===')\nfor c in courses:\n    print(f\"  {c['title']:25} N{c['price']:,}  [{c['level']}]\")\n\nbudget    = 10000\naffordable = [c for c in courses if c['price'] <= ___]\nprint(f'\\nAffordable (<=N{budget:,}): {len(affordable)} courses')\nfor c in affordable:\n    print(f\"  {c['title']} — N{c['price']:,}\")",
+      solution: "from bs4 import BeautifulSoup\nhtml='<div class=\"catalog\"><div class=\"course\"><h2 class=\"title\">Python Fundamentals</h2><span class=\"price\">5000</span><span class=\"level\">Beginner</span></div><div class=\"course\"><h2 class=\"title\">FastAPI Mastery</h2><span class=\"price\">12000</span><span class=\"level\">Intermediate</span></div><div class=\"course\"><h2 class=\"title\">AI Engineering</h2><span class=\"price\">25000</span><span class=\"level\">Advanced</span></div><div class=\"course\"><h2 class=\"title\">SQL Basics</h2><span class=\"price\">4000</span><span class=\"level\">Beginner</span></div></div>'\nsoup=BeautifulSoup(html,'html.parser')\ncourses=[]\nfor card in soup.select('.course'):\n    title=card.select_one('.title').text.strip()\n    price=int(card.select_one('.price').text)\n    level=card.select_one('.level').text\n    courses.append({'title':title,'price':price,'level':level})\ncourses.sort(key=lambda c:c['price'])\nprint('=== Catalogue ===')\nfor c in courses:print(f\"  {c['title']:25} N{c['price']:,} [{c['level']}]\")\nbudget=10000\naffordable=[c for c in courses if c['price']<=budget]\nprint(f'\\nAffordable:{len(affordable)}')\nfor c in affordable:print(f\"  {c['title']}-N{c['price']:,}\")",
+      hint: "soup.select('.course') finds all with class 'course'. select_one('.title') gets first match. int() converts price.",
+      rubric: "BeautifulSoup parses HTML. select iterates cards. select_one for each field. sort by price. filter affordable."
     }
   ]
 },
 
-"CSS Animations": {
-  aiRubric: "Check @keyframes, transition, animation properties.",
+"API Automation with Python": {
+  aiRubric: "Check API chaining, error handling, pipeline pattern.",
   lessons: [
     {
-      title: "CSS Transitions & Animations",
-      theory: "## CSS Animations\n```css\n/* Transitions — smooth property changes */\n.btn { transition: background 0.3s ease, transform 0.2s; }\n.btn:hover { background: #00e5a0; transform: translateY(-2px); }\n\n/* Keyframe animations */\n@keyframes fadeIn {\n  from { opacity: 0; transform: translateY(20px); }\n  to   { opacity: 1; transform: translateY(0); }\n}\n\n.card { animation: fadeIn 0.5s ease forwards; }\n\n/* Pulse animation */\n@keyframes pulse {\n  0%, 100% { opacity: 1; }\n  50%       { opacity: 0.4; }\n}\n```",
-      instructions: "## Task: Animated UI Components\nWrite CSS for:\n1. Button with hover transition (color + scale)\n2. Card with fadeIn animation on load\n3. Loading spinner with rotate animation\n4. Pulse effect for a status dot\n5. Slide-in from left animation",
-      starterCode: "/* 1. Button hover transition */\n.btn {\n    padding: 10px 20px;\n    background: #007acc;\n    color: white;\n    border: none;\n    border-radius: 6px;\n    cursor: pointer;\n    transition: background ___ ease, transform ___;\n}\n.btn:hover {\n    background: #005999;\n    transform: ___(-2px);\n}\n\n/* 2. FadeIn keyframe */\n@___ fadeIn {\n    from { opacity: 0; transform: translateY(20px); }\n    to   { opacity: 1; transform: translateY(0); }\n}\n.card { animation: fadeIn ___ ease forwards; }\n\n/* 3. Spinner */\n@keyframes spin {\n    from { transform: rotate(0deg); }\n    to   { transform: rotate(___); }\n}\n.spinner {\n    width: 32px; height: 32px;\n    border: 3px solid #eee;\n    border-top-color: #007acc;\n    border-radius: 50%;\n    animation: spin ___ linear ___;\n}\n\n/* 4. Pulse */\n@keyframes pulse {\n    0%, 100% { opacity: 1; }\n    50% { opacity: ___; }\n}\n.status-dot { animation: pulse 2s infinite; }\n\n/* 5. Slide in */\n@keyframes slideIn {\n    from { transform: translateX(___); opacity: 0; }\n    to   { transform: translateX(0); opacity: 1; }\n}\n.slide { animation: slideIn 0.4s ease; }",
-      solution: ".btn{padding:10px 20px;background:#007acc;color:white;border:none;border-radius:6px;cursor:pointer;transition:background 0.3s ease,transform 0.2s;}\n.btn:hover{background:#005999;transform:translateY(-2px);}\n@keyframes fadeIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}\n.card{animation:fadeIn 0.5s ease forwards;}\n@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}\n.spinner{width:32px;height:32px;border:3px solid #eee;border-top-color:#007acc;border-radius:50%;animation:spin 1s linear infinite;}\n@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}\n.status-dot{animation:pulse 2s infinite;}\n@keyframes slideIn{from{transform:translateX(-100px);opacity:0;}to{transform:translateX(0);opacity:1;}}\n.slide{animation:slideIn 0.4s ease;}",
-      hint: "transition: property duration easing. @keyframes name { from { } to { } }. animation: name duration easing iteration.",
-      rubric: "transition on button. fadeIn @keyframes. spin 360deg infinite. pulse opacity. slideIn from left."
+      title: "Chaining APIs Together",
+      theory: "## API Chaining\n```\nNew Student Enrolls\n    -> Create account (POST /users)\n    -> Add to email list (POST /subscribers)\n    -> Send Slack notification\n    -> Log to spreadsheet\n```\nEach step uses the output of the previous step.",
+      instructions: "## Task: Student Onboarding Pipeline\nBuild a 4-step automation:\n1. `create_account(name, email)` — returns user_id\n2. `send_welcome_email(user_id, email)`\n3. `add_to_crm(user_id, name)` — returns crm_id\n4. `notify_instructor(student_name)`\n5. `onboard_student(name, email)` — chains all 4 with error handling",
+      starterCode: "import time, random\n\ndef create_account(name, email):\n    time.sleep(0.05)\n    if '@' not in email:\n        raise ValueError(f'Invalid email: {email}')\n    user_id = f'usr_{random.randint(1000,9999)}'\n    print(f'  [AUTH] Created: {user_id}')\n    return ___\n\ndef send_welcome_email(user_id, email):\n    time.sleep(0.05)\n    print(f'  [EMAIL] Welcome sent to {email}')\n    return True\n\ndef add_to_crm(user_id, name):\n    time.sleep(0.05)\n    crm_id = f'crm_{user_id}'\n    print(f'  [CRM] {name} added as {crm_id}')\n    return ___\n\ndef notify_instructor(student_name):\n    time.sleep(0.05)\n    print(f'  [SLACK] New student: {student_name}')\n    return True\n\ndef onboard_student(name, email):\n    print(f'\\nOnboarding: {name} ({email})')\n    results = {}\n    try:\n        user_id = create_account(___, ___)\n        results['user_id'] = user_id\n        send_welcome_email(___, ___)\n        results['email_sent'] = True\n        crm_id = add_to_crm(___, name)\n        results['crm_id'] = crm_id\n        notify_instructor(___)\n        results['notified'] = True\n        results['status'] = 'success'\n        print(f'  SUCCESS: {name} onboarded!')\n    except Exception as e:\n        print(f'  FAILED: {e}')\n        results['status'] = ___\n        results['error']  = str(e)\n    return results\n\nfor name, email in [('Ada Okonkwo','ada@example.com'),('Tunde Bello','tunde@gmail.com'),('Bad Email','not-valid')]:\n    result = onboard_student(name, email)\n    print(f'  Result: {result[\"status\"]}')",
+      solution: "import time,random\ndef create_account(name,email):\n    time.sleep(0.05)\n    if '@' not in email:raise ValueError(f'Invalid:{email}')\n    uid=f'usr_{random.randint(1000,9999)}'\n    print(f'  [AUTH] Created:{uid}')\n    return uid\ndef send_welcome_email(uid,email):\n    time.sleep(0.05)\n    print(f'  [EMAIL] Sent to {email}')\n    return True\ndef add_to_crm(uid,name):\n    time.sleep(0.05)\n    cid=f'crm_{uid}'\n    print(f'  [CRM] {name} added as {cid}')\n    return cid\ndef notify_instructor(student):\n    time.sleep(0.05)\n    print(f'  [SLACK] New student:{student}')\n    return True\ndef onboard_student(name,email):\n    print(f'\\nOnboarding:{name}({email})')\n    results={}\n    try:\n        uid=create_account(name,email);results['user_id']=uid\n        send_welcome_email(uid,email);results['email_sent']=True\n        cid=add_to_crm(uid,name);results['crm_id']=cid\n        notify_instructor(name);results['notified']=True\n        results['status']='success'\n        print(f'  SUCCESS!')\n    except Exception as e:\n        print(f'  FAILED:{e}')\n        results['status']='failed'\n        results['error']=str(e)\n    return results\nfor name,email in [('Ada Okonkwo','ada@example.com'),('Tunde Bello','tunde@gmail.com'),('Bad Email','not-valid')]:\n    r=onboard_student(name,email)\n    print(f'  Result:{r[\"status\"]}')",
+      hint: "Return user_id from create_account. Pass to next function. try/except for failures.",
+      rubric: "create_account returns user_id. Pipeline chains all 4. try/except handles errors. 3 test cases."
     }
   ]
 },
 
-"LocalStorage & State": {
-  aiRubric: "Check localStorage get/set/remove, JSON serialization, state management.",
+"AI-Powered Bots": {
+  aiRubric: "Check bot logic, command handling, message routing.",
   lessons: [
     {
-      title: "Browser Storage & State",
-      theory: "## localStorage\n```javascript\n// Store\nlocalStorage.setItem('user', JSON.stringify({name:'Ada'}));\n\n// Retrieve\nconst user = JSON.parse(localStorage.getItem('user'));\n\n// Remove\nlocalStorage.removeItem('user');\n\n// Clear all\nlocalStorage.clear();\n\n// Check exists\nconst exists = localStorage.getItem('user') !== null;\n```\n\n**Note:** localStorage stores strings only — always use JSON.stringify/parse for objects.",
-      instructions: "## Task: Student Progress Tracker\nWrite JavaScript that:\n1. Saves student name and progress to localStorage\n2. Loads it on page start (persists across refreshes)\n3. Updates progress when a lesson is completed\n4. Shows total XP and completed lessons\n5. Has a reset function",
-      starterCode: "const STORAGE_KEY = 'mabel_student_v1';\n\nfunction loadProgress() {\n    const raw = localStorage.getItem(___);\n    if (!raw) return {name:'Student', xp:0, completed:[]};\n    return JSON.___(raw);\n}\n\nfunction saveProgress(data) {\n    localStorage.setItem(___, JSON.___(data));\n}\n\nfunction completeLesson(lessonId, xpReward=50) {\n    const progress = loadProgress();\n    if (!progress.completed.includes(___)) {\n        progress.completed.push(lessonId);\n        progress.xp += ___;\n        saveProgress(___);\n        console.log(`Completed ${lessonId}! +${xpReward} XP. Total: ${progress.xp}`);\n    } else {\n        console.log(`${lessonId} already completed.`);\n    }\n}\n\nfunction showStats() {\n    const p = loadProgress();\n    console.log(`Student: ${p.___}`);\n    console.log(`XP:      ${p.___}`);\n    console.log(`Lessons: ${p.___.length}`);\n    console.log(`Done:    ${p.completed.join(', ')}`);\n}\n\nfunction reset() {\n    localStorage.___(STORAGE_KEY);\n    console.log('Progress reset!');\n}\n\n// Test\ncompleteLesson('python-001');\ncompleteLesson('python-002', 75);\ncompleteLesson('python-001');  // duplicate\nshowStats();",
-      solution: "const STORAGE_KEY='mabel_student_v1';\nfunction loadProgress(){\n    const raw=localStorage.getItem(STORAGE_KEY);\n    if(!raw)return{name:'Student',xp:0,completed:[]};\n    return JSON.parse(raw);\n}\nfunction saveProgress(data){\n    localStorage.setItem(STORAGE_KEY,JSON.stringify(data));\n}\nfunction completeLesson(lessonId,xpReward=50){\n    const progress=loadProgress();\n    if(!progress.completed.includes(lessonId)){\n        progress.completed.push(lessonId);\n        progress.xp+=xpReward;\n        saveProgress(progress);\n        console.log(`Completed ${lessonId}! +${xpReward} XP. Total:${progress.xp}`);\n    }else{console.log(`${lessonId} already done.`);}\n}\nfunction showStats(){\n    const p=loadProgress();\n    console.log(`Student:${p.name}`);\n    console.log(`XP:${p.xp}`);\n    console.log(`Lessons:${p.completed.length}`);\n    console.log(`Done:${p.completed.join(', ')}`);\n}\nfunction reset(){\n    localStorage.removeItem(STORAGE_KEY);\n    console.log('Reset!');\n}\ncompleteLesson('python-001');\ncompleteLesson('python-002',75);\ncompleteLesson('python-001');\nshowStats();",
-      hint: "JSON.stringify to save objects. JSON.parse to load. includes() checks duplicates. removeItem to reset.",
-      rubric: "JSON.stringify/parse. includes() duplicate check. xp += reward. removeItem. showStats prints all."
+      title: "Building a Chatbot",
+      theory: "## Bot Architecture\n```\nUser Message\n    -> Message Router\n        |-- Command (/start, /help)\n        |-- Question -> LLM API\n        |-- Unknown  -> Default response\n    -> Format Response\n    -> Send to User\n```",
+      instructions: "## Task: Mabel Academy Bot\nBuild a bot handling:\n1. `/start` — welcome message\n2. `/courses` — list available courses\n3. `/help` — show commands\n4. Questions — keyword-based response\n5. Unknown — polite fallback\n\nTest with 6 different messages.",
+      starterCode: "COURSES = ['Python Fundamentals','FastAPI','SQL Basics','AI Engineering']\n\ndef handle_command(command):\n    if command == '/start':\n        return 'Welcome to Mabel Academy! Type /help for commands.'\n    elif command == ___:\n        listing = '\\n'.join([f'{i+1}. {c}' for i,c in enumerate(COURSES)])\n        return f'Available courses:\\n{listing}'\n    elif command == '/help':\n        return '/start - Welcome\\n/courses - List courses\\n/help - This message'\n    return ___\n\ndef handle_question(text):\n    keywords = {\n        'python':  'Python is versatile. Check Python Fundamentals!',\n        'fastapi': 'FastAPI builds great APIs fast. We have a course!',\n        'price':   'Courses start at N4,000. Visit our website.',\n        'enrol':   'To enrol, reply with your email or visit mabelacademy.com'\n    }\n    text_lower = text.lower()\n    for keyword, response in keywords.___():\n        if keyword in ___:\n            return response\n    return f'Great question! I will get back to you shortly.'\n\ndef process_message(user_id, text):\n    print(f'\\n[User {user_id}]: {text}')\n    if text.startswith('/'):\n        response = handle_command(___)\n    elif '?' in text or len(text) > 15:\n        response = handle_question(___)\n    else:\n        response = 'I did not understand. Type /help for commands.'\n    print(f'[Bot]: {response}')\n    return response\n\nfor user_id, msg in [(1,'/start'),(1,'/courses'),(2,'How much is Python?'),(2,'I want to enrol'),(3,'What is FastAPI?'),(3,'xyz')]:\n    process_message(user_id, msg)",
+      solution: "COURSES=['Python Fundamentals','FastAPI','SQL Basics','AI Engineering']\ndef handle_command(command):\n    if command=='/start':return 'Welcome to Mabel Academy! Type /help.'\n    elif command=='/courses':\n        return 'Courses:\\n'+'\\n'.join([f'{i+1}. {c}' for i,c in enumerate(COURSES)])\n    elif command=='/help':return '/start /courses /help'\n    return 'Unknown command. Type /help.'\ndef handle_question(text):\n    keywords={'python':'Check Python Fundamentals!','fastapi':'FastAPI course available!','price':'From N4,000.','enrol':'Reply with your email.'}\n    for kw,resp in keywords.items():\n        if kw in text.lower():return resp\n    return 'Great question! I will get back to you.'\ndef process_message(uid,text):\n    print(f'\\n[User {uid}]:{text}')\n    if text.startswith('/'):response=handle_command(text)\n    elif '?' in text or len(text)>15:response=handle_question(text)\n    else:response='I did not understand. Type /help.'\n    print(f'[Bot]:{response}')\n    return response\nfor uid,msg in [(1,'/start'),(1,'/courses'),(2,'How much is Python?'),(2,'I want to enrol'),(3,'What is FastAPI?'),(3,'xyz')]:\n    process_message(uid,msg)",
+      hint: "startswith('/') for commands. keywords.items() loop. '?' in text for questions.",
+      rubric: "3 commands handled. keyword matching. fallback for unknown. 6 test messages."
     }
   ]
 },
 
-"React Fundamentals": {
-  aiRubric: "Check React components, props, useState, JSX syntax.",
+// Advanced
+
+"LLM Workflow Automation": {
+  aiRubric: "Check LLM chaining, JSON parsing, pipeline building.",
   lessons: [
     {
-      title: "React Components & Props",
-      theory: "## React Basics\n```jsx\n// Functional component\nfunction StudentCard({ name, score }) {\n  return (\n    <div className='card'>\n      <h2>{name}</h2>\n      <p>Score: {score}</p>\n    </div>\n  );\n}\n\n// Usage\n<StudentCard name='Ada' score={88} />\n\n// useState hook\nconst [count, setCount] = useState(0);\n// Update: setCount(count + 1);\n```",
-      instructions: "## Task: Student Dashboard Component\nWrite React-style component logic in Python (since we can't render JSX here):\n1. Define component props (name, score, course, xp)\n2. Compute derived state: grade, level badge\n3. Simulate rendering by returning a dict\n4. Create a list of 3 student card components",
-      starterCode: "# Simulating React component logic in Python\n\ndef StudentCard(name, score, course, xp=0):\n    # Derived state\n    grade = 'A' if score >= 90 else 'B' if score >= 80 else 'C' if score >= 70 else 'F'\n    level = 'Expert' if xp >= 1000 else 'Intermediate' if xp >= 500 else ___\n    badge_color = '#00e5a0' if grade in ['A','B'] else ___\n\n    # Simulated JSX render\n    return {\n        'component': 'StudentCard',\n        'props': {'name':name,'score':score,'course':course,'xp':xp},\n        'state': {'grade':grade,'level':___,'badge_color':___},\n        'html': f'<div class=\"card\"><h2>{name}</h2><p>{course} | Grade:{grade}</p><span style=\"color:{badge_color}\">{___}</span></div>'\n    }\n\n# List rendering (like .map() in React)\nstudents_data = [\n    ('Ada',   88, 'Python',  750),\n    ('Tunde', 72, 'SQL',     200),\n    ('Ngozi', 95, 'FastAPI', 1200)\n]\n\ncomponents = [StudentCard(n, s, c, x) for n, s, c, x in ___]\n\nfor comp in components:\n    print(comp['html'])\n    print(f'  State: grade={comp[\"state\"][\"grade\"]}, level={comp[\"state\"][\"level\"]}')\n    print()",
-      solution: "def StudentCard(name,score,course,xp=0):\n    grade='A' if score>=90 else 'B' if score>=80 else 'C' if score>=70 else 'F'\n    level='Expert' if xp>=1000 else 'Intermediate' if xp>=500 else 'Beginner'\n    badge_color='#00e5a0' if grade in['A','B'] else '#ef4444'\n    return{'component':'StudentCard','props':{'name':name,'score':score,'course':course,'xp':xp},'state':{'grade':grade,'level':level,'badge_color':badge_color},'html':f'<div class=\"card\"><h2>{name}</h2><p>{course}|Grade:{grade}</p><span style=\"color:{badge_color}\">{level}</span></div>'}\nstudents_data=[('Ada',88,'Python',750),('Tunde',72,'SQL',200),('Ngozi',95,'FastAPI',1200)]\ncomponents=[StudentCard(n,s,c,x) for n,s,c,x in students_data]\nfor comp in components:\n    print(comp['html'])\n    print(f'  State:grade={comp[\"state\"][\"grade\"]},level={comp[\"state\"][\"level\"]}')\n    print()",
-      hint: "Ternary for grade/level. List comprehension for components. Access dict keys for state.",
-      rubric: "StudentCard returns dict. grade and level computed. badge_color set. List of 3 components."
+      title: "LLM-Powered Data Pipeline",
+      theory: "## LLM in Pipelines\n```\nRaw Input\n    -> LLM Step 1: Extract structured data\n    -> LLM Step 2: Classify\n    -> LLM Step 3: Generate response\n    -> Action: Save, send, notify\n```\n\nKey rule: **One LLM call per transformation.**",
+      instructions: "## Task: Feedback Processor\nBuild a 3-step LLM pipeline:\n1. `extract_sentiment(text)` — positive/negative/neutral\n2. `extract_topics(text)` — list of topics\n3. `generate_response(feedback, sentiment)` — draft reply\n4. `process_feedback(text)` — runs all 3\n5. Test with 3 feedback samples",
+      starterCode: "import requests, os, json\n\nAPI_KEY = os.getenv('GROQ_API_KEY', '')\n\ndef call_llm(prompt, system='Respond with only JSON.'):\n    if not API_KEY:\n        return '{\"result\": \"No API key set\"}'\n    r = requests.post(\n        'https://api.groq.com/openai/v1/chat/completions',\n        headers={'Authorization': f'Bearer {API_KEY}'},\n        json={'model':'llama3-8b-8192','max_tokens':200,\n              'messages':[{'role':'system','content':system},{'role':'user','content':prompt}]}\n    )\n    return r.json()['choices'][0]['message']['content']\n\ndef extract_sentiment(text):\n    result = call_llm(f'Classify sentiment. JSON only: {{\"sentiment\":\"positive/negative/neutral\",\"score\":0.0}}\\nText:{text}')\n    try:\n        return json.loads(result.strip().strip('`').replace('json',''))\n    except:\n        return {'sentiment':'neutral','score':0.5}\n\ndef extract_topics(text):\n    result = call_llm(f'Extract topics. JSON only: {{\"topics\":[\"...\"]}}\\nText:{text}')\n    try:\n        return json.loads(result.strip().strip('`').replace('json',''))\n    except:\n        return {'topics':['general']}\n\ndef generate_response(feedback, sentiment):\n    tone = 'encouraging' if sentiment == 'positive' else 'empathetic'\n    return call_llm(\n        f'Write a 2-sentence {tone} response to: {feedback}',\n        system='You are a supportive instructor.'\n    )\n\ndef process_feedback(feedback):\n    print(f'\\nFeedback: \"{feedback[:60]}\"')\n    sentiment = extract_sentiment(___)\n    topics    = extract_topics(___)\n    response  = generate_response(feedback, sentiment.get('sentiment','neutral'))\n    return {'sentiment':sentiment,'topics':topics,'response':response}\n\nsamples = [\n    'The Python course is amazing! I learned so much.',\n    'I am confused about decorators. The explanation was not clear.',\n    'Exercises are okay but I need more Nigerian examples.'\n]\n\nfor sample in ___:\n    result = process_feedback(sample)\n    print(f'  Sentiment: {result[\"sentiment\"][\"sentiment\"]}')\n    print(f'  Topics:    {result[\"topics\"][\"topics\"]}')\n    print(f'  Response:  {result[\"response\"][:80]}')",
+      solution: "import requests,os,json\nAPI_KEY=os.getenv('GROQ_API_KEY','')\ndef call_llm(prompt,system='JSON only.'):\n    if not API_KEY:return '{\"result\":\"No key\"}'\n    r=requests.post('https://api.groq.com/openai/v1/chat/completions',headers={'Authorization':f'Bearer {API_KEY}'},json={'model':'llama3-8b-8192','max_tokens':200,'messages':[{'role':'system','content':system},{'role':'user','content':prompt}]})\n    return r.json()['choices'][0]['message']['content']\ndef extract_sentiment(text):\n    result=call_llm(f'Classify sentiment. JSON: {{\"sentiment\":\"...\",\"score\":0.0}}\\nText:{text}')\n    try:return json.loads(result.strip().strip('`').replace('json',''))\n    except:return{'sentiment':'neutral','score':0.5}\ndef extract_topics(text):\n    result=call_llm(f'Extract topics. JSON: {{\"topics\":[\"...\"]}}\\nText:{text}')\n    try:return json.loads(result.strip().strip('`').replace('json',''))\n    except:return{'topics':['general']}\ndef generate_response(feedback,sentiment):\n    tone='encouraging' if sentiment=='positive' else 'empathetic'\n    return call_llm(f'Write a 2-sentence {tone} reply to:{feedback}',system='You are a supportive instructor.')\ndef process_feedback(feedback):\n    print(f'\\nFeedback:\"{feedback[:60]}\"')\n    s=extract_sentiment(feedback)\n    t=extract_topics(feedback)\n    r=generate_response(feedback,s.get('sentiment','neutral'))\n    return{'sentiment':s,'topics':t,'response':r}\nsamples=['The Python course is amazing!','I am confused about decorators.','Need more Nigerian examples.']\nfor sample in samples:\n    result=process_feedback(sample)\n    print(f'  Sentiment:{result[\"sentiment\"][\"sentiment\"]}')\n    print(f'  Topics:{result[\"topics\"][\"topics\"]}')\n    print(f'  Response:{result[\"response\"][:80]}')",
+      hint: "call_llm with specific prompt. json.loads() parses result. strip backticks first.",
+      rubric: "3 LLM functions. json.loads with error handling. process_feedback chains all 3. 3 samples tested."
     }
   ]
 },
 
-"React Hooks & Context": {
-  aiRubric: "Check useState, useEffect, useContext patterns.",
+"Document Processing with AI": {
+  aiRubric: "Check text extraction, requirement checking, scoring.",
   lessons: [
     {
-      title: "React Hooks Pattern",
-      theory: "## React Hooks\n```jsx\n// useState — local state\nconst [students, setStudents] = useState([]);\n\n// useEffect — side effects (fetch, subscribe)\nuseEffect(() => {\n  fetchStudents().then(data => setStudents(data));\n}, []);  // [] = run once on mount\n\n// useContext — global state\nconst theme = useContext(ThemeContext);\n\n// Custom hook\nfunction useLocalStorage(key, initial) {\n  const [value, setValue] = useState(\n    () => JSON.parse(localStorage.getItem(key)) ?? initial\n  );\n  // ...\n  return [value, setValue];\n}\n```",
-      instructions: "## Task: Simulate React Hooks\nSimulate React hook behaviour in Python:\n1. `useState` — returns value and setter\n2. `useEffect` — runs callback with cleanup\n3. `useReducer` — state + dispatch pattern\n4. A simple student list reducer",
-      starterCode: "# Simulating React hooks in Python\n\ndef useState(initial):\n    state = [initial]  # list allows mutation in closure\n    def setState(new_val):\n        state[0] = new_val if not callable(new_val) else new_val(state[0])\n    return state, setState\n\ndef useEffect(callback, deps=None):\n    # In React, this runs after render\n    # Here we simulate by calling immediately\n    cleanup = ___()\n    return cleanup\n\ndef useReducer(reducer, initial_state):\n    state = [initial_state]\n    def dispatch(action):\n        state[0] = reducer(state[0], ___)\n    return state, dispatch\n\n# Student list reducer\ndef studentsReducer(state, action):\n    if action['type'] == 'ADD':\n        return state + [action[___]]\n    elif action['type'] == ___:\n        return [s for s in state if s['id'] != action['id']]\n    elif action['type'] == 'UPDATE_SCORE':\n        return [{**s, 'score': action['score']} if s['id'] == action['id'] else s\n                for s in state]\n    return state\n\n# Test\nstudent_state, dispatch = useReducer(studentsReducer, [])\n\ndispatch({'type':'ADD','student':{'id':1,'name':'Ada','score':88}})\ndispatch({'type':'ADD','student':{'id':2,'name':'Tunde','score':72}})\nprint('After adds:', student_state[0])\n\ndispatch({'type':'UPDATE_SCORE','id':1,'score':95})\nprint('After update:', student_state[0])\n\ndispatch({'type':'DELETE','id':2})\nprint('After delete:', student_state[0])",
-      solution: "def useState(initial):\n    state=[initial]\n    def setState(new_val):\n        state[0]=new_val if not callable(new_val) else new_val(state[0])\n    return state,setState\ndef useEffect(callback,deps=None):\n    cleanup=callback()\n    return cleanup\ndef useReducer(reducer,initial_state):\n    state=[initial_state]\n    def dispatch(action):\n        state[0]=reducer(state[0],action)\n    return state,dispatch\ndef studentsReducer(state,action):\n    if action['type']=='ADD':\n        return state+[action['student']]\n    elif action['type']=='DELETE':\n        return[s for s in state if s['id']!=action['id']]\n    elif action['type']=='UPDATE_SCORE':\n        return[{**s,'score':action['score']} if s['id']==action['id'] else s for s in state]\n    return state\nstudent_state,dispatch=useReducer(studentsReducer,[])\ndispatch({'type':'ADD','student':{'id':1,'name':'Ada','score':88}})\ndispatch({'type':'ADD','student':{'id':2,'name':'Tunde','score':72}})\nprint('After adds:',student_state[0])\ndispatch({'type':'UPDATE_SCORE','id':1,'score':95})\nprint('After update:',student_state[0])\ndispatch({'type':'DELETE','id':2})\nprint('After delete:',student_state[0])",
-      hint: "state[0]=reducer(state[0],action). ADD appends. DELETE filters. UPDATE_SCORE maps with spread.",
-      rubric: "useReducer calls reducer. 3 action types handled. ADD/DELETE/UPDATE_SCORE all work."
+      title: "AI Assignment Grader",
+      theory: "## Document Processing\n```python\n# Extract text from PDF\nimport pdfplumber\nwith pdfplumber.open('report.pdf') as pdf:\n    text = '\\n'.join(page.extract_text() for page in pdf.pages)\n\n# Then send to LLM\nsummary = llm(f'Summarise: {text[:3000]}')\n```\n\nPipeline: Extract text -> Chunk -> LLM process -> Structured output",
+      instructions: "## Task: Automated Assignment Grader\nBuild a grader that:\n1. `check_requirements(text, requirements)` — checks if requirements met\n2. `calculate_score(results)` — weighted score\n3. `generate_feedback(score, results)` — feedback message\n4. `grade(submission, requirements)` — full pipeline\n5. Test with 3 student submissions",
+      starterCode: "def check_requirements(text, requirements):\n    results = {}\n    for req in ___:\n        found = any(kw.lower() in text.lower() for kw in req['keywords'])\n        results[req['name']] = {'met':found,'weight':req.get('weight',1),'msg':req['pass'] if found else req['fail']}\n    return results\n\ndef calculate_score(results):\n    total  = sum(r['weight'] for r in results.values())\n    earned = sum(r['weight'] for r in results.values() if r['met'])\n    return round((earned / total) * 100) if total > 0 else 0\n\ndef generate_feedback(score, results):\n    passed = [n for n,r in results.items() if r['met']]\n    failed = [n for n,r in results.items() if not r['met']]\n    fb = f'Score: {score}/100\\n'\n    if passed: fb += f'Well done: {\", \".join(passed)}\\n'\n    if failed: fb += f'Missing:   {\", \".join(failed)}\\n'\n    fb += 'Tip: ' + ('Great work!' if score >= 80 else 'Review requirements and try again.')\n    return ___\n\ndef grade(submission, requirements):\n    results  = check_requirements(submission, ___)\n    score    = calculate_score(___)\n    feedback = generate_feedback(score, ___)\n    return {'score':score,'feedback':feedback}\n\nrequirements = [\n    {'name':'Has function',     'keywords':['def '],          'weight':2, 'pass':'Function defined',   'fail':'Missing function'},\n    {'name':'Has return',       'keywords':['return '],       'weight':2, 'pass':'Return found',       'fail':'Missing return'},\n    {'name':'Has docstring',    'keywords':['\"\"\"', \"'''\"],    'weight':1, 'pass':'Docstring present',  'fail':'No docstring'},\n    {'name':'Has error handling','keywords':['try:','except'], 'weight':1, 'pass':'Error handling ok',  'fail':'No error handling'},\n]\n\nsubmissions = [\n    {'student':'Ada',   'code':'def add(a,b):\\n    \"\"\"Adds two numbers.\"\"\"\\n    try:\\n        return a+b\\n    except: return None'},\n    {'student':'Tunde', 'code':'def multiply(x,y):\\n    return x*y'},\n    {'student':'Ngozi', 'code':'result = 5+3\\nprint(result)'},\n]\n\nfor sub in ___:\n    result = grade(sub['code'], requirements)\n    print(f\"\\n{sub['student']}: {result['score']}/100\")\n    print(result['feedback'])",
+      solution: "def check_requirements(text,requirements):\n    results={}\n    for req in requirements:\n        found=any(kw.lower() in text.lower() for kw in req['keywords'])\n        results[req['name']]={'met':found,'weight':req.get('weight',1),'msg':req['pass'] if found else req['fail']}\n    return results\ndef calculate_score(results):\n    total=sum(r['weight'] for r in results.values())\n    earned=sum(r['weight'] for r in results.values() if r['met'])\n    return round((earned/total)*100) if total>0 else 0\ndef generate_feedback(score,results):\n    passed=[n for n,r in results.items() if r['met']]\n    failed=[n for n,r in results.items() if not r['met']]\n    fb=f'Score:{score}/100\\n'\n    if passed:fb+=f'Done:{', '.join(passed)}\\n'\n    if failed:fb+=f'Missing:{', '.join(failed)}\\n'\n    fb+='Tip:'+('Great!' if score>=80 else 'Review and retry.')\n    return fb\ndef grade(submission,requirements):\n    results=check_requirements(submission,requirements)\n    score=calculate_score(results)\n    return{'score':score,'feedback':generate_feedback(score,results)}\nrequirements=[{'name':'Has function','keywords':['def '],'weight':2,'pass':'Function defined','fail':'Missing function'},{'name':'Has return','keywords':['return '],'weight':2,'pass':'Return found','fail':'Missing return'},{'name':'Has docstring','keywords':['\"\"\"',\"'''\"],'weight':1,'pass':'Docstring present','fail':'No docstring'},{'name':'Error handling','keywords':['try:','except'],'weight':1,'pass':'Error handling ok','fail':'No error handling'}]\nsubmissions=[{'student':'Ada','code':'def add(a,b):\\n    \"\"\"Adds.\"\"\"\\n    try:\\n        return a+b\\n    except:return None'},{'student':'Tunde','code':'def multiply(x,y):\\n    return x*y'},{'student':'Ngozi','code':'result=5+3\\nprint(result)'}]\nfor sub in submissions:\n    r=grade(sub['code'],requirements)\n    print(f\"\\n{sub['student']}:{r['score']}/100\")\n    print(r['feedback'])",
+      hint: "any() checks if keyword found. weighted score: earned/total. generate_feedback lists passed/failed.",
+      rubric: "check_requirements uses any(). calculate_score weighted. generate_feedback lists results. 3 submissions graded."
     }
   ]
 },
 
-"Database Design Patterns": {
-  aiRubric: "Check normalization, foreign keys, indexes, relationships.",
+"Scheduling & Task Automation": {
+  aiRubric: "Check task queues, priority, retry logic.",
   lessons: [
     {
-      title: "Normalization & Schema Design",
-      theory: "## Database Normalization\n**1NF** — no repeating groups, atomic values\n**2NF** — no partial dependencies\n**3NF** — no transitive dependencies\n\n```sql\n-- Unnormalized (BAD)\nCREATE TABLE orders (\n    id INT,\n    customer_name TEXT,\n    customer_email TEXT,  -- repeated every order!\n    items TEXT  -- comma-separated, not atomic!\n);\n\n-- Normalized (GOOD)\nCREATE TABLE customers (id INT PRIMARY KEY, name TEXT, email TEXT UNIQUE);\nCREATE TABLE orders (id INT PRIMARY KEY, customer_id INT REFERENCES customers(id));\nCREATE TABLE order_items (order_id INT, product_id INT, quantity INT);\n```",
-      instructions: "## Task: Design a School Schema\nDesign normalized tables for Mabel Academy:\n1. `students` (id, name, email, enrolled_at)\n2. `courses` (id, title, level, instructor_id)\n3. `instructors` (id, name, email, specialty)\n4. `enrolments` (student_id, course_id, enrolled_at, grade) — many-to-many\n5. Write the CREATE TABLE statements with proper foreign keys",
-      starterCode: "-- Instructors (no foreign keys — parent table)\nCREATE TABLE instructors (\n    id         ___ PRIMARY KEY,\n    name       VARCHAR(100) NOT NULL,\n    email      VARCHAR(120) ___ NOT NULL,\n    specialty  VARCHAR(50)\n);\n\n-- Students\nCREATE TABLE students (\n    id          INTEGER PRIMARY KEY AUTOINCREMENT,\n    name        VARCHAR(100) NOT NULL,\n    email       VARCHAR(120) UNIQUE NOT NULL,\n    enrolled_at DATETIME DEFAULT ___\n);\n\n-- Courses (references instructors)\nCREATE TABLE courses (\n    id            INTEGER PRIMARY KEY AUTOINCREMENT,\n    title         VARCHAR(200) NOT NULL,\n    level         VARCHAR(20) CHECK (level IN (___)),\n    instructor_id INTEGER REFERENCES ___(id) ON DELETE SET NULL\n);\n\n-- Enrolments (many-to-many junction)\nCREATE TABLE enrolments (\n    student_id  INTEGER REFERENCES ___(id) ON DELETE CASCADE,\n    course_id   INTEGER REFERENCES ___(id) ON DELETE CASCADE,\n    enrolled_at DATETIME DEFAULT CURRENT_TIMESTAMP,\n    grade       VARCHAR(2),\n    PRIMARY KEY (student_id, ___)\n);",
-      solution: "CREATE TABLE instructors(id INTEGER PRIMARY KEY,name VARCHAR(100) NOT NULL,email VARCHAR(120) UNIQUE NOT NULL,specialty VARCHAR(50));\nCREATE TABLE students(id INTEGER PRIMARY KEY AUTOINCREMENT,name VARCHAR(100) NOT NULL,email VARCHAR(120) UNIQUE NOT NULL,enrolled_at DATETIME DEFAULT CURRENT_TIMESTAMP);\nCREATE TABLE courses(id INTEGER PRIMARY KEY AUTOINCREMENT,title VARCHAR(200) NOT NULL,level VARCHAR(20) CHECK(level IN('Beginner','Intermediate','Advanced')),instructor_id INTEGER REFERENCES instructors(id) ON DELETE SET NULL);\nCREATE TABLE enrolments(student_id INTEGER REFERENCES students(id) ON DELETE CASCADE,course_id INTEGER REFERENCES courses(id) ON DELETE CASCADE,enrolled_at DATETIME DEFAULT CURRENT_TIMESTAMP,grade VARCHAR(2),PRIMARY KEY(student_id,course_id));",
-      hint: "UNIQUE on email. CHECK for level values. REFERENCES table(id). CASCADE deletes related rows. Composite PK.",
-      rubric: "4 tables. UNIQUE on emails. CHECK constraint. REFERENCES with ON DELETE. Composite PK in enrolments."
-    }
-  ]
-},
-
-"Sharding & Replication": {
-  aiRubric: "Check concepts of horizontal scaling, read replicas, sharding strategies.",
-  lessons: [
-    {
-      title: "Scaling Databases",
-      theory: "## Scaling Strategies\n**Vertical** — bigger server (limited)\n**Horizontal** — more servers\n\n**Replication:**\n- Primary → writes\n- Replicas → reads\n- Increases read capacity\n\n**Sharding:**\n- Split data across multiple DBs\n- Each shard holds a subset\n- Shard by: user_id range, geography, hash\n\n**Example:**\n- Shard 0: users 1-1M\n- Shard 1: users 1M-2M\n- Shard 2: users 2M-3M",
-      instructions: "## Task: Simulate a Sharding Router\n1. Write `get_shard(user_id, num_shards=3)` — hash-based routing\n2. Write `ShardRouter` class that routes queries to correct shard\n3. Simulate inserting 10 users and show shard distribution\n4. Show how to query a specific user",
-      starterCode: "import hashlib\n\ndef get_shard(user_id, num_shards=3):\n    # Hash-based sharding: consistent distribution\n    hash_val = int(hashlib.md5(str(user_id).encode()).hexdigest(), 16)\n    return hash_val % ___\n\nclass ShardRouter:\n    def __init__(self, num_shards=3):\n        self.num_shards = num_shards\n        self.shards = {i: {} for i in range(num_shards)}  # shard_id -> {user_id: data}\n\n    def insert(self, user_id, data):\n        shard = get_shard(user_id, self.___)\n        self.shards[shard][user_id] = data\n        return shard\n\n    def find(self, user_id):\n        shard = get_shard(user_id, self.num_shards)\n        return self.shards[shard].get(___, None)\n\n    def stats(self):\n        for i, shard in self.shards.items():\n            print(f'  Shard {i}: {len(shard)} users — {list(shard.keys())}')\n\nrouter = ShardRouter(num_shards=3)\n\nusers = [(1,'Ada','Python'),(2,'Tunde','SQL'),(3,'Ngozi','FastAPI'),\n         (4,'Emeka','React'),(5,'Amaka','AI'),(6,'Bola','Django'),\n         (7,'Kemi','Flask'),(8,'Seun','Docker'),(9,'Tobi','Redis'),(10,'Femi','Mongo')]\n\nfor uid, name, course in users:\n    shard = router.insert(uid, {'name':name,'course':course})\n    print(f'User {uid} ({name}) -> Shard {shard}')\n\nprint('\\nShard distribution:')\nrouter.stats()\n\nprint('\\nFind user 5:', router.find(5))\nprint('Find user 99:', router.find(99))",
-      solution: "import hashlib\ndef get_shard(user_id,num_shards=3):\n    hash_val=int(hashlib.md5(str(user_id).encode()).hexdigest(),16)\n    return hash_val%num_shards\nclass ShardRouter:\n    def __init__(self,num_shards=3):\n        self.num_shards=num_shards\n        self.shards={i:{} for i in range(num_shards)}\n    def insert(self,user_id,data):\n        shard=get_shard(user_id,self.num_shards)\n        self.shards[shard][user_id]=data\n        return shard\n    def find(self,user_id):\n        shard=get_shard(user_id,self.num_shards)\n        return self.shards[shard].get(user_id,None)\n    def stats(self):\n        for i,shard in self.shards.items():\n            print(f'  Shard {i}:{len(shard)} users-{list(shard.keys())}')\nrouter=ShardRouter(num_shards=3)\nusers=[(1,'Ada','Python'),(2,'Tunde','SQL'),(3,'Ngozi','FastAPI'),(4,'Emeka','React'),(5,'Amaka','AI'),(6,'Bola','Django'),(7,'Kemi','Flask'),(8,'Seun','Docker'),(9,'Tobi','Redis'),(10,'Femi','Mongo')]\nfor uid,name,course in users:\n    shard=router.insert(uid,{'name':name,'course':course})\n    print(f'User {uid}({name})->Shard {shard}')\nprint('\\nDistribution:')\nrouter.stats()\nprint('\\nFind 5:',router.find(5))\nprint('Find 99:',router.find(99))",
-      hint: "hash_val % num_shards routes to shard. find uses same hash to locate correct shard.",
-      rubric: "hash-based shard function. ShardRouter inserts to correct shard. find routes correctly. stats shown."
-    }
-  ]
-},
-
-// Frontend Advanced (remaining)
-
-"Performance Optimization": {
-  aiRubric: "Check lazy loading, debounce, memoization, bundle concepts.",
-  lessons: [
-    {
-      title: "Frontend Performance",
-      theory: "## Performance Techniques\n```javascript\n// Debounce — wait until user stops typing\nfunction debounce(fn, delay) {\n  let timer;\n  return function(...args) {\n    clearTimeout(timer);\n    timer = setTimeout(() => fn(...args), delay);\n  };\n}\n\n// Memoize — cache expensive results\nfunction memoize(fn) {\n  const cache = {};\n  return function(key) {\n    if (cache[key] !== undefined) return cache[key];\n    return (cache[key] = fn(key));\n  };\n}\n\n// Lazy load images\n<img src='placeholder.jpg' data-src='real.jpg' loading='lazy'>\n```",
-      instructions: "## Task: Performance Utilities\n1. `debounce(fn, delay)` — prevents rapid function calls\n2. `throttle(fn, interval)` — limits calls to once per interval\n3. `memoize(fn)` — caches results for same inputs\n4. Test debounce with search simulation\n5. Test memoize with expensive computation",
-      starterCode: "function debounce(fn, delay) {\n    let timer;\n    return function(...args) {\n        clearTimeout(___);\n        timer = setTimeout(() => fn(...args), ___);\n    };\n}\n\nfunction throttle(fn, interval) {\n    let lastCall = 0;\n    return function(...args) {\n        const now = Date.now();\n        if (now - lastCall >= ___) {\n            lastCall = now;\n            return fn(...args);\n        }\n    };\n}\n\nfunction memoize(fn) {\n    const cache = {};\n    return function(...args) {\n        const key = JSON.stringify(args);\n        if (key in ___) return cache[key];\n        return (cache[___] = fn(...args));\n    };\n}\n\n// Test debounce\nconst search = debounce((query) => console.log('Searching:', query), 300);\nsearch('p'); search('py'); search('pyt'); search('pyth');\nsetTimeout(() => search('python'), 400);  // only this fires\n\n// Test memoize\nlet callCount = 0;\nconst expensive = memoize((n) => {\n    callCount++;\n    return n * n;\n});\n\nconsole.log(expensive(5));   // computes\nconsole.log(expensive(5));   // cached\nconsole.log(expensive(10));  // computes\nconsole.log('Total calls:', callCount);  // should be 2",
-      solution: "function debounce(fn,delay){\n    let timer;\n    return function(...args){\n        clearTimeout(timer);\n        timer=setTimeout(()=>fn(...args),delay);\n    };\n}\nfunction throttle(fn,interval){\n    let lastCall=0;\n    return function(...args){\n        const now=Date.now();\n        if(now-lastCall>=interval){\n            lastCall=now;\n            return fn(...args);\n        }\n    };\n}\nfunction memoize(fn){\n    const cache={};\n    return function(...args){\n        const key=JSON.stringify(args);\n        if(key in cache)return cache[key];\n        return(cache[key]=fn(...args));\n    };\n}\nconst search=debounce((q)=>console.log('Searching:',q),300);\nsearch('p');search('py');search('pyt');search('pyth');\nsetTimeout(()=>search('python'),400);\nlet callCount=0;\nconst expensive=memoize((n)=>{callCount++;return n*n;});\nconsole.log(expensive(5));\nconsole.log(expensive(5));\nconsole.log(expensive(10));\nconsole.log('Calls:',callCount);",
-      hint: "clearTimeout(timer) cancels previous. JSON.stringify(args) as cache key. Date.now() for throttle.",
-      rubric: "debounce clears and resets timer. throttle checks interval. memoize uses JSON key. callCount=2."
-    }
-  ]
-},
-
-"Testing Frontend Code": {
-  aiRubric: "Check test function structure, assertions, test runner pattern.",
-  lessons: [
-    {
-      title: "Unit Testing JavaScript",
-      theory: "## Testing Pattern\n```javascript\n// Minimal test runner\nfunction test(name, fn) {\n  try {\n    fn();\n    console.log(`✅ ${name}`);\n  } catch(err) {\n    console.log(`❌ ${name}: ${err.message}`);\n  }\n}\n\nfunction expect(received) {\n  return {\n    toBe: (expected) => {\n      if (received !== expected)\n        throw new Error(`Expected ${expected}, got ${received}`);\n    }\n  };\n}\n\ntest('adds numbers', () => {\n  expect(add(2, 3)).toBe(5);\n});\n```",
-      instructions: "## Task: Test Suite for Utilities\nBuild a mini test framework and test your utility functions:\n1. `test(name, fn)` runner with pass/fail count\n2. `expect(val)` with `toBe`, `toEqual`, `toBeTruthy`, `toContain`\n3. Write 5 tests for: add, getGrade, filterPassingStudents\n4. Show summary: X passed, Y failed",
-      starterCode: "let passed = 0, failed = 0;\n\nfunction test(name, fn) {\n    try {\n        fn();\n        ___ ++;\n        console.log(`OK ${name}`);\n    } catch(err) {\n        ___++;\n        console.log(`FAIL ${name}: ${err.message}`);\n    }\n}\n\nfunction expect(received) {\n    return {\n        toBe(expected) {\n            if (received !== expected)\n                throw new Error(`Expected ${JSON.stringify(expected)}, got ${JSON.stringify(received)}`);\n        },\n        toEqual(expected) {\n            if (JSON.stringify(received) !== JSON.stringify(___)) \n                throw new Error(`Objects not equal`);\n        },\n        toBeTruthy() {\n            if (!received) throw new Error(`Expected truthy, got ${received}`);\n        },\n        toContain(item) {\n            if (!received.___(item)) throw new Error(`Expected to contain ${item}`);\n        }\n    };\n}\n\n// Functions to test\nconst add = (a, b) => a + b;\nconst getGrade = s => s>=90?'A':s>=80?'B':s>=70?'C':'F';\nconst filterPassing = students => students.filter(s => s.score >= 60);\n\n// Tests\ntest('add(2,3) equals 5', () => expect(add(2,3)).toBe(5));\ntest('add(0,0) equals 0', () => expect(add(0,0)).toBe(___));\ntest('score 95 gets grade A', () => expect(getGrade(95)).toBe(___));\ntest('score 55 gets grade F', () => expect(getGrade(55)).toBe(___));\ntest('filters passing students', () => {\n    const students = [{name:'Ada',score:88},{name:'Tunde',score:45}];\n    const result = filterPassing(students);\n    expect(result.length).toBe(___);\n    expect(result[0].name).toBe('Ada');\n});\n\nconsole.log(`\\nResults: ${passed} passed, ${failed} failed`);",
-      solution: "let passed=0,failed=0;\nfunction test(name,fn){\n    try{fn();passed++;console.log(`OK ${name}`);}\n    catch(err){failed++;console.log(`FAIL ${name}:${err.message}`);}\n}\nfunction expect(received){\n    return{\n        toBe(expected){if(received!==expected)throw new Error(`Expected ${JSON.stringify(expected)},got ${JSON.stringify(received)}`);},\n        toEqual(expected){if(JSON.stringify(received)!==JSON.stringify(expected))throw new Error('Not equal');},\n        toBeTruthy(){if(!received)throw new Error(`Expected truthy,got ${received}`);},\n        toContain(item){if(!received.includes(item))throw new Error(`Expected to contain ${item}`);}\n    };\n}\nconst add=(a,b)=>a+b;\nconst getGrade=s=>s>=90?'A':s>=80?'B':s>=70?'C':'F';\nconst filterPassing=students=>students.filter(s=>s.score>=60);\ntest('add(2,3)=5',()=>expect(add(2,3)).toBe(5));\ntest('add(0,0)=0',()=>expect(add(0,0)).toBe(0));\ntest('95->A',()=>expect(getGrade(95)).toBe('A'));\ntest('55->F',()=>expect(getGrade(55)).toBe('F'));\ntest('filter passing',()=>{\n    const students=[{name:'Ada',score:88},{name:'Tunde',score:45}];\n    const result=filterPassing(students);\n    expect(result.length).toBe(1);\n    expect(result[0].name).toBe('Ada');\n});\nconsole.log(`\\n${passed} passed,${failed} failed`);",
-      hint: "passed++ on success, failed++ on catch. toBe uses ===. toEqual uses JSON.stringify comparison.",
-      rubric: "test runner with try/catch. 4 matchers. 5 tests. Pass/fail count shown."
-    }
-  ]
-},
-
-"Build Tools & Webpack": {
-  aiRubric: "Check module system, bundler concepts, npm scripts.",
-  lessons: [
-    {
-      title: "Modern Build Pipeline",
-      theory: "## Build Tools\n```bash\n# Initialize project\nnpm init -y\nnpm install --save-dev webpack webpack-cli\nnpm install react react-dom\n\n# package.json scripts\n\"scripts\": {\n  \"build\": \"webpack --mode production\",\n  \"dev\":   \"webpack serve --mode development\",\n  \"test\":  \"jest\"\n}\n```\n\n**Webpack** bundles all JS files into one.\n**Vite** is faster — modern alternative.\n**npm** manages packages and scripts.",
-      instructions: "## Task: Project Setup Simulation\nWrite Python code that generates a complete project structure:\n1. `package.json` with dependencies and scripts\n2. `webpack.config.js` content\n3. `.gitignore` file\n4. `src/index.js` entry point\n5. Print all files that would be created",
-      starterCode: "import json\n\nfiles = {}\n\n# 1. package.json\nfiles['package.json'] = json.dumps({\n    'name': 'mabel-academy',\n    'version': '1.0.0',\n    'scripts': {\n        'build': ___,\n        'dev':   'webpack serve --mode development --open',\n        'test':  ___\n    },\n    'dependencies': {\n        'react': '^18.0.0',\n        'react-dom': '^18.0.0'\n    },\n    'devDependencies': {\n        'webpack': '^5.0.0',\n        'webpack-cli': ___,\n        'webpack-dev-server': '^4.0.0',\n        'babel-loader': '^9.0.0',\n        '@babel/core': '^7.0.0',\n        '@babel/preset-react': ___\n    }\n}, indent=2)\n\n# 2. webpack.config.js\nfiles['webpack.config.js'] = '''\nconst path = require('path');\nmodule.exports = {\n  entry: './src/index.js',\n  output: { path: path.resolve(__dirname, 'dist'), filename: 'bundle.js' },\n  module: { rules: [{ test: /\\.jsx?$/, use: 'babel-loader' }] }\n};\n'''\n\n# 3. .gitignore\nfiles['.gitignore'] = 'node_modules/\\ndist/\\n.env\\n*.log'\n\n# 4. src/index.js\nfiles['src/index.js'] = '''\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(<h1>Mabel Academy</h1>);\n'''\n\nfor filename, content in files.items():\n    print(f'=== {filename} ===')\n    print(content[:200])\n    print()",
-      solution: "import json\nfiles={}\nfiles['package.json']=json.dumps({'name':'mabel-academy','version':'1.0.0','scripts':{'build':'webpack --mode production','dev':'webpack serve --mode development --open','test':'jest'},'dependencies':{'react':'^18.0.0','react-dom':'^18.0.0'},'devDependencies':{'webpack':'^5.0.0','webpack-cli':'^5.0.0','webpack-dev-server':'^4.0.0','babel-loader':'^9.0.0','@babel/core':'^7.0.0','@babel/preset-react':'^7.0.0'}},indent=2)\nfiles['webpack.config.js']=\"const path=require('path');module.exports={entry:'./src/index.js',output:{path:path.resolve(__dirname,'dist'),filename:'bundle.js'},module:{rules:[{test:/\\.jsx?$/,use:'babel-loader'}]}};\"\nfiles['.gitignore']='node_modules/\\ndist/\\n.env\\n*.log'\nfiles['src/index.js']=\"import React from 'react';import ReactDOM from 'react-dom/client';const root=ReactDOM.createRoot(document.getElementById('root'));root.render(<h1>Mabel Academy</h1>);\"\nfor filename,content in files.items():\n    print(f'==={filename}===')\n    print(content[:200])\n    print()",
-      hint: "'webpack --mode production' for build. 'jest' for test. Version strings like '^5.0.0'.",
-      rubric: "package.json with 4 scripts. webpack.config.js generated. .gitignore correct. 4 files printed."
+      title: "Priority Task Queue",
+      theory: "## Task Queues\nFor async work use a queue:\n```python\nimport threading\nt = threading.Thread(target=send_certificate, args=(student_id,))\nt.start()  # runs in background\n\n# Production: Celery + Redis\nfrom celery import Celery\napp = Celery('tasks', broker='redis://localhost:6379')\n@app.task\ndef send_certificate(student_id): ...\nsend_certificate.delay(42)\n```",
+      instructions: "## Task: Priority Queue System\nBuild `TaskQueue` with:\n1. `add_task(name, func, args, priority)` — queues a task\n2. `process_next()` — runs highest priority task\n3. Retry on failure (max 2 retries)\n4. Track: done, failed counts\n5. Test with 4 tasks including one that fails",
+      starterCode: "import heapq, time\nfrom datetime import datetime\n\nclass Task:\n    def __init__(self, name, func, args=(), priority=1, max_retries=2):\n        self.name=name; self.func=func; self.args=args\n        self.priority=priority; self.max_retries=max_retries\n        self.retries=0; self.status='pending'\n    def __lt__(self, other):\n        return self.priority > other.___  # higher first\n\nclass TaskQueue:\n    def __init__(self):\n        self.queue=[]; self.completed=[]; self.failed=[]\n\n    def add_task(self, name, func, args=(), priority=1):\n        heapq.heappush(self.___, Task(name,func,args,priority))\n        print(f'Queued: {name} (priority {priority})')\n\n    def process_next(self):\n        if not self.queue: return\n        task = heapq.heappop(___)\n        try:\n            result = task.func(*task.args)\n            task.status = 'done'\n            self.completed.append(task)\n            print(f'Done:   {task.name} -> {result}')\n        except Exception as e:\n            task.retries += 1\n            if task.retries < task.max_retries:\n                heapq.heappush(self.queue, task)\n                print(f'Retry {task.retries}: {task.name}')\n            else:\n                task.status = ___\n                self.failed.append(task)\n                print(f'FAILED: {task.name} - {e}')\n\n    def process_all(self):\n        while self.___: self.process_next()\n\n    def report(self):\n        print(f'\\nDone: {len(self.completed)} | Failed: {len(self.failed)}')\n\ndef send_email(to):    return f'Email sent to {to}'\ndef make_report():     return 'Report generated'\ndef risky():           raise ValueError('Simulated failure')\n\nq = TaskQueue()\nq.add_task('Welcome Email', send_email, ('ada@example.com',), priority=3)\nq.add_task('Daily Report',  make_report, (),                  priority=2)\nq.add_task('Risky Task',    risky,      (),                   priority=1)\nq.add_task('Another Email', send_email, ('tunde@example.com',),priority=3)\nq.process_all()\nq.report()",
+      solution: "import heapq\nclass Task:\n    def __init__(self,name,func,args=(),priority=1,max_retries=2):\n        self.name=name;self.func=func;self.args=args\n        self.priority=priority;self.max_retries=max_retries\n        self.retries=0;self.status='pending'\n    def __lt__(self,other):return self.priority>other.priority\nclass TaskQueue:\n    def __init__(self):\n        self.queue=[];self.completed=[];self.failed=[]\n    def add_task(self,name,func,args=(),priority=1):\n        heapq.heappush(self.queue,Task(name,func,args,priority))\n        print(f'Queued:{name}(p{priority})')\n    def process_next(self):\n        if not self.queue:return\n        task=heapq.heappop(self.queue)\n        try:\n            result=task.func(*task.args)\n            task.status='done';self.completed.append(task)\n            print(f'Done:{task.name}->{result}')\n        except Exception as e:\n            task.retries+=1\n            if task.retries<task.max_retries:\n                heapq.heappush(self.queue,task)\n                print(f'Retry {task.retries}:{task.name}')\n            else:\n                task.status='failed';self.failed.append(task)\n                print(f'FAILED:{task.name}-{e}')\n    def process_all(self):\n        while self.queue:self.process_next()\n    def report(self):\n        print(f'\\nDone:{len(self.completed)} Failed:{len(self.failed)}')\ndef send_email(to):return f'Sent to {to}'\ndef make_report():return 'Report done'\ndef risky():raise ValueError('Failure')\nq=TaskQueue()\nq.add_task('Welcome',send_email,('ada@example.com',),priority=3)\nq.add_task('Report',make_report,(),priority=2)\nq.add_task('Risky',risky,(),priority=1)\nq.add_task('Email2',send_email,('tunde@example.com',),priority=3)\nq.process_all()\nq.report()",
+      hint: "__lt__ uses > for max-priority (heapq is min-heap). heappush/heappop manage queue. retry re-adds task.",
+      rubric: "__lt__ reverses for max-priority. heappush/heappop correct. retry logic re-adds. failed after max_retries."
     }
   ]
 },
 
 
+// ═══════════════════════════════════════
+// VERSION CONTROL
+// ═══════════════════════════════════════
+// Beginner
 
-"Stored Procedures": {
-  aiRubric: "Check parameterized queries, transactions, reusable query functions.",
+"Git Fundamentals": {
+  aiRubric: "Check git init, add, commit, status, log commands.",
   lessons: [
     {
-      title: "Stored Procedures in Python",
-      theory: "## Stored Procedures\nPre-compiled SQL logic stored in the database:\n```sql\nCREATE OR REPLACE FUNCTION get_top_students(min_score INT)\nRETURNS TABLE(name TEXT, score INT) AS $$\n  SELECT name, score FROM students\n  WHERE score >= min_score\n  ORDER BY score DESC;\n$$ LANGUAGE SQL;\n\nSELECT * FROM get_top_students(80);\n```\nBenefits: reusable, faster (pre-compiled), reduces network traffic.",
-      instructions: "## Task: Procedure-style Functions\nSimulate stored procedures using Python + SQLite:\n1. `get_top_students(conn, min_score)` — parameterized query function\n2. `calculate_grade(score)` — scalar function (A/B/C/F)\n3. `update_student_score(conn, student_id, new_score)` — transactional update\n4. Test all three",
-      starterCode: "import sqlite3\n\nconn = sqlite3.connect(':memory:')\nconn.row_factory = sqlite3.Row\ncursor = conn.cursor()\ncursor.executescript(\"\"\"\n    CREATE TABLE students(id INT, name TEXT, score INT, course TEXT);\n    INSERT INTO students VALUES(1,'Ada',88,'Python');\n    INSERT INTO students VALUES(2,'Tunde',55,'SQL');\n    INSERT INTO students VALUES(3,'Ngozi',95,'FastAPI');\n    INSERT INTO students VALUES(4,'Emeka',72,'Python');\n\"\"\")\n\ndef get_top_students(conn, min_score):\n    return conn.execute(\n        'SELECT name,score FROM students WHERE score>=? ORDER BY score DESC',\n        (___,)\n    ).fetchall()\n\ndef calculate_grade(score):\n    if score >= 90: return 'A'\n    elif score >= 80: return ___\n    elif score >= 70: return 'C'\n    else: return ___\n\ndef update_student_score(conn, student_id, new_score):\n    try:\n        conn.execute('BEGIN')\n        conn.execute('UPDATE students SET score=? WHERE id=?', (___, ___))\n        conn.commit()\n        return True\n    except Exception as e:\n        conn.rollback()\n        return False\n\nprint('Top students (>=80):')\nfor row in get_top_students(conn, ___):\n    print(f'  {row[\"name\"]}: {row[\"score\"]} ({calculate_grade(row[\"score\"])})')\n\nprint('Update result:', update_student_score(conn, 2, 85))\nprint('After update:')\nfor row in get_top_students(conn, 60):\n    print(f'  {row[\"name\"]}: {row[\"score\"]}')",
-      solution: "import sqlite3\nconn=sqlite3.connect(':memory:')\nconn.row_factory=sqlite3.Row\ncursor=conn.cursor()\ncursor.executescript(\"CREATE TABLE students(id INT,name TEXT,score INT,course TEXT);INSERT INTO students VALUES(1,'Ada',88,'Python');INSERT INTO students VALUES(2,'Tunde',55,'SQL');INSERT INTO students VALUES(3,'Ngozi',95,'FastAPI');INSERT INTO students VALUES(4,'Emeka',72,'Python');\")\ndef get_top_students(conn,min_score):\n    return conn.execute('SELECT name,score FROM students WHERE score>=? ORDER BY score DESC',(min_score,)).fetchall()\ndef calculate_grade(score):\n    if score>=90:return 'A'\n    elif score>=80:return 'B'\n    elif score>=70:return 'C'\n    else:return 'F'\ndef update_student_score(conn,student_id,new_score):\n    try:\n        conn.execute('BEGIN')\n        conn.execute('UPDATE students SET score=? WHERE id=?',(new_score,student_id))\n        conn.commit()\n        return True\n    except Exception as e:\n        conn.rollback()\n        return False\nprint('Top>=80:')\nfor row in get_top_students(conn,80):\n    print(f'  {row[\"name\"]}:{row[\"score\"]}({calculate_grade(row[\"score\"])})')\nprint('Update:',update_student_score(conn,2,85))\nprint('After:')\nfor row in get_top_students(conn,60):\n    print(f'  {row[\"name\"]}:{row[\"score\"]}')",
-      hint: "Pass min_score as tuple (min_score,). calculate_grade if/elif. BEGIN/COMMIT/ROLLBACK for transaction.",
-      rubric: "parameterized query with ?. calculate_grade B and F correct. transaction with rollback."
+      title: "What is Git & Why Use It",
+      theory: "## Git — Version Control\nGit tracks every change to your code.\n\n```bash\ngit init                   # start tracking\ngit add .                  # stage all files\ngit commit -m 'Initial'   # save snapshot\ngit status                 # what changed?\ngit log --oneline          # see history\n```\n\nWhy Git? Undo mistakes, collaborate, required for every dev job.",
+      instructions: "## Task: Git Simulator\nBuild a `GitRepo` class:\n1. `add(filename)` — stages files\n2. `commit(message)` — saves snapshot\n3. `log()` — shows history\n4. `status()` — shows staged/working\n5. Simulate a full workflow",
+      starterCode: "import hashlib\nfrom datetime import datetime\n\nclass GitRepo:\n    def __init__(self):\n        self.commits = []\n        self.staged  = []\n        self.working = []\n\n    def add(self, filename):\n        if filename == '.':\n            self.staged.extend(self.___)\n            self.working = []\n        elif filename in self.working:\n            self.staged.append(filename)\n            self.working.remove(filename)\n        print(f'Staged: {filename}')\n\n    def commit(self, message):\n        if not self.___:\n            print('Nothing to commit'); return\n        h = hashlib.sha1(f'{message}{datetime.now()}'.encode()).hexdigest()[:7]\n        self.commits.append({'hash':h,'msg':message,'files':self.staged.copy(),'time':datetime.now().strftime('%H:%M')})\n        print(f'[main {h}] {message}')\n        self.staged = ___\n\n    def log(self):\n        for c in reversed(self.commits):\n            print(f'commit {c[\"hash\"]}')\n            print(f'  {c[\"msg\"]} | {c[\"files\"]}\\n')\n\n    def status(self):\n        if self.staged:  [print(f'  staged:    {f}') for f in self.___]\n        if self.working: [print(f'  untracked: {f}') for f in self.working]\n        if not self.staged and not self.working: print('Nothing to commit. Clean.')\n\nrepo = GitRepo()\nrepo.working = ['main.py','README.md','requirements.txt']\nrepo.status()\nrepo.add('main.py')\nrepo.commit('Initial commit')\nrepo.add('.')\nrepo.commit('Add all files')\nrepo.log()",
+      solution: "import hashlib\nfrom datetime import datetime\nclass GitRepo:\n    def __init__(self):\n        self.commits=[];self.staged=[];self.working=[]\n    def add(self,filename):\n        if filename=='.':\n            self.staged.extend(self.working);self.working=[]\n        elif filename in self.working:\n            self.staged.append(filename);self.working.remove(filename)\n        print(f'Staged:{filename}')\n    def commit(self,message):\n        if not self.staged:print('Nothing');return\n        h=hashlib.sha1(f'{message}{datetime.now()}'.encode()).hexdigest()[:7]\n        self.commits.append({'hash':h,'msg':message,'files':self.staged.copy(),'time':datetime.now().strftime('%H:%M')})\n        print(f'[main {h}] {message}')\n        self.staged=[]\n    def log(self):\n        for c in reversed(self.commits):\n            print(f'commit {c[\"hash\"]}')\n            print(f'  {c[\"msg\"]}|{c[\"files\"]}\\n')\n    def status(self):\n        if self.staged:[print(f'  staged:{f}') for f in self.staged]\n        if self.working:[print(f'  untracked:{f}') for f in self.working]\n        if not self.staged and not self.working:print('Clean.')\nrepo=GitRepo()\nrepo.working=['main.py','README.md','requirements.txt']\nrepo.status()\nrepo.add('main.py')\nrepo.commit('Initial commit')\nrepo.add('.')\nrepo.commit('Add all files')\nrepo.log()",
+      hint: "extend(self.working) for dot. Clear staged after commit with []. reversed() for newest-first log.",
+      rubric: "add stages files. dot adds all. commit saves and clears staged. log reversed. status shows both lists."
+    },
+    {
+      title: "Commit Message Best Practices",
+      theory: "## Conventional Commits\n```\nfeat(auth): add JWT token refresh\nfix(api): handle empty student list\ndocs: update README installation steps\nstyle: format with black\nrefactor(db): extract query logic\ntest: add grade calculation tests\nchore: update dependencies\n```\n\nGolden rule: explain WHY, not just WHAT.",
+      instructions: "## Task: Commit Message Validator\nWrite `validate_commit_message(msg)` that:\n1. Checks type is valid\n2. Validates format `type(scope): description`\n3. Checks description length 10-72 chars\n4. Returns list of errors (empty = valid)\n5. Test with 8 messages",
+      starterCode: "import re\n\nVALID_TYPES = {'feat','fix','docs','style','refactor','test','chore','perf','ci'}\n\ndef validate_commit_message(message):\n    errors  = []\n    pattern = r'^(\\w+)(\\([\\w-]+\\))?:\\s(.+)$'\n    match   = re.match(___, message)\n    if not match:\n        return ['Invalid format. Use: type(scope): description']\n    commit_type = match.group(1)\n    description = match.group(3)\n    if commit_type not in ___:\n        errors.append(f'Invalid type \"{commit_type}\"')\n    if len(description) < ___:\n        errors.append('Description too short (min 10 chars)')\n    if len(description) > ___:\n        errors.append('Description too long (max 72 chars)')\n    return errors if errors else ['Valid!']\n\ntests = [\n    'feat(auth): add JWT token refresh endpoint',\n    'fix(api): handle empty student list correctly',\n    'stuff',\n    'FIX: something',\n    'feat: x',\n    'docs: update README with installation guide',\n    'refactor(db): extract query logic into repository layer',\n    'feat: ' + 'a' * 80\n]\n\nfor msg in tests:\n    result = validate_commit_message(___)\n    status = 'OK  ' if result == ['Valid!'] else 'FAIL'\n    print(f'[{status}] {msg[:55]}')\n    if status == 'FAIL':\n        for err in result: print(f'       {err}')",
+      solution: "import re\nVALID_TYPES={'feat','fix','docs','style','refactor','test','chore','perf','ci'}\ndef validate_commit_message(message):\n    errors=[]\n    match=re.match(r'^(\\w+)(\\([\\w-]+\\))?:\\s(.+)$',message)\n    if not match:return['Invalid format. Use: type(scope): description']\n    t=match.group(1);d=match.group(3)\n    if t not in VALID_TYPES:errors.append(f'Invalid type \"{t}\"')\n    if len(d)<10:errors.append('Too short (min 10)')\n    if len(d)>72:errors.append('Too long (max 72)')\n    return errors if errors else['Valid!']\ntests=['feat(auth): add JWT token refresh endpoint','fix(api): handle empty student list','stuff','FIX: something','feat: x','docs: update README with installation guide','refactor(db): extract query logic into repository','feat: '+'a'*80]\nfor msg in tests:\n    result=validate_commit_message(msg)\n    status='OK  ' if result==['Valid!'] else 'FAIL'\n    print(f'[{status}] {msg[:55]}')\n    if status=='FAIL':\n        for err in result:print(f'       {err}')",
+      hint: "re.match(pattern, message). group(1) for type, group(3) for description. len() for length.",
+      rubric: "regex match. VALID_TYPES check. len 10-72. 8 tests."
     }
   ]
 },
 
+"Commits & History": {
+  aiRubric: "Check git log, history analysis, grouping by author/type.",
+  lessons: [
+    {
+      title: "Reading & Analysing Git History",
+      theory: "## Git Log Commands\n```bash\ngit log                     # full log\ngit log --oneline           # compact\ngit log --author='Ada'      # by author\ngit log --since='1 week ago'\ngit show abc1234            # see a commit\ngit diff HEAD~1 HEAD        # compare commits\n```",
+      instructions: "## Task: History Analyser\n1. Parse a list of commit dicts\n2. `commits_by_author(commits)` — groups by author\n3. `commits_by_type(commits)` — groups by type\n4. `most_active_day(commits)` — finds busiest day\n5. Print a full report",
+      starterCode: "from collections import defaultdict, Counter\n\ncommits = [\n    {'hash':'a1b2c3d','message':'feat(auth): add login',  'author':'Ada',   'date':'2024-01-15'},\n    {'hash':'e4f5g6h','message':'fix(api): handle null',  'author':'Tunde', 'date':'2024-01-15'},\n    {'hash':'i7j8k9l','message':'docs: update API docs',  'author':'Ada',   'date':'2024-01-16'},\n    {'hash':'m1n2o3p','message':'feat(db): add model',    'author':'Ngozi', 'date':'2024-01-16'},\n    {'hash':'q4r5s6t','message':'test: add auth tests',   'author':'Ada',   'date':'2024-01-17'},\n    {'hash':'u7v8w9x','message':'refactor: clean routes', 'author':'Tunde', 'date':'2024-01-17'},\n    {'hash':'y1z2a3b','message':'feat: add certificates', 'author':'Ada',   'date':'2024-01-18'},\n]\n\ndef commits_by_author(commits):\n    groups = defaultdict(list)\n    for c in ___:\n        groups[c[___]].append(c)\n    return dict(groups)\n\ndef commits_by_type(commits):\n    types = defaultdict(int)\n    for c in commits:\n        t = c['message'].split('(')[0].split(':')[0].strip()\n        types[___] += 1\n    return dict(types)\n\ndef most_active_day(commits):\n    return Counter(c[___] for c in commits).most_common(1)[0]\n\nby_author = commits_by_author(commits)\nby_type   = commits_by_type(commits)\nbusiest   = most_active_day(commits)\n\nprint('=== Git History Report ===')\nprint('\\nBy Author:')\nfor author, clist in by_author.items():\n    print(f'  {author}: {len(clist)} commits')\nprint('\\nBy Type:')\nfor ctype, count in sorted(by_type.items()):\n    print(f'  {ctype}: {count}')\nprint(f'\\nBusiest day: {busiest[0]} ({busiest[1]} commits)')",
+      solution: "from collections import defaultdict,Counter\ncommits=[{'hash':'a1b2c3d','message':'feat(auth): add login','author':'Ada','date':'2024-01-15'},{'hash':'e4f5g6h','message':'fix(api): handle null','author':'Tunde','date':'2024-01-15'},{'hash':'i7j8k9l','message':'docs: update docs','author':'Ada','date':'2024-01-16'},{'hash':'m1n2o3p','message':'feat(db): add model','author':'Ngozi','date':'2024-01-16'},{'hash':'q4r5s6t','message':'test: auth tests','author':'Ada','date':'2024-01-17'},{'hash':'u7v8w9x','message':'refactor: routes','author':'Tunde','date':'2024-01-17'},{'hash':'y1z2a3b','message':'feat: certificates','author':'Ada','date':'2024-01-18'}]\ndef commits_by_author(commits):\n    groups=defaultdict(list)\n    for c in commits:groups[c['author']].append(c)\n    return dict(groups)\ndef commits_by_type(commits):\n    types=defaultdict(int)\n    for c in commits:\n        t=c['message'].split('(')[0].split(':')[0].strip()\n        types[t]+=1\n    return dict(types)\ndef most_active_day(commits):\n    return Counter(c['date'] for c in commits).most_common(1)[0]\nby_author=commits_by_author(commits)\nby_type=commits_by_type(commits)\nbusiest=most_active_day(commits)\nprint('=== Git History ===')\nprint('\\nBy Author:')\nfor a,cl in by_author.items():print(f'  {a}:{len(cl)} commits')\nprint('\\nBy Type:')\nfor t,n in sorted(by_type.items()):print(f'  {t}:{n}')\nprint(f'\\nBusiest:{busiest[0]}({busiest[1]} commits)')",
+      hint: "defaultdict(list) groups by key. split('(')[0] extracts type. Counter.most_common(1)[0].",
+      rubric: "commits_by_author groups correctly. commits_by_type extracts type. most_active_day uses Counter."
+    }
+  ]
+},
 
+"Branching Basics": {
+  aiRubric: "Check branch creation, switching, merging.",
+  lessons: [
+    {
+      title: "Git Branches",
+      theory: "## Branching\n```bash\ngit switch -c feature/login  # create & switch\ngit branch                   # list branches\ngit switch main              # switch\ngit merge feature/login      # merge into current\ngit branch -d feature/login  # delete merged\n```\n\nBranch naming: `feature/short-name`, `fix/issue`, `hotfix/v1.2.1`",
+      instructions: "## Task: Branch Simulator\nExtend GitRepo with branches:\n1. `create_branch(name)` — new branch from current\n2. `switch_branch(name)` — switch current\n3. `merge(branch_name)` — merge into current\n4. `list_branches()` — show all with current marked\n5. Simulate feature workflow",
+      starterCode: "class GitRepo:\n    def __init__(self):\n        self.branches = {'main': []}\n        self.current  = 'main'\n        self._id      = 1\n\n    def commit(self, msg):\n        c = {'id':self._id,'msg':msg}\n        self.branches[self.current].append(c)\n        self._id += 1\n        print(f'  [{self.current}] {c[\"id\"]}: {msg}')\n\n    def create_branch(self, name):\n        if name in self.___:\n            print(f'{name} already exists'); return\n        self.branches[name] = self.branches[self.current].copy()\n        print(f'Created: {name}')\n\n    def switch_branch(self, name):\n        if name not in self.branches:\n            print(f'{name} not found'); return\n        self.current = ___\n        print(f'Switched to: {name}')\n\n    def merge(self, branch_name):\n        source  = self.branches[___]\n        target  = self.branches[self.current]\n        new     = [c for c in source if c not in target]\n        self.branches[self.current].extend(___)\n        self.branches[self.current].append({'id':self._id,'msg':f'Merge {branch_name}'})\n        self._id += 1\n        print(f'Merged {branch_name} ({len(new)} new commits)')\n\n    def list_branches(self):\n        for b in self.branches:\n            mark = '* ' if b == self.___ else '  '\n            print(f'{mark}{b} ({len(self.branches[b])} commits)')\n\nrepo = GitRepo()\nrepo.commit('Initial setup')\nrepo.create_branch('feature/student-api')\nrepo.switch_branch('feature/student-api')\nrepo.commit('Add GET /students')\nrepo.commit('Add POST /students')\nrepo.switch_branch('main')\nrepo.commit('Hotfix: fix null error')\nprint('\\nBranches before merge:')\nrepo.list_branches()\nrepo.merge('feature/student-api')\nprint('\\nAfter merge:')\nrepo.list_branches()",
+      solution: "class GitRepo:\n    def __init__(self):\n        self.branches={'main':[]};self.current='main';self._id=1\n    def commit(self,msg):\n        c={'id':self._id,'msg':msg}\n        self.branches[self.current].append(c);self._id+=1\n        print(f'  [{self.current}] {c[\"id\"]}:{msg}')\n    def create_branch(self,name):\n        if name in self.branches:print(f'{name} exists');return\n        self.branches[name]=self.branches[self.current].copy()\n        print(f'Created:{name}')\n    def switch_branch(self,name):\n        if name not in self.branches:print(f'{name} not found');return\n        self.current=name\n        print(f'Switched:{name}')\n    def merge(self,branch_name):\n        source=self.branches[branch_name]\n        target=self.branches[self.current]\n        new=[c for c in source if c not in target]\n        self.branches[self.current].extend(new)\n        self.branches[self.current].append({'id':self._id,'msg':f'Merge {branch_name}'})\n        self._id+=1\n        print(f'Merged {branch_name}({len(new)} commits)')\n    def list_branches(self):\n        for b in self.branches:\n            mark='* ' if b==self.current else '  '\n            print(f'{mark}{b}({len(self.branches[b])} commits)')\nrepo=GitRepo()\nrepo.commit('Initial setup')\nrepo.create_branch('feature/student-api')\nrepo.switch_branch('feature/student-api')\nrepo.commit('Add GET /students')\nrepo.commit('Add POST /students')\nrepo.switch_branch('main')\nrepo.commit('Hotfix')\nprint('\\nBefore:')\nrepo.list_branches()\nrepo.merge('feature/student-api')\nprint('\\nAfter:')\nrepo.list_branches()",
+      hint: "create_branch copies current commits. switch sets self.current. merge appends new + merge commit.",
+      rubric: "create_branch copies. switch updates current. merge appends new commits. list marks * on current."
+    }
+  ]
+},
+
+"GitHub Essentials": {
+  aiRubric: "Check remote, push, pull, clone workflow.",
+  lessons: [
+    {
+      title: "GitHub Setup Guide",
+      theory: "## GitHub Commands\n```bash\ngit remote add origin https://github.com/user/repo.git\ngit push -u origin main    # first push\ngit push                   # after that\ngit pull                   # get changes\ngit clone https://...      # clone repo\n```",
+      instructions: "## Task: Setup Guide Generator\nWrite `github_setup_guide(username, repo_name, description)` that generates:\n1. All commands from init to first push\n2. A .gitignore for Python\n3. A starter README template\n4. Print everything",
+      starterCode: "def github_setup_guide(username, repo_name, description):\n    steps = [\n        f'# Create repo at github.com/{username}',\n        '',\n        f'mkdir {___} && cd {repo_name}',\n        'git init',\n        'git branch -M main',\n        '',\n        'git add .',\n        f'git commit -m \\'feat: initial {___} setup\\'',\n        '',\n        f'git remote add origin https://github.com/{___}/{repo_name}.git',\n        'git push -u origin main'\n    ]\n    gitignore = '__pycache__/\\n*.pyc\\nvenv/\\n.env\\ndist/'\n    readme    = f'# {repo_name}\\n\\n{description}\\n\\n## Install\\n```bash\\ngit clone https://github.com/{___}/{repo_name}.git\\npip install -r requirements.txt\\n```\\n\\n## Author\\n{username}'\n\n    print('=== Setup Commands ===')\n    for step in ___: print(step)\n    print('\\n=== .gitignore ===')\n    print(gitignore)\n    print('\\n=== README.md ===')\n    print(readme)\n\ngithub_setup_guide('ada-okonkwo', 'mabel-academy-api', 'FastAPI backend for Mabel Academy LMS')",
+      solution: "def github_setup_guide(username,repo_name,description):\n    steps=[f'# Create repo at github.com/{username}','',f'mkdir {repo_name} && cd {repo_name}','git init','git branch -M main','','git add .',f'git commit -m \\'feat: initial {repo_name}\\'','',f'git remote add origin https://github.com/{username}/{repo_name}.git','git push -u origin main']\n    gitignore='__pycache__/\\n*.pyc\\nvenv/\\n.env\\ndist/'\n    readme=f'# {repo_name}\\n\\n{description}\\n\\n## Install\\n```bash\\ngit clone https://github.com/{username}/{repo_name}.git\\npip install -r requirements.txt\\n```\\n\\n## Author\\n{username}'\n    print('=== Commands ===')\n    for s in steps:print(s)\n    print('\\n=== .gitignore ===')\n    print(gitignore)\n    print('\\n=== README ===')\n    print(readme)\ngithub_setup_guide('ada-okonkwo','mabel-academy-api','FastAPI backend for Mabel Academy')",
+      hint: "f-strings for username/repo_name. List of steps printed with loop.",
+      rubric: "username/repo_name interpolated. All 3 sections printed. gitignore Python files. README has clone."
+    }
+  ]
+},
+
+"Collaborative Workflows": {
+  aiRubric: "Check PR structure, code review, team workflow.",
+  lessons: [
+    {
+      title: "Pull Requests & Code Review",
+      theory: "## Team Git Workflow\n```\nfork/clone -> branch -> commit -> push -> PR -> review -> merge\n```\n\n**Good PR:** small, focused, clear description, tests included.\n\n**Good review:** specific, constructive, asks questions.",
+      instructions: "## Task: PR Description Generator\nWrite `generate_pr_description(branch, commits, files)` that:\n1. Extracts feature name from branch\n2. Lists commits\n3. Lists changed files\n4. Adds checklist\n5. Returns Markdown",
+      starterCode: "def generate_pr_description(branch_name, commits, changed_files):\n    feature = branch_name.replace('feature/','').replace('fix/','').replace('-',' ').title()\n    desc  = f'## {___}\\n\\n'\n    desc += '### What does this PR do?\\n'\n    desc += f'This PR implements: {feature}\\n\\n'\n    desc += '### Commits\\n'\n    for c in ___:\n        desc += f'- {c}\\n'\n    desc += '\\n### Files Changed\\n'\n    for f in ___:\n        desc += f'- `{f}`\\n'\n    desc += '\\n### Checklist\\n'\n    desc += '- [ ] Tests added/updated\\n'\n    desc += '- [ ] Documentation updated\\n'\n    desc += '- [ ] No debug statements\\n'\n    desc += '- [ ] Tested locally\\n'\n    return ___\n\npr = generate_pr_description(\n    'feature/student-grade-api',\n    ['feat(api): add grade endpoint','feat: add grade logic','test: add grade tests'],\n    ['src/routes/students.py','src/services/grade.py','tests/test_grade.py']\n)\nprint(pr)",
+      solution: "def generate_pr_description(branch_name,commits,changed_files):\n    feature=branch_name.replace('feature/','').replace('fix/','').replace('-',' ').title()\n    desc=f'## {feature}\\n\\n### What?\\nThis PR implements:{feature}\\n\\n### Commits\\n'\n    for c in commits:desc+=f'- {c}\\n'\n    desc+='\\n### Files\\n'\n    for f in changed_files:desc+=f'- `{f}`\\n'\n    desc+='\\n### Checklist\\n- [ ] Tests\\n- [ ] Docs\\n- [ ] No debug\\n- [ ] Tested\\n'\n    return desc\npr=generate_pr_description('feature/student-grade-api',['feat(api): add grade endpoint','feat: grade logic','test: grade tests'],['src/routes/students.py','src/services/grade.py','tests/test_grade.py'])\nprint(pr)",
+      hint: "branch_name.replace() strips prefix. .title() capitalises. Loop commits and files. Return desc.",
+      rubric: "Branch name cleaned. feature extracted. commits and files listed. Checklist present."
+    }
+  ]
+},
+
+// Intermediate
+
+"Merging & Rebasing": {
+  aiRubric: "Check merge vs rebase concepts, strategy selection.",
+  lessons: [
+    {
+      title: "Merge vs Rebase Strategies",
+      theory: "## Merge vs Rebase\n\n**Merge** — preserves full history, creates merge commit:\n```bash\ngit switch main && git merge feature/login\n```\n\n**Rebase** — rewrites history, linear:\n```bash\ngit switch feature/login && git rebase main\n```\n\n**Rule:** Merge for main/develop. Rebase for short feature branches.",
+      instructions: "## Task: Strategy Simulator\n1. Create main branch with 3 commits\n2. Feature branch diverges with 2 extra commits\n3. `simulate_merge(main, feature)` — both histories preserved\n4. `simulate_rebase(feature, main)` — linear history\n5. Compare commit counts",
+      starterCode: "def simulate_merge(main_commits, feature_commits):\n    base_msgs   = {c['msg'] for c in main_commits}\n    new_commits = [c for c in feature_commits if c['msg'] not in ___]\n    result = main_commits.copy()\n    result.extend(___)\n    result.append({'msg':'Merge feature branch','branch':'merge'})\n    return result\n\ndef simulate_rebase(feature_commits, onto_commits):\n    onto_msgs = {c['msg'] for c in onto_commits}\n    own       = [c for c in feature_commits if c['msg'] not in ___]\n    result    = onto_commits.copy()\n    result.extend(___)\n    return result\n\nmain = [\n    {'msg':'Initial setup',  'branch':'main'},\n    {'msg':'Add models',     'branch':'main'},\n    {'msg':'Add routes',     'branch':'main'},\n]\nfeature = [\n    {'msg':'Initial setup',  'branch':'main'},\n    {'msg':'Add models',     'branch':'main'},\n    {'msg':'Add login view', 'branch':'feature'},\n    {'msg':'Add JWT tokens', 'branch':'feature'},\n]\nmain.append({'msg':'Hotfix: null error','branch':'main'})\n\nmerged  = simulate_merge(main, ___)\nrebased = simulate_rebase(feature, main)\n\nprint('After MERGE:', len(merged), 'commits')\nfor c in merged: print(f\"  [{c['branch']}] {c['msg']}\")\nprint('\\nAfter REBASE:', len(rebased), 'commits')\nfor c in rebased: print(f\"  [{c['branch']}] {c['msg']}\")",
+      solution: "def simulate_merge(main_commits,feature_commits):\n    base={c['msg'] for c in main_commits}\n    new=[c for c in feature_commits if c['msg'] not in base]\n    result=main_commits.copy()\n    result.extend(new)\n    result.append({'msg':'Merge feature','branch':'merge'})\n    return result\ndef simulate_rebase(feature_commits,onto_commits):\n    onto={c['msg'] for c in onto_commits}\n    own=[c for c in feature_commits if c['msg'] not in onto]\n    result=onto_commits.copy()\n    result.extend(own)\n    return result\nmain=[{'msg':'Initial setup','branch':'main'},{'msg':'Add models','branch':'main'},{'msg':'Add routes','branch':'main'}]\nfeature=[{'msg':'Initial setup','branch':'main'},{'msg':'Add models','branch':'main'},{'msg':'Add login view','branch':'feature'},{'msg':'Add JWT tokens','branch':'feature'}]\nmain.append({'msg':'Hotfix','branch':'main'})\nmerged=simulate_merge(main,feature)\nrebased=simulate_rebase(feature,main)\nprint('MERGE:',len(merged),'commits')\nfor c in merged:print(f\"  [{c['branch']}] {c['msg']}\")\nprint('\\nREBASE:',len(rebased),'commits')\nfor c in rebased:print(f\"  [{c['branch']}] {c['msg']}\")",
+      hint: "Set of main msgs for deduplication. extend new commits. Rebase appends own on top of onto.",
+      rubric: "merge appends new + merge commit. rebase creates linear history. Both logged."
+    }
+  ]
+},
+
+"Pull Requests & Code Review": {
+  aiRubric: "Check review automation, issue detection, scoring.",
+  lessons: [
+    {
+      title: "Automated Code Review",
+      theory: "## Code Review Automation\n- **flake8** — Python style\n- **black** — formatting\n- **mypy** — type checking\n- **bandit** — security\n- **pytest --cov** — coverage\n\nAll run in GitHub Actions on every PR.",
+      instructions: "## Task: Code Reviewer Tool\nBuild `review_code(code)` that:\n1. Flags risky ops without try/except\n2. Finds functions without docstrings (using ast)\n3. Flags lines > 79 chars\n4. Returns score and issues list",
+      starterCode: "import ast, re\n\ndef review_code(code):\n    issues = []\n    lines  = code.split('\\n')\n\n    # Check 1: risky ops without try/except\n    risky = ['open(','requests.','json.loads','.execute(']\n    for i, line in enumerate(lines, 1):\n        for op in ___:\n            if op in line:\n                ctx = '\\n'.join(lines[max(0,i-5):i])\n                if 'try:' not in ctx:\n                    issues.append(f'Line {i}: {op} without try/except')\n\n    # Check 2: functions without docstrings\n    try:\n        tree = ast.parse(___)\n        for node in ast.walk(tree):\n            if isinstance(node, ast.FunctionDef):\n                has_doc = (node.body and isinstance(node.body[0], ast.Expr)\n                           and isinstance(node.body[0].value, ast.Constant))\n                if not ___:\n                    issues.append(f'Function \"{node.name}\" missing docstring')\n    except SyntaxError as e:\n        issues.append(f'Syntax error: {e}')\n\n    # Check 3: long lines\n    for i, line in enumerate(lines, 1):\n        if len(line) > ___:\n            issues.append(f'Line {i}: {len(line)} chars (max 79)')\n\n    return {'score': max(0, 10 - len(issues)), 'issues': issues}\n\ntest_code = '''\ndef process(path):\n    data = open(path).read()\n    return data\n\ndef add(a, b):\n    return a + b\n\nvery_long_line_that_goes_way_beyond_seventy_nine_characters_for_testing_purposes = True\n'''\n\nresult = review_code(test_code)\nprint(f'Score: {result[\"score\"]}/10')\nfor issue in result[___]:\n    print(f'  - {issue}')",
+      solution: "import ast,re\ndef review_code(code):\n    issues=[];lines=code.split('\\n')\n    risky=['open(','requests.','json.loads','.execute(']\n    for i,line in enumerate(lines,1):\n        for op in risky:\n            if op in line:\n                ctx='\\n'.join(lines[max(0,i-5):i])\n                if 'try:' not in ctx:\n                    issues.append(f'Line {i}:{op} without try/except')\n    try:\n        tree=ast.parse(code)\n        for node in ast.walk(tree):\n            if isinstance(node,ast.FunctionDef):\n                has_doc=node.body and isinstance(node.body[0],ast.Expr) and isinstance(node.body[0].value,ast.Constant)\n                if not has_doc:issues.append(f'Function \"{node.name}\" missing docstring')\n    except SyntaxError as e:\n        issues.append(f'Syntax:{e}')\n    for i,line in enumerate(lines,1):\n        if len(line)>79:issues.append(f'Line {i}:{len(line)} chars')\n    return{'score':max(0,10-len(issues)),'issues':issues}\ntest_code='\\ndef process(path):\\n    data=open(path).read()\\n    return data\\n\\ndef add(a,b):\\n    return a+b\\n'\nresult=review_code(test_code)\nprint(f'Score:{result[\"score\"]}/10')\nfor i in result['issues']:print(f'  -{i}')",
+      hint: "risky ops check context for 'try:'. ast.parse builds tree. len(line)>79 for long lines.",
+      rubric: "risky ops detected. ast.parse for docstrings. long lines flagged. score = 10 - issues."
+    }
+  ]
+},
+
+"Tags & Releases": {
+  aiRubric: "Check semantic versioning, release tracking, changelog.",
+  lessons: [
+    {
+      title: "Semantic Versioning & Release Manager",
+      theory: "## Semantic Versioning\n`MAJOR.MINOR.PATCH` — e.g. `v1.4.2`\n\n- **MAJOR** — breaking changes\n- **MINOR** — new features, backward compatible\n- **PATCH** — bug fixes\n\n```bash\ngit tag -a v1.0.0 -m 'First release'\ngit push origin --tags\ngit tag  # list tags\n```",
+      instructions: "## Task: Release Manager\nBuild `ReleaseManager` with:\n1. `bump_major()`, `bump_minor()`, `bump_patch()`\n2. `create_release(notes)` — tags and logs\n3. `get_changelog()` — all releases\n4. Simulate 4 releases",
+      starterCode: "from datetime import datetime\n\nclass ReleaseManager:\n    def __init__(self, initial='0.0.0'):\n        parts = initial.split('.')\n        self.major    = int(parts[0])\n        self.minor    = int(parts[1])\n        self.patch    = int(parts[2])\n        self.releases = []\n\n    @property\n    def version(self):\n        return f'{self.___}.{self.___}.{self.___}'\n\n    def bump_major(self):\n        self.major += 1; self.minor = ___; self.patch = ___\n        print(f'v{self.version} (MAJOR)')\n\n    def bump_minor(self):\n        self.minor += ___; self.patch = 0\n        print(f'v{self.version} (MINOR)')\n\n    def bump_patch(self):\n        self.___ += 1\n        print(f'v{self.version} (PATCH)')\n\n    def create_release(self, notes):\n        r = {'version':self.version,'date':datetime.now().strftime('%Y-%m-%d'),'notes':notes}\n        self.___.append(r)\n        print(f'Tagged v{self.version}')\n\n    def get_changelog(self):\n        print('\\n=== CHANGELOG ===')\n        for r in reversed(self.___):\n            print(f'\\n## v{r[\"version\"]} ({r[\"date\"]})')\n            for note in r['notes']:\n                print(f'  - {note}')\n\nrm = ReleaseManager('0.0.0')\nrm.bump_minor()\nrm.create_release(['Initial alpha','Basic CRUD','SQLite DB'])\nrm.bump_patch()\nrm.create_release(['Fix login bug','Better error messages'])\nrm.bump_minor()\nrm.create_release(['Add certificates','Add payment integration'])\nrm.bump_major()\nrm.create_release(['Complete redesign','Production ready'])\nrm.get_changelog()\nprint(f'\\nCurrent: v{rm.___}')",
+      solution: "from datetime import datetime\nclass ReleaseManager:\n    def __init__(self,initial='0.0.0'):\n        p=initial.split('.')\n        self.major=int(p[0]);self.minor=int(p[1]);self.patch=int(p[2])\n        self.releases=[]\n    @property\n    def version(self):return f'{self.major}.{self.minor}.{self.patch}'\n    def bump_major(self):\n        self.major+=1;self.minor=0;self.patch=0\n        print(f'v{self.version}(MAJOR)')\n    def bump_minor(self):\n        self.minor+=1;self.patch=0\n        print(f'v{self.version}(MINOR)')\n    def bump_patch(self):\n        self.patch+=1\n        print(f'v{self.version}(PATCH)')\n    def create_release(self,notes):\n        r={'version':self.version,'date':datetime.now().strftime('%Y-%m-%d'),'notes':notes}\n        self.releases.append(r)\n        print(f'Tagged v{self.version}')\n    def get_changelog(self):\n        print('\\n=== CHANGELOG ===')\n        for r in reversed(self.releases):\n            print(f'\\n## v{r[\"version\"]}({r[\"date\"]})')\n            for n in r['notes']:print(f'  -{n}')\nrm=ReleaseManager('0.0.0')\nrm.bump_minor();rm.create_release(['Alpha','CRUD','SQLite'])\nrm.bump_patch();rm.create_release(['Fix login','Better errors'])\nrm.bump_minor();rm.create_release(['Certificates','Payments'])\nrm.bump_major();rm.create_release(['Redesign','Production'])\nrm.get_changelog()\nprint(f'\\nCurrent:v{rm.version}')",
+      hint: "@property for version. bump_major resets minor and patch. releases.append(r).",
+      rubric: "@property version. bump_major resets minor/patch. releases tracked. Changelog reversed."
+    }
+  ]
+},
+
+"Undoing Changes": {
+  aiRubric: "Check git reset, revert, stash operations.",
+  lessons: [
+    {
+      title: "Git Undo Operations",
+      theory: "## Undoing in Git\n```bash\ngit restore file.py         # undo unstaged\ngit restore --staged file   # unstage\ngit reset --soft HEAD~1     # undo commit, keep staged\ngit reset HEAD~1            # undo commit, keep unstaged\ngit reset --hard HEAD~1     # undo commit, DELETE changes\ngit revert HEAD             # safe undo (adds new commit)\ngit stash                   # save work temporarily\ngit stash pop               # restore stash\n```\n\nRule: `revert` on shared branches. `reset` only locally.",
+      instructions: "## Task: Undo Simulator\nExtend GitRepo with:\n1. `stash()` — saves staged changes\n2. `stash_pop()` — restores from stash\n3. `reset_soft()` — undoes last commit, keeps staged\n4. `revert()` — new commit undoing the last\n5. Test full undo workflow",
+      starterCode: "class GitRepo:\n    def __init__(self):\n        self.commits     = []\n        self.staged      = []\n        self.stash_stack = []\n        self._id         = 1\n\n    def commit(self, msg, files=None):\n        c = {'id':self._id,'msg':msg,'files':files or self.staged.copy()}\n        self.commits.append(c); self.staged=[]; self._id+=1\n        print(f'[{c[\"id\"]}] {msg}')\n\n    def stash(self):\n        if not self.staged: print('Nothing to stash'); return\n        self.stash_stack.append(self.staged.copy())\n        print(f'Stashed {len(self.staged)} changes')\n        self.staged = ___\n\n    def stash_pop(self):\n        if not self.___: print('No stash'); return\n        restored = self.stash_stack.___()\n        self.staged.extend(___)\n        print(f'Restored {len(restored)} from stash')\n\n    def reset_soft(self):\n        if not self.commits: print('Nothing'); return\n        last = self.commits.___()\n        self.staged.extend(last['files'])\n        print(f'Undid [{last[\"id\"]}]: {last[\"msg\"]} (staged)')\n\n    def revert(self):\n        if not self.commits: return\n        last = self.commits[-1]\n        self.commit(f'Revert \"{last[\"msg\"]}\"', files=[f'~{f}' for f in last['files']])\n\n    def log(self):\n        for c in reversed(self.commits):\n            print(f'  [{c[\"id\"]}] {c[\"msg\"]}')\n\nrepo = GitRepo()\nrepo.staged = ['main.py','models.py']\nrepo.commit('Add initial files')\nrepo.staged = ['bug.py']\nrepo.commit('Accidentally committed bug')\nprint('History:'); repo.log()\nrepo.reset_soft()\nprint(f'Staged after reset: {repo.staged}')\nrepo.staged = ['fix.py']\nrepo.commit('Add proper fix')\nrepo.revert()\nprint('\\nFinal:'); repo.log()",
+      solution: "class GitRepo:\n    def __init__(self):\n        self.commits=[];self.staged=[];self.stash_stack=[];self._id=1\n    def commit(self,msg,files=None):\n        c={'id':self._id,'msg':msg,'files':files or self.staged.copy()}\n        self.commits.append(c);self.staged=[];self._id+=1\n        print(f'[{c[\"id\"]}] {msg}')\n    def stash(self):\n        if not self.staged:print('Nothing');return\n        self.stash_stack.append(self.staged.copy())\n        print(f'Stashed {len(self.staged)}')\n        self.staged=[]\n    def stash_pop(self):\n        if not self.stash_stack:print('No stash');return\n        restored=self.stash_stack.pop()\n        self.staged.extend(restored)\n        print(f'Restored {len(restored)}')\n    def reset_soft(self):\n        if not self.commits:return\n        last=self.commits.pop()\n        self.staged.extend(last['files'])\n        print(f'Undid [{last[\"id\"]}]:{last[\"msg\"]}')\n    def revert(self):\n        if not self.commits:return\n        last=self.commits[-1]\n        self.commit(f'Revert \"{last[\"msg\"]}\"',files=[f'~{f}' for f in last['files']])\n    def log(self):\n        for c in reversed(self.commits):print(f'  [{c[\"id\"]}] {c[\"msg\"]}')\nrepo=GitRepo()\nrepo.staged=['main.py','models.py'];repo.commit('Add initial files')\nrepo.staged=['bug.py'];repo.commit('Bug commit')\nprint('History:');repo.log()\nrepo.reset_soft()\nprint(f'Staged:{repo.staged}')\nrepo.staged=['fix.py'];repo.commit('Proper fix')\nrepo.revert()\nprint('\\nFinal:');repo.log()",
+      hint: "stash saves and clears staged. stash_pop uses .pop(). reset_soft uses .pop() from commits.",
+      rubric: "stash saves and clears. stash_pop restores. reset_soft removes commit re-stages files. revert adds new commit."
+    }
+  ]
+},
+
+"Git Internals": {
+  aiRubric: "Check SHA-1 hashing, object types, content-addressable storage.",
+  lessons: [
+    {
+      title: "How Git Stores Data Internally",
+      theory: "## Git Object Model\nGit = content-addressable storage:\n\n```\nblob   — file content\ntree   — directory listing\ncommit — snapshot + metadata\n```\n\n```bash\ngit cat-file -t abc1234  # object type\ngit cat-file -p abc1234  # object content\n```\nEvery object identified by SHA-1 of its content.",
+      instructions: "## Task: Mini Git Object Store\n1. `hash_object(content)` — SHA-1 hash\n2. `write_blob(content)` — stores file\n3. `write_tree(files)` — stores directory\n4. `write_commit(tree_sha, message, parent)` — stores commit\n5. Read back and verify parent chain",
+      starterCode: "import hashlib, json\nfrom datetime import datetime\n\nclass GitObjectStore:\n    def __init__(self):\n        self.objects = {}\n\n    def hash_object(self, content):\n        if isinstance(content, str): content = content.encode()\n        return hashlib.sha1(___).hexdigest()\n\n    def write_blob(self, content):\n        data = f'blob {len(content)}\\0' + content\n        sha  = self.hash_object(___)\n        self.objects[sha] = {'type':'blob','content':content}\n        return sha\n\n    def write_tree(self, files):\n        tc  = json.dumps(___)\n        sha = self.hash_object(tc)\n        self.objects[sha] = {'type':'tree','content':files}\n        return sha\n\n    def write_commit(self, tree_sha, message, parent=None):\n        c   = {'tree':tree_sha,'parent':parent,'message':___,'author':'Ada','date':datetime.now().isoformat()}\n        sha = self.hash_object(json.dumps(c))\n        self.objects[sha] = {'type':'commit','content':c}\n        return sha\n\n    def read(self, sha):\n        return self.objects.get(___, None)\n\nstore = GitObjectStore()\nb1    = store.write_blob('print(\"Hello Mabel!\")')\nb2    = store.write_blob('name = \"Ada\"')\ntree  = store.write_tree({'main.py':b1,'config.py':b2})\nc1    = store.write_commit(tree, 'Initial commit')\nc2    = store.write_commit(tree, 'Second commit', parent=___)\n\nprint(f'Blob:   {b1[:8]}...')\nprint(f'Tree:   {tree[:8]}...')\nprint(f'Commit: {c2[:8]}...')\ncommit = store.read(___)\nprint(f'Message: {commit[\"content\"][\"message\"]}')\nprint(f'Parent:  {commit[\"content\"][\"parent\"][:8]}...')",
+      solution: "import hashlib,json\nfrom datetime import datetime\nclass GitObjectStore:\n    def __init__(self):\n        self.objects={}\n    def hash_object(self,content):\n        if isinstance(content,str):content=content.encode()\n        return hashlib.sha1(content).hexdigest()\n    def write_blob(self,content):\n        data=f'blob {len(content)}\\0'+content\n        sha=self.hash_object(data)\n        self.objects[sha]={'type':'blob','content':content}\n        return sha\n    def write_tree(self,files):\n        tc=json.dumps(files)\n        sha=self.hash_object(tc)\n        self.objects[sha]={'type':'tree','content':files}\n        return sha\n    def write_commit(self,tree_sha,message,parent=None):\n        c={'tree':tree_sha,'parent':parent,'message':message,'author':'Ada','date':datetime.now().isoformat()}\n        sha=self.hash_object(json.dumps(c))\n        self.objects[sha]={'type':'commit','content':c}\n        return sha\n    def read(self,sha):\n        return self.objects.get(sha,None)\nstore=GitObjectStore()\nb1=store.write_blob('print(\"Hello\")')\nb2=store.write_blob('name=\"Ada\"')\ntree=store.write_tree({'main.py':b1,'config.py':b2})\nc1=store.write_commit(tree,'Initial commit')\nc2=store.write_commit(tree,'Second commit',parent=c1)\nprint(f'Blob:{b1[:8]}')\nprint(f'Tree:{tree[:8]}')\nprint(f'Commit:{c2[:8]}')\ncommit=store.read(c2)\nprint(f'Message:{commit[\"content\"][\"message\"]}')\nprint(f'Parent:{commit[\"content\"][\"parent\"][:8]}')",
+      hint: "hashlib.sha1(content).hexdigest(). Pass c1 as parent to c2. objects.get(sha) for read.",
+      rubric: "SHA-1 hash used. blob/tree/commit stored. read() retrieves. Parent chain verified."
+    }
+  ]
+},
+
+// Advanced
+
+"CI/CD with GitHub Actions": {
+  aiRubric: "Check YAML syntax, triggers, jobs, steps.",
+  lessons: [
+    {
+      title: "GitHub Actions Workflows",
+      theory: "## GitHub Actions\n```yaml\nname: Tests\non:\n  push:\n    branches: [main]\n  pull_request:\n    branches: [main]\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v4\n        with:\n          python-version: '3.11'\n      - run: pip install -r requirements.txt\n      - run: pytest tests/\n```",
+      instructions: "## Task: Workflow Generator\nGenerate GitHub Actions YAML:\n1. `test_workflow(python_version, test_cmd)` — tests on push\n2. `deploy_workflow(service, branch)` — deploy to cloud\n3. `lint_workflow()` — code quality checks\n4. Print all 3",
+      starterCode: "def test_workflow(python_version='3.11', test_cmd='pytest tests/ -v'):\n    return f'''name: Tests\n\non:\n  push:\n    branches: [main, develop]\n  pull_request:\n    branches: [___]\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v4\n        with:\n          python-version: \\'{python_version}\\'\n      - run: pip install -r requirements.txt\n      - run: ___\n'''\n\ndef deploy_workflow(service='render', branch='main'):\n    return f'''name: Deploy to {service.title()}\n\non:\n  push:\n    branches: [{___}]\n\njobs:\n  deploy:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - name: Deploy\n        run: echo \"Deploying to {service}...\"\n'''\n\ndef lint_workflow():\n    return '''name: Lint\n\non: [push, pull_request]\n\njobs:\n  lint:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: pip install black flake8\n      - run: black --check .\n      - run: flake8 . --max-line-length=100\n'''\n\nfor name, content in [\n    ('tests.yml',  test_workflow()),\n    ('deploy.yml', deploy_workflow('render','main')),\n    ('lint.yml',   lint_workflow())\n]:\n    print(f'=== .github/workflows/{name} ===')\n    print(content)\n    print()",
+      solution: "def test_workflow(python_version='3.11',test_cmd='pytest tests/ -v'):\n    return f'name: Tests\\n\\non:\\n  push:\\n    branches: [main,develop]\\n  pull_request:\\n    branches: [main]\\n\\njobs:\\n  test:\\n    runs-on: ubuntu-latest\\n    steps:\\n      - uses: actions/checkout@v4\\n      - uses: actions/setup-python@v4\\n        with:\\n          python-version: \\'{python_version}\\'\\n      - run: pip install -r requirements.txt\\n      - run: {test_cmd}\\n'\ndef deploy_workflow(service='render',branch='main'):\n    return f'name: Deploy to {service.title()}\\n\\non:\\n  push:\\n    branches: [{branch}]\\n\\njobs:\\n  deploy:\\n    runs-on: ubuntu-latest\\n    steps:\\n      - uses: actions/checkout@v4\\n      - run: echo \"Deploying to {service}\"\\n'\ndef lint_workflow():\n    return 'name: Lint\\n\\non: [push]\\n\\njobs:\\n  lint:\\n    runs-on: ubuntu-latest\\n    steps:\\n      - uses: actions/checkout@v4\\n      - run: pip install black flake8\\n      - run: black --check .\\n      - run: flake8 .\\n'\nfor name,content in [('tests.yml',test_workflow()),('deploy.yml',deploy_workflow()),('lint.yml',lint_workflow())]:\n    print(f'==={name}===')\n    print(content)\n    print()",
+      hint: "f-strings for YAML. python_version and test_cmd interpolated. 3 functions.",
+      rubric: "3 workflows. YAML with on/jobs/steps. python_version interpolated. All 3 printed."
+    }
+  ]
+},
+
+"Monorepo Strategies": {
+  aiRubric: "Check monorepo structure, workspace config, shared packages.",
+  lessons: [
+    {
+      title: "Monorepo Structure",
+      theory: "## Monorepo\nAll projects in one repo:\n```\nmabel-academy/\n  apps/\n    api/     (FastAPI backend)\n    web/     (React frontend)\n  packages/\n    shared/  (shared utilities)\n  tools/\n    scripts/ (automation)\n  README.md\n```\n\nBenefits: shared code, unified CI/CD, atomic commits across projects.",
+      instructions: "## Task: Monorepo Setup Generator\nGenerate a complete monorepo structure:\n1. Define folder structure as nested dict\n2. `print_tree(tree)` — recursive tree printer\n3. Generate root `package.json` with workspaces\n4. Print the full structure",
+      starterCode: "import json\n\nSTRUCTURE = {\n    'apps': {\n        'api':  {'src':{'main.py':None,'routes':{}},'tests':{},'requirements.txt':None,'Dockerfile':None},\n        'web':  {'src':{'App.jsx':None,'components':{}},'public':{},'package.json':None}\n    },\n    'packages': {\n        'shared': {'__init__.py':None,'models.py':None,'utils.py':None}\n    },\n    'tools': {'scripts':{'deploy.sh':None,'test_all.py':None}},\n    'README.md': None,\n    '.gitignore': None\n}\n\ndef print_tree(tree, prefix=''):\n    if not isinstance(tree, dict): return\n    items = list(tree.items())\n    for i, (name, content) in enumerate(items):\n        is_last   = i == len(items) - 1\n        connector = '|-- '\n        icon      = '[D] ' if isinstance(content, ___) else '[F] '\n        print(f'{prefix}{connector}{icon}{name}')\n        if isinstance(content, dict):\n            extension = '    ' if is_last else '|   '\n            print_tree(___, prefix + extension)\n\nroot_package = {\n    'name': 'mabel-academy',\n    'version': '1.0.0',\n    'private': True,\n    'workspaces': ['apps/*', 'packages/*'],\n    'scripts': {\n        'test':   'python tools/scripts/test_all.py',\n        'deploy': 'bash tools/scripts/deploy.sh',\n        'lint':   'black apps/api && eslint apps/web'\n    }\n}\n\nprint('mabel-academy/')\nprint_tree(___)\nprint('\\n=== package.json ===')\nprint(json.dumps(___, indent=2))",
+      solution: "import json\nSTRUCTURE={'apps':{'api':{'src':{'main.py':None,'routes':{}},'tests':{},'requirements.txt':None,'Dockerfile':None},'web':{'src':{'App.jsx':None,'components':{}},'public':{},'package.json':None}},'packages':{'shared':{'__init__.py':None,'models.py':None,'utils.py':None}},'tools':{'scripts':{'deploy.sh':None,'test_all.py':None}},'README.md':None,'.gitignore':None}\ndef print_tree(tree,prefix=''):\n    if not isinstance(tree,dict):return\n    items=list(tree.items())\n    for i,(name,content) in enumerate(items):\n        is_last=i==len(items)-1\n        conn='|-- '\n        icon='[D] ' if isinstance(content,dict) else '[F] '\n        print(f'{prefix}{conn}{icon}{name}')\n        if isinstance(content,dict):\n            ext='    ' if is_last else '|   '\n            print_tree(content,prefix+ext)\nroot_pkg={'name':'mabel-academy','version':'1.0.0','private':True,'workspaces':['apps/*','packages/*'],'scripts':{'test':'python tools/scripts/test_all.py','deploy':'bash deploy.sh','lint':'black apps/api'}}\nprint('mabel-academy/')\nprint_tree(STRUCTURE)\nprint('\\n=== package.json ===')\nprint(json.dumps(root_pkg,indent=2))",
+      hint: "isinstance(content, dict) checks if folder. Recursive call for nested. prefix extends for depth.",
+      rubric: "Recursive print_tree. Folder vs file icons. package.json with workspaces. Structure printed."
+    }
+  ]
+},
+
+"Advanced Git Workflows": {
+  aiRubric: "Check strategy scoring, branch naming, protection rules.",
+  lessons: [
+    {
+      title: "Branching Strategy Advisor",
+      theory: "## Strategy Comparison\n\n**Git Flow:** main, develop, feature/*, release/*, hotfix/*\n- Best for: large teams, scheduled releases\n\n**Trunk-Based:** main + short-lived feature/*\n- Best for: small teams, CI/CD, frequent deploys\n\n**GitHub Flow:** main + feature branches + PRs\n- Best for: web teams, continuous deployment",
+      instructions: "## Task: Strategy Recommender\nBuild a tool recommending branching strategy based on:\n1. Team size, releases/month, CI/CD availability, experience\n2. Score each strategy\n3. Generate branch naming conventions\n4. Test with 3 team scenarios",
+      starterCode: "def recommend_strategy(team_size, releases_per_month, has_cicd, experience):\n    gf = 0   # gitflow score\n    tb = 0   # trunk-based score\n\n    if team_size >= 10:   gf += ___\n    else:                 tb += 3\n\n    if releases_per_month >= 10:  tb += ___\n    elif releases_per_month <= 2: gf += 3\n\n    if has_cicd:   tb += ___\n    else:          gf += 2\n\n    if experience == 'senior': tb += 1\n    else:                      ___ += 1\n\n    strategy = ___ if gf > tb else 'Trunk-Based'\n\n    naming = {\n        'Git Flow':    ['feature/', 'release/', 'hotfix/', 'develop', 'main'],\n        'Trunk-Based': ['feature/', 'fix/', 'main']\n    }\n    return {\n        'recommended':   strategy,\n        'gf_score':      gf,\n        'tb_score':      tb,\n        'branch_naming': naming[strategy],\n        'protection':    ['Require PR','All CI must pass','Min 1 approval','No direct push to main']\n    }\n\nfor scenario in [\n    (3,  20, True,  'senior'),   # small startup\n    (15, 2,  False, 'mixed'),    # large enterprise\n    (6,  8,  True,  'mixed'),    # medium team\n]:\n    r = recommend_strategy(*scenario)\n    print(f'Team:{scenario[0]} Releases/mo:{scenario[1]} CI:{scenario[2]}')\n    print(f'  Recommended: {r[___]}')\n    print(f'  Scores: GitFlow={r[\"gf_score\"]} Trunk={r[\"tb_score\"]}')\n    print(f'  Branches: {r[\"branch_naming\"]}')\n    print()",
+      solution: "def recommend_strategy(team_size,releases_per_month,has_cicd,experience):\n    gf=0;tb=0\n    if team_size>=10:gf+=3\n    else:tb+=3\n    if releases_per_month>=10:tb+=3\n    elif releases_per_month<=2:gf+=3\n    if has_cicd:tb+=2\n    else:gf+=2\n    if experience=='senior':tb+=1\n    else:gf+=1\n    strategy='Git Flow' if gf>tb else 'Trunk-Based'\n    naming={'Git Flow':['feature/','release/','hotfix/','develop','main'],'Trunk-Based':['feature/','fix/','main']}\n    return{'recommended':strategy,'gf_score':gf,'tb_score':tb,'branch_naming':naming[strategy],'protection':['Require PR','CI must pass','1 approval','No direct push']}\nfor scenario in [(3,20,True,'senior'),(15,2,False,'mixed'),(6,8,True,'mixed')]:\n    r=recommend_strategy(*scenario)\n    print(f'Team:{scenario[0]} Releases:{scenario[1]}')\n    print(f'  Recommended:{r[\"recommended\"]}')\n    print(f'  Scores:GF={r[\"gf_score\"]} TB={r[\"tb_score\"]}')\n    print(f'  Branches:{r[\"branch_naming\"]}')\n    print()",
+      hint: "Score each strategy. strategy='Git Flow' if gf>tb. naming[strategy] picks correct list.",
+      rubric: "4 scoring criteria. strategy by comparison. naming from dict. 3 scenarios tested."
+    }
+  ]
+},
+
+"Git for Teams": {
+  aiRubric: "Check git hooks, team standards, gitignore.",
+  lessons: [
+    {
+      title: "Team Git Configuration",
+      theory: "## Git Hooks\n```bash\n# .git/hooks/pre-commit\n#!/bin/bash\npython -m pytest tests/ -q\nif [ $? -ne 0 ]; then\n    echo 'Tests failed — commit blocked.'\n    exit 1\nfi\n```\n\nHooks: pre-commit, commit-msg, pre-push, post-merge",
+      instructions: "## Task: Team Config Generator\nGenerate all team Git files:\n1. `pre_commit_hook()` — runs tests and black\n2. `commit_msg_hook()` — validates format\n3. `gitignore(project_type)` — Python or Node\n4. `team_standards(team, lead)` — Markdown doc\n5. Print all 4",
+      starterCode: "def pre_commit_hook():\n    return '''#!/bin/bash\n# Runs before every commit\necho \"Running checks...\"\npython -m pytest tests/ -q --tb=short\nif [ $? -ne 0 ]; then\n    echo \"BLOCKED: Tests failed\"\n    exit 1\nfi\npython -m black --check . --quiet\nif [ $? -ne 0 ]; then\n    echo \"BLOCKED: Run: black .\"\n    exit 1\nfi\necho \"All checks passed!\"\n'''\n\ndef commit_msg_hook():\n    return r'''#!/bin/bash\nMSG=$(cat \"$1\")\nPATTERN=\"^(feat|fix|docs|style|refactor|test|chore)(\\([a-z-]+\\))?: .{10,72}$\"\nif ! echo \"$MSG\" | grep -qE \"$PATTERN\"; then\n    echo \"BLOCKED: Use format: type(scope): description\"\n    exit 1\nfi\n'''\n\ndef gitignore(project_type='python'):\n    py   = '# Python\\n__pycache__/\\n*.pyc\\nvenv/\\n.env\\ndist/'\n    node = '# Node\\nnode_modules/\\ndist/\\n.env'\n    if project_type == ___:   return py\n    elif project_type == 'node': return node\n    return py + '\\n\\n' + node\n\ndef team_standards(team_name, lead_email):\n    return f'''# Git Standards — {team_name}\n\n## Commits\nUse conventional commits: type(scope): description\nTypes: feat, fix, docs, style, refactor, test, chore\n\n## Branches\n- feature/short-name\n- fix/issue-description\n- release/v1.0.0\n\n## Pull Requests\n- Max 400 lines per PR\n- One logical change\n- All CI checks must pass\n- Min 1 approval required\n\nLead: {lead_email}\n'''\n\nfiles = {\n    '.git/hooks/pre-commit': pre_commit_hook(),\n    '.git/hooks/commit-msg': commit_msg_hook(),\n    '.gitignore':            gitignore(___),\n    'GIT_STANDARDS.md':      team_standards('Mabel Academy Dev Team', 'ada@mabelacademy.com')\n}\n\nfor filename, content in files.___():\n    print(f'=== {filename} ===')\n    print(content[:200])\n    print()",
+      solution: "def pre_commit_hook():\n    return '#!/bin/bash\\npython -m pytest tests/ -q\\nif [ $? -ne 0 ]; then echo \"Tests failed\";exit 1;fi\\npython -m black --check . --quiet\\nif [ $? -ne 0 ]; then echo \"Format error\";exit 1;fi\\necho \"OK\"\\n'\ndef commit_msg_hook():\n    return '#!/bin/bash\\nMSG=$(cat \"$1\")\\nif ! echo \"$MSG\" | grep -qE \"^(feat|fix|docs|style|refactor|test|chore)(\\\\([a-z-]+\\\\))?: .{10,72}$\"; then\\n    echo \"Invalid\";exit 1\\nfi\\n'\ndef gitignore(project_type='python'):\n    py='# Python\\n__pycache__/\\n*.pyc\\nvenv/\\n.env\\ndist/'\n    node='# Node\\nnode_modules/\\ndist/\\n.env'\n    if project_type=='python':return py\n    elif project_type=='node':return node\n    return py+'\\n\\n'+node\ndef team_standards(team,lead):\n    return f'# Git Standards — {team}\\n\\n## Commits\\nConventional commits\\n\\n## Branches\\nfeature/, fix/, release/\\n\\n## PRs\\nMax 400 lines, 1 approval, CI must pass\\n\\nLead:{lead}\\n'\nfiles={'.git/hooks/pre-commit':pre_commit_hook(),'.git/hooks/commit-msg':commit_msg_hook(),'.gitignore':gitignore('python'),'GIT_STANDARDS.md':team_standards('Mabel Academy','ada@mabelacademy.com')}\nfor filename,content in files.items():\n    print(f'==={filename}===')\n    print(content[:200])\n    print()",
+      hint: "pre_commit_hook returns shell script. gitignore checks project_type. files.items() for printing.",
+      rubric: "4 files generated. pre-commit hook runs tests and black. commit-msg validates. gitignore correct."
+    }
+  ]
+},
 }; // end courseManifest
