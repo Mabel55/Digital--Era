@@ -617,45 +617,54 @@
 <body>
 
 <!-- ══ ONBOARDING ══ -->
-<div id="onboarding" class="screen active">
-  <div class="onboard-card">
-    <div class="logo-row">
-      <div class="logo-icon">🎓</div>
-      <div class="logo-text">Mabel <span>Academy</span></div>
-    </div>
-    <div class="onboard-title">Start Your Coding Journey</div>
-    <div class="onboard-sub">Tell us about yourself so we can personalize your learning experience.</div>
 
-    <div class="field-row">
-      <label class="field-label">Your Full Name</label>
-      <input type="text" id="ob-name" placeholder="e.g. Ada Okonkwo">
-    </div>
-    <div class="two-col">
-      <div class="field-row">
-        <label class="field-label">Experience Level</label>
-        <select id="ob-level">
-          <option value="Beginner">🟢 Beginner</option>
-          <option value="Intermediate">🟡 Intermediate</option>
-          <option value="Advanced">🔴 Advanced</option>
-        </select>
-      </div>
-      <div class="field-row">
-        <label class="field-label">Goal</label>
-        <select id="ob-goal">
-          <option value="get a job">Get a Job</option>
-          <option value="build projects">Build Projects</option>
-          <option value="learn AI/ML">Learn AI/ML</option>
-          <option value="freelance">Freelance</option>
-        </select>
-      </div>
-    </div>
-
-    <button class="btn-primary" onclick="createProfile()">🚀 Initialize My Learning Path</button>
-    <div class="divider"><hr><span>Already enrolled?</span><hr></div>
-    <button class="returning-btn" onclick="loadExistingProfile()">📂 Continue where I left off</button>
+<div class="onboard-card">
+  <div class="logo-row">
+    <div class="logo-icon">🎓</div>
+    <div class="logo-text">Mabel <span>Academy</span></div>
   </div>
-</div>
+  <div class="onboard-title">Start Your Coding Journey</div>
+  <div class="onboard-sub">Tell us about yourself so we can personalize your learning experience.</div>
 
+  <div class="field-row">
+    <label class="field-label">Your Full Name</label>
+    <input type="text" id="ob-name" placeholder="e.g. Ada Okonkwo">
+  </div>
+
+  <div class="field-row">
+    <label class="field-label">Email</label>
+    <input type="email" id="ob-email" placeholder="ada@example.com">
+  </div>
+
+  <div class="field-row">
+    <label class="field-label">Password</label>
+    <input type="password" id="ob-password" placeholder="••••••••">
+  </div>
+
+  <div class="two-col">
+    <div class="field-row">
+      <label class="field-label">Experience Level</label>
+      <select id="ob-level">
+        <option value="Beginner">🟢 Beginner</option>
+        <option value="Intermediate">🟡 Intermediate</option>
+        <option value="Advanced">🔴 Advanced</option>
+      </select>
+    </div>
+    <div class="field-row">
+      <label class="field-label">Goal</label>
+      <select id="ob-goal">
+        <option value="get a job">Get a Job</option>
+        <option value="build projects">Build Projects</option>
+        <option value="learn AI/ML">Learn AI/ML</option>
+        <option value="freelance">Freelance</option>
+      </select>
+    </div>
+  </div>
+
+  <button class="btn-primary" onclick="createProfile()">🚀 Initialize My Learning Path</button>
+  <div class="divider"><hr><span>Already enrolled?</span><hr></div>
+  <button class="returning-btn" onclick="loadExistingProfile()">📂 Continue where I left off</button>
+</div>
 <!-- ══ DASHBOARD ══ -->
 <div id="dashboard" class="screen">
   <nav class="dash-nav">
@@ -891,21 +900,24 @@ function updateStreak() {
 /* ══════════════════════════
    ONBOARDING
 ══════════════════════════ */
-function createProfile() {
-  const name = document.getElementById('ob-name').value.trim();
-  if (!name) { showToast("Please enter your name 👋", "error"); return; }
-  studentProfile.name = name;
-  studentProfile.level = document.getElementById('ob-level').value;
-  studentProfile.goal = document.getElementById('ob-goal').value;
-  updateStreak();
-  saveProfile();
-  showDashboard();
-}
-function loadExistingProfile() {
-  if (loadProfile()) { updateStreak(); showDashboard(); }
-  else showToast("No existing profile found. Please create one.", "error");
-}
+async function createProfile() {
+  const name = document.getElementById('ob-name').value;
+  const email = document.getElementById('ob-email').value; // Make sure you add this field to your HTML!
+  const password = document.getElementById('ob-password').value; // Add this field!
 
+  const res = await fetch('/signup', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ full_name: name, email: email, password: password, role: 'student' })
+  });
+
+  if (res.ok) {
+    showToast("Account created! Please log in.", "success");
+    // After signup, automatically log them in or ask them to login
+  } else {
+    showToast("Signup failed.", "error");
+  }
+}
 /* ══════════════════════════
    DASHBOARD
 ══════════════════════════ */
@@ -1160,14 +1172,9 @@ function startCourse(courseKey, trackKey, level) {
   document.getElementById('ws-course-title').textContent = courseKey;
   initMonaco(loadLesson);
   addSystemMessage(`Welcome to **${courseKey}**! 👋 I'm your AI instructor. I'll help you through all ${currentLessons.length} lessons. Ready to start? Ask me anything!`);
-
-  // Prompt for API key if not set
-  if (!getApiKey()) {
-    setTimeout(() => {
-      addSystemMessage(`⚠️ **No AI API key detected.**\n\nTo activate your AI instructor, click **⚙️** in the toolbar and paste your Anthropic API key.\n\nGet a free key at [console.anthropic.com](https://console.anthropic.com) — the free tier is enough for learning.\n\n*Code execution works without a key — only AI chat needs one.*`);
-    }, 800);
-  }
 }
+
+
 
 function loadLesson() {
   if (!currentLessons.length) return;
@@ -1263,85 +1270,27 @@ function initMonaco(callback) {
 }
 
 /* ══════════════════════════
-   PISTON API — CLOUD CODE EXECUTION
-   Free, no key needed: https://emkc.org/api/v2/piston
+   CLOUD CODE EXECUTION (Custom Backend)
 ══════════════════════════ */
-// If using self-hosted Piston on Docker, replace with your server IP:
-// const PISTON_URL = 'http://YOUR_AZURE_VM_IP:2000/api/v2/piston/execute';
-// If using the free public API (no Docker needed), keep this line:
-const PISTON_URL = 'https://emkc.org/api/v2/piston/execute';
-let PYTHON_VERSION = '3.10.0'; // will be updated on load
-
-// Auto-detect the best available Python version from Piston
 async function detectPythonVersion() {
-  try {
-    const res = await fetch('https://emkc.org/api/v2/piston/runtimes', {
-      signal: AbortSignal.timeout(5000)
-    });
-    if (!res.ok) return;
-    const runtimes = await res.json();
-    const pythonVersions = runtimes
-      .filter(r => r.language === 'python')
-      .map(r => r.version)
-      .sort((a, b) => {
-        // sort descending so highest version is first
-        const av = a.split('.').map(Number);
-        const bv = b.split('.').map(Number);
-        for (let i = 0; i < 3; i++) {
-          if ((bv[i]||0) !== (av[i]||0)) return (bv[i]||0) - (av[i]||0);
-        }
-        return 0;
-      });
-    if (pythonVersions.length > 0) {
-      PYTHON_VERSION = pythonVersions[0];
-      console.log('Piston Python version detected:', PYTHON_VERSION);
-    }
-  } catch (e) {
-    console.warn('Could not detect Piston version, using default:', PYTHON_VERSION);
-  }
+  console.log('Using Mabel Academy Custom Python Backend');
 }
 
 async function executePython(code) {
-  const res = await fetch(PISTON_URL, {
+  const res = await fetch('/run-python/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      language: 'python',
-      version: PYTHON_VERSION,
-      files: [{ name: 'solution.py', content: code }],
-      stdin: '',
-      args: [],
-      compile_timeout: 10000,
-      run_timeout: 5000
-    })
+    body: JSON.stringify({ code: code })
   });
 
-  // If the version doesn't match, Piston returns 400 — retry with '*' wildcard
-  if (res.status === 400) {
-    const retry = await fetch(PISTON_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        language: 'python',
-        version: '*',
-        files: [{ name: 'solution.py', content: code }],
-        stdin: '',
-        args: [],
-        run_timeout: 5000
-      })
-    });
-    if (!retry.ok) throw new Error(`Piston API error: ${retry.status}`);
-    const data = await retry.json();
-    const output = (data.run?.stdout || '') + (data.run?.stderr || '');
-    return { output: output || '(no output)', exit_code: data.run?.code ?? 1 };
-  }
-
-  if (!res.ok) throw new Error(`Piston API error: ${res.status}`);
+  if (!res.ok) throw new Error(`Backend API error: ${res.status}`);
+  
   const data = await res.json();
-  const output = (data.run?.stdout || '') + (data.run?.stderr || '');
-  return { output: output || '(no output)', exit_code: data.run?.code ?? 0 };
+  return { 
+    output: data.output || '(no output)', 
+    exit_code: data.exit_code ?? 0 
+  };
 }
-
 /* ══════════════════════════
    RUN & SUBMIT
 ══════════════════════════ */
@@ -1455,18 +1404,45 @@ async function autoAnalyzeError(code, error) {
 }
 
 /* ══════════════════════════
-   AI CHAT
+   AI CHAT (Routed through FastAPI Backend)
 ══════════════════════════ */
-async function sendChat() {
-  const input = document.getElementById('chat-input');
-  const msg = input.value.trim();
-  if (!msg) return;
-  input.value = ''; input.style.height = '';
-  addUserMessage(msg);
+async function askAI(prompt) {
+  const typing = addTypingIndicator();
 
-  const lesson = currentLessons[currentLessonIndex];
-  const context = `Context: Student is doing "${currentCourseKey}" — "${lesson?.title || 'general exercise'}". Level: ${studentProfile.level}. Goal: ${studentProfile.goal}.`;
-  await askAI(`${context}\n\nStudent question: ${msg}`);
+  try {
+    // Send the question to your custom FastAPI backend
+    const res = await fetch('/ask-ai/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: prompt,
+        level: studentProfile.level || "Beginner",
+        track: "Programming", 
+        course: currentCourseKey
+      })
+    });
+
+    const data = await res.json();
+    removeTypingIndicator(typing);
+
+    if (!res.ok) {
+      addSystemMessage(`❌ Backend error: ${res.status}`);
+      return;
+    }
+
+    // Your backend returns {"reply": "..."}
+    const reply = data.reply;
+    addAIMessage(reply);
+
+    // Inject fill-in-blank starter code if AI provides it
+    const codeMatch = reply.match(/```python\n([\s\S]*?)```/);
+    if (codeMatch && codeMatch[1].includes('___') && editor) {
+      editor.setValue(codeMatch[1].trim());
+    }
+  } catch (e) {
+    removeTypingIndicator(typing);
+    addSystemMessage('⚠️ Could not reach your FastAPI backend. Check your server.');
+  }
 }
 
 /* ══════════════════════════
@@ -1542,6 +1518,7 @@ Format code with proper markdown code blocks.`;
     addSystemMessage('⚠️ Could not reach AI. Check your internet connection.');
   }
 }
+
 /* ══════════════════════════
    SETTINGS PANEL
 ══════════════════════════ */
@@ -1549,7 +1526,6 @@ function openSettings() {
   const existing = document.getElementById('settings-panel');
   if (existing) { existing.remove(); return; }
 
-  const key = getApiKey();
   const panel = document.createElement('div');
   panel.id = 'settings-panel';
   panel.style.cssText = `
@@ -1566,40 +1542,16 @@ function openSettings() {
         style="background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;">×</button>
     </div>
 
-    <div style="margin-bottom:16px;">
-      <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text2);margin-bottom:8px;">
-        Gemini API Key
-      </label>
-      <input type="password" id="api-key-input" 
-        placeholder="AIzaSy..." 
-        value="${key}"
-        style="width:100%;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:12px;">
-      <div style="margin-top:6px;font-size:11px;color:var(--text3);">
-        Get a free key at <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:var(--accent2);">aistudio.google.com</a>
-      </div>
-    </div>
-
     <div style="background:rgba(0,229,160,0.05);border:1px solid rgba(0,229,160,0.15);border-radius:6px;padding:10px 12px;margin-bottom:16px;font-size:12px;color:var(--text2);line-height:1.5;">
-      🔒 Your key is stored only in your browser's localStorage. It is never sent to any server except Google's API directly.
+      🤖 <strong>AI Tutor Active:</strong> Connected securely to Mabel Academy's cloud brain.
     </div>
-
-    <button onclick="
-      const k = document.getElementById('api-key-input').value.trim();
-      if (!k) { showToast('Please enter an API key', 'error'); return; }
-      saveApiKey(k);
-      showToast('API key saved! ✅', 'success');
-      document.getElementById('settings-panel').remove();
-    " style="width:100%;padding:10px;background:var(--accent);color:#0d0f14;border:none;border-radius:6px;font-weight:700;cursor:pointer;font-size:14px;">
-      Save Key
-    </button>
 
     <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:16px;">
       <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text2);margin-bottom:10px;">Code Execution</div>
       <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:8px;">
         <span style="width:8px;height:8px;background:var(--accent);border-radius:50%;display:inline-block;"></span>
-        Piston API (free, no key needed)
+        Mabel Academy Python Engine
       </div>
-      <div style="font-size:11px;color:var(--text3);margin-top:4px;">Python 3.10 · 5s timeout · Cloud sandbox</div>
     </div>
 
     <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:16px;">
@@ -1843,10 +1795,47 @@ window.onload = function() {
     return;
   }
 
-  if (loadProfile()) {
-    updateStreak();
-    showDashboard();
+  window.onload = function() {
+  detectPythonVersion();
+
+  // Safety check — courses.js must be loaded
+  if (typeof curriculum === 'undefined' || typeof courseManifest === 'undefined') {
+     // ... keep your existing "courses.js Not Found" error block here ...
+     return;
   }
+
+  // GATING LOGIC: Check for a valid JWT token in localStorage
+  const token = localStorage.getItem('access_token');
+  
+  if (token) {
+    // If they have a token, we don't auto-show dashboard. 
+    // Instead, we verify the token with your FastAPI backend first.
+    verifyTokenAndLoad(token);
+  } else {
+    // No token? They remain on the Onboarding screen (no action needed, it's the default active screen).
+    console.log("Welcome to Mabel Academy! Please sign in.");
+  }
+};
+
+// Add this verification helper function below window.onload
+async function verifyTokenAndLoad(token) {
+  try {
+    const res = await fetch('/users/me', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (res.ok) {
+      const user = await res.json();
+      studentProfile.name = user.full_name;
+      updateStreak();
+      showDashboard();
+    } else {
+      localStorage.removeItem('access_token');
+      showToast("Session expired, please sign in.", "error");
+    }
+  } catch (e) {
+    showToast("Could not connect to server.", "error");
+  }
+}
 };
 </script>
 </body>
