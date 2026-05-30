@@ -710,22 +710,21 @@
       <div id="continue-card"></div>
     </div>
 
-    <!-- API Key Banner (shown if no key) -->
     <div id="api-key-banner" style="display:none;margin-bottom:28px;">
-      <div style="background:linear-gradient(120deg,rgba(59,130,246,0.08),rgba(0,229,160,0.06));border:1px solid rgba(59,130,246,0.25);border-radius:12px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;">
-        <div style="display:flex;align-items:center;gap:14px;">
-          <div style="font-size:28px;">🤖</div>
-          <div>
-            <div style="font-family:var(--font-display);font-weight:700;font-size:15px;margin-bottom:4px;">Activate Your AI Instructor</div>
-            <div style="font-size:13px;color:var(--text2);">Add your free Anthropic API key to unlock the AI tutor, auto-grading, and error analysis.</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:10px;align-items:center;flex-shrink:0;">
-          <a href="https://console.anthropic.com" target="_blank" style="padding:8px 14px;background:transparent;border:1px solid var(--border);color:var(--text2);border-radius:6px;font-size:13px;text-decoration:none;">Get Free Key ↗</a>
-          <button onclick="openSettingsFromDashboard()" style="padding:8px 18px;background:var(--accent2);color:white;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;">Enter Key</button>
+    <div style="background:linear-gradient(120deg,rgba(59,130,246,0.08),rgba(0,229,160,0.06));border:1px solid rgba(59,130,246,0.25);border-radius:12px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div style="font-size:28px;">🤖</div>
+        <div>
+          <div style="font-family:var(--font-display);font-weight:700;font-size:15px;margin-bottom:4px;">Activate Your AI Instructor</div>
+          <div style="font-size:13px;color:var(--text2);">Add your free Gemini API key to unlock the AI tutor, auto-grading, and error analysis.</div>
         </div>
       </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-shrink:0;">
+        <a href="https://aistudio.google.com/app/apikey" target="_blank" style="padding:8px 14px;background:transparent;border:1px solid var(--border);color:var(--text2);border-radius:6px;font-size:13px;text-decoration:none;">Get Free Key ↗</a>
+        <button onclick="openSettingsFromDashboard()" style="padding:8px 18px;background:var(--accent2);color:white;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;">Enter Key</button>
+      </div>
     </div>
+  </div>
 
     <!-- Certificates -->
     <div class="cert-section" id="cert-section" style="display:none;">
@@ -911,12 +910,14 @@ function loadExistingProfile() {
    DASHBOARD
 ══════════════════════════ */
 const trackMeta = [
-  { key: "Python Core", icon: "🐍", desc: "Master Python from variables to OOP. The foundation of everything.", tag: "beginner", levels: ["Beginner","Intermediate","Advanced"] },
-  { key: "Frontend", icon: "🎨", desc: "Build beautiful interfaces with HTML, CSS & JavaScript.", tag: "beginner", levels: ["Beginner","Intermediate"] },
-  { key: "Backend", icon: "⚙️", desc: "Build APIs and server-side systems with Python & FastAPI.", tag: "intermediate", levels: ["Intermediate","Advanced"] },
-  { key: "SQL & Databases", icon: "🗄️", desc: "Query, design, and optimize relational databases.", tag: "beginner", levels: ["Beginner","Intermediate"] },
-  { key: "Data Science", icon: "📊", desc: "Analyze data with pandas, NumPy, matplotlib & scikit-learn.", tag: "intermediate", levels: ["Intermediate","Advanced"] },
-  { key: "AI Engineering", icon: "🧠", desc: "Build LLM apps, RAG systems, and AI pipelines.", tag: "advanced", levels: ["Advanced"] },
+  { key: "Python Core",    icon: "🐍", desc: "Master Python from variables to advanced OOP and performance.", tag: "beginner",     levels: ["Beginner","Intermediate","Advanced"] },
+  { key: "Frontend",       icon: "🎨", desc: "Build beautiful interfaces with HTML, CSS, JavaScript & React.", tag: "beginner",     levels: ["Beginner","Intermediate","Advanced"] },
+  { key: "Backend",        icon: "⚙️", desc: "Build APIs and server-side systems with Python & FastAPI.", tag: "beginner",     levels: ["Beginner","Intermediate","Advanced"] },
+  { key: "SQL & Databases",icon: "🗄️", desc: "Query, design, and optimize relational databases.", tag: "beginner",     levels: ["Beginner","Intermediate","Advanced"] },
+  { key: "Data Science",   icon: "📊", desc: "Analyze data with pandas, NumPy, matplotlib & scikit-learn.", tag: "beginner",     levels: ["Beginner","Intermediate","Advanced"] },
+  { key: "AI Engineering", icon: "🧠", desc: "Build LLM apps, RAG systems, and AI pipelines.", tag: "intermediate", levels: ["Beginner","Intermediate","Advanced"] },
+  { key: "AI Automation",  icon: "🤖", desc: "Automate tasks using Python, n8n, APIs and LLMs.", tag: "intermediate", levels: ["Beginner","Intermediate","Advanced"] },
+  { key: "Version Control",icon: "🔀", desc: "Master Git, GitHub, branching, CI/CD and team workflows.", tag: "beginner",     levels: ["Beginner","Intermediate","Advanced"] },
 ];
 
 function showDashboard() {
@@ -927,21 +928,17 @@ function showDashboard() {
   checkCloudStatus();
 }
 
-/* ══════════════════════════
-   CLOUD STATUS CHECK
-══════════════════════════ */
 function openSettingsFromDashboard() {
-  // Show a quick inline modal for key entry from dashboard
   const overlay = document.createElement('div');
   overlay.style.cssText = 'position:fixed;inset:0;z-index:600;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;';
   overlay.innerHTML = `
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:36px;width:420px;box-shadow:0 30px 80px rgba(0,0,0,0.5);">
-      <h2 style="font-family:var(--font-display);margin-bottom:8px;">🤖 Add Anthropic API Key</h2>
+      <h2 style="font-family:var(--font-display);margin-bottom:8px;">🤖 Add Gemini API Key</h2>
       <p style="color:var(--text2);font-size:13px;margin-bottom:20px;line-height:1.5;">
         Your key is stored only in your browser. Never shared with anyone.<br>
-        Get a free key at <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent2);">console.anthropic.com</a>
+        Get a free key at <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:var(--accent2);">aistudio.google.com</a>
       </p>
-      <input type="password" id="dash-api-input" placeholder="sk-ant-api03-..."
+      <input type="password" id="dash-api-input" placeholder="AIzaSy..."
         style="width:100%;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:13px;margin-bottom:16px;">
       <div style="display:flex;gap:10px;">
         <button onclick="
@@ -962,7 +959,6 @@ function openSettingsFromDashboard() {
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
   setTimeout(() => document.getElementById('dash-api-input')?.focus(), 100);
 }
-
 async function checkCloudStatus() {
   const dot   = document.getElementById('cloud-dot');
   const label = document.getElementById('cloud-label');
@@ -974,8 +970,16 @@ async function checkCloudStatus() {
       signal: AbortSignal.timeout(4000)
     });
     if (res.ok) {
+      const runtimes = await res.json();
+      const pythonVersions = runtimes
+        .filter(r => r.language === 'python')
+        .map(r => r.version)
+        .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
+      if (pythonVersions.length > 0) {
+        PYTHON_VERSION = pythonVersions[0];
+      }
       dot.style.background   = 'var(--accent)';
-      label.textContent      = 'Cloud Ready';
+      label.textContent      = `Cloud Ready (Python ${PYTHON_VERSION})`;
       label.style.color      = 'var(--accent)';
     } else {
       throw new Error('not ok');
@@ -1006,11 +1010,13 @@ function renderDashboard() {
   document.getElementById('avatar-btn').textContent = p.name[0].toUpperCase();
 
   // Ring
-const totalCourses = Object.keys(courseManifest).length;
-const doneCourses = p.completedCourses.length;
-const pct = totalCourses ? Math.round((doneCourses / totalCourses) * 100) : 0;
-document.getElementById('ring-pct').textContent = pct + '%';
-drawRing(pct);
+  const totalLessons = Object.keys(curriculum).reduce((sum, track) => {
+    return sum + Object.values(curriculum[track] || {}).flat().length;
+  }, 0);
+  const doneLessons = p.completedCourses.length;
+  const pct = totalLessons ? Math.round((doneLessons / totalLessons) * 100) : 0;
+  document.getElementById('ring-pct').textContent = pct + '%';
+  drawRing(pct);
 
   // Show API key banner if no key set
   const banner = document.getElementById('api-key-banner');
@@ -1019,32 +1025,28 @@ drawRing(pct);
   // Track cards
   const grid = document.getElementById('track-grid');
   grid.innerHTML = '';
-  // Replace lines 1024-1027 in your index.html with this:
-trackMeta.forEach(t => {
-  // Instead of using 'curriculum', we filter the flat 'courseManifest'
-  const allCourses = Object.keys(courseManifest);
-  const coursesInTrack = allCourses.filter(key => key.includes(t.key));
-  
-  const done = coursesInTrack.filter(c => p.completedCourses.includes(c)).length;
-  const pctDone = coursesInTrack.length ? Math.round((done / coursesInTrack.length) * 100) : 0;
+  trackMeta.forEach(t => {
+    const courses = t.levels.flatMap(lvl => curriculum[t.key]?.[lvl] || []);
+    const done = courses.filter(c => p.completedCourses.includes(c)).length;
+    const pctDone = courses.length ? Math.round((done / courses.length) * 100) : 0;
 
-  const card = document.createElement('div');
-  card.className = 'track-card';
-  card.innerHTML = `
-    <div class="track-card-icon">${t.icon}</div>
-    <div class="track-card-name">${t.key}</div>
-    <div class="track-card-desc">${t.desc}</div>
-    <div class="track-card-meta">
-      <span class="track-tag tag-${t.tag}">${t.tag.charAt(0).toUpperCase()+t.tag.slice(1)}</span>
-      <span style="font-size:12px;color:var(--text2);">${done}/${coursesInTrack.length} courses</span>
-    </div>
-    <div class="track-progress-bar">
-      <div class="bar-bg"><div class="bar-fill" style="width:${pctDone}%"></div></div>
-      <div class="bar-label">${pctDone}% complete</div>
-    </div>`;
-  card.onclick = () => openTrackPicker(t);
-  grid.appendChild(card);
-});
+    const card = document.createElement('div');
+    card.className = 'track-card';
+    card.innerHTML = `
+      <div class="track-card-icon">${t.icon}</div>
+      <div class="track-card-name">${t.key}</div>
+      <div class="track-card-desc">${t.desc}</div>
+      <div class="track-card-meta">
+        <span class="track-tag tag-${t.tag}">${t.tag.charAt(0).toUpperCase()+t.tag.slice(1)}</span>
+        <span style="font-size:12px;color:var(--text2);">${done}/${courses.length} courses</span>
+      </div>
+      <div class="track-progress-bar">
+        <div class="bar-bg"><div class="bar-fill" style="width:${pctDone}%"></div></div>
+        <div class="bar-label">${pctDone}% complete</div>
+      </div>`;
+    card.onclick = () => openTrackPicker(t);
+    grid.appendChild(card);
+  });
 
   // Certificates
   if (p.certificates.length) {
@@ -1159,8 +1161,12 @@ function startCourse(courseKey, trackKey, level) {
   initMonaco(loadLesson);
   addSystemMessage(`Welcome to **${courseKey}**! 👋 I'm your AI instructor. I'll help you through all ${currentLessons.length} lessons. Ready to start? Ask me anything!`);
 
- 
-  
+  // Prompt for API key if not set
+  if (!getApiKey()) {
+    setTimeout(() => {
+      addSystemMessage(`⚠️ **No AI API key detected.**\n\nTo activate your AI instructor, click **⚙️** in the toolbar and paste your Anthropic API key.\n\nGet a free key at [console.anthropic.com](https://console.anthropic.com) — the free tier is enough for learning.\n\n*Code execution works without a key — only AI chat needs one.*`);
+    }, 800);
+  }
 }
 
 function loadLesson() {
@@ -1256,24 +1262,84 @@ function initMonaco(callback) {
   });
 }
 
+/* ══════════════════════════
+   PISTON API — CLOUD CODE EXECUTION
+   Free, no key needed: https://emkc.org/api/v2/piston
+══════════════════════════ */
+// If using self-hosted Piston on Docker, replace with your server IP:
+// const PISTON_URL = 'http://YOUR_AZURE_VM_IP:2000/api/v2/piston/execute';
+// If using the free public API (no Docker needed), keep this line:
+const PISTON_URL = 'https://emkc.org/api/v2/piston/execute';
+let PYTHON_VERSION = '3.10.0'; // will be updated on load
+
+// Auto-detect the best available Python version from Piston
+async function detectPythonVersion() {
+  try {
+    const res = await fetch('https://emkc.org/api/v2/piston/runtimes', {
+      signal: AbortSignal.timeout(5000)
+    });
+    if (!res.ok) return;
+    const runtimes = await res.json();
+    const pythonVersions = runtimes
+      .filter(r => r.language === 'python')
+      .map(r => r.version)
+      .sort((a, b) => {
+        // sort descending so highest version is first
+        const av = a.split('.').map(Number);
+        const bv = b.split('.').map(Number);
+        for (let i = 0; i < 3; i++) {
+          if ((bv[i]||0) !== (av[i]||0)) return (bv[i]||0) - (av[i]||0);
+        }
+        return 0;
+      });
+    if (pythonVersions.length > 0) {
+      PYTHON_VERSION = pythonVersions[0];
+      console.log('Piston Python version detected:', PYTHON_VERSION);
+    }
+  } catch (e) {
+    console.warn('Could not detect Piston version, using default:', PYTHON_VERSION);
+  }
+}
 
 async function executePython(code) {
-    // Talk directly to your local FastAPI backend!
-    const res = await fetch('/run-python/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: code })
+  const res = await fetch(PISTON_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      language: 'python',
+      version: PYTHON_VERSION,
+      files: [{ name: 'solution.py', content: code }],
+      stdin: '',
+      args: [],
+      compile_timeout: 10000,
+      run_timeout: 5000
+    })
+  });
+
+  // If the version doesn't match, Piston returns 400 — retry with '*' wildcard
+  if (res.status === 400) {
+    const retry = await fetch(PISTON_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        language: 'python',
+        version: '*',
+        files: [{ name: 'solution.py', content: code }],
+        stdin: '',
+        args: [],
+        run_timeout: 5000
+      })
     });
+    if (!retry.ok) throw new Error(`Piston API error: ${retry.status}`);
+    const data = await retry.json();
+    const output = (data.run?.stdout || '') + (data.run?.stderr || '');
+    return { output: output || '(no output)', exit_code: data.run?.code ?? 1 };
+  }
 
-    if (!res.ok) throw new Error(`FastAPI Server error: ${res.status}`);
-
-    // Your local backend returns exactly {"output": "...", "exit_code": 0}
-    const data = await res.json();
-    
-    return { 
-        output: data.output || '(no output)', 
-        exit_code: data.exit_code 
-    };
+  if (!res.ok) throw new Error(`Piston API error: ${res.status}`);
+  const data = await res.json();
+  const output = (data.run?.stdout || '') + (data.run?.stderr || '');
+  return { output: output || '(no output)', exit_code: data.run?.code ?? 0 };
 }
 
 /* ══════════════════════════
@@ -1344,30 +1410,22 @@ Grade their solution. If correct: congratulate specifically, explain what they d
     await askAI(prompt);
 
     // Award XP if correct
-        if (data.exit_code === 0) {
-            const lessonKey = `${currentCourseKey}_${currentLessonIndex}`;
-            
-            // 1. ONLY give XP if it's their first time completing this specific lesson
-            if (!studentProfile.completedLessons[lessonKey]) {
-                studentProfile.completedLessons[lessonKey] = true;
-                studentProfile.xp += 50;
-                showToast('+50 XP earned! ⚡', 'xp');
-            } // <--- MOVE YOUR CLOSING BRACKET TO RIGHT HERE!
-
-            // 2. ALWAYS auto-advance to the next lesson
-            const allDone = currentLessons.every((_, i) => studentProfile.completedLessons[`${currentCourseKey}_${i}`]);
-            if (allDone && !studentProfile.completedCourses.includes(currentCourseKey)) {
-                completeCourse();
-            } else if (currentLessonIndex < currentLessons.length - 1) {
-                setTimeout(() => { 
-                    currentLessonIndex++; 
-                    loadLesson(); // This does exactly what clicking the '>' arrow does!
-                    showToast("Moving to next lesson! 🏃‍♂️", "success"); 
-                }, 4000); 
-            }
-            
-            saveProfile();
+    if (data.exit_code === 0) {
+      const lessonKey = `${currentCourseKey}_${currentLessonIndex}`;
+      if (!studentProfile.completedLessons[lessonKey]) {
+        studentProfile.completedLessons[lessonKey] = true;
+        studentProfile.xp += 50;
+        showToast(`+50 XP earned! ⚡`, "xp");
+        // Check if course complete
+        const allDone = currentLessons.every((_, i) => studentProfile.completedLessons[`${currentCourseKey}_${i}`]);
+        if (allDone && !studentProfile.completedCourses.includes(currentCourseKey)) {
+          completeCourse();
+        } else if (currentLessonIndex < currentLessons.length - 1) {
+          setTimeout(() => { currentLessonIndex++; loadLesson(); showToast("Moving to next lesson! ➡️", "success"); }, 2500);
         }
+      }
+      saveProfile();
+    }
   } catch (e) {
     terminal.className = 'error';
     terminal.textContent = '$ Cloud execution failed: ' + e.message;
@@ -1412,53 +1470,78 @@ async function sendChat() {
 }
 
 /* ══════════════════════════
-   ANTHROPIC API — DIRECT BROWSER CALL
-   Student sets their own API key (stored in localStorage)
+   GEMINI API — DIRECT BROWSER CALL
 ══════════════════════════ */
 function getApiKey() {
-  return localStorage.getItem('mabel_anthropic_key') || '';
+  return localStorage.getItem('mabel_gemini_key') || '';
 }
 function saveApiKey(key) {
-  localStorage.setItem('mabel_anthropic_key', key.trim());
+  localStorage.setItem('mabel_gemini_key', key.trim());
 }
 
 async function askAI(prompt) {
-    const typing = addTypingIndicator();
-    
-    // Keep your awesome Mabel Academy personality!
-    const systemPrompt = `You are Mabel, a senior software engineering instructor at Mabel Academy - a coding school for Nigerian developers.
-    You are teaching a ${studentProfile.level} student named ${studentProfile.name} who wants to ${studentProfile.goal}.
-    Current course: ${currentCourseKey}.
-    Be encouraging, concise, and use Nigerian examples when helpful (Lagos, Naira, jollof rice, etc).
-    Never give full solutions unless grading - give hints, ask questions, guide thinking.
-    Format code with proper markdown code blocks.`;
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    addSystemMessage('⚠️ No API key set. Click **⚙ Settings** in the toolbar to add your Gemini API key.');
+    return;
+  }
 
-    try {
-        // Point directly to your local backend
-        const res = await fetch('/ask-ai/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                message: prompt, 
-                level: studentProfile.level,
-                track: studentProfile.goal,
-                course: currentCourseKey
-            })
-        });
+  const typing = addTypingIndicator();
+  const systemPrompt = `You are Mabel, a senior software engineering instructor at Mabel Academy — a coding school for Nigerian developers. 
+You are teaching a ${studentProfile.level} student named ${studentProfile.name} who wants to ${studentProfile.goal}.
+Current course: ${currentCourseKey}.
+Be encouraging, concise, and use Nigerian examples when helpful (Lagos, Naira, jollof rice, etc).
+Never give full solutions unless grading — give hints, ask questions, guide thinking.
+Format code with proper markdown code blocks.`;
 
-        if (!res.ok) throw new Error("Backend server error");
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        systemInstruction: {
+          parts: [{ text: systemPrompt }]
+        },
+        contents: [{
+          role: 'user',
+          parts: [{ text: prompt }]
+        }],
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 1024,
+        }
+      })
+    });
 
-        const data = await res.json();
-        removeTypingIndicator(typing);
-        addSystemMessage(data.reply);
-        
-    } catch (error) {
-        removeTypingIndicator(typing);
-        addSystemMessage('❌ Server connection failed. Make sure Uvicorn is running!');
+    if (!res.ok) {
+      const err = await res.json();
+      removeTypingIndicator(typing);
+      if (res.status === 400 && err.error?.message?.includes("API key not valid")) {
+        addSystemMessage('❌ Invalid API key. Click **⚙ Settings** to update it.');
+      } else {
+        addSystemMessage(`❌ AI error: ${err.error?.message || res.status}`);
+      }
+      return;
     }
-}
-   
 
+    const data = await res.json();
+    removeTypingIndicator(typing);
+    
+    // Parse Gemini's specific JSON response structure
+    const reply = data.candidates[0].content.parts[0].text;
+    addAIMessage(reply);
+
+    const codeMatch = reply.match(/```python\n([\s\S]*?)```/);
+    if (codeMatch && codeMatch[1].includes('___') && editor) {
+      editor.setValue(codeMatch[1].trim());
+    }
+  } catch (e) {
+    removeTypingIndicator(typing);
+    addSystemMessage('⚠️ Could not reach AI. Check your internet connection.');
+  }
+}
 /* ══════════════════════════
    SETTINGS PANEL
 ══════════════════════════ */
@@ -1485,19 +1568,19 @@ function openSettings() {
 
     <div style="margin-bottom:16px;">
       <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text2);margin-bottom:8px;">
-        Anthropic API Key
+        Gemini API Key
       </label>
       <input type="password" id="api-key-input" 
-        placeholder="sk-ant-..." 
+        placeholder="AIzaSy..." 
         value="${key}"
         style="width:100%;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:12px;">
       <div style="margin-top:6px;font-size:11px;color:var(--text3);">
-        Get a free key at <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent2);">console.anthropic.com</a>
+        Get a free key at <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:var(--accent2);">aistudio.google.com</a>
       </div>
     </div>
 
     <div style="background:rgba(0,229,160,0.05);border:1px solid rgba(0,229,160,0.15);border-radius:6px;padding:10px 12px;margin-bottom:16px;font-size:12px;color:var(--text2);line-height:1.5;">
-      🔒 Your key is stored only in your browser's localStorage. It is never sent to any server except Anthropic's API directly.
+      🔒 Your key is stored only in your browser's localStorage. It is never sent to any server except Google's API directly.
     </div>
 
     <button onclick="
@@ -1532,7 +1615,6 @@ function openSettings() {
   `;
   document.body.appendChild(panel);
 
-  // Close on outside click
   setTimeout(() => {
     document.addEventListener('click', function handler(e) {
       if (!panel.contains(e.target) && !e.target.closest('[onclick*="openSettings"]')) {
@@ -1542,7 +1624,6 @@ function openSettings() {
     });
   }, 100);
 }
-
 function addUserMessage(text) {
   const msgs = document.getElementById('chat-messages');
   msgs.innerHTML += `<div class="chat-msg user"><div class="msg-bubble">${escapeHtml(text)}</div></div>`;
@@ -1734,6 +1815,9 @@ function escapeHtml(text) {
    INIT
 ══════════════════════════ */
 window.onload = function() {
+  // Detect best Python version from Piston on startup (runs in background)
+  detectPythonVersion();
+
   // Safety check — courses.js must be loaded before main script
   if (typeof curriculum === 'undefined' || typeof courseManifest === 'undefined') {
     document.body.innerHTML = `

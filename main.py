@@ -34,14 +34,15 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 # --- YOUR @app.post ROUTES SHOULD BE RIGHT BELOW THIS ---
 
 @app.get("/")
-def serve_frontend():
-    # This serves your HTML file directly to the browser
+def serve_frontend_root():
+    # This loads the dashboard when students visit digital-era.live
     return FileResponse("index.html")
 
+@app.get("/index.html")
+def serve_frontend_explicit():
+    # This catches anyone who manually types /index.html in the address bar
+    return FileResponse("index.html")
 
-@app.get("/")
-def read_root():
-    return {"message": "Welcome to Digital Era!"}
 
 # This is your brand new route to ADD a student!
 
