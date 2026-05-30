@@ -901,21 +901,56 @@ function updateStreak() {
    ONBOARDING
 ══════════════════════════ */
 async function createProfile() {
-  const name = document.getElementById('ob-name').value;
-  const email = document.getElementById('ob-email').value; // Make sure you add this field to your HTML!
-  const password = document.getElementById('ob-password').value; // Add this field!
+  const name = document.getElementById('ob-name').value.trim();
+  const email = document.getElementById('ob-email').value.trim();
+  const password = document.getElementById('ob-password').value.trim();
+  // Ensure these are captured if your backend expects them
+  const level = document.getElementById('ob-level').value;
+  const goal = document.getElementById('ob-goal').value;
 
-  const res = await fetch('/signup', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ full_name: name, email: email, password: password, role: 'student' })
-  });
+  if (!name || !email || !password) {
+    showToast("Please fill in all fields!", "error");
+    return;
+  }
 
-  if (res.ok) {
-    showToast("Account created! Please log in.", "success");
-    // After signup, automatically log them in or ask them to login
-  } else {
-    showToast("Signup failed.", "error");
+  try {
+    const res = await fetch('/users/', { // Make sure this matches your FastAPI route
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        full_name: name, // Ensure this key matches your Pydantic model
+        email: email, 
+        password: password,
+        role: 'student'
+      })
+    });
+
+    if (res.ok) {
+      showToast("Account created! Logging in...", "success");
+      // Log them in automatically
+      const loginRes = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ username: email, password: password })
+      });
+      
+      if (loginRes.ok) {
+        const auth = await loginRes.json();
+        localStorage.setItem('access_token', auth.access_token);
+        // Save the profile to localStorage
+        studentProfile.name = name;
+        studentProfile.level = level;
+        studentProfile.goal = goal;
+        saveProfile();
+        showDashboard();
+      }
+    } else {
+      const errData = await res.json();
+      console.error("Backend Error:", errData);
+      showToast("Signup failed: " + (errData.detail || "Check console"), "error");
+    }
+  } catch (e) {
+    showToast("Signup failed: Check connection", "error");
   }
 }
 /* ══════════════════════════
