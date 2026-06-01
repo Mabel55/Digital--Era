@@ -20,6 +20,7 @@ import requests
 from schemas import CodeSubmission, ChatMessage
 import subprocess
 import tempfile
+import traceback
 
 
 # 1. Build the database tables safely
@@ -188,31 +189,34 @@ def update_teacher(teacher_id: int, teacher_data: schemas.TeacherUpdate, db: Ses
     db.refresh(db_teacher)
     return db_teacher
 
-@app.post("/users/", response_model=schemas.UserResponse)
+
+
+@app.post("/users/")
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    # 1. Check if the email is already taken
-    db_user = db.query(models.User).filter(models.User.email == user.email).first()
-    if db_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
-    
-    # 2. Hash the raw password
-    hashed_pwd = get_password_hash(user.password)
-    
-    # 3. Create the new user object
-    new_user = models.User(
-        email=user.email,
-        hashed_password=hashed_pwd,
-        full_name=user.full_name,
-        role=user.role
-    )
-    
-    # 4. Save to the database
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    
-    # 5. Return the user (FastAPI will automatically use UserResponse to hide the password!)
-    return new_user
+    try:
+        # Check if user exists
+        db_user = db.query(models.User).filter(models.User.email == user.email).first()
+        if db_user:
+            raise HTTPException(status_code=400, detail="Email already registered")
+        
+        # Create new user
+        hashed_pw = get_password_hash(user.password)
+        new_user = models.User(
+            email=user.email, 
+            hashed_password=hashed_pw, 
+            full_name=user.full_name, 
+            role=user.role
+        )
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+        return new_user
+
+    except Exception as e:
+        # THIS IS THE MAGIC: If the server crashes, it grabs the Python error and sends it to your browser!
+        error_details = traceback.format_exc()
+        print("BACKEND CRASH:", error_details) 
+        raise HTTPException(status_code=500, detail=f"PYTHON ERROR: {str(e)}")
 
 
 @app.get("/users/me", response_model=schemas.UserResponse)
