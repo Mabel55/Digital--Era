@@ -374,21 +374,26 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
     
     return {"message": "User created successfully in PostgreSQL!", "email": new_user.email}
 
+
 @app.post("/login")
-def login_user(
-    form_data: OAuth2PasswordRequestForm = Depends(), # 👈 Captures the Swagger popup fields!
-    db: Session = Depends(get_db)
-):
-    # 1. Look up the user (Note: Swagger saves the email inside form_data.username)
-    db_user = db.query(models.User).filter(models.User.email == form_data.username).first()
-    
-    # 2. Check if user exists and password matches
-    if not db_user or not verify_password(form_data.password, db_user.hashed_password):
-        raise HTTPException(status_code=400, detail="Invalid email or password")
-    
-    # 3. Generate and hand back the secure token
-    access_token = create_access_token(data={"sub": db_user.email})
-    return {"access_token": access_token, "token_type": "bearer"}
+def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    try:
+        user = db.query(models.User).filter(models.User.email == form_data.username).first()
+        if not user or not verify_password(form_data.password, user.hashed_password):
+            raise HTTPException(status_code=400, detail="Incorrect username or password")
+        
+        # Make sure create_access_token is defined above this in your code!
+        access_token = create_access_token(data={"sub": user.email})
+        return {"access_token": access_token, "token_type": "bearer"}
+
+    except HTTPException:
+        # This catches the "Incorrect password" 400 error normally
+        raise
+    except Exception as e:
+        # THIS CATCHES THE CRASH!
+        error_details = traceback.format_exc()
+        print("LOGIN CRASH:", error_details) 
+        raise HTTPException(status_code=500, detail=f"LOGIN ERROR: {str(e)}")
 
 # 2. Add the secure Admin Upload Route
 @app.post("/admin/upload-course-pdf/", tags=["Admin Panel"])

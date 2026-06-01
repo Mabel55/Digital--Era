@@ -897,9 +897,6 @@ function updateStreak() {
   saveProfile();
 }
 
-/* ══════════════════════════
-   ONBOARDING
-══════════════════════════ */
 async function createProfile() {
   const name = document.getElementById('ob-name').value.trim();
   const email = document.getElementById('ob-email').value.trim();
@@ -914,12 +911,12 @@ async function createProfile() {
   }
 
   try {
-    const res = await fetch('/users/', { // Make sure this matches your FastAPI route
+    const res = await fetch('/users/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         full_name: name, // Ensure this key matches your Pydantic model
-        email: email, 
+        email: email,
         password: password,
         role: 'student'
       })
@@ -927,32 +924,61 @@ async function createProfile() {
 
     if (res.ok) {
       showToast("Account created! Logging in...", "success");
+      
       // Log them in automatically
       const loginRes = await fetch('/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({ username: email, password: password })
       });
-      
+
+      // --- ULTRA-SAFE LOGIN BLOCK START ---
       if (loginRes.ok) {
         const auth = await loginRes.json();
+        console.log("🎉 Token received:", auth.access_token);
+        
+        // 1. Save the secure token
         localStorage.setItem('access_token', auth.access_token);
-        // Save the profile to localStorage
-        studentProfile.name = name;
-        studentProfile.level = level;
-        studentProfile.goal = goal;
-        saveProfile();
-        showDashboard();
+        
+        // 2. Safely try to update the profile
+        try {
+          if (typeof studentProfile !== 'undefined') {
+            studentProfile.name = name;
+            studentProfile.level = level;
+            studentProfile.goal = goal;
+            if (typeof saveProfile === 'function') saveProfile();
+          }
+          
+          // 3. FORCE the dashboard to show
+          if (typeof showDashboard === 'function') {
+             showDashboard();
+          } else {
+             console.log("showDashboard function not found, redirecting manually...");
+             window.location.href = "/dashboard.html"; // Adjust if your dashboard page is named differently
+          }
+        } catch (jsError) {
+          console.error("UI Routing Error:", jsError);
+          showToast("Login worked, but UI failed. Check console.", "success");
+        }
+        
+      } else {
+        const errData = await loginRes.json();
+        console.error("Login Error:", errData);
+        showToast("Login failed: " + (errData.detail || "Check console"), "error");
       }
+      // --- ULTRA-SAFE LOGIN BLOCK END ---
+
     } else {
       const errData = await res.json();
       console.error("Backend Error:", errData);
       showToast("Signup failed: " + (errData.detail || "Check console"), "error");
     }
   } catch (e) {
+    console.error("Connection Error:", e);
     showToast("Signup failed: Check connection", "error");
   }
 }
+
 /* ══════════════════════════
    DASHBOARD
 ══════════════════════════ */
