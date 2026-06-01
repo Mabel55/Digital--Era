@@ -134,6 +134,8 @@ class ChatRequest(BaseModel):
 class UserCreate(BaseModel):
     email: str
     password: str
+    full_name: str
+    role: str ="student"
 
 class UserLogin(BaseModel):
     email: str
