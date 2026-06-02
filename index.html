@@ -897,88 +897,26 @@ function updateStreak() {
   saveProfile();
 }
 
-async function createProfile() {
-  const name = document.getElementById('ob-name').value.trim();
-  const email = document.getElementById('ob-email').value.trim();
-  const password = document.getElementById('ob-password').value.trim();
-  // Ensure these are captured if your backend expects them
-  const level = document.getElementById('ob-level').value;
-  const goal = document.getElementById('ob-goal').value;
-
-  if (!name || !email || !password) {
-    showToast("Please fill in all fields!", "error");
-    return;
+function createProfile() {
+  // 1. Grab the name so we can still welcome them on the dashboard
+  const name = document.getElementById('ob-name').value.trim() || "Student";
+  
+  // 2. Save it locally (no database needed!)
+  if (typeof studentProfile !== 'undefined') {
+    studentProfile.name = name;
+    if (typeof saveProfile === 'function') saveProfile();
   }
 
-  try {
-    const res = await fetch('/users/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        full_name: name, // Ensure this key matches your Pydantic model
-        email: email,
-        password: password,
-        role: 'student'
-      })
-    });
-
-    if (res.ok) {
-      showToast("Account created! Logging in...", "success");
-      
-      // Log them in automatically
-      const loginRes = await fetch('/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ username: email, password: password })
-      });
-
-      // --- ULTRA-SAFE LOGIN BLOCK START ---
-      if (loginRes.ok) {
-        const auth = await loginRes.json();
-        console.log("🎉 Token received:", auth.access_token);
-        
-        // 1. Save the secure token
-        localStorage.setItem('access_token', auth.access_token);
-        
-        // 2. Safely try to update the profile
-        try {
-          if (typeof studentProfile !== 'undefined') {
-            studentProfile.name = name;
-            studentProfile.level = level;
-            studentProfile.goal = goal;
-            if (typeof saveProfile === 'function') saveProfile();
-          }
-          
-          // 3. FORCE the dashboard to show
-          if (typeof showDashboard === 'function') {
-             showDashboard();
-          } else {
-             console.log("showDashboard function not found, redirecting manually...");
-             window.location.href = "/dashboard.html"; // Adjust if your dashboard page is named differently
-          }
-        } catch (jsError) {
-          console.error("UI Routing Error:", jsError);
-          showToast("Login worked, but UI failed. Check console.", "success");
-        }
-        
-      } else {
-        const errData = await loginRes.json();
-        console.error("Login Error:", errData);
-        showToast("Login failed: " + (errData.detail || "Check console"), "error");
-      }
-      // --- ULTRA-SAFE LOGIN BLOCK END ---
-
-    } else {
-      const errData = await res.json();
-      console.error("Backend Error:", errData);
-      showToast("Signup failed: " + (errData.detail || "Check console"), "error");
-    }
-  } catch (e) {
-    console.error("Connection Error:", e);
-    showToast("Signup failed: Check connection", "error");
+  // 3. Immediately open the door to the dashboard
+  console.log("Authentication bypassed. Welcome to the academy!");
+  
+  if (typeof showDashboard === 'function') {
+     showDashboard();
+  } else {
+     // Change 'dashboard.html' if your main page is named something else
+     window.location.href = "/dashboard.html"; 
   }
 }
-
 /* ══════════════════════════
    DASHBOARD
 ══════════════════════════ */
