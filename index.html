@@ -1837,5 +1837,14 @@ async function verifyTokenAndLoad(token) {
 }
 };
 </script>
+<script>
+  // This forces the dashboard to open the exact millisecond the page loads
+  window.addEventListener('DOMContentLoaded', (event) => {
+      console.log("Auto-bypassing sign-up screen...");
+      if (typeof showDashboard === 'function') {
+          showDashboard();
+      }
+  });
+</script>
 </body>
 </html>
