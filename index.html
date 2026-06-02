@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mabel Academy</title>
+<title>DIGITAL ERA</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
@@ -1272,7 +1272,7 @@ function initMonaco(callback) {
    CLOUD CODE EXECUTION (Custom Backend)
 ══════════════════════════ */
 async function detectPythonVersion() {
-  console.log('Using Mabel Academy Custom Python Backend');
+  console.log('Using DIGITAL ERA Custom Python Backend');
 }
 
 async function executePython(code) {
@@ -1462,7 +1462,7 @@ async function askAI(prompt) {
   }
 
   const typing = addTypingIndicator();
-  const systemPrompt = `You are Mabel, a senior software engineering instructor at Mabel Academy — a coding school for Nigerian developers. 
+  const systemPrompt = `You are Mabel, a senior software engineering instructor at DIGITAL ACADEMY — a coding school for Nigerian developers. 
 You are teaching a ${studentProfile.level} student named ${studentProfile.name} who wants to ${studentProfile.goal}.
 Current course: ${currentCourseKey}.
 Be encouraging, concise, and use Nigerian examples when helpful (Lagos, Naira, jollof rice, etc).
@@ -1549,7 +1549,7 @@ function openSettings() {
       <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text2);margin-bottom:10px;">Code Execution</div>
       <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:8px;">
         <span style="width:8px;height:8px;background:var(--accent);border-radius:50%;display:inline-block;"></span>
-        Mabel Academy Python Engine
+        Digital Academy Python Engine
       </div>
     </div>
 
@@ -1652,7 +1652,7 @@ function drawCertificate(courseName, studentName) {
   ctx.fillStyle = '#00e5a0';
   ctx.font = 'bold 13px "Syne", sans-serif';
   ctx.textAlign = 'center'; ctx.letterSpacing = '4px';
-  ctx.fillText('MABEL ACADEMY', W/2, 88);
+  ctx.fillText('DIGITAL ERA', W/2, 88);
 
   // Certificate of Completion
   ctx.fillStyle = 'rgba(255,255,255,0.15)';
@@ -1701,7 +1701,32 @@ function drawCertificate(courseName, studentName) {
   ctx.fill(); ctx.stroke();
   ctx.fillStyle = '#00e5a0'; ctx.font = 'bold 12px Inter, sans-serif';
   ctx.fillText(`⚡ +500 XP Awarded`, W/2, H - 36);
+
+  // --- INSTRUCTOR SIGNATURE BLOCK ---
+  ctx.textAlign = 'right';
+
+  // 1. The Signature
+  ctx.fillStyle = '#ffffff'; 
+  ctx.font = 'italic 20px serif';
+  ctx.fillText('Arua Mabel Chinasa', W - 50, H - 85);
+
+  // 2. The Signature Line
+  ctx.strokeStyle = 'rgba(0, 229, 160, 0.5)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); 
+  ctx.moveTo(W - 240, H - 75);
+  ctx.lineTo(W - 50, H - 75);
+  ctx.stroke();
+
+  // 3. Your Title
+  ctx.fillStyle = '#6b7a99'; 
+  ctx.font = '12px Inter, sans-serif';
+  ctx.fillText('Lead AI & Backend Engineer', W - 50, H - 60);
+
+  ctx.textAlign = 'center';
 }
+
+
 
 function roundRect(ctx, x, y, w, h, r) {
   ctx.beginPath(); ctx.moveTo(x+r, y);
@@ -1812,7 +1837,7 @@ window.onload = function() {
     verifyTokenAndLoad(token);
   } else {
     // No token? They remain on the Onboarding screen (no action needed, it's the default active screen).
-    console.log("Welcome to Mabel Academy! Please sign in.");
+    console.log("Welcome to DIGITAL ERA! Please sign in.");
   }
 };
 
