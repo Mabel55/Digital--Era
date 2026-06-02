@@ -621,7 +621,7 @@
 <div class="onboard-card">
   <div class="logo-row">
     <div class="logo-icon">🎓</div>
-    <div class="logo-text">Mabel <span>Academy</span></div>
+    <div class="logo-text">Digital <span>Era</span></div>
   </div>
   <div class="onboard-title">Start Your Coding Journey</div>
   <div class="onboard-sub">Tell us about yourself so we can personalize your learning experience.</div>
@@ -670,7 +670,7 @@
   <nav class="dash-nav">
     <div class="logo-row">
       <div class="logo-icon">🎓</div>
-      <div class="logo-text">Mabel <span>Academy</span></div>
+      <div class="logo-text">Digital <span>Era</span></div>
     </div>
     <div class="nav-right">
       <div id="cloud-status" style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);padding:5px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;">
@@ -819,7 +819,7 @@
       <div class="chat-header-bar">
         <div class="ai-avatar">🤖</div>
         <div class="ai-info">
-          <div class="ai-name">Mabel AI Instructor</div>
+          <div class="ai-name">Digital Era AI Instructor</div>
           <div class="ai-status"><div class="status-dot"></div> Always here to help</div>
         </div>
       </div>
@@ -873,7 +873,7 @@ let studentProfile = {
   currentLesson: 0
 };
 
-const STORAGE_KEY = "mabel_academy_v2";
+const STORAGE_KEY = "digital_era_v2";
 let editor = null;
 let currentLessons = [];
 let currentLessonIndex = 0;
@@ -1740,7 +1740,7 @@ function roundRect(ctx, x, y, w, h, r) {
 function downloadCertificate() {
   const canvas = document.getElementById('cert-canvas');
   const link = document.createElement('a');
-  link.download = `Mabel_Academy_Certificate_${studentProfile.name.replace(' ', '_')}.png`;
+  link.download = `Digital_Era_Certificate_${studentProfile.name.replace(' ', '_')}.png`;
   link.href = canvas.toDataURL('image/png');
   link.click();
   showToast("Certificate downloaded! 🎉", "success");
