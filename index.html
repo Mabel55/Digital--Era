@@ -665,6 +665,26 @@
   <div class="divider"><hr><span>Already enrolled?</span><hr></div>
   <button class="returning-btn" onclick="loadExistingProfile()">📂 Continue where I left off</button>
 </div>
+
+<!-- ══ LOGIN MODAL ══ -->
+<div class="modal-overlay" id="login-modal-overlay">
+  <div class="onboard-card" style="width: 420px; animation: none;">
+    <div class="logo-row" style="margin-bottom: 24px;">
+      <div class="logo-icon">🔒</div>
+      <div class="logo-text">Welcome <span>Back</span></div>
+    </div>
+    <div class="field-row">
+      <label class="field-label">Email</label>
+      <input type="email" id="login-email" placeholder="ada@example.com">
+    </div>
+    <div class="field-row">
+      <label class="field-label">Password</label>
+      <input type="password" id="login-password" placeholder="••••••••">
+    </div>
+    <button class="btn-primary" onclick="loginToBackend()">Login</button>
+    <button class="returning-btn" style="margin-top: 12px;" onclick="document.getElementById('login-modal-overlay').classList.remove('visible')">Cancel</button>
+  </div>
+</div>
 <!-- ══ DASHBOARD ══ -->
 <div id="dashboard" class="screen">
   <nav class="dash-nav">
@@ -719,21 +739,7 @@
       <div id="continue-card"></div>
     </div>
 
-    <div id="api-key-banner" style="display:none;margin-bottom:28px;">
-    <div style="background:linear-gradient(120deg,rgba(59,130,246,0.08),rgba(0,229,160,0.06));border:1px solid rgba(59,130,246,0.25);border-radius:12px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;">
-      <div style="display:flex;align-items:center;gap:14px;">
-        <div style="font-size:28px;">🤖</div>
-        <div>
-          <div style="font-family:var(--font-display);font-weight:700;font-size:15px;margin-bottom:4px;">Activate Your AI Instructor</div>
-          <div style="font-size:13px;color:var(--text2);">Add your free Gemini API key to unlock the AI tutor, auto-grading, and error analysis.</div>
-        </div>
-      </div>
-      <div style="display:flex;gap:10px;align-items:center;flex-shrink:0;">
-        <a href="https://aistudio.google.com/app/apikey" target="_blank" style="padding:8px 14px;background:transparent;border:1px solid var(--border);color:var(--text2);border-radius:6px;font-size:13px;text-decoration:none;">Get Free Key ↗</a>
-        <button onclick="openSettingsFromDashboard()" style="padding:8px 18px;background:var(--accent2);color:white;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;">Enter Key</button>
-      </div>
-    </div>
-  </div>
+
 
     <!-- Certificates -->
     <div class="cert-section" id="cert-section" style="display:none;">
@@ -897,24 +903,98 @@ function updateStreak() {
   saveProfile();
 }
 
-function createProfile() {
-  // 1. Grab the name so we can still welcome them on the dashboard
-  const name = document.getElementById('ob-name').value.trim() || "Student";
-  
-  // 2. Save it locally (no database needed!)
-  if (typeof studentProfile !== 'undefined') {
-    studentProfile.name = name;
-    if (typeof saveProfile === 'function') saveProfile();
+const API_BASE = "http://127.0.0.1:8000";
+
+async function createProfile() {
+  const name = document.getElementById('ob-name').value.trim();
+  const email = document.getElementById('ob-email').value.trim();
+  const password = document.getElementById('ob-password').value.trim();
+
+  if (!name || !email || !password) {
+    showToast("Please fill all fields", "error");
+    return;
   }
 
-  // 3. Immediately open the door to the dashboard
-  console.log("Authentication bypassed. Welcome to the academy!");
+  try {
+    const res = await fetch(`${API_BASE}/signup`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+        full_name: name,
+        role: "student"
+      })
+    });
+    
+    if (!res.ok) {
+      const err = await res.json();
+      showToast(err.detail || "Signup failed", "error");
+      return;
+    }
+    
+    // Automatically log in
+    document.getElementById('login-email').value = email;
+    document.getElementById('login-password').value = password;
+    
+    if (typeof studentProfile !== 'undefined') {
+      studentProfile.name = name;
+      if (typeof saveProfile === 'function') saveProfile();
+    }
+    
+    await loginToBackend();
+    
+  } catch (e) {
+    showToast("Network Error: Is backend running?", "error");
+  }
+}
+
+function loadExistingProfile() {
+  document.getElementById('login-modal-overlay').classList.add('visible');
+}
+
+async function loginToBackend() {
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value.trim();
   
-  if (typeof showDashboard === 'function') {
-     showDashboard();
-  } else {
-     // Change 'dashboard.html' if your main page is named something else
-     window.location.href = "/dashboard.html"; 
+  if (!email || !password) return;
+  
+  try {
+    const params = new URLSearchParams();
+    params.append('username', email);
+    params.append('password', password);
+
+    const res = await fetch(`${API_BASE}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: params
+    });
+    
+    if (!res.ok) {
+      showToast("Invalid email or password", "error");
+      return;
+    }
+    
+    const data = await res.json();
+    localStorage.setItem("access_token", data.access_token);
+    
+    document.getElementById('login-modal-overlay').classList.remove('visible');
+    
+    // Fetch real name
+    const userRes = await fetch(`${API_BASE}/users/me`, {
+        headers: { "Authorization": `Bearer ${data.access_token}` }
+    });
+    if(userRes.ok) {
+        const userData = await userRes.json();
+        studentProfile.name = userData.full_name;
+        saveProfile();
+    }
+    
+    showToast("Logged in successfully! 🎉", "success");
+    showDashboard();
+    
+  } catch (e) {
+    showToast("Network Error", "error");
   }
 }
 /* ══════════════════════════
@@ -1029,9 +1109,7 @@ function renderDashboard() {
   document.getElementById('ring-pct').textContent = pct + '%';
   drawRing(pct);
 
-  // Show API key banner if no key set
-  const banner = document.getElementById('api-key-banner');
-  if (banner) banner.style.display = getApiKey() ? 'none' : 'block';
+
 
   // Track cards
   const grid = document.getElementById('track-grid');
@@ -1276,7 +1354,7 @@ async function detectPythonVersion() {
 }
 
 async function executePython(code) {
-  const res = await fetch('/run-python/', {
+  const res = await fetch(`${API_BASE}/run-python/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ code: code })
@@ -1409,10 +1487,13 @@ async function askAI(prompt) {
   const typing = addTypingIndicator();
 
   try {
-    // Send the question to your custom FastAPI backend
-    const res = await fetch('/ask-ai/', {
+    const token = localStorage.getItem('access_token');
+    const res = await fetch(`${API_BASE}/chat`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
       body: JSON.stringify({
         message: prompt,
         level: studentProfile.level || "Beginner",
@@ -1444,79 +1525,7 @@ async function askAI(prompt) {
   }
 }
 
-/* ══════════════════════════
-   GEMINI API — DIRECT BROWSER CALL
-══════════════════════════ */
-function getApiKey() {
-  return localStorage.getItem('mabel_gemini_key') || '';
-}
-function saveApiKey(key) {
-  localStorage.setItem('mabel_gemini_key', key.trim());
-}
 
-async function askAI(prompt) {
-  const apiKey = getApiKey();
-  if (!apiKey) {
-    addSystemMessage('⚠️ No API key set. Click **⚙ Settings** in the toolbar to add your Gemini API key.');
-    return;
-  }
-
-  const typing = addTypingIndicator();
-  const systemPrompt = `You are Mabel, a senior software engineering instructor at DIGITAL ACADEMY — a coding school for Nigerian developers. 
-You are teaching a ${studentProfile.level} student named ${studentProfile.name} who wants to ${studentProfile.goal}.
-Current course: ${currentCourseKey}.
-Be encouraging, concise, and use Nigerian examples when helpful (Lagos, Naira, jollof rice, etc).
-Never give full solutions unless grading — give hints, ask questions, guide thinking.
-Format code with proper markdown code blocks.`;
-
-  try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        systemInstruction: {
-          parts: [{ text: systemPrompt }]
-        },
-        contents: [{
-          role: 'user',
-          parts: [{ text: prompt }]
-        }],
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 1024,
-        }
-      })
-    });
-
-    if (!res.ok) {
-      const err = await res.json();
-      removeTypingIndicator(typing);
-      if (res.status === 400 && err.error?.message?.includes("API key not valid")) {
-        addSystemMessage('❌ Invalid API key. Click **⚙ Settings** to update it.');
-      } else {
-        addSystemMessage(`❌ AI error: ${err.error?.message || res.status}`);
-      }
-      return;
-    }
-
-    const data = await res.json();
-    removeTypingIndicator(typing);
-    
-    // Parse Gemini's specific JSON response structure
-    const reply = data.candidates[0].content.parts[0].text;
-    addAIMessage(reply);
-
-    const codeMatch = reply.match(/```python\n([\s\S]*?)```/);
-    if (codeMatch && codeMatch[1].includes('___') && editor) {
-      editor.setValue(codeMatch[1].trim());
-    }
-  } catch (e) {
-    removeTypingIndicator(typing);
-    addSystemMessage('⚠️ Could not reach AI. Check your internet connection.');
-  }
-}
 
 /* ══════════════════════════
    SETTINGS PANEL
@@ -1862,22 +1871,6 @@ async function verifyTokenAndLoad(token) {
 }
 };
 </script>
-<script>
-  // This forces the dashboard to open the exact millisecond the page loads
-  window.addEventListener('DOMContentLoaded', (event) => {
-      console.log("Auto-bypassing sign-up screen...");
-      
-      // 1. Manually hide the sign-up card so it stops blocking the screen
-      const signUpCard = document.querySelector('.onboard-card');
-      if (signUpCard) {
-          signUpCard.style.display = 'none';
-      }
-      
-      // 2. Open the dashboard
-      if (typeof showDashboard === 'function') {
-          showDashboard();
-      }
-  });
-</script>
+
 </body>
 </html>

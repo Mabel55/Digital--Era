@@ -35,10 +35,9 @@ def load_embedding_model():
 
 
 # ── GEMINI LLM INFERENCE ENGINE (Stable 2.5 Flash) ────────────────
-def ask_gemini(question: str, context_chunks: list[str], chat_history: list = None, course_title: str = "", student_level: str = "Beginner", student_track: str = "General", specific_course: str = "") -> str:
+def ask_gemini(question: str, context_chunks: list[str] = None, chat_history: list = None, course_title: str = "", student_level: str = "Beginner", student_track: str = "General", specific_course: str = "", system_prompt_override: str = None) -> str:
     """
-    Compiles retrieved course context, appends historical conversation data from the DB,
-    and prompts Gemini 2.5 Flash using LangChain's chat invocation sequence.
+    Prompts Gemini 2.5 Flash using LangChain's chat invocation sequence.
     """
     api_key = os.getenv("GEMINI_API_KEY")
 
@@ -48,31 +47,27 @@ def ask_gemini(question: str, context_chunks: list[str], chat_history: list = No
         temperature=0.3
     )
 
-    # Compile text context from your FAISS vector search
-    course_hint = f" Specifically, they are currently taking the module: '{specific_course}'." if specific_course else ""
-    context = "\n\n---\n\n".join(context_chunks)
-    subject_hint = f" The student is studying: {course_title}." if course_title else ""
-
-    level_instruction = ""
-    if student_level == "Beginner":
-        level_instruction = "Use simple analogies, avoid overly complex jargon, and explain foundational concepts step-by-step."
-    elif student_level == "Advanced":
-        level_instruction = "Assume the student knows the basics. Provide highly optimized, production-level code and discuss edge cases and performance."
-
-    # Your updated system prompt template
-    # Your PRO, Technical System Prompt
-    # Your PRO, Technical System Prompt with Dynamic Levels
-    system_prompt = (
-            f"You are a Senior Technical Instructor at Mabel's Coding School teaching a {student_level} student in the {student_track} track.{subject_hint}\n"
-            f"{level_instruction}\n"
-            "Your goal is to provide highly technical, professional, and accurate answers to the student's questions.\n"
-            "Use the provided context and conversation history to inform your answer. If the context is missing specific details, seamlessly use your expert programming knowledge to provide a complete response.\n"
-            "CRITICAL INSTRUCTIONS:\n"
-            "1. NEVER mention 'the provided context', 'the database', or 'the lesson'. Do not explain where your information comes from. Just answer the question directly.\n"
-            "2. ALWAYS include real, production-ready code examples to illustrate your explanations whenever applicable.\n"
-            "3. Maintain a professional, authoritative, yet encouraging tone. Speak like a senior software engineer teaching a junior developer.\n"
-            "4. If any provided context is in a foreign language, comprehend it silently and output your final response entirely in perfect English.\n\n"
-            f"Context:\n{context}"
+    if system_prompt_override:
+        system_prompt = system_prompt_override
+    else:
+        course_hint = f" Specifically, they are currently taking the module: '{specific_course}'." if specific_course else ""
+        subject_hint = f" The student is studying: {course_title}." if course_title else ""
+        
+        level_instruction = ""
+        if student_level == "Beginner":
+            level_instruction = "Use simple analogies, avoid overly complex jargon, and explain foundational concepts step-by-step."
+        elif student_level == "Advanced":
+            level_instruction = "Assume the student knows the basics. Provide highly optimized, production-level code and discuss edge cases and performance."
+            
+        system_prompt = (
+                f"You are a Senior Technical Instructor at Mabel's Coding School teaching a {student_level} student in the {student_track} track.{subject_hint}\n"
+                f"{level_instruction}\n"
+                "Your goal is to provide highly technical, professional, and accurate answers to the student's questions.\n"
+                "Use your expert programming knowledge to provide a complete response.\n"
+                "CRITICAL INSTRUCTIONS:\n"
+                "1. NEVER mention 'the database', or 'the lesson'. Do not explain where your information comes from. Just answer the question directly.\n"
+                "2. ALWAYS include real, production-ready code examples to illustrate your explanations whenever applicable.\n"
+                "3. Maintain a professional, authoritative, yet encouraging tone. Speak like a senior software engineer teaching a junior developer.\n"
         )
 
     # 1. Start the message array with your system prompt instructions

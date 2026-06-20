@@ -1,0 +1,152 @@
+{
+  "Dart Fundamentals": {
+    "aiRubric": "Check variables, functions, OOP, null safety, and async/await.",
+    "lessons": [
+      {
+        "title": "Variables & Data Types in Dart",
+        "theory": "## Dart Variables\nDart is statically typed but supports type inference with `var`.\n```dart\nString name = 'Ada';\nint age = 22;\ndouble height = 1.65;\nbool isStudent = true;\nvar city = 'Lagos'; // Inferred as String\n```",
+        "instructions": "## Task: Profile Setup\nCreate variables for `username` (String), `score` (int), and `isActive` (bool). Print them.",
+        "starterCode": "String username = '___';\nint score = ___;\nbool isActive = ___;\n\nvoid main() {\n  print('$username, $score, $isActive');\n}",
+        "solution": "String username = 'Ada';\nint score = 100;\nbool isActive = true;\nvoid main() {\n  print('$username, $score, $isActive');\n}",
+        "hint": "Use String, int, and bool.",
+        "rubric": "Variables correctly typed and printed."
+      },
+      {
+        "title": "Functions & Arrow Syntax",
+        "theory": "## Functions\nDart supports traditional functions and fat-arrow syntax for single-line functions.\n```dart\nint add(int a, int b) {\n  return a + b;\n}\nint multiply(int a, int b) => a * b;\n```",
+        "instructions": "## Task: Arrow Function\nCreate a function `subtract` that takes two integers and uses arrow syntax `=>` to return their difference.",
+        "starterCode": "int subtract(int a, int b) => ___;\n\nvoid main() {\n  print(subtract(10, 4));\n}",
+        "solution": "int subtract(int a, int b) => a - b;\nvoid main() {\n  print(subtract(10, 4));\n}",
+        "hint": "=> a - b",
+        "rubric": "Arrow function used correctly."
+      },
+      {
+        "title": "Object-Oriented Dart (Classes & Mixins)",
+        "theory": "## Classes & Mixins\nDart is an OOP language. Mixins allow reusing class code in multiple class hierarchies.\n```dart\nclass User { String name; User(this.name); }\nmixin Logger { void log(String msg) => print('LOG: $msg'); }\nclass Admin extends User with Logger { Admin(String n) : super(n); }\n```",
+        "instructions": "## Task: Class with Mixin\nCreate a class `Player` with a `name` field, and use a `Swimmer` mixin that provides a `swim()` method.",
+        "starterCode": "mixin Swimmer {\n  void swim() => print('Swimming...');\n}\n\nclass Player with ___ {\n  String name;\n  Player(this.name);\n}\n\nvoid main() {\n  var p = Player('Ada');\n  p.___();\n}",
+        "solution": "mixin Swimmer {\n  void swim() => print('Swimming...');\n}\nclass Player with Swimmer {\n  String name;\n  Player(this.name);\n}\nvoid main() {\n  var p = Player('Ada');\n  p.swim();\n}",
+        "hint": "with Swimmer, call p.swim().",
+        "rubric": "Mixin applied and method called."
+      },
+      {
+        "title": "Null Safety",
+        "theory": "## Null Safety\nVariables cannot be null by default. Use `?` to allow null.\n```dart\nString? maybeName = null;\nString definiteName = maybeName ?? 'Guest';\n```",
+        "instructions": "## Task: Nullable String\nCreate a nullable string `nickname`. Use the null-coalescing operator `??` to print 'No Nickname' if it is null.",
+        "starterCode": "String? nickname = ___;\n\nvoid main() {\n  print(nickname ?? '___');\n}",
+        "solution": "String? nickname = null;\nvoid main() {\n  print(nickname ?? 'No Nickname');\n}",
+        "hint": "Use null, and ?? 'No Nickname'.",
+        "rubric": "Nullable type used and null handled."
+      },
+      {
+        "title": "Asynchronous Dart (Futures & Async/Await)",
+        "theory": "## Async Programming\nUse `Future`, `async`, and `await` for operations that take time.\n```dart\nFuture<String> fetchData() async {\n  await Future.delayed(Duration(seconds: 1));\n  return 'Data loaded';\n}\n```",
+        "instructions": "## Task: Async Fetch\nWrite an async function `getUser` that returns a `Future<String>` 'Ada' after a 1-second delay.",
+        "starterCode": "Future<String> getUser() ___ {\n  await Future.delayed(Duration(seconds: 1));\n  return '___';\n}\n\nvoid main() async {\n  print(await getUser());\n}",
+        "solution": "Future<String> getUser() async {\n  await Future.delayed(Duration(seconds: 1));\n  return 'Ada';\n}\nvoid main() async {\n  print(await getUser());\n}",
+        "hint": "Add async keyword, return 'Ada'.",
+        "rubric": "async keyword used, returns Future."
+      }
+    ]
+  },
+  "Flutter UI & Widgets": {
+    "aiRubric": "Check stateless/stateful widgets, layout structure, lists, forms, and navigation.",
+    "lessons": [
+      {
+        "title": "Introduction to Widgets (Stateless vs Stateful)",
+        "theory": "## Widgets\nEverything in Flutter is a widget. `StatelessWidget` does not change. `StatefulWidget` can rebuild when state changes.\n```dart\nclass MyText extends StatelessWidget {\n  @override\n  Widget build(BuildContext context) => Text('Hello');\n}\n```",
+        "instructions": "## Task: Simple Widget\nCreate a `StatelessWidget` called `Greeting` that returns a `Text` widget displaying 'Welcome'.",
+        "starterCode": "import 'package:flutter/material.dart';\n\nclass Greeting extends ___ {\n  @override\n  Widget build(BuildContext context) {\n    return ___('Welcome');\n  }\n}",
+        "solution": "import 'package:flutter/material.dart';\nclass Greeting extends StatelessWidget {\n  @override\n  Widget build(BuildContext context) {\n    return Text('Welcome');\n  }\n}",
+        "hint": "Extend StatelessWidget, return Text('Welcome').",
+        "rubric": "StatelessWidget created returning Text."
+      },
+      {
+        "title": "Layouts (Row, Column, Container)",
+        "theory": "## Layouts\n`Container` adds padding/margins. `Row` and `Column` arrange children horizontally and vertically.\n```dart\nColumn(\n  children: [ Text('A'), Text('B') ],\n)\n```",
+        "instructions": "## Task: Column Layout\nReturn a `Column` containing two `Text` widgets: 'Top' and 'Bottom'.",
+        "starterCode": "import 'package:flutter/material.dart';\n\nclass LayoutDemo extends StatelessWidget {\n  @override\n  Widget build(BuildContext context) {\n    return ___(\n      ___: [\n        Text('Top'),\n        Text('Bottom'),\n      ],\n    );\n  }\n}",
+        "solution": "import 'package:flutter/material.dart';\nclass LayoutDemo extends StatelessWidget {\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      children: [\n        Text('Top'),\n        Text('Bottom'),\n      ],\n    );\n  }\n}",
+        "hint": "Use Column and its children property.",
+        "rubric": "Column used with children array."
+      },
+      {
+        "title": "ListView & GridView",
+        "theory": "## Scrollable Lists\nUse `ListView.builder` for long scrolling lists.\n```dart\nListView.builder(\n  itemCount: 10,\n  itemBuilder: (context, index) => Text('Item $index'),\n)\n```",
+        "instructions": "## Task: List of Names\nCreate a `ListView.builder` that displays 5 items with the text 'User 0' through 'User 4'.",
+        "starterCode": "import 'package:flutter/material.dart';\n\nclass ListDemo extends StatelessWidget {\n  @override\n  Widget build(BuildContext context) {\n    return ___.___{\n      itemCount: 5,\n      itemBuilder: (context, index) {\n        return Text('User $___');\n      },\n    );\n  }\n}",
+        "solution": "import 'package:flutter/material.dart';\nclass ListDemo extends StatelessWidget {\n  @override\n  Widget build(BuildContext context) {\n    return ListView.builder(\n      itemCount: 5,\n      itemBuilder: (context, index) {\n        return Text('User $index');\n      },\n    );\n  }\n}",
+        "hint": "ListView.builder with itemCount and itemBuilder.",
+        "rubric": "ListView.builder returns correct Text."
+      },
+      {
+        "title": "User Input & Forms",
+        "theory": "## Input\n`TextField` allows text entry. Use a `TextEditingController` to read the value.\n```dart\nfinal controller = TextEditingController();\nTextField(controller: controller)\n```",
+        "instructions": "## Task: Text Field\nCreate a `TextField` and attach it to a given controller.",
+        "starterCode": "import 'package:flutter/material.dart';\n\nclass InputDemo extends StatelessWidget {\n  final TextEditingController myController = TextEditingController();\n\n  @override\n  Widget build(BuildContext context) {\n    return ___(\n      controller: ___,\n    );\n  }\n}",
+        "solution": "import 'package:flutter/material.dart';\nclass InputDemo extends StatelessWidget {\n  final TextEditingController myController = TextEditingController();\n  @override\n  Widget build(BuildContext context) {\n    return TextField(\n      controller: myController,\n    );\n  }\n}",
+        "hint": "TextField and pass myController.",
+        "rubric": "TextField uses controller."
+      },
+      {
+        "title": "Navigation & Routing",
+        "theory": "## Navigation\nUse `Navigator.push` to go to a new screen, and `Navigator.pop` to go back.\n```dart\nNavigator.push(context, MaterialPageRoute(builder: (context) => NextScreen()));\n```",
+        "instructions": "## Task: Push Route\nWrite the code to navigate to `DetailScreen` when a button is pressed.",
+        "starterCode": "import 'package:flutter/material.dart';\nclass DetailScreen extends StatelessWidget { @override Widget build(context) => Text('Detail'); }\n\nclass NavDemo extends StatelessWidget {\n  @override\n  Widget build(BuildContext context) {\n    return ElevatedButton(\n      onPressed: () {\n        Navigator.___(___, MaterialPageRoute(builder: (context) => ___()));\n      },\n      child: Text('Go'),\n    );\n  }\n}",
+        "solution": "import 'package:flutter/material.dart';\nclass DetailScreen extends StatelessWidget { @override Widget build(context) => Text('Detail'); }\nclass NavDemo extends StatelessWidget {\n  @override\n  Widget build(BuildContext context) {\n    return ElevatedButton(\n      onPressed: () {\n        Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen()));\n      },\n      child: Text('Go'),\n    );\n  }\n}",
+        "hint": "Navigator.push(context, ...DetailScreen())",
+        "rubric": "Navigator.push used correctly."
+      }
+    ]
+  },
+  "Flutter State Management": {
+    "aiRubric": "Check setState, Provider/Riverpod usage, HTTP requests, and SharedPreferences.",
+    "lessons": [
+      {
+        "title": "Local State with setState",
+        "theory": "## setState\nIn a `StatefulWidget`, calling `setState` triggers a UI rebuild with the new data.\n```dart\nvoid increment() {\n  setState(() { count++; });\n}\n```",
+        "instructions": "## Task: Counter Increment\nInside a `StatefulWidget`'s state class, write the `increment` method that increments `_count` by 1 inside `setState`.",
+        "starterCode": "import 'package:flutter/material.dart';\n\nclass CounterState extends State<StatefulWidget> {\n  int _count = 0;\n\n  void increment() {\n    ___(() {\n      _count___\n    });\n  }\n  @override Widget build(BuildContext context) => Text('$_count');\n}",
+        "solution": "import 'package:flutter/material.dart';\nclass CounterState extends State<StatefulWidget> {\n  int _count = 0;\n  void increment() {\n    setState(() {\n      _count++;\n    });\n  }\n  @override Widget build(BuildContext context) => Text('$_count');\n}",
+        "hint": "setState(() { _count++; });",
+        "rubric": "setState used to increment."
+      },
+      {
+        "title": "InheritedWidget & Provider Basics",
+        "theory": "## Provider\nProvider simplifies InheritedWidget, making data available to the widget tree.\n```dart\nProvider.of<MyModel>(context).doSomething();\n```",
+        "instructions": "## Task: Read Provider Data\nRead a `String` from the Provider context and display it in a `Text` widget.",
+        "starterCode": "import 'package:flutter/material.dart';\nimport 'package:provider/provider.dart';\n\nclass ProviderDemo extends StatelessWidget {\n  @override\n  Widget build(BuildContext context) {\n    String data = ___.___<String>(context);\n    return Text(___);\n  }\n}",
+        "solution": "import 'package:flutter/material.dart';\nimport 'package:provider/provider.dart';\nclass ProviderDemo extends StatelessWidget {\n  @override\n  Widget build(BuildContext context) {\n    String data = Provider.of<String>(context);\n    return Text(data);\n  }\n}",
+        "hint": "Provider.of<String>(context)",
+        "rubric": "Provider.of reads data."
+      },
+      {
+        "title": "State Management with Riverpod",
+        "theory": "## Riverpod\nA modern, compile-safe alternative to Provider.\n```dart\nfinal counterProvider = StateProvider((ref) => 0);\n// read: ref.watch(counterProvider)\n```",
+        "instructions": "## Task: Read Riverpod Provider\nUse a `ConsumerWidget` to read the `counterProvider` using `ref.watch`.",
+        "starterCode": "import 'package:flutter/material.dart';\nimport 'package:flutter_riverpod/flutter_riverpod.dart';\n\nfinal counterProvider = StateProvider((ref) => 0);\n\nclass RiverpodDemo extends ConsumerWidget {\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    final count = ref.___(___);\n    return Text('$count');\n  }\n}",
+        "solution": "import 'package:flutter/material.dart';\nimport 'package:flutter_riverpod/flutter_riverpod.dart';\nfinal counterProvider = StateProvider((ref) => 0);\nclass RiverpodDemo extends ConsumerWidget {\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    final count = ref.watch(counterProvider);\n    return Text('$count');\n  }\n}",
+        "hint": "ref.watch(counterProvider)",
+        "rubric": "ref.watch retrieves provider state."
+      },
+      {
+        "title": "API Integration (HTTP GET/POST)",
+        "theory": "## HTTP Requests\nUse the `http` package to communicate with backends.\n```dart\nvar response = await http.get(Uri.parse('https://api.example.com/data'));\nprint(response.body);\n```",
+        "instructions": "## Task: HTTP GET\nWrite an async function that performs a GET request to 'https://api.mabel.com/users' and returns the response body.",
+        "starterCode": "import 'package:http/http.dart' as http;\n\nFuture<String> fetchUsers() ___ {\n  var response = await ___.___(___.parse('https://api.mabel.com/users'));\n  return response.___;\n}",
+        "solution": "import 'package:http/http.dart' as http;\nFuture<String> fetchUsers() async {\n  var response = await http.get(Uri.parse('https://api.mabel.com/users'));\n  return response.body;\n}",
+        "hint": "async function, http.get, Uri.parse, response.body.",
+        "rubric": "HTTP GET request formatted properly."
+      },
+      {
+        "title": "Local Storage (SharedPreferences)",
+        "theory": "## SharedPreferences\nStore simple data persistently on the device.\n```dart\nfinal prefs = await SharedPreferences.getInstance();\nawait prefs.setString('name', 'Ada');\nString? name = prefs.getString('name');\n```",
+        "instructions": "## Task: Save and Read Token\nSave the string 'abc123' under the key 'token', then retrieve it.",
+        "starterCode": "import 'package:shared_preferences/shared_preferences.dart';\n\nFuture<void> handleStorage() async {\n  final prefs = await SharedPreferences.getInstance();\n  await prefs.___('token', 'abc123');\n  String? token = prefs.___('token');\n  print(token);\n}",
+        "solution": "import 'package:shared_preferences/shared_preferences.dart';\nFuture<void> handleStorage() async {\n  final prefs = await SharedPreferences.getInstance();\n  await prefs.setString('token', 'abc123');\n  String? token = prefs.getString('token');\n  print(token);\n}",
+        "hint": "setString and getString.",
+        "rubric": "SharedPreferences writes and reads token."
+      }
+    ]
+  }
+}

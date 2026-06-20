@@ -1,18 +1,31 @@
-# Use the official Python image
+# Stage 1: Build the React Frontend
+FROM node:20-alpine AS frontend-builder
+WORKDIR /app/frontend
+COPY frontend/package*.json ./
+RUN npm install
+COPY frontend/ ./
+RUN npm run build
+
+# Stage 2: Build the FastAPI Backend
 FROM python:3.11-slim
 
-# Set the working directory inside the container
+# Install Docker CLI so the container can spawn sandbox containers (requires /var/run/docker.sock mounted)
+RUN apt-get update && apt-get install -y docker.io && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
-# Copy the requirements file and install dependencies
+# Copy python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy all your project files (including your study_buddy_brain) into the container
+# Copy backend files
 COPY . .
 
-# Open port 8000 for FastAPI
+# Copy the built React app from Stage 1 into frontend/dist
+COPY --from=frontend-builder /app/frontend/dist /app/frontend/dist
+
+# Expose port
 EXPOSE 8000
 
-# Tell the container how to start the server
+# Start server
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

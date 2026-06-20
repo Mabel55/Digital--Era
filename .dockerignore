@@ -1,0 +1,14 @@
+.env
+*.env
+.git
+.gitignore
+__pycache__/
+*.pyc
+venv/
+env/
+.venv/
+study_buddy_brain/
+*.sqlite3
+*.db
+frontend/node_modules/
+frontend/dist/

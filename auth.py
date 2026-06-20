@@ -1,11 +1,18 @@
 import bcrypt
 from datetime import datetime, timedelta
-from jose import jwt
+from jose import jwt, JWTError
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy.orm import Session
+from database import get_db
+import models
 
 # 🔑 Setup JWT Token Secrets
 SECRET_KEY = "super_secret_noun_academy_key_change_this_later"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 def hash_password(password: str) -> str:
     """
@@ -34,3 +41,25 @@ def create_access_token(data: dict):
     
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
+def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    """Verifies the JWT token and returns the current user model."""
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        # Decode the token using our secret key
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+        
+    # Fetch the user matching the token's email
+    user = db.query(models.User).filter(models.User.email == email).first()
+    if user is None:
+        raise credentials_exception
+    return user

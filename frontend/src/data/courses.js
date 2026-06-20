@@ -4,7 +4,7 @@
 //  Edit the JSON files in the curriculum/ directory instead.
 // ═══════════════════════════════════════════════════
 
-const curriculum = {
+export const curriculum = {
   "Python Core": {
     "Beginner": [
       "Python Fundamentals",
@@ -302,7 +302,7 @@ const curriculum = {
   }
 };
 
-const courseManifest = {
+export const courseManifest = {
   "Agent Foundations & Tools": {
     "aiRubric": "Check agentic concepts, function calling logic, MCP configuration, ReAct loop understanding, and API integration.",
     "lessons": [

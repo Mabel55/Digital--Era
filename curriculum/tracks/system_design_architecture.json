@@ -1,0 +1,152 @@
+{
+  "Architecture Fundamentals": {
+    "aiRubric": "Check concepts of monoliths vs microservices, scaling logic, load balancer config, caching, and database selection.",
+    "lessons": [
+      {
+        "title": "Monoliths vs. Microservices Architectural Patterns",
+        "theory": "## Architectural Patterns\nMonoliths bundle all logic into one deployable unit. Microservices break them apart.\n```text\nMonolith -> [ UI + Auth + DB Logic ] -> DB\nMicroservices -> [ UI ] -> [ Auth API ] & [ DB API ]\n```",
+        "instructions": "## Task: Architecture Concept\nAssign the string `'Monolith'` to a variable representing a single-unit application.",
+        "starterCode": "const architectureType = '___';",
+        "solution": "const architectureType = 'Monolith';",
+        "hint": "'Monolith'",
+        "rubric": "Variable assigned 'Monolith'."
+      },
+      {
+        "title": "Vertical vs. Horizontal Scaling Basics",
+        "theory": "## Scaling\nVertical: upgrade CPU/RAM. Horizontal: add more servers.\n```text\nVertical: Server(2GB) -> Server(8GB)\nHorizontal: Server -> Server + Server + Server\n```",
+        "instructions": "## Task: Scaling Type\nAssign `'Horizontal'` to the variable describing adding more server nodes.",
+        "starterCode": "const addMoreServers = '___';",
+        "solution": "const addMoreServers = 'Horizontal';",
+        "hint": "'Horizontal'",
+        "rubric": "Variable assigned 'Horizontal'."
+      },
+      {
+        "title": "Load Balancers & Reverse Proxies (Nginx)",
+        "theory": "## Load Balancers\nDistribute traffic across multiple servers.\n```bash\nupstream backend {\n  server 10.0.0.1;\n  server 10.0.0.2;\n}\n```",
+        "instructions": "## Task: Nginx Upstream\nDefine an Nginx upstream block named `app_servers` with one server `192.168.1.10`.",
+        "starterCode": "___ app_servers {\n  ___ 192.168.1.10;\n}",
+        "solution": "upstream app_servers {\n  server 192.168.1.10;\n}",
+        "hint": "upstream and server.",
+        "rubric": "Nginx upstream block properly formatted."
+      },
+      {
+        "title": "Caching Strategies (Client, CDN, Server side)",
+        "theory": "## Caching\nCaching temporarily stores copies of data to serve it faster.\n```json\n{\n  \"Cache-Control\": \"max-age=3600\"\n}\n```",
+        "instructions": "## Task: Cache Header\nSet a JSON header configuration with `Cache-Control` set to `'max-age=86400'`.",
+        "starterCode": "{\n  \"___\": \"___\"\n}",
+        "solution": "{\n  \"Cache-Control\": \"max-age=86400\"\n}",
+        "hint": "Cache-Control and max-age=86400",
+        "rubric": "Cache-Control header configured."
+      },
+      {
+        "title": "Database Selection: SQL vs. NoSQL Architectural Choices",
+        "theory": "## DB Choices\nSQL is relational (ACID). NoSQL is non-relational (flexible schema, BASE).\n```text\nSQL: Users Table -> Rows/Columns\nNoSQL: Users Collection -> JSON Documents\n```",
+        "instructions": "## Task: DB Type\nAssign `'NoSQL'` to the variable describing a document-based database.",
+        "starterCode": "const documentDB = '___';",
+        "solution": "const documentDB = 'NoSQL';",
+        "hint": "'NoSQL'",
+        "rubric": "Variable assigned 'NoSQL'."
+      }
+    ]
+  },
+  "Distributed Systems": {
+    "aiRubric": "Check understanding of CAP theorem, Redis caching, message queues, replication, and sharding.",
+    "lessons": [
+      {
+        "title": "Architectural Trade-offs: The CAP Theorem",
+        "theory": "## CAP Theorem\nConsistency, Availability, Partition Tolerance. Pick two.\n```text\nCA: RDBMS\nCP: MongoDB\nAP: Cassandra\n```",
+        "instructions": "## Task: CAP Choice\nAssign `'Availability'` to the missing property if a system prioritizes `Partition Tolerance` and staying online.",
+        "starterCode": "const capChoice = '___';",
+        "solution": "const capChoice = 'Availability';",
+        "hint": "'Availability'",
+        "rubric": "Variable assigned 'Availability'."
+      },
+      {
+        "title": "Distributed Caching with Redis & Memcached",
+        "theory": "## Redis\nIn-memory key-value data store.\n```bash\nSET user:1 \"Ada\"\nGET user:1\n```",
+        "instructions": "## Task: Redis CLI\nWrite the Redis command to set the key `session_1` to `active`.",
+        "starterCode": "___ session_1 \"___\"",
+        "solution": "SET session_1 \"active\"",
+        "hint": "SET and active",
+        "rubric": "Redis SET command formed correctly."
+      },
+      {
+        "title": "Message Queues & Event-Driven Architecture (RabbitMQ/Kafka)",
+        "theory": "## Message Queues\nDecouple services using async messaging.\n```text\nProducer -> [ Queue ] -> Consumer\n```",
+        "instructions": "## Task: Architecture Flow\nAssign `'Producer'` to the service sending messages, and `'Consumer'` to the service receiving.",
+        "starterCode": "const sender = '___';\nconst receiver = '___';",
+        "solution": "const sender = 'Producer';\nconst receiver = 'Consumer';",
+        "hint": "Producer and Consumer",
+        "rubric": "Variables assigned Producer and Consumer."
+      },
+      {
+        "title": "Data Replication & Master-Slave Architectures",
+        "theory": "## Replication\nCopying data across multiple servers. Master handles Writes, Slaves handle Reads.\n```text\nWrite -> Master -> (Sync) -> Slave 1, Slave 2\n```",
+        "instructions": "## Task: Read/Write Split\nAssign `'Writes'` to Master tasks, and `'Reads'` to Slave tasks.",
+        "starterCode": "const masterHandles = '___';\nconst slaveHandles = '___';",
+        "solution": "const masterHandles = 'Writes';\nconst slaveHandles = 'Reads';",
+        "hint": "Writes and Reads",
+        "rubric": "Variables correctly map Writes and Reads."
+      },
+      {
+        "title": "Distributed ID Generation & Sharding Keys",
+        "theory": "## Sharding\nPartitioning data across multiple databases. Requires a good Shard Key.\n```text\nID -> Hash(ID) % N -> Shard Server\n```",
+        "instructions": "## Task: Hashing Concept\nAssign `'Modulo'` to the operator commonly used to distribute IDs across `N` servers.",
+        "starterCode": "const operator = '___';",
+        "solution": "const operator = 'Modulo';",
+        "hint": "'Modulo'",
+        "rubric": "Variable assigned 'Modulo'."
+      }
+    ]
+  },
+  "High Availability & Scalability": {
+    "aiRubric": "Check concepts of fault tolerance, CDNs, consistent hashing, circuit breakers, and disaster recovery.",
+    "lessons": [
+      {
+        "title": "Designing for Fault Tolerance & Rate Limiting",
+        "theory": "## Rate Limiting\nControls traffic to prevent overload.\n```bash\n# Nginx limit_req_zone\nlimit_req_zone $binary_remote_addr zone=mylimit:10m rate=1r/s;\n```",
+        "instructions": "## Task: HTTP Status\nWhat HTTP status code is commonly returned for Too Many Requests?",
+        "starterCode": "const rateLimitStatus = ___;",
+        "solution": "const rateLimitStatus = 429;",
+        "hint": "429",
+        "rubric": "Status code 429 identified."
+      },
+      {
+        "title": "Content Delivery Networks (CDNs) & Edge Computing",
+        "theory": "## CDNs\nServe static assets from servers geographically closer to the user.\n```text\nUser (Tokyo) -> CDN Node (Tokyo) -> Origin (NY)\n```",
+        "instructions": "## Task: CDN Purpose\nAssign `'Latency'` to the primary metric CDNs aim to reduce.",
+        "starterCode": "const metricReduced = '___';",
+        "solution": "const metricReduced = 'Latency';",
+        "hint": "'Latency'",
+        "rubric": "Variable assigned 'Latency'."
+      },
+      {
+        "title": "Database Sharding & Consistent Hashing",
+        "theory": "## Consistent Hashing\nMinimizes data movement when nodes are added or removed.\n```text\nHash Ring [ Node A, Node B, Node C ]\n```",
+        "instructions": "## Task: Rebalancing\nDoes consistent hashing require full data rebalancing? Assign `false`.",
+        "starterCode": "const requiresFullRebalance = ___;",
+        "solution": "const requiresFullRebalance = false;",
+        "hint": "false",
+        "rubric": "Assigned false."
+      },
+      {
+        "title": "Microservice Patterns: Circuit Breakers & API Gateways",
+        "theory": "## Circuit Breakers\nPrevent cascading failures when a downstream service is down.\n```text\nState: Closed -> Open -> Half-Open\n```",
+        "instructions": "## Task: Circuit State\nAssign `'Open'` to the state where the circuit breaker instantly rejects requests.",
+        "starterCode": "const failingState = '___';",
+        "solution": "const failingState = 'Open';",
+        "hint": "'Open'",
+        "rubric": "Variable assigned 'Open'."
+      },
+      {
+        "title": "Disaster Recovery, Backups, and Multi-Region Deployment",
+        "theory": "## Disaster Recovery\nRTO (Recovery Time Objective) and RPO (Recovery Point Objective) define backup SLAs.\n```text\nRegion A (Active) <--> Region B (Standby)\n```",
+        "instructions": "## Task: SLA Metrics\nAssign `'RTO'` to the metric defining how fast a system must recover.",
+        "starterCode": "const recoveryTimeMetric = '___';",
+        "solution": "const recoveryTimeMetric = 'RTO';",
+        "hint": "'RTO'",
+        "rubric": "Variable assigned 'RTO'."
+      }
+    ]
+  }
+}

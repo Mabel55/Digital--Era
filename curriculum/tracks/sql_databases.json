@@ -1,0 +1,266 @@
+{
+  "SQL Fundamentals": {
+    "aiRubric": "Check valid SQL syntax, correct keywords.",
+    "lessons": [
+      {
+        "title": "SELECT & FROM",
+        "theory": "## Basic SQL\n```sql\nSELECT column1, column2 FROM table;\nSELECT * FROM students;\nSELECT name AS student_name FROM students;\n```",
+        "instructions": "## Task: Query Students\nTable `students(id, name, age, course, score)`\n1. Select all\n2. Select name and course only\n3. Select with aliases: name AS student_name, score AS exam_score",
+        "starterCode": "-- 1. All students\n___ * ___ students;\n\n-- 2. Name and course\nSELECT ___, ___ FROM ___;\n\n-- 3. With aliases\nSELECT name ___ student_name, score ___ exam_score FROM ___;",
+        "solution": "SELECT * FROM students;\nSELECT name,course FROM students;\nSELECT name AS student_name,score AS exam_score FROM students;",
+        "hint": "SELECT then columns, FROM then table. AS for aliases.",
+        "rubric": "All 3 queries correct. AS used."
+      },
+      {
+        "title": "WHERE & Filtering",
+        "theory": "## Filtering\n```sql\nSELECT * FROM students WHERE score >= 70;\nSELECT * FROM students WHERE name LIKE 'A%';\nSELECT * FROM students WHERE score BETWEEN 60 AND 80;\nSELECT * FROM students WHERE course IN ('Python','SQL');\n```",
+        "instructions": "## Task: 4 Filter Queries\n1. Score >= 80\n2. Python course AND age < 25\n3. Name starts with 'A'\n4. Score between 60 and 79",
+        "starterCode": "-- 1.\nSELECT * FROM students WHERE score ___ 80;\n-- 2.\nSELECT * FROM students WHERE course = ___ ___ age < 25;\n-- 3.\nSELECT * FROM students WHERE name ___ 'A%';\n-- 4.\nSELECT * FROM students WHERE score ___ 60 ___ 79;",
+        "solution": "SELECT * FROM students WHERE score>=80;\nSELECT * FROM students WHERE course='Python' AND age<25;\nSELECT * FROM students WHERE name LIKE 'A%';\nSELECT * FROM students WHERE score BETWEEN 60 AND 79;",
+        "hint": "LIKE 'A%' starts with A. BETWEEN x AND y inclusive.",
+        "rubric": "All 4 queries. LIKE and BETWEEN used."
+      },
+      {
+        "title": "ORDER BY & LIMIT",
+        "theory": "## Sorting & Limiting\n```sql\nSELECT * FROM students ORDER BY score DESC;\nSELECT * FROM students ORDER BY score DESC LIMIT 3;\nSELECT * FROM students ORDER BY course ASC, score DESC;\n```",
+        "instructions": "## Task: Rankings\n1. All students by score descending\n2. Top 5\n3. By course A-Z then score highest within each",
+        "starterCode": "-- 1.\nSELECT * FROM students ORDER BY score ___;\n-- 2.\nSELECT * FROM students ORDER BY score DESC ___ 5;\n-- 3.\nSELECT * FROM students ORDER BY course ___, score ___;",
+        "solution": "SELECT * FROM students ORDER BY score DESC;\nSELECT * FROM students ORDER BY score DESC LIMIT 5;\nSELECT * FROM students ORDER BY course ASC,score DESC;",
+        "hint": "DESC for high-to-low. LIMIT after ORDER BY.",
+        "rubric": "DESC correct. LIMIT 5. Multi-sort ASC then DESC."
+      },
+      {
+        "title": "Aggregations & GROUP BY",
+        "theory": "## Aggregate Functions\n```sql\nSELECT COUNT(*), AVG(score), MAX(score), MIN(score) FROM students;\n\nSELECT course, AVG(score) AS avg\nFROM students\nGROUP BY course\nHAVING AVG(score) > 70;\n```",
+        "instructions": "## Task: Course Stats\n1. Count per course\n2. Average per course\n3. Courses with avg > 75\n4. Overall highest and lowest",
+        "starterCode": "-- 1.\nSELECT course, ___(*)  AS count FROM students ___ BY course;\n-- 2.\nSELECT course, ___(score) AS avg FROM students GROUP BY course;\n-- 3.\nSELECT course, AVG(score) FROM students GROUP BY course ___ AVG(score)>75;\n-- 4.\nSELECT ___(score) AS highest, ___(score) AS lowest FROM students;",
+        "solution": "SELECT course,COUNT(*) AS count FROM students GROUP BY course;\nSELECT course,AVG(score) AS avg FROM students GROUP BY course;\nSELECT course,AVG(score) FROM students GROUP BY course HAVING AVG(score)>75;\nSELECT MAX(score) AS highest,MIN(score) AS lowest FROM students;",
+        "hint": "COUNT(*) counts rows. HAVING filters groups (not WHERE).",
+        "rubric": "COUNT/AVG/MAX/MIN. GROUP BY. HAVING used."
+      },
+      {
+        "title": "JOINs",
+        "theory": "## JOIN Types\n```sql\n-- INNER: only matching rows\nSELECT s.name, e.course\nFROM students s\nINNER JOIN enrollments e ON s.id = e.student_id;\n\n-- LEFT: all left rows\nFROM students s\nLEFT JOIN enrollments e ON s.id = e.student_id;\n```",
+        "instructions": "## Task: Join Queries\nTables: `students(id,name)`, `enrollments(id,student_id,course,grade)`\n1. INNER JOIN — students with courses\n2. Filter grade = 'A'\n3. LEFT JOIN — all students including unenrolled",
+        "starterCode": "-- 1.\nSELECT s.name, e.course FROM students ___\nINNER JOIN enrollments e ON s.___ = e.___;\n-- 2.\nSELECT s.name,e.course,e.grade FROM students s\nINNER JOIN enrollments e ON s.id=e.student_id\nWHERE e.grade = ___;\n-- 3.\nSELECT s.name,e.course FROM students s\n___ JOIN enrollments e ON s.id=e.student_id;",
+        "solution": "SELECT s.name,e.course FROM students s INNER JOIN enrollments e ON s.id=e.student_id;\nSELECT s.name,e.course,e.grade FROM students s INNER JOIN enrollments e ON s.id=e.student_id WHERE e.grade='A';\nSELECT s.name,e.course FROM students s LEFT JOIN enrollments e ON s.id=e.student_id;",
+        "hint": "INNER returns matches only. LEFT keeps all left rows.",
+        "rubric": "INNER JOIN correct. WHERE filter. LEFT JOIN correct."
+      }
+    ]
+  },
+  "Filtering & Sorting": {
+    "aiRubric": "Check WHERE conditions, ORDER BY, LIMIT, DISTINCT.",
+    "lessons": [
+      {
+        "title": "Advanced WHERE Conditions",
+        "theory": "## WHERE Operators\n```sql\nWHERE age BETWEEN 20 AND 25\nWHERE name LIKE 'A%'\nWHERE course IN ('Python','SQL')\nWHERE score IS NOT NULL\nWHERE score IS NULL\nWHERE NOT score < 60\n```",
+        "instructions": "## Task: 5 Filter Queries\nTable: `students(id, name, age, course, score)`\n1. Students aged 20-25\n2. Name contains 'ada' (case-insensitive)\n3. Course is Python OR SQL\n4. Score is NOT NULL\n5. Score NOT below 70",
+        "starterCode": "-- 1. Age 20-25\nSELECT * FROM students WHERE age ___ 20 ___ 25;\n\n-- 2. Name contains 'ada'\nSELECT * FROM students WHERE ___(name) LIKE ___;\n\n-- 3. Python or SQL\nSELECT * FROM students WHERE course ___ ('Python','SQL');\n\n-- 4. Score not null\nSELECT * FROM students WHERE score IS ___ NULL;\n\n-- 5. Score not below 70\nSELECT * FROM students WHERE ___ score < 70;",
+        "solution": "SELECT * FROM students WHERE age BETWEEN 20 AND 25;\nSELECT * FROM students WHERE LOWER(name) LIKE '%ada%';\nSELECT * FROM students WHERE course IN ('Python','SQL');\nSELECT * FROM students WHERE score IS NOT NULL;\nSELECT * FROM students WHERE NOT score < 70;",
+        "hint": "BETWEEN x AND y. LOWER() for case-insensitive. IN (list). IS NOT NULL. NOT negates.",
+        "rubric": "All 5 queries correct. BETWEEN, LIKE, IN, IS NOT NULL, NOT all used."
+      },
+      {
+        "title": "ORDER BY & DISTINCT",
+        "theory": "## Sorting & Deduplication\n```sql\n-- Sort multiple columns\nSELECT * FROM students\nORDER BY course ASC, score DESC;\n\n-- Unique values only\nSELECT DISTINCT course FROM students;\n\n-- Top N per group (subquery)\nSELECT * FROM students\nORDER BY score DESC LIMIT 3;\n```",
+        "instructions": "## Task: Sorting Queries\n1. All students sorted by course A-Z then score high-low\n2. List of unique courses (no duplicates)\n3. Top 3 students overall\n4. Students sorted by name length (shortest first)",
+        "starterCode": "-- 1. Multi-sort\nSELECT * FROM students ORDER BY course ___, score ___;\n\n-- 2. Unique courses\nSELECT ___ course FROM students;\n\n-- 3. Top 3\nSELECT * FROM students ORDER BY score DESC ___ 3;\n\n-- 4. By name length\nSELECT *, ___(name) AS name_len FROM students\nORDER BY ___(name);",
+        "solution": "SELECT * FROM students ORDER BY course ASC,score DESC;\nSELECT DISTINCT course FROM students;\nSELECT * FROM students ORDER BY score DESC LIMIT 3;\nSELECT *,LENGTH(name) AS name_len FROM students ORDER BY LENGTH(name);",
+        "hint": "DISTINCT removes duplicates. LIMIT 3. LENGTH(name) returns character count.",
+        "rubric": "Multi-sort correct. DISTINCT used. LIMIT 3. LENGTH() for name length."
+      }
+    ]
+  },
+  "Joins & Relationships": {
+    "aiRubric": "Check INNER, LEFT, RIGHT joins, ON condition, multi-table queries.",
+    "lessons": [
+      {
+        "title": "INNER & LEFT JOIN",
+        "theory": "## JOIN Types\n```sql\n-- INNER: only rows matching in BOTH\nSELECT s.name, e.course\nFROM students s\nINNER JOIN enrollments e ON s.id = e.student_id;\n\n-- LEFT: ALL rows from left + matching right\nSELECT s.name, e.course\nFROM students s\nLEFT JOIN enrollments e ON s.id = e.student_id;\n-- Unenrolled students appear with NULL course\n```",
+        "instructions": "## Task: Student Enrollment Joins\nTables: `students(id,name,age)`, `enrollments(id,student_id,course,grade)`\n1. All enrolled students with their courses\n2. All students (enrolled or not) — show NULL if unenrolled\n3. Students who got grade 'A'\n4. Count of enrollments per student",
+        "starterCode": "-- 1. Enrolled students\nSELECT s.name, e.course\nFROM students s\n___ JOIN enrollments e ON s.id = e.student_id;\n\n-- 2. All students (incl. unenrolled)\nSELECT s.name, e.course\nFROM students s\n___ JOIN enrollments e ON s.id = e.student_id;\n\n-- 3. Grade A only\nSELECT s.name, e.course, e.grade\nFROM students s\nINNER JOIN enrollments e ON s.id = e.student_id\nWHERE e.grade = ___;\n\n-- 4. Count per student\nSELECT s.name, COUNT(e.id) AS enrolment_count\nFROM students s\nLEFT JOIN enrollments e ON s.id = e.student_id\n___ BY s.name;",
+        "solution": "SELECT s.name,e.course FROM students s INNER JOIN enrollments e ON s.id=e.student_id;\nSELECT s.name,e.course FROM students s LEFT JOIN enrollments e ON s.id=e.student_id;\nSELECT s.name,e.course,e.grade FROM students s INNER JOIN enrollments e ON s.id=e.student_id WHERE e.grade='A';\nSELECT s.name,COUNT(e.id) AS enrolment_count FROM students s LEFT JOIN enrollments e ON s.id=e.student_id GROUP BY s.name;",
+        "hint": "INNER for matches only. LEFT for all left rows. GROUP BY s.name with COUNT.",
+        "rubric": "INNER JOIN. LEFT JOIN. WHERE grade='A'. GROUP BY with COUNT."
+      },
+      {
+        "title": "Multi-Table Joins",
+        "theory": "## Joining 3+ Tables\n```sql\nSELECT s.name, c.title, e.grade\nFROM students s\nJOIN enrollments e ON s.id = e.student_id\nJOIN courses c ON e.course_id = c.id\nWHERE e.grade = 'A';\n```",
+        "instructions": "## Task: 3-Table Query\nTables: `students`, `enrollments`, `courses(id,title,instructor)`\n1. Student name, course title, instructor for all enrolments\n2. Filter: only courses taught by 'Ada'\n3. Count students per course title",
+        "starterCode": "-- 1. Three-way join\nSELECT s.name, c.title, c.instructor\nFROM students s\nJOIN enrollments e ON s.id = e.student_id\nJOIN courses c ON e.course_id = ___;\n\n-- 2. Taught by Ada\nSELECT s.name, c.title\nFROM students s\nJOIN enrollments e ON s.id = e.student_id\nJOIN courses c ON e.course_id = c.id\nWHERE c.instructor = ___;\n\n-- 3. Count per course\nSELECT c.title, COUNT(s.id) AS student_count\nFROM courses c\nLEFT JOIN enrollments e ON c.id = e.course_id\nLEFT JOIN students s ON e.student_id = s.id\nGROUP BY ___;",
+        "solution": "SELECT s.name,c.title,c.instructor FROM students s JOIN enrollments e ON s.id=e.student_id JOIN courses c ON e.course_id=c.id;\nSELECT s.name,c.title FROM students s JOIN enrollments e ON s.id=e.student_id JOIN courses c ON e.course_id=c.id WHERE c.instructor='Ada';\nSELECT c.title,COUNT(s.id) AS student_count FROM courses c LEFT JOIN enrollments e ON c.id=e.course_id LEFT JOIN students s ON e.student_id=s.id GROUP BY c.title;",
+        "hint": "Chain JOINs one after another. Each needs its own ON condition.",
+        "rubric": "3-table join. WHERE on instructor. COUNT with GROUP BY."
+      }
+    ]
+  },
+  "Aggregations & Grouping": {
+    "aiRubric": "Check GROUP BY, HAVING, COUNT/SUM/AVG/MAX/MIN.",
+    "lessons": [
+      {
+        "title": "GROUP BY & HAVING",
+        "theory": "## Aggregations\n```sql\nSELECT course,\n       COUNT(*)    AS total,\n       AVG(score)  AS avg_score,\n       MAX(score)  AS top_score\nFROM students\nGROUP BY course\nHAVING COUNT(*) > 2;  -- filter groups\n```\n**WHERE** filters rows BEFORE grouping.\n**HAVING** filters groups AFTER.",
+        "instructions": "## Task: Course Statistics\n1. Count, average, max score per course\n2. Only courses with avg score > 75\n3. Courses with more than 2 students\n4. Total score per course (SUM)",
+        "starterCode": "-- 1. Full stats per course\nSELECT course,\n       ___(*)       AS total_students,\n       ROUND(___(score),1) AS avg_score,\n       ___(score)   AS top_score,\n       ___(score)   AS lowest\nFROM students\nGROUP BY ___;\n\n-- 2. Avg > 75\nSELECT course, AVG(score) AS avg\nFROM students\nGROUP BY course\n___ AVG(score) > 75;\n\n-- 3. More than 2 students\nSELECT course, COUNT(*) AS n\nFROM students GROUP BY course\nHAVING COUNT(*) > ___;\n\n-- 4. Sum per course\nSELECT course, ___(score) AS total_score\nFROM students GROUP BY course;",
+        "solution": "SELECT course,COUNT(*) AS total_students,ROUND(AVG(score),1) AS avg_score,MAX(score) AS top_score,MIN(score) AS lowest FROM students GROUP BY course;\nSELECT course,AVG(score) AS avg FROM students GROUP BY course HAVING AVG(score)>75;\nSELECT course,COUNT(*) AS n FROM students GROUP BY course HAVING COUNT(*)>2;\nSELECT course,SUM(score) AS total_score FROM students GROUP BY course;",
+        "hint": "HAVING filters groups. ROUND(AVG(),1) for 1dp. SUM adds all values.",
+        "rubric": "COUNT/AVG/MAX/MIN all used. GROUP BY. HAVING for filter. SUM correct."
+      }
+    ]
+  },
+  "Subqueries": {
+    "aiRubric": "Check subquery in WHERE, FROM, SELECT. Correlated subqueries.",
+    "lessons": [
+      {
+        "title": "Subqueries",
+        "theory": "## Subqueries\nA query inside another query:\n```sql\n-- In WHERE\nSELECT * FROM students\nWHERE score > (SELECT AVG(score) FROM students);\n\n-- In FROM\nSELECT * FROM\n    (SELECT name, score FROM students WHERE score > 70) AS high_scorers;\n\n-- In SELECT\nSELECT name,\n    (SELECT COUNT(*) FROM enrollments e WHERE e.student_id=s.id) AS courses\nFROM students s;\n```",
+        "instructions": "## Task: Subquery Queries\n1. Students scoring above average\n2. Students in the top 3 scores (using subquery)\n3. Students with no enrolments (using NOT EXISTS)\n4. Each student's score compared to course average",
+        "starterCode": "-- 1. Above average\nSELECT name, score FROM students\nWHERE score > (SELECT ___(score) FROM students);\n\n-- 2. Top 3 scores\nSELECT name, score FROM students\nWHERE score >= (\n    SELECT ___ FROM students ORDER BY score DESC LIMIT 1 OFFSET ___\n);\n\n-- 3. No enrolments\nSELECT name FROM students s\nWHERE NOT ___ (\n    SELECT 1 FROM enrollments e WHERE e.student_id = s.___\n);\n\n-- 4. Score vs course average\nSELECT s.name, s.score, s.course,\n    ROUND((SELECT AVG(score) FROM students s2 WHERE s2.course = s.___),1) AS course_avg\nFROM students s;",
+        "solution": "SELECT name,score FROM students WHERE score>(SELECT AVG(score) FROM students);\nSELECT name,score FROM students WHERE score>=(SELECT score FROM students ORDER BY score DESC LIMIT 1 OFFSET 2);\nSELECT name FROM students s WHERE NOT EXISTS(SELECT 1 FROM enrollments e WHERE e.student_id=s.id);\nSELECT s.name,s.score,s.course,ROUND((SELECT AVG(score) FROM students s2 WHERE s2.course=s.course),1) AS course_avg FROM students s;",
+        "hint": "Subquery in WHERE returns single value. NOT EXISTS for absence check. Correlated: reference outer table.",
+        "rubric": "AVG subquery. OFFSET for 3rd. NOT EXISTS correct. Correlated subquery in SELECT."
+      }
+    ]
+  },
+  "Indexes & Performance": {
+    "aiRubric": "Check CREATE INDEX, EXPLAIN QUERY PLAN, index types.",
+    "lessons": [
+      {
+        "title": "Creating & Using Indexes",
+        "theory": "## Indexes\nSpeeds up SELECT queries dramatically:\n```sql\n-- Create index\nCREATE INDEX idx_student_score ON students(score);\nCREATE INDEX idx_student_course ON students(course);\n\n-- Unique index\nCREATE UNIQUE INDEX idx_student_email ON students(email);\n\n-- Composite index\nCREATE INDEX idx_course_score ON students(course, score);\n\n-- Remove\nDROP INDEX idx_student_score;\n\n-- See query plan\nEXPLAIN QUERY PLAN SELECT * FROM students WHERE score > 80;\n```",
+        "instructions": "## Task: Index Design\n1. Create a basic index on `score`\n2. Create a unique index on `email`\n3. Create a composite index on `(course, score)`\n4. Write a query that would benefit from each index\n5. List all indexes (SQLite: `PRAGMA index_list`)",
+        "starterCode": "-- 1. Index on score\nCREATE ___ idx_score ON students(___);\n\n-- 2. Unique index on email\nCREATE ___ INDEX idx_email ON students(___);\n\n-- 3. Composite on course+score\nCREATE INDEX idx_course_score ON students(___, ___);\n\n-- 4a. Uses idx_score\nSELECT * FROM students WHERE score > ___;\n\n-- 4b. Uses idx_email\nSELECT * FROM students WHERE email = ___;\n\n-- 4c. Uses idx_course_score\nSELECT * FROM students WHERE course = ___ ORDER BY score DESC;\n\n-- 5. List indexes\nPRAGMA index_list(___);",
+        "solution": "CREATE INDEX idx_score ON students(score);\nCREATE UNIQUE INDEX idx_email ON students(email);\nCREATE INDEX idx_course_score ON students(course,score);\nSELECT * FROM students WHERE score>80;\nSELECT * FROM students WHERE email='ada@example.com';\nSELECT * FROM students WHERE course='Python' ORDER BY score DESC;\nPRAGMA index_list(students);",
+        "hint": "INDEX keyword. UNIQUE INDEX for unique constraint. Composite: (course, score) order matters.",
+        "rubric": "Basic index. UNIQUE index. Composite index. 3 queries. PRAGMA index_list."
+      }
+    ]
+  },
+  "Stored Procedures": {
+    "aiRubric": "Check parameterized queries, transactions, reusable query functions.",
+    "lessons": [
+      {
+        "title": "Stored Procedures in Python",
+        "theory": "## Stored Procedures\nPre-compiled SQL logic stored in the database:\n```sql\nCREATE OR REPLACE FUNCTION get_top_students(min_score INT)\nRETURNS TABLE(name TEXT, score INT) AS $$\n  SELECT name, score FROM students\n  WHERE score >= min_score\n  ORDER BY score DESC;\n$$ LANGUAGE SQL;\n\nSELECT * FROM get_top_students(80);\n```\nBenefits: reusable, faster (pre-compiled), reduces network traffic.",
+        "instructions": "## Task: Procedure-style Functions\nSimulate stored procedures using Python + SQLite:\n1. `get_top_students(conn, min_score)` — parameterized query function\n2. `calculate_grade(score)` — scalar function (A/B/C/F)\n3. `update_student_score(conn, student_id, new_score)` — transactional update\n4. Test all three",
+        "starterCode": "import sqlite3\n\nconn = sqlite3.connect(':memory:')\nconn.row_factory = sqlite3.Row\ncursor = conn.cursor()\ncursor.executescript(\"\"\"\n    CREATE TABLE students(id INT, name TEXT, score INT, course TEXT);\n    INSERT INTO students VALUES(1,'Ada',88,'Python');\n    INSERT INTO students VALUES(2,'Tunde',55,'SQL');\n    INSERT INTO students VALUES(3,'Ngozi',95,'FastAPI');\n    INSERT INTO students VALUES(4,'Emeka',72,'Python');\n\"\"\")\n\ndef get_top_students(conn, min_score):\n    return conn.execute(\n        'SELECT name,score FROM students WHERE score>=? ORDER BY score DESC',\n        (___,)\n    ).fetchall()\n\ndef calculate_grade(score):\n    if score >= 90: return 'A'\n    elif score >= 80: return ___\n    elif score >= 70: return 'C'\n    else: return ___\n\ndef update_student_score(conn, student_id, new_score):\n    try:\n        conn.execute('BEGIN')\n        conn.execute('UPDATE students SET score=? WHERE id=?', (___, ___))\n        conn.commit()\n        return True\n    except Exception as e:\n        conn.rollback()\n        return False\n\nprint('Top students (>=80):')\nfor row in get_top_students(conn, ___):\n    print(f'  {row[\"name\"]}: {row[\"score\"]} ({calculate_grade(row[\"score\"])})')\n\nprint('Update result:', update_student_score(conn, 2, 85))\nprint('After update:')\nfor row in get_top_students(conn, 60):\n    print(f'  {row[\"name\"]}: {row[\"score\"]}')",
+        "solution": "import sqlite3\nconn=sqlite3.connect(':memory:')\nconn.row_factory=sqlite3.Row\ncursor=conn.cursor()\ncursor.executescript(\"CREATE TABLE students(id INT,name TEXT,score INT,course TEXT);INSERT INTO students VALUES(1,'Ada',88,'Python');INSERT INTO students VALUES(2,'Tunde',55,'SQL');INSERT INTO students VALUES(3,'Ngozi',95,'FastAPI');INSERT INTO students VALUES(4,'Emeka',72,'Python');\")\ndef get_top_students(conn,min_score):\n    return conn.execute('SELECT name,score FROM students WHERE score>=? ORDER BY score DESC',(min_score,)).fetchall()\ndef calculate_grade(score):\n    if score>=90:return 'A'\n    elif score>=80:return 'B'\n    elif score>=70:return 'C'\n    else:return 'F'\ndef update_student_score(conn,student_id,new_score):\n    try:\n        conn.execute('BEGIN')\n        conn.execute('UPDATE students SET score=? WHERE id=?',(new_score,student_id))\n        conn.commit()\n        return True\n    except Exception as e:\n        conn.rollback()\n        return False\nprint('Top>=80:')\nfor row in get_top_students(conn,80):\n    print(f'  {row[\"name\"]}:{row[\"score\"]}({calculate_grade(row[\"score\"])})')\nprint('Update:',update_student_score(conn,2,85))\nprint('After:')\nfor row in get_top_students(conn,60):\n    print(f'  {row[\"name\"]}:{row[\"score\"]}')",
+        "hint": "Pass min_score as tuple (min_score,). calculate_grade if/elif. BEGIN/COMMIT/ROLLBACK for transaction.",
+        "rubric": "parameterized query with ?. calculate_grade B and F correct. transaction with rollback."
+      }
+    ]
+  },
+  "Transactions & ACID": {
+    "aiRubric": "Check BEGIN, COMMIT, ROLLBACK, ACID properties.",
+    "lessons": [
+      {
+        "title": "Transactions",
+        "theory": "## ACID Properties\n- **Atomic** — all or nothing\n- **Consistent** — valid state before and after\n- **Isolated** — transactions don't interfere\n- **Durable** — committed data survives crashes\n\n```sql\nBEGIN;\n    UPDATE accounts SET balance = balance - 500 WHERE id = 1;\n    UPDATE accounts SET balance = balance + 500 WHERE id = 2;\nCOMMIT;\n\n-- If error:\nROLLBACK;\n```",
+        "instructions": "## Task: Bank Transfer Transaction\nSimulate transferring N1000 from Ada to Tunde:\n1. BEGIN transaction\n2. Check Ada has enough funds\n3. Deduct from Ada\n4. Add to Tunde\n5. COMMIT if successful, ROLLBACK if not",
+        "starterCode": "import sqlite3\n\nconn = sqlite3.connect(':memory:')\ncursor = conn.cursor()\n\n# Setup\ncursor.executescript('''\n    CREATE TABLE accounts(id INTEGER PRIMARY KEY, name TEXT, balance REAL);\n    INSERT INTO accounts VALUES(1,'Ada',5000);\n    INSERT INTO accounts VALUES(2,'Tunde',1000);\n''')\n\ndef transfer(from_id, to_id, amount):\n    try:\n        cursor.execute('BEGIN')\n\n        # Check balance\n        cursor.execute('SELECT balance FROM accounts WHERE id=?', (from_id,))\n        balance = cursor.fetchone()[0]\n        if balance < ___:\n            raise ValueError('Insufficient funds')\n\n        # Deduct\n        cursor.execute('UPDATE accounts SET balance = balance - ? WHERE id=?', (___, from_id))\n\n        # Add\n        cursor.execute('UPDATE accounts SET balance = balance + ? WHERE id=?', (amount, ___))\n\n        conn.commit()\n        print(f'Transferred N{amount} successfully')\n    except Exception as e:\n        conn.___()  # undo everything\n        print(f'Transfer failed: {e}')\n\ntransfer(1, 2, 1000)  # Ada -> Tunde N1000\ntransfer(1, 2, 9000)  # Should fail (insufficient)\n\ncursor.execute('SELECT * FROM accounts')\nfor row in cursor.fetchall():\n    print(row)",
+        "solution": "import sqlite3\nconn=sqlite3.connect(':memory:')\ncursor=conn.cursor()\ncursor.executescript('CREATE TABLE accounts(id INTEGER PRIMARY KEY,name TEXT,balance REAL);INSERT INTO accounts VALUES(1,\"Ada\",5000);INSERT INTO accounts VALUES(2,\"Tunde\",1000);')\ndef transfer(from_id,to_id,amount):\n    try:\n        cursor.execute('BEGIN')\n        cursor.execute('SELECT balance FROM accounts WHERE id=?',(from_id,))\n        balance=cursor.fetchone()[0]\n        if balance<amount:raise ValueError('Insufficient funds')\n        cursor.execute('UPDATE accounts SET balance=balance-? WHERE id=?',(amount,from_id))\n        cursor.execute('UPDATE accounts SET balance=balance+? WHERE id=?',(amount,to_id))\n        conn.commit()\n        print(f'Transferred N{amount}')\n    except Exception as e:\n        conn.rollback()\n        print(f'Failed:{e}')\ntransfer(1,2,1000)\ntransfer(1,2,9000)\ncursor.execute('SELECT * FROM accounts')\nfor row in cursor.fetchall():print(row)",
+        "hint": "conn.rollback() on exception. Check balance < amount. Both UPDATE needed.",
+        "rubric": "BEGIN. Balance check. Both UPDATEs. COMMIT on success. ROLLBACK on failure."
+      }
+    ]
+  },
+  "Views & CTEs": {
+    "aiRubric": "Check CREATE VIEW, WITH (CTE), recursive CTEs.",
+    "lessons": [
+      {
+        "title": "Views & CTEs",
+        "theory": "## Views\n```sql\n-- Create reusable view\nCREATE VIEW high_scorers AS\nSELECT name, score, course\nFROM students WHERE score >= 80;\n\n-- Use like a table\nSELECT * FROM high_scorers;\n```\n\n## CTEs (Common Table Expressions)\n```sql\nWITH top_students AS (\n    SELECT name, score FROM students ORDER BY score DESC LIMIT 5\n)\nSELECT * FROM top_students WHERE score > 85;\n```",
+        "instructions": "## Task: Views & CTEs\n1. Create view `passing_students` (score >= 60)\n2. Create view `course_stats` (avg, count per course)\n3. Write a CTE that ranks students\n4. Write a CTE that finds above-average students per course",
+        "starterCode": "-- 1. View: passing students\nCREATE ___ passing_students AS\nSELECT name, score, course\nFROM students WHERE score >= ___;\n\n-- 2. View: course stats\nCREATE VIEW course_stats AS\nSELECT course, ROUND(AVG(score),1) AS avg, COUNT(*) AS total\nFROM students\n___ BY course;\n\n-- 3. CTE: ranked students\n___ ranked AS (\n    SELECT name, score,\n           ROW_NUMBER() OVER (ORDER BY score DESC) AS rank\n    FROM students\n)\nSELECT * FROM ranked WHERE rank <= 5;\n\n-- 4. CTE: above average per course\nWITH course_avgs AS (\n    SELECT course, AVG(score) AS avg_score\n    FROM students GROUP BY course\n)\nSELECT s.name, s.score, s.course\nFROM students s\nJOIN course_avgs ca ON s.course = ca.___\nWHERE s.score > ca.___;",
+        "solution": "CREATE VIEW passing_students AS SELECT name,score,course FROM students WHERE score>=60;\nCREATE VIEW course_stats AS SELECT course,ROUND(AVG(score),1) AS avg,COUNT(*) AS total FROM students GROUP BY course;\nWITH ranked AS(SELECT name,score,ROW_NUMBER() OVER(ORDER BY score DESC) AS rank FROM students) SELECT * FROM ranked WHERE rank<=5;\nWITH course_avgs AS(SELECT course,AVG(score) AS avg_score FROM students GROUP BY course) SELECT s.name,s.score,s.course FROM students s JOIN course_avgs ca ON s.course=ca.course WHERE s.score>ca.avg_score;",
+        "hint": "CREATE VIEW name AS SELECT... CTE: WITH name AS (query) SELECT...",
+        "rubric": "CREATE VIEW x2. CTE with ROW_NUMBER. CTE with JOIN and WHERE."
+      }
+    ]
+  },
+  "PostgreSQL Deep Dive": {
+    "aiRubric": "Check PostgreSQL-specific syntax, JSON columns, arrays, window functions.",
+    "lessons": [
+      {
+        "title": "PostgreSQL Features",
+        "theory": "## PostgreSQL Extras\n```sql\n-- JSON column\nCREATE TABLE students (\n    id SERIAL PRIMARY KEY,\n    name VARCHAR(100),\n    metadata JSONB\n);\n\n-- Query JSON\nSELECT metadata->>'city' FROM students;\n\n-- Array column\nCREATE TABLE courses (\n    id SERIAL PRIMARY KEY,\n    tags TEXT[]\n);\n\n-- Window functions\nSELECT name, score,\n    RANK() OVER (PARTITION BY course ORDER BY score DESC)\nFROM students;\n```",
+        "instructions": "## Task: PostgreSQL Queries\nWrite PostgreSQL-style SQL for:\n1. Create table with SERIAL, VARCHAR, JSONB\n2. Insert a student with JSONB metadata\n3. Query students by JSON field\n4. Use RANK() window function per course\n5. Array containment check",
+        "starterCode": "-- 1. Create with JSONB\nCREATE TABLE students (\n    id       ___ PRIMARY KEY,\n    name     ___(100),\n    score    INTEGER,\n    course   VARCHAR(50),\n    metadata ___\n);\n\n-- 2. Insert with JSONB\nINSERT INTO students(name, score, course, metadata)\nVALUES('Ada', 88, 'Python', ___'{\"city\":\"Lagos\",\"age\":22}');\n\n-- 3. Query by JSON field\nSELECT name, metadata___'city' AS city\nFROM students\nWHERE metadata___'city' = '\"Lagos\"';\n\n-- 4. Rank per course\nSELECT name, score, course,\n    ___()\n    OVER (___ BY course ORDER BY score DESC) AS rank\nFROM students;\n\n-- 5. Array contains\nSELECT * FROM courses WHERE ___ @> ARRAY['Python'];",
+        "solution": "CREATE TABLE students(id SERIAL PRIMARY KEY,name VARCHAR(100),score INTEGER,course VARCHAR(50),metadata JSONB);\nINSERT INTO students(name,score,course,metadata) VALUES('Ada',88,'Python','{\"city\":\"Lagos\",\"age\":22}');\nSELECT name,metadata->>'city' AS city FROM students WHERE metadata->>'city'='Lagos';\nSELECT name,score,course,RANK() OVER(PARTITION BY course ORDER BY score DESC) AS rank FROM students;\nSELECT * FROM courses WHERE tags @> ARRAY['Python'];",
+        "hint": "SERIAL for auto-increment. JSONB for JSON. ->> extracts text. RANK() OVER (PARTITION BY...).",
+        "rubric": "SERIAL. JSONB. ->> operator. RANK() with PARTITION BY. ARRAY containment @>."
+      }
+    ]
+  },
+  "Query Optimization": {
+    "aiRubric": "Check EXPLAIN, index usage, query rewriting, avoiding N+1.",
+    "lessons": [
+      {
+        "title": "Reading Query Plans",
+        "theory": "## EXPLAIN\n```sql\nEXPLAIN SELECT * FROM students WHERE score > 80;\n-- Shows: Seq Scan (slow) or Index Scan (fast)\n\nEXPLAIN ANALYZE SELECT ...; -- actually runs it\n```\n\n**Slow queries:**\n- Full table scan (no index)\n- SELECT * (fetches unused columns)\n- N+1 queries (query inside a loop)\n\n**Fast queries:**\n- Index on WHERE/JOIN/ORDER BY columns\n- SELECT only needed columns\n- JOINs instead of subqueries in loops",
+        "instructions": "## Task: Optimize These Queries\nRewrite each slow query to be faster:\n1. `SELECT * FROM students` → only fetch name and score\n2. Add WHERE to avoid scanning all rows\n3. Replace correlated subquery with a JOIN\n4. Add appropriate index recommendations",
+        "starterCode": "-- SLOW: fetches everything\nSELECT ___ FROM students;\n\n-- BETTER: only needed columns\nSELECT ___, ___ FROM students;\n\n-- SLOW: no filter\nSELECT name, score FROM students ORDER BY score DESC;\n\n-- BETTER: with index-friendly filter\nSELECT name, score FROM students\nWHERE score ___ 0  -- uses index on score\nORDER BY score DESC LIMIT 10;\n\n-- SLOW: correlated subquery (runs once per row)\nSELECT name,\n    (SELECT COUNT(*) FROM enrollments e WHERE e.student_id = s.id) AS cnt\nFROM students s;\n\n-- BETTER: single JOIN aggregation\nSELECT s.name, COUNT(e.id) AS cnt\nFROM students s\n___ JOIN enrollments e ON s.id = e.student_id\nGROUP BY s.___;\n\n-- Index recommendations\nCREATE INDEX IF NOT EXISTS idx_score ON students(___);\nCREATE INDEX IF NOT EXISTS idx_enrol_sid ON enrollments(___);",
+        "solution": "SELECT * FROM students;\nSELECT name,score FROM students;\nSELECT name,score FROM students ORDER BY score DESC;\nSELECT name,score FROM students WHERE score>0 ORDER BY score DESC LIMIT 10;\nSELECT name,(SELECT COUNT(*) FROM enrollments e WHERE e.student_id=s.id) AS cnt FROM students s;\nSELECT s.name,COUNT(e.id) AS cnt FROM students s LEFT JOIN enrollments e ON s.id=e.student_id GROUP BY s.name;\nCREATE INDEX IF NOT EXISTS idx_score ON students(score);\nCREATE INDEX IF NOT EXISTS idx_enrol_sid ON enrollments(student_id);",
+        "hint": "SELECT only needed columns. LEFT JOIN + GROUP BY replaces correlated subquery. Index WHERE columns.",
+        "rubric": "Column selection. LIMIT added. Correlated replaced with JOIN. Indexes recommended."
+      }
+    ]
+  },
+  "Database Design Patterns": {
+    "aiRubric": "Check normalization, foreign keys, indexes, relationships.",
+    "lessons": [
+      {
+        "title": "Normalization & Schema Design",
+        "theory": "## Database Normalization\n**1NF** — no repeating groups, atomic values\n**2NF** — no partial dependencies\n**3NF** — no transitive dependencies\n\n```sql\n-- Unnormalized (BAD)\nCREATE TABLE orders (\n    id INT,\n    customer_name TEXT,\n    customer_email TEXT,  -- repeated every order!\n    items TEXT  -- comma-separated, not atomic!\n);\n\n-- Normalized (GOOD)\nCREATE TABLE customers (id INT PRIMARY KEY, name TEXT, email TEXT UNIQUE);\nCREATE TABLE orders (id INT PRIMARY KEY, customer_id INT REFERENCES customers(id));\nCREATE TABLE order_items (order_id INT, product_id INT, quantity INT);\n```",
+        "instructions": "## Task: Design a School Schema\nDesign normalized tables for Mabel Academy:\n1. `students` (id, name, email, enrolled_at)\n2. `courses` (id, title, level, instructor_id)\n3. `instructors` (id, name, email, specialty)\n4. `enrolments` (student_id, course_id, enrolled_at, grade) — many-to-many\n5. Write the CREATE TABLE statements with proper foreign keys",
+        "starterCode": "-- Instructors (no foreign keys — parent table)\nCREATE TABLE instructors (\n    id         ___ PRIMARY KEY,\n    name       VARCHAR(100) NOT NULL,\n    email      VARCHAR(120) ___ NOT NULL,\n    specialty  VARCHAR(50)\n);\n\n-- Students\nCREATE TABLE students (\n    id          INTEGER PRIMARY KEY AUTOINCREMENT,\n    name        VARCHAR(100) NOT NULL,\n    email       VARCHAR(120) UNIQUE NOT NULL,\n    enrolled_at DATETIME DEFAULT ___\n);\n\n-- Courses (references instructors)\nCREATE TABLE courses (\n    id            INTEGER PRIMARY KEY AUTOINCREMENT,\n    title         VARCHAR(200) NOT NULL,\n    level         VARCHAR(20) CHECK (level IN (___)),\n    instructor_id INTEGER REFERENCES ___(id) ON DELETE SET NULL\n);\n\n-- Enrolments (many-to-many junction)\nCREATE TABLE enrolments (\n    student_id  INTEGER REFERENCES ___(id) ON DELETE CASCADE,\n    course_id   INTEGER REFERENCES ___(id) ON DELETE CASCADE,\n    enrolled_at DATETIME DEFAULT CURRENT_TIMESTAMP,\n    grade       VARCHAR(2),\n    PRIMARY KEY (student_id, ___)\n);",
+        "solution": "CREATE TABLE instructors(id INTEGER PRIMARY KEY,name VARCHAR(100) NOT NULL,email VARCHAR(120) UNIQUE NOT NULL,specialty VARCHAR(50));\nCREATE TABLE students(id INTEGER PRIMARY KEY AUTOINCREMENT,name VARCHAR(100) NOT NULL,email VARCHAR(120) UNIQUE NOT NULL,enrolled_at DATETIME DEFAULT CURRENT_TIMESTAMP);\nCREATE TABLE courses(id INTEGER PRIMARY KEY AUTOINCREMENT,title VARCHAR(200) NOT NULL,level VARCHAR(20) CHECK(level IN('Beginner','Intermediate','Advanced')),instructor_id INTEGER REFERENCES instructors(id) ON DELETE SET NULL);\nCREATE TABLE enrolments(student_id INTEGER REFERENCES students(id) ON DELETE CASCADE,course_id INTEGER REFERENCES courses(id) ON DELETE CASCADE,enrolled_at DATETIME DEFAULT CURRENT_TIMESTAMP,grade VARCHAR(2),PRIMARY KEY(student_id,course_id));",
+        "hint": "UNIQUE on email. CHECK for level values. REFERENCES table(id). CASCADE deletes related rows. Composite PK.",
+        "rubric": "4 tables. UNIQUE on emails. CHECK constraint. REFERENCES with ON DELETE. Composite PK in enrolments."
+      }
+    ]
+  },
+  "NoSQL with MongoDB": {
+    "aiRubric": "Check pymongo CRUD, find filters, update operators, aggregation pipeline.",
+    "lessons": [
+      {
+        "title": "MongoDB with PyMongo",
+        "theory": "## MongoDB Basics\n```python\nfrom pymongo import MongoClient\n\nclient = MongoClient('mongodb://localhost:27017')\ndb = client['school']\nstudents = db['students']\n\n# Insert\nstudents.insert_one({'name':'Ada','score':88})\n\n# Find\nfor s in students.find({'score':{'$gt':80}}):\n    print(s)\n\n# Update\nstudents.update_one({'name':'Ada'},{'$set':{'score':95}})\n\n# Delete\nstudents.delete_one({'name':'Ada'})\n```\nInstall: `pip install pymongo`",
+        "instructions": "## Task: MongoDB Student DB\nSimulate MongoDB operations (we'll use a dict-based mock):\n1. Insert 3 student documents\n2. Find students with score > 80\n3. Update a student's score\n4. Delete students with score < 60\n5. Show all remaining",
+        "starterCode": "# Simulated MongoDB-style operations using Python dicts\nfrom copy import deepcopy\n\nclass MockCollection:\n    def __init__(self):\n        self._docs = []\n        self._id = 1\n\n    def insert_one(self, doc):\n        d = deepcopy(doc)\n        d['_id'] = self._id\n        self._id += 1\n        self._docs.append(d)\n        return d['_id']\n\n    def find(self, query={}):\n        results = []\n        for doc in self._docs:\n            match = all(\n                (doc.get(k) > v['$gt'] if '$gt' in v else doc.get(k) == v)\n                for k, v in query.items()\n            )\n            if match or not query:\n                results.append(deepcopy(doc))\n        return results\n\n    def update_one(self, query, update):\n        for doc in self._docs:\n            if all(doc.get(k) == v for k,v in query.items()):\n                for k,v in update.get('$set', {}).items():\n                    doc[k] = v\n                break\n\n    def delete_many(self, query):\n        self._docs = [d for d in self._docs\n                      if not all(d.get(k) < v['$lt'] for k,v in query.items()\n                                 if '$lt' in v)]\n\nstudents = MockCollection()\n\n# 1. Insert\nstudents.insert_one({'name':'Ada',   'course':'Python', 'score': 88})\nstudents.insert_one({'name':'Tunde', 'course':'SQL',    'score': ___ })\nstudents.insert_one({'name':'Ngozi', 'course':'Python', 'score': 95})\n\n# 2. Find score > 80\nprint('Score > 80:')\nfor s in students.find({'score': {'$gt': ___}}):\n    print(f\"  {s['name']}: {s['score']}\")\n\n# 3. Update Ada\nstudents.update_one({'name': ___}, {'$set': {'score': 92}})\n\n# 4. Delete low scorers\nstudents.delete_many({'score': {'$lt': 60}})\n\n# 5. All remaining\nprint('Remaining:')\nfor s in students.find():\n    print(f\"  {s}\")",
+        "solution": "from copy import deepcopy\nclass MockCollection:\n    def __init__(self):\n        self._docs=[];self._id=1\n    def insert_one(self,doc):\n        d=deepcopy(doc);d['_id']=self._id;self._id+=1;self._docs.append(d);return d['_id']\n    def find(self,query={}):\n        results=[]\n        for doc in self._docs:\n            match=all((doc.get(k)>v['$gt'] if '$gt' in v else doc.get(k)==v) for k,v in query.items())\n            if match or not query:results.append(deepcopy(doc))\n        return results\n    def update_one(self,query,update):\n        for doc in self._docs:\n            if all(doc.get(k)==v for k,v in query.items()):\n                for k,v in update.get('$set',{}).items():doc[k]=v\n                break\n    def delete_many(self,query):\n        self._docs=[d for d in self._docs if not all(d.get(k)<v['$lt'] for k,v in query.items() if '$lt' in v)]\nstudents=MockCollection()\nstudents.insert_one({'name':'Ada','course':'Python','score':88})\nstudents.insert_one({'name':'Tunde','course':'SQL','score':45})\nstudents.insert_one({'name':'Ngozi','course':'Python','score':95})\nprint('Score>80:')\nfor s in students.find({'score':{'$gt':80}}):print(f\"  {s['name']}:{s['score']}\")\nstudents.update_one({'name':'Ada'},{'$set':{'score':92}})\nstudents.delete_many({'score':{'$lt':60}})\nprint('Remaining:')\nfor s in students.find():print(f'  {s}')",
+        "hint": "$gt for greater than. $lt for less than. $set updates a field. update_one finds first match.",
+        "rubric": "insert_one used. find with $gt. update_one with $set. delete_many with $lt. All remaining shown."
+      }
+    ]
+  },
+  "ORMs with SQLAlchemy": {
+    "aiRubric": "Check SQLAlchemy model, session, query, relationships.",
+    "lessons": [
+      {
+        "title": "SQLAlchemy Core & ORM",
+        "theory": "## SQLAlchemy\n```python\nfrom sqlalchemy import create_engine, Column, Integer, String\nfrom sqlalchemy.orm import declarative_base, Session\n\nBase = declarative_base()\nengine = create_engine('sqlite:///school.db')\n\nclass Student(Base):\n    __tablename__ = 'students'\n    id     = Column(Integer, primary_key=True)\n    name   = Column(String(100), nullable=False)\n    score  = Column(Integer, default=0)\n\nBase.metadata.create_all(engine)\n\nwith Session(engine) as session:\n    ada = Student(name='Ada', score=88)\n    session.add(ada)\n    session.commit()\n\n    students = session.query(Student).filter(Student.score > 80).all()\n```",
+        "instructions": "## Task: SQLAlchemy Student CRUD\n1. Define `Student` model (id, name, course, score)\n2. Create tables\n3. Insert 3 students\n4. Query: filter score >= 80, order by score desc\n5. Update Ada's score\n6. Delete students with score < 60",
+        "starterCode": "from sqlalchemy import create_engine, Column, Integer, String\nfrom sqlalchemy.orm import declarative_base, Session\n\nBase = declarative_base()\nengine = create_engine('sqlite:///:memory:')\n\nclass Student(Base):\n    __tablename__ = ___\n    id     = Column(Integer, primary_key=True)\n    name   = Column(String(100), nullable=False)\n    course = Column(String(50))\n    score  = Column(Integer, default=___)\n\n    def __repr__(self):\n        return f'<Student {self.name} {self.score}>'\n\nBase.metadata.create_all(___)\n\nwith Session(engine) as session:\n    session.add_all([\n        Student(name='Ada',   course='Python', score=88),\n        Student(name='Tunde', course='SQL',    score=55),\n        Student(name='Ngozi', course='Python', score=95)\n    ])\n    session.commit()\n\n    # Query high scorers\n    high = session.query(Student)\\\n        .filter(Student.score >= ___)\\\n        .order_by(Student.score.___())\\\n        .all()\n    print('High scorers:', high)\n\n    # Update Ada\n    ada = session.query(Student).filter(Student.name == ___).first()\n    ada.score = 92\n    session.commit()\n\n    # Delete low scorers\n    session.query(Student).filter(Student.score < ___).delete()\n    session.commit()\n\n    print('All remaining:', session.query(Student).all())",
+        "solution": "from sqlalchemy import create_engine,Column,Integer,String\nfrom sqlalchemy.orm import declarative_base,Session\nBase=declarative_base()\nengine=create_engine('sqlite:///:memory:')\nclass Student(Base):\n    __tablename__='students'\n    id=Column(Integer,primary_key=True)\n    name=Column(String(100),nullable=False)\n    course=Column(String(50))\n    score=Column(Integer,default=0)\n    def __repr__(self):return f'<Student {self.name} {self.score}>'\nBase.metadata.create_all(engine)\nwith Session(engine) as session:\n    session.add_all([Student(name='Ada',course='Python',score=88),Student(name='Tunde',course='SQL',score=55),Student(name='Ngozi',course='Python',score=95)])\n    session.commit()\n    high=session.query(Student).filter(Student.score>=80).order_by(Student.score.desc()).all()\n    print('High:',high)\n    ada=session.query(Student).filter(Student.name=='Ada').first()\n    ada.score=92\n    session.commit()\n    session.query(Student).filter(Student.score<60).delete()\n    session.commit()\n    print('All:',session.query(Student).all())",
+        "hint": "declarative_base(). Column types. Session.add_all(). .filter().order_by().all().",
+        "rubric": "Model defined. create_all. add_all. filter and order_by. Update via attribute. delete()."
+      }
+    ]
+  },
+  "Sharding & Replication": {
+    "aiRubric": "Check concepts of horizontal scaling, read replicas, sharding strategies.",
+    "lessons": [
+      {
+        "title": "Scaling Databases",
+        "theory": "## Scaling Strategies\n**Vertical** — bigger server (limited)\n**Horizontal** — more servers\n\n**Replication:**\n- Primary → writes\n- Replicas → reads\n- Increases read capacity\n\n**Sharding:**\n- Split data across multiple DBs\n- Each shard holds a subset\n- Shard by: user_id range, geography, hash\n\n**Example:**\n- Shard 0: users 1-1M\n- Shard 1: users 1M-2M\n- Shard 2: users 2M-3M",
+        "instructions": "## Task: Simulate a Sharding Router\n1. Write `get_shard(user_id, num_shards=3)` — hash-based routing\n2. Write `ShardRouter` class that routes queries to correct shard\n3. Simulate inserting 10 users and show shard distribution\n4. Show how to query a specific user",
+        "starterCode": "import hashlib\n\ndef get_shard(user_id, num_shards=3):\n    # Hash-based sharding: consistent distribution\n    hash_val = int(hashlib.md5(str(user_id).encode()).hexdigest(), 16)\n    return hash_val % ___\n\nclass ShardRouter:\n    def __init__(self, num_shards=3):\n        self.num_shards = num_shards\n        self.shards = {i: {} for i in range(num_shards)}  # shard_id -> {user_id: data}\n\n    def insert(self, user_id, data):\n        shard = get_shard(user_id, self.___)\n        self.shards[shard][user_id] = data\n        return shard\n\n    def find(self, user_id):\n        shard = get_shard(user_id, self.num_shards)\n        return self.shards[shard].get(___, None)\n\n    def stats(self):\n        for i, shard in self.shards.items():\n            print(f'  Shard {i}: {len(shard)} users — {list(shard.keys())}')\n\nrouter = ShardRouter(num_shards=3)\n\nusers = [(1,'Ada','Python'),(2,'Tunde','SQL'),(3,'Ngozi','FastAPI'),\n         (4,'Emeka','React'),(5,'Amaka','AI'),(6,'Bola','Django'),\n         (7,'Kemi','Flask'),(8,'Seun','Docker'),(9,'Tobi','Redis'),(10,'Femi','Mongo')]\n\nfor uid, name, course in users:\n    shard = router.insert(uid, {'name':name,'course':course})\n    print(f'User {uid} ({name}) -> Shard {shard}')\n\nprint('\\nShard distribution:')\nrouter.stats()\n\nprint('\\nFind user 5:', router.find(5))\nprint('Find user 99:', router.find(99))",
+        "solution": "import hashlib\ndef get_shard(user_id,num_shards=3):\n    hash_val=int(hashlib.md5(str(user_id).encode()).hexdigest(),16)\n    return hash_val%num_shards\nclass ShardRouter:\n    def __init__(self,num_shards=3):\n        self.num_shards=num_shards\n        self.shards={i:{} for i in range(num_shards)}\n    def insert(self,user_id,data):\n        shard=get_shard(user_id,self.num_shards)\n        self.shards[shard][user_id]=data\n        return shard\n    def find(self,user_id):\n        shard=get_shard(user_id,self.num_shards)\n        return self.shards[shard].get(user_id,None)\n    def stats(self):\n        for i,shard in self.shards.items():\n            print(f'  Shard {i}:{len(shard)} users-{list(shard.keys())}')\nrouter=ShardRouter(num_shards=3)\nusers=[(1,'Ada','Python'),(2,'Tunde','SQL'),(3,'Ngozi','FastAPI'),(4,'Emeka','React'),(5,'Amaka','AI'),(6,'Bola','Django'),(7,'Kemi','Flask'),(8,'Seun','Docker'),(9,'Tobi','Redis'),(10,'Femi','Mongo')]\nfor uid,name,course in users:\n    shard=router.insert(uid,{'name':name,'course':course})\n    print(f'User {uid}({name})->Shard {shard}')\nprint('\\nDistribution:')\nrouter.stats()\nprint('\\nFind 5:',router.find(5))\nprint('Find 99:',router.find(99))",
+        "hint": "hash_val % num_shards routes to shard. find uses same hash to locate correct shard.",
+        "rubric": "hash-based shard function. ShardRouter inserts to correct shard. find routes correctly. stats shown."
+      }
+    ]
+  }
+}

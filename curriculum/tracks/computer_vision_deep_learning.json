@@ -1,0 +1,152 @@
+{
+  "Computer Vision Fundamentals": {
+    "aiRubric": "Check OpenCV basics, color spaces, filtering, thresholding, and Haar cascade face detection.",
+    "lessons": [
+      {
+        "title": "Image Processing Basics with OpenCV (Read, Display, Save)",
+        "theory": "## OpenCV Basics\nOpenCV is the standard library for computer vision in Python.\n```python\nimport cv2\nimg = cv2.imread('image.jpg')\n```",
+        "instructions": "## Task: Read Image\nUse `cv2` to read `'photo.png'` into a variable called `img`.",
+        "starterCode": "import cv2\nimg = cv2.___('___')",
+        "solution": "import cv2\nimg = cv2.imread('photo.png')",
+        "hint": "cv2.imread",
+        "rubric": "Image read correctly using cv2.imread."
+      },
+      {
+        "title": "Color Spaces & Image Transformations",
+        "theory": "## Color Spaces\nOpenCV reads images in BGR format by default. Often we convert to Grayscale or RGB.\n```python\ngray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)\n```",
+        "instructions": "## Task: Convert to Grayscale\nConvert the BGR image `img` to grayscale using `cv2.COLOR_BGR2GRAY`.",
+        "starterCode": "import cv2\ngray = cv2.___(___, cv2.___)",
+        "solution": "import cv2\ngray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)",
+        "hint": "cv2.cvtColor and cv2.COLOR_BGR2GRAY",
+        "rubric": "Image successfully converted to grayscale."
+      },
+      {
+        "title": "Image Filtering, Blurring & Edge Detection",
+        "theory": "## Edge Detection\nCanny edge detection finds the edges in an image.\n```python\nedges = cv2.Canny(gray, 100, 200)\n```",
+        "instructions": "## Task: Canny Edges\nApply Canny edge detection to `gray_img` with thresholds `50` and `150`.",
+        "starterCode": "import cv2\nedges = cv2.___(___, ___, ___)",
+        "solution": "import cv2\nedges = cv2.Canny(gray_img, 50, 150)",
+        "hint": "cv2.Canny(gray_img, 50, 150)",
+        "rubric": "Canny edge detection applied correctly."
+      },
+      {
+        "title": "Thresholding & Contour Detection",
+        "theory": "## Thresholding\nConverts a grayscale image into a binary (black and white) image.\n```python\nret, thresh = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)\n```",
+        "instructions": "## Task: Binary Threshold\nApply a binary threshold to `gray` at a value of `100`.",
+        "starterCode": "import cv2\nret, thresh = cv2.___(___, ___, 255, cv2.___)",
+        "solution": "import cv2\nret, thresh = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY)",
+        "hint": "cv2.threshold and cv2.THRESH_BINARY",
+        "rubric": "Binary threshold applied at 100."
+      },
+      {
+        "title": "Face Detection with Haar Cascades",
+        "theory": "## Haar Cascades\nPre-trained classifiers used for rapid object detection (like faces).\n```python\ncascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')\nfaces = cascade.detectMultiScale(gray, 1.1, 4)\n```",
+        "instructions": "## Task: Detect Faces\nUse `detectMultiScale` on the `gray` image with a scale factor of `1.2` and `5` minNeighbors.",
+        "starterCode": "faces = face_cascade.___(___, ___, ___)",
+        "solution": "faces = face_cascade.detectMultiScale(gray, 1.2, 5)",
+        "hint": "detectMultiScale(gray, 1.2, 5)",
+        "rubric": "detectMultiScale used with correct parameters."
+      }
+    ]
+  },
+  "Deep Learning for Vision": {
+    "aiRubric": "Check CNN concepts, PyTorch neural network logic, Transfer Learning, YOLO basics, and segmentation concepts.",
+    "lessons": [
+      {
+        "title": "Intro to Convolutional Neural Networks (CNNs)",
+        "theory": "## CNNs\nCNNs use convolutional layers to extract spatial features from images.\n```python\nimport torch.nn as nn\nconv = nn.Conv2d(in_channels=3, out_channels=16, kernel_size=3)\n```",
+        "instructions": "## Task: Define Convolution\nCreate a 2D convolution layer with `1` input channel, `32` output channels, and a kernel size of `5`.",
+        "starterCode": "import torch.nn as nn\nconv1 = nn.___(___=1, ___=32, ___=5)",
+        "solution": "import torch.nn as nn\nconv1 = nn.Conv2d(in_channels=1, out_channels=32, kernel_size=5)",
+        "hint": "Conv2d, in_channels, out_channels, kernel_size",
+        "rubric": "Conv2d defined correctly."
+      },
+      {
+        "title": "Building & Training a CNN with PyTorch",
+        "theory": "## PyTorch Training\nA training step requires a forward pass, loss calculation, backpropagation, and optimizer step.\n```python\nloss.backward()\noptimizer.step()\n```",
+        "instructions": "## Task: Backprop Step\nCall the backward pass on the `loss` variable, then step the `optimizer`.",
+        "starterCode": "loss.___\noptimizer.___()",
+        "solution": "loss.backward()\noptimizer.step()",
+        "hint": "backward() and step()",
+        "rubric": "Backward pass and optimizer step completed."
+      },
+      {
+        "title": "Transfer Learning & Pre-Trained Models (ResNet)",
+        "theory": "## Transfer Learning\nUse a pre-trained model and replace its final layer for a new task.\n```python\nimport torchvision.models as models\nresnet = models.resnet18(pretrained=True)\n```",
+        "instructions": "## Task: Load ResNet\nLoad a pre-trained `resnet50` model from `torchvision.models`.",
+        "starterCode": "import torchvision.models as models\nmodel = models.___(___)",
+        "solution": "import torchvision.models as models\nmodel = models.resnet50(pretrained=True)",
+        "hint": "resnet50(pretrained=True)",
+        "rubric": "Pretrained resnet50 loaded."
+      },
+      {
+        "title": "Object Detection Basics with YOLO",
+        "theory": "## YOLO\nYou Only Look Once (YOLO) is a fast, single-pass object detection model predicting bounding boxes and classes.\n```python\n# pseudo-code: model(image) -> [x, y, w, h, class_id, confidence]\n```",
+        "instructions": "## Task: YOLO Output\nAssign the string `'Bounding Box'` to the variable representing the spatial localization output of YOLO.",
+        "starterCode": "localization_output = '___'",
+        "solution": "localization_output = 'Bounding Box'",
+        "hint": "'Bounding Box'",
+        "rubric": "Variable assigned 'Bounding Box'."
+      },
+      {
+        "title": "Image Segmentation Fundamentals",
+        "theory": "## Segmentation\nUnlike detection (boxes), segmentation predicts a class for every single pixel in the image.\n```python\n# Output shape: [batch_size, num_classes, height, width]\n```",
+        "instructions": "## Task: Segmentation Target\nAssign the string `'Pixel'` to the variable describing what level segmentation operates at.",
+        "starterCode": "segmentation_level = '___'",
+        "solution": "segmentation_level = 'Pixel'",
+        "hint": "'Pixel'",
+        "rubric": "Variable assigned 'Pixel'."
+      }
+    ]
+  },
+  "Advanced Vision & Deployment": {
+    "aiRubric": "Check object tracking concepts, facial recognition, VLM knowledge, ONNX export, and vision deployment logic.",
+    "lessons": [
+      {
+        "title": "Real-Time Object Tracking in Video",
+        "theory": "## Object Tracking\nAlgorithms like SORT or DeepSORT track an object ID across multiple video frames.\n```python\ntracker.update(detections)\n```",
+        "instructions": "## Task: Tracker Update\nCall the `update` method on the `tracker` object, passing in the `boxes` array.",
+        "starterCode": "tracker.___(___)",
+        "solution": "tracker.update(boxes)",
+        "hint": "update(boxes)",
+        "rubric": "Tracker update method called with boxes."
+      },
+      {
+        "title": "Building a Facial Recognition Pipeline",
+        "theory": "## Facial Recognition\nExtract face embeddings (vectors) and compare their cosine similarity or Euclidean distance.\n```python\ndistance = np.linalg.norm(emb1 - emb2)\n```",
+        "instructions": "## Task: Vector Distance\nAssign the string `'Euclidean'` to the variable describing the distance metric `np.linalg.norm` computes.",
+        "starterCode": "distance_metric = '___'",
+        "solution": "distance_metric = 'Euclidean'",
+        "hint": "'Euclidean'",
+        "rubric": "Variable assigned 'Euclidean'."
+      },
+      {
+        "title": "Vision-Language Models (VLMs) & Multimodal AI",
+        "theory": "## VLMs\nModels like CLIP embed both text and images into the same vector space to perform zero-shot classification.\n```python\nimage_features = model.encode_image(image)\ntext_features = model.encode_text(text)\n```",
+        "instructions": "## Task: Joint Embedding Space\nAssign `'CLIP'` to the popular OpenAI VLM model that maps images and text together.",
+        "starterCode": "vlm_model_name = '___'",
+        "solution": "vlm_model_name = 'CLIP'",
+        "hint": "'CLIP'",
+        "rubric": "Variable assigned 'CLIP'."
+      },
+      {
+        "title": "Optimizing Models with ONNX & TensorRT",
+        "theory": "## ONNX\nOpen Neural Network Exchange (ONNX) format allows cross-platform optimization.\n```python\ntorch.onnx.export(model, dummy_input, \"model.onnx\")\n```",
+        "instructions": "## Task: Export to ONNX\nUse `torch.onnx.export` to save `model` and `x` to `'vision.onnx'`.",
+        "starterCode": "torch.onnx.___(___, ___, '___')",
+        "solution": "torch.onnx.export(model, x, 'vision.onnx')",
+        "hint": "export(model, x, 'vision.onnx')",
+        "rubric": "ONNX export command correctly formed."
+      },
+      {
+        "title": "Deploying Vision Models to Production",
+        "theory": "## Deployment\nVision models are heavy. We often use TensorRT or TorchServe for optimized production inference.\n```bash\ntorchserve --start --ncs --model-store model_store --models resnet=resnet-18.mar\n```",
+        "instructions": "## Task: TorchServe\nAssign `'TorchServe'` to the PyTorch tool used specifically for model serving.",
+        "starterCode": "serving_tool = '___'",
+        "solution": "serving_tool = 'TorchServe'",
+        "hint": "'TorchServe'",
+        "rubric": "Variable assigned 'TorchServe'."
+      }
+    ]
+  }
+}

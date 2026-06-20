@@ -1,0 +1,152 @@
+{
+  "DSA Foundations & Linear Data": {
+    "aiRubric": "Check understanding of Big O, Arrays, Linked Lists, Stacks, Queues, and basic searching.",
+    "lessons": [
+      {
+        "title": "Big O Notation & Time/Space Complexity Analysis",
+        "theory": "## Big O Notation\nBig O describes how runtime or space requirements grow as the input size `n` grows.\n```python\ndef print_all(items):\n    for i in items: print(i)  # O(n) Time, O(1) Space\n\ndef print_pairs(items):\n    for i in items:\n        for j in items: print(i, j)  # O(n^2) Time\n```",
+        "instructions": "## Task: Big O Analysis\nIdentify the time complexity of the given function and return it as a string formatted like `'O(n)'`.",
+        "starterCode": "def find_max(arr):\n    max_val = arr[0]\n    for num in arr:\n        if num > max_val:\n            max_val = num\n    return max_val\n\ndef get_time_complexity():\n    return '___'",
+        "solution": "def get_time_complexity():\n    return 'O(n)'",
+        "hint": "The loop runs `n` times, where `n` is the length of `arr`.",
+        "rubric": "Returns 'O(n)'."
+      },
+      {
+        "title": "Arrays & The Two-Pointer Technique",
+        "theory": "## Two-Pointer Technique\nUse two pointers (usually start and end) to iterate through an array efficiently.\n```python\n# Reverse array in-place\nleft, right = 0, len(arr) - 1\nwhile left < right:\n    arr[left], arr[right] = arr[right], arr[left]\n    left += 1; right -= 1\n```",
+        "instructions": "## Task: Two Sum (Sorted)\nGiven a *sorted* array and a target sum, use two pointers to find if any two numbers add up to the target. Return `True` if found, else `False`.",
+        "starterCode": "def has_pair_with_sum(arr, target):\n    left, right = 0, len(arr) - 1\n    while left < right:\n        current_sum = arr[left] + arr[right]\n        if current_sum == target:\n            return ___\n        elif current_sum < target:\n            ___ += 1\n        else:\n            ___ -= 1\n    return False",
+        "solution": "def has_pair_with_sum(arr, target):\n    left, right = 0, len(arr) - 1\n    while left < right:\n        current_sum = arr[left] + arr[right]\n        if current_sum == target:\n            return True\n        elif current_sum < target:\n            left += 1\n        else:\n            right -= 1\n    return False",
+        "hint": "If sum < target, move left pointer up. If sum > target, move right pointer down.",
+        "rubric": "Correctly implements two-pointer logic returning True/False."
+      },
+      {
+        "title": "Linked Lists (Singly & Doubly Linked)",
+        "theory": "## Singly Linked List\nNodes contain a value and a pointer to the next node.\n```python\nclass Node:\n    def __init__(self, val):\n        self.val = val\n        self.next = None\n```",
+        "instructions": "## Task: Create a Node\nInstantiate two `Node` objects: `head` with value 1, and `second` with value 2. Link `head` to `second`.",
+        "starterCode": "class Node:\n    def __init__(self, val):\n        self.val = val\n        self.next = None\n\nhead = Node(___)\nsecond = Node(___)\nhead.___ = second",
+        "solution": "class Node:\n    def __init__(self, val):\n        self.val = val\n        self.next = None\n\nhead = Node(1)\nsecond = Node(2)\nhead.next = second",
+        "hint": "head.next = second",
+        "rubric": "Nodes instantiated with 1 and 2, linked properly."
+      },
+      {
+        "title": "Stacks & Queues (LIFO vs FIFO)",
+        "theory": "## Stack (LIFO)\nLast-In-First-Out. Can be implemented using a Python list.\n```python\nstack = []\nstack.append(1) # Push\nval = stack.pop() # Pop\n```",
+        "instructions": "## Task: Valid Parentheses\nUse a stack to check if a string of parentheses is valid (e.g. `()` is valid, `()(` is not).",
+        "starterCode": "def is_valid(s):\n    stack = []\n    for char in s:\n        if char == '(':\n            stack.___(char)\n        elif char == ')':\n            if not stack:\n                return False\n            stack.___()\n    return len(stack) == 0",
+        "solution": "def is_valid(s):\n    stack = []\n    for char in s:\n        if char == '(':\n            stack.append(char)\n        elif char == ')':\n            if not stack:\n                return False\n            stack.pop()\n    return len(stack) == 0",
+        "hint": "append() to push, pop() to remove.",
+        "rubric": "Uses append and pop correctly on stack."
+      },
+      {
+        "title": "Searching (Binary Search) & Basic Sorting",
+        "theory": "## Binary Search\nFinds an element in a *sorted* array in `O(log n)` time by repeatedly dividing the search interval in half.\n```python\nmid = (left + right) // 2\nif arr[mid] == target: return True\n```",
+        "instructions": "## Task: Binary Search\nImplement binary search to return the index of `target`. Return `-1` if not found.",
+        "starterCode": "def binary_search(arr, target):\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return ___\n        elif arr[mid] < target:\n            ___ = mid + 1\n        else:\n            ___ = mid - 1\n    return -1",
+        "solution": "def binary_search(arr, target):\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1",
+        "hint": "Return mid when found. Adjust left and right pointers appropriately.",
+        "rubric": "Binary search implemented correctly."
+      }
+    ]
+  },
+  "Hash Maps, Trees & Recursion": {
+    "aiRubric": "Check understanding of dicts, sets, recursion, tree structures, traversals, and advanced sorts.",
+    "lessons": [
+      {
+        "title": "Hash Tables, Sets & Collision Resolution",
+        "theory": "## Hash Maps\nDictionaries (`dict`) in Python are implemented as hash tables. They provide `O(1)` average time complexity for lookups.\n```python\nseen = set()\nseen.add(5)\nif 5 in seen: print('found')\n```",
+        "instructions": "## Task: Two Sum (Unsorted)\nUse a hash map (dictionary) or set to find if two numbers in an *unsorted* array sum to `target` in `O(n)` time.",
+        "starterCode": "def has_pair(arr, target):\n    seen = set()\n    for num in arr:\n        complement = target - num\n        if complement in seen:\n            return ___\n        seen.___(___)\n    return False",
+        "solution": "def has_pair(arr, target):\n    seen = set()\n    for num in arr:\n        complement = target - num\n        if complement in seen:\n            return True\n        seen.add(num)\n    return False",
+        "hint": "Check if complement is in seen. Add num to seen.",
+        "rubric": "Uses set appropriately in O(n) time."
+      },
+      {
+        "title": "Recursion & Backtracking Basics",
+        "theory": "## Recursion\nA function calling itself. Must have a base case to prevent infinite loops.\n```python\ndef factorial(n):\n    if n <= 1: return 1\n    return n * factorial(n - 1)\n```",
+        "instructions": "## Task: Fibonacci Sequence\nWrite a recursive function to return the `n`th Fibonacci number.",
+        "starterCode": "def fib(n):\n    if n <= 1:\n        return ___\n    return fib(___) + fib(___)",
+        "solution": "def fib(n):\n    if n <= 1:\n        return n\n    return fib(n - 1) + fib(n - 2)",
+        "hint": "Base case returns n. Recursive calls are n-1 and n-2.",
+        "rubric": "Correct recursive Fibonacci implementation."
+      },
+      {
+        "title": "Trees & Binary Search Trees (BST)",
+        "theory": "## Binary Search Tree\nLeft child is less than parent, right child is greater than parent.\n```python\nclass TreeNode:\n    def __init__(self, val):\n        self.val = val\n        self.left = None\n        self.right = None\n```",
+        "instructions": "## Task: BST Insertion\nComplete the code to insert a new value into a Binary Search Tree.",
+        "starterCode": "def insert(root, val):\n    if not root:\n        return TreeNode(val)\n    if val < root.val:\n        root.left = insert(root.___, val)\n    else:\n        root.right = insert(root.___, val)\n    return root",
+        "solution": "def insert(root, val):\n    if not root:\n        return TreeNode(val)\n    if val < root.val:\n        root.left = insert(root.left, val)\n    else:\n        root.right = insert(root.right, val)\n    return root",
+        "hint": "Pass root.left or root.right recursively.",
+        "rubric": "Correctly assigns root.left and root.right."
+      },
+      {
+        "title": "Tree Traversals (Inorder, Preorder, Postorder)",
+        "theory": "## Inorder Traversal\nVisits Left, Root, Right. For a BST, this yields values in sorted order.\n```python\ndef inorder(node):\n    if node:\n        inorder(node.left)\n        print(node.val)\n        inorder(node.right)\n```",
+        "instructions": "## Task: Inorder List\nModify the inorder traversal to append values to a list `result` instead of printing them.",
+        "starterCode": "def get_inorder(node, result):\n    if node:\n        get_inorder(node.___, result)\n        result.append(node.___)\n        get_inorder(node.___, result)",
+        "solution": "def get_inorder(node, result):\n    if node:\n        get_inorder(node.left, result)\n        result.append(node.val)\n        get_inorder(node.right, result)",
+        "hint": "Traverse left, append val, traverse right.",
+        "rubric": "Correct inorder recursive traversal."
+      },
+      {
+        "title": "Advanced Sorting (Merge Sort & Quick Sort)",
+        "theory": "## Merge Sort\nA divide-and-conquer algorithm that recursively splits the array and merges the sorted halves.\n```python\n# Merging two sorted arrays\n# ... logic to compare elements from left and right ...\n```",
+        "instructions": "## Task: Merge Logic\nComplete the core logic of merging two sorted lists `left` and `right` into a new list `merged`.",
+        "starterCode": "def merge(left, right):\n    merged = []\n    i = j = 0\n    while i < len(left) and j < len(right):\n        if left[i] < right[j]:\n            merged.append(___)\n            i += 1\n        else:\n            merged.append(___)\n            j += 1\n    return merged + left[i:] + right[j:]",
+        "solution": "def merge(left, right):\n    merged = []\n    i = j = 0\n    while i < len(left) and j < len(right):\n        if left[i] < right[j]:\n            merged.append(left[i])\n            i += 1\n        else:\n            merged.append(right[j])\n            j += 1\n    return merged + left[i:] + right[j:]",
+        "hint": "Append left[i] or right[j] based on which is smaller.",
+        "rubric": "Merge step appends correctly."
+      }
+    ]
+  },
+  "Graphs & Dynamic Programming": {
+    "aiRubric": "Check understanding of adjacency lists, BFS/DFS, Heaps, Memoization, and shortest path algorithms.",
+    "lessons": [
+      {
+        "title": "Graphs (Adjacency Lists vs Matrices)",
+        "theory": "## Adjacency List\nGraphs are often represented as dictionaries where keys are nodes and values are lists of neighbors.\n```python\ngraph = {\n    'A': ['B', 'C'],\n    'B': ['A', 'D']\n}\n```",
+        "instructions": "## Task: Build Adjacency List\nGiven a list of edges (pairs of connected nodes), build an undirected adjacency list.",
+        "starterCode": "def build_graph(edges):\n    graph = {}\n    for u, v in edges:\n        if u not in graph: graph[u] = []\n        if v not in graph: graph[v] = []\n        graph[u].___(v)\n        graph[v].___(u) # undirected\n    return graph",
+        "solution": "def build_graph(edges):\n    graph = {}\n    for u, v in edges:\n        if u not in graph: graph[u] = []\n        if v not in graph: graph[v] = []\n        graph[u].append(v)\n        graph[v].append(u)\n    return graph",
+        "hint": "append() neighbors to the list.",
+        "rubric": "Appends to adjacency list properly."
+      },
+      {
+        "title": "Graph Traversals (Breadth-First Search & Depth-First Search)",
+        "theory": "## Breadth-First Search (BFS)\nUses a queue to visit all neighbors layer by layer.\n```python\nfrom collections import deque\nq = deque([start_node])\nwhile q:\n    curr = q.popleft()\n```",
+        "instructions": "## Task: BFS Implementation\nComplete the BFS traversal to return a list of visited nodes.",
+        "starterCode": "from collections import deque\n\ndef bfs(graph, start):\n    visited = set([start])\n    queue = deque([start])\n    result = []\n    while queue:\n        node = queue.___()\n        result.append(node)\n        for neighbor in graph[node]:\n            if neighbor not in visited:\n                visited.___(neighbor)\n                queue.___(neighbor)\n    return result",
+        "solution": "from collections import deque\n\ndef bfs(graph, start):\n    visited = set([start])\n    queue = deque([start])\n    result = []\n    while queue:\n        node = queue.popleft()\n        result.append(node)\n        for neighbor in graph[node]:\n            if neighbor not in visited:\n                visited.add(neighbor)\n                queue.append(neighbor)\n    return result",
+        "hint": "popleft() from queue, add() to set, append() to queue.",
+        "rubric": "Proper queue usage for BFS."
+      },
+      {
+        "title": "Heaps & Priority Queues",
+        "theory": "## Min-Heap\nA binary tree where the parent is always smaller than its children. Python's `heapq` module provides min-heap functionality on lists.\n```python\nimport heapq\nh = []\nheapq.heappush(h, 5)\nmin_val = heapq.heappop(h)\n```",
+        "instructions": "## Task: Kth Largest Element\nUse a min-heap to find the `k`th largest element in an array efficiently.",
+        "starterCode": "import heapq\n\ndef find_kth_largest(nums, k):\n    min_heap = nums[:k]\n    heapq.___(___)\n    for num in nums[k:]:\n        if num > min_heap[0]:\n            heapq.heappushpop(min_heap, num)\n    return min_heap[___]",
+        "solution": "import heapq\n\ndef find_kth_largest(nums, k):\n    min_heap = nums[:k]\n    heapq.heapify(min_heap)\n    for num in nums[k:]:\n        if num > min_heap[0]:\n            heapq.heappushpop(min_heap, num)\n    return min_heap[0]",
+        "hint": "heapify the initial list. The kth largest is at index 0 of a size-k min-heap.",
+        "rubric": "heapify used and index 0 returned."
+      },
+      {
+        "title": "Dynamic Programming (Memoization vs Tabulation)",
+        "theory": "## Memoization (Top-Down)\nStore results of expensive recursive calls to avoid redundant work.\n```python\nmemo = {}\ndef dp(n):\n    if n in memo: return memo[n]\n    memo[n] = result = ...\n    return result\n```",
+        "instructions": "## Task: Climbing Stairs\nYou are climbing a staircase of `n` steps. You can take 1 or 2 steps at a time. Add memoization to the recursive solution.",
+        "starterCode": "def climb(n, memo={}):\n    if n in ___:\n        return ___\n    if n <= 2:\n        return n\n    memo[n] = climb(n-1, memo) + climb(n-2, memo)\n    return memo[n]",
+        "solution": "def climb(n, memo={}):\n    if n in memo:\n        return memo[n]\n    if n <= 2:\n        return n\n    memo[n] = climb(n-1, memo) + climb(n-2, memo)\n    return memo[n]",
+        "hint": "Check if n in memo, then return memo[n].",
+        "rubric": "Memoization implemented correctly."
+      },
+      {
+        "title": "Advanced Graph Algorithms (Dijkstra's Shortest Path)",
+        "theory": "## Dijkstra's Algorithm\nFinds the shortest path from a start node to all other nodes in a weighted graph with non-negative weights using a priority queue.\n```python\n# distances = {node: float('inf')}\n# distances[start] = 0\n```",
+        "instructions": "## Task: Dijkstra Distances\nInitialize the `distances` dictionary and the priority queue `pq` for Dijkstra's algorithm.",
+        "starterCode": "def init_dijkstra(graph, start):\n    distances = {node: float('inf') for node in graph}\n    distances[start] = ___\n    pq = [(___, start)]  # (distance, node)\n    return distances, pq",
+        "solution": "def init_dijkstra(graph, start):\n    distances = {node: float('inf') for node in graph}\n    distances[start] = 0\n    pq = [(0, start)]  # (distance, node)\n    return distances, pq",
+        "hint": "Distance to start is 0.",
+        "rubric": "Distances initialized with 0 for start."
+      }
+    ]
+  }
+}

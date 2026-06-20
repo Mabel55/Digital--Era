@@ -1,0 +1,152 @@
+{
+  "DevOps Fundamentals": {
+    "aiRubric": "Check basic bash commands, networking concepts, cloud provider basics, IAM setup, and CI/CD logic.",
+    "lessons": [
+      {
+        "title": "Linux Command Line & Bash Scripting",
+        "theory": "## Bash Scripting\nBash is the default shell for many Linux distros.\n```bash\n#!/bin/bash\necho \"Starting script...\"\nls -la /var/www\n```",
+        "instructions": "## Task: Simple Script\nWrite a bash script that prints 'Hello DevOps' and then lists the contents of the current directory.",
+        "starterCode": "#!/bin/bash\n\n___ \"Hello DevOps\"\n___ -la\n",
+        "solution": "#!/bin/bash\necho \"Hello DevOps\"\nls -la\n",
+        "hint": "Use echo and ls -la.",
+        "rubric": "echo and ls commands used correctly."
+      },
+      {
+        "title": "Networking Basics (IP, DNS, HTTP)",
+        "theory": "## DNS & HTTP\nDNS resolves domains to IPs. HTTP is the protocol of the web.\n```bash\ncurl -I https://api.github.com\n```",
+        "instructions": "## Task: Curl Headers\nUse `curl` to fetch only the HTTP headers from `http://example.com`.",
+        "starterCode": "___ -I http://example.com",
+        "solution": "curl -I http://example.com",
+        "hint": "curl -I",
+        "rubric": "curl -I command correctly structured."
+      },
+      {
+        "title": "Introduction to Cloud Providers (AWS & Azure)",
+        "theory": "## Cloud Providers\nAWS uses CLI commands like `aws s3 ls`.\n```bash\naws ec2 describe-instances\n```",
+        "instructions": "## Task: AWS CLI\nWrite the AWS CLI command to list all S3 buckets.",
+        "starterCode": "aws ___ ___",
+        "solution": "aws s3 ls",
+        "hint": "aws s3 ls",
+        "rubric": "aws s3 ls invoked."
+      },
+      {
+        "title": "Identity & Access Management (IAM)",
+        "theory": "## IAM Policies\nIAM defines permissions using JSON policies.\n```json\n{\n  \"Effect\": \"Allow\",\n  \"Action\": \"s3:ListBucket\",\n  \"Resource\": \"*\"\n}\n```",
+        "instructions": "## Task: IAM JSON\nComplete the IAM policy to `Allow` the action `ec2:DescribeInstances`.",
+        "starterCode": "{\n  \"Effect\": \"___\",\n  \"Action\": \"___\",\n  \"Resource\": \"*\"\n}",
+        "solution": "{\n  \"Effect\": \"Allow\",\n  \"Action\": \"ec2:DescribeInstances\",\n  \"Resource\": \"*\"\n}",
+        "hint": "Allow and ec2:DescribeInstances",
+        "rubric": "IAM policy JSON is correct."
+      },
+      {
+        "title": "CI/CD Pipelines (GitHub Actions)",
+        "theory": "## GitHub Actions\nAutomate workflows using YAML.\n```yaml\nname: CI\non: [push]\njobs:\n  build:\n    runs-on: ubuntu-latest\n```",
+        "instructions": "## Task: Trigger Action\nConfigure the GitHub Action workflow to trigger `on: [pull_request]`.",
+        "starterCode": "name: CI\non: [___]\njobs:\n  test:\n    runs-on: ubuntu-latest",
+        "solution": "name: CI\non: [pull_request]\njobs:\n  test:\n    runs-on: ubuntu-latest",
+        "hint": "on: [pull_request]",
+        "rubric": "GitHub Action triggers on pull_request."
+      }
+    ]
+  },
+  "Containers & Infrastructure": {
+    "aiRubric": "Check Docker syntax, Docker Compose yaml structure, Terraform HCL logic, and Ansible playbooks.",
+    "lessons": [
+      {
+        "title": "Introduction to Docker & Containerization",
+        "theory": "## Dockerfiles\nDefine container images.\n```dockerfile\nFROM node:18\nCOPY . /app\nCMD [\"node\", \"app.js\"]\n```",
+        "instructions": "## Task: Docker FROM\nStart a Dockerfile using the `python:3.9-slim` image and set the working directory to `/app`.",
+        "starterCode": "___ python:3.9-slim\n___ /app",
+        "solution": "FROM python:3.9-slim\nWORKDIR /app",
+        "hint": "FROM and WORKDIR",
+        "rubric": "FROM and WORKDIR specified."
+      },
+      {
+        "title": "Docker Compose & Multi-Container Apps",
+        "theory": "## Docker Compose\nRun multi-container applications via YAML.\n```yaml\nservices:\n  db:\n    image: postgres\n```",
+        "instructions": "## Task: Compose Service\nDefine a service named `web` using the `nginx:latest` image mapping port `8080:80`.",
+        "starterCode": "services:\n  ___:\n    image: ___\n    ports:\n      - \"___:80\"",
+        "solution": "services:\n  web:\n    image: nginx:latest\n    ports:\n      - \"8080:80\"",
+        "hint": "web, nginx:latest, and 8080",
+        "rubric": "Docker Compose service properly defined."
+      },
+      {
+        "title": "Infrastructure as Code (IaC) Concepts",
+        "theory": "## IaC\nManage infrastructure using declarative code. Tools include Terraform, Pulumi, and CloudFormation.",
+        "instructions": "## Task: Principles\nDefine the core benefit of IaC by assigning `true` to `isDeclarative`.",
+        "starterCode": "const isDeclarative = ___;",
+        "solution": "const isDeclarative = true;",
+        "hint": "true",
+        "rubric": "isDeclarative set to true."
+      },
+      {
+        "title": "Provisioning with Terraform",
+        "theory": "## Terraform HCL\nUse HashiCorp Configuration Language to provision resources.\n```hcl\nresource \"aws_s3_bucket\" \"bucket\" {\n  bucket = \"my-bucket\"\n}\n```",
+        "instructions": "## Task: AWS EC2 Resource\nDefine an `aws_instance` resource named `web_server` with an ami of `ami-12345`.",
+        "starterCode": "resource \"___\" \"___\" {\n  ami = \"___\"\n}",
+        "solution": "resource \"aws_instance\" \"web_server\" {\n  ami = \"ami-12345\"\n}",
+        "hint": "aws_instance, web_server, ami-12345",
+        "rubric": "Terraform resource defined."
+      },
+      {
+        "title": "Configuration Management with Ansible",
+        "theory": "## Ansible Playbooks\nAutomate configuration via SSH.\n```yaml\n- hosts: all\n  tasks:\n    - name: Ensure nginx is installed\n      apt: name=nginx state=present\n```",
+        "instructions": "## Task: Ansible Task\nWrite a task using the `apt` module to install `git` (state=present).",
+        "starterCode": "- hosts: webservers\n  tasks:\n    - name: Install Git\n      ___: name=___ state=___",
+        "solution": "- hosts: webservers\n  tasks:\n    - name: Install Git\n      apt: name=git state=present",
+        "hint": "apt, git, present",
+        "rubric": "Ansible apt task complete."
+      }
+    ]
+  },
+  "Orchestration & Observability": {
+    "aiRubric": "Check Kubernetes YAML (pods, deployments, services), ArgoCD concepts, and Prometheus/ELK configurations.",
+    "lessons": [
+      {
+        "title": "Introduction to Kubernetes (K8s) Architecture",
+        "theory": "## Kubernetes\nOrchestrates containers across clusters.\n```yaml\napiVersion: v1\nkind: Pod\n```",
+        "instructions": "## Task: Pod YAML\nComplete the YAML to define a `Pod` with the name `my-app`.",
+        "starterCode": "apiVersion: v1\nkind: ___\nmetadata:\n  name: ___\n",
+        "solution": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: my-app\n",
+        "hint": "Pod and my-app",
+        "rubric": "Pod metadata defined correctly."
+      },
+      {
+        "title": "Deploying Pods & Services in Kubernetes",
+        "theory": "## Services\nExpose Pods to the network.\n```yaml\nkind: Service\nspec:\n  selector:\n    app: my-app\n```",
+        "instructions": "## Task: Service Selector\nMatch the Service selector to the app label `backend` on port `80`.",
+        "starterCode": "kind: Service\nspec:\n  ___:\n    app: ___\n  ports:\n    - port: ___",
+        "solution": "kind: Service\nspec:\n  selector:\n    app: backend\n  ports:\n    - port: 80",
+        "hint": "selector, backend, 80",
+        "rubric": "K8s Service selector and port specified."
+      },
+      {
+        "title": "Continuous Deployment (GitOps with ArgoCD)",
+        "theory": "## GitOps\nStore the desired state in Git. ArgoCD syncs the cluster to match Git.",
+        "instructions": "## Task: Argo Application\nSet the `project` to `default` and the `repoURL` to `https://github.com/my/repo`.",
+        "starterCode": "apiVersion: argoproj.io/v1alpha1\nkind: Application\nspec:\n  project: ___\n  source:\n    repoURL: ___\n",
+        "solution": "apiVersion: argoproj.io/v1alpha1\nkind: Application\nspec:\n  project: default\n  source:\n    repoURL: https://github.com/my/repo\n",
+        "hint": "default and https://github.com/my/repo",
+        "rubric": "ArgoCD Application config is correct."
+      },
+      {
+        "title": "Monitoring with Prometheus & Grafana",
+        "theory": "## Prometheus\nScrapes metrics from /metrics endpoints.\n```yaml\nscrape_configs:\n  - job_name: 'api'\n```",
+        "instructions": "## Task: Scrape Config\nSet the `job_name` to `'prometheus'` and the `static_configs` target to `localhost:9090`.",
+        "starterCode": "scrape_configs:\n  - job_name: '___'\n    static_configs:\n      - targets: ['___']",
+        "solution": "scrape_configs:\n  - job_name: 'prometheus'\n    static_configs:\n      - targets: ['localhost:9090']",
+        "hint": "prometheus and localhost:9090",
+        "rubric": "Prometheus scrape target defined."
+      },
+      {
+        "title": "Centralized Logging (ELK Stack)",
+        "theory": "## ELK\nElasticsearch, Logstash, Kibana.\n```json\nGET /logs/_search\n{ \"query\": { \"match\": { \"level\": \"error\" } } }\n```",
+        "instructions": "## Task: Elastic Query\nWrite the Elasticsearch JSON query to match the `status` field with `500`.",
+        "starterCode": "{\n  \"query\": {\n    \"match\": { \"___\": \"___\" }\n  }\n}",
+        "solution": "{\n  \"query\": {\n    \"match\": { \"status\": \"500\" }\n  }\n}",
+        "hint": "status and 500",
+        "rubric": "Elasticsearch query JSON correct."
+      }
+    ]
+  }
+}

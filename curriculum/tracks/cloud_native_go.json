@@ -1,0 +1,152 @@
+{
+  "Go Fundamentals": {
+    "aiRubric": "Check Go syntax, variables, arrays, slices, maps, structs, and error handling.",
+    "lessons": [
+      {
+        "title": "Variables, Types & Syntax",
+        "theory": "## Go Variables\nGo uses strong static typing with inference via `:=`.\n```go\npackage main\nimport \"fmt\"\n\nfunc main() {\n    var name string = \"Ada\"\n    age := 25\n    fmt.Println(name, age)\n}\n```",
+        "instructions": "## Task: Profile Setup\nDeclare variables for a user: `username` (string), `level` (int), `score` (float64), and `isActive` (bool). Use the `:=` short variable declaration. Print them.",
+        "starterCode": "package main\nimport \"fmt\"\n\nfunc main() {\n    username ___ \"___\"\n    level ___ ___\n    score ___ ___\n    isActive ___ ___\n\n    fmt.Println(username, level, score, isActive)\n}",
+        "solution": "package main\nimport \"fmt\"\nfunc main() {\n    username := \"Ada\"\n    level := 1\n    score := 100.5\n    isActive := true\n    fmt.Println(username, level, score, isActive)\n}",
+        "hint": "Use := for assignment.",
+        "rubric": "Variables declared with := and printed."
+      },
+      {
+        "title": "Functions & Control Structures",
+        "theory": "## Control Structures\nGo's `if`, `for`, and `switch` are simple.\n```go\nfor i := 0; i < 5; i++ { /*...*/ }\nfunc add(a int, b int) int { return a + b }\n```",
+        "instructions": "## Task: Multiply Function\nWrite a function `multiply` that takes two `int` parameters and returns their product as an `int`. Call it and print the result.",
+        "starterCode": "package main\nimport \"fmt\"\n\n___ multiply(a ___, b ___) ___ {\n    return a * b\n}\n\nfunc main() {\n    fmt.Println(multiply(3, 4))\n}",
+        "solution": "package main\nimport \"fmt\"\nfunc multiply(a int, b int) int {\n    return a * b\n}\nfunc main() {\n    fmt.Println(multiply(3, 4))\n}",
+        "hint": "func multiply(a int, b int) int",
+        "rubric": "Function signature and return type correct."
+      },
+      {
+        "title": "Arrays, Slices & Maps",
+        "theory": "## Slices and Maps\nSlices are dynamic arrays. Maps are key-value stores.\n```go\nnums := []int{1, 2, 3}\nscores := make(map[string]int)\nscores[\"Ada\"] = 95\n```",
+        "instructions": "## Task: Map Usage\nCreate a map mapping string names to int scores. Add 'Ada' -> 95, and print the map.",
+        "starterCode": "package main\nimport \"fmt\"\n\nfunc main() {\n    scores := make(___[___]___)\n    scores[\"Ada\"] = ___\n    fmt.Println(scores)\n}",
+        "solution": "package main\nimport \"fmt\"\nfunc main() {\n    scores := make(map[string]int)\n    scores[\"Ada\"] = 95\n    fmt.Println(scores)\n}",
+        "hint": "make(map[string]int)",
+        "rubric": "Map initialized and populated correctly."
+      },
+      {
+        "title": "Structs & Methods",
+        "theory": "## Structs and Methods\nGo doesn't have classes, it has structs and methods with receiver arguments.\n```go\ntype User struct { Name string }\nfunc (u User) Greet() { fmt.Println(\"Hi\", u.Name) }\n```",
+        "instructions": "## Task: User Struct\nDefine a `User` struct with a `Name` string field. Write a `Greet` method for it.",
+        "starterCode": "package main\nimport \"fmt\"\n\ntype User ___ {\n    Name ___\n}\n\nfunc (u ___) Greet() {\n    fmt.Println(\"Hello \" + u.Name)\n}\n\nfunc main() {\n    u := User{Name: \"Ada\"}\n    u.Greet()\n}",
+        "solution": "package main\nimport \"fmt\"\ntype User struct {\n    Name string\n}\nfunc (u User) Greet() {\n    fmt.Println(\"Hello \" + u.Name)\n}\nfunc main() {\n    u := User{Name: \"Ada\"}\n    u.Greet()\n}",
+        "hint": "type User struct. Receiver is (u User).",
+        "rubric": "Struct and method correctly implemented."
+      },
+      {
+        "title": "Pointers & Error Handling",
+        "theory": "## Pointers and Errors\nGo uses explicit error handling, often returning `error` as the last return value.\n```go\nfunc doWork() (int, error) { return 0, errors.New(\"Fail\") }\n```",
+        "instructions": "## Task: Error Check\nCall a function `divide(10, 0)` that returns an int and an error. If the error is not `nil`, print the error.",
+        "starterCode": "package main\nimport (\"fmt\"; \"errors\")\n\nfunc divide(a, b int) (int, error) {\n    if b == 0 { return 0, errors.New(\"div by zero\") }\n    return a / b, nil\n}\n\nfunc main() {\n    res, err := divide(10, 0)\n    if err != ___ {\n        fmt.Println(___)\n    } else {\n        fmt.Println(res)\n    }\n}",
+        "solution": "package main\nimport (\"fmt\"; \"errors\")\nfunc divide(a, b int) (int, error) {\n    if b == 0 { return 0, errors.New(\"div by zero\") }\n    return a / b, nil\n}\nfunc main() {\n    res, err := divide(10, 0)\n    if err != nil {\n        fmt.Println(err)\n    } else {\n        fmt.Println(res)\n    }\n}",
+        "hint": "if err != nil. Print err.",
+        "rubric": "Error checked against nil."
+      }
+    ]
+  },
+  "Advanced Go & Concurrency": {
+    "aiRubric": "Check interface implementations, goroutines, channels, mutexes, and context usage.",
+    "lessons": [
+      {
+        "title": "Interfaces & Type Assertions",
+        "theory": "## Interfaces\nInterfaces are satisfied implicitly.\n```go\ntype Speaker interface { Speak() string }\ntype Dog struct{}\nfunc (d Dog) Speak() string { return \"Bark\" }\n```",
+        "instructions": "## Task: Shape Interface\nDefine an `Area()` method for a `Circle` struct that satisfies a `Shape` interface.",
+        "starterCode": "package main\nimport \"fmt\"\n\ntype Shape interface { Area() float64 }\ntype Circle struct { radius float64 }\n\nfunc (c ___) ___() ___ {\n    return 3.14 * c.radius * c.radius\n}\n\nfunc main() {\n    var s Shape = Circle{radius: 5}\n    fmt.Println(s.Area())\n}",
+        "solution": "package main\nimport \"fmt\"\ntype Shape interface { Area() float64 }\ntype Circle struct { radius float64 }\nfunc (c Circle) Area() float64 {\n    return 3.14 * c.radius * c.radius\n}\nfunc main() {\n    var s Shape = Circle{radius: 5}\n    fmt.Println(s.Area())\n}",
+        "hint": "func (c Circle) Area() float64",
+        "rubric": "Interface method properly implemented."
+      },
+      {
+        "title": "Goroutines (Concurrency Basics)",
+        "theory": "## Goroutines\nLightweight threads managed by the Go runtime.\n```go\ngo func() {\n    fmt.Println(\"Running asynchronously\")\n}()\n```",
+        "instructions": "## Task: Simple Goroutine\nLaunch a goroutine that prints 'Hello' and sleep the main thread for 1 second.",
+        "starterCode": "package main\nimport (\"fmt\"; \"time\")\n\nfunc printHello() {\n    fmt.Println(\"Hello\")\n}\n\nfunc main() {\n    ___ printHello()\n    time.Sleep(1 * time.Second)\n}",
+        "solution": "package main\nimport (\"fmt\"; \"time\")\nfunc printHello() {\n    fmt.Println(\"Hello\")\n}\nfunc main() {\n    go printHello()\n    time.Sleep(1 * time.Second)\n}",
+        "hint": "Use the go keyword.",
+        "rubric": "go keyword used to launch routine."
+      },
+      {
+        "title": "Channels & Select Statements",
+        "theory": "## Channels\nChannels are the pipes that connect concurrent goroutines.\n```go\nch := make(chan int)\ngo func() { ch <- 42 }()\nval := <-ch\n```",
+        "instructions": "## Task: Send to Channel\nCreate a channel of ints. Launch a goroutine that sends the number `10` into it. Receive and print it in main.",
+        "starterCode": "package main\nimport \"fmt\"\n\nfunc main() {\n    ch := make(___ ___)\n    go func() {\n        ___ <- 10\n    }()\n    val := <-___\n    fmt.Println(val)\n}",
+        "solution": "package main\nimport \"fmt\"\nfunc main() {\n    ch := make(chan int)\n    go func() {\n        ch <- 10\n    }()\n    val := <-ch\n    fmt.Println(val)\n}",
+        "hint": "make(chan int), ch <- 10, val := <-ch",
+        "rubric": "Channel created, sent, and received."
+      },
+      {
+        "title": "Mutexes & WaitGroups",
+        "theory": "## WaitGroups\n`sync.WaitGroup` waits for a collection of goroutines to finish.\n```go\nvar wg sync.WaitGroup\nwg.Add(1)\ngo func() { defer wg.Done(); }()\nwg.Wait()\n```",
+        "instructions": "## Task: WaitGroup Setup\nUse a WaitGroup to wait for one goroutine to finish.",
+        "starterCode": "package main\nimport (\"fmt\"; \"sync\")\n\nfunc main() {\n    var wg ___.WaitGroup\n    wg.___(___)\n    go func() {\n        defer wg.___()\n        fmt.Println(\"Done working\")\n    }()\n    wg.___()\n}",
+        "solution": "package main\nimport (\"fmt\"; \"sync\")\nfunc main() {\n    var wg sync.WaitGroup\n    wg.Add(1)\n    go func() {\n        defer wg.Done()\n        fmt.Println(\"Done working\")\n    }()\n    wg.Wait()\n}",
+        "hint": "sync.WaitGroup, Add(1), Done(), Wait()",
+        "rubric": "WaitGroup used to synchronize routines."
+      },
+      {
+        "title": "The Context Package",
+        "theory": "## Context\nUsed for deadlines, cancellation, and passing request-scoped values.\n```go\nctx, cancel := context.WithCancel(context.Background())\ncancel()\n```",
+        "instructions": "## Task: Cancel Context\nCreate a cancellable context from `context.Background()`, defer its cancellation, and check if it's done.",
+        "starterCode": "package main\nimport (\"fmt\"; \"context\")\n\nfunc main() {\n    ctx, cancel := context.___(___.Background())\n    ___ cancel()\n    \n    select {\n    case <-ctx.___():\n        fmt.Println(\"Cancelled\")\n    default:\n        fmt.Println(\"Running\")\n    }\n}",
+        "solution": "package main\nimport (\"fmt\"; \"context\")\nfunc main() {\n    ctx, cancel := context.WithCancel(context.Background())\n    defer cancel()\n    select {\n    case <-ctx.Done():\n        fmt.Println(\"Cancelled\")\n    default:\n        fmt.Println(\"Running\")\n    }\n}",
+        "hint": "WithCancel, defer, Done()",
+        "rubric": "Context correctly created and handled."
+      }
+    ]
+  },
+  "Cloud DevOps & Microservices": {
+    "aiRubric": "Check HTTP routing, JSON marshaling, DB logic, Docker knowledge, and tests.",
+    "lessons": [
+      {
+        "title": "Building REST APIs with net/http",
+        "theory": "## net/http\nThe standard library contains a powerful HTTP server.\n```go\nhttp.HandleFunc(\"/\", func(w http.ResponseWriter, r *http.Request) {})\nhttp.ListenAndServe(\":8080\", nil)\n```",
+        "instructions": "## Task: Simple Server\nWrite a handler that writes 'Hello API' to the response.",
+        "starterCode": "package main\nimport (\"fmt\"; \"net/http\")\n\nfunc handler(w ___, r *___) {\n    fmt.Fprintf(___, \"Hello API\")\n}\n\nfunc main() {\n    // http.HandleFunc(\"/\", handler)\n    // http.ListenAndServe(\":8080\", nil)\n}",
+        "solution": "package main\nimport (\"fmt\"; \"net/http\")\nfunc handler(w http.ResponseWriter, r *http.Request) {\n    fmt.Fprintf(w, \"Hello API\")\n}\nfunc main() {\n}",
+        "hint": "http.ResponseWriter and http.Request.",
+        "rubric": "HTTP handler correctly constructed."
+      },
+      {
+        "title": "JSON, Serialization & Middleware",
+        "theory": "## JSON\nUse `encoding/json` to marshal/unmarshal structs.\n```go\ntype User struct { Name string `json:\"name\"` }\ndata, _ := json.Marshal(User{\"Ada\"})\n```",
+        "instructions": "## Task: JSON Marshal\nMarshal a struct into JSON bytes and print them as a string.",
+        "starterCode": "package main\nimport (\"fmt\"; \"encoding/json\")\n\ntype User struct {\n    Name string `json:\"name\"`\n}\n\nfunc main() {\n    u := User{Name: \"Ada\"}\n    data, err := json.___(u)\n    if err == nil {\n        fmt.Println(string(___))\n    }\n}",
+        "solution": "package main\nimport (\"fmt\"; \"encoding/json\")\ntype User struct {\n    Name string `json:\"name\"`\n}\nfunc main() {\n    u := User{Name: \"Ada\"}\n    data, err := json.Marshal(u)\n    if err == nil {\n        fmt.Println(string(data))\n    }\n}",
+        "hint": "json.Marshal",
+        "rubric": "json.Marshal invoked properly."
+      },
+      {
+        "title": "Database Connections (database/sql)",
+        "theory": "## database/sql\nStandard interface for SQL databases.\n```go\ndb, err := sql.Open(\"postgres\", dsn)\nrows, err := db.Query(\"SELECT id FROM users\")\n```",
+        "instructions": "## Task: Query Execution\nWrite the `db.Query` syntax to select all rows from 'users'.",
+        "starterCode": "package main\nimport (\"fmt\"; \"database/sql\")\n// Assume db is an active *sql.DB\nfunc fetch(db *sql.DB) {\n    rows, err := db.___(\"SELECT * FROM ___\")\n    if err == nil { fmt.Println(\"Query OK\") }\n}\nfunc main() {}",
+        "solution": "package main\nimport (\"fmt\"; \"database/sql\")\nfunc fetch(db *sql.DB) {\n    rows, err := db.Query(\"SELECT * FROM users\")\n    if err == nil { fmt.Println(\"Query OK\") }\n}\nfunc main() {}",
+        "hint": "db.Query and \"users\"",
+        "rubric": "db.Query string is correct."
+      },
+      {
+        "title": "Dockerizing Go Applications",
+        "theory": "## Docker + Go\nMulti-stage builds are common to produce small binaries.\n```dockerfile\nFROM golang:1.20 as builder\nRUN go build -o app .\nFROM scratch\nCOPY --from=builder /app /app\n```",
+        "instructions": "## Task: Dockerfile CMD\nWrite a Dockerfile snippet that sets the working directory and defines the run command.",
+        "starterCode": "FROM alpine:latest\n___ /app\nCOPY myapp .\n___ [\"./myapp\"]\n",
+        "solution": "FROM alpine:latest\nWORKDIR /app\nCOPY myapp .\nCMD [\"./myapp\"]\n",
+        "hint": "WORKDIR /app and CMD",
+        "rubric": "WORKDIR and CMD defined."
+      },
+      {
+        "title": "Testing & Benchmarking in Go",
+        "theory": "## Testing\nGo has built-in testing using the `testing` package and `go test`.\n```go\nfunc TestAdd(t *testing.T) {\n    if add(1,1) != 2 { t.Error(\"Failed\") }\n}\n```",
+        "instructions": "## Task: Write a Test\nWrite a test function `TestSubtract` that uses `t.Errorf` if `subtract(5, 3)` is not `2`.",
+        "starterCode": "package main\nimport \"testing\"\n\nfunc subtract(a, b int) int { return a - b }\n\nfunc TestSubtract(t *___.___) {\n    if subtract(5, 3) != ___ {\n        t.___(\"Expected 2\")\n    }\n}",
+        "solution": "package main\nimport \"testing\"\nfunc subtract(a, b int) int { return a - b }\nfunc TestSubtract(t *testing.T) {\n    if subtract(5, 3) != 2 {\n        t.Errorf(\"Expected 2\")\n    }\n}",
+        "hint": "testing.T, 2, t.Errorf",
+        "rubric": "Test function correctly uses testing.T."
+      }
+    ]
+  }
+}

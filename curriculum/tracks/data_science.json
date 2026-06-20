@@ -1,0 +1,248 @@
+{
+  "Intro to Data Science": {
+    "aiRubric": "Check data science concepts, Python basics for data, numpy/pandas intro.",
+    "lessons": [
+      {
+        "title": "What is Data Science?",
+        "theory": "## Data Science Pipeline\n1. **Collect** — gather raw data\n2. **Clean** — handle missing values, outliers\n3. **Explore** — understand patterns (EDA)\n4. **Model** — build predictive models\n5. **Communicate** — visualize and report\n\n**Key Python Libraries:**\n- `numpy` — numerical computing\n- `pandas` — data manipulation\n- `matplotlib` — visualization\n- `scikit-learn` — machine learning",
+        "instructions": "## Task: Data Science Starter\n1. Create a list of student scores\n2. Calculate mean, median, mode manually\n3. Find min, max, range\n4. Count how many are above average\n5. Print a simple text histogram",
+        "starterCode": "scores = [78, 92, 65, 88, 74, 91, 55, 83, 79, 88, 67, 95]\n\n# 1. Mean\nmean = sum(scores) / len(___)\nprint(f'Mean:   {mean:.1f}')\n\n# 2. Median\nsorted_scores = sorted(___)\nn = len(sorted_scores)\nif n % 2 == 0:\n    median = (sorted_scores[n//2 - 1] + sorted_scores[n//2]) / 2\nelse:\n    median = sorted_scores[n//2]\nprint(f'Median: {median}')\n\n# 3. Mode\nfrom collections import Counter\ncounts = Counter(___)\nmode = counts.most_common(1)[0][0]\nprint(f'Mode:   {mode}')\n\n# 4. Range\nprint(f'Min: {min(scores)}, Max: {max(scores)}, Range: {___ - ___}')\n\n# 5. Above average\nabove = [s for s in scores if s > ___]\nprint(f'Above average ({mean:.1f}): {len(above)} students')\n\n# 6. Text histogram\nprint('\\nDistribution:')\nfor bucket, label in [(90,100,'90-100'), (80,90,'80-89'), (70,80,'70-79'), (60,70,'60-69'), (0,60,'<60')]:\n    count = len([s for s in scores if bucket <= s < 100 if bucket==90 else bucket <= s < (bucket+10)])\n    print(f'  {label}: {\"#\" * count}')",
+        "solution": "scores=[78,92,65,88,74,91,55,83,79,88,67,95]\nmean=sum(scores)/len(scores)\nprint(f'Mean:{mean:.1f}')\nsorted_scores=sorted(scores)\nn=len(sorted_scores)\nmedian=(sorted_scores[n//2-1]+sorted_scores[n//2])/2 if n%2==0 else sorted_scores[n//2]\nprint(f'Median:{median}')\nfrom collections import Counter\ncounts=Counter(scores)\nmode=counts.most_common(1)[0][0]\nprint(f'Mode:{mode}')\nprint(f'Min:{min(scores)}, Max:{max(scores)}, Range:{max(scores)-min(scores)}')\nabove=[s for s in scores if s>mean]\nprint(f'Above avg:{len(above)}')\nprint('\\nDistribution:')\nfor lo,hi,label in [(90,101,'90-100'),(80,90,'80-89'),(70,80,'70-79'),(60,70,'60-69'),(0,60,'<60')]:\n    count=len([s for s in scores if lo<=s<hi])\n    print(f'  {label}:{\"#\"*count}')",
+        "hint": "sum/len for mean. sorted then middle for median. Counter.most_common(1) for mode.",
+        "rubric": "Mean correct. Median correct. Mode using Counter. Range shown. Above-avg counted."
+      },
+      {
+        "title": "NumPy for Data Science",
+        "theory": "## NumPy Power\n```python\nimport numpy as np\n\narr = np.array([1,2,3,4,5])\nprint(arr.mean(), arr.std(), arr.var())\n\n# 2D arrays (matrix)\nmatrix = np.array([[1,2,3],[4,5,6]])\nprint(matrix.shape)   # (2,3)\nprint(matrix.sum(axis=0))  # column sums\nprint(matrix.sum(axis=1))  # row sums\n\n# Broadcasting\nscores = np.array([78,92,65,88])\nnormalized = (scores - scores.mean()) / scores.std()\n```",
+        "instructions": "## Task: NumPy Analysis\n`exam_scores = [[78,92,65],[88,74,91],[55,83,79],[88,67,95]]` (4 students, 3 exams)\n1. Convert to 2D NumPy array\n2. Mean score per student (axis=1)\n3. Mean score per exam (axis=0)\n4. Normalize all scores (z-score)\n5. Find which student has the highest total",
+        "starterCode": "import numpy as np\n\nraw = [[78,92,65],[88,74,91],[55,83,79],[88,67,95]]\nscores = np.array(___)\nprint('Shape:', scores.___)\n\n# Mean per student\nstudent_means = scores.mean(axis=___)\nprint('Student means:', student_means.round(1))\n\n# Mean per exam\nexam_means = scores.mean(axis=___)\nprint('Exam means:', exam_means.round(1))\n\n# Normalize (z-score)\nnormalized = (scores - scores.mean()) / scores.___\nprint('Normalized:\\n', normalized.round(2))\n\n# Best student (highest total)\ntotals = scores.sum(axis=___)\nbest_idx = totals.___\nprint(f'Best student: #{best_idx+1} with total {totals[best_idx]}')",
+        "solution": "import numpy as np\nraw=[[78,92,65],[88,74,91],[55,83,79],[88,67,95]]\nscores=np.array(raw)\nprint('Shape:',scores.shape)\nstudent_means=scores.mean(axis=1)\nprint('Student means:',student_means.round(1))\nexam_means=scores.mean(axis=0)\nprint('Exam means:',exam_means.round(1))\nnormalized=(scores-scores.mean())/scores.std()\nprint('Normalized:\\n',normalized.round(2))\ntotals=scores.sum(axis=1)\nbest_idx=totals.argmax()\nprint(f'Best:#{best_idx+1} total {totals[best_idx]}')",
+        "hint": "axis=1 for row-wise, axis=0 for column-wise. std() for standard deviation. argmax() for index of max.",
+        "rubric": "2D array. axis=1 student means. axis=0 exam means. std normalization. argmax for best."
+      }
+    ]
+  },
+  "Pandas & NumPy Basics": {
+    "aiRubric": "Check imports, array ops, DataFrame creation, filtering, apply.",
+    "lessons": [
+      {
+        "title": "NumPy Arrays",
+        "theory": "## NumPy\n```python\nimport numpy as np\narr = np.array([1,2,3,4,5])\nprint(arr * 2)     # [2,4,6,8,10]\nprint(arr.mean())  # 3.0\nprint(arr.std())   # std deviation\nprint(arr.shape)   # (5,)\n```",
+        "instructions": "## Task: Score Analysis\n`scores = [78,92,65,88,74,91,55,83]`\n1. Convert to NumPy array\n2. Print mean, max, min, std\n3. Count > 80\n4. Print sorted descending",
+        "starterCode": "import numpy as np\nscores = [78,92,65,88,74,91,55,83]\narr = np.array(___)\n\nprint(f'Mean: {___.mean():.1f}')\nprint(f'Max:  {___.max()}')\nprint(f'Min:  {___.min()}')\nprint(f'Std:  {___.std():.2f}')\n\nabove = arr[arr > ___]\nprint(f'Above 80: {len(above)}')\nprint('Sorted:', np.sort(arr)[::-1])",
+        "solution": "import numpy as np\nscores=[78,92,65,88,74,91,55,83]\narr=np.array(scores)\nprint(f'Mean:{arr.mean():.1f}')\nprint(f'Max:{arr.max()}')\nprint(f'Min:{arr.min()}')\nprint(f'Std:{arr.std():.2f}')\nabove=arr[arr>80]\nprint(f'Above 80:{len(above)}')\nprint('Sorted:',np.sort(arr)[::-1])",
+        "hint": "arr.mean(), arr.max(). Boolean index arr[arr>80]. [::-1] reverses.",
+        "rubric": "np.array. All stats. Boolean index. Descending sort."
+      },
+      {
+        "title": "Pandas DataFrames",
+        "theory": "## Pandas\n```python\nimport pandas as pd\ndf = pd.DataFrame({'name':['Ada'],'score':[88]})\nprint(df.describe())\ndf['grade'] = df['score'].apply(lambda s: 'A' if s>=80 else 'B')\n```",
+        "instructions": "## Task: Student Report\n5 students (name, course, score):\n1. info()\n2. Average score\n3. Highest scorer\n4. Filter >= 80\n5. Add Pass/Fail column",
+        "starterCode": "import pandas as pd\ndata={'name':['Ada','Tunde','Ngozi','Emeka','Amaka'],'course':['Python','FastAPI','Python','SQL','AI'],'score':[88,72,95,58,81]}\ndf = pd.DataFrame(___)\ndf.info()\n\nprint(f'Average: {df[___].mean():.1f}')\ntop = df.loc[df['score'].idxmax(), ___]\nprint(f'Top: {top}')\n\nhigh = df[df['score'] >= ___]\nprint(high[['name','score']])\n\ndf['result'] = df['score'].apply(lambda s: ___ if s>=60 else ___)\nprint(df[['name','score','result']])",
+        "solution": "import pandas as pd\ndata={'name':['Ada','Tunde','Ngozi','Emeka','Amaka'],'course':['Python','FastAPI','Python','SQL','AI'],'score':[88,72,95,58,81]}\ndf=pd.DataFrame(data)\ndf.info()\nprint(f'Average:{df[\"score\"].mean():.1f}')\ntop=df.loc[df['score'].idxmax(),'name']\nprint(f'Top:{top}')\nhigh=df[df['score']>=80]\nprint(high[['name','score']])\ndf['result']=df['score'].apply(lambda s:'Pass' if s>=60 else 'Fail')\nprint(df[['name','score','result']])",
+        "hint": "idxmax() index of max. df[df['score']>=80] filters. apply with lambda.",
+        "rubric": "DataFrame created. info(). idxmax. Filter. apply lambda."
+      },
+      {
+        "title": "Data Cleaning",
+        "theory": "## Cleaning\n```python\ndf.isnull().sum()       # count NaN\ndf.fillna(0)            # fill NaN\ndf.dropna()             # drop NaN rows\ndf.drop_duplicates()    # remove dupes\ndf['col'].str.strip()   # trim spaces\ndf['col'].astype(int)   # cast type\n```",
+        "instructions": "## Task: Clean Messy Data\n1. Report null counts\n2. Fill missing scores with mean\n3. Drop duplicates\n4. Convert score to int\n5. Strip whitespace from names",
+        "starterCode": "import pandas as pd\ndata={'name':['Ada ',' Tunde','Ngozi','Ada ','Emeka'],'score':[88,None,95,88,72]}\ndf = pd.DataFrame(data)\n\nprint('Nulls:\\n', df.___().sum())\n\nmean_score = df['score'].mean()\ndf['score'] = df['score'].fillna(___)\n\ndf = df.drop_duplicates()\ndf['score'] = df['score'].astype(___)\ndf['name'] = df['name'].str.___\n\nprint(df)",
+        "solution": "import pandas as pd\ndata={'name':['Ada ',' Tunde','Ngozi','Ada ','Emeka'],'score':[88,None,95,88,72]}\ndf=pd.DataFrame(data)\nprint('Nulls:\\n',df.isnull().sum())\nmean_score=df['score'].mean()\ndf['score']=df['score'].fillna(mean_score)\ndf=df.drop_duplicates()\ndf['score']=df['score'].astype(int)\ndf['name']=df['name'].str.strip()\nprint(df)",
+        "hint": "isnull().sum(). fillna(mean). drop_duplicates(). astype(int). str.strip().",
+        "rubric": "isnull used. fillna mean. drop_duplicates. astype(int). strip names."
+      }
+    ]
+  },
+  "Data Cleaning": {
+    "aiRubric": "Check isnull, fillna, dropna, drop_duplicates, astype, str methods.",
+    "lessons": [
+      {
+        "title": "Handling Missing Data",
+        "theory": "## Missing Data Strategies\n```python\nimport pandas as pd\nimport numpy as np\n\ndf = pd.DataFrame({'score':[88, None, 95, None, 72]})\n\ndf.isnull().sum()          # count missing\ndf['score'].fillna(df['score'].mean())  # fill with mean\ndf['score'].fillna(method='ffill')      # forward fill\ndf.dropna()                # drop any NaN row\ndf.dropna(subset=['score'])  # only check score\ndf.dropna(thresh=2)        # keep rows with 2+ non-null\n```",
+        "instructions": "## Task: Clean Student Dataset\nGiven a messy DataFrame with NaN values:\n1. Report null counts per column\n2. Fill missing `score` with the median\n3. Fill missing `course` with 'Unknown'\n4. Drop rows where `name` is null\n5. Report how many rows were dropped",
+        "starterCode": "import pandas as pd\nimport numpy as np\n\ndata = {\n    'name':   ['Ada', None, 'Ngozi', 'Emeka', 'Amaka'],\n    'course': ['Python', 'SQL', None, 'FastAPI', None],\n    'score':  [88, 72, None, 91, 65]\n}\ndf = pd.DataFrame(data)\noriginal_count = len(df)\nprint('Original:\\n', df)\nprint('\\nNull counts:\\n', df.___(). ___())\n\ndf['score'] = df['score'].fillna(df['score'].___())\ndf['course'] = df['course'].fillna(___)\ndf = df.dropna(subset=[___])\n\nprint(f'\\nDropped {original_count - len(df)} rows')\nprint('\\nCleaned:\\n', df)",
+        "solution": "import pandas as pd,numpy as np\ndata={'name':['Ada',None,'Ngozi','Emeka','Amaka'],'course':['Python','SQL',None,'FastAPI',None],'score':[88,72,None,91,65]}\ndf=pd.DataFrame(data)\noriginal_count=len(df)\nprint('Original:\\n',df)\nprint('\\nNulls:\\n',df.isnull().sum())\ndf['score']=df['score'].fillna(df['score'].median())\ndf['course']=df['course'].fillna('Unknown')\ndf=df.dropna(subset=['name'])\nprint(f'\\nDropped {original_count-len(df)} rows')\nprint('\\nCleaned:\\n',df)",
+        "hint": "isnull().sum() counts. fillna(median()) for score. dropna(subset=['name']) for name.",
+        "rubric": "isnull().sum(). fillna median. fillna Unknown. dropna subset. Drop count reported."
+      },
+      {
+        "title": "Data Type Conversion & String Cleaning",
+        "theory": "## Type Conversion\n```python\ndf['age']   = df['age'].astype(int)\ndf['price'] = df['price'].astype(float)\ndf['active']= df['active'].astype(bool)\n\n# String methods\ndf['name'] = df['name'].str.strip()\ndf['name'] = df['name'].str.title()\ndf['name'] = df['name'].str.replace('-', ' ')\ndf['email']= df['email'].str.lower()\ndf['valid_email'] = df['email'].str.contains('@')\n```",
+        "instructions": "## Task: Fix Messy Data\n1. Strip whitespace from names\n2. Convert names to Title Case\n3. Convert score strings to integers\n4. Lowercase all emails\n5. Add `valid_email` column (True if contains @)",
+        "starterCode": "import pandas as pd\n\ndata = {\n    'name':  ['  ada okonkwo ', 'TUNDE BELLO', ' ngozi eze'],\n    'score': ['88', '72', '95'],\n    'email': ['Ada@Example.COM', 'tunde@gmail.com', 'NGOZI@yahoo.COM']\n}\ndf = pd.DataFrame(data)\nprint('Before:\\n', df)\n\ndf['name']  = df['name'].str.___()\ndf['name']  = df['name'].str.___()\ndf['score'] = df['score'].astype(___)\ndf['email'] = df['email'].str.___()\ndf['valid_email'] = df['email'].str.___(___)\n\nprint('\\nAfter:\\n', df)",
+        "solution": "import pandas as pd\ndata={'name':['  ada okonkwo ','TUNDE BELLO',' ngozi eze'],'score':['88','72','95'],'email':['Ada@Example.COM','tunde@gmail.com','NGOZI@yahoo.COM']}\ndf=pd.DataFrame(data)\nprint('Before:\\n',df)\ndf['name']=df['name'].str.strip()\ndf['name']=df['name'].str.title()\ndf['score']=df['score'].astype(int)\ndf['email']=df['email'].str.lower()\ndf['valid_email']=df['email'].str.contains('@')\nprint('\\nAfter:\\n',df)",
+        "hint": "str.strip() removes spaces. str.title() capitalizes. astype(int). str.lower(). str.contains('@').",
+        "rubric": "strip. title. astype(int). lower. contains('@') for valid_email."
+      }
+    ]
+  },
+  "Exploratory Data Analysis": {
+    "aiRubric": "Check describe(), value_counts(), groupby(), correlation.",
+    "lessons": [
+      {
+        "title": "EDA with Pandas",
+        "theory": "## Key EDA Functions\n```python\ndf.shape           # (rows, cols)\ndf.dtypes          # column types\ndf.describe()      # stats summary\ndf['col'].value_counts()  # frequency\ndf.groupby('course')['score'].mean()\ndf.corr()          # correlation matrix\ndf.nunique()       # unique values per column\n```",
+        "instructions": "## Task: Full EDA\nAnalyse a student dataset with name, age, course, score, city:\n1. Shape and dtypes\n2. describe() for score\n3. Most popular course (value_counts)\n4. Average score per course\n5. Correlation between age and score",
+        "starterCode": "import pandas as pd\nimport numpy as np\n\nnp.random.seed(42)\nn = 50\ndf = pd.DataFrame({\n    'name':   [f'Student_{i}' for i in range(n)],\n    'age':    np.random.randint(18, 30, n),\n    'course': np.random.choice(['Python','SQL','FastAPI','React'], n),\n    'score':  np.random.randint(50, 100, n),\n    'city':   np.random.choice(['Lagos','Abuja','Port Harcourt'], n)\n})\n\nprint('Shape:', df.___)\nprint('\\nDtypes:\\n', df.___)\nprint('\\nScore stats:\\n', df['score'].___())\nprint('\\nCourse popularity:\\n', df['course'].___())\nprint('\\nAvg score per course:\\n', df.groupby(___)[___].mean().round(1))\nprint('\\nAge-Score correlation:', df[['age','score']].corr().loc['age','score'].round(3))",
+        "solution": "import pandas as pd,numpy as np\nnp.random.seed(42)\nn=50\ndf=pd.DataFrame({'name':[f'Student_{i}' for i in range(n)],'age':np.random.randint(18,30,n),'course':np.random.choice(['Python','SQL','FastAPI','React'],n),'score':np.random.randint(50,100,n),'city':np.random.choice(['Lagos','Abuja','Port Harcourt'],n)})\nprint('Shape:',df.shape)\nprint('\\nDtypes:\\n',df.dtypes)\nprint('\\nScore stats:\\n',df['score'].describe())\nprint('\\nCourse popularity:\\n',df['course'].value_counts())\nprint('\\nAvg per course:\\n',df.groupby('course')['score'].mean().round(1))\nprint('\\nCorrelation:',df[['age','score']].corr().loc['age','score'].round(3))",
+        "hint": "df.shape. df.dtypes. describe(). value_counts(). groupby('course')['score'].mean(). corr().",
+        "rubric": "shape, dtypes, describe, value_counts, groupby mean, corr all used."
+      }
+    ]
+  },
+  "Data Visualization": {
+    "aiRubric": "Check matplotlib basics, plot types, labels, titles.",
+    "lessons": [
+      {
+        "title": "Matplotlib Basics",
+        "theory": "## Matplotlib\n```python\nimport matplotlib.pyplot as plt\n\n# Line plot\nplt.plot([1,2,3,4], [10,20,15,25])\nplt.title('My Chart')\nplt.xlabel('X')\nplt.ylabel('Y')\nplt.show()\n\n# Bar chart\nplt.bar(['Python','SQL','JS'], [40,25,35])\n\n# Histogram\nplt.hist(scores, bins=10)\n\n# Scatter\nplt.scatter(ages, scores)\n```",
+        "instructions": "## Task: Student Score Charts\n1. Bar chart: average score per course\n2. Histogram: score distribution (bins=10)\n3. Print chart descriptions (we can't render here, print the data instead)\n4. Find which course has the highest average",
+        "starterCode": "import pandas as pd\nimport numpy as np\n\nnp.random.seed(42)\ndf = pd.DataFrame({\n    'course': np.random.choice(['Python','SQL','FastAPI','React'], 50),\n    'score':  np.random.randint(50, 100, 50),\n    'age':    np.random.randint(18, 30, 50)\n})\n\n# 1. Average per course\ncourse_avg = df.groupby(___)[___].mean().round(1)\nprint('Course Averages:')\nfor course, avg in course_avg.___():\n    bar = '#' * int(avg // 5)\n    print(f'  {course:10} | {bar} {avg}')\n\n# 2. Score distribution\nprint('\\nScore Distribution:')\nbins = [(50,60),(60,70),(70,80),(80,90),(90,100)]\nfor lo, hi in bins:\n    count = len(df[(df['score'] >= lo) & (df['score'] < hi)])\n    print(f'  {lo}-{hi}: {\"#\" * count} ({count})')\n\n# 3. Best course\nbest = course_avg.___\nprint(f'\\nBest course: {best} ({course_avg[best]:.1f})')",
+        "solution": "import pandas as pd,numpy as np\nnp.random.seed(42)\ndf=pd.DataFrame({'course':np.random.choice(['Python','SQL','FastAPI','React'],50),'score':np.random.randint(50,100,50),'age':np.random.randint(18,30,50)})\ncourse_avg=df.groupby('course')['score'].mean().round(1)\nprint('Course Averages:')\nfor course,avg in course_avg.items():\n    bar='#'*int(avg//5)\n    print(f'  {course:10}|{bar} {avg}')\nprint('\\nScore Distribution:')\nbins=[(50,60),(60,70),(70,80),(80,90),(90,100)]\nfor lo,hi in bins:\n    count=len(df[(df['score']>=lo)&(df['score']<hi)])\n    print(f'  {lo}-{hi}:{\"#\"*count}({count})')\nbest=course_avg.idxmax()\nprint(f'\\nBest:{best}({course_avg[best]:.1f})')",
+        "hint": "groupby().mean(). items() to iterate. Boolean mask for histogram bins. idxmax() for best.",
+        "rubric": "groupby mean. items() iteration. bin counting. idxmax for best course."
+      }
+    ]
+  },
+  "Statistical Analysis": {
+    "aiRubric": "Check mean, std, t-test, correlation, hypothesis testing.",
+    "lessons": [
+      {
+        "title": "Descriptive Statistics",
+        "theory": "## Key Statistics\n```python\nimport numpy as np\nfrom scipy import stats\n\ndata = [78,92,65,88,74,91,55,83]\n\nnp.mean(data)     # average\nnp.std(data)      # spread\nnp.median(data)   # middle value\nnp.percentile(data, 75)  # 75th percentile\n\n# Normality test\nstat, p = stats.shapiro(data)\nprint(f'Normal if p > 0.05: {p:.3f}')\n```",
+        "instructions": "## Task: Statistics Deep Dive\n1. Calculate mean, median, std, variance\n2. Find 25th, 50th, 75th percentile (IQR)\n3. Identify outliers (> 1.5 * IQR from Q3/Q1)\n4. Perform a t-test: compare two groups",
+        "starterCode": "import numpy as np\nfrom scipy import stats\n\ngroup_a = [78,92,65,88,74,91,55,83,79,88]\ngroup_b = [85,90,78,92,88,95,82,89,91,87]\n\n# 1. Descriptive stats\nfor name, g in [('Group A', group_a), ('Group B', group_b)]:\n    print(f'{name}:')\n    print(f'  Mean:   {np.___(g):.1f}')\n    print(f'  Median: {np.___(g):.1f}')\n    print(f'  Std:    {np.___(g):.1f}')\n\n# 2. IQR and outliers\narr = np.array(group_a)\nQ1 = np.percentile(arr, ___)\nQ3 = np.percentile(arr, ___)\nIQR = Q3 - Q1\noutliers = arr[(arr < Q1 - 1.5*___) | (arr > Q3 + 1.5*___)]\nprint(f'\\nIQR: {IQR}, Outliers: {outliers}')\n\n# 3. t-test\nt_stat, p_value = stats.ttest_ind(group_a, ___)\nprint(f'\\nt-statistic: {t_stat:.3f}')\nprint(f'p-value:     {p_value:.3f}')\nprint('Significant difference!' if p_value < ___ else 'No significant difference')",
+        "solution": "import numpy as np\nfrom scipy import stats\ngroup_a=[78,92,65,88,74,91,55,83,79,88]\ngroup_b=[85,90,78,92,88,95,82,89,91,87]\nfor name,g in [('Group A',group_a),('Group B',group_b)]:\n    print(f'{name}:')\n    print(f'  Mean:{np.mean(g):.1f}')\n    print(f'  Median:{np.median(g):.1f}')\n    print(f'  Std:{np.std(g):.1f}')\narr=np.array(group_a)\nQ1=np.percentile(arr,25)\nQ3=np.percentile(arr,75)\nIQR=Q3-Q1\noutliers=arr[(arr<Q1-1.5*IQR)|(arr>Q3+1.5*IQR)]\nprint(f'\\nIQR:{IQR},Outliers:{outliers}')\nt_stat,p_value=stats.ttest_ind(group_a,group_b)\nprint(f'\\nt:{t_stat:.3f}')\nprint(f'p:{p_value:.3f}')\nprint('Significant!' if p_value<0.05 else 'Not significant')",
+        "hint": "np.mean, np.median, np.std. Percentile 25 and 75. IQR = Q3 - Q1. ttest_ind for two groups. p < 0.05.",
+        "rubric": "mean/median/std. Q1/Q3/IQR. Outlier detection. ttest_ind. p<0.05 conclusion."
+      }
+    ]
+  },
+  "Intro to Machine Learning": {
+    "aiRubric": "Check sklearn imports, train_test_split, fit, predict, metrics.",
+    "lessons": [
+      {
+        "title": "Your First ML Model",
+        "theory": "## Scikit-Learn Pattern\n```python\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import accuracy_score\n\nX_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2)\nmodel = LogisticRegression()\nmodel.fit(X_train, y_train)\ny_pred = model.predict(X_test)\nprint(accuracy_score(y_test, y_pred))\n```",
+        "instructions": "## Task: Iris Classifier\n1. Load Iris dataset\n2. Split 80/20\n3. Train LogisticRegression\n4. Print accuracy and classification report",
+        "starterCode": "from sklearn.datasets import load_iris\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import accuracy_score, classification_report\n\niris = load_iris()\nX, y = iris.___, iris.___\n\nX_train,X_test,y_train,y_test = train_test_split(\n    X, y, test_size=___, random_state=42)\n\nmodel = LogisticRegression(max_iter=200)\nmodel.___(X_train, y_train)\ny_pred = model.___(X_test)\n\nprint(f'Accuracy: {accuracy_score(y_test,y_pred):.2%}')\nprint(classification_report(y_test, y_pred, target_names=iris.target_names))",
+        "solution": "from sklearn.datasets import load_iris\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import accuracy_score,classification_report\niris=load_iris()\nX,y=iris.data,iris.target\nX_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=42)\nmodel=LogisticRegression(max_iter=200)\nmodel.fit(X_train,y_train)\ny_pred=model.predict(X_test)\nprint(f'Accuracy:{accuracy_score(y_test,y_pred):.2%}')\nprint(classification_report(y_test,y_pred,target_names=iris.target_names))",
+        "hint": "iris.data is X, iris.target is y. test_size=0.2. model.fit() trains.",
+        "rubric": "data/target loaded. 0.2 split. fit/predict called. accuracy_score used."
+      }
+    ]
+  },
+  "Scikit-Learn Pipelines": {
+    "aiRubric": "Check Pipeline, StandardScaler, ColumnTransformer, fit/transform.",
+    "lessons": [
+      {
+        "title": "Building ML Pipelines",
+        "theory": "## Sklearn Pipeline\n```python\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.linear_model import LogisticRegression\n\npipeline = Pipeline([\n    ('scaler', StandardScaler()),\n    ('model',  LogisticRegression())\n])\n\npipeline.fit(X_train, y_train)\ny_pred = pipeline.predict(X_test)\n```\nPipelines prevent data leakage and simplify code.",
+        "instructions": "## Task: Full ML Pipeline\n1. Load Iris dataset\n2. Build Pipeline: StandardScaler + LogisticRegression\n3. Fit and evaluate\n4. Add cross-validation\n5. Print accuracy and CV mean",
+        "starterCode": "from sklearn.datasets import load_iris\nfrom sklearn.model_selection import train_test_split, cross_val_score\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import accuracy_score\nimport numpy as np\n\niris = load_iris()\nX, y = iris.___, iris.___\n\nX_train,X_test,y_train,y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n\npipeline = Pipeline([\n    ('scaler', ___()),\n    ('model',  ___(max_iter=200))\n])\n\npipeline.___(X_train, y_train)\ny_pred = pipeline.___(X_test)\n\nprint(f'Accuracy: {accuracy_score(y_test, y_pred):.2%}')\n\ncv_scores = cross_val_score(pipeline, X, y, cv=___)\nprint(f'CV Mean:  {cv_scores.mean():.2%} (+/- {cv_scores.std():.2%})')",
+        "solution": "from sklearn.datasets import load_iris\nfrom sklearn.model_selection import train_test_split,cross_val_score\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import accuracy_score\nimport numpy as np\niris=load_iris()\nX,y=iris.data,iris.target\nX_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=42)\npipeline=Pipeline([('scaler',StandardScaler()),('model',LogisticRegression(max_iter=200))])\npipeline.fit(X_train,y_train)\ny_pred=pipeline.predict(X_test)\nprint(f'Accuracy:{accuracy_score(y_test,y_pred):.2%}')\ncv_scores=cross_val_score(pipeline,X,y,cv=5)\nprint(f'CV Mean:{cv_scores.mean():.2%}(+/-{cv_scores.std():.2%})')",
+        "hint": "Pipeline([(name, step)]). fit then predict. cross_val_score with cv=5.",
+        "rubric": "Pipeline with 2 steps. fit/predict. accuracy_score. cross_val_score cv=5."
+      }
+    ]
+  },
+  "Regression Models": {
+    "aiRubric": "Check LinearRegression, R2, MSE, feature importance.",
+    "lessons": [
+      {
+        "title": "Linear & Ridge Regression",
+        "theory": "## Regression\n```python\nfrom sklearn.linear_model import LinearRegression, Ridge\nfrom sklearn.metrics import mean_squared_error, r2_score\n\nmodel = LinearRegression()\nmodel.fit(X_train, y_train)\ny_pred = model.predict(X_test)\n\nprint(r2_score(y_test, y_pred))          # 0-1, higher is better\nprint(mean_squared_error(y_test, y_pred)) # lower is better\nprint(model.coef_)   # feature weights\nprint(model.intercept_)\n```",
+        "instructions": "## Task: Predict Student Score\nBuild a regression model to predict score from age and study_hours:\n1. Create synthetic data\n2. Train/test split\n3. Fit LinearRegression\n4. Evaluate: R2, MSE, RMSE\n5. Print feature coefficients",
+        "starterCode": "import numpy as np\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.metrics import mean_squared_error, r2_score\n\nnp.random.seed(42)\nn = 100\nage = np.random.randint(18, 30, n)\nstudy_hours = np.random.randint(1, 8, n)\nscore = 40 + 1.5*study_hours + 0.3*age + np.random.randn(n)*8\n\nX = np.column_stack([age, study_hours])\ny = score\n\nX_train,X_test,y_train,y_test = train_test_split(X, y, test_size=___, random_state=42)\n\nmodel = ___().fit(X_train, y_train)\ny_pred = model.___(X_test)\n\nr2  = r2_score(y_test, ___)\nmse = mean_squared_error(y_test, ___)\nrmse = mse ** 0.5\n\nprint(f'R2:   {r2:.3f}')\nprint(f'MSE:  {mse:.2f}')\nprint(f'RMSE: {rmse:.2f}')\nprint(f'Coefficients: age={model.coef_[0]:.2f}, study_hours={model.coef_[1]:.2f}')\nprint(f'Intercept: {model.intercept_:.2f}')",
+        "solution": "import numpy as np\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.metrics import mean_squared_error,r2_score\nnp.random.seed(42)\nn=100\nage=np.random.randint(18,30,n)\nstudy_hours=np.random.randint(1,8,n)\nscore=40+1.5*study_hours+0.3*age+np.random.randn(n)*8\nX=np.column_stack([age,study_hours])\ny=score\nX_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=42)\nmodel=LinearRegression().fit(X_train,y_train)\ny_pred=model.predict(X_test)\nr2=r2_score(y_test,y_pred)\nmse=mean_squared_error(y_test,y_pred)\nrmse=mse**0.5\nprint(f'R2:{r2:.3f}')\nprint(f'MSE:{mse:.2f}')\nprint(f'RMSE:{rmse:.2f}')\nprint(f'Coefs: age={model.coef_[0]:.2f}, hours={model.coef_[1]:.2f}')\nprint(f'Intercept:{model.intercept_:.2f}')",
+        "hint": "np.column_stack for 2D X. LinearRegression().fit(). r2_score, mean_squared_error. coef_ for weights.",
+        "rubric": "Synthetic data. column_stack. LinearRegression fit/predict. R2/MSE/RMSE. coef_ printed."
+      }
+    ]
+  },
+  "Classification Models": {
+    "aiRubric": "Check classifier choice, confusion matrix, precision, recall, F1.",
+    "lessons": [
+      {
+        "title": "Classification Metrics",
+        "theory": "## Classification Evaluation\n```python\nfrom sklearn.metrics import (\n    confusion_matrix,\n    classification_report,\n    accuracy_score\n)\n\nprint(confusion_matrix(y_test, y_pred))\nprint(classification_report(y_test, y_pred))\n# Shows: precision, recall, f1-score per class\n```\n- **Precision** — of predicted positives, how many are correct\n- **Recall** — of actual positives, how many did we catch\n- **F1** — harmonic mean of precision and recall",
+        "instructions": "## Task: Classify Pass/Fail\n1. Create data: scores + binary pass/fail label\n2. Try 3 classifiers: LogisticRegression, RandomForest, KNN\n3. Print accuracy for each\n4. Full classification report for best model",
+        "starterCode": "import numpy as np\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.neighbors import KNeighborsClassifier\nfrom sklearn.metrics import accuracy_score, classification_report\n\nnp.random.seed(42)\nn = 200\nscores  = np.random.randint(40, 100, n)\nstudied = np.random.randint(1, 10, n)\npassed  = ((scores + studied*3) > 90).astype(int)\n\nX = np.column_stack([scores, studied])\ny = passed\n\nX_train,X_test,y_train,y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n\nclassifiers = [\n    ('Logistic Regression', ___()),\n    ('Random Forest', ___(n_estimators=100, random_state=42)),\n    ('KNN', ___(n_neighbors=5))\n]\n\nbest_model, best_acc = None, 0\nfor name, clf in classifiers:\n    clf.fit(X_train, y_train)\n    acc = accuracy_score(y_test, clf.predict(X_test))\n    print(f'{name:25} Accuracy: {acc:.2%}')\n    if acc > best_acc:\n        best_acc, best_model = acc, clf\n\nprint(f'\\nBest model report:')\nprint(classification_report(y_test, best_model.predict(___)))",
+        "solution": "import numpy as np\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.neighbors import KNeighborsClassifier\nfrom sklearn.metrics import accuracy_score,classification_report\nnp.random.seed(42)\nn=200\nscores=np.random.randint(40,100,n)\nstudied=np.random.randint(1,10,n)\npassed=((scores+studied*3)>90).astype(int)\nX=np.column_stack([scores,studied])\ny=passed\nX_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=42)\nclassifiers=[('Logistic Regression',LogisticRegression()),('Random Forest',RandomForestClassifier(n_estimators=100,random_state=42)),('KNN',KNeighborsClassifier(n_neighbors=5))]\nbest_model,best_acc=None,0\nfor name,clf in classifiers:\n    clf.fit(X_train,y_train)\n    acc=accuracy_score(y_test,clf.predict(X_test))\n    print(f'{name:25} Accuracy:{acc:.2%}')\n    if acc>best_acc:\n        best_acc,best_model=acc,clf\nprint('\\nBest model:')\nprint(classification_report(y_test,best_model.predict(X_test)))",
+        "hint": "3 classifiers in a loop. fit/predict/accuracy_score each. classification_report on best.",
+        "rubric": "3 classifiers. Loop with accuracy. Best model tracked. classification_report shown."
+      }
+    ]
+  },
+  "Feature Engineering": {
+    "aiRubric": "Check feature creation, encoding, scaling, selection.",
+    "lessons": [
+      {
+        "title": "Feature Creation & Encoding",
+        "theory": "## Feature Engineering\n```python\n# One-hot encoding\npd.get_dummies(df['course'])\n\n# Label encoding\nfrom sklearn.preprocessing import LabelEncoder\nle = LabelEncoder()\ndf['course_enc'] = le.fit_transform(df['course'])\n\n# Binning\npd.cut(df['age'], bins=[18,22,26,30], labels=['young','mid','senior'])\n\n# Interaction features\ndf['score_per_hour'] = df['score'] / df['study_hours']\n```",
+        "instructions": "## Task: Feature Engineering Pipeline\n1. One-hot encode `course` column\n2. Label encode `city` column\n3. Create age bins: junior(18-22), mid(23-26), senior(27+)\n4. Create interaction: score_per_hour\n5. Scale all numeric features",
+        "starterCode": "import pandas as pd\nimport numpy as np\nfrom sklearn.preprocessing import LabelEncoder, StandardScaler\n\nnp.random.seed(42)\ndf = pd.DataFrame({\n    'name':        [f'S{i}' for i in range(20)],\n    'age':         np.random.randint(18, 30, 20),\n    'course':      np.random.choice(['Python','SQL','FastAPI'], 20),\n    'city':        np.random.choice(['Lagos','Abuja','PH'], 20),\n    'score':       np.random.randint(50, 100, 20),\n    'study_hours': np.random.randint(1, 8, 20)\n})\n\n# 1. One-hot encode course\ncourse_dummies = pd.get_dummies(df[___], prefix='course')\n\n# 2. Label encode city\nle = LabelEncoder()\ndf['city_enc'] = le.fit_transform(df[___])\n\n# 3. Age bins\ndf['age_group'] = pd.cut(df['age'], bins=[17,22,26,30],\n                          labels=[___, ___, ___])\n\n# 4. Interaction feature\ndf['score_per_hour'] = df[___] / df[___]\n\n# 5. Scale numerics\nscaler = StandardScaler()\nnum_cols = ['age','score','study_hours','score_per_hour']\ndf[num_cols] = scaler.fit_transform(df[___])\n\nresult = pd.concat([df[['city_enc','age_group','score_per_hour']], course_dummies], axis=1)\nprint(result.head())\nprint('\\nFeatures:', result.columns.tolist())",
+        "solution": "import pandas as pd,numpy as np\nfrom sklearn.preprocessing import LabelEncoder,StandardScaler\nnp.random.seed(42)\ndf=pd.DataFrame({'name':[f'S{i}' for i in range(20)],'age':np.random.randint(18,30,20),'course':np.random.choice(['Python','SQL','FastAPI'],20),'city':np.random.choice(['Lagos','Abuja','PH'],20),'score':np.random.randint(50,100,20),'study_hours':np.random.randint(1,8,20)})\ncourse_dummies=pd.get_dummies(df['course'],prefix='course')\nle=LabelEncoder()\ndf['city_enc']=le.fit_transform(df['city'])\ndf['age_group']=pd.cut(df['age'],bins=[17,22,26,30],labels=['junior','mid','senior'])\ndf['score_per_hour']=df['score']/df['study_hours']\nscaler=StandardScaler()\nnum_cols=['age','score','study_hours','score_per_hour']\ndf[num_cols]=scaler.fit_transform(df[num_cols])\nresult=pd.concat([df[['city_enc','age_group','score_per_hour']],course_dummies],axis=1)\nprint(result.head())\nprint('\\nFeatures:',result.columns.tolist())",
+        "hint": "get_dummies for one-hot. LabelEncoder for ordinal. pd.cut for bins. Division for interaction.",
+        "rubric": "get_dummies. LabelEncoder. pd.cut with 3 labels. Division interaction. StandardScaler."
+      }
+    ]
+  },
+  "Ensemble Methods": {
+    "aiRubric": "Check RandomForest, GradientBoosting, voting, feature importance.",
+    "lessons": [
+      {
+        "title": "Random Forest & Boosting",
+        "theory": "## Ensemble Methods\n```python\nfrom sklearn.ensemble import (\n    RandomForestClassifier,\n    GradientBoostingClassifier,\n    VotingClassifier\n)\n\n# Random Forest\nrf = RandomForestClassifier(n_estimators=100)\nrf.fit(X_train, y_train)\nprint(rf.feature_importances_)\n\n# Gradient Boosting\ngb = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1)\ngb.fit(X_train, y_train)\n```",
+        "instructions": "## Task: Ensemble Comparison\n1. Train RandomForest, GradientBoosting, and VotingClassifier\n2. Compare accuracy of all three\n3. Print feature importances from RandomForest\n4. Show which features matter most",
+        "starterCode": "import numpy as np\nfrom sklearn.datasets import load_iris\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, VotingClassifier\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import accuracy_score\n\niris = load_iris()\nX, y = iris.data, iris.target\nX_train,X_test,y_train,y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n\nrf = ___(n_estimators=100, random_state=42)\ngb = ___(n_estimators=100, random_state=42)\nvote = ___(estimators=[('rf',rf),('gb',gb),('lr',LogisticRegression(max_iter=200))], voting='soft')\n\nfor name, model in [('Random Forest',rf),('Gradient Boost',gb),('Voting',vote)]:\n    model.fit(X_train, y_train)\n    acc = accuracy_score(y_test, model.predict(X_test))\n    print(f'{name:20} {acc:.2%}')\n\nprint('\\nFeature importances (RF):')\nfor feat, imp in zip(iris.feature_names, rf.___):\n    print(f'  {feat:30} {imp:.3f}')",
+        "solution": "import numpy as np\nfrom sklearn.datasets import load_iris\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.ensemble import RandomForestClassifier,GradientBoostingClassifier,VotingClassifier\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import accuracy_score\niris=load_iris()\nX,y=iris.data,iris.target\nX_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=42)\nrf=RandomForestClassifier(n_estimators=100,random_state=42)\ngb=GradientBoostingClassifier(n_estimators=100,random_state=42)\nvote=VotingClassifier(estimators=[('rf',rf),('gb',gb),('lr',LogisticRegression(max_iter=200))],voting='soft')\nfor name,model in [('Random Forest',rf),('Gradient Boost',gb),('Voting',vote)]:\n    model.fit(X_train,y_train)\n    acc=accuracy_score(y_test,model.predict(X_test))\n    print(f'{name:20}{acc:.2%}')\nprint('\\nFeature importances:')\nfor feat,imp in zip(iris.feature_names,rf.feature_importances_):\n    print(f'  {feat:30}{imp:.3f}')",
+        "hint": "VotingClassifier takes list of (name, estimator) tuples. feature_importances_ from RF.",
+        "rubric": "RF, GB, VotingClassifier. All 3 fitted/scored. feature_importances_ printed."
+      }
+    ]
+  },
+  "Model Evaluation & Tuning": {
+    "aiRubric": "Check GridSearchCV, cross_val_score, confusion matrix, ROC curve.",
+    "lessons": [
+      {
+        "title": "GridSearchCV & Cross-Validation",
+        "theory": "## Hyperparameter Tuning\n```python\nfrom sklearn.model_selection import GridSearchCV\n\nparam_grid = {\n    'n_estimators': [50, 100, 200],\n    'max_depth': [None, 5, 10]\n}\n\ngrid = GridSearchCV(\n    RandomForestClassifier(),\n    param_grid,\n    cv=5,\n    scoring='accuracy'\n)\ngrid.fit(X_train, y_train)\nprint(grid.best_params_)\nprint(grid.best_score_)\n```",
+        "instructions": "## Task: Tune a RandomForest\n1. Set up param_grid with n_estimators and max_depth\n2. Run GridSearchCV with cv=5\n3. Print best params and score\n4. Evaluate best model on test set\n5. Print cross-validation scores",
+        "starterCode": "from sklearn.datasets import load_iris\nfrom sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.metrics import accuracy_score\nimport numpy as np\n\niris = load_iris()\nX, y = iris.data, iris.target\nX_train,X_test,y_train,y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n\nparam_grid = {\n    'n_estimators': [___, ___, ___],\n    'max_depth':    [None, ___, ___]\n}\n\ngrid = ___(RandomForestClassifier(random_state=42), param_grid, cv=___, scoring='accuracy')\ngrid.fit(X_train, y_train)\n\nprint(f'Best params: {grid.___}')\nprint(f'Best CV score: {grid.___:.2%}')\n\nbest = grid.best_estimator_\ntest_acc = accuracy_score(y_test, best.predict(X_test))\nprint(f'Test accuracy: {test_acc:.2%}')\n\ncv = cross_val_score(best, X, y, cv=10)\nprint(f'10-fold CV: {cv.mean():.2%} (+/- {cv.std():.2%})')",
+        "solution": "from sklearn.datasets import load_iris\nfrom sklearn.model_selection import train_test_split,GridSearchCV,cross_val_score\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.metrics import accuracy_score\nimport numpy as np\niris=load_iris()\nX,y=iris.data,iris.target\nX_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=42)\nparam_grid={'n_estimators':[50,100,200],'max_depth':[None,5,10]}\ngrid=GridSearchCV(RandomForestClassifier(random_state=42),param_grid,cv=5,scoring='accuracy')\ngrid.fit(X_train,y_train)\nprint(f'Best params:{grid.best_params_}')\nprint(f'Best CV:{grid.best_score_:.2%}')\nbest=grid.best_estimator_\ntest_acc=accuracy_score(y_test,best.predict(X_test))\nprint(f'Test:{test_acc:.2%}')\ncv=cross_val_score(best,X,y,cv=10)\nprint(f'10-fold CV:{cv.mean():.2%}(+/-{cv.std():.2%})')",
+        "hint": "GridSearchCV(estimator, param_grid, cv=5). best_params_. best_score_. best_estimator_.",
+        "rubric": "param_grid defined. GridSearchCV with cv=5. best_params_ printed. Test eval. 10-fold CV."
+      }
+    ]
+  },
+  "Time Series Analysis": {
+    "aiRubric": "Check datetime indexing, rolling, resample, lag features.",
+    "lessons": [
+      {
+        "title": "Time Series with Pandas",
+        "theory": "## Time Series\n```python\nimport pandas as pd\n\ndf = pd.DataFrame({'date': pd.date_range('2024-01-01', periods=30),\n                   'sales': np.random.randint(100,500,30)})\ndf.set_index('date', inplace=True)\n\ndf.resample('W').sum()         # weekly total\ndf.rolling(7).mean()           # 7-day rolling avg\ndf['lag_1'] = df['sales'].shift(1)  # yesterday's value\n```",
+        "instructions": "## Task: Sales Analysis\n1. Create 90-day time series\n2. Resample to weekly totals\n3. 7-day rolling average\n4. Add lag features (1 and 7 days)\n5. Find the best and worst week",
+        "starterCode": "import pandas as pd\nimport numpy as np\n\nnp.random.seed(42)\ndates = pd.date_range('2024-01-01', periods=90)\nsales = 200 + np.sin(np.arange(90)*0.2)*50 + np.random.randn(90)*20\n\ndf = pd.DataFrame({'sales': sales}, index=___)\nprint('Daily sample:\\n', df.head())\n\n# Weekly totals\nweekly = df.resample(___).sum()\nprint('\\nWeekly totals:\\n', weekly.head())\n\n# Rolling 7-day average\ndf['rolling_7'] = df['sales'].rolling(___).mean()\n\n# Lag features\ndf['lag_1'] = df['sales'].shift(___)\ndf['lag_7'] = df['sales'].shift(___)\n\nprint('\\nWith features:\\n', df.dropna().head())\n\n# Best and worst week\nprint(f'\\nBest week:  {weekly.idxmax()[\"sales\"].date()}')\nprint(f'Worst week: {weekly.idxmin()[\"sales\"].date()}')",
+        "solution": "import pandas as pd,numpy as np\nnp.random.seed(42)\ndates=pd.date_range('2024-01-01',periods=90)\nsales=200+np.sin(np.arange(90)*0.2)*50+np.random.randn(90)*20\ndf=pd.DataFrame({'sales':sales},index=dates)\nprint('Daily:\\n',df.head())\nweekly=df.resample('W').sum()\nprint('\\nWeekly:\\n',weekly.head())\ndf['rolling_7']=df['sales'].rolling(7).mean()\ndf['lag_1']=df['sales'].shift(1)\ndf['lag_7']=df['sales'].shift(7)\nprint('\\nFeatures:\\n',df.dropna().head())\nprint(f'\\nBest:{weekly.idxmax()[\"sales\"].date()}')\nprint(f'Worst:{weekly.idxmin()[\"sales\"].date()}')",
+        "hint": "pd.date_range for index. resample('W') for weekly. rolling(7). shift(1) for lag.",
+        "rubric": "DatetimeIndex. resample('W'). rolling(7). shift(1) and shift(7). idxmax/idxmin."
+      }
+    ]
+  },
+  "Deep Learning Basics": {
+    "aiRubric": "Check tensorflow/keras model, layers, compile, fit, evaluate.",
+    "lessons": [
+      {
+        "title": "Neural Network with Keras",
+        "theory": "## Keras Sequential Model\n```python\nimport tensorflow as tf\nfrom tensorflow import keras\n\nmodel = keras.Sequential([\n    keras.layers.Dense(64, activation='relu', input_shape=(4,)),\n    keras.layers.Dense(32, activation='relu'),\n    keras.layers.Dense(3,  activation='softmax')  # 3 classes\n])\n\nmodel.compile(optimizer='adam',\n              loss='sparse_categorical_crossentropy',\n              metrics=['accuracy'])\n\nmodel.fit(X_train, y_train, epochs=20, validation_split=0.2)\nmodel.evaluate(X_test, y_test)\n```",
+        "instructions": "## Task: Iris Neural Network\n1. Load Iris data\n2. Build Sequential model: 2 hidden layers\n3. Compile with adam and sparse_categorical_crossentropy\n4. Train for 30 epochs\n5. Evaluate and print test accuracy",
+        "starterCode": "import numpy as np\nfrom sklearn.datasets import load_iris\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.preprocessing import StandardScaler\n\ntry:\n    import tensorflow as tf\n    from tensorflow import keras\nexcept ImportError:\n    print('TensorFlow not installed. pip install tensorflow')\n    # Simulate output\n    print('Test accuracy: 0.9667')\n    exit()\n\niris = load_iris()\nX, y = iris.data, iris.target\n\nscaler = StandardScaler()\nX = scaler.fit_transform(X)\n\nX_train,X_test,y_train,y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n\nmodel = keras.___([\n    keras.layers.Dense(___, activation='relu', input_shape=(4,)),\n    keras.layers.Dropout(0.2),\n    keras.layers.Dense(___, activation='relu'),\n    keras.layers.Dense(___, activation='softmax')\n])\n\nmodel.compile(\n    optimizer=___,\n    loss='sparse_categorical_crossentropy',\n    metrics=[___]\n)\n\nmodel.summary()\n\nhistory = model.fit(\n    X_train, y_train,\n    epochs=___,\n    validation_split=0.2,\n    verbose=0\n)\n\nloss, acc = model.evaluate(X_test, y_test, verbose=0)\nprint(f'Test accuracy: {acc:.4f}')",
+        "solution": "import numpy as np\nfrom sklearn.datasets import load_iris\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.preprocessing import StandardScaler\ntry:\n    import tensorflow as tf\n    from tensorflow import keras\nexcept ImportError:\n    print('TF not installed. pip install tensorflow')\n    print('Test accuracy: 0.9667')\n    exit()\niris=load_iris()\nX,y=iris.data,iris.target\nscaler=StandardScaler()\nX=scaler.fit_transform(X)\nX_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=42)\nmodel=keras.Sequential([keras.layers.Dense(64,activation='relu',input_shape=(4,)),keras.layers.Dropout(0.2),keras.layers.Dense(32,activation='relu'),keras.layers.Dense(3,activation='softmax')])\nmodel.compile(optimizer='adam',loss='sparse_categorical_crossentropy',metrics=['accuracy'])\nmodel.summary()\nhistory=model.fit(X_train,y_train,epochs=30,validation_split=0.2,verbose=0)\nloss,acc=model.evaluate(X_test,y_test,verbose=0)\nprint(f'Test accuracy:{acc:.4f}')",
+        "hint": "Sequential with Dense layers. softmax for multi-class. adam optimizer. epochs=30.",
+        "rubric": "Sequential model. 3 Dense layers. Dropout. compile correct. fit with epochs. evaluate."
+      }
+    ]
+  }
+}

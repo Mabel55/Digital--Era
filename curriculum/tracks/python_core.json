@@ -1,0 +1,473 @@
+{
+  "Python Fundamentals": {
+    "aiRubric": "Check variables correctly typed, print statements work, f-strings used.",
+    "lessons": [
+      {
+        "title": "Variables & Data Types",
+        "theory": "## Variables\nPython is dynamically typed.\n```python\nname = 'Ada'      # str\nage  = 25         # int\nprice = 9.99      # float\nactive = True     # bool\nprint(type(name)) # <class 'str'>\n```",
+        "instructions": "## Task: Your Profile\n1. Create `name` (string), `age` (int), `height` (float), `is_student` (bool)\n2. Print all four with labels\n3. Print `type(name)`",
+        "starterCode": "name = ___\nage = ___\nheight = ___\nis_student = ___\n\nprint('Name:', ___)\nprint('Age:', ___)\nprint('Height:', ___)\nprint('Student:', ___)\nprint('Type:', type(___))",
+        "solution": "name='Ada Okonkwo'\nage=22\nheight=1.65\nis_student=True\nprint('Name:',name)\nprint('Age:',age)\nprint('Height:',height)\nprint('Student:',is_student)\nprint('Type:',type(name))",
+        "hint": "Strings need quotes. Booleans are True or False.",
+        "rubric": "All 4 variables typed. All 5 prints correct."
+      },
+      {
+        "title": "String Operations",
+        "theory": "## Strings\n```python\nfull = 'Ada Okonkwo'\nprint(len(full))       # 11\nprint(full.upper())    # ADA OKONKWO\nprint(full[0:3])       # Ada\nprint(f'Hi {full}!')   # Hi Ada Okonkwo!\n```",
+        "instructions": "## Task: String Manipulation\n1. Create `first_name` and `last_name`\n2. Combine into `full_name`\n3. Print length, uppercase, and an f-string greeting",
+        "starterCode": "first_name = '___'\nlast_name = '___'\nfull_name = ___ + ' ' + ___\n\nprint('Length:', ___)\nprint('Upper:', ___)\nprint(f'Hello, {full_name}! Welcome to Mabel Academy.')",
+        "solution": "first_name='Ada'\nlast_name='Okonkwo'\nfull_name=first_name+' '+last_name\nprint('Length:',len(full_name))\nprint('Upper:',full_name.upper())\nprint(f'Hello, {full_name}! Welcome to Mabel Academy.')",
+        "hint": "Use len() for length, .upper() for caps.",
+        "rubric": "Concatenation correct. len() and upper() used. f-string correct."
+      },
+      {
+        "title": "Numbers & Arithmetic",
+        "theory": "## Operators\n+, -, *, / (divide), // (floor div), % (modulo), ** (power)\n```python\nprint(10 // 3)  # 3\nprint(10 % 3)   # 1\nprint(2 ** 8)   # 256\nprint(round(3.14159, 2))  # 3.14\n```",
+        "instructions": "## Task: Invoice Calculator\n`price_per_item = 1500`, `quantity = 7`\n1. Calculate subtotal\n2. Apply 7.5% VAT\n3. Print subtotal, VAT, total (rounded 2dp)",
+        "starterCode": "price_per_item = 1500\nquantity = 7\n\nsubtotal = ___\nvat = ___\ntotal = ___\n\nprint(f'Subtotal: N{subtotal}')\nprint(f'VAT:      N{round(___, 2)}')\nprint(f'Total:    N{round(___, 2)}')",
+        "solution": "price_per_item=1500\nquantity=7\nsubtotal=price_per_item*quantity\nvat=subtotal*0.075\ntotal=subtotal+vat\nprint(f'Subtotal: N{subtotal}')\nprint(f'VAT:      N{round(vat,2)}')\nprint(f'Total:    N{round(total,2)}')",
+        "hint": "VAT = subtotal * 0.075. Total = subtotal + vat.",
+        "rubric": "Correct multiplication. VAT 0.075. round() used."
+      },
+      {
+        "title": "User Input & Type Casting",
+        "theory": "## Input\n```python\nname  = input('Name: ')          # always string\nage   = int(input('Age: '))      # cast to int\nprice = float(input('Price: '))  # cast to float\n```\nType casting: `int()`, `float()`, `str()`, `bool()`",
+        "instructions": "## Task: Simple Calculator\n1. Take two numbers as input (cast to float)\n2. Print sum, difference, product, quotient (2dp)",
+        "starterCode": "a = float(input('Enter first number: '))\nb = float(input('Enter second number: '))\n\nprint(f'Sum:        {___}')\nprint(f'Difference: {___}')\nprint(f'Product:    {___}')\nprint(f'Quotient:   {round(___ / ___, 2)}')",
+        "solution": "a=float(input('Enter first number: '))\nb=float(input('Enter second number: '))\nprint(f'Sum:        {a+b}')\nprint(f'Difference: {a-b}')\nprint(f'Product:    {a*b}')\nprint(f'Quotient:   {round(a/b,2)}')",
+        "hint": "Wrap input() with float(). a+b, a-b, a*b, a/b.",
+        "rubric": "Both inputs cast to float. All 4 operations printed."
+      },
+      {
+        "title": "Comments & Code Style",
+        "theory": "## PEP 8\n```python\n# Single-line comment\n\"\"\"\nDocstring\n\"\"\"\nstudent_name = 'Ada'  # snake_case\nMAX_SCORE = 100       # UPPER_CASE constants\n```",
+        "instructions": "## Task: Clean & Document\nRewrite messy code:\n```python\nx='ada'\ny=22\nZ=True\nprint(x,y,Z)\n```\nAdd docstring, snake_case names, comments, f-string.",
+        "starterCode": "\"\"\"\nPurpose: ___\nAuthor: ___\n\"\"\"\n\nstudent_name = \"___\"  # full name\nstudent_age = ___\nis_enrolled = ___\n\nprint(f\"{student_name} | Age: {student_age} | Enrolled: {is_enrolled}\")",
+        "solution": "\"\"\"\nPurpose: Display student profile\nAuthor: Mabel Academy\n\"\"\"\n\nstudent_name = \"Ada Okonkwo\"\nstudent_age = 22\nis_enrolled = True\n\nprint(f\"{student_name} | Age: {student_age} | Enrolled: {is_enrolled}\")",
+        "hint": "Triple quotes for docstring. snake_case uses underscores.",
+        "rubric": "Docstring present. snake_case used. f-string output correct."
+      }
+    ]
+  },
+  "Control Flow & Loops": {
+    "aiRubric": "Check if/elif/else syntax, correct indentation, loop ranges.",
+    "lessons": [
+      {
+        "title": "If / Elif / Else",
+        "theory": "## Conditionals\n```python\nif score >= 90:\n    grade = 'A'\nelif score >= 80:\n    grade = 'B'\nelse:\n    grade = 'F'\n```",
+        "instructions": "## Task: Grade Calculator\nA(90+), B(80+), C(70+), D(60+), F(below 60). Test with score = 85.",
+        "starterCode": "score = 85\n\nif ___:\n    grade = 'A'\nelif ___:\n    grade = 'B'\nelif ___:\n    grade = 'C'\nelif ___:\n    grade = 'D'\nelse:\n    grade = 'F'\n\nprint(f'Score: {score} -> Grade: {grade}')",
+        "solution": "score=85\nif score>=90:\n    grade='A'\nelif score>=80:\n    grade='B'\nelif score>=70:\n    grade='C'\nelif score>=60:\n    grade='D'\nelse:\n    grade='F'\nprint(f'Score: {score} -> Grade: {grade}')",
+        "hint": "Start from highest boundary. Use >= so values land in correct band.",
+        "rubric": "5 branches. Correct boundaries. Output correct."
+      },
+      {
+        "title": "For Loops & Range",
+        "theory": "## For Loops\n```python\nfor i in range(1, 6):       # 1,2,3,4,5\n    print(i)\n\nfor i, v in enumerate(['a','b','c']):\n    print(i, v)             # 0 a  1 b  2 c\n```",
+        "instructions": "## Task: Multiplication Table\nPrint the 9 times table from 1 to 12.",
+        "starterCode": "for i in range(___, ___):\n    result = 9 * i\n    print(f'9 x {i} = {result}')",
+        "solution": "for i in range(1,13):\n    result=9*i\n    print(f'9 x {i} = {result}')",
+        "hint": "range(1, 13) gives 1 to 12.",
+        "rubric": "range(1,13). result = 9*i. Format correct."
+      },
+      {
+        "title": "While Loops",
+        "theory": "## While\n```python\ncount = 0\nwhile count < 5:\n    print(count)\n    count += 1   # always increment!\n```",
+        "instructions": "## Task: Countdown\nCount down from 10 to 1, then print 'Liftoff!'",
+        "starterCode": "countdown = 10\nwhile ___ > 0:\n    print(countdown)\n    countdown ___\nprint('Liftoff!')",
+        "solution": "countdown=10\nwhile countdown>0:\n    print(countdown)\n    countdown-=1\nprint('Liftoff!')",
+        "hint": "countdown -= 1 decrements by 1 each iteration.",
+        "rubric": "Condition > 0. countdown -= 1. Liftoff after."
+      },
+      {
+        "title": "Break & Continue",
+        "theory": "## Loop Control\n```python\nfor i in range(10):\n    if i % 2 == 0: continue  # skip even\n    if i > 7:      break     # stop\n    print(i)\n# prints: 1 3 5 7\n```",
+        "instructions": "## Task: First Even > 10\nLoop 1-30. Skip odd numbers with continue. Print first even > 10 and break.",
+        "starterCode": "for n in range(1, 31):\n    if n % 2 != 0:\n        ___\n    if n > 10:\n        print(f'First even > 10: {n}')\n        ___",
+        "solution": "for n in range(1,31):\n    if n%2!=0:\n        continue\n    if n>10:\n        print(f'First even > 10: {n}')\n        break",
+        "hint": "n % 2 != 0 means odd. continue skips, break exits.",
+        "rubric": "continue for odds. break after printing. Output is 12."
+      },
+      {
+        "title": "Nested Loops",
+        "theory": "## Nested Loops\n```python\nfor i in range(1, 4):\n    for j in range(1, 4):\n        print(i * j, end='\\t')\n    print()   # newline\n```\nInner loop runs fully for each outer iteration.",
+        "instructions": "## Task: 5x5 Multiplication Grid\nPrint a 5x5 table using `end='\\t'` for spacing.",
+        "starterCode": "for i in range(1, ___):\n    for j in range(1, ___):\n        print(i * j, end='\\t')\n    print()",
+        "solution": "for i in range(1,6):\n    for j in range(1,6):\n        print(i*j,end='\\t')\n    print()",
+        "hint": "Both ranges (1, 6). print() alone resets line.",
+        "rubric": "Both ranges correct. i*j. end='\\t'. print() for newline."
+      }
+    ]
+  },
+  "Functions & Scope": {
+    "aiRubric": "Check def, parameters, return, correct calls.",
+    "lessons": [
+      {
+        "title": "Defining Functions",
+        "theory": "## Functions\n```python\ndef greet(name):\n    return f'Hello, {name}!'\n\nprint(greet('Ada'))  # Hello, Ada!\n```",
+        "instructions": "## Task: Temperature Converter\nWrite `celsius_to_fahrenheit(c)`. Formula: F = (C x 9/5) + 32. Test with 0, 100, 37.",
+        "starterCode": "def celsius_to_fahrenheit(c):\n    f = ___\n    return ___\n\nprint(celsius_to_fahrenheit(0))    # 32.0\nprint(celsius_to_fahrenheit(100))  # 212.0\nprint(celsius_to_fahrenheit(37))   # 98.6",
+        "solution": "def celsius_to_fahrenheit(c):\n    f=(c*9/5)+32\n    return f\nprint(celsius_to_fahrenheit(0))\nprint(celsius_to_fahrenheit(100))\nprint(celsius_to_fahrenheit(37))",
+        "hint": "(c * 9/5) + 32. Store in f and return it.",
+        "rubric": "Correct formula. return present. 3 test calls."
+      },
+      {
+        "title": "Default Arguments",
+        "theory": "## Defaults\n```python\ndef greet(name, greeting='Hello'):\n    return f'{greeting}, {name}!'\n\ngreet('Ada')            # Hello, Ada!\ngreet('Ada', 'Hey')    # Hey, Ada!\n```",
+        "instructions": "## Task: Receipt Generator\nCreate `create_receipt(item, price, quantity=1, currency='NGN')`\nReturn: `Receipt: 3x Jollof Rice = NGN 4500`",
+        "starterCode": "def create_receipt(item, price, quantity=___, currency=___):\n    total = price * ___\n    return f'Receipt: {quantity}x {item} = {currency} {total}'\n\nprint(create_receipt('Suya', 800))\nprint(create_receipt('Rice', 1500, quantity=3))\nprint(create_receipt('Coffee', 2000, currency='USD'))",
+        "solution": "def create_receipt(item,price,quantity=1,currency='NGN'):\n    total=price*quantity\n    return f'Receipt: {quantity}x {item} = {currency} {total}'\nprint(create_receipt('Suya',800))\nprint(create_receipt('Rice',1500,quantity=3))\nprint(create_receipt('Coffee',2000,currency='USD'))",
+        "hint": "quantity=1, currency='NGN' as defaults.",
+        "rubric": "Correct defaults. total = price*quantity. Format matches."
+      },
+      {
+        "title": "Multiple Return Values",
+        "theory": "## Multiple Returns\n```python\ndef min_max(nums):\n    return min(nums), max(nums)\n\nlo, hi = min_max([3, 1, 9])\nprint(lo, hi)  # 1 9\n```",
+        "instructions": "## Task: Score Statistics\nWrite `score_stats(scores)` returning mean, highest, lowest, pass_count (>=60).",
+        "starterCode": "def score_stats(scores):\n    mean = sum(scores) / len(scores)\n    highest = ___\n    lowest = ___\n    passes = len([s for s in scores if s >= 60])\n    return ___, ___, ___, ___\n\nscores = [78,92,45,88,60,34,75]\nmean, high, low, passes = score_stats(scores)\nprint(f'Mean:{mean:.1f} High:{high} Low:{low} Passes:{passes}')",
+        "solution": "def score_stats(scores):\n    mean=sum(scores)/len(scores)\n    highest=max(scores)\n    lowest=min(scores)\n    passes=len([s for s in scores if s>=60])\n    return mean,highest,lowest,passes\nscores=[78,92,45,88,60,34,75]\nmean,high,low,passes=score_stats(scores)\nprint(f'Mean:{mean:.1f} High:{high} Low:{low} Passes:{passes}')",
+        "hint": "max(), min(). Comprehension for passes. Return 4 comma-separated.",
+        "rubric": "max/min used. Comprehension correct. 4 values returned."
+      },
+      {
+        "title": "Lambda Functions",
+        "theory": "## Lambda\n```python\nsquare = lambda x: x**2\nprint(square(5))  # 25\n\n# With sorted & filter\nranked = sorted(students, key=lambda s: s[1], reverse=True)\nevens  = list(filter(lambda x: x%2==0, nums))\n```",
+        "instructions": "## Task: Sort Students by Score\n`students = [(name, score)]`\n1. Sort by score descending\n2. Filter passing students (>=60)\n3. Print ranked list",
+        "starterCode": "students = [('Ada',88),('Tunde',55),('Ngozi',92),('Emeka',67),('Amaka',45)]\n\nranked = sorted(students, key=lambda s: ___, reverse=___)\nfor i,(name,score) in enumerate(ranked, 1):\n    print(f'{i}. {name}: {score}')\n\npassed = list(filter(lambda s: s[___] >= 60, students))\nprint(f'Passed: {[s[0] for s in passed]}')",
+        "solution": "students=[('Ada',88),('Tunde',55),('Ngozi',92),('Emeka',67),('Amaka',45)]\nranked=sorted(students,key=lambda s:s[1],reverse=True)\nfor i,(name,score) in enumerate(ranked,1):\n    print(f'{i}. {name}: {score}')\npassed=list(filter(lambda s:s[1]>=60,students))\nprint(f'Passed: {[s[0] for s in passed]}')",
+        "hint": "s[1] is the score. reverse=True for descending.",
+        "rubric": "Lambda s[1]. reverse=True. filter lambda correct."
+      }
+    ]
+  },
+  "Lists & Tuples": {
+    "aiRubric": "Check list creation, indexing, slicing, methods, tuple usage.",
+    "lessons": [
+      {
+        "title": "Creating & Indexing Lists",
+        "theory": "## Lists\n```python\nfruits = ['mango','banana','pawpaw']\nprint(fruits[0])    # mango\nprint(fruits[-1])   # pawpaw\nprint(fruits[1:3])  # ['banana','pawpaw']\nprint(len(fruits))  # 3\n```",
+        "instructions": "## Task: Classroom List\n1. Create list of 5 student names\n2. Print first and last\n3. Print students 2-4 using slice\n4. Print total count",
+        "starterCode": "students = [___, ___, ___, ___, ___]\n\nprint('First:', students[___])\nprint('Last:', students[___])\nprint('Middle 3:', students[___:___])\nprint('Total:', ___)",
+        "solution": "students=['Ada','Tunde','Ngozi','Emeka','Amaka']\nprint('First:',students[0])\nprint('Last:',students[-1])\nprint('Middle 3:',students[1:4])\nprint('Total:',len(students))",
+        "hint": "[0] is first, [-1] is last. [1:4] gives indices 1,2,3.",
+        "rubric": "5 items. [0], [-1], [1:4], len() all correct."
+      },
+      {
+        "title": "List Methods",
+        "theory": "## Methods\n```python\nmy = [3,1,4]\nmy.append(9)      # add end\nmy.insert(1, 7)   # insert at index\nmy.remove(4)      # remove value\nmy.sort()         # sort ascending\nmy.reverse()      # reverse\npopped = my.pop() # remove last\n```",
+        "instructions": "## Task: Shopping Cart\nStart with `cart = ['rice','beans']`\n1. Add 'tomatoes' and 'palm oil'\n2. Insert 'salt' at index 1\n3. Remove 'beans'\n4. Sort alphabetically\n5. Print final cart",
+        "starterCode": "cart = ['rice', 'beans']\n\ncart.___('tomatoes')\ncart.___('palm oil')\ncart.___(1, 'salt')\ncart.___('beans')\ncart.sort()\n\nprint('Cart:', cart)\nprint('Items:', len(cart))",
+        "solution": "cart=['rice','beans']\ncart.append('tomatoes')\ncart.append('palm oil')\ncart.insert(1,'salt')\ncart.remove('beans')\ncart.sort()\nprint('Cart:',cart)\nprint('Items:',len(cart))",
+        "hint": "append() end. insert(idx,val). remove(val).",
+        "rubric": "append twice, insert, remove, sort. Output correct."
+      },
+      {
+        "title": "List Comprehensions",
+        "theory": "## Comprehensions\n```python\nsquares = [x**2 for x in range(5)]\nevens   = [n for n in range(20) if n%2==0]\n```",
+        "instructions": "## Task: Three Comprehensions\n1. Squares of 1-10\n2. Even numbers 1-20\n3. Words longer than 4 chars from a sentence",
+        "starterCode": "squares = [___ for x in range(1, 11)]\nprint(squares)\n\nevens = [n for n in range(1,21) if n % ___ == 0]\nprint(evens)\n\nsentence = 'Mabel Academy teaches backend and frontend development'\nlong_words = [w for w in sentence.split() if len(w) > ___]\nprint(long_words)",
+        "solution": "squares=[x**2 for x in range(1,11)]\nprint(squares)\nevens=[n for n in range(1,21) if n%2==0]\nprint(evens)\nsentence='Mabel Academy teaches backend and frontend development'\nlong_words=[w for w in sentence.split() if len(w)>4]\nprint(long_words)",
+        "hint": "x**2 for squares. n%2==0 for evens. len(w)>4 for long words.",
+        "rubric": "All 3 comprehensions correct."
+      },
+      {
+        "title": "Tuples",
+        "theory": "## Tuples — Immutable\n```python\ncoords = (6.5244, 3.3792)\nx, y = coords   # unpacking\nlocs = {(6.5, 3.4): 'Lagos'}  # as dict key\n```",
+        "instructions": "## Task: Student Record\n1. Create `student = (name, age, course, gpa)`\n2. Unpack and print\n3. Use as a dict key",
+        "starterCode": "student = ('Ada Okonkwo', 22, 'Computer Science', 4.5)\n\nname, age, course, gpa = ___\nprint(f'{name} | {course} | GPA: {gpa}')\n\nrecords = {}\nrecords[___] = 'active'\nprint(records)",
+        "solution": "student=('Ada Okonkwo',22,'Computer Science',4.5)\nname,age,course,gpa=student\nprint(f'{name} | {course} | GPA: {gpa}')\nrecords={}\nrecords[student]='active'\nprint(records)",
+        "hint": "Unpack: name,age,course,gpa = student. Use whole tuple as key.",
+        "rubric": "Tuple created. Unpacking correct. Used as dict key."
+      }
+    ]
+  },
+  "Dictionaries & Sets": {
+    "aiRubric": "Check dict syntax, .get(), .items(), set operations.",
+    "lessons": [
+      {
+        "title": "Dictionary Basics",
+        "theory": "## Dicts\n```python\ns = {'name':'Ada','score':88}\nprint(s['name'])              # Ada\nprint(s.get('grade','N/A'))   # N/A\ns['gpa'] = 4.5               # add key\ndel s['score']               # delete key\nfor k,v in s.items():\n    print(k, v)\n```",
+        "instructions": "## Task: Student Registry\n1. Dict with name, age, course, score\n2. Print name with [] and score with .get()\n3. Add grade key (A if >=80 else B)\n4. Delete score\n5. Loop and print all pairs",
+        "starterCode": "student = {'name':'Ada','age':22,'course':'Python','score':88}\n\nprint(student[___])\nprint(student.get('score', 'Not graded'))\n\nstudent['grade'] = 'A' if student['score'] >= 80 else 'B'\ndel student[___]\n\nfor key, value in student.___():\n    print(f'{key}: {value}')",
+        "solution": "student={'name':'Ada','age':22,'course':'Python','score':88}\nprint(student['name'])\nprint(student.get('score','Not graded'))\nstudent['grade']='A' if student['score']>=80 else 'B'\ndel student['score']\nfor key,value in student.items():\n    print(f'{key}: {value}')",
+        "hint": ".get(key, default) is safe. .items() for looping.",
+        "rubric": "[] and .get() used. Grade added. del used. .items() loop correct."
+      },
+      {
+        "title": "Nested Dictionaries",
+        "theory": "## Nested Dicts\n```python\nstudents = {\n    'ada':   {'age':22,'score':88},\n    'tunde': {'age':25,'score':72}\n}\nprint(students['ada']['score'])  # 88\n```",
+        "instructions": "## Task: School Registry\n1. Nested dict with 3 students (age, course, score)\n2. Print one student's course\n3. Add grade to each student using a loop\n4. Print all students with their grades",
+        "starterCode": "registry = {\n    'ada':   {'age':22,'course':'Python', 'score':88},\n    'tunde': {'age':25,'course':'FastAPI','score':72},\n    'ngozi': {'age':23,'course':'SQL',    'score':95}\n}\n\nprint(registry[___][___])\n\nfor name, info in registry.___():\n    info['grade'] = 'A' if info['score'] >= 80 else 'B'\n\nfor name, info in registry.items():\n    print(f'{name}: {info[\"course\"]} | Grade: {info[___]}')",
+        "solution": "registry={'ada':{'age':22,'course':'Python','score':88},'tunde':{'age':25,'course':'FastAPI','score':72},'ngozi':{'age':23,'course':'SQL','score':95}}\nprint(registry['ada']['course'])\nfor name,info in registry.items():\n    info['grade']='A' if info['score']>=80 else 'B'\nfor name,info in registry.items():\n    print(f'{name}: {info[\"course\"]} | Grade: {info[\"grade\"]}')",
+        "hint": "registry['ada']['course'] for nested access.",
+        "rubric": "Nested access correct. Loop adds grade. Final print correct."
+      },
+      {
+        "title": "Sets & Operations",
+        "theory": "## Sets\n```python\na = {1,2,3,4}\nb = {3,4,5,6}\nprint(a | b)  # union\nprint(a & b)  # intersection\nprint(a - b)  # difference\nprint(a ^ b)  # symmetric diff\n```",
+        "instructions": "## Task: Enrolment Overlap\nTrack A: {Ada,Tunde,Ngozi,Emeka} Track B: {Ngozi,Emeka,Amaka,Bola}\nFind: in both, all students, only Track A, exactly one track.",
+        "starterCode": "track_a = {'Ada','Tunde','Ngozi','Emeka'}\ntrack_b = {'Ngozi','Emeka','Amaka','Bola'}\n\nboth   = ___ & ___\nall_s  = ___ | ___\nonly_a = ___ - ___\nexcl   = ___ ^ ___\n\nprint(f'Both:      {both}')\nprint(f'All:       {all_s}')\nprint(f'Only A:    {only_a}')\nprint(f'Exclusive: {excl}')",
+        "solution": "track_a={'Ada','Tunde','Ngozi','Emeka'}\ntrack_b={'Ngozi','Emeka','Amaka','Bola'}\nboth=track_a&track_b\nall_s=track_a|track_b\nonly_a=track_a-track_b\nexcl=track_a^track_b\nprint(f'Both:      {both}')\nprint(f'All:       {all_s}')\nprint(f'Only A:    {only_a}')\nprint(f'Exclusive: {excl}')",
+        "hint": "& intersection, | union, - difference, ^ symmetric.",
+        "rubric": "All 4 operations correct."
+      }
+    ]
+  },
+  "OOP in Python": {
+    "aiRubric": "Check class, __init__, self, methods, inheritance, super().__init__().",
+    "lessons": [
+      {
+        "title": "Classes & Objects",
+        "theory": "## Classes\n```python\nclass Student:\n    def __init__(self, name, age):\n        self.name = name\n        self.age  = age\n    def greet(self):\n        return f'Hi, I am {self.name}'\n\nada = Student('Ada', 22)\nprint(ada.greet())\n```",
+        "instructions": "## Task: BankAccount Class\nCreate `BankAccount(owner, balance=0)` with:\n- `deposit(amount)` — adds to balance\n- `withdraw(amount)` — checks funds first\n- `get_balance()` — returns balance",
+        "starterCode": "class BankAccount:\n    def __init__(self, owner, balance=0):\n        self.owner = ___\n        self.balance = ___\n\n    def deposit(self, amount):\n        self.balance += ___\n        print(f'Deposited N{amount}. Balance: N{self.balance}')\n\n    def withdraw(self, amount):\n        if amount > self.___:\n            print('Insufficient funds')\n        else:\n            self.balance -= ___\n            print(f'Withdrawn N{amount}. Balance: N{self.balance}')\n\n    def get_balance(self):\n        return self.___\n\nacc = BankAccount('Ada')\nacc.deposit(5000)\nacc.withdraw(2000)\nacc.withdraw(10000)\nprint(f'Final: N{acc.get_balance()}')",
+        "solution": "class BankAccount:\n    def __init__(self,owner,balance=0):\n        self.owner=owner\n        self.balance=balance\n    def deposit(self,amount):\n        self.balance+=amount\n        print(f'Deposited N{amount}. Balance: N{self.balance}')\n    def withdraw(self,amount):\n        if amount>self.balance:\n            print('Insufficient funds')\n        else:\n            self.balance-=amount\n            print(f'Withdrawn N{amount}. Balance: N{self.balance}')\n    def get_balance(self):\n        return self.balance\nacc=BankAccount('Ada')\nacc.deposit(5000)\nacc.withdraw(2000)\nacc.withdraw(10000)\nprint(f'Final: N{acc.get_balance()}')",
+        "hint": "Use self.balance. Check amount > self.balance before withdrawing.",
+        "rubric": "__init__ correct. deposit/withdraw modify balance. Insufficient check present."
+      },
+      {
+        "title": "Inheritance",
+        "theory": "## Inheritance\n```python\nclass Animal:\n    def __init__(self, name):\n        self.name = name\n    def speak(self): return '...'\n\nclass Dog(Animal):\n    def speak(self):\n        return f'{self.name}: Woof!'\n\nd = Dog('Rex')\nprint(d.speak())\n```",
+        "instructions": "## Task: Employee Hierarchy\n- Base `Employee(name, salary)` with `get_info()`\n- `Manager(name, salary, team_size)` — overrides `get_info()`\n- `Intern(name, duration)` — salary defaults 50000",
+        "starterCode": "class Employee:\n    def __init__(self, name, salary):\n        self.name = ___\n        self.salary = ___\n    def get_info(self):\n        return f'{self.name} | N{self.salary}'\n\nclass Manager(___):\n    def __init__(self, name, salary, team_size):\n        super().__init__(___, ___)\n        self.team_size = ___\n    def get_info(self):\n        return super().get_info() + f' | Team: {self.team_size}'\n\nclass Intern(___):\n    def __init__(self, name, duration):\n        super().__init__(name, salary=___)\n        self.duration = duration\n    def get_duration(self):\n        return f'{self.name} interns for {self.duration} months'\n\nprint(Manager('Tunde',500000,8).get_info())\nprint(Intern('Amaka',6).get_info())\nprint(Intern('Amaka',6).get_duration())",
+        "solution": "class Employee:\n    def __init__(self,name,salary):\n        self.name=name;self.salary=salary\n    def get_info(self):\n        return f'{self.name} | N{self.salary}'\nclass Manager(Employee):\n    def __init__(self,name,salary,team_size):\n        super().__init__(name,salary)\n        self.team_size=team_size\n    def get_info(self):\n        return super().get_info()+f' | Team:{self.team_size}'\nclass Intern(Employee):\n    def __init__(self,name,duration):\n        super().__init__(name,salary=50000)\n        self.duration=duration\n    def get_duration(self):\n        return f'{self.name} interns for {self.duration} months'\nprint(Manager('Tunde',500000,8).get_info())\nprint(Intern('Amaka',6).get_info())\nprint(Intern('Amaka',6).get_duration())",
+        "hint": "super().__init__() calls parent. Override get_info in Manager.",
+        "rubric": "Both inherit. super().__init__(). Manager overrides. Intern defaults salary."
+      },
+      {
+        "title": "Dunder Methods",
+        "theory": "## Magic Methods\n```python\nclass Book:\n    def __init__(self, title, pages):\n        self.title=title; self.pages=pages\n    def __str__(self):  return f'Book: {self.title}'\n    def __len__(self):  return self.pages\n    def __repr__(self): return f'Book({self.title!r})'\n```",
+        "instructions": "## Task: Vector Class\nCreate `Vector(x, y)` with:\n- `__str__` → `Vector(3, 4)`\n- `__add__` → adds two vectors\n- `__len__` → magnitude as int\n- `__eq__` → True if x and y equal",
+        "starterCode": "import math\n\nclass Vector:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    def __str__(self):\n        return f'Vector({self.___}, {self.___})'\n    def __add__(self, other):\n        return Vector(self.x + ___.x, self.y + ___.y)\n    def __len__(self):\n        return int(math.sqrt(self.x**2 + ___))\n    def __eq__(self, other):\n        return self.x == ___.x and self.y == ___.y\n\nv1 = Vector(3, 4)\nv2 = Vector(1, 2)\nprint(v1)\nprint(v1 + v2)\nprint(len(v1))    # 5\nprint(v1 == v2)   # False",
+        "solution": "import math\nclass Vector:\n    def __init__(self,x,y):\n        self.x=x;self.y=y\n    def __str__(self):\n        return f'Vector({self.x},{self.y})'\n    def __add__(self,other):\n        return Vector(self.x+other.x,self.y+other.y)\n    def __len__(self):\n        return int(math.sqrt(self.x**2+self.y**2))\n    def __eq__(self,other):\n        return self.x==other.x and self.y==other.y\nv1=Vector(3,4);v2=Vector(1,2)\nprint(v1)\nprint(v1+v2)\nprint(len(v1))\nprint(v1==v2)",
+        "hint": "__add__ returns new Vector. __len__ uses math.sqrt.",
+        "rubric": "All 4 dunders correct. __add__ returns Vector. __len__ returns int."
+      },
+      {
+        "title": "Class & Static Methods",
+        "theory": "## Class & Static Methods\n```python\nclass MathHelper:\n    pi = 3.14159\n\n    @classmethod\n    def circle_area(cls, r):\n        return cls.pi * r**2\n\n    @staticmethod\n    def add(a, b):\n        return a + b\n```",
+        "instructions": "## Task: Student Factory\n- Class var `school = 'Mabel Academy'`\n- `@classmethod from_string(cls, data)` — parses `'Ada,22,Python'`\n- `@staticmethod is_passing(score)` — True if score >= 60",
+        "starterCode": "class Student:\n    school = 'Mabel Academy'\n\n    def __init__(self, name, age, course):\n        self.name = name\n        self.age = age\n        self.course = course\n\n    def __str__(self):\n        return f'{self.name} ({self.course}) @ {Student.___}'\n\n    @classmethod\n    def from_string(cls, data):\n        name, age, course = data.split(___)\n        return cls(name, int(___), course)\n\n    @staticmethod\n    def is_passing(score):\n        return score >= ___\n\nada = Student('Ada', 22, 'Python')\nprint(ada)\ntunde = Student.from_string('Tunde,25,FastAPI')\nprint(tunde)\nprint(Student.is_passing(75))\nprint(Student.is_passing(45))",
+        "solution": "class Student:\n    school='Mabel Academy'\n    def __init__(self,name,age,course):\n        self.name=name;self.age=age;self.course=course\n    def __str__(self):\n        return f'{self.name} ({self.course}) @ {Student.school}'\n    @classmethod\n    def from_string(cls,data):\n        name,age,course=data.split(',')\n        return cls(name,int(age),course)\n    @staticmethod\n    def is_passing(score):\n        return score>=60\nada=Student('Ada',22,'Python')\nprint(ada)\ntunde=Student.from_string('Tunde,25,FastAPI')\nprint(tunde)\nprint(Student.is_passing(75))\nprint(Student.is_passing(45))",
+        "hint": "split(',') for CSV. @classmethod gets cls. @staticmethod gets no self/cls.",
+        "rubric": "school class var. from_string parses and constructs. is_passing correct."
+      }
+    ]
+  },
+  "File Handling & Exceptions": {
+    "aiRubric": "Check open/with, read/write modes, try/except/finally.",
+    "lessons": [
+      {
+        "title": "Reading & Writing Files",
+        "theory": "## Files\n```python\n# Write\nwith open('data.txt', 'w') as f:\n    f.write('Hello Ada!\\n')\n\n# Read all at once\nwith open('data.txt', 'r') as f:\n    content = f.read()\n\n# Read line by line\nwith open('data.txt') as f:\n    for line in f:\n        print(line.strip())\n```",
+        "instructions": "## Task: Student Log\n1. Write 3 student records to `students.txt` (name,score per line)\n2. Read back and print: `Ada scored 88`",
+        "starterCode": "with open('students.txt', ___) as f:\n    f.write('Ada,88\\n')\n    f.write('Tunde,72\\n')\n    f.write('Ngozi,95\\n')\n\nwith open('students.txt', ___) as f:\n    for line in f:\n        parts = line.strip().split(___)\n        name  = parts[___]\n        score = parts[___]\n        print(f'{name} scored {score}')",
+        "solution": "with open('students.txt','w') as f:\n    f.write('Ada,88\\n')\n    f.write('Tunde,72\\n')\n    f.write('Ngozi,95\\n')\nwith open('students.txt','r') as f:\n    for line in f:\n        parts=line.strip().split(',')\n        name=parts[0]\n        score=parts[1]\n        print(f'{name} scored {score}')",
+        "hint": "'w' to write, 'r' to read. split(',') splits by comma.",
+        "rubric": "Write mode 'w'. Read mode 'r'. split(',') used. Indices correct."
+      },
+      {
+        "title": "Try / Except / Finally",
+        "theory": "## Exception Handling\n```python\ntry:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    print('Cannot divide by zero')\nexcept ValueError as e:\n    print(f'Bad value: {e}')\nelse:\n    print('Success!')\nfinally:\n    print('Always runs')\n```",
+        "instructions": "## Task: Safe Calculator\nWrite `safe_divide(a, b)` that:\n1. Catches ZeroDivisionError\n2. Catches TypeError\n3. Returns result on success, None on error\n4. Always prints 'Done' in finally",
+        "starterCode": "def safe_divide(a, b):\n    try:\n        result = a / b\n    except ___:\n        print('Error: Cannot divide by zero')\n        return None\n    except ___:\n        print('Error: Inputs must be numbers')\n        return None\n    else:\n        return ___\n    finally:\n        print('Done')\n\nprint(safe_divide(10, 2))\nprint(safe_divide(10, 0))\nprint(safe_divide('ten', 2))",
+        "solution": "def safe_divide(a,b):\n    try:\n        result=a/b\n    except ZeroDivisionError:\n        print('Error: Cannot divide by zero')\n        return None\n    except TypeError:\n        print('Error: Inputs must be numbers')\n        return None\n    else:\n        return result\n    finally:\n        print('Done')\nprint(safe_divide(10,2))\nprint(safe_divide(10,0))\nprint(safe_divide('ten',2))",
+        "hint": "ZeroDivisionError for /0. TypeError for wrong types. else runs if no exception.",
+        "rubric": "Both except clauses correct. else returns result. finally always prints."
+      },
+      {
+        "title": "Custom Exceptions",
+        "theory": "## Custom Exceptions\n```python\nclass InsufficientFundsError(Exception):\n    def __init__(self, amount, balance):\n        self.amount = amount\n        self.balance = balance\n        super().__init__(f'Need N{amount}, have N{balance}')\n\nraise InsufficientFundsError(5000, 2000)\n```",
+        "instructions": "## Task: Bank Exceptions\nCreate:\n1. `InsufficientFundsError(amount, balance)` — custom exception\n2. `InvalidAmountError` — raised if amount <= 0\n3. Update `BankAccount.withdraw()` to raise these\n4. Catch them separately in a try/except",
+        "starterCode": "class InsufficientFundsError(Exception):\n    def __init__(self, amount, balance):\n        super().__init__(f'Need N{amount} but balance is N{balance}')\n\nclass InvalidAmountError(Exception):\n    def __init__(self, amount):\n        super().__init__(f'Invalid amount: N{amount}')\n\nclass BankAccount:\n    def __init__(self, owner, balance=0):\n        self.owner = owner\n        self.balance = balance\n\n    def withdraw(self, amount):\n        if amount <= 0:\n            raise ___(amount)\n        if amount > self.balance:\n            raise ___(amount, self.balance)\n        self.balance -= amount\n        return self.balance\n\nacc = BankAccount('Ada', 5000)\ntry:\n    acc.withdraw(2000)\n    print(f'Balance: N{acc.balance}')\n    acc.withdraw(10000)\nexcept ___ as e:\n    print(f'Funds error: {e}')\nexcept ___ as e:\n    print(f'Amount error: {e}')",
+        "solution": "class InsufficientFundsError(Exception):\n    def __init__(self,amount,balance):\n        super().__init__(f'Need N{amount} but balance is N{balance}')\nclass InvalidAmountError(Exception):\n    def __init__(self,amount):\n        super().__init__(f'Invalid amount: N{amount}')\nclass BankAccount:\n    def __init__(self,owner,balance=0):\n        self.owner=owner;self.balance=balance\n    def withdraw(self,amount):\n        if amount<=0:\n            raise InvalidAmountError(amount)\n        if amount>self.balance:\n            raise InsufficientFundsError(amount,self.balance)\n        self.balance-=amount\n        return self.balance\nacc=BankAccount('Ada',5000)\ntry:\n    acc.withdraw(2000)\n    print(f'Balance: N{acc.balance}')\n    acc.withdraw(10000)\nexcept InsufficientFundsError as e:\n    print(f'Funds error: {e}')\nexcept InvalidAmountError as e:\n    print(f'Amount error: {e}')",
+        "hint": "Inherit from Exception. Call super().__init__(message). raise ExceptionClass(args).",
+        "rubric": "Both custom exceptions. Correct raises in withdraw. Both caught separately."
+      }
+    ]
+  },
+  "Modules & Packages": {
+    "aiRubric": "Check import statements, from...import, __name__, module creation.",
+    "lessons": [
+      {
+        "title": "Importing Modules",
+        "theory": "## Modules\n```python\nimport math\nprint(math.sqrt(16))   # 4.0\nprint(math.pi)         # 3.14159\n\nfrom math import sqrt, pi\nprint(sqrt(25))        # 5.0\n\nimport random\nprint(random.randint(1, 10))\n```",
+        "instructions": "## Task: Math Toolkit\nUsing the `math` and `random` modules:\n1. Print the square root of 144\n2. Print pi rounded to 4 decimal places\n3. Generate 5 random integers between 1 and 100\n4. Find the ceiling and floor of 4.7",
+        "starterCode": "import math\nimport random\n\nprint('sqrt(144):', math.___(___))\nprint('pi:', round(math.___, 4))\n\nrandoms = [random.___(1, 100) for _ in range(5)]\nprint('Random:', randoms)\n\nprint('ceil(4.7):', math.___(4.7))\nprint('floor(4.7):', math.___(4.7))",
+        "solution": "import math\nimport random\nprint('sqrt(144):',math.sqrt(144))\nprint('pi:',round(math.pi,4))\nrandoms=[random.randint(1,100) for _ in range(5)]\nprint('Random:',randoms)\nprint('ceil(4.7):',math.ceil(4.7))\nprint('floor(4.7):',math.floor(4.7))",
+        "hint": "math.sqrt(), math.pi, random.randint(a,b), math.ceil(), math.floor()",
+        "rubric": "sqrt, pi, randint, ceil, floor all used."
+      },
+      {
+        "title": "Creating Your Own Module",
+        "theory": "## Custom Modules\nAny .py file is a module:\n```python\n# utils.py\ndef add(a, b): return a + b\ndef greet(name): return f'Hello, {name}!'\nPI = 3.14159\n\n# main.py\nfrom utils import add, greet, PI\nprint(add(3, 4))       # 7\nprint(greet('Ada'))    # Hello, Ada!\n```\n`if __name__ == '__main__':` runs only when file is executed directly.",
+        "instructions": "## Task: math_utils Module\nWrite a `math_utils.py` style module with:\n1. `is_even(n)` — returns True if n is even\n2. `factorial(n)` — computes n! recursively\n3. `is_prime(n)` — checks if n is prime\n4. Test all three in the same file using `if __name__ == '__main__':`",
+        "starterCode": "def is_even(n):\n    return n % ___ == 0\n\ndef factorial(n):\n    if n <= 1:\n        return ___\n    return n * factorial(___ - 1)\n\ndef is_prime(n):\n    if n < 2: return False\n    for i in range(2, int(n**0.5) + 1):\n        if n % i == ___:\n            return False\n    return True\n\nif __name__ == '___':\n    print(is_even(4))       # True\n    print(factorial(5))     # 120\n    print(is_prime(17))     # True\n    print(is_prime(15))     # False",
+        "solution": "def is_even(n):\n    return n%2==0\ndef factorial(n):\n    if n<=1:return 1\n    return n*factorial(n-1)\ndef is_prime(n):\n    if n<2:return False\n    for i in range(2,int(n**0.5)+1):\n        if n%i==0:return False\n    return True\nif __name__=='__main__':\n    print(is_even(4))\n    print(factorial(5))\n    print(is_prime(17))\n    print(is_prime(15))",
+        "hint": "n%2==0 for even. Recursive factorial: n * factorial(n-1). Prime: no divisor in range 2 to sqrt(n).",
+        "rubric": "All 3 functions correct. __name__ check present. All 4 tests run."
+      },
+      {
+        "title": "Standard Library Tour",
+        "theory": "## Useful Standard Modules\n```python\nimport os, sys, datetime, json, collections\n\nos.getcwd()              # current directory\ndatetime.date.today()    # today's date\njson.dumps({'a':1})      # dict to JSON string\njson.loads('{\"a\":1}')   # JSON string to dict\ncollections.Counter([1,2,2,3]) # {2:2,1:1,3:1}\n```",
+        "instructions": "## Task: Student Report JSON\n1. Create a dict with 3 student records\n2. Convert to JSON string with `json.dumps(indent=2)`\n3. Parse it back with `json.loads()`\n4. Use `collections.Counter` to count how many students are per course\n5. Print today's date",
+        "starterCode": "import json\nimport collections\nimport datetime\n\nstudents = [\n    {'name':'Ada',   'course':'Python', 'score':88},\n    {'name':'Tunde', 'course':'SQL',    'score':72},\n    {'name':'Ngozi', 'course':'Python', 'score':95}\n]\n\njson_str = json.___(students, indent=___)\nprint(json_str)\n\nparsed = json.___(json_str)\nprint('First student:', parsed[0]['name'])\n\ncourses = [s['course'] for s in students]\ncounts = collections.___(courses)\nprint('Per course:', dict(counts))\n\nprint('Today:', datetime.date.___())",
+        "solution": "import json,collections,datetime\nstudents=[{'name':'Ada','course':'Python','score':88},{'name':'Tunde','course':'SQL','score':72},{'name':'Ngozi','course':'Python','score':95}]\njson_str=json.dumps(students,indent=2)\nprint(json_str)\nparsed=json.loads(json_str)\nprint('First:',parsed[0]['name'])\ncourses=[s['course'] for s in students]\ncounts=collections.Counter(courses)\nprint('Per course:',dict(counts))\nprint('Today:',datetime.date.today())",
+        "hint": "json.dumps() converts to string. json.loads() parses. Counter counts occurrences.",
+        "rubric": "json.dumps with indent. json.loads. Counter used. datetime.date.today()."
+      }
+    ]
+  },
+  "List Comprehensions": {
+    "aiRubric": "Check [expr for x in iterable if condition] syntax.",
+    "lessons": [
+      {
+        "title": "Basic Comprehensions",
+        "theory": "## List Comprehensions\n```python\n# Old way\nsquares = []\nfor x in range(5):\n    squares.append(x**2)\n\n# Comprehension\nsquares = [x**2 for x in range(5)]  # [0,1,4,9,16]\nevens   = [n for n in range(10) if n%2==0]\n```",
+        "instructions": "## Task: Three Comprehensions\n1. Squares of 1-10\n2. Even numbers from 1-20\n3. Words longer than 4 chars from a sentence",
+        "starterCode": "squares = [___ for x in range(1, 11)]\nprint(squares)\n\nevens = [n for n in range(1,21) if n % ___ == 0]\nprint(evens)\n\nsentence = 'Mabel Academy teaches backend and frontend development'\nlong_words = [w for w in sentence.split() if len(w) > ___]\nprint(long_words)",
+        "solution": "squares=[x**2 for x in range(1,11)]\nprint(squares)\nevens=[n for n in range(1,21) if n%2==0]\nprint(evens)\nsentence='Mabel Academy teaches backend and frontend development'\nlong_words=[w for w in sentence.split() if len(w)>4]\nprint(long_words)",
+        "hint": "x**2 for squares. n%2==0 for evens. len(w)>4 for long words.",
+        "rubric": "All 3 comprehensions correct."
+      },
+      {
+        "title": "Dict & Set Comprehensions",
+        "theory": "## Dict & Set Comprehensions\n```python\n# Dict\nscores = {'Ada':88,'Tunde':72}\ngrades = {name:'A' if s>=80 else 'B' for name,s in scores.items()}\n\n# Set (unique values only)\nlengths = {len(w) for w in ['hi','hello','hey']}  # {2,5}\n```",
+        "instructions": "## Task: Grade Dictionary\nFrom `[(name, score)]` list:\n1. Dict `{name: score}`\n2. Dict `{name: grade}` A(>=80) B(>=70) C(>=60) F\n3. Set of unique grades awarded",
+        "starterCode": "data = [('Ada',88),('Tunde',72),('Ngozi',95),('Emeka',55),('Amaka',65)]\n\nscores = {name: score for name, score in ___}\n\ndef get_grade(s):\n    if s>=80: return 'A'\n    elif s>=70: return 'B'\n    elif s>=60: return 'C'\n    else: return 'F'\n\ngrades = {name: get_grade(___) for name, score in data}\nunique = {___ for ___ in grades.values()}\n\nprint(scores)\nprint(grades)\nprint('Unique grades:', unique)",
+        "solution": "data=[('Ada',88),('Tunde',72),('Ngozi',95),('Emeka',55),('Amaka',65)]\nscores={name:score for name,score in data}\ndef get_grade(s):\n    if s>=80:return'A'\n    elif s>=70:return'B'\n    elif s>=60:return'C'\n    else:return'F'\ngrades={name:get_grade(score) for name,score in data}\nunique={g for g in grades.values()}\nprint(scores)\nprint(grades)\nprint('Unique:',unique)",
+        "hint": "Dict: {k:v for k,v in data}. Set: {expr for x in iterable}.",
+        "rubric": "Both dict comprehensions. get_grade called. Set from .values()."
+      },
+      {
+        "title": "Nested Comprehensions",
+        "theory": "## Nested Comprehensions\n```python\n# Flatten a 2D list\nmatrix = [[1,2,3],[4,5,6],[7,8,9]]\nflat = [n for row in matrix for n in row]\n# [1,2,3,4,5,6,7,8,9]\n\n# 5x5 multiplication table\ntable = [[i*j for j in range(1,6)] for i in range(1,6)]\n```",
+        "instructions": "## Task: Matrix Operations\n1. Create a 4x4 matrix using nested comprehension (i*j)\n2. Flatten it into one list\n3. Filter only values > 8 from the flat list\n4. Print the matrix row by row",
+        "starterCode": "matrix = [[i*j for j in range(1,5)] for i in range(1,5)]\n\nfor row in matrix:\n    print(row)\n\nflat = [n for row in ___ for n in ___]\nprint('Flat:', flat)\n\nhigh = [n for n in flat if n > ___]\nprint('Above 8:', high)",
+        "solution": "matrix=[[i*j for j in range(1,5)] for i in range(1,5)]\nfor row in matrix:\n    print(row)\nflat=[n for row in matrix for n in row]\nprint('Flat:',flat)\nhigh=[n for n in flat if n>8]\nprint('Above 8:',high)",
+        "hint": "Nested: [expr for row in matrix for n in row] flattens. Filter with if n>8.",
+        "rubric": "4x4 matrix. Flatten with nested comprehension. Filter > 8."
+      }
+    ]
+  },
+  "Iterators & Generators": {
+    "aiRubric": "Check __iter__, __next__, yield keyword, generator expressions.",
+    "lessons": [
+      {
+        "title": "Iterators",
+        "theory": "## Iterators\nAn iterator has `__iter__` and `__next__`:\n```python\nclass CountUp:\n    def __init__(self, limit):\n        self.current = 0\n        self.limit = limit\n    def __iter__(self):\n        return self\n    def __next__(self):\n        if self.current >= self.limit:\n            raise StopIteration\n        self.current += 1\n        return self.current\n\nfor n in CountUp(5):\n    print(n)  # 1 2 3 4 5\n```",
+        "instructions": "## Task: Range Iterator\nCreate `MyRange(start, stop, step=1)` that mimics Python's range:\n1. Implement `__iter__` and `__next__`\n2. Raise StopIteration when done\n3. Test with `for n in MyRange(0, 10, 2):`",
+        "starterCode": "class MyRange:\n    def __init__(self, start, stop, step=1):\n        self.current = ___\n        self.stop = ___\n        self.step = ___\n\n    def __iter__(self):\n        return ___\n\n    def __next__(self):\n        if self.current >= self.___:\n            raise ___\n        value = self.current\n        self.current += self.___\n        return value\n\nfor n in MyRange(0, 10, 2):\n    print(n, end=' ')\nprint()\nprint(list(MyRange(1, 6)))",
+        "solution": "class MyRange:\n    def __init__(self,start,stop,step=1):\n        self.current=start\n        self.stop=stop\n        self.step=step\n    def __iter__(self):\n        return self\n    def __next__(self):\n        if self.current>=self.stop:\n            raise StopIteration\n        value=self.current\n        self.current+=self.step\n        return value\nfor n in MyRange(0,10,2):\n    print(n,end=' ')\nprint()\nprint(list(MyRange(1,6)))",
+        "hint": "__iter__ returns self. __next__ increments current by step. Raise StopIteration when done.",
+        "rubric": "__iter__ returns self. __next__ logic correct. StopIteration raised. Both tests work."
+      },
+      {
+        "title": "Generators with yield",
+        "theory": "## Generators\n```python\ndef count_up(limit):\n    n = 0\n    while n < limit:\n        yield n\n        n += 1\n\ngen = count_up(3)\nprint(next(gen))  # 0\nprint(next(gen))  # 1\n\nfor n in count_up(5):\n    print(n)\n```\n`yield` pauses the function and returns a value. Much more memory efficient than lists.",
+        "instructions": "## Task: Fibonacci Generator\nWrite a generator `fibonacci(n)` that yields the first n Fibonacci numbers.\nAlso write `infinite_fib()` that yields forever — use `itertools.islice` to get first 10.",
+        "starterCode": "def fibonacci(n):\n    a, b = 0, 1\n    for _ in range(n):\n        ___ a\n        a, b = ___, a + b\n\nprint(list(fibonacci(10)))\n\ndef infinite_fib():\n    a, b = 0, 1\n    while True:\n        yield ___\n        a, b = b, a + ___\n\nimport itertools\nfirst10 = list(itertools.islice(infinite_fib(), ___))\nprint(first10)",
+        "solution": "def fibonacci(n):\n    a,b=0,1\n    for _ in range(n):\n        yield a\n        a,b=b,a+b\nprint(list(fibonacci(10)))\ndef infinite_fib():\n    a,b=0,1\n    while True:\n        yield a\n        a,b=b,a+b\nimport itertools\nfirst10=list(itertools.islice(infinite_fib(),10))\nprint(first10)",
+        "hint": "yield a then swap: a,b = b, a+b. infinite_fib has no stop condition. islice(gen, 10).",
+        "rubric": "yield used. Fibonacci correct. infinite_fib has while True. islice used."
+      }
+    ]
+  },
+  "Decorators & Closures": {
+    "aiRubric": "Check closure variable capture, @decorator syntax, functools.wraps.",
+    "lessons": [
+      {
+        "title": "Closures",
+        "theory": "## Closures\nA function that remembers variables from its enclosing scope:\n```python\ndef make_multiplier(n):\n    def multiplier(x):\n        return x * n   # n is captured\n    return multiplier\n\ndouble = make_multiplier(2)\ntriple = make_multiplier(3)\nprint(double(5))  # 10\nprint(triple(5))  # 15\n```",
+        "instructions": "## Task: Counter Closure\n1. Write `make_counter(start=0)` that returns an `increment()` function\n2. Each call to `increment()` adds 1 and returns the new value\n3. Create two independent counters and show they don't share state",
+        "starterCode": "def make_counter(start=0):\n    count = [___]  # use list to allow mutation\n\n    def increment():\n        count[0] += ___\n        return count[___]\n\n    return ___\n\ncounter_a = make_counter()\ncounter_b = make_counter(10)\n\nprint(counter_a())  # 1\nprint(counter_a())  # 2\nprint(counter_b())  # 11\nprint(counter_a())  # 3  (independent)\nprint(counter_b())  # 12",
+        "solution": "def make_counter(start=0):\n    count=[start]\n    def increment():\n        count[0]+=1\n        return count[0]\n    return increment\ncounter_a=make_counter()\ncounter_b=make_counter(10)\nprint(counter_a())\nprint(counter_a())\nprint(counter_b())\nprint(counter_a())\nprint(counter_b())",
+        "hint": "Use a list [start] so increment can modify it. Return the inner function.",
+        "rubric": "Closure captures count. Two independent counters. Correct sequence."
+      },
+      {
+        "title": "Decorators",
+        "theory": "## Decorators\n```python\nfrom functools import wraps\n\ndef timer(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        import time\n        start = time.time()\n        result = func(*args, **kwargs)\n        print(f'{func.__name__} took {time.time()-start:.4f}s')\n        return result\n    return wrapper\n\n@timer\ndef slow_function():\n    import time; time.sleep(0.1)\n```",
+        "instructions": "## Task: Three Decorators\n1. `@log_call` — prints function name and args before calling\n2. `@validate_positive` — raises ValueError if any arg <= 0\n3. `@retry(times=3)` — retries function up to N times on exception\nTest each one.",
+        "starterCode": "from functools import wraps\n\ndef log_call(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        print(f'Calling {func.___}({args}, {kwargs})')\n        return ___(* args, **kwargs)\n    return wrapper\n\ndef validate_positive(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        for arg in args:\n            if arg <= 0:\n                raise ValueError(f'Argument {arg} must be positive')\n        return func(*___, **kwargs)\n    return wrapper\n\ndef retry(times=3):\n    def decorator(func):\n        @wraps(func)\n        def wrapper(*args, **kwargs):\n            for attempt in range(___):\n                try:\n                    return func(*args, **kwargs)\n                except Exception as e:\n                    print(f'Attempt {attempt+1} failed: {e}')\n                    if attempt == times - 1:\n                        raise\n        return wrapper\n    return ___\n\n@log_call\n@validate_positive\ndef divide(a, b):\n    return a / b\n\nprint(divide(10, 2))\n\n@retry(times=3)\ndef flaky():\n    import random\n    if random.random() < 0.7:\n        raise Exception('Random failure')\n    return 'Success!'\n\nprint(flaky())",
+        "solution": "from functools import wraps\ndef log_call(func):\n    @wraps(func)\n    def wrapper(*args,**kwargs):\n        print(f'Calling {func.__name__}({args},{kwargs})')\n        return func(*args,**kwargs)\n    return wrapper\ndef validate_positive(func):\n    @wraps(func)\n    def wrapper(*args,**kwargs):\n        for arg in args:\n            if arg<=0:raise ValueError(f'{arg} must be positive')\n        return func(*args,**kwargs)\n    return wrapper\ndef retry(times=3):\n    def decorator(func):\n        @wraps(func)\n        def wrapper(*args,**kwargs):\n            for attempt in range(times):\n                try:return func(*args,**kwargs)\n                except Exception as e:\n                    print(f'Attempt {attempt+1} failed:{e}')\n                    if attempt==times-1:raise\n        return wrapper\n    return decorator\n@log_call\n@validate_positive\ndef divide(a,b):\n    return a/b\nprint(divide(10,2))\n@retry(times=3)\ndef flaky():\n    import random\n    if random.random()<0.7:raise Exception('fail')\n    return 'Success!'\nprint(flaky())",
+        "hint": "@wraps preserves function metadata. retry returns decorator which returns wrapper.",
+        "rubric": "All 3 decorators work. @wraps used. retry is a decorator factory."
+      }
+    ]
+  },
+  "Concurrency in Python": {
+    "aiRubric": "Check threading, multiprocessing, asyncio basics.",
+    "lessons": [
+      {
+        "title": "Threading",
+        "theory": "## Threading\n```python\nimport threading\n\ndef task(name, delay):\n    import time\n    time.sleep(delay)\n    print(f'{name} done')\n\nt1 = threading.Thread(target=task, args=('A', 1))\nt2 = threading.Thread(target=task, args=('B', 2))\nt1.start()\nt2.start()\nt1.join()\nt2.join()\nprint('All done')\n```\nGood for I/O-bound tasks (network, file).",
+        "instructions": "## Task: Concurrent Downloads (simulated)\n1. Write `download(url, delay)` that sleeps for `delay` then prints 'Downloaded: url'\n2. Create 4 threads for different URLs\n3. Time the total execution with `time.time()`\n4. Show threads run concurrently (total time < sum of delays)",
+        "starterCode": "import threading\nimport time\n\ndef download(url, delay):\n    time.sleep(___)\n    print(f'Downloaded: {url}')\n\nurls = [\n    ('https://api.example.com/data1', 1),\n    ('https://api.example.com/data2', 2),\n    ('https://api.example.com/data3', 1),\n    ('https://api.example.com/data4', 3),\n]\n\nstart = time.time()\n\nthreads = []\nfor url, delay in urls:\n    t = threading.___(target=___, args=(url, delay))\n    threads.append(t)\n    t.start()\n\nfor t in ___:\n    t.___()\n\nprint(f'All done in {time.time()-start:.2f}s (vs {sum(d for _,d in urls)}s sequential)')",
+        "solution": "import threading,time\ndef download(url,delay):\n    time.sleep(delay)\n    print(f'Downloaded: {url}')\nurls=[('https://api.example.com/data1',1),('https://api.example.com/data2',2),('https://api.example.com/data3',1),('https://api.example.com/data4',3)]\nstart=time.time()\nthreads=[]\nfor url,delay in urls:\n    t=threading.Thread(target=download,args=(url,delay))\n    threads.append(t)\n    t.start()\nfor t in threads:\n    t.join()\nprint(f'All done in {time.time()-start:.2f}s')",
+        "hint": "Thread(target=fn, args=(...)). t.start() launches. t.join() waits for completion.",
+        "rubric": "Thread created with target/args. All started. All joined. Timing shown."
+      },
+      {
+        "title": "Async/Await Basics",
+        "theory": "## asyncio\n```python\nimport asyncio\n\nasync def fetch(url):\n    await asyncio.sleep(1)  # simulates I/O\n    return f'data from {url}'\n\nasync def main():\n    results = await asyncio.gather(\n        fetch('url1'),\n        fetch('url2'),\n        fetch('url3')\n    )\n    print(results)\n\nasyncio.run(main())\n```\n`async def` defines a coroutine. `await` suspends it. `gather` runs concurrently.",
+        "instructions": "## Task: Async Student Fetcher\n1. Write `async fetch_student(id)` — awaits asyncio.sleep(0.5) then returns student dict\n2. Write `async main()` — fetches students 1-5 concurrently using `asyncio.gather`\n3. Time the execution (should be ~0.5s not 2.5s)\n4. Run with `asyncio.run(main())`",
+        "starterCode": "import asyncio\nimport time\n\nasync def fetch_student(student_id):\n    await asyncio.sleep(___)\n    return {'id': student_id, 'name': f'Student {student_id}', 'score': student_id * 10}\n\nasync def main():\n    start = time.time()\n\n    results = await asyncio.___(\n        *[fetch_student(i) for i in range(1, 6)]\n    )\n\n    print(f'Fetched {len(results)} students in {time.time()-start:.2f}s')\n    for student in results:\n        print(student)\n\nasyncio.___(main())",
+        "solution": "import asyncio,time\nasync def fetch_student(sid):\n    await asyncio.sleep(0.5)\n    return {'id':sid,'name':f'Student {sid}','score':sid*10}\nasync def main():\n    start=time.time()\n    results=await asyncio.gather(*[fetch_student(i) for i in range(1,6)])\n    print(f'Fetched {len(results)} in {time.time()-start:.2f}s')\n    for s in results:print(s)\nasyncio.run(main())",
+        "hint": "asyncio.gather(*coroutines) runs all concurrently. asyncio.run() starts the event loop.",
+        "rubric": "async def used. await asyncio.sleep. gather with spread. asyncio.run."
+      }
+    ]
+  },
+  "Design Patterns": {
+    "aiRubric": "Check pattern structure, intent understood, implementation correct.",
+    "lessons": [
+      {
+        "title": "Singleton Pattern",
+        "theory": "## Singleton\nEnsures only ONE instance of a class exists:\n```python\nclass Singleton:\n    _instance = None\n\n    def __new__(cls):\n        if cls._instance is None:\n            cls._instance = super().__new__(cls)\n        return cls._instance\n\na = Singleton()\nb = Singleton()\nprint(a is b)  # True — same object!\n```",
+        "instructions": "## Task: Database Connection Singleton\n1. Create `DatabaseConnection` singleton\n2. Store `host`, `port`, `connected=False`\n3. Add `connect()` and `disconnect()` methods\n4. Prove that two 'instances' share state",
+        "starterCode": "class DatabaseConnection:\n    _instance = ___\n\n    def __new__(cls):\n        if cls._instance is ___:\n            cls._instance = super().__new__(cls)\n            cls._instance.host = 'localhost'\n            cls._instance.port = 5432\n            cls._instance.connected = False\n        return cls.___\n\n    def connect(self):\n        self.connected = ___\n        print(f'Connected to {self.host}:{self.port}')\n\n    def disconnect(self):\n        self.connected = ___\n        print('Disconnected')\n\ndb1 = DatabaseConnection()\ndb2 = DatabaseConnection()\n\nprint(db1 is db2)   # True\ndb1.connect()\nprint(db2.connected)  # True — shared state!\ndb2.disconnect()\nprint(db1.connected)  # False",
+        "solution": "class DatabaseConnection:\n    _instance=None\n    def __new__(cls):\n        if cls._instance is None:\n            cls._instance=super().__new__(cls)\n            cls._instance.host='localhost'\n            cls._instance.port=5432\n            cls._instance.connected=False\n        return cls._instance\n    def connect(self):\n        self.connected=True\n        print(f'Connected to {self.host}:{self.port}')\n    def disconnect(self):\n        self.connected=False\n        print('Disconnected')\ndb1=DatabaseConnection()\ndb2=DatabaseConnection()\nprint(db1 is db2)\ndb1.connect()\nprint(db2.connected)\ndb2.disconnect()\nprint(db1.connected)",
+        "hint": "_instance = None at class level. __new__ checks if None. Returns cls._instance.",
+        "rubric": "Singleton __new__ correct. _instance check. Shared state demonstrated."
+      },
+      {
+        "title": "Observer Pattern",
+        "theory": "## Observer\nObjects subscribe to events and get notified:\n```python\nclass EventEmitter:\n    def __init__(self):\n        self._listeners = {}\n\n    def on(self, event, callback):\n        self._listeners.setdefault(event, []).append(callback)\n\n    def emit(self, event, data=None):\n        for cb in self._listeners.get(event, []):\n            cb(data)\n```",
+        "instructions": "## Task: Student Grade Notifier\n1. Create `GradeBook` with `subscribe(event, callback)` and `record_grade(student, score)`\n2. When grade > 90, emit 'distinction'\n3. When grade < 60, emit 'at_risk'\n4. Subscribe email and SMS handlers to each event",
+        "starterCode": "class GradeBook:\n    def __init__(self):\n        self._listeners = {}\n\n    def subscribe(self, event, callback):\n        self._listeners.setdefault(___, []).append(___)\n\n    def record_grade(self, student, score):\n        print(f'Recorded: {student} = {score}')\n        if score > ___:\n            self._emit('distinction', {'student':student,'score':score})\n        elif score < ___:\n            self._emit('at_risk', {'student':student,'score':score})\n\n    def _emit(self, event, data):\n        for cb in self._listeners.get(___, []):\n            cb(___)\n\ngb = GradeBook()\ngb.subscribe('distinction', lambda d: print(f'EMAIL: {d[\"student\"]} got distinction!'))\ngb.subscribe('at_risk',     lambda d: print(f'SMS:   {d[\"student\"]} is at risk!'))\n\ngb.record_grade('Ada', 95)\ngb.record_grade('Tunde', 55)\ngb.record_grade('Ngozi', 75)",
+        "solution": "class GradeBook:\n    def __init__(self):\n        self._listeners={}\n    def subscribe(self,event,callback):\n        self._listeners.setdefault(event,[]).append(callback)\n    def record_grade(self,student,score):\n        print(f'Recorded:{student}={score}')\n        if score>90:self._emit('distinction',{'student':student,'score':score})\n        elif score<60:self._emit('at_risk',{'student':student,'score':score})\n    def _emit(self,event,data):\n        for cb in self._listeners.get(event,[]):\n            cb(data)\ngb=GradeBook()\ngb.subscribe('distinction',lambda d:print(f'EMAIL:{d[\"student\"]} distinction!'))\ngb.subscribe('at_risk',lambda d:print(f'SMS:{d[\"student\"]} at risk!'))\ngb.record_grade('Ada',95)\ngb.record_grade('Tunde',55)\ngb.record_grade('Ngozi',75)",
+        "hint": "setdefault creates empty list if key missing. _emit loops callbacks. Both events test.",
+        "rubric": "subscribe adds to listeners. record_grade emits correct event. _emit calls all callbacks."
+      }
+    ]
+  },
+  "Metaprogramming": {
+    "aiRubric": "Check __getattr__, __setattr__, type(), metaclass basics.",
+    "lessons": [
+      {
+        "title": "Dynamic Attributes",
+        "theory": "## __getattr__ & __setattr__\n```python\nclass DynamicConfig:\n    def __init__(self):\n        self._data = {}\n\n    def __getattr__(self, name):\n        if name.startswith('_'):\n            raise AttributeError(name)\n        return self._data.get(name, f'No {name}')\n\n    def __setattr__(self, name, value):\n        if name.startswith('_'):\n            super().__setattr__(name, value)\n        else:\n            self._data[name] = value\n\nc = DynamicConfig()\nc.host = 'localhost'\nprint(c.host)    # localhost\nprint(c.missing) # No missing\n```",
+        "instructions": "## Task: Config Object\nCreate `Config` where you can set and get any attribute dynamically:\n1. Uses `_data` dict internally\n2. `to_dict()` returns all settings\n3. `from_dict(d)` loads settings from a dict\n4. Test with database config settings",
+        "starterCode": "class Config:\n    def __init__(self):\n        object.__setattr__(self, '_data', {})\n\n    def __getattr__(self, name):\n        return self._data.get(___, None)\n\n    def __setattr__(self, name, value):\n        self._data[___] = value\n\n    def to_dict(self):\n        return dict(self.___)\n\n    @classmethod\n    def from_dict(cls, d):\n        config = cls()\n        for key, value in d.___():\n            setattr(config, key, value)\n        return config\n\ncfg = Config()\ncfg.host = 'localhost'\ncfg.port = 5432\ncfg.debug = True\n\nprint(cfg.host)\nprint(cfg.to_dict())\n\ncfg2 = Config.from_dict({'name':'Mabel','version':'1.0'})\nprint(cfg2.name)\nprint(cfg2.to_dict())",
+        "solution": "class Config:\n    def __init__(self):\n        object.__setattr__(self,'_data',{})\n    def __getattr__(self,name):\n        return self._data.get(name,None)\n    def __setattr__(self,name,value):\n        self._data[name]=value\n    def to_dict(self):\n        return dict(self._data)\n    @classmethod\n    def from_dict(cls,d):\n        config=cls()\n        for key,value in d.items():\n            setattr(config,key,value)\n        return config\ncfg=Config()\ncfg.host='localhost'\ncfg.port=5432\ncfg.debug=True\nprint(cfg.host)\nprint(cfg.to_dict())\ncfg2=Config.from_dict({'name':'Mabel','version':'1.0'})\nprint(cfg2.name)\nprint(cfg2.to_dict())",
+        "hint": "Use object.__setattr__ to set _data without recursion. from_dict uses setattr().",
+        "rubric": "__getattr__ and __setattr__ correct. to_dict returns copy. from_dict loads from dict."
+      }
+    ]
+  },
+  "Memory & Performance": {
+    "aiRubric": "Check profiling, slots, generators vs lists, caching.",
+    "lessons": [
+      {
+        "title": "Profiling & Optimization",
+        "theory": "## Performance Tools\n```python\nimport timeit\nimport cProfile\n\n# Time a snippet\nt = timeit.timeit('sum(range(1000))', number=10000)\nprint(f'{t:.4f}s')\n\n# Profile a function\ncProfile.run('my_function()')\n\n# Memory efficient: use generators\nbig_list = [x**2 for x in range(1000000)]  # lots of RAM\nbig_gen  = (x**2 for x in range(1000000))  # tiny RAM\n```",
+        "instructions": "## Task: Compare Performance\n1. Compare list comprehension vs generator for sum of squares 1-1,000,000\n2. Use `timeit` to compare both\n3. Use `sys.getsizeof` to compare memory\n4. Use `functools.lru_cache` to speed up recursive fibonacci",
+        "starterCode": "import timeit, sys\nfrom functools import lru_cache\n\n# 1. List vs Generator sum\nlist_sum = sum([x**2 for x in range(1_000_000)])\ngen_sum  = sum(___ for x in range(1_000_000))\nprint(list_sum == gen_sum)  # True\n\n# 2. Time comparison\nlist_time = timeit.timeit('[x**2 for x in range(10000)]', number=100)\ngen_time  = timeit.timeit('sum(x**2 for x in range(10000))', number=100)\nprint(f'List: {list_time:.3f}s  Gen: {gen_time:.3f}s')\n\n# 3. Memory\nmy_list = [x**2 for x in range(1000)]\nmy_gen  = (x**2 for x in range(1000))\nprint(f'List size: {sys.getsizeof(___)} bytes')\nprint(f'Gen size:  {sys.getsizeof(___)} bytes')\n\n# 4. Cached fibonacci\n@___\ndef fib(n):\n    if n <= 1: return n\n    return fib(n-1) + fib(n-2)\n\nprint(fib(50))",
+        "solution": "import timeit,sys\nfrom functools import lru_cache\nlist_sum=sum([x**2 for x in range(1_000_000)])\ngen_sum=sum(x**2 for x in range(1_000_000))\nprint(list_sum==gen_sum)\nlist_time=timeit.timeit('[x**2 for x in range(10000)]',number=100)\ngen_time=timeit.timeit('sum(x**2 for x in range(10000))',number=100)\nprint(f'List:{list_time:.3f}s Gen:{gen_time:.3f}s')\nmy_list=[x**2 for x in range(1000)]\nmy_gen=(x**2 for x in range(1000))\nprint(f'List:{sys.getsizeof(my_list)} bytes')\nprint(f'Gen:{sys.getsizeof(my_gen)} bytes')\n@lru_cache(maxsize=None)\ndef fib(n):\n    if n<=1:return n\n    return fib(n-1)+fib(n-2)\nprint(fib(50))",
+        "hint": "Generator expression uses () not []. sys.getsizeof measures bytes. @lru_cache before def.",
+        "rubric": "Generator expression correct. timeit used. getsizeof compared. lru_cache applied."
+      }
+    ]
+  }
+}

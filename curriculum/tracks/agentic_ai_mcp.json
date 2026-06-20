@@ -1,0 +1,152 @@
+{
+  "Agent Foundations & Tools": {
+    "aiRubric": "Check agentic concepts, function calling logic, MCP configuration, ReAct loop understanding, and API integration.",
+    "lessons": [
+      {
+        "title": "Intro to Agentic AI vs Traditional LLMs",
+        "theory": "## Agents vs LLMs\nWhile LLMs just generate text, Agents use tools to take actions in the environment.\n```python\n# Traditional: model.predict(\"Hello\")\n# Agentic: agent.run(\"Check the weather and email me\")\n```",
+        "instructions": "## Task: Agent Capability\nAssign the string `'Actions'` to the variable describing what Agents can perform that base LLMs cannot.",
+        "starterCode": "capability = '___'",
+        "solution": "capability = 'Actions'",
+        "hint": "'Actions'",
+        "rubric": "Variable assigned 'Actions'."
+      },
+      {
+        "title": "LLM Tool Calling (Function Calling)",
+        "theory": "## Tool Calling\nModels can be provided with a schema of functions to execute.\n```python\n@tool\ndef get_weather(location: str):\n    return \"Sunny\"\n```",
+        "instructions": "## Task: Define a Tool\nUse the `@tool` decorator on the `search_web` function.",
+        "starterCode": "___\ndef search_web(query: str):\n    return \"Results\"",
+        "solution": "@tool\ndef search_web(query: str):\n    return \"Results\"",
+        "hint": "@tool",
+        "rubric": "Function decorated with @tool."
+      },
+      {
+        "title": "Introduction to the Model Context Protocol (MCP)",
+        "theory": "## MCP\nMCP provides a standard interface for agents to access external context and tools securely.\n```python\nmcp_client = Client(server=\"filesystem\")\n```",
+        "instructions": "## Task: MCP Client\nInstantiate an MCP Client connecting to the `'database'` server.",
+        "starterCode": "client = ___(server='___')",
+        "solution": "client = Client(server='database')",
+        "hint": "Client and 'database'",
+        "rubric": "MCP Client instantiated correctly."
+      },
+      {
+        "title": "Building a Simple ReAct (Reason + Act) Agent",
+        "theory": "## ReAct Pattern\nAgents loop through: Thought, Action, Observation, Answer.\n```python\n# Thought: I need to search.\n# Action: search(\"MCP\")\n```",
+        "instructions": "## Task: ReAct Step\nAssign `'Observation'` to the step following an Action.",
+        "starterCode": "next_step = '___'",
+        "solution": "next_step = 'Observation'",
+        "hint": "'Observation'",
+        "rubric": "Variable assigned 'Observation'."
+      },
+      {
+        "title": "Connecting Agents to External APIs",
+        "theory": "## API Integration\nAgents use tools to fetch data from APIs to ground their responses.\n```python\nrequests.get(\"https://api.weather.gov\")\n```",
+        "instructions": "## Task: Fetch API Data\nWrite the Python code to perform a `GET` request on `'https://api.example.com'` using the `requests` library.",
+        "starterCode": "import requests\nresponse = requests.___('___')",
+        "solution": "import requests\nresponse = requests.get('https://api.example.com')",
+        "hint": "get and 'https://api.example.com'",
+        "rubric": "API GET request completed."
+      }
+    ]
+  },
+  "Stateful Agents & Memory": {
+    "aiRubric": "Check LangGraph concepts, memory implementations, checkpointing, human-in-the-loop logic, and research agent components.",
+    "lessons": [
+      {
+        "title": "Intro to LangGraph for Stateful Workflows",
+        "theory": "## LangGraph\nA framework for building stateful, multi-actor applications with LLMs.\n```python\nbuilder = StateGraph(AgentState)\nbuilder.add_node(\"reason\", reason_node)\n```",
+        "instructions": "## Task: Add Node\nAdd a node named `'act'` mapping to the `action_node` function in the StateGraph.",
+        "starterCode": "builder.add_node('___', ___)",
+        "solution": "builder.add_node('act', action_node)",
+        "hint": "'act' and action_node",
+        "rubric": "Node added to StateGraph."
+      },
+      {
+        "title": "Implementing Short-Term & Long-Term Memory",
+        "theory": "## Memory\nShort-term memory holds the current conversation. Long-term memory uses vector databases.\n```python\nmemory.save_context({\"input\": \"Hi\"}, {\"output\": \"Hello\"})\n```",
+        "instructions": "## Task: Vector DB Type\nAssign `'Vector'` to the type of database typically used for Long-Term semantic memory.",
+        "starterCode": "db_type = '___'",
+        "solution": "db_type = 'Vector'",
+        "hint": "'Vector'",
+        "rubric": "Variable assigned 'Vector'."
+      },
+      {
+        "title": "Managing Agent State & Checkpointing",
+        "theory": "## Checkpointing\nSaves the agent's graph state so workflows can be paused and resumed.\n```python\ncheckpointer = MemorySaver()\ngraph = builder.compile(checkpointer=checkpointer)\n```",
+        "instructions": "## Task: Compile Graph\nCompile the `builder` passing `checkpointer` as an argument.",
+        "starterCode": "graph = builder.___(___=checkpointer)",
+        "solution": "graph = builder.compile(checkpointer=checkpointer)",
+        "hint": "compile and checkpointer",
+        "rubric": "Graph compiled with checkpointer."
+      },
+      {
+        "title": "Human-in-the-Loop (Approval Workflows)",
+        "theory": "## Human-in-the-Loop\nAgents pause execution to wait for human approval before dangerous actions.\n```python\ngraph.invoke(state, config={\"interrupt_before\": [\"execute\"]})\n```",
+        "instructions": "## Task: Interrupt Node\nConfigure the graph invocation to interrupt before the `'deploy'` node.",
+        "starterCode": "graph.invoke(state, config={\"___\": [\"___\"]})",
+        "solution": "graph.invoke(state, config={\"interrupt_before\": [\"deploy\"]})",
+        "hint": "interrupt_before and 'deploy'",
+        "rubric": "Graph configured to interrupt before deploy."
+      },
+      {
+        "title": "Building a Web-Searching Research Agent",
+        "theory": "## Research Agent\nA specific agent designed to issue queries, scrape pages, and summarize findings.\n```python\n@tool\ndef scrape_page(url: str):\n    # logic here\n```",
+        "instructions": "## Task: Research Steps\nAssign `'Summarize'` as the final step after querying and scraping.",
+        "starterCode": "final_step = '___'",
+        "solution": "final_step = 'Summarize'",
+        "hint": "'Summarize'",
+        "rubric": "Variable assigned 'Summarize'."
+      }
+    ]
+  },
+  "Multi-Agent Orchestration": {
+    "aiRubric": "Check multi-agent network topologies, delegation mechanisms, evaluation harnesses, infinite loop prevention, and deployment concepts.",
+    "lessons": [
+      {
+        "title": "Multi-Agent Architectures (Hierarchical vs Network)",
+        "theory": "## Topologies\nHierarchical uses a Supervisor agent. Network allows peer-to-peer agent communication.\n```python\nsupervisor.delegate(task, worker_agent)\n```",
+        "instructions": "## Task: Supervisor Role\nAssign `'Supervisor'` to the architecture where one agent manages others.",
+        "starterCode": "architecture = '___'",
+        "solution": "architecture = 'Supervisor'",
+        "hint": "'Supervisor'",
+        "rubric": "Variable assigned 'Supervisor'."
+      },
+      {
+        "title": "Agent Collaboration & Task Delegation",
+        "theory": "## Delegation\nAgents pass context and tools to specialized sub-agents.\n```python\nsub_agent = create_agent(tools=[search])\n```",
+        "instructions": "## Task: Create Sub-Agent\nCreate a `coder` agent equipped with the `write_code` tool.",
+        "starterCode": "coder = create_agent(___=[___])",
+        "solution": "coder = create_agent(tools=[write_code])",
+        "hint": "tools and write_code",
+        "rubric": "Sub-agent created with correct tool."
+      },
+      {
+        "title": "Harness Engineering for Agent Evaluation",
+        "theory": "## Evaluation\nAgents require automated testing harnesses to evaluate their trajectories and tool usage, not just their final text output.\n```python\nassert \"search_web\" in trajectory.tool_calls\n```",
+        "instructions": "## Task: Evaluate Trajectory\nWrite an assertion checking if `'read_file'` is in `trajectory.tools`.",
+        "starterCode": "___ \"___\" in trajectory.tools",
+        "solution": "assert \"read_file\" in trajectory.tools",
+        "hint": "assert and 'read_file'",
+        "rubric": "Assertion written correctly."
+      },
+      {
+        "title": "Handling Agent Failures & Infinite Loops",
+        "theory": "## Max Steps\nTo prevent infinite ReAct loops, always define a maximum step limit.\n```python\ngraph.invoke(state, {\"recursion_limit\": 10})\n```",
+        "instructions": "## Task: Recursion Limit\nInvoke the graph with a `recursion_limit` of `5`.",
+        "starterCode": "graph.invoke(state, {\"___\": ___})",
+        "solution": "graph.invoke(state, {\"recursion_limit\": 5})",
+        "hint": "recursion_limit and 5",
+        "rubric": "Recursion limit configured to 5."
+      },
+      {
+        "title": "Deploying Autonomous Agents to Production",
+        "theory": "## Deployment\nAgents in production need streaming, concurrency, and robust error handling. FastAPI and WebSockets are common.\n```python\n@app.websocket(\"/ws\")\nasync def agent_stream(ws):\n    await ws.send_text(agent_output)\n```",
+        "instructions": "## Task: WebSocket Endpoint\nDefine a FastAPI websocket endpoint at `\"/agent\"`.",
+        "starterCode": "___(\"___\")\nasync def stream(ws):",
+        "solution": "@app.websocket(\"/agent\")\nasync def stream(ws):",
+        "hint": "@app.websocket and \"/agent\"",
+        "rubric": "WebSocket endpoint defined correctly."
+      }
+    ]
+  }
+}

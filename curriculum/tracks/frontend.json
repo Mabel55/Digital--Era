@@ -1,0 +1,461 @@
+{
+  "HTML Essentials": {
+    "aiRubric": "Check valid HTML structure, semantic tags, nesting.",
+    "lessons": [
+      {
+        "title": "HTML Document Structure",
+        "theory": "## HTML Skeleton\n```html\n<!DOCTYPE html>\n<html lang='en'>\n<head>\n  <meta charset='UTF-8'>\n  <title>Title</title>\n</head>\n<body>\n  <h1>Heading</h1>\n  <p>Paragraph</p>\n</body>\n</html>\n```",
+        "instructions": "## Task: Student Profile Page\n1. DOCTYPE + full structure\n2. Title: 'My Profile'\n3. h1 with your name\n4. p with your course\n5. ul with 3 skills\n6. Link to GitHub",
+        "starterCode": "<!DOCTYPE ___>\n<html lang='en'>\n<___>\n  <meta charset='UTF-8'>\n  <title>___</title>\n</___>\n<___>\n  <h1>___</h1>\n  <p>Course: ___</p>\n  <ul>\n    <li>___</li>\n    <li>___</li>\n    <li>___</li>\n  </ul>\n  <a href='https://github.com'>GitHub</a>\n</___>\n</html>",
+        "solution": "<!DOCTYPE html>\n<html lang='en'>\n<head>\n  <meta charset='UTF-8'>\n  <title>My Profile</title>\n</head>\n<body>\n  <h1>Ada Okonkwo</h1>\n  <p>Course: Computer Science</p>\n  <ul><li>Python</li><li>FastAPI</li><li>SQL</li></ul>\n  <a href='https://github.com'>GitHub</a>\n</body>\n</html>",
+        "hint": "head for meta info. body for visible content. ul > li for lists.",
+        "rubric": "DOCTYPE. head/body. h1/p/ul/li/a all present."
+      },
+      {
+        "title": "Semantic HTML",
+        "theory": "## Semantic Tags\n```html\n<header>  — top of page\n<nav>     — navigation\n<main>    — main content\n<article> — self-contained\n<aside>   — sidebar\n<footer>  — bottom\n```\nSemantic HTML improves SEO and accessibility.",
+        "instructions": "## Task: Blog Page\n1. `<header>` with site name + `<nav>` 3 links\n2. `<main>` with `<article>` (heading, date, 2 paras)\n3. `<aside>` with Related Posts list\n4. `<footer>` with copyright",
+        "starterCode": "<!DOCTYPE html>\n<html lang='en'>\n<head><meta charset='UTF-8'><title>Blog</title></head>\n<body>\n\n  <___>\n    <h1>Mabel's Tech Blog</h1>\n    <___>\n      <a href='/'>Home</a>\n      <a href='/courses'>Courses</a>\n      <a href='/contact'>Contact</a>\n    </___>\n  </___>\n\n  <___>\n    <___>\n      <h2>Getting Started with Python</h2>\n      <time datetime='2024-01-15'>Jan 15, 2024</time>\n      <p>Python is one of the most popular languages...</p>\n      <p>In this article we cover the basics...</p>\n    </___>\n    <___>\n      <h3>Related Posts</h3>\n      <ul>\n        <li><a href='#'>Python Basics</a></li>\n        <li><a href='#'>FastAPI Tutorial</a></li>\n      </ul>\n    </___>\n  </___>\n\n  <___>\n    <p>&copy; 2024 Mabel Academy</p>\n  </___>\n\n</body></html>",
+        "solution": "<!DOCTYPE html>\n<html lang='en'>\n<head><meta charset='UTF-8'><title>Blog</title></head>\n<body>\n<header>\n  <h1>Mabel's Tech Blog</h1>\n  <nav><a href='/'>Home</a><a href='/courses'>Courses</a><a href='/contact'>Contact</a></nav>\n</header>\n<main>\n  <article>\n    <h2>Getting Started with Python</h2>\n    <time datetime='2024-01-15'>Jan 15, 2024</time>\n    <p>Python is one of the most popular languages...</p>\n    <p>In this article we cover the basics...</p>\n  </article>\n  <aside>\n    <h3>Related Posts</h3>\n    <ul><li><a href='#'>Python Basics</a></li><li><a href='#'>FastAPI Tutorial</a></li></ul>\n  </aside>\n</main>\n<footer><p>&copy; 2024 Mabel Academy</p></footer>\n</body></html>",
+        "hint": "header > nav. main > article + aside. footer at bottom.",
+        "rubric": "All 6 semantic tags correct. nav in header. article and aside in main."
+      }
+    ]
+  },
+  "CSS Styling & Layout": {
+    "aiRubric": "Check selectors, box model, flexbox, colors, typography.",
+    "lessons": [
+      {
+        "title": "Selectors & Box Model",
+        "theory": "## CSS Basics\n```css\nh1 { color: #333; }          /* element */\n.card { padding: 16px; }     /* class */\n#header { background: #fff; } /* id */\n\n.box {\n  width: 200px;\n  padding: 16px;   /* inside */\n  border: 2px solid #333;\n  margin: 24px;    /* outside */\n  box-sizing: border-box;\n}\n```",
+        "instructions": "## Task: Style a Student Card\n1. `body` — dark background, white text\n2. `.card` — white bg, rounded corners, padding, max-width 400px, box-shadow\n3. `.card h2` — teal color\n4. `.badge` — pill shape (border-radius: 20px)",
+        "starterCode": "___ {\n  background: #1e1e1e;\n  color: white;\n  font-family: sans-serif;\n  display: flex;\n  justify-content: center;\n  padding: 40px;\n}\n\n.___ {\n  background: white;\n  color: #1e1e1e;\n  border-radius: ___;\n  padding: ___;\n  max-width: 400px;\n  box-shadow: 0 4px 20px rgba(0,0,0,0.3);\n}\n\n.card ___ {\n  color: #00e5a0;\n}\n\n.___ {\n  background: #00e5a0;\n  color: #1e1e1e;\n  border-radius: 20px;\n  padding: 4px 12px;\n  font-size: 12px;\n}",
+        "solution": "body{background:#1e1e1e;color:white;font-family:sans-serif;display:flex;justify-content:center;padding:40px;}\n.card{background:white;color:#1e1e1e;border-radius:8px;padding:24px;max-width:400px;box-shadow:0 4px 20px rgba(0,0,0,0.3);}\n.card h2{color:#00e5a0;}\n.badge{background:#00e5a0;color:#1e1e1e;border-radius:20px;padding:4px 12px;font-size:12px;}",
+        "hint": "body selector. .card class. .card h2 descendant. border-radius:20px for pill.",
+        "rubric": "body bg set. .card styled. .card h2 teal. .badge pill shape."
+      },
+      {
+        "title": "Flexbox Layout",
+        "theory": "## Flexbox\n```css\n.container {\n  display: flex;\n  justify-content: space-between;  /* horizontal */\n  align-items: center;             /* vertical */\n  gap: 16px;\n}\n.item { flex: 1; }  /* grow equally */\n```",
+        "instructions": "## Task: Navigation Bar\n1. Logo left, links center, button right\n2. All vertically centered\n3. Proper gap between links",
+        "starterCode": ".navbar {\n  display: ___;\n  justify-content: ___;\n  align-items: ___;\n  padding: 16px 32px;\n  background: #1e1e1e;\n  gap: 24px;\n}\n\n.logo {\n  font-weight: bold;\n  color: #00e5a0;\n}\n\n.nav-links {\n  display: ___;\n  gap: ___;\n  list-style: none;\n}\n\n.nav-links a { color: white; text-decoration: none; }\n\n.login-btn {\n  padding: 8px 20px;\n  background: #00e5a0;\n  color: #1e1e1e;\n  border: none;\n  border-radius: 6px;\n  cursor: pointer;\n  margin-left: auto;\n}",
+        "solution": ".navbar{display:flex;justify-content:space-between;align-items:center;padding:16px 32px;background:#1e1e1e;gap:24px;}\n.logo{font-weight:bold;color:#00e5a0;}\n.nav-links{display:flex;gap:24px;list-style:none;}\n.nav-links a{color:white;text-decoration:none;}\n.login-btn{padding:8px 20px;background:#00e5a0;color:#1e1e1e;border:none;border-radius:6px;cursor:pointer;margin-left:auto;}",
+        "hint": "display:flex. justify-content:space-between. align-items:center. nav-links also flex.",
+        "rubric": "display:flex on navbar. justify-content. align-items:center. nav-links flex with gap."
+      }
+    ]
+  },
+  "JavaScript Basics": {
+    "aiRubric": "Check let/const, functions, array methods.",
+    "lessons": [
+      {
+        "title": "Variables & Functions",
+        "theory": "## JS Basics\n```javascript\nconst name = 'Ada';  // can't reassign\nlet score = 0;       // can reassign\n\nfunction greet(name) {\n  return `Hello, ${name}!`;\n}\nconst add = (a, b) => a + b;  // arrow fn\nconsole.log(greet('Ada'));    // Hello, Ada!\n```",
+        "instructions": "## Task: Score Processor\n1. `scores` array of 5 numbers\n2. `getAverage(arr)` using reduce\n3. `getGrade(avg)` → A/B/C/F\n4. Log: `Average: 82.4 | Grade: B`",
+        "starterCode": "const scores = [78, 92, 65, 88, ___];\n\nfunction getAverage(arr) {\n  const sum = arr.reduce((___, b) => a + b, 0);\n  return sum / arr.___;\n}\n\nfunction getGrade(avg) {\n  if (avg >= 80) return ___;\n  else if (avg >= 70) return ___;\n  else if (avg >= 60) return ___;\n  else return ___;\n}\n\nconst avg = getAverage(scores);\nconsole.log(`Average: ${avg.toFixed(1)} | Grade: ${getGrade(avg)}`);",
+        "solution": "const scores=[78,92,65,88,75];\nfunction getAverage(arr){\n  const sum=arr.reduce((a,b)=>a+b,0);\n  return sum/arr.length;\n}\nfunction getGrade(avg){\n  if(avg>=80)return'A';\n  else if(avg>=70)return'B';\n  else if(avg>=60)return'C';\n  else return'F';\n}\nconst avg=getAverage(scores);\nconsole.log(`Average:${avg.toFixed(1)} | Grade:${getGrade(avg)}`);",
+        "hint": "reduce((a,b)=>a+b,0). arr.length for count. toFixed(1).",
+        "rubric": "reduce for sum. Division. Grade conditions. Template literal."
+      },
+      {
+        "title": "Array Methods",
+        "theory": "## Array Methods\n```javascript\nconst nums = [1,2,3,4,5];\nnums.map(x => x*2)         // [2,4,6,8,10]\nnums.filter(x => x>2)      // [3,4,5]\nnums.reduce((a,b)=>a+b, 0) // 15\nnums.find(x => x>3)        // 4\nnums.sort((a,b)=>b-a)      // desc\n```",
+        "instructions": "## Task: Student Processing\n`students = [{name, score}]`\n1. `map` to add `grade` field\n2. `filter` passing students (>=60)\n3. `reduce` for total score\n4. `find` student named 'Ngozi'\n5. `sort` by score descending",
+        "starterCode": "const students = [\n  {name:'Ada',score:88},{name:'Tunde',score:55},\n  {name:'Ngozi',score:92},{name:'Emeka',score:67},{name:'Amaka',score:45}\n];\n\nconst withGrades = students.___(s => ({...s, grade: s.score>=80?'A':s.score>=70?'B':s.score>=60?'C':'F'}));\nconst passing = students.___(s => s.score >= ___);\nconst total = students.___((acc, s) => acc + s.score, 0);\nconst ngozi = students.___(s => s.name === ___);\nconst ranked = [...students].___((___, b) => b.score - a.score);\n\nconsole.log('Grades:', withGrades.map(s=>`${s.name}:${s.grade}`));\nconsole.log('Passing:', passing.length);\nconsole.log('Total:', total);\nconsole.log('Ngozi:', ngozi);\nconsole.log('Ranked:', ranked.map(s=>s.name));",
+        "solution": "const students=[{name:'Ada',score:88},{name:'Tunde',score:55},{name:'Ngozi',score:92},{name:'Emeka',score:67},{name:'Amaka',score:45}];\nconst withGrades=students.map(s=>({...s,grade:s.score>=80?'A':s.score>=70?'B':s.score>=60?'C':'F'}));\nconst passing=students.filter(s=>s.score>=60);\nconst total=students.reduce((acc,s)=>acc+s.score,0);\nconst ngozi=students.find(s=>s.name==='Ngozi');\nconst ranked=[...students].sort((a,b)=>b.score-a.score);\nconsole.log('Grades:',withGrades.map(s=>`${s.name}:${s.grade}`));\nconsole.log('Passing:',passing.length);\nconsole.log('Total:',total);\nconsole.log('Ngozi:',ngozi);\nconsole.log('Ranked:',ranked.map(s=>s.name));",
+        "hint": "map returns new array. filter keeps matching. reduce accumulates. find returns first match. spread [...arr] before sort.",
+        "rubric": "map/filter/reduce/find/sort all used correctly."
+      }
+    ]
+  },
+  "Forms & Validation": {
+    "aiRubric": "Check form elements, validation logic, error messages.",
+    "lessons": [
+      {
+        "title": "HTML Forms & JavaScript Validation",
+        "theory": "## Forms\n```html\n<form id='myForm'>\n  <input type='text' id='name' required>\n  <input type='email' id='email'>\n  <input type='number' min='0' max='100'>\n  <select id='course'>\n    <option value='python'>Python</option>\n  </select>\n  <button type='submit'>Submit</button>\n</form>\n```\n```javascript\ndocument.getElementById('myForm').addEventListener('submit', (e) => {\n  e.preventDefault();  // stop page reload\n  const name = document.getElementById('name').value;\n  if (!name) { alert('Name required!'); return; }\n});\n```",
+        "instructions": "## Task: Student Registration Form\nWrite HTML + JavaScript for a form that:\n1. Has fields: name, email, course (select), score (number 0-100)\n2. Validates: all required, email has @, score in range\n3. Shows inline error messages (not alert)\n4. On success, shows a summary of the registration",
+        "starterCode": "// Validation logic (JavaScript)\nfunction validateForm(name, email, course, score) {\n    const errors = {};\n\n    if (!___) errors.name = 'Name is required';\n    if (!email.includes(___)) errors.email = 'Invalid email address';\n    if (!course) errors.course = 'Please select a course';\n    if (score < ___ || score > ___) errors.score = 'Score must be 0-100';\n\n    return errors;\n}\n\nfunction submitForm() {\n    const name  = 'Ada Okonkwo';   // simulate input\n    const email = 'ada@test.com';\n    const course = 'python';\n    const score = 88;\n\n    const errors = validateForm(___, ___, ___, ___);\n\n    if (Object.keys(errors).length > 0) {\n        console.log('Validation errors:', errors);\n        return;\n    }\n\n    console.log('Registration successful!');\n    console.log(`Student: ${name} | Course: ${course} | Score: ${score}`);\n}\n\n// Test with valid data\nsubmitForm();\n\n// Test with invalid data\nconst errors = validateForm('', 'not-an-email', '', 150);\nconsole.log('Expected errors:', errors);",
+        "solution": "function validateForm(name,email,course,score){\n    const errors={};\n    if(!name)errors.name='Name is required';\n    if(!email.includes('@'))errors.email='Invalid email';\n    if(!course)errors.course='Please select a course';\n    if(score<0||score>100)errors.score='Score must be 0-100';\n    return errors;\n}\nfunction submitForm(){\n    const name='Ada Okonkwo',email='ada@test.com',course='python',score=88;\n    const errors=validateForm(name,email,course,score);\n    if(Object.keys(errors).length>0){console.log('Errors:',errors);return;}\n    console.log('Success!');\n    console.log(`${name}|${course}|${score}`);\n}\nsubmitForm();\nconst errors=validateForm('','not-an-email','',150);\nconsole.log('Expected errors:',errors);",
+        "hint": "!name for empty check. email.includes('@'). score<0||score>100. Object.keys(errors).length.",
+        "rubric": "4 validations. Error object built. Length check. Success and error paths tested."
+      }
+    ]
+  },
+  "Responsive Design Basics": {
+    "aiRubric": "Check media queries, mobile-first, flexbox/grid for responsive layout.",
+    "lessons": [
+      {
+        "title": "Mobile-First Responsive CSS",
+        "theory": "## Responsive Design\n```css\n/* Mobile first — base styles for small screens */\n.card { width: 100%; padding: 16px; }\n\n/* Tablet (768px+) */\n@media (min-width: 768px) {\n  .card { width: 50%; }\n}\n\n/* Desktop (1024px+) */\n@media (min-width: 1024px) {\n  .card { width: 33.333%; }\n}\n\n/* Grid layout */\n.grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));\n  gap: 20px;\n}\n```",
+        "instructions": "## Task: Responsive Card Grid\nWrite CSS for a course card grid that:\n1. 1 column on mobile\n2. 2 columns on tablet (768px+)\n3. 3 columns on desktop (1024px+)\n4. Cards have padding, shadow, rounded corners\n5. Navigation bar stacks vertically on mobile",
+        "starterCode": "/* Mobile First — base styles */\n* { box-sizing: border-box; margin: 0; padding: 0; }\nbody { font-family: sans-serif; background: #f5f5f5; }\n\n/* Navbar — stacks on mobile */\n.navbar {\n    display: flex;\n    flex-direction: ___; /* column on mobile */\n    background: #1e1e1e;\n    padding: 16px;\n    gap: 12px;\n}\n\n/* Card grid — 1 col on mobile */\n.grid {\n    display: ___;\n    grid-template-columns: ___; /* 1 col */\n    gap: 16px;\n    padding: 20px;\n}\n\n.card {\n    background: white;\n    border-radius: ___;\n    padding: 20px;\n    box-shadow: 0 2px 8px rgba(0,0,0,0.1);\n}\n\n/* Tablet */\n@media (min-width: ___) {\n    .navbar { flex-direction: ___; }\n    .grid { grid-template-columns: ___ ___ ; }\n}\n\n/* Desktop */\n@media (min-width: 1024px) {\n    .grid { grid-template-columns: ___ ___ ___; }\n}",
+        "solution": "*{box-sizing:border-box;margin:0;padding:0}\nbody{font-family:sans-serif;background:#f5f5f5}\n.navbar{display:flex;flex-direction:column;background:#1e1e1e;padding:16px;gap:12px}\n.grid{display:grid;grid-template-columns:1fr;gap:16px;padding:20px}\n.card{background:white;border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}\n@media(min-width:768px){.navbar{flex-direction:row}.grid{grid-template-columns:1fr 1fr}}\n@media(min-width:1024px){.grid{grid-template-columns:1fr 1fr 1fr}}",
+        "hint": "column for mobile, row for tablet. 1fr is one column unit. @media(min-width:768px).",
+        "rubric": "Mobile: column nav, 1-col grid. Tablet: row nav, 2-col. Desktop: 3-col. card styles present."
+      }
+    ]
+  },
+  "TypeScript: Beginner": {
+    "aiRubric": "Check basic types, arrays, any vs unknown, enums, and explicit annotations.",
+    "lessons": [
+      {
+        "title": "Basic Types (string, number, boolean)",
+        "theory": "## Basic Types\nTypeScript adds static typing to JavaScript.\n```typescript\nlet firstName: string = 'Ada';\nlet age: number = 22;\nlet isStudent: boolean = true;\n```",
+        "instructions": "## Task: User Profile\nCreate variables for `username` (string), `score` (number), and `isActive` (boolean). Print them out.",
+        "starterCode": "let username: ___ = 'User123';\nlet score: ___ = 100;\nlet isActive: ___ = true;\n\nconsole.log(username, score, isActive);",
+        "solution": "let username: string = 'User123';\nlet score: number = 100;\nlet isActive: boolean = true;\nconsole.log(username, score, isActive);",
+        "hint": "Use string, number, boolean.",
+        "rubric": "Variables correctly typed."
+      },
+      {
+        "title": "Arrays and Tuples",
+        "theory": "## Arrays & Tuples\n```typescript\nlet numbers: number[] = [1, 2, 3];\nlet person: [string, number] = ['Ada', 22]; // Tuple\n```",
+        "instructions": "## Task: High Scores\nCreate an array of numbers `scores` and a tuple `record` containing a string and a number.",
+        "starterCode": "let scores: ___ = [90, 85, 100];\nlet record: ___ = ['Highest', 100];\n\nconsole.log(scores, record);",
+        "solution": "let scores: number[] = [90, 85, 100];\nlet record: [string, number] = ['Highest', 100];\nconsole.log(scores, record);",
+        "hint": "Use type[] for arrays, [type1, type2] for tuples.",
+        "rubric": "Array and Tuple typed correctly."
+      },
+      {
+        "title": "The any vs unknown types",
+        "theory": "## any vs unknown\n`any` disables type checking. `unknown` requires type checking before use.\n```typescript\nlet a: any = 5;\na.toUpperCase(); // Runtime error, no TS error\nlet u: unknown = 5;\n// u.toUpperCase(); // TS error until narrowed\n```",
+        "instructions": "## Task: Safe Value Check\nAssign a value to an `unknown` variable, then use `typeof` to check if it's a string before calling `.toUpperCase()`.",
+        "starterCode": "let data: ___ = 'hello';\n\nif (typeof data === ___) {\n    console.log(data.toUpperCase());\n}",
+        "solution": "let data: unknown = 'hello';\nif (typeof data === 'string') {\n    console.log(data.toUpperCase());\n}",
+        "hint": "Use typeof data === 'string'.",
+        "rubric": "unknown used. Type narrowed properly."
+      },
+      {
+        "title": "Enums",
+        "theory": "## Enums\nEnums allow defining a set of named constants.\n```typescript\nenum Role { ADMIN, USER, GUEST }\nlet myRole: Role = Role.USER;\n```",
+        "instructions": "## Task: Status Enum\nCreate an enum `Status` with values `PENDING`, `APPROVED`, `REJECTED`. Assign `Status.APPROVED` to a variable.",
+        "starterCode": "enum Status {\n    ___,\n    ___,\n    ___\n}\n\nlet currentStatus: Status = Status.___;\nconsole.log(currentStatus);",
+        "solution": "enum Status {\n    PENDING,\n    APPROVED,\n    REJECTED\n}\nlet currentStatus: Status = Status.APPROVED;\nconsole.log(currentStatus);",
+        "hint": "List enum values separated by commas.",
+        "rubric": "Enum defined with 3 values. Value assigned correctly."
+      },
+      {
+        "title": "Type Inference vs. Explicit Annotations",
+        "theory": "## Inference\nTypeScript infers types when not explicitly defined.\n```typescript\nlet msg = 'Hello'; // Inferred as string\n// msg = 5; // Error\n```",
+        "instructions": "## Task: Rely on Inference\nDeclare a variable `greeting` with a string value without explicitly typing it. Try to assign a number to it (commented out).",
+        "starterCode": "let greeting = 'Welcome';\n\n// greeting = ___; // This would error\nconsole.log(typeof greeting);",
+        "solution": "let greeting = 'Welcome';\n// greeting = 5;\nconsole.log(typeof greeting);",
+        "hint": "Just assign the string. Type is inferred.",
+        "rubric": "Inference used correctly."
+      }
+    ]
+  },
+  "DOM Manipulation": {
+    "aiRubric": "Check querySelector, addEventListener, textContent, classList.",
+    "lessons": [
+      {
+        "title": "Selecting & Modifying Elements",
+        "theory": "## DOM API\n```javascript\nconst el  = document.querySelector('.card');\nconst all = document.querySelectorAll('li');\n\nel.textContent = 'New text';\nel.style.color = 'red';\nel.classList.add('active');\nel.classList.toggle('hidden');\n\nconst p = document.createElement('p');\np.textContent = 'Hello';\ndocument.body.appendChild(p);\n```",
+        "instructions": "## Task: Dynamic Score Card\n1. Set `#score` text to 88\n2. Set `#status` to 'Pass' (green) if score >= 60\n3. Add class `highlight` to `#card` if score >= 80\n4. Create and append `<p>Grade: A</p>` to `#output`",
+        "starterCode": "const score = 88;\n\ndocument.querySelector(___).textContent = ___;\n\nconst statusEl = document.querySelector('___');\nif (score >= 60) {\n  statusEl.___ = 'Pass';\n  statusEl.style.___ = 'green';\n}\n\nif (score >= 80) {\n  document.querySelector('___').classList.add('___');\n}\n\nconst grade = score >= 80 ? 'A' : 'B';\nconst p = document.___(___);  \np.textContent = `Grade: ${grade}`;\ndocument.querySelector('___').appendChild(p);",
+        "solution": "const score=88;\ndocument.querySelector('#score').textContent=score;\nconst statusEl=document.querySelector('#status');\nif(score>=60){\n  statusEl.textContent='Pass';\n  statusEl.style.color='green';\n}\nif(score>=80){\n  document.querySelector('#card').classList.add('highlight');\n}\nconst grade=score>=80?'A':'B';\nconst p=document.createElement('p');\np.textContent=`Grade:${grade}`;\ndocument.querySelector('#output').appendChild(p);",
+        "hint": "querySelector('#id') for IDs. textContent sets text. createElement then appendChild.",
+        "rubric": "querySelector used. textContent set. style.color changed. classList.add. createElement/appendChild."
+      }
+    ]
+  },
+  "Fetch API & AJAX": {
+    "aiRubric": "Check fetch usage, async/await, .then(), error handling, JSON parsing.",
+    "lessons": [
+      {
+        "title": "Fetch API & Async JS",
+        "theory": "## Fetch API\n```javascript\n// With async/await\nasync function getUser(id) {\n  try {\n    const res = await fetch(`/api/users/${id}`);\n    if (!res.ok) throw new Error(`HTTP ${res.status}`);\n    const data = await res.json();\n    return data;\n  } catch (err) {\n    console.error('Fetch failed:', err);\n  }\n}\n\n// POST request\nconst res = await fetch('/api/students', {\n  method: 'POST',\n  headers: {'Content-Type': 'application/json'},\n  body: JSON.stringify({name: 'Ada', score: 88})\n});\n```",
+        "instructions": "## Task: Student API Client (JS)\nWrite async JavaScript functions:\n1. `fetchStudents()` — GET all students from JSONPlaceholder /users\n2. `fetchStudent(id)` — GET one user\n3. `createStudent(data)` — POST to /posts\n4. Handle errors properly\n5. Print results",
+        "starterCode": "const BASE_URL = 'https://jsonplaceholder.typicode.com';\n\nasync function fetchStudents() {\n    const res = await ___(f`${BASE_URL}/users`);\n    if (!res.ok) throw new Error(`Error: ${res.status}`);\n    return await res.___();\n}\n\nasync function fetchStudent(id) {\n    try {\n        const res = await fetch(`${BASE_URL}/users/${___}`);\n        if (!res.___) throw new Error(`Student ${id} not found`);\n        return await res.json();\n    } catch (err) {\n        console.error(err.message);\n        return null;\n    }\n}\n\nasync function createStudent(data) {\n    const res = await fetch(`${BASE_URL}/posts`, {\n        method: ___,\n        headers: {'Content-Type': 'application/json'},\n        body: JSON.stringify(___)\n    });\n    return await res.___();\n}\n\nasync function main() {\n    const students = await fetchStudents();\n    console.log(`Fetched ${students.length} students`);\n    console.log('First:', students[0].name, students[0].email);\n\n    const one = await fetchStudent(1);\n    console.log('User 1:', one?.name);\n\n    const created = await createStudent({name:'Ada',course:'Python',score:88});\n    console.log('Created:', created);\n}\n\nmain();",
+        "solution": "const BASE_URL='https://jsonplaceholder.typicode.com';\nasync function fetchStudents(){\n    const res=await fetch(`${BASE_URL}/users`);\n    if(!res.ok)throw new Error(`Error:${res.status}`);\n    return await res.json();\n}\nasync function fetchStudent(id){\n    try{\n        const res=await fetch(`${BASE_URL}/users/${id}`);\n        if(!res.ok)throw new Error(`Not found:${id}`);\n        return await res.json();\n    }catch(err){console.error(err.message);return null;}\n}\nasync function createStudent(data){\n    const res=await fetch(`${BASE_URL}/posts`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});\n    return await res.json();\n}\nasync function main(){\n    const students=await fetchStudents();\n    console.log(`Fetched ${students.length}`);\n    console.log('First:',students[0].name,students[0].email);\n    const one=await fetchStudent(1);\n    console.log('User 1:',one?.name);\n    const created=await createStudent({name:'Ada',course:'Python',score:88});\n    console.log('Created:',created);\n}\nmain();",
+        "hint": "await fetch(url). res.ok checks status. res.json() parses. POST needs method, headers, body.",
+        "rubric": "fetch with await. res.ok check. json() called. POST with headers and JSON.stringify."
+      }
+    ]
+  },
+  "ES6+ Modern JS": {
+    "aiRubric": "Check destructuring, spread, arrow functions, template literals, modules.",
+    "lessons": [
+      {
+        "title": "Modern JavaScript Features",
+        "theory": "## ES6+ Features\n```javascript\n// Destructuring\nconst {name, score} = student;\nconst [first, ...rest] = array;\n\n// Spread operator\nconst merged = {...obj1, ...obj2};\nconst combined = [...arr1, ...arr2];\n\n// Optional chaining\nconst city = user?.address?.city;\n\n// Nullish coalescing\nconst name = user.name ?? 'Anonymous';\n\n// Template literals\nconst msg = `Hello ${name}, your score is ${score}`;\n\n// Async/await (ES2017)\nconst data = await fetchData();\n```",
+        "instructions": "## Task: Modern JS Toolkit\n1. Destructure a student object\n2. Merge two objects with spread\n3. Use optional chaining on nested object\n4. Map an array using arrow functions and destructuring\n5. Use nullish coalescing for defaults",
+        "starterCode": "// 1. Destructuring\nconst student = {name:'Ada', score:88, course:'Python', city:'Lagos'};\nconst {___, ___, ...rest} = student;\nconsole.log(name, score);\nconsole.log('Rest:', rest);\n\n// 2. Spread merge\nconst base = {role:'student', active:true};\nconst extra = {name:'Ada', score:88};\nconst merged = {...___, ...___};\nconsole.log('Merged:', merged);\n\n// 3. Optional chaining\nconst user = {profile: {address: {city:'Lagos'}}};\nconst missingUser = null;\nconst city1 = user?.profile?.address?.___;\nconst city2 = missingUser?.___.___; // no error!\nconsole.log(city1, city2); // Lagos undefined\n\n// 4. Array destructuring in map\nconst pairs = [['Ada',88], ['Tunde',72], ['Ngozi',95]];\nconst formatted = pairs.map(([___, ___]) => `${name}: ${score >= 80 ? 'A' : 'B'}`);\nconsole.log(formatted);\n\n// 5. Nullish coalescing\nconst settings = {theme: null, lang: 'en'};\nconst theme = settings.theme ?? ___;\nconst lang  = settings.lang  ?? 'en';\nconsole.log(theme, lang);",
+        "solution": "const student={name:'Ada',score:88,course:'Python',city:'Lagos'};\nconst{name,score,...rest}=student;\nconsole.log(name,score);\nconsole.log('Rest:',rest);\nconst base={role:'student',active:true};\nconst extra={name:'Ada',score:88};\nconst merged={...base,...extra};\nconsole.log('Merged:',merged);\nconst user={profile:{address:{city:'Lagos'}}};\nconst missingUser=null;\nconst city1=user?.profile?.address?.city;\nconst city2=missingUser?.profile?.city;\nconsole.log(city1,city2);\nconst pairs=[['Ada',88],['Tunde',72],['Ngozi',95]];\nconst formatted=pairs.map(([name,score])=>`${name}:${score>=80?'A':'B'}`);\nconsole.log(formatted);\nconst settings={theme:null,lang:'en'};\nconst theme=settings.theme??'dark';\nconst lang=settings.lang??'en';\nconsole.log(theme,lang);",
+        "hint": "Destructure with {}. Spread: {...obj1,...obj2}. ?. for optional chain. ?? for nullish default.",
+        "rubric": "Object destructure with rest. Spread merge. Optional chaining. Array destructure in map. ??."
+      }
+    ]
+  },
+  "CSS Animations": {
+    "aiRubric": "Check @keyframes, transition, animation properties.",
+    "lessons": [
+      {
+        "title": "CSS Transitions & Animations",
+        "theory": "## CSS Animations\n```css\n/* Transitions — smooth property changes */\n.btn { transition: background 0.3s ease, transform 0.2s; }\n.btn:hover { background: #00e5a0; transform: translateY(-2px); }\n\n/* Keyframe animations */\n@keyframes fadeIn {\n  from { opacity: 0; transform: translateY(20px); }\n  to   { opacity: 1; transform: translateY(0); }\n}\n\n.card { animation: fadeIn 0.5s ease forwards; }\n\n/* Pulse animation */\n@keyframes pulse {\n  0%, 100% { opacity: 1; }\n  50%       { opacity: 0.4; }\n}\n```",
+        "instructions": "## Task: Animated UI Components\nWrite CSS for:\n1. Button with hover transition (color + scale)\n2. Card with fadeIn animation on load\n3. Loading spinner with rotate animation\n4. Pulse effect for a status dot\n5. Slide-in from left animation",
+        "starterCode": "/* 1. Button hover transition */\n.btn {\n    padding: 10px 20px;\n    background: #007acc;\n    color: white;\n    border: none;\n    border-radius: 6px;\n    cursor: pointer;\n    transition: background ___ ease, transform ___;\n}\n.btn:hover {\n    background: #005999;\n    transform: ___(-2px);\n}\n\n/* 2. FadeIn keyframe */\n@___ fadeIn {\n    from { opacity: 0; transform: translateY(20px); }\n    to   { opacity: 1; transform: translateY(0); }\n}\n.card { animation: fadeIn ___ ease forwards; }\n\n/* 3. Spinner */\n@keyframes spin {\n    from { transform: rotate(0deg); }\n    to   { transform: rotate(___); }\n}\n.spinner {\n    width: 32px; height: 32px;\n    border: 3px solid #eee;\n    border-top-color: #007acc;\n    border-radius: 50%;\n    animation: spin ___ linear ___;\n}\n\n/* 4. Pulse */\n@keyframes pulse {\n    0%, 100% { opacity: 1; }\n    50% { opacity: ___; }\n}\n.status-dot { animation: pulse 2s infinite; }\n\n/* 5. Slide in */\n@keyframes slideIn {\n    from { transform: translateX(___); opacity: 0; }\n    to   { transform: translateX(0); opacity: 1; }\n}\n.slide { animation: slideIn 0.4s ease; }",
+        "solution": ".btn{padding:10px 20px;background:#007acc;color:white;border:none;border-radius:6px;cursor:pointer;transition:background 0.3s ease,transform 0.2s;}\n.btn:hover{background:#005999;transform:translateY(-2px);}\n@keyframes fadeIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}\n.card{animation:fadeIn 0.5s ease forwards;}\n@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}\n.spinner{width:32px;height:32px;border:3px solid #eee;border-top-color:#007acc;border-radius:50%;animation:spin 1s linear infinite;}\n@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}\n.status-dot{animation:pulse 2s infinite;}\n@keyframes slideIn{from{transform:translateX(-100px);opacity:0;}to{transform:translateX(0);opacity:1;}}\n.slide{animation:slideIn 0.4s ease;}",
+        "hint": "transition: property duration easing. @keyframes name { from { } to { } }. animation: name duration easing iteration.",
+        "rubric": "transition on button. fadeIn @keyframes. spin 360deg infinite. pulse opacity. slideIn from left."
+      }
+    ]
+  },
+  "LocalStorage & State": {
+    "aiRubric": "Check localStorage get/set/remove, JSON serialization, state management.",
+    "lessons": [
+      {
+        "title": "Browser Storage & State",
+        "theory": "## localStorage\n```javascript\n// Store\nlocalStorage.setItem('user', JSON.stringify({name:'Ada'}));\n\n// Retrieve\nconst user = JSON.parse(localStorage.getItem('user'));\n\n// Remove\nlocalStorage.removeItem('user');\n\n// Clear all\nlocalStorage.clear();\n\n// Check exists\nconst exists = localStorage.getItem('user') !== null;\n```\n\n**Note:** localStorage stores strings only — always use JSON.stringify/parse for objects.",
+        "instructions": "## Task: Student Progress Tracker\nWrite JavaScript that:\n1. Saves student name and progress to localStorage\n2. Loads it on page start (persists across refreshes)\n3. Updates progress when a lesson is completed\n4. Shows total XP and completed lessons\n5. Has a reset function",
+        "starterCode": "const STORAGE_KEY = 'mabel_student_v1';\n\nfunction loadProgress() {\n    const raw = localStorage.getItem(___);\n    if (!raw) return {name:'Student', xp:0, completed:[]};\n    return JSON.___(raw);\n}\n\nfunction saveProgress(data) {\n    localStorage.setItem(___, JSON.___(data));\n}\n\nfunction completeLesson(lessonId, xpReward=50) {\n    const progress = loadProgress();\n    if (!progress.completed.includes(___)) {\n        progress.completed.push(lessonId);\n        progress.xp += ___;\n        saveProgress(___);\n        console.log(`Completed ${lessonId}! +${xpReward} XP. Total: ${progress.xp}`);\n    } else {\n        console.log(`${lessonId} already completed.`);\n    }\n}\n\nfunction showStats() {\n    const p = loadProgress();\n    console.log(`Student: ${p.___}`);\n    console.log(`XP:      ${p.___}`);\n    console.log(`Lessons: ${p.___.length}`);\n    console.log(`Done:    ${p.completed.join(', ')}`);\n}\n\nfunction reset() {\n    localStorage.___(STORAGE_KEY);\n    console.log('Progress reset!');\n}\n\n// Test\ncompleteLesson('python-001');\ncompleteLesson('python-002', 75);\ncompleteLesson('python-001');  // duplicate\nshowStats();",
+        "solution": "const STORAGE_KEY='mabel_student_v1';\nfunction loadProgress(){\n    const raw=localStorage.getItem(STORAGE_KEY);\n    if(!raw)return{name:'Student',xp:0,completed:[]};\n    return JSON.parse(raw);\n}\nfunction saveProgress(data){\n    localStorage.setItem(STORAGE_KEY,JSON.stringify(data));\n}\nfunction completeLesson(lessonId,xpReward=50){\n    const progress=loadProgress();\n    if(!progress.completed.includes(lessonId)){\n        progress.completed.push(lessonId);\n        progress.xp+=xpReward;\n        saveProgress(progress);\n        console.log(`Completed ${lessonId}! +${xpReward} XP. Total:${progress.xp}`);\n    }else{console.log(`${lessonId} already done.`);}\n}\nfunction showStats(){\n    const p=loadProgress();\n    console.log(`Student:${p.name}`);\n    console.log(`XP:${p.xp}`);\n    console.log(`Lessons:${p.completed.length}`);\n    console.log(`Done:${p.completed.join(', ')}`);\n}\nfunction reset(){\n    localStorage.removeItem(STORAGE_KEY);\n    console.log('Reset!');\n}\ncompleteLesson('python-001');\ncompleteLesson('python-002',75);\ncompleteLesson('python-001');\nshowStats();",
+        "hint": "JSON.stringify to save objects. JSON.parse to load. includes() checks duplicates. removeItem to reset.",
+        "rubric": "JSON.stringify/parse. includes() duplicate check. xp += reward. removeItem. showStats prints all."
+      }
+    ]
+  },
+  "TypeScript: Intermediate": {
+    "aiRubric": "Check interfaces, aliases, function types, union/intersection, and literal types.",
+    "lessons": [
+      {
+        "title": "Interfaces and Object Structuring",
+        "theory": "## Interfaces\nDefines the shape of objects.\n```typescript\ninterface User { name: string; age?: number; }\nlet u: User = { name: 'Ada' };\n```",
+        "instructions": "## Task: Product Interface\nDefine an interface `Product` with `id` (number), `name` (string), and optional `price` (number). Create an object conforming to it.",
+        "starterCode": "interface Product {\n    id: ___;\n    name: ___;\n    price?: ___;\n}\n\nlet item: Product = { id: 1, name: 'Laptop' };\nconsole.log(item);",
+        "solution": "interface Product { id: number; name: string; price?: number; }\nlet item: Product = { id: 1, name: 'Laptop' };\nconsole.log(item);",
+        "hint": "Use ? for optional properties.",
+        "rubric": "Interface defined with optional price."
+      },
+      {
+        "title": "Type Aliases and Custom Types",
+        "theory": "## Type Aliases\nSimilar to interfaces but can represent primitive, union, and tuple types.\n```typescript\ntype ID = string | number;\n```",
+        "instructions": "## Task: Coordinates Alias\nCreate a type alias `Point` for an object with `x` and `y` numbers.",
+        "starterCode": "type Point = {\n    x: ___;\n    y: ___;\n};\n\nlet p: Point = { x: 10, y: 20 };",
+        "solution": "type Point = { x: number; y: number; };\nlet p: Point = { x: 10, y: 20 };",
+        "hint": "Define object shape for the alias.",
+        "rubric": "Type alias created for object."
+      },
+      {
+        "title": "Typed Functions (Parameters and Return Values)",
+        "theory": "## Typed Functions\n```typescript\nfunction add(a: number, b: number): number {\n    return a + b;\n}\n```",
+        "instructions": "## Task: Greet Function\nCreate a function `greet` taking `name` as a string and returning a string.",
+        "starterCode": "function greet(name: ___): ___ {\n    return `Hello, ${name}`;\n}\n\nconsole.log(greet('Ada'));",
+        "solution": "function greet(name: string): string {\n    return `Hello, ${name}`;\n}\nconsole.log(greet('Ada'));",
+        "hint": "Type parameters and return values.",
+        "rubric": "Parameters and return types defined."
+      },
+      {
+        "title": "Union and Intersection Types",
+        "theory": "## Unions and Intersections\n`|` means OR (Union). `&` means AND (Intersection).\n```typescript\ntype Success = { valid: boolean };\ntype Error = { message: string };\ntype Result = Success | Error;\ntype Combined = Success & Error;\n```",
+        "instructions": "## Task: ID Union\nCreate a function `printId` that accepts an ID which can be a `string` or `number`.",
+        "starterCode": "function printId(id: ___) {\n    console.log(`ID is ${id}`);\n}\n\nprintId(101);\nprintId('202A');",
+        "solution": "function printId(id: string | number) {\n    console.log(`ID is ${id}`);\n}\nprintId(101);\nprintId('202A');",
+        "hint": "Use | for union types.",
+        "rubric": "Union type used correctly."
+      },
+      {
+        "title": "Literal Types",
+        "theory": "## Literal Types\nTypes that represent a specific string, number, or boolean.\n```typescript\nlet dir: 'up' | 'down' = 'up';\n```",
+        "instructions": "## Task: Button Sizes\nCreate a literal type `Size` that can only be 'small', 'medium', or 'large'.",
+        "starterCode": "type Size = ___ | ___ | ___;\n\nlet btnSize: Size = 'medium';\nconsole.log(btnSize);",
+        "solution": "type Size = 'small' | 'medium' | 'large';\nlet btnSize: Size = 'medium';\nconsole.log(btnSize);",
+        "hint": "Use strings joined by |.",
+        "rubric": "Literal union defined."
+      }
+    ]
+  },
+  "React Fundamentals": {
+    "aiRubric": "Check JSX syntax, props passing, useState implementation, form event handling, and list rendering with keys.",
+    "lessons": [
+      {
+        "title": "Introduction to JSX & Functional Components",
+        "theory": "## JSX\nJSX allows writing HTML within JavaScript.\n```jsx\nfunction Welcome() {\n  return <h1>Hello React</h1>;\n}\n```",
+        "instructions": "## Task: First Component\nCreate a functional component named `Header` that returns an `<h2>` element containing the text 'Welcome'.",
+        "starterCode": "function ___() {\n  return <h2>___</h2>;\n}",
+        "solution": "function Header() {\n  return <h2>Welcome</h2>;\n}",
+        "hint": "function Header() { return <h2>Welcome</h2>; }",
+        "rubric": "Functional component accurately returning JSX."
+      },
+      {
+        "title": "Passing Data with Props",
+        "theory": "## Props\nProps are inputs to a React component.\n```jsx\nfunction Greeting(props) { return <h1>Hi {props.name}</h1>; }\n<Greeting name=\"Ada\" />\n```",
+        "instructions": "## Task: User Profile Props\nCreate a `Profile` component that accepts `props` and renders an `<h3>` with `props.username`.",
+        "starterCode": "function Profile(___) {\n  return <h3>{___.___}</h3>;\n}",
+        "solution": "function Profile(props) {\n  return <h3>{props.username}</h3>;\n}",
+        "hint": "props and props.username",
+        "rubric": "Props correctly accessed inside JSX."
+      },
+      {
+        "title": "Managing Local State with useState",
+        "theory": "## useState\nThe useState hook lets you add state to functional components.\n```jsx\nconst [count, setCount] = useState(0);\n<button onClick={() => setCount(count + 1)}>\n```",
+        "instructions": "## Task: Counter State\nInitialize a state variable `score` with setter `setScore` starting at `0` using `useState`.",
+        "starterCode": "import { useState } from 'react';\n\nfunction Game() {\n  const [___, ___] = ___(0);\n  return <div>{score}</div>;\n}",
+        "solution": "import { useState } from 'react';\nfunction Game() {\n  const [score, setScore] = useState(0);\n  return <div>{score}</div>;\n}",
+        "hint": "const [score, setScore] = useState(0);",
+        "rubric": "useState hook initialized correctly."
+      },
+      {
+        "title": "Handling Events & Forms in React",
+        "theory": "## Events\nReact events are named using camelCase.\n```jsx\n<button onClick={handleClick}>Click Me</button>\n```",
+        "instructions": "## Task: Click Handler\nAdd an `onClick` attribute to the button that calls the provided `handleClick` function.",
+        "starterCode": "function Button() {\n  const handleClick = () => console.log('Clicked');\n  return <button ___={___}>Click Me</button>;\n}",
+        "solution": "function Button() {\n  const handleClick = () => console.log('Clicked');\n  return <button onClick={handleClick}>Click Me</button>;\n}",
+        "hint": "onClick={handleClick}",
+        "rubric": "onClick event handler attached."
+      },
+      {
+        "title": "Rendering Lists & Keys",
+        "theory": "## Lists & Keys\nUse `.map()` to render lists, and always provide a unique `key`.\n```jsx\n{items.map(item => <li key={item.id}>{item.name}</li>)}\n```",
+        "instructions": "## Task: Map Users\nMap over the `users` array and render a `<li>` for each, using `user.id` as the `key` and `user.name` as the text.",
+        "starterCode": "function UserList({ users }) {\n  return (\n    <ul>\n      {users.___(user => (\n        <li ___={user.___}>{user.___}</li>\n      ))}\n    </ul>\n  );\n}",
+        "solution": "function UserList({ users }) {\n  return (\n    <ul>\n      {users.map(user => (\n        <li key={user.id}>{user.name}</li>\n      ))}\n    </ul>\n  );\n}",
+        "hint": "users.map, key={user.id}, {user.name}",
+        "rubric": "Array mapped and key prop applied."
+      }
+    ]
+  },
+  "React Hooks & Context": {
+    "aiRubric": "Check useEffect dependencies, custom hook creation, Context Provider setup, useReducer usage, and React Router logic.",
+    "lessons": [
+      {
+        "title": "Side Effects & Data Fetching with useEffect",
+        "theory": "## useEffect\nPerform side effects in function components.\n```jsx\nuseEffect(() => {\n  fetchData();\n}, []); // Empty array = run once\n```",
+        "instructions": "## Task: Fetch on Mount\nWrite a `useEffect` that calls `loadData()` exactly once when the component mounts.",
+        "starterCode": "import { useEffect } from 'react';\n\nfunction App({ loadData }) {\n  ___(() => {\n    loadData();\n  }, [___]);\n  return <div>Loaded</div>;\n}",
+        "solution": "import { useEffect } from 'react';\nfunction App({ loadData }) {\n  useEffect(() => {\n    loadData();\n  }, []);\n  return <div>Loaded</div>;\n}",
+        "hint": "useEffect and [] dependency array.",
+        "rubric": "useEffect correctly configured to run once."
+      },
+      {
+        "title": "Building Custom Hooks",
+        "theory": "## Custom Hooks\nExtract component logic into reusable functions starting with 'use'.\n```jsx\nfunction useWindowWidth() {\n  const [width, setWidth] = useState(window.innerWidth);\n  // ...\n  return width;\n}\n```",
+        "instructions": "## Task: useToggle Hook\nCreate a custom hook `useToggle` that manages a boolean state and returns `[value, toggleFunction]`.",
+        "starterCode": "import { useState } from 'react';\n\nfunction ___useToggle(initial) {\n  const [val, setVal] = useState(initial);\n  const toggle = () => setVal(!val);\n  return ___, ___;\n}",
+        "solution": "import { useState } from 'react';\nfunction useToggle(initial) {\n  const [val, setVal] = useState(initial);\n  const toggle = () => setVal(!val);\n  return [val, toggle];\n}",
+        "hint": "useToggle and return [val, toggle]",
+        "rubric": "Custom hook defined and array returned."
+      },
+      {
+        "title": "The Context API for Global State",
+        "theory": "## Context API\nShare state across the entire app without prop drilling.\n```jsx\nconst ThemeContext = createContext('light');\n<ThemeContext.Provider value=\"dark\">\n```",
+        "instructions": "## Task: Provide Context\nWrap the `Child` component with `UserContext.Provider` and pass the value `'Ada'`.",
+        "starterCode": "import { createContext } from 'react';\nconst UserContext = createContext();\n\nfunction App() {\n  return (\n    <___.___ value=\"___\">\n      <Child />\n    </___.___>\n  );\n}",
+        "solution": "import { createContext } from 'react';\nconst UserContext = createContext();\nfunction App() {\n  return (\n    <UserContext.Provider value=\"Ada\">\n      <Child />\n    </UserContext.Provider>\n  );\n}",
+        "hint": "UserContext.Provider value=\"Ada\"",
+        "rubric": "Context Provider and value configured."
+      },
+      {
+        "title": "Complex State Management with useReducer",
+        "theory": "## useReducer\nAn alternative to useState for complex state logic.\n```jsx\nconst [state, dispatch] = useReducer(reducer, initialState);\ndispatch({ type: 'INCREMENT' });\n```",
+        "instructions": "## Task: Reducer Action\nWrite a reducer function that handles the `'INCREMENT'` action type by returning `{ count: state.count + 1 }`.",
+        "starterCode": "function reducer(state, action) {\n  switch (action.___) {\n    case '___':\n      return { count: state.count + 1 };\n    default:\n      return state;\n  }\n}",
+        "solution": "function reducer(state, action) {\n  switch (action.type) {\n    case 'INCREMENT':\n      return { count: state.count + 1 };\n    default:\n      return state;\n  }\n}",
+        "hint": "action.type and 'INCREMENT'",
+        "rubric": "Reducer logic handles action.type correctly."
+      },
+      {
+        "title": "Client-Side Routing with React Router",
+        "theory": "## React Router\nNavigate between views without full page reloads.\n```jsx\n<BrowserRouter>\n  <Routes>\n    <Route path=\"/\" element={<Home />} />\n  </Routes>\n</BrowserRouter>\n```",
+        "instructions": "## Task: Route Setup\nDefine a `<Route>` that maps the path `/about` to the `<About />` component.",
+        "starterCode": "import { Routes, Route } from 'react-router-dom';\nimport About from './About';\n\nfunction App() {\n  return (\n    <Routes>\n      <___ path=\"___\" element={<___ />} />\n    </Routes>\n  );\n}",
+        "solution": "import { Routes, Route } from 'react-router-dom';\nimport About from './About';\nfunction App() {\n  return (\n    <Routes>\n      <Route path=\"/about\" element={<About />} />\n    </Routes>\n  );\n}",
+        "hint": "Route, path=\"/about\", element={<About />}",
+        "rubric": "React Router Route component correctly defined."
+      }
+    ]
+  },
+  "Performance Optimization": {
+    "aiRubric": "Check lazy loading, debounce, memoization, bundle concepts.",
+    "lessons": [
+      {
+        "title": "Frontend Performance",
+        "theory": "## Performance Techniques\n```javascript\n// Debounce — wait until user stops typing\nfunction debounce(fn, delay) {\n  let timer;\n  return function(...args) {\n    clearTimeout(timer);\n    timer = setTimeout(() => fn(...args), delay);\n  };\n}\n\n// Memoize — cache expensive results\nfunction memoize(fn) {\n  const cache = {};\n  return function(key) {\n    if (cache[key] !== undefined) return cache[key];\n    return (cache[key] = fn(key));\n  };\n}\n\n// Lazy load images\n<img src='placeholder.jpg' data-src='real.jpg' loading='lazy'>\n```",
+        "instructions": "## Task: Performance Utilities\n1. `debounce(fn, delay)` — prevents rapid function calls\n2. `throttle(fn, interval)` — limits calls to once per interval\n3. `memoize(fn)` — caches results for same inputs\n4. Test debounce with search simulation\n5. Test memoize with expensive computation",
+        "starterCode": "function debounce(fn, delay) {\n    let timer;\n    return function(...args) {\n        clearTimeout(___);\n        timer = setTimeout(() => fn(...args), ___);\n    };\n}\n\nfunction throttle(fn, interval) {\n    let lastCall = 0;\n    return function(...args) {\n        const now = Date.now();\n        if (now - lastCall >= ___) {\n            lastCall = now;\n            return fn(...args);\n        }\n    };\n}\n\nfunction memoize(fn) {\n    const cache = {};\n    return function(...args) {\n        const key = JSON.stringify(args);\n        if (key in ___) return cache[key];\n        return (cache[___] = fn(...args));\n    };\n}\n\n// Test debounce\nconst search = debounce((query) => console.log('Searching:', query), 300);\nsearch('p'); search('py'); search('pyt'); search('pyth');\nsetTimeout(() => search('python'), 400);  // only this fires\n\n// Test memoize\nlet callCount = 0;\nconst expensive = memoize((n) => {\n    callCount++;\n    return n * n;\n});\n\nconsole.log(expensive(5));   // computes\nconsole.log(expensive(5));   // cached\nconsole.log(expensive(10));  // computes\nconsole.log('Total calls:', callCount);  // should be 2",
+        "solution": "function debounce(fn,delay){\n    let timer;\n    return function(...args){\n        clearTimeout(timer);\n        timer=setTimeout(()=>fn(...args),delay);\n    };\n}\nfunction throttle(fn,interval){\n    let lastCall=0;\n    return function(...args){\n        const now=Date.now();\n        if(now-lastCall>=interval){\n            lastCall=now;\n            return fn(...args);\n        }\n    };\n}\nfunction memoize(fn){\n    const cache={};\n    return function(...args){\n        const key=JSON.stringify(args);\n        if(key in cache)return cache[key];\n        return(cache[key]=fn(...args));\n    };\n}\nconst search=debounce((q)=>console.log('Searching:',q),300);\nsearch('p');search('py');search('pyt');search('pyth');\nsetTimeout(()=>search('python'),400);\nlet callCount=0;\nconst expensive=memoize((n)=>{callCount++;return n*n;});\nconsole.log(expensive(5));\nconsole.log(expensive(5));\nconsole.log(expensive(10));\nconsole.log('Calls:',callCount);",
+        "hint": "clearTimeout(timer) cancels previous. JSON.stringify(args) as cache key. Date.now() for throttle.",
+        "rubric": "debounce clears and resets timer. throttle checks interval. memoize uses JSON key. callCount=2."
+      }
+    ]
+  },
+  "Testing Frontend Code": {
+    "aiRubric": "Check test function structure, assertions, test runner pattern.",
+    "lessons": [
+      {
+        "title": "Unit Testing JavaScript",
+        "theory": "## Testing Pattern\n```javascript\n// Minimal test runner\nfunction test(name, fn) {\n  try {\n    fn();\n    console.log(`✅ ${name}`);\n  } catch(err) {\n    console.log(`❌ ${name}: ${err.message}`);\n  }\n}\n\nfunction expect(received) {\n  return {\n    toBe: (expected) => {\n      if (received !== expected)\n        throw new Error(`Expected ${expected}, got ${received}`);\n    }\n  };\n}\n\ntest('adds numbers', () => {\n  expect(add(2, 3)).toBe(5);\n});\n```",
+        "instructions": "## Task: Test Suite for Utilities\nBuild a mini test framework and test your utility functions:\n1. `test(name, fn)` runner with pass/fail count\n2. `expect(val)` with `toBe`, `toEqual`, `toBeTruthy`, `toContain`\n3. Write 5 tests for: add, getGrade, filterPassingStudents\n4. Show summary: X passed, Y failed",
+        "starterCode": "let passed = 0, failed = 0;\n\nfunction test(name, fn) {\n    try {\n        fn();\n        ___ ++;\n        console.log(`OK ${name}`);\n    } catch(err) {\n        ___++;\n        console.log(`FAIL ${name}: ${err.message}`);\n    }\n}\n\nfunction expect(received) {\n    return {\n        toBe(expected) {\n            if (received !== expected)\n                throw new Error(`Expected ${JSON.stringify(expected)}, got ${JSON.stringify(received)}`);\n        },\n        toEqual(expected) {\n            if (JSON.stringify(received) !== JSON.stringify(___)) \n                throw new Error(`Objects not equal`);\n        },\n        toBeTruthy() {\n            if (!received) throw new Error(`Expected truthy, got ${received}`);\n        },\n        toContain(item) {\n            if (!received.___(item)) throw new Error(`Expected to contain ${item}`);\n        }\n    };\n}\n\n// Functions to test\nconst add = (a, b) => a + b;\nconst getGrade = s => s>=90?'A':s>=80?'B':s>=70?'C':'F';\nconst filterPassing = students => students.filter(s => s.score >= 60);\n\n// Tests\ntest('add(2,3) equals 5', () => expect(add(2,3)).toBe(5));\ntest('add(0,0) equals 0', () => expect(add(0,0)).toBe(___));\ntest('score 95 gets grade A', () => expect(getGrade(95)).toBe(___));\ntest('score 55 gets grade F', () => expect(getGrade(55)).toBe(___));\ntest('filters passing students', () => {\n    const students = [{name:'Ada',score:88},{name:'Tunde',score:45}];\n    const result = filterPassing(students);\n    expect(result.length).toBe(___);\n    expect(result[0].name).toBe('Ada');\n});\n\nconsole.log(`\\nResults: ${passed} passed, ${failed} failed`);",
+        "solution": "let passed=0,failed=0;\nfunction test(name,fn){\n    try{fn();passed++;console.log(`OK ${name}`);}\n    catch(err){failed++;console.log(`FAIL ${name}:${err.message}`);}\n}\nfunction expect(received){\n    return{\n        toBe(expected){if(received!==expected)throw new Error(`Expected ${JSON.stringify(expected)},got ${JSON.stringify(received)}`);},\n        toEqual(expected){if(JSON.stringify(received)!==JSON.stringify(expected))throw new Error('Not equal');},\n        toBeTruthy(){if(!received)throw new Error(`Expected truthy,got ${received}`);},\n        toContain(item){if(!received.includes(item))throw new Error(`Expected to contain ${item}`);}\n    };\n}\nconst add=(a,b)=>a+b;\nconst getGrade=s=>s>=90?'A':s>=80?'B':s>=70?'C':'F';\nconst filterPassing=students=>students.filter(s=>s.score>=60);\ntest('add(2,3)=5',()=>expect(add(2,3)).toBe(5));\ntest('add(0,0)=0',()=>expect(add(0,0)).toBe(0));\ntest('95->A',()=>expect(getGrade(95)).toBe('A'));\ntest('55->F',()=>expect(getGrade(55)).toBe('F'));\ntest('filter passing',()=>{\n    const students=[{name:'Ada',score:88},{name:'Tunde',score:45}];\n    const result=filterPassing(students);\n    expect(result.length).toBe(1);\n    expect(result[0].name).toBe('Ada');\n});\nconsole.log(`\\n${passed} passed,${failed} failed`);",
+        "hint": "passed++ on success, failed++ on catch. toBe uses ===. toEqual uses JSON.stringify comparison.",
+        "rubric": "test runner with try/catch. 4 matchers. 5 tests. Pass/fail count shown."
+      }
+    ]
+  },
+  "Build Tools & Webpack": {
+    "aiRubric": "Check module system, bundler concepts, npm scripts.",
+    "lessons": [
+      {
+        "title": "Modern Build Pipeline",
+        "theory": "## Build Tools\n```bash\n# Initialize project\nnpm init -y\nnpm install --save-dev webpack webpack-cli\nnpm install react react-dom\n\n# package.json scripts\n\"scripts\": {\n  \"build\": \"webpack --mode production\",\n  \"dev\":   \"webpack serve --mode development\",\n  \"test\":  \"jest\"\n}\n```\n\n**Webpack** bundles all JS files into one.\n**Vite** is faster — modern alternative.\n**npm** manages packages and scripts.",
+        "instructions": "## Task: Project Setup Simulation\nWrite Python code that generates a complete project structure:\n1. `package.json` with dependencies and scripts\n2. `webpack.config.js` content\n3. `.gitignore` file\n4. `src/index.js` entry point\n5. Print all files that would be created",
+        "starterCode": "import json\n\nfiles = {}\n\n# 1. package.json\nfiles['package.json'] = json.dumps({\n    'name': 'mabel-academy',\n    'version': '1.0.0',\n    'scripts': {\n        'build': ___,\n        'dev':   'webpack serve --mode development --open',\n        'test':  ___\n    },\n    'dependencies': {\n        'react': '^18.0.0',\n        'react-dom': '^18.0.0'\n    },\n    'devDependencies': {\n        'webpack': '^5.0.0',\n        'webpack-cli': ___,\n        'webpack-dev-server': '^4.0.0',\n        'babel-loader': '^9.0.0',\n        '@babel/core': '^7.0.0',\n        '@babel/preset-react': ___\n    }\n}, indent=2)\n\n# 2. webpack.config.js\nfiles['webpack.config.js'] = '''\nconst path = require('path');\nmodule.exports = {\n  entry: './src/index.js',\n  output: { path: path.resolve(__dirname, 'dist'), filename: 'bundle.js' },\n  module: { rules: [{ test: /\\.jsx?$/, use: 'babel-loader' }] }\n};\n'''\n\n# 3. .gitignore\nfiles['.gitignore'] = 'node_modules/\\ndist/\\n.env\\n*.log'\n\n# 4. src/index.js\nfiles['src/index.js'] = '''\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(<h1>Mabel Academy</h1>);\n'''\n\nfor filename, content in files.items():\n    print(f'=== {filename} ===')\n    print(content[:200])\n    print()",
+        "solution": "import json\nfiles={}\nfiles['package.json']=json.dumps({'name':'mabel-academy','version':'1.0.0','scripts':{'build':'webpack --mode production','dev':'webpack serve --mode development --open','test':'jest'},'dependencies':{'react':'^18.0.0','react-dom':'^18.0.0'},'devDependencies':{'webpack':'^5.0.0','webpack-cli':'^5.0.0','webpack-dev-server':'^4.0.0','babel-loader':'^9.0.0','@babel/core':'^7.0.0','@babel/preset-react':'^7.0.0'}},indent=2)\nfiles['webpack.config.js']=\"const path=require('path');module.exports={entry:'./src/index.js',output:{path:path.resolve(__dirname,'dist'),filename:'bundle.js'},module:{rules:[{test:/\\.jsx?$/,use:'babel-loader'}]}};\"\nfiles['.gitignore']='node_modules/\\ndist/\\n.env\\n*.log'\nfiles['src/index.js']=\"import React from 'react';import ReactDOM from 'react-dom/client';const root=ReactDOM.createRoot(document.getElementById('root'));root.render(<h1>Mabel Academy</h1>);\"\nfor filename,content in files.items():\n    print(f'==={filename}===')\n    print(content[:200])\n    print()",
+        "hint": "'webpack --mode production' for build. 'jest' for test. Version strings like '^5.0.0'.",
+        "rubric": "package.json with 4 scripts. webpack.config.js generated. .gitignore correct. 4 files printed."
+      }
+    ]
+  },
+  "TypeScript: Advanced": {
+    "aiRubric": "Check generics, narrowing, utility types, keyof/typeof, and mapped types.",
+    "lessons": [
+      {
+        "title": "Generics (Reusable Types)",
+        "theory": "## Generics\nAllow creating reusable components.\n```typescript\nfunction identity<T>(arg: T): T {\n    return arg;\n}\nlet val = identity<string>('hello');\n```",
+        "instructions": "## Task: Generic Box\nCreate an interface `Box<T>` with a `value` of type `T`. Create a `number` box and a `string` box.",
+        "starterCode": "interface Box<___> {\n    value: ___;\n}\n\nlet numBox: Box<___> = { value: 42 };\nlet strBox: Box<___> = { value: 'Code' };",
+        "solution": "interface Box<T> { value: T; }\nlet numBox: Box<number> = { value: 42 };\nlet strBox: Box<string> = { value: 'Code' };",
+        "hint": "Use <T> for the interface type parameter.",
+        "rubric": "Generics correctly implemented."
+      },
+      {
+        "title": "Type Narrowing and Type Guards",
+        "theory": "## Narrowing\nRefining types in conditional blocks.\n```typescript\nfunction padLeft(padding: number | string, input: string) {\n    if (typeof padding === 'number') {\n        return ' '.repeat(padding) + input;\n    }\n    return padding + input;\n}\n```",
+        "instructions": "## Task: Array Narrowing\nWrite a function that takes `val: string | string[]`. If it's an array, join it with commas. If a string, return it directly.",
+        "starterCode": "function format(val: string | string[]): string {\n    if (Array.___(val)) {\n        return val.join(', ');\n    }\n    return val;\n}",
+        "solution": "function format(val: string | string[]): string {\n    if (Array.isArray(val)) {\n        return val.join(', ');\n    }\n    return val;\n}",
+        "hint": "Use Array.isArray for type guard.",
+        "rubric": "Type narrowed successfully."
+      },
+      {
+        "title": "Utility Types (Partial, Pick, Omit)",
+        "theory": "## Utility Types\nBuilt-in transformations.\n```typescript\ninterface Todo { title: string; desc: string; }\ntype PartialTodo = Partial<Todo>; // All optional\ntype TodoTitle = Pick<Todo, 'title'>; // Only title\n```",
+        "instructions": "## Task: Update Todo\nUse `Partial<Todo>` for a function that updates an existing Todo object.",
+        "starterCode": "interface Todo { title: string; completed: boolean; }\n\nfunction updateTodo(todo: Todo, updates: ___<Todo>) {\n    return { ...todo, ...updates };\n}",
+        "solution": "interface Todo { title: string; completed: boolean; }\nfunction updateTodo(todo: Todo, updates: Partial<Todo>) {\n    return { ...todo, ...updates };\n}",
+        "hint": "Use Partial<Todo>.",
+        "rubric": "Partial utility type used."
+      },
+      {
+        "title": "The keyof and typeof Operators",
+        "theory": "## keyof and typeof\n`typeof` gets the type of a value. `keyof` extracts keys as a union.\n```typescript\ntype Point = { x: number; y: number };\ntype PKeys = keyof Point; // 'x' | 'y'\n```",
+        "instructions": "## Task: Get Property\nCreate a function `getProperty` that takes an object and a key, using `keyof` to ensure the key exists.",
+        "starterCode": "function getProperty<T, K extends ___ T>(obj: T, key: K) {\n    return obj[key];\n}\n\nlet user = { name: 'Ada', age: 22 };\ngetProperty(user, 'name');",
+        "solution": "function getProperty<T, K extends keyof T>(obj: T, key: K) {\n    return obj[key];\n}\nlet user = { name: 'Ada', age: 22 };\ngetProperty(user, 'name');",
+        "hint": "K extends keyof T",
+        "rubric": "keyof used correctly."
+      },
+      {
+        "title": "Mapped Types",
+        "theory": "## Mapped Types\nCreating new types by transforming properties.\n```typescript\ntype ReadOnly<T> = {\n    readonly [P in keyof T]: T[P];\n};\n```",
+        "instructions": "## Task: Nullable Mapped Type\nCreate a mapped type `Nullable<T>` that makes all properties of `T` capable of being `null`.",
+        "starterCode": "type Nullable<T> = {\n    [P in ___ T]: T[P] | ___;\n};\n\ninterface User { name: string; }\ntype NullUser = Nullable<User>; // { name: string | null }",
+        "solution": "type Nullable<T> = {\n    [P in keyof T]: T[P] | null;\n};\ninterface User { name: string; }\ntype NullUser = Nullable<User>;",
+        "hint": "Use [P in keyof T]: T[P] | null",
+        "rubric": "Mapped type defined with keyof."
+      }
+    ]
+  }
+}

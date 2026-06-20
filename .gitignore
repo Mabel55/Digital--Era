@@ -26,3 +26,7 @@ study_buddy_brain/
 .idea/
 .DS_Store
 Thumbs.db
+
+# 7. Frontend
+frontend/node_modules/
+frontend/dist/

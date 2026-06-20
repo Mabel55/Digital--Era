@@ -1,0 +1,152 @@
+{
+  "C++ Fundamentals": {
+    "aiRubric": "Check for correct syntax, variable declarations, control flow, loops, pointers, and array usage.",
+    "lessons": [
+      {
+        "title": "Basic Syntax, Variables & Data Types",
+        "theory": "## Variables & Data Types\nC++ is statically typed.\n```cpp\n#include <iostream>\n\nint age = 25;\ndouble price = 19.99;\nbool isActive = true;\nstd::string name = \"Ada\";\n```",
+        "instructions": "## Task: Profile Setup\nDeclare variables for a user: `username` (string), `level` (int), `score` (double), and `isActive` (bool). Print them.",
+        "starterCode": "#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    string username = \"___\";\n    int level = ___;\n    double score = ___;\n    bool isActive = ___;\n\n    cout << username << \" \" << level << \" \" << score << \" \" << isActive << endl;\n    return 0;\n}",
+        "solution": "#include <iostream>\n#include <string>\nusing namespace std;\nint main() {\n    string username = \"Ada\";\n    int level = 1;\n    double score = 100.5;\n    bool isActive = true;\n    cout << username << \" \" << level << \" \" << score << \" \" << isActive << endl;\n    return 0;\n}",
+        "hint": "Use string, int, double, bool. Include <iostream> and <string>.",
+        "rubric": "Variables correctly typed and printed."
+      },
+      {
+        "title": "Control Flow (If/Else & Switch)",
+        "theory": "## If/Else & Switch\n```cpp\nif (score > 90) {\n    cout << \"A\" << endl;\n} else {\n    cout << \"B\" << endl;\n}\n\nswitch (day) {\n    case 1: cout << \"Mon\" << endl; break;\n    default: cout << \"Other\" << endl;\n}\n```",
+        "instructions": "## Task: Grade Evaluator\nWrite an if/else block that prints 'Pass' if `score` is >= 60, otherwise 'Fail'.",
+        "starterCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int score = 75;\n    if (___) {\n        cout << \"___\" << endl;\n    } else {\n        cout << \"___\" << endl;\n    }\n    return 0;\n}",
+        "solution": "#include <iostream>\nusing namespace std;\nint main() {\n    int score = 75;\n    if (score >= 60) {\n        cout << \"Pass\" << endl;\n    } else {\n        cout << \"Fail\" << endl;\n    }\n    return 0;\n}",
+        "hint": "Condition is score >= 60.",
+        "rubric": "If/else handles >= 60 correctly."
+      },
+      {
+        "title": "Loops & Functions",
+        "theory": "## Loops & Functions\n```cpp\nfor (int i = 0; i < 5; i++) { /*...*/ }\nint add(int a, int b) { return a + b; }\n```",
+        "instructions": "## Task: Multiply Function\nCreate a function `multiply` that takes two integers and returns their product. Call it and print the result.",
+        "starterCode": "#include <iostream>\nusing namespace std;\n\n___ multiply(___ a, ___ b) {\n    return a * b;\n}\n\nint main() {\n    cout << multiply(3, 4) << endl;\n    return 0;\n}",
+        "solution": "#include <iostream>\nusing namespace std;\nint multiply(int a, int b) {\n    return a * b;\n}\nint main() {\n    cout << multiply(3, 4) << endl;\n    return 0;\n}",
+        "hint": "Return type is int. Parameters are int a, int b.",
+        "rubric": "Function signature and return correct."
+      },
+      {
+        "title": "Pointers & References (The Basics)",
+        "theory": "## Pointers vs References\nPointers (`*`) hold memory addresses. References (`&`) are aliases for variables.\n```cpp\nint x = 10;\nint* ptr = &x; // Pointer\nint& ref = x;  // Reference\n```",
+        "instructions": "## Task: Pointer Setup\nCreate an integer `val`, a pointer `p` pointing to `val`, and a reference `r` to `val`.",
+        "starterCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int val = 42;\n    int___ p = ___val;\n    int___ r = val;\n    cout << *p << \" \" << r << endl;\n    return 0;\n}",
+        "solution": "#include <iostream>\nusing namespace std;\nint main() {\n    int val = 42;\n    int* p = &val;\n    int& r = val;\n    cout << *p << \" \" << r << endl;\n    return 0;\n}",
+        "hint": "int* p = &val; int& r = val;",
+        "rubric": "Pointer and reference initialized properly."
+      },
+      {
+        "title": "Arrays & Strings",
+        "theory": "## Arrays and Strings\nStandard arrays and `std::string`.\n```cpp\nint arr[3] = {1, 2, 3};\nstd::string msg = \"Hello\";\n```",
+        "instructions": "## Task: Array Sum\nCreate an array of 3 integers and calculate their sum using a loop.",
+        "starterCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int arr[3] = {10, 20, 30};\n    int sum = 0;\n    for (int i = 0; i < ___; i++) {\n        sum += ___;\n    }\n    cout << sum << endl;\n    return 0;\n}",
+        "solution": "#include <iostream>\nusing namespace std;\nint main() {\n    int arr[3] = {10, 20, 30};\n    int sum = 0;\n    for (int i = 0; i < 3; i++) {\n        sum += arr[i];\n    }\n    cout << sum << endl;\n    return 0;\n}",
+        "hint": "Loop until i < 3. Add arr[i] to sum.",
+        "rubric": "Array iterated and sum calculated."
+      }
+    ]
+  },
+  "Object-Oriented C++": {
+    "aiRubric": "Check class design, constructors, access specifiers, inheritance, polymorphism, and operator overloading.",
+    "lessons": [
+      {
+        "title": "Classes, Objects & Access Specifiers",
+        "theory": "## Classes & Access Specifiers\nUse `public`, `private`, and `protected` to control access.\n```cpp\nclass User {\nprivate:\n    int id;\npublic:\n    void setId(int i) { id = i; }\n};\n```",
+        "instructions": "## Task: User Class\nCreate a `User` class with a private `name` and public `setName` and `getName` methods.",
+        "starterCode": "#include <iostream>\n#include <string>\nusing namespace std;\n\nclass User {\n___:\n    string name;\n___:\n    void setName(string n) { name = n; }\n    string getName() { return name; }\n};\n\nint main() {\n    User u;\n    u.setName(\"Ada\");\n    cout << u.getName() << endl;\n    return 0;\n}",
+        "solution": "#include <iostream>\n#include <string>\nusing namespace std;\nclass User {\nprivate:\n    string name;\npublic:\n    void setName(string n) { name = n; }\n    string getName() { return name; }\n};\nint main() {\n    User u;\n    u.setName(\"Ada\");\n    cout << u.getName() << endl;\n    return 0;\n}",
+        "hint": "Use private for fields, public for methods.",
+        "rubric": "Class fields and methods have correct access specifiers."
+      },
+      {
+        "title": "Constructors & Destructors",
+        "theory": "## Constructors & Destructors\nConstructors initialize objects. Destructors clean up.\n```cpp\nclass Car {\npublic:\n    Car() { cout << \"Created\"; }\n    ~Car() { cout << \"Destroyed\"; }\n};\n```",
+        "instructions": "## Task: File Handler\nCreate a `File` class with a constructor that prints 'Opened' and a destructor that prints 'Closed'.",
+        "starterCode": "#include <iostream>\nusing namespace std;\n\nclass File {\npublic:\n    ___() { cout << \"Opened\" << endl; }\n    ___() { cout << \"Closed\" << endl; }\n};\n\nint main() {\n    File f;\n    return 0;\n}",
+        "solution": "#include <iostream>\nusing namespace std;\nclass File {\npublic:\n    File() { cout << \"Opened\" << endl; }\n    ~File() { cout << \"Closed\" << endl; }\n};\nint main() {\n    File f;\n    return 0;\n}",
+        "hint": "Constructor is File(), Destructor is ~File().",
+        "rubric": "Constructor and destructor defined properly."
+      },
+      {
+        "title": "Inheritance",
+        "theory": "## Inheritance\nDerive new classes from existing ones.\n```cpp\nclass Animal { public: void eat() {} };\nclass Dog : public Animal {};\n```",
+        "instructions": "## Task: Employee Hierarchy\nCreate `Manager` that inherits publicly from `Employee`.",
+        "starterCode": "#include <iostream>\nusing namespace std;\n\nclass Employee {\npublic:\n    void work() { cout << \"Working\" << endl; }\n};\n\nclass Manager ___ public ___ {\n};\n\nint main() {\n    Manager m;\n    m.work();\n    return 0;\n}",
+        "solution": "#include <iostream>\nusing namespace std;\nclass Employee {\npublic:\n    void work() { cout << \"Working\" << endl; }\n};\nclass Manager : public Employee {\n};\nint main() {\n    Manager m;\n    m.work();\n    return 0;\n}",
+        "hint": "Use : public Employee",
+        "rubric": "Inheritance syntax applied."
+      },
+      {
+        "title": "Polymorphism & Virtual Functions",
+        "theory": "## Virtual Functions\nUse `virtual` for runtime polymorphism and method overriding.\n```cpp\nclass Base { public: virtual void print() { cout << \"Base\"; } };\nclass Derived : public Base { public: void print() override { cout << \"Derived\"; } };\n```",
+        "instructions": "## Task: Shape Area\nCreate a base class `Shape` with a virtual `area()` method. Override it in `Circle`.",
+        "starterCode": "#include <iostream>\nusing namespace std;\n\nclass Shape {\npublic:\n    ___ void area() { cout << \"Shape\" << endl; }\n};\n\nclass Circle : public Shape {\npublic:\n    void area() ___ { cout << \"Circle\" << endl; }\n};\n\nint main() {\n    Shape* s = new Circle();\n    s->area();\n    delete s;\n    return 0;\n}",
+        "solution": "#include <iostream>\nusing namespace std;\nclass Shape {\npublic:\n    virtual void area() { cout << \"Shape\" << endl; }\n};\nclass Circle : public Shape {\npublic:\n    void area() override { cout << \"Circle\" << endl; }\n};\nint main() {\n    Shape* s = new Circle();\n    s->area();\n    delete s;\n    return 0;\n}",
+        "hint": "Use virtual in Base, override in Derived.",
+        "rubric": "Virtual function and override used correctly."
+      },
+      {
+        "title": "Operator Overloading",
+        "theory": "## Operator Overloading\nDefine custom behaviors for operators like `+`.\n```cpp\nVector operator+(const Vector& v) {\n    return Vector(x + v.x, y + v.y);\n}\n```",
+        "instructions": "## Task: Add Points\nOverload the `+` operator to add two `Point` objects together.",
+        "starterCode": "#include <iostream>\nusing namespace std;\n\nclass Point {\npublic:\n    int x, y;\n    Point(int x=0, int y=0) : x(x), y(y) {}\n    Point operator___(const Point& p) {\n        return Point(x + ___, y + ___);\n    }\n};\n\nint main() {\n    Point p1(1, 2), p2(3, 4);\n    Point p3 = p1 + p2;\n    cout << p3.x << \",\" << p3.y << endl;\n    return 0;\n}",
+        "solution": "#include <iostream>\nusing namespace std;\nclass Point {\npublic:\n    int x, y;\n    Point(int x=0, int y=0) : x(x), y(y) {}\n    Point operator+(const Point& p) {\n        return Point(x + p.x, y + p.y);\n    }\n};\nint main() {\n    Point p1(1, 2), p2(3, 4);\n    Point p3 = p1 + p2;\n    cout << p3.x << \",\" << p3.y << endl;\n    return 0;\n}",
+        "hint": "operator+(const Point& p)",
+        "rubric": "Operator + overloaded."
+      }
+    ]
+  },
+  "Modern C++ & Memory": {
+    "aiRubric": "Check dynamic memory, smart pointers, STL usage, templates, and exception handling.",
+    "lessons": [
+      {
+        "title": "Dynamic Memory Allocation (new & delete)",
+        "theory": "## new & delete\nAllocate and free memory dynamically.\n```cpp\nint* p = new int(10);\ndelete p;\n```",
+        "instructions": "## Task: Dynamic Array\nAllocate an array of 5 integers dynamically, then delete it.",
+        "starterCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int* arr = ___ int[___];\n    arr[0] = 42;\n    ___[] arr;\n    return 0;\n}",
+        "solution": "#include <iostream>\nusing namespace std;\nint main() {\n    int* arr = new int[5];\n    arr[0] = 42;\n    delete[] arr;\n    return 0;\n}",
+        "hint": "new int[5] and delete[] arr.",
+        "rubric": "Dynamic array allocated and deleted."
+      },
+      {
+        "title": "Smart Pointers (unique_ptr & shared_ptr)",
+        "theory": "## Smart Pointers\nAutomatic memory management in modern C++.\n```cpp\nstd::unique_ptr<int> p = std::make_unique<int>(10);\n```",
+        "instructions": "## Task: Unique Pointer\nCreate a `unique_ptr` for an integer and print its value.",
+        "starterCode": "#include <iostream>\n#include <memory>\nusing namespace std;\n\nint main() {\n    ___<int> ptr = ___<int>(100);\n    cout << *ptr << endl;\n    return 0;\n}",
+        "solution": "#include <iostream>\n#include <memory>\nusing namespace std;\nint main() {\n    unique_ptr<int> ptr = make_unique<int>(100);\n    cout << *ptr << endl;\n    return 0;\n}",
+        "hint": "Use unique_ptr and make_unique.",
+        "rubric": "unique_ptr created and used."
+      },
+      {
+        "title": "The Standard Template Library (STL & Vectors)",
+        "theory": "## STL Vectors\nDynamic arrays provided by the standard library.\n```cpp\nstd::vector<int> v = {1, 2, 3};\nv.push_back(4);\n```",
+        "instructions": "## Task: Vector Usage\nCreate a vector of integers, add '10' and '20' to it, and print the first element.",
+        "starterCode": "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    ___<int> vec;\n    vec.___(___);\n    vec.push_back(20);\n    cout << vec[0] << endl;\n    return 0;\n}",
+        "solution": "#include <iostream>\n#include <vector>\nusing namespace std;\nint main() {\n    vector<int> vec;\n    vec.push_back(10);\n    vec.push_back(20);\n    cout << vec[0] << endl;\n    return 0;\n}",
+        "hint": "Use vector<int> and push_back.",
+        "rubric": "Vector initialized and elements pushed."
+      },
+      {
+        "title": "Templates (Generic Programming)",
+        "theory": "## Templates\nWrite generic functions and classes.\n```cpp\ntemplate <typename T>\nT getMax(T a, T b) { return (a > b) ? a : b; }\n```",
+        "instructions": "## Task: Generic Swap\nCreate a template function `mySwap` that swaps two values of any type.",
+        "starterCode": "#include <iostream>\nusing namespace std;\n\n___ <typename T>\nvoid mySwap(T& a, T& b) {\n    T temp = a;\n    a = b;\n    b = temp;\n}\n\nint main() {\n    int x = 1, y = 2;\n    mySwap(x, y);\n    cout << x << y << endl;\n    return 0;\n}",
+        "solution": "#include <iostream>\nusing namespace std;\ntemplate <typename T>\nvoid mySwap(T& a, T& b) {\n    T temp = a;\n    a = b;\n    b = temp;\n}\nint main() {\n    int x = 1, y = 2;\n    mySwap(x, y);\n    cout << x << y << endl;\n    return 0;\n}",
+        "hint": "Use template <typename T>.",
+        "rubric": "Template function defined."
+      },
+      {
+        "title": "Exception Handling",
+        "theory": "## Exceptions\nHandle errors gracefully.\n```cpp\ntry {\n    throw runtime_error(\"Error\");\n} catch (const exception& e) {\n    cout << e.what();\n}\n```",
+        "instructions": "## Task: Try/Catch Block\nThrow a `runtime_error` if `divisor` is 0, and catch it to print the message.",
+        "starterCode": "#include <iostream>\n#include <stdexcept>\nusing namespace std;\n\nint main() {\n    int divisor = 0;\n    ___ {\n        if (divisor == 0) ___ runtime_error(\"Div by zero\");\n    } ___ (const exception& e) {\n        cout << e.___() << endl;\n    }\n    return 0;\n}",
+        "solution": "#include <iostream>\n#include <stdexcept>\nusing namespace std;\nint main() {\n    int divisor = 0;\n    try {\n        if (divisor == 0) throw runtime_error(\"Div by zero\");\n    } catch (const exception& e) {\n        cout << e.what() << endl;\n    }\n    return 0;\n}",
+        "hint": "try, throw, catch, e.what()",
+        "rubric": "Exception thrown and caught."
+      }
+    ]
+  }
+}

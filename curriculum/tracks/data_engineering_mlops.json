@@ -1,0 +1,152 @@
+{
+  "Data Pipeline Engineering": {
+    "aiRubric": "Check ETL concepts, pandas logic, Airflow DAG creation, API requests, and Kafka producer understanding.",
+    "lessons": [
+      {
+        "title": "Introduction to Data Pipelines & ETL Concepts",
+        "theory": "## ETL\nExtract, Transform, Load. It is the core process of moving and cleaning data.\n```text\nRaw Data -> [Extract] -> [Transform] -> [Load] -> Data Warehouse\n```",
+        "instructions": "## Task: ETL Phases\nAssign the string `'Transform'` to the variable describing the phase where data is cleaned.",
+        "starterCode": "cleaning_phase = '___'",
+        "solution": "cleaning_phase = 'Transform'",
+        "hint": "'Transform'",
+        "rubric": "Variable assigned 'Transform'."
+      },
+      {
+        "title": "Building ETL Pipelines with Pandas & Python",
+        "theory": "## Pandas ETL\nExtract from CSV, filter missing data, and load to a new file.\n```python\ndf = pd.read_csv('data.csv')\ndf.dropna(inplace=True)\ndf.to_csv('clean.csv')\n```",
+        "instructions": "## Task: Drop Nulls\nCall the `dropna` method on the dataframe `df`.",
+        "starterCode": "import pandas as pd\ndf = pd.read_csv('data.csv')\ndf.___()\n",
+        "solution": "import pandas as pd\ndf = pd.read_csv('data.csv')\ndf.dropna()\n",
+        "hint": "dropna()",
+        "rubric": "dropna() called on dataframe."
+      },
+      {
+        "title": "Workflow Automation & Task Orchestration with Apache Airflow",
+        "theory": "## Airflow DAGs\nDirected Acyclic Graphs define task dependencies in Python.\n```python\ntask1 = PythonOperator(task_id='t1', python_callable=func1)\ntask1 >> task2\n```",
+        "instructions": "## Task: DAG Dependency\nUse the `>>` bitshift operator to make `task2` run after `task1`.",
+        "starterCode": "task1 ___ task2",
+        "solution": "task1 >> task2",
+        "hint": ">>",
+        "rubric": "Task dependency set using >>."
+      },
+      {
+        "title": "Ingesting Data from REST APIs & Webhooks",
+        "theory": "## Ingestion\nPulling JSON data from an endpoint and extracting the relevant payload.\n```python\ndata = requests.get('api').json()['payload']\n```",
+        "instructions": "## Task: Extract JSON Payload\nExtract the `'results'` key from the `.json()` response.",
+        "starterCode": "import requests\nres = requests.get('https://api.example.com')\ndata = res.___()['___']",
+        "solution": "import requests\nres = requests.get('https://api.example.com')\ndata = res.json()['results']",
+        "hint": "json() and 'results'",
+        "rubric": "JSON payload parsed correctly."
+      },
+      {
+        "title": "Stream Processing Basics with Apache Kafka",
+        "theory": "## Kafka\nA distributed event streaming platform. Producers send events to Topics.\n```python\nproducer.send('my-topic', value=b'event_data')\n```",
+        "instructions": "## Task: Kafka Topic\nSend the byte-string `b'login'` to the topic `'user-events'`.",
+        "starterCode": "producer.send('___', value=___)",
+        "solution": "producer.send('user-events', value=b'login')",
+        "hint": "'user-events' and b'login'",
+        "rubric": "Producer sends correct value to correct topic."
+      }
+    ]
+  },
+  "Feature Stores & Scale": {
+    "aiRubric": "Check Data Warehouse concepts, feature store utility, PySpark commands, vector DB knowledge, and data validation techniques.",
+    "lessons": [
+      {
+        "title": "Introduction to Data Warehouses (BigQuery/Snowflake)",
+        "theory": "## Data Warehousing\nOptimized for OLAP (Online Analytical Processing) workloads, using columnar storage.\n```sql\nSELECT COUNT(*) FROM user_events\n```",
+        "instructions": "## Task: Workload Type\nAssign `'OLAP'` to the variable describing data warehouse workloads.",
+        "starterCode": "warehouse_workload = '___'",
+        "solution": "warehouse_workload = 'OLAP'",
+        "hint": "'OLAP'",
+        "rubric": "Variable assigned 'OLAP'."
+      },
+      {
+        "title": "Building & Managing Feature Stores for Machine Learning",
+        "theory": "## Feature Stores\nA centralized vault for storing, retrieving, and sharing curated ML features to prevent training-serving skew.\n```python\nfs.get_online_features(features=['user_age'])\n```",
+        "instructions": "## Task: Feature Store Goal\nAssign the string `'Training-Serving Skew'` to the variable representing the main problem Feature Stores prevent.",
+        "starterCode": "problem_solved = '___'",
+        "solution": "problem_solved = 'Training-Serving Skew'",
+        "hint": "'Training-Serving Skew'",
+        "rubric": "Variable assigned 'Training-Serving Skew'."
+      },
+      {
+        "title": "Managing Big Data with PySpark",
+        "theory": "## PySpark\nSpark distributes processing across clusters. Data is stored in Resilient Distributed Datasets (RDDs) or DataFrames.\n```python\ndf = spark.read.json(\"logs.json\")\ndf.filter(df.age > 21).show()\n```",
+        "instructions": "## Task: Spark Filter\nUse the `filter` method on `df` to keep only rows where `df.status == 'active'`.",
+        "starterCode": "active_df = df.___(df.___ == '___')",
+        "solution": "active_df = df.filter(df.status == 'active')",
+        "hint": "filter and df.status == 'active'",
+        "rubric": "Spark dataframe filtered correctly."
+      },
+      {
+        "title": "Scaling Production Vector Databases for AI Systems",
+        "theory": "## Vector DBs\nDatabases like Pinecone or Milvus optimized for high-dimensional semantic similarity search.\n```python\nindex.upsert(vectors=[(\"id1\", [0.1, 0.2, 0.3])])\n```",
+        "instructions": "## Task: Upsert Vector\nCall the `upsert` method to insert vector `[0.5, 0.5]` under the ID `'doc_2'`.",
+        "starterCode": "index.___(___=[('___', [0.5, 0.5])])",
+        "solution": "index.upsert(vectors=[('doc_2', [0.5, 0.5])])",
+        "hint": "upsert, vectors, and 'doc_2'",
+        "rubric": "upsert method used with vectors list."
+      },
+      {
+        "title": "Automated Data Quality Testing & Validation",
+        "theory": "## Data Validation\nTools like Great Expectations ensure incoming data matches the expected schema.\n```python\nvalidator.expect_column_values_to_not_be_null(\"age\")\n```",
+        "instructions": "## Task: Expectation\nWrite the method call to expect that column `'email'` should not be null.",
+        "starterCode": "validator.___(\"___\")",
+        "solution": "validator.expect_column_values_to_not_be_null(\"email\")",
+        "hint": "expect_column_values_to_not_be_null and 'email'",
+        "rubric": "Data validation method written."
+      }
+    ]
+  },
+  "LLMOps & Production": {
+    "aiRubric": "Check ML CI/CD concepts, RAG evaluation metrics, deployment logic, production monitoring, and distributed compute scaling.",
+    "lessons": [
+      {
+        "title": "CI/CD Pipelines for ML/AI Models (GitHub Actions + DVC)",
+        "theory": "## DVC\nData Version Control handles tracking large models/datasets while Git tracks code.\n```bash\ndvc add data/dataset.csv\ngit commit -m \"Update data\"\n```",
+        "instructions": "## Task: DVC Add\nWrite the bash command to add `'model.pkl'` to DVC tracking.",
+        "starterCode": "___ ___ model.pkl",
+        "solution": "dvc add model.pkl",
+        "hint": "dvc add",
+        "rubric": "dvc add command written."
+      },
+      {
+        "title": "Automated Evaluation of RAG & Agent Performance Metrics",
+        "theory": "## RAG Metrics\nRAG systems are often evaluated on context relevancy, faithfulness, and answer correctness.\n```python\nscore = evaluator.evaluate(answer, context)\n```",
+        "instructions": "## Task: RAG Metric\nAssign `'Faithfulness'` to the variable describing if an answer is purely derived from the retrieved context.",
+        "starterCode": "rag_metric = '___'",
+        "solution": "rag_metric = 'Faithfulness'",
+        "hint": "'Faithfulness'",
+        "rubric": "Variable assigned 'Faithfulness'."
+      },
+      {
+        "title": "Deploying Models safely with API Gateways & Gradio",
+        "theory": "## Gradio\nA fast way to build UIs for ML models.\n```python\nimport gradio as gr\ngr.Interface(fn=predict, inputs=\"text\", outputs=\"text\").launch()\n```",
+        "instructions": "## Task: Launch Interface\nCreate a Gradio Interface using the function `generate`, input `'image'`, output `'text'`, and call `launch()`.",
+        "starterCode": "import gradio as gr\ngr.___(___=generate, ___=\"image\", ___=\"text\").___()",
+        "solution": "import gradio as gr\ngr.Interface(fn=generate, inputs=\"image\", outputs=\"text\").launch()",
+        "hint": "Interface, fn, inputs, outputs, launch()",
+        "rubric": "Gradio Interface configured and launched."
+      },
+      {
+        "title": "Monitoring Model Drift & Prompt Leakage in Production",
+        "theory": "## Data Drift\nWhen the statistical properties of the input data change over time, degrading model accuracy.\n```python\nif drift_score > threshold:\n    alert(\"Retrain model\")\n```",
+        "instructions": "## Task: Drift Concept\nAssign `'Data Drift'` to the variable representing changing input distributions.",
+        "starterCode": "degradation_type = '___'",
+        "solution": "degradation_type = 'Data Drift'",
+        "hint": "'Data Drift'",
+        "rubric": "Variable assigned 'Data Drift'."
+      },
+      {
+        "title": "Decentralized Fine-tuning Compute & GPU Orchestration",
+        "theory": "## GPU Orchestration\nTools like Ray distribute Python code and model training across multiple GPUs/nodes.\n```python\nimport ray\nray.init()\n```",
+        "instructions": "## Task: Initialize Ray\nWrite the code to import `ray` and initialize the cluster connection.",
+        "starterCode": "import ___\nray.___()",
+        "solution": "import ray\nray.init()",
+        "hint": "ray and init()",
+        "rubric": "Ray imported and initialized."
+      }
+    ]
+  }
+}
