@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './AuthContext';
 import Onboarding from './components/Onboarding';
 import Dashboard from './components/Dashboard';
 import Workspace from './components/Workspace';
+import TeacherDashboard from './components/TeacherDashboard';
 
 const ProtectedRoute = ({ children }) => {
   const { token, loading } = useAuth();
@@ -33,6 +34,11 @@ const App = () => {
           <Route path="/workspace/:courseId" element={
             <ProtectedRoute>
               <Workspace />
+            </ProtectedRoute>
+          } />
+          <Route path="/teacher" element={
+            <ProtectedRoute>
+              <TeacherDashboard />
             </ProtectedRoute>
           } />
         </Routes>

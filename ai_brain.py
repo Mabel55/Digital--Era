@@ -233,24 +233,18 @@ def query_ai_brain(question: str, course_id: int = None, top_k: int = 4, student
 
 # ── PDF INGESTION ────────────────────────────────────────────────────────────
 def add_pdf_to_vector_db(file_path: str, course_title: str, course_level: str, course_track: str):
-    # ... load the PDF ...
-    
-    # Tag every page with the Title, Level, and Track!
-    for doc in documents:
-        doc.metadata["title"] = course_title
-        doc.metadata["level"] = course_level
-        doc.metadata["track"] = course_track
     """
     Reads a PDF, chops it into readable chunks, and injects it into the FAISS vector database.
     """
     # 1. Load the PDF
-
     loader = PyPDFLoader(file_path)
     documents = loader.load()
 
-    # 2. Tag every page with the course title
+    # 2. Tag every page with the course title, level, and track
     for doc in documents:
         doc.metadata["title"] = course_title
+        doc.metadata["level"] = course_level
+        doc.metadata["track"] = course_track
 
     # 3. Chop into chunks
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)

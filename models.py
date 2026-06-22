@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, Boolean, DateTime
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, Boolean, DateTime, JSON
 from database import Base
 from sqlalchemy.orm import relationship
 
@@ -63,6 +63,11 @@ class User(Base):
     full_name = Column(String)
     role = Column(String, default="student") # Can be "student" or "admin"
     is_active = Column(Boolean, default=True)
+    xp = Column(Integer, default=0)
+    level = Column(String, default="Beginner")
+    streak = Column(Integer, default=0)
+    last_login = Column(DateTime, nullable=True)
+    progress = Column(JSON, default=dict)
 
 # Add this to the bottom of models.py
 

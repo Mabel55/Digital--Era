@@ -4,7 +4,7 @@
 //  Edit the JSON files in the curriculum/ directory instead.
 // ═══════════════════════════════════════════════════
 
-const curriculum = {
+export const curriculum = {
   "Python Core": {
     "Beginner": [
       "Python Fundamentals",
@@ -302,7 +302,7 @@ const curriculum = {
   }
 };
 
-const courseManifest = {
+export const courseManifest = {
   "Agent Foundations & Tools": {
     "aiRubric": "Check agentic concepts, function calling logic, MCP configuration, ReAct loop understanding, and API integration.",
     "lessons": [
@@ -3168,6 +3168,24 @@ const courseManifest = {
         "solution": "\"\"\"\nPurpose: Display student profile\nAuthor: Mabel Academy\n\"\"\"\n\nstudent_name = \"Ada Okonkwo\"\nstudent_age = 22\nis_enrolled = True\n\nprint(f\"{student_name} | Age: {student_age} | Enrolled: {is_enrolled}\")",
         "hint": "Triple quotes for docstring. snake_case uses underscores.",
         "rubric": "Docstring present. snake_case used. f-string output correct."
+      },
+      {
+        "title": "Module Quiz: Python Basics",
+        "type": "quiz",
+        "theory": "Test your knowledge of Python Basics.",
+        "instructions": "Answer the following question.",
+        "question": "Which of the following data types is used to store text in Python?",
+        "options": [
+          "int",
+          "float",
+          "str",
+          "bool"
+        ],
+        "correctAnswer": 2,
+        "starterCode": "",
+        "solution": "",
+        "hint": "Think about 'strings' of text.",
+        "rubric": "User selects str."
       }
     ]
   },

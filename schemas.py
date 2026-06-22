@@ -77,6 +77,10 @@ class UserCreate(UserBase):
 class UserResponse(UserBase):
     id: int
     is_active: bool
+    xp: int
+    level: str
+    streak: int
+    progress: dict
     # We explicitly exclude the password here so it never leaks to the frontend!
 
     class Config:

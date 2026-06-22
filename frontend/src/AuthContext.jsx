@@ -52,7 +52,8 @@ export const AuthProvider = ({ children }) => {
     });
 
     if (!res.ok) {
-      throw new Error("Invalid credentials");
+      const errData = await res.json();
+      throw new Error(errData.detail || "Invalid credentials");
     }
     const data = await res.json();
     setToken(data.access_token);
@@ -62,11 +63,12 @@ export const AuthProvider = ({ children }) => {
     const res = await fetch('http://127.0.0.1:8000/signup', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password, level, goal })
+      body: JSON.stringify({ full_name: name, email, password, level, goal })
     });
     
     if (!res.ok) {
-      throw new Error("Registration failed");
+      const errData = await res.json();
+      throw new Error(errData.detail || "Registration failed");
     }
     // Automatically login after signup
     await login(email, password);

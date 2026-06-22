@@ -21,6 +21,9 @@ const Workspace = () => {
   const [messages, setMessages] = useState([]);
   const [chatInput, setChatInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [quizResult, setQuizResult] = useState(null);
   
   const chatEndRef = useRef(null);
 
@@ -41,15 +44,18 @@ const Workspace = () => {
   const loadLesson = (idx) => {
     setCurrentLessonIdx(idx);
     const lesson = manifest.lessons[idx];
-    setCode(lesson.starterCode);
+    setCode(lesson.starterCode || '');
     setTerminalOutput('');
     setActiveTab('theory');
+    setSelectedOption(null);
+    setQuizResult(null);
   };
 
   const handleRunCode = async () => {
     setIsRunning(true);
     setTerminalOutput('Executing...');
     setTerminalClass('');
+    setHasError(false);
     
     try {
       const res = await fetch('http://127.0.0.1:8000/run-python/', {
@@ -62,34 +68,97 @@ const Workspace = () => {
       if (!res.ok) {
         setTerminalOutput(`Error: ${data.detail}`);
         setTerminalClass('error');
+        setHasError(true);
       } else {
         setTerminalOutput(data.output || "No output.");
-        setTerminalClass(data.output.toLowerCase().includes('error') ? 'error' : 'success');
+        const codeHasError = data.output.toLowerCase().includes('error') || data.exit_code !== 0 || data.output.toLowerCase().includes('traceback');
+        setTerminalClass(codeHasError ? 'error' : 'success');
+        setHasError(codeHasError);
+        
+        if (!codeHasError) {
+          // Grant XP and Progress
+          const token = localStorage.getItem('token');
+          if (token) {
+            try {
+              const progressRes = await fetch('http://127.0.0.1:8000/users/me/progress', {
+                method: 'POST',
+                headers: { 
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}` 
+                },
+                body: JSON.stringify({ 
+                  course_name: courseName, 
+                  lesson_index: currentLessonIdx 
+                })
+              });
+              
+              if (progressRes.ok) {
+                const userData = await progressRes.json();
+                setTerminalOutput(prev => prev + `\n\n🎉 Lesson Passed! +10 XP Awarded! You are now level: ${userData.level}`);
+              }
+            } catch (e) {
+              console.error("Failed to update progress", e);
+            }
+          }
+        }
       }
     } catch (err) {
       setTerminalOutput("Execution failed. Ensure Docker is running.");
       setTerminalClass('error');
+      setHasError(true);
     } finally {
       setIsRunning(false);
     }
   };
 
-  const sendChat = async (e) => {
-    e?.preventDefault();
-    if (!chatInput.trim()) return;
+  const handleFixMyCode = () => {
+    const prompt = `I am getting an error. Can you find the bug in my code **without giving me the full solution**? Tell me what line it is on, and give me a hint.\n\nHere is my code:\n\`\`\`python\n${code}\n\`\`\`\n\nError output:\n\`\`\`\n${terminalOutput}\n\`\`\``;
+    sendChat(null, prompt);
+  };
 
-    const userMsg = chatInput;
+  const handleQuizSubmit = async () => {
+    const lesson = manifest.lessons[currentLessonIdx];
+    if (selectedOption === lesson.correctAnswer) {
+      setQuizResult('correct');
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const progressRes = await fetch('http://127.0.0.1:8000/users/me/progress', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({ course_name: courseName, lesson_index: currentLessonIdx })
+          });
+          if (progressRes.ok) {
+            const userData = await progressRes.json();
+            setQuizResult(`correct_xp_${userData.level}`);
+          }
+        } catch (e) { console.error(e); }
+      }
+    } else {
+      setQuizResult('incorrect');
+    }
+  };
+
+  const sendChat = async (e, directMessage = null) => {
+    e?.preventDefault();
+    const userMsg = directMessage || chatInput;
+    if (!userMsg.trim()) return;
+
     setMessages(prev => [...prev, { sender: 'user', text: userMsg }]);
-    setChatInput('');
+    if (!directMessage) setChatInput('');
     setIsTyping(true);
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/chat?message=${encodeURIComponent(userMsg)}&course_name=${encodeURIComponent(courseName)}`, {
+      const res = await fetch(`http://127.0.0.1:8000/chat`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` 
+        },
+        body: JSON.stringify({ message: userMsg, course: courseName })
       });
       const data = await res.json();
-      setMessages(prev => [...prev, { sender: 'ai', text: data.response }]);
+      setMessages(prev => [...prev, { sender: 'ai', text: data.answer || data.response || "No response" }]);
     } catch (err) {
       setMessages(prev => [...prev, { sender: 'ai', text: "Sorry, I'm having trouble connecting to my brain right now." }]);
     } finally {
@@ -142,16 +211,76 @@ const Workspace = () => {
           <div className="exercise-tabs">
             <div className={`ex-tab ${activeTab === 'theory' ? 'active' : ''}`} onClick={() => setActiveTab('theory')}>Theory</div>
             <div className={`ex-tab ${activeTab === 'instructions' ? 'active' : ''}`} onClick={() => setActiveTab('instructions')}>Instructions</div>
+            <div className={`ex-tab ${activeTab === 'solution' ? 'active' : ''}`} onClick={() => setActiveTab('solution')}>Solution</div>
           </div>
           <div className="ex-tab-content">
             <div className="exercise-title">{lesson.title}</div>
-            <div className="exercise-body" dangerouslySetInnerHTML={{ __html: marked(activeTab === 'theory' ? lesson.theory : lesson.instructions) }}></div>
+            <div className="exercise-body" dangerouslySetInnerHTML={{ __html: marked(
+              activeTab === 'theory' ? lesson.theory : 
+              activeTab === 'instructions' ? lesson.instructions : 
+              '### Solution Code\n\n```python\n' + (lesson.solution || 'No solution provided.') + '\n```'
+            ) }}></div>
+            
+            {(activeTab === 'theory' || activeTab === 'solution') && (
+              <button 
+                onClick={() => sendChat(null, `Please give me a detailed technical explanation of this lesson: "${lesson.title}". Explain the concepts and how the code works step-by-step.`)}
+                style={{ 
+                  marginTop: '20px', padding: '10px 16px', background: 'var(--surface)', 
+                  color: 'var(--accent)', border: '1px solid var(--border)', 
+                  borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold',
+                  display: 'flex', alignItems: 'center', gap: '8px'
+                }}
+              >
+                Get Detail Explanation
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Middle Panel - Editor & Terminal */}
-        <div className="ws-editor-panel">
-          <div className="editor-toolbar">
+        {/* Middle Panel - Editor & Terminal OR Quiz */}
+        {lesson.type === 'quiz' ? (
+          <div className="ws-quiz-panel" style={{ flex: 1, padding: '40px', background: 'var(--surface)', margin: '20px', borderRadius: '12px', display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto' }}>
+            <h2 style={{ color: 'var(--text-bright)' }}>{lesson.question}</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {lesson.options.map((opt, i) => (
+                <div 
+                  key={i}
+                  onClick={() => setSelectedOption(i)}
+                  style={{
+                    padding: '16px', borderRadius: '8px', border: `2px solid ${selectedOption === i ? 'var(--accent)' : 'var(--border)'}`,
+                    background: selectedOption === i ? 'rgba(56, 189, 248, 0.1)' : 'transparent',
+                    cursor: 'pointer', color: 'var(--text-bright)', fontSize: '16px', transition: 'all 0.2s'
+                  }}
+                >
+                  {String.fromCharCode(65 + i)}. {opt}
+                </div>
+              ))}
+            </div>
+            <button 
+              onClick={handleQuizSubmit}
+              disabled={selectedOption === null}
+              style={{
+                marginTop: '20px', padding: '14px', background: 'var(--accent)', color: 'black', 
+                fontWeight: 'bold', fontSize: '16px', borderRadius: '8px', border: 'none', 
+                cursor: selectedOption === null ? 'not-allowed' : 'pointer', opacity: selectedOption === null ? 0.5 : 1
+              }}
+            >
+              Submit Answer
+            </button>
+            {quizResult && quizResult.startsWith('correct') && (
+              <div style={{ padding: '16px', background: 'rgba(34, 197, 94, 0.1)', color: '#22c55e', borderRadius: '8px', fontWeight: 'bold' }}>
+                🎉 Correct! {quizResult.includes('xp') && `+10 XP Awarded! You are now level: ${quizResult.split('_')[2]}`}
+              </div>
+            )}
+            {quizResult === 'incorrect' && (
+              <div style={{ padding: '16px', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', borderRadius: '8px', fontWeight: 'bold' }}>
+                ❌ Incorrect. Try again!
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="ws-editor-panel">
+            <div className="editor-toolbar">
             <div className="file-tab"><div className="dot"></div> main.py</div>
           </div>
           <div style={{ flex: 1, minHeight: 0 }}>
@@ -165,17 +294,33 @@ const Workspace = () => {
             />
           </div>
           <div className="terminal-panel">
-            <div className="terminal-header">
-              <div className="terminal-dot dot-red"></div>
-              <div className="terminal-dot dot-yellow"></div>
-              <div className="terminal-dot dot-green"></div>
-              <span style={{ marginLeft: '8px' }}>Terminal Output</span>
+            <div className="terminal-header" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div className="terminal-dot dot-red"></div>
+                <div className="terminal-dot dot-yellow"></div>
+                <div className="terminal-dot dot-green"></div>
+                <span style={{ marginLeft: '8px' }}>Terminal Output</span>
+              </div>
+              {hasError && (
+                <button 
+                  onClick={handleFixMyCode}
+                  style={{ 
+                    background: 'rgba(239,68,68,0.15)', color: '#ef4444', 
+                    border: '1px solid rgba(239,68,68,0.3)', borderRadius: '4px', 
+                    padding: '3px 10px', fontSize: '11px', fontWeight: 'bold', 
+                    cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' 
+                  }}
+                >
+                  🐛 Fix My Code
+                </button>
+              )}
             </div>
             <div id="terminal-output" className={terminalClass}>
               {terminalOutput}
             </div>
           </div>
-        </div>
+          </div>
+        )}
 
         {/* Right Panel - AI Chat */}
         <div className="ws-chat">

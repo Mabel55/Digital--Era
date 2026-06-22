@@ -54,10 +54,14 @@ def build_courses():
     output_js += "//  Edit the JSON files in the curriculum/ directory instead.\n"
     output_js += "// ═══════════════════════════════════════════════════\n\n"
 
-    output_js += "const curriculum = " + json.dumps(curriculum, indent=2, ensure_ascii=False) + ";\n\n"
-    output_js += "const courseManifest = " + json.dumps(course_manifest, indent=2, ensure_ascii=False) + "; // end courseManifest\n"
+    output_js += "export const curriculum = " + json.dumps(curriculum, indent=2, ensure_ascii=False) + ";\n\n"
+    output_js += "export const courseManifest = " + json.dumps(course_manifest, indent=2, ensure_ascii=False) + "; // end courseManifest\n"
 
     with io.open("courses.js", "w", encoding="utf-8") as f:
+        f.write(output_js)
+
+    frontend_path = os.path.join("frontend", "src", "data", "courses.js")
+    with io.open(frontend_path, "w", encoding="utf-8") as f:
         f.write(output_js)
 
     print("Success: Successfully built courses.js from JSON modules.")

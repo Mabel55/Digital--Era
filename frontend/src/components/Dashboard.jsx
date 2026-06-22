@@ -7,6 +7,7 @@ const Dashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('Beginner');
+  const [overviewCourse, setOverviewCourse] = useState(null);
 
   // Find user's track based on goal, default to "Python Core"
   const getTrack = () => {
@@ -20,7 +21,7 @@ const Dashboard = () => {
     return "Python Core";
   };
 
-  const currentTrack = getTrack();
+  const [currentTrack, setCurrentTrack] = useState(() => getTrack());
 
   const handleLogout = () => {
     logout();
@@ -33,7 +34,11 @@ const Dashboard = () => {
     return user.progress[courseName].completed_lessons || 0;
   };
 
-  const openCourse = (courseName) => {
+  const openOverview = (courseName) => {
+    setOverviewCourse(courseName);
+  };
+
+  const startCourse = (courseName) => {
     navigate(`/workspace/${encodeURIComponent(courseName)}`);
   };
 
@@ -44,10 +49,21 @@ const Dashboard = () => {
           <div className="logo-icon">🎓</div>
           <div className="logo-text">Digital <span>Era</span></div>
         </div>
-        <div className="nav-right">
+        <div className="nav-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div className="streak-badge">🔥 <span>{user?.streak || 0}</span> day streak</div>
-          <button className="avatar-btn" onClick={handleLogout}>
-            {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+          {(user?.role === 'admin' || user?.role === 'teacher') && (
+            <button 
+              onClick={() => navigate('/teacher')}
+              style={{ padding: '8px 16px', background: 'var(--accent)', color: 'black', border: 'none', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold' }}
+            >
+              👨‍🏫 Teacher Portal
+            </button>
+          )}
+          <button 
+            onClick={handleLogout}
+            style={{ padding: '8px 16px', background: 'transparent', color: 'var(--text-dim)', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold' }}
+          >
+            Logout
           </button>
         </div>
       </nav>
@@ -56,7 +72,29 @@ const Dashboard = () => {
         <div className="dash-hero">
           <div className="hero-left">
             <h2>Welcome back, <span>{user?.name?.split(' ')[0] || 'Student'}</span>!</h2>
-            <p>Your custom track is focused on: <strong>{currentTrack}</strong>.</p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px', color: 'var(--text-dim)' }}>
+              Your current track:
+              <select 
+                value={currentTrack} 
+                onChange={(e) => setCurrentTrack(e.target.value)}
+                style={{
+                  padding: '6px 12px',
+                  borderRadius: '6px',
+                  background: 'var(--surface)',
+                  color: 'var(--accent)',
+                  border: '1px solid var(--border)',
+                  outline: 'none',
+                  fontFamily: 'inherit',
+                  fontSize: '14px',
+                  fontWeight: '600',
+                  cursor: 'pointer'
+                }}
+              >
+                {Object.keys(curriculum).map(trackName => (
+                  <option key={trackName} value={trackName}>{trackName}</option>
+                ))}
+              </select>
+            </div>
             <div className="hero-stats">
               <div className="stat-item">
                 <div className="stat-num">{user?.xp || 0}</div>
@@ -103,7 +141,7 @@ const Dashboard = () => {
             const progressPct = totalLessons > 0 ? (completed / totalLessons) * 100 : 0;
 
             return (
-              <div key={courseName} className="track-card" onClick={() => openCourse(courseName)}>
+              <div key={courseName} className="track-card" onClick={() => openOverview(courseName)}>
                 <div className="track-card-icon">💻</div>
                 <div className="track-card-name">{courseName}</div>
                 <div className="track-card-desc">
@@ -123,6 +161,41 @@ const Dashboard = () => {
           })}
         </div>
       </div>
+
+      {overviewCourse && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
+          backgroundColor: 'rgba(0,0,0,0.8)', display: 'flex', 
+          justifyContent: 'center', alignItems: 'center', zIndex: 1000
+        }}>
+          <div style={{
+            background: 'var(--surface)', padding: '30px', borderRadius: '16px',
+            width: '100%', maxWidth: '500px', border: '1px solid var(--border)'
+          }}>
+            <h2 style={{ marginTop: 0, color: 'white' }}>{overviewCourse}</h2>
+            <p style={{ color: 'var(--text-dim)', marginBottom: '20px' }}>What you will learn in this course:</p>
+            <ul style={{ color: 'var(--text)', paddingLeft: '20px', marginBottom: '30px', lineHeight: '1.6' }}>
+              {courseManifest[overviewCourse]?.lessons.map((lesson, idx) => (
+                <li key={idx}><strong>{lesson.title}</strong></li>
+              ))}
+            </ul>
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+              <button 
+                onClick={() => setOverviewCourse(null)}
+                style={{ padding: '10px 20px', background: 'transparent', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={() => startCourse(overviewCourse)}
+                style={{ padding: '10px 20px', background: 'var(--accent)', color: '#000', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
+              >
+                Start Course
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
