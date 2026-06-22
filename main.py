@@ -8,18 +8,22 @@ from sqlalchemy import text
 
 # 1. Initialize Database & Run Migrations
 Base.metadata.create_all(bind=engine)
-try:
-    with engine.begin() as conn:
-        conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS xp INTEGER DEFAULT 0"))
-        conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS level INTEGER DEFAULT 1"))
-        conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS streak INTEGER DEFAULT 0"))
-        # Add progress column safely
-        try:
-            conn.execute(text("ALTER TABLE users ADD COLUMN progress JSON DEFAULT '{}'::json"))
-        except Exception:
-            pass # column likely exists
-except Exception as e:
-    print(f"Migration check completed: {e}")
+
+# Auto-migrate db safely, one column at a time so a single failure doesn't roll back the others
+migrations = [
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS xp INTEGER DEFAULT 0",
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS level VARCHAR DEFAULT 'Beginner'",
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS streak INTEGER DEFAULT 0",
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login TIMESTAMP",
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS progress JSON DEFAULT '{}'::json"
+]
+
+for migration in migrations:
+    try:
+        with engine.begin() as conn:
+            conn.execute(text(migration))
+    except Exception as e:
+        print(f"Migration issue (ignored): {e}")
 
 # Import all routers
 import routers.users
