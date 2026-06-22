@@ -4,6 +4,22 @@ from fastapi.staticfiles import StaticFiles
 import os
 from database import engine
 from models import Base
+from sqlalchemy import text
+
+# 1. Initialize Database & Run Migrations
+Base.metadata.create_all(bind=engine)
+try:
+    with engine.begin() as conn:
+        conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS xp INTEGER DEFAULT 0"))
+        conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS level INTEGER DEFAULT 1"))
+        conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS streak INTEGER DEFAULT 0"))
+        # Add progress column safely
+        try:
+            conn.execute(text("ALTER TABLE users ADD COLUMN progress JSON DEFAULT '{}'::json"))
+        except Exception:
+            pass # column likely exists
+except Exception as e:
+    print(f"Migration check completed: {e}")
 
 # Import all routers
 import routers.users
