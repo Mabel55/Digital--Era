@@ -15,7 +15,7 @@ migrations = [
     "ALTER TABLE users ADD COLUMN IF NOT EXISTS level VARCHAR DEFAULT 'Beginner'",
     "ALTER TABLE users ADD COLUMN IF NOT EXISTS streak INTEGER DEFAULT 0",
     "ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login TIMESTAMP",
-    "ALTER TABLE users ADD COLUMN IF NOT EXISTS progress JSON DEFAULT '{}'::json"
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS progress JSON DEFAULT '{{}}'::json"
 ]
 
 for migration in migrations:
