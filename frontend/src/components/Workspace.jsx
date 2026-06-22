@@ -58,7 +58,7 @@ const Workspace = () => {
     setHasError(false);
     
     try {
-      const res = await fetch('http://127.0.0.1:8000/run-python/', {
+      const res = await fetch('/run-python/', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code })
@@ -80,7 +80,7 @@ const Workspace = () => {
           const token = localStorage.getItem('token');
           if (token) {
             try {
-              const progressRes = await fetch('http://127.0.0.1:8000/users/me/progress', {
+              const progressRes = await fetch('/users/me/progress', {
                 method: 'POST',
                 headers: { 
                   'Content-Type': 'application/json',
@@ -123,7 +123,7 @@ const Workspace = () => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const progressRes = await fetch('http://127.0.0.1:8000/users/me/progress', {
+          const progressRes = await fetch('/users/me/progress', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
             body: JSON.stringify({ course_name: courseName, lesson_index: currentLessonIdx })
@@ -149,7 +149,7 @@ const Workspace = () => {
     setIsTyping(true);
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/chat`, {
+      const res = await fetch(`/chat`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

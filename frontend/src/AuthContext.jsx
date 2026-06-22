@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUserProfile = async (authToken) => {
     try {
-      const res = await fetch('http://127.0.0.1:8000/users/me', {
+      const res = await fetch('/users/me', {
         headers: { 'Authorization': `Bearer ${authToken}` }
       });
       if (res.ok) {
@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
     formData.append("username", email);
     formData.append("password", password);
 
-    const res = await fetch('http://127.0.0.1:8000/login', {
+    const res = await fetch('/login', {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: formData
@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signup = async (name, email, password, level, goal) => {
-    const res = await fetch('http://127.0.0.1:8000/signup', {
+    const res = await fetch('/signup', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ full_name: name, email, password, level, goal })

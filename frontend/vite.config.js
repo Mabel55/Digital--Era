@@ -9,6 +9,7 @@ export default defineConfig({
       '/signup': 'http://127.0.0.1:8000',
       '/login': 'http://127.0.0.1:8000',
       '/users': 'http://127.0.0.1:8000',
+      '/teachers': 'http://127.0.0.1:8000',
       '/run-python': 'http://127.0.0.1:8000',
       '/chat': 'http://127.0.0.1:8000',
       '/ask-ai': 'http://127.0.0.1:8000',

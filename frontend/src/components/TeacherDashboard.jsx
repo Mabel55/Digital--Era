@@ -25,7 +25,7 @@ const TeacherDashboard = () => {
 
   const fetchStudents = async () => {
     try {
-      const res = await fetch('http://127.0.0.1:8000/users/', {
+      const res = await fetch('/users/', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
@@ -54,7 +54,7 @@ const TeacherDashboard = () => {
     formData.append('course_track', courseTrack);
 
     try {
-      const res = await fetch('http://127.0.0.1:8000/teachers/upload-pdf/', {
+      const res = await fetch('/teachers/upload-pdf/', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }, // if endpoint is protected
         body: formData
