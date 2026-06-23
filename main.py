@@ -13,6 +13,9 @@ Base.metadata.create_all(bind=engine)
 migrations = [
     "ALTER TABLE users ADD COLUMN IF NOT EXISTS xp INTEGER DEFAULT 0",
     "ALTER TABLE users ADD COLUMN IF NOT EXISTS level VARCHAR DEFAULT 'Beginner'",
+    # Fix: If level was created as INTEGER by a previous migration, convert it to VARCHAR
+    "ALTER TABLE users ALTER COLUMN level TYPE VARCHAR USING level::varchar",
+    "ALTER TABLE users ALTER COLUMN level SET DEFAULT 'Beginner'",
     "ALTER TABLE users ADD COLUMN IF NOT EXISTS streak INTEGER DEFAULT 0",
     "ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login TIMESTAMP",
     "ALTER TABLE users ADD COLUMN IF NOT EXISTS progress JSON"
