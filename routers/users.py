@@ -13,20 +13,28 @@ router = APIRouter(tags=["Users & Auth"])
 
 @router.post("/signup")
 def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    # 1. Check if the email is already in PostgreSQL
-    existing_user = db.query(models.User).filter(models.User.email == user.email).first()
-    if existing_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
-    
-    # 2. Hash the password and save the new user to the database
-    hashed_pw = hash_password(user.password)
-    new_user = models.User(email=user.email, hashed_password=hashed_pw, full_name=user.full_name, role=user.role)
-    
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    
-    return {"message": "User created successfully in PostgreSQL!", "email": new_user.email}
+    try:
+        # 1. Check if the email is already in PostgreSQL
+        existing_user = db.query(models.User).filter(models.User.email == user.email).first()
+        if existing_user:
+            raise HTTPException(status_code=400, detail="Email already registered")
+        
+        # 2. Hash the password and save the new user to the database
+        hashed_pw = hash_password(user.password)
+        new_user = models.User(email=user.email, hashed_password=hashed_pw, full_name=user.full_name, role=user.role)
+        
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+        
+        return {"message": "User created successfully in PostgreSQL!", "email": new_user.email}
+    except HTTPException:
+        raise
+    except Exception as e:
+        # Return a 400 instead of 500 so Azure doesn't mask the error text!
+        import traceback
+        print("SIGNUP CRASH", traceback.format_exc())
+        raise HTTPException(status_code=400, detail=f"DB_CRASH: {str(e)}")
 
 @router.post("/login")
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
