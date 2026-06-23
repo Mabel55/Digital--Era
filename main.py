@@ -13,7 +13,8 @@ Base.metadata.create_all(bind=engine)
 migrations = [
     "ALTER TABLE users ADD COLUMN IF NOT EXISTS xp INTEGER DEFAULT 0",
     "ALTER TABLE users ADD COLUMN IF NOT EXISTS level VARCHAR DEFAULT 'Beginner'",
-    # Fix: If level was created as INTEGER by a previous migration, convert it to VARCHAR
+    # Fix: If level was accidentally created as INTEGER, we must drop the old default first
+    "ALTER TABLE users ALTER COLUMN level DROP DEFAULT",
     "ALTER TABLE users ALTER COLUMN level TYPE VARCHAR USING level::varchar",
     "ALTER TABLE users ALTER COLUMN level SET DEFAULT 'Beginner'",
     "ALTER TABLE users ADD COLUMN IF NOT EXISTS streak INTEGER DEFAULT 0",
@@ -25,8 +26,9 @@ for migration in migrations:
     try:
         with engine.begin() as conn:
             conn.execute(text(migration))
+        print(f"Migration OK: {migration[:60]}")
     except Exception as e:
-        print(f"Migration issue (ignored): {e}")
+        print(f"Migration SKIPPED: {migration[:60]} -> {e}")
 
 # Import all routers
 import routers.users
