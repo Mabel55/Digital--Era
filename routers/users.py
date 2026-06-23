@@ -15,7 +15,7 @@ router = APIRouter(tags=["Users & Auth"])
 def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     try:
         # 1. Check if the email is already in PostgreSQL
-        existing_user = db.query(models.User).filter(models.User.email == user.email).first()
+        existing_user = db.query(models.User).filter(models.User.email.ilike(user.email)).first()
         if existing_user:
             raise HTTPException(status_code=400, detail="Email already registered")
         
@@ -39,7 +39,7 @@ def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 @router.post("/login")
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     try:
-        user = db.query(models.User).filter(models.User.email == form_data.username).first()
+        user = db.query(models.User).filter(models.User.email.ilike(form_data.username)).first()
         if not user or not verify_password(form_data.password, user.hashed_password):
             raise HTTPException(status_code=400, detail="Incorrect username or password")
         
@@ -76,7 +76,7 @@ def get_all_users(db: Session = Depends(get_db)):
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     try:
         # Check if user exists
-        db_user = db.query(models.User).filter(models.User.email == user.email).first()
+        db_user = db.query(models.User).filter(models.User.email.ilike(user.email)).first()
         if db_user:
             raise HTTPException(status_code=400, detail="Email already registered")
         
