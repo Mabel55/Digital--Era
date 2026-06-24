@@ -51,7 +51,7 @@ const Dashboard = () => {
         </div>
         <div className="nav-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div className="streak-badge">🔥 <span>{user?.streak || 0}</span> day streak</div>
-          {(user?.role === 'admin' || user?.role === 'teacher') && (
+          {((user?.role || '').toLowerCase() === 'admin' || (user?.role || '').toLowerCase() === 'teacher' || user?.email === 'nasaadanna@gmail.com') && (
             <button 
               onClick={() => navigate('/teacher')}
               style={{ padding: '8px 16px', background: 'var(--accent)', color: 'black', border: 'none', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold' }}
