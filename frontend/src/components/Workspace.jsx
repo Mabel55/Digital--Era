@@ -158,7 +158,7 @@ const Workspace = () => {
         body: JSON.stringify({ message: userMsg, course: courseName })
       });
       const data = await res.json();
-      setMessages(prev => [...prev, { sender: 'ai', text: data.answer || data.response || "No response" }]);
+      setMessages(prev => [...prev, { sender: 'ai', text: data.answer || data.response || data.detail || "No response" }]);
     } catch (err) {
       setMessages(prev => [...prev, { sender: 'ai', text: "Sorry, I'm having trouble connecting to my brain right now." }]);
     } finally {
