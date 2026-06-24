@@ -68,7 +68,7 @@ class CourseResponse(BaseModel):
 # ==========================================
 class UserBase(BaseModel):
     email: str
-    full_name: str
+    full_name: Optional[str] = None
     role: str = "student" # Defaults to student for security
 
 class UserCreate(UserBase):
@@ -76,11 +76,11 @@ class UserCreate(UserBase):
 
 class UserResponse(UserBase):
     id: int
-    is_active: bool
-    xp: int
-    level: str
-    streak: int
-    progress: dict
+    is_active: Optional[bool] = True
+    xp: Optional[int] = 0
+    level: Optional[str] = "Beginner"
+    streak: Optional[int] = 0
+    progress: Optional[dict] = {}
     # We explicitly exclude the password here so it never leaks to the frontend!
 
     class Config:
@@ -135,11 +135,6 @@ class ChatRequest(BaseModel):
     course: str ="General Setup"
 
 # --- Authentication Schemas ---
-class UserCreate(BaseModel):
-    email: str
-    password: str
-    full_name: str
-    role: str ="student"
 
 class UserLogin(BaseModel):
     email: str
