@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Onboarding = () => {
   const [isLogin, setIsLogin] = useState(false);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -12,7 +13,7 @@ const Onboarding = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   
-  const { login, signup } = useAuth();
+  const { login, signup, resetPassword } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -21,12 +22,18 @@ const Onboarding = () => {
     setLoading(true);
     
     try {
-      if (isLogin) {
+      if (isForgotPassword) {
+        await resetPassword(email, password);
+        setIsForgotPassword(false);
+        setIsLogin(true);
+        setError("Password reset successfully. Please log in with your new password.");
+      } else if (isLogin) {
         await login(email, password);
+        navigate('/');
       } else {
         await signup(name, email, password, level, goal);
+        navigate('/');
       }
-      navigate('/');
     } catch (err) {
       setError(err.message || "An error occurred");
     } finally {
@@ -42,15 +49,15 @@ const Onboarding = () => {
           <div className="logo-text">Digital <span>Era</span></div>
         </div>
         
-        <div className="onboard-title">{isLogin ? "Welcome Back" : "Start Your Coding Journey"}</div>
+        <div className="onboard-title">{isForgotPassword ? "Reset Password" : (isLogin ? "Welcome Back" : "Start Your Coding Journey")}</div>
         <div className="onboard-sub">
-          {isLogin ? "Log in to continue your personalized learning path." : "Tell us about yourself so we can personalize your learning experience."}
+          {isForgotPassword ? "Enter your email and a new password." : (isLogin ? "Log in to continue your personalized learning path." : "Tell us about yourself so we can personalize your learning experience.")}
         </div>
 
-        {error && <div style={{ color: 'var(--danger)', marginBottom: '16px', fontSize: '13px' }}>{error}</div>}
+        {error && <div style={{ color: error.includes("successfully") ? 'var(--success)' : 'var(--danger)', marginBottom: '16px', fontSize: '13px' }}>{error}</div>}
 
         <form onSubmit={handleSubmit}>
-          {!isLogin && (
+          {!isLogin && !isForgotPassword && (
             <div className="field-row">
               <label className="field-label">Your Full Name</label>
               <input 
@@ -58,7 +65,7 @@ const Onboarding = () => {
                 placeholder="e.g. Ada Okonkwo" 
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                required={!isLogin}
+                required={!isLogin && !isForgotPassword}
               />
             </div>
           )}
@@ -75,7 +82,7 @@ const Onboarding = () => {
           </div>
 
           <div className="field-row">
-            <label className="field-label">Password</label>
+            <label className="field-label">{isForgotPassword ? "New Password" : "Password"}</label>
             <input 
               type="password" 
               placeholder="••••••••"
@@ -85,7 +92,7 @@ const Onboarding = () => {
             />
           </div>
 
-          {!isLogin && (
+          {!isLogin && !isForgotPassword && (
             <div className="two-col">
               <div className="field-row">
                 <label className="field-label">Experience Level</label>
@@ -108,19 +115,33 @@ const Onboarding = () => {
           )}
 
           <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? "Processing..." : (isLogin ? "Login" : "🚀 Initialize My Learning Path")}
+            {loading ? "Processing..." : (isForgotPassword ? "Reset Password" : (isLogin ? "Login" : "🚀 Initialize My Learning Path"))}
           </button>
         </form>
 
+        {isLogin && !isForgotPassword && (
+          <div style={{ textAlign: 'center', marginTop: '16px' }}>
+            <a href="#" onClick={(e) => { e.preventDefault(); setIsForgotPassword(true); setError(''); }} style={{ color: 'var(--text-muted)', fontSize: '14px', textDecoration: 'none' }}>Forgot Password?</a>
+          </div>
+        )}
+
         <div className="divider">
-          <hr /><span>{isLogin ? "New here?" : "Already enrolled?"}</span><hr />
+          <hr /><span>{isForgotPassword ? "Or" : (isLogin ? "New here?" : "Already enrolled?")}</span><hr />
         </div>
         
         <button 
           className="returning-btn" 
-          onClick={() => { setIsLogin(!isLogin); setError(''); }}
+          onClick={() => { 
+            if (isForgotPassword) {
+              setIsForgotPassword(false);
+              setIsLogin(true);
+            } else {
+              setIsLogin(!isLogin); 
+            }
+            setError(''); 
+          }}
         >
-          {isLogin ? "✨ Create a new account" : "📂 Continue where I left off"}
+          {isForgotPassword ? "🔙 Back to Login" : (isLogin ? "✨ Create a new account" : "📂 Continue where I left off")}
         </button>
       </div>
     </div>

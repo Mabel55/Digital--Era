@@ -74,12 +74,25 @@ export const AuthProvider = ({ children }) => {
     await login(email, password);
   };
 
+  const resetPassword = async (email, newPassword) => {
+    const res = await fetch('/users/reset-password', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, new_password: newPassword })
+    });
+    
+    if (!res.ok) {
+      const errData = await res.json();
+      throw new Error(errData.detail || "Reset password failed");
+    }
+  };
+
   const logout = () => {
     setToken(null);
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, loading, login, signup, logout }}>
+    <AuthContext.Provider value={{ token, user, loading, login, signup, logout, resetPassword }}>
       {children}
     </AuthContext.Provider>
   );

@@ -137,3 +137,21 @@ def update_progress(payload: ProgressUpdate, db: Session = Depends(get_db), curr
     db.refresh(current_user)
     
     return current_user
+
+@router.post("/users/reset-password")
+def reset_password(payload: schemas.UserResetPassword, db: Session = Depends(get_db)):
+    try:
+        user = db.query(models.User).filter(models.User.email.ilike(payload.email)).first()
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        hashed_pw = hash_password(payload.new_password)
+        user.hashed_password = hashed_pw
+        db.commit()
+        return {"message": "Password reset successfully"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        print("RESET PASSWORD CRASH:", traceback.format_exc())
+        raise HTTPException(status_code=500, detail=f"ERROR: {str(e)}")

@@ -150,3 +150,7 @@ class CodeSubmission(BaseModel):
 
 class ChatMessage(BaseModel):
     message: str
+
+class UserResetPassword(BaseModel):
+    email: str
+    new_password: str
