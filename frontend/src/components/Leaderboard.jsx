@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 
-const Leaderboard = () => {
+const Leaderboard = ({ isPublic }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
@@ -36,7 +36,11 @@ const Leaderboard = () => {
           <div className="logo-icon">🏆</div>
           <div className="logo-text">Global <span>Leaderboard</span></div>
         </div>
-        <button onClick={() => navigate('/dashboard')} className="ws-back-btn">← Back to Dashboard</button>
+        {!isPublic ? (
+          <button onClick={() => navigate('/dashboard')} className="ws-back-btn">← Back to Dashboard</button>
+        ) : (
+          <button onClick={() => navigate('/onboarding')} className="ws-back-btn">Join Now</button>
+        )}
       </nav>
       
       <div className="dash-body" style={{ maxWidth: '900px', margin: '0 auto', width: '100%' }}>

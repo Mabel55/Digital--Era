@@ -132,6 +132,12 @@ const CertificateModal = ({ courseName, studentName, onClose }) => {
     link.click();
   };
 
+  const shareToLinkedIn = () => {
+    // In production, this should point to a specific certificate verification page
+    const url = encodeURIComponent('https://digital-era.vercel.app'); 
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
+  };
+
   return (
     <div style={{
       position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
@@ -165,7 +171,13 @@ const CertificateModal = ({ courseName, studentName, onClose }) => {
             onClick={downloadCertificate}
             style={{ padding: '12px 24px', background: '#00e5a0', color: '#000', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}
           >
-            ⬇ Download Certificate
+            ⬇ Download
+          </button>
+          <button 
+            onClick={shareToLinkedIn}
+            style={{ padding: '12px 24px', background: '#0a66c2', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}
+          >
+            Share on LinkedIn
           </button>
         </div>
       </div>

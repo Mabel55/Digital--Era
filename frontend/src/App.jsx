@@ -65,6 +65,9 @@ const App = () => {
               <Leaderboard />
             </ProtectedRoute>
           } />
+          <Route path="/public-leaderboard" element={
+            <Leaderboard isPublic={true} />
+          } />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
