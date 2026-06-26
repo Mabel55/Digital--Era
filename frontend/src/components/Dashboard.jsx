@@ -42,6 +42,33 @@ const Dashboard = () => {
     navigate(`/workspace/${encodeURIComponent(courseName)}`);
   };
 
+  const [dbCourses, setDbCourses] = useState([]);
+
+  useEffect(() => {
+    fetchDBCourses();
+  }, []);
+
+  const fetchDBCourses = async () => {
+    try {
+      const res = await fetch('/courses/');
+      if (res.ok) {
+        const data = await res.json();
+        setDbCourses(data);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const startDBCourse = (courseId) => {
+    navigate(`/db-workspace/${courseId}`);
+  };
+
+  const getDBCourseProgress = (courseName) => {
+    if (!user || !user.progress || !user.progress[courseName]) return 0;
+    return user.progress[courseName].completed_lesson_ids?.length || 0;
+  };
+
   return (
     <div id="dashboard" className="screen active">
       <nav className="dash-nav">
@@ -107,6 +134,39 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+
+        {dbCourses.length > 0 && (
+          <>
+            <div className="section-title">
+              🚀 Live AI Courses <span>Created by your teachers</span>
+            </div>
+            <div className="track-grid" style={{ marginBottom: '40px' }}>
+              {dbCourses.map(course => {
+                const totalLessons = course.lessons?.length || 0;
+                const completed = getDBCourseProgress(course.title);
+                const progressPct = totalLessons > 0 ? (completed / totalLessons) * 100 : 0;
+                return (
+                  <div key={course.id} className="track-card" onClick={() => startDBCourse(course.id)} style={{ border: '1px solid var(--accent)' }}>
+                    <div className="track-card-icon">🧠</div>
+                    <div className="track-card-name">{course.title}</div>
+                    <div className="track-card-desc">
+                      {totalLessons} lessons • {completed} completed
+                    </div>
+                    <div className="track-card-meta">
+                      <span className={`track-tag tag-advanced`}>Live</span>
+                    </div>
+                    <div className="track-progress-bar">
+                      <div className="bar-bg">
+                        <div className="bar-fill" style={{ width: `${progressPct}%`, background: 'var(--accent)' }}></div>
+                      </div>
+                      <div className="bar-label">{Math.round(progressPct)}% Complete</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        )}
 
         <div className="section-title">
           📚 Learning Path <span>Select your difficulty level</span>

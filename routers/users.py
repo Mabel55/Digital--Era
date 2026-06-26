@@ -104,7 +104,8 @@ def read_users_me(current_user: models.User = Depends(get_current_user)):
 
 class ProgressUpdate(BaseModel):
     course_name: str
-    lesson_index: int
+    lesson_index: int | None = None
+    lesson_id: int | None = None
 
 @router.post("/users/me/progress", response_model=schemas.UserResponse)
 def update_progress(payload: ProgressUpdate, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
@@ -112,13 +113,27 @@ def update_progress(payload: ProgressUpdate, db: Session = Depends(get_db), curr
     
     progress = dict(current_user.progress) if current_user.progress else {}
     if payload.course_name not in progress:
-        progress[payload.course_name] = {"completed_lessons": 0}
+        progress[payload.course_name] = {"completed_lessons": 0, "completed_lesson_ids": []}
         
     current_completed = progress[payload.course_name].get("completed_lessons", 0)
+    completed_ids = progress[payload.course_name].get("completed_lesson_ids", [])
     
-    # Award XP if they completed a new lesson
-    if payload.lesson_index >= current_completed:
-        progress[payload.course_name]["completed_lessons"] = payload.lesson_index + 1
+    awarded_xp = False
+
+    # 1. Legacy Static Course tracking (lesson_index)
+    if payload.lesson_index is not None:
+        if payload.lesson_index >= current_completed:
+            progress[payload.course_name]["completed_lessons"] = payload.lesson_index + 1
+            awarded_xp = True
+
+    # 2. Dynamic DB Course tracking (lesson_id)
+    if payload.lesson_id is not None:
+        if payload.lesson_id not in completed_ids:
+            completed_ids.append(payload.lesson_id)
+            progress[payload.course_name]["completed_lesson_ids"] = completed_ids
+            awarded_xp = True
+            
+    if awarded_xp:
         current_user.xp += xp_to_add
         
         # Calculate level based on XP

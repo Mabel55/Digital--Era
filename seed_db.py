@@ -10,10 +10,10 @@ def seed_database():
             "title": "1. Python (Core Programming)",
             "description": "The absolute foundation. Master Python syntax, data structures, and advanced OOP.",
             "lessons": [
-                {"title": "Python Syntax & Variables", "content": "Python uses indentation to define code blocks instead of brackets. Variables are created dynamically without declaring their type."},
-                {"title": "Data Structures", "content": "Python's core data structures include Lists (ordered, mutable), Tuples (ordered, immutable), Sets (unordered, unique), and Dictionaries (key-value pairs)."},
-                {"title": "Object-Oriented Programming (OOP)", "content": "OOP in Python involves creating Classes and Objects. It relies on four main pillars: Encapsulation, Abstraction, Inheritance, and Polymorphism."},
-                {"title": "Decorators & Generators", "content": "Decorators allow you to wrap a function to extend its behavior. Generators use the 'yield' keyword to return data one piece at a time, saving memory."}
+                {"title": "Python Syntax & Variables", "content": "Python uses indentation to define code blocks instead of brackets. Variables are created dynamically without declaring their type.", "expected_output": "Hello, World!"},
+                {"title": "Data Structures", "content": "Python's core data structures include Lists (ordered, mutable), Tuples (ordered, immutable), Sets (unordered, unique), and Dictionaries (key-value pairs).", "expected_output": "[1, 2, 3]"},
+                {"title": "Object-Oriented Programming (OOP)", "content": "OOP in Python involves creating Classes and Objects. It relies on four main pillars: Encapsulation, Abstraction, Inheritance, and Polymorphism.", "expected_output": "Woof!"},
+                {"title": "Decorators & Generators", "content": "Decorators allow you to wrap a function to extend its behavior. Generators use the 'yield' keyword to return data one piece at a time, saving memory.", "expected_output": "1\n2\n3"}
             ]
         },
         {
@@ -125,6 +125,7 @@ def seed_database():
                 new_lesson = models.Lesson(
                     title=lesson_data["title"], 
                     content=lesson_data["content"], 
+                    expected_output=lesson_data.get("expected_output", "Print the expected output for this lesson."),
                     course_id=new_course.id
                 )
                 db.add(new_lesson)

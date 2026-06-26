@@ -26,10 +26,17 @@ def chat_with_study_buddy(
         # 2. Extract question text
         question_text = payload.question if hasattr(payload, 'question') else payload.message
         
-        # 3. Run your LangChain engine passing the database history (NO TEXTBOOK CONTEXT)
+        # 3. Fetch lesson context if lesson_id is provided
+        context_chunks = []
+        if getattr(payload, 'lesson_id', None):
+            lesson = db.query(models.Lesson).filter(models.Lesson.id == payload.lesson_id).first()
+            if lesson:
+                context_chunks.append(f"CURRENT LESSON CONTEXT:\nTitle: {lesson.title}\nContent: {lesson.content}\nExpected Output: {lesson.expected_output or 'N/A'}")
+
+        # 4. Run your LangChain engine passing the database history AND lesson context
         answer = ask_gemini(
             question=question_text, 
-            context_chunks=[], 
+            context_chunks=context_chunks, 
             chat_history=past_messages
         )
         

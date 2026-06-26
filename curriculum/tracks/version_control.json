@@ -19,6 +19,33 @@
         "solution": "import re\nVALID_TYPES={'feat','fix','docs','style','refactor','test','chore','perf','ci'}\ndef validate_commit_message(message):\n    errors=[]\n    match=re.match(r'^(\\w+)(\\([\\w-]+\\))?:\\s(.+)$',message)\n    if not match:return['Invalid format. Use: type(scope): description']\n    t=match.group(1);d=match.group(3)\n    if t not in VALID_TYPES:errors.append(f'Invalid type \"{t}\"')\n    if len(d)<10:errors.append('Too short (min 10)')\n    if len(d)>72:errors.append('Too long (max 72)')\n    return errors if errors else['Valid!']\ntests=['feat(auth): add JWT token refresh endpoint','fix(api): handle empty student list','stuff','FIX: something','feat: x','docs: update README with installation guide','refactor(db): extract query logic into repository','feat: '+'a'*80]\nfor msg in tests:\n    result=validate_commit_message(msg)\n    status='OK  ' if result==['Valid!'] else 'FAIL'\n    print(f'[{status}] {msg[:55]}')\n    if status=='FAIL':\n        for err in result:print(f'       {err}')",
         "hint": "re.match(pattern, message). group(1) for type, group(3) for description. len() for length.",
         "rubric": "regex match. VALID_TYPES check. len 10-72. 8 tests."
+      },
+      {
+        "title": "What is Version Control?",
+        "theory": "## Tracking Changes\nVersion control systems (VCS) record changes to a file or set of files over time so you can recall specific versions later.",
+        "instructions": "## Task: Identify VCS\n1. Return True if Git is a distributed VCS.",
+        "starterCode": "is_git_distributed = ___",
+        "solution": "is_git_distributed = True",
+        "hint": "Set to True.",
+        "rubric": "Git architecture concept identified."
+      },
+      {
+        "title": "Initializing a Repository",
+        "theory": "## git init\nTo track a project with Git, you must initialize it. This creates a hidden `.git` folder.",
+        "instructions": "## Task: Run Init\n1. Provide the command to initialize an empty Git repository.",
+        "starterCode": "git ___",
+        "solution": "git init",
+        "hint": "init",
+        "rubric": "git init command specified."
+      },
+      {
+        "title": "The Staging Area",
+        "theory": "## git add\nGit has three states: Modified, Staged, and Committed. You use `git add` to move files to the staging area.",
+        "instructions": "## Task: Stage a File\n1. Provide the command to stage `main.py`.",
+        "starterCode": "git ___ ___",
+        "solution": "git add main.py",
+        "hint": "add main.py",
+        "rubric": "git add command specified."
       }
     ]
   },
@@ -33,6 +60,33 @@
         "solution": "from collections import defaultdict,Counter\ncommits=[{'hash':'a1b2c3d','message':'feat(auth): add login','author':'Ada','date':'2024-01-15'},{'hash':'e4f5g6h','message':'fix(api): handle null','author':'Tunde','date':'2024-01-15'},{'hash':'i7j8k9l','message':'docs: update docs','author':'Ada','date':'2024-01-16'},{'hash':'m1n2o3p','message':'feat(db): add model','author':'Ngozi','date':'2024-01-16'},{'hash':'q4r5s6t','message':'test: auth tests','author':'Ada','date':'2024-01-17'},{'hash':'u7v8w9x','message':'refactor: routes','author':'Tunde','date':'2024-01-17'},{'hash':'y1z2a3b','message':'feat: certificates','author':'Ada','date':'2024-01-18'}]\ndef commits_by_author(commits):\n    groups=defaultdict(list)\n    for c in commits:groups[c['author']].append(c)\n    return dict(groups)\ndef commits_by_type(commits):\n    types=defaultdict(int)\n    for c in commits:\n        t=c['message'].split('(')[0].split(':')[0].strip()\n        types[t]+=1\n    return dict(types)\ndef most_active_day(commits):\n    return Counter(c['date'] for c in commits).most_common(1)[0]\nby_author=commits_by_author(commits)\nby_type=commits_by_type(commits)\nbusiest=most_active_day(commits)\nprint('=== Git History ===')\nprint('\\nBy Author:')\nfor a,cl in by_author.items():print(f'  {a}:{len(cl)} commits')\nprint('\\nBy Type:')\nfor t,n in sorted(by_type.items()):print(f'  {t}:{n}')\nprint(f'\\nBusiest:{busiest[0]}({busiest[1]} commits)')",
         "hint": "defaultdict(list) groups by key. split('(')[0] extracts type. Counter.most_common(1)[0].",
         "rubric": "commits_by_author groups correctly. commits_by_type extracts type. most_active_day uses Counter."
+      },
+      {
+        "title": "Making a Commit",
+        "theory": "## git commit\nA commit permanently stores the staged changes in the Git directory. Always include a descriptive message using `-m`.",
+        "instructions": "## Task: Commit Changes\n1. Provide the command to commit with the message \"Fix typo\".",
+        "starterCode": "git ___ ___ \"___\"",
+        "solution": "git commit -m \"Fix typo\"",
+        "hint": "commit -m \"Fix typo\"",
+        "rubric": "git commit command properly formatted."
+      },
+      {
+        "title": "Viewing History",
+        "theory": "## git log\nTo see the history of commits, use `git log`.",
+        "instructions": "## Task: View Log\n1. Provide the command to view the commit history.",
+        "starterCode": "git ___",
+        "solution": "git log",
+        "hint": "log",
+        "rubric": "git log command specified."
+      },
+      {
+        "title": "Checking Status",
+        "theory": "## git status\n`git status` shows which files are modified and which are staged.",
+        "instructions": "## Task: Check Status\n1. Provide the command to check the current state of the working tree.",
+        "starterCode": "git ___",
+        "solution": "git status",
+        "hint": "status",
+        "rubric": "git status command specified."
       }
     ]
   },
@@ -47,6 +101,33 @@
         "solution": "class GitRepo:\n    def __init__(self):\n        self.branches={'main':[]};self.current='main';self._id=1\n    def commit(self,msg):\n        c={'id':self._id,'msg':msg}\n        self.branches[self.current].append(c);self._id+=1\n        print(f'  [{self.current}] {c[\"id\"]}:{msg}')\n    def create_branch(self,name):\n        if name in self.branches:print(f'{name} exists');return\n        self.branches[name]=self.branches[self.current].copy()\n        print(f'Created:{name}')\n    def switch_branch(self,name):\n        if name not in self.branches:print(f'{name} not found');return\n        self.current=name\n        print(f'Switched:{name}')\n    def merge(self,branch_name):\n        source=self.branches[branch_name]\n        target=self.branches[self.current]\n        new=[c for c in source if c not in target]\n        self.branches[self.current].extend(new)\n        self.branches[self.current].append({'id':self._id,'msg':f'Merge {branch_name}'})\n        self._id+=1\n        print(f'Merged {branch_name}({len(new)} commits)')\n    def list_branches(self):\n        for b in self.branches:\n            mark='* ' if b==self.current else '  '\n            print(f'{mark}{b}({len(self.branches[b])} commits)')\nrepo=GitRepo()\nrepo.commit('Initial setup')\nrepo.create_branch('feature/student-api')\nrepo.switch_branch('feature/student-api')\nrepo.commit('Add GET /students')\nrepo.commit('Add POST /students')\nrepo.switch_branch('main')\nrepo.commit('Hotfix')\nprint('\\nBefore:')\nrepo.list_branches()\nrepo.merge('feature/student-api')\nprint('\\nAfter:')\nrepo.list_branches()",
         "hint": "create_branch copies current commits. switch sets self.current. merge appends new + merge commit.",
         "rubric": "create_branch copies. switch updates current. merge appends new commits. list marks * on current."
+      },
+      {
+        "title": "Creating Branches",
+        "theory": "## git branch\nBranches allow you to diverge from the main line of development to work on features safely.",
+        "instructions": "## Task: Create Branch\n1. Provide the command to create a new branch named `feature-x`.",
+        "starterCode": "git ___ ___",
+        "solution": "git branch feature-x",
+        "hint": "branch feature-x",
+        "rubric": "git branch command specified."
+      },
+      {
+        "title": "Switching Branches",
+        "theory": "## git checkout / switch\nTo start working on a different branch, you switch to it. `git checkout` or `git switch`.",
+        "instructions": "## Task: Switch Branch\n1. Provide the command to switch to `feature-x`.",
+        "starterCode": "git ___ ___",
+        "solution": "git switch feature-x",
+        "hint": "switch feature-x",
+        "rubric": "git switch command specified."
+      },
+      {
+        "title": "Create and Switch",
+        "theory": "## git checkout -b\nYou can create and switch to a branch in one step.",
+        "instructions": "## Task: Create & Switch\n1. Provide the command to create and switch to `bugfix`.",
+        "starterCode": "git checkout ___ ___",
+        "solution": "git checkout -b bugfix",
+        "hint": "checkout -b bugfix",
+        "rubric": "git checkout -b command utilized."
       }
     ]
   },
@@ -61,6 +142,33 @@
         "solution": "def github_setup_guide(username,repo_name,description):\n    steps=[f'# Create repo at github.com/{username}','',f'mkdir {repo_name} && cd {repo_name}','git init','git branch -M main','','git add .',f'git commit -m \\'feat: initial {repo_name}\\'','',f'git remote add origin https://github.com/{username}/{repo_name}.git','git push -u origin main']\n    gitignore='__pycache__/\\n*.pyc\\nvenv/\\n.env\\ndist/'\n    readme=f'# {repo_name}\\n\\n{description}\\n\\n## Install\\n```bash\\ngit clone https://github.com/{username}/{repo_name}.git\\npip install -r requirements.txt\\n```\\n\\n## Author\\n{username}'\n    print('=== Commands ===')\n    for s in steps:print(s)\n    print('\\n=== .gitignore ===')\n    print(gitignore)\n    print('\\n=== README ===')\n    print(readme)\ngithub_setup_guide('ada-okonkwo','mabel-academy-api','FastAPI backend for Mabel Academy')",
         "hint": "f-strings for username/repo_name. List of steps printed with loop.",
         "rubric": "username/repo_name interpolated. All 3 sections printed. gitignore Python files. README has clone."
+      },
+      {
+        "title": "Adding Remotes",
+        "theory": "## git remote add\nTo push code to GitHub, you add a remote URL (usually named 'origin').",
+        "instructions": "## Task: Add Remote\n1. Add a remote named `origin` pointing to `https://github.com/user/repo.git`.",
+        "starterCode": "git ___ ___ ___ https://github.com/user/repo.git",
+        "solution": "git remote add origin https://github.com/user/repo.git",
+        "hint": "remote add origin",
+        "rubric": "git remote add command specified."
+      },
+      {
+        "title": "Pushing Code",
+        "theory": "## git push\nPushing sends your local commits to the remote repository.",
+        "instructions": "## Task: Push Main\n1. Push the `main` branch to the `origin` remote.",
+        "starterCode": "git ___ ___ ___",
+        "solution": "git push origin main",
+        "hint": "push origin main",
+        "rubric": "git push command specified."
+      },
+      {
+        "title": "Cloning Repos",
+        "theory": "## git clone\nCloning downloads a full copy of a remote repository to your local machine.",
+        "instructions": "## Task: Clone Repo\n1. Clone the repo at `https://github.com/user/repo.git`.",
+        "starterCode": "git ___ https://github.com/user/repo.git",
+        "solution": "git clone https://github.com/user/repo.git",
+        "hint": "clone",
+        "rubric": "git clone command specified."
       }
     ]
   },
@@ -75,6 +183,33 @@
         "solution": "def generate_pr_description(branch_name,commits,changed_files):\n    feature=branch_name.replace('feature/','').replace('fix/','').replace('-',' ').title()\n    desc=f'## {feature}\\n\\n### What?\\nThis PR implements:{feature}\\n\\n### Commits\\n'\n    for c in commits:desc+=f'- {c}\\n'\n    desc+='\\n### Files\\n'\n    for f in changed_files:desc+=f'- `{f}`\\n'\n    desc+='\\n### Checklist\\n- [ ] Tests\\n- [ ] Docs\\n- [ ] No debug\\n- [ ] Tested\\n'\n    return desc\npr=generate_pr_description('feature/student-grade-api',['feat(api): add grade endpoint','feat: grade logic','test: grade tests'],['src/routes/students.py','src/services/grade.py','tests/test_grade.py'])\nprint(pr)",
         "hint": "branch_name.replace() strips prefix. .title() capitalises. Loop commits and files. Return desc.",
         "rubric": "Branch name cleaned. feature extracted. commits and files listed. Checklist present."
+      },
+      {
+        "title": "Fetching Updates",
+        "theory": "## git fetch\nFetching downloads updates from the remote, but does not merge them into your working files.",
+        "instructions": "## Task: Fetch Origin\n1. Fetch updates from the `origin` remote.",
+        "starterCode": "git ___ ___",
+        "solution": "git fetch origin",
+        "hint": "fetch origin",
+        "rubric": "git fetch command specified."
+      },
+      {
+        "title": "Pulling Updates",
+        "theory": "## git pull\nPulling is effectively `git fetch` followed immediately by `git merge`. It updates your current branch.",
+        "instructions": "## Task: Pull Code\n1. Pull updates from `origin` into your current branch.",
+        "starterCode": "git ___ ___",
+        "solution": "git pull origin",
+        "hint": "pull origin",
+        "rubric": "git pull command specified."
+      },
+      {
+        "title": "Merge Conflicts",
+        "theory": "## Conflicts\nIf two people edit the same lines, Git pauses the merge and asks you to manually resolve the conflict.",
+        "instructions": "## Task: Resolve Status\n1. After fixing a conflict in a file, what command do you run to mark it resolved before committing?",
+        "starterCode": "git ___ <filename>",
+        "solution": "git add <filename>",
+        "hint": "add",
+        "rubric": "git add used for conflict resolution."
       }
     ]
   },
@@ -89,6 +224,33 @@
         "solution": "def simulate_merge(main_commits,feature_commits):\n    base={c['msg'] for c in main_commits}\n    new=[c for c in feature_commits if c['msg'] not in base]\n    result=main_commits.copy()\n    result.extend(new)\n    result.append({'msg':'Merge feature','branch':'merge'})\n    return result\ndef simulate_rebase(feature_commits,onto_commits):\n    onto={c['msg'] for c in onto_commits}\n    own=[c for c in feature_commits if c['msg'] not in onto]\n    result=onto_commits.copy()\n    result.extend(own)\n    return result\nmain=[{'msg':'Initial setup','branch':'main'},{'msg':'Add models','branch':'main'},{'msg':'Add routes','branch':'main'}]\nfeature=[{'msg':'Initial setup','branch':'main'},{'msg':'Add models','branch':'main'},{'msg':'Add login view','branch':'feature'},{'msg':'Add JWT tokens','branch':'feature'}]\nmain.append({'msg':'Hotfix','branch':'main'})\nmerged=simulate_merge(main,feature)\nrebased=simulate_rebase(feature,main)\nprint('MERGE:',len(merged),'commits')\nfor c in merged:print(f\"  [{c['branch']}] {c['msg']}\")\nprint('\\nREBASE:',len(rebased),'commits')\nfor c in rebased:print(f\"  [{c['branch']}] {c['msg']}\")",
         "hint": "Set of main msgs for deduplication. extend new commits. Rebase appends own on top of onto.",
         "rubric": "merge appends new + merge commit. rebase creates linear history. Both logged."
+      },
+      {
+        "title": "git merge",
+        "theory": "## Merging\nMerging takes the contents of a source branch and integrates them into a target branch, creating a new merge commit.",
+        "instructions": "## Task: Merge Feature\n1. While on `main`, merge the `feature-x` branch into it.",
+        "starterCode": "git ___ ___",
+        "solution": "git merge feature-x",
+        "hint": "merge feature-x",
+        "rubric": "git merge command specified."
+      },
+      {
+        "title": "git rebase",
+        "theory": "## Rebasing\nRebasing rewrites history by moving your branch's starting point to the tip of the target branch, resulting in a linear history.",
+        "instructions": "## Task: Rebase onto Main\n1. While on your feature branch, rebase it onto `main`.",
+        "starterCode": "git ___ ___",
+        "solution": "git rebase main",
+        "hint": "rebase main",
+        "rubric": "git rebase command specified."
+      },
+      {
+        "title": "Force Pushing",
+        "theory": "## git push --force\nBecause rebasing rewrites history, pushing that branch to a remote usually requires a force push. Be careful!",
+        "instructions": "## Task: Force Push\n1. Force push your current branch to origin.",
+        "starterCode": "git push ___ ___",
+        "solution": "git push origin --force",
+        "hint": "origin --force",
+        "rubric": "git push --force command utilized."
       }
     ]
   },
@@ -103,6 +265,33 @@
         "solution": "import ast,re\ndef review_code(code):\n    issues=[];lines=code.split('\\n')\n    risky=['open(','requests.','json.loads','.execute(']\n    for i,line in enumerate(lines,1):\n        for op in risky:\n            if op in line:\n                ctx='\\n'.join(lines[max(0,i-5):i])\n                if 'try:' not in ctx:\n                    issues.append(f'Line {i}:{op} without try/except')\n    try:\n        tree=ast.parse(code)\n        for node in ast.walk(tree):\n            if isinstance(node,ast.FunctionDef):\n                has_doc=node.body and isinstance(node.body[0],ast.Expr) and isinstance(node.body[0].value,ast.Constant)\n                if not has_doc:issues.append(f'Function \"{node.name}\" missing docstring')\n    except SyntaxError as e:\n        issues.append(f'Syntax:{e}')\n    for i,line in enumerate(lines,1):\n        if len(line)>79:issues.append(f'Line {i}:{len(line)} chars')\n    return{'score':max(0,10-len(issues)),'issues':issues}\ntest_code='\\ndef process(path):\\n    data=open(path).read()\\n    return data\\n\\ndef add(a,b):\\n    return a+b\\n'\nresult=review_code(test_code)\nprint(f'Score:{result[\"score\"]}/10')\nfor i in result['issues']:print(f'  -{i}')",
         "hint": "risky ops check context for 'try:'. ast.parse builds tree. len(line)>79 for long lines.",
         "rubric": "risky ops detected. ast.parse for docstrings. long lines flagged. score = 10 - issues."
+      },
+      {
+        "title": "What is a PR?",
+        "theory": "## Pull Requests\nA PR is a request to merge your pushed branch into another branch (usually main), providing a space for code review on platforms like GitHub.",
+        "instructions": "## Task: PR Purpose\n1. True or False: PRs are a native Git feature, not just a GitHub/GitLab feature.",
+        "starterCode": "is_native_git = ___",
+        "solution": "is_native_git = False",
+        "hint": "False. Git only has branches. GitHub adds PRs.",
+        "rubric": "PR concept identified correctly."
+      },
+      {
+        "title": "Code Reviews",
+        "theory": "## Approvals\nBefore merging, peers review the code for bugs or style issues. If changes are needed, you add commits to the PR branch.",
+        "instructions": "## Task: Update PR\n1. If a reviewer asks for a change, do you close the PR and open a new one? (True/False)",
+        "starterCode": "open_new_pr = ___",
+        "solution": "open_new_pr = False",
+        "hint": "False. Just push new commits to the same branch.",
+        "rubric": "PR workflow understood."
+      },
+      {
+        "title": "Squash and Merge",
+        "theory": "## Squashing\nSquash and Merge takes all commits in a PR and squashes them into a single commit on the main branch, keeping history clean.",
+        "instructions": "## Task: Squashing effect\n1. If a PR has 5 commits, how many commits are added to `main` when using Squash and Merge?",
+        "starterCode": "commits_added = ___",
+        "solution": "commits_added = 1",
+        "hint": "1",
+        "rubric": "Squash concept understood."
       }
     ]
   },
@@ -117,6 +306,24 @@
         "solution": "from datetime import datetime\nclass ReleaseManager:\n    def __init__(self,initial='0.0.0'):\n        p=initial.split('.')\n        self.major=int(p[0]);self.minor=int(p[1]);self.patch=int(p[2])\n        self.releases=[]\n    @property\n    def version(self):return f'{self.major}.{self.minor}.{self.patch}'\n    def bump_major(self):\n        self.major+=1;self.minor=0;self.patch=0\n        print(f'v{self.version}(MAJOR)')\n    def bump_minor(self):\n        self.minor+=1;self.patch=0\n        print(f'v{self.version}(MINOR)')\n    def bump_patch(self):\n        self.patch+=1\n        print(f'v{self.version}(PATCH)')\n    def create_release(self,notes):\n        r={'version':self.version,'date':datetime.now().strftime('%Y-%m-%d'),'notes':notes}\n        self.releases.append(r)\n        print(f'Tagged v{self.version}')\n    def get_changelog(self):\n        print('\\n=== CHANGELOG ===')\n        for r in reversed(self.releases):\n            print(f'\\n## v{r[\"version\"]}({r[\"date\"]})')\n            for n in r['notes']:print(f'  -{n}')\nrm=ReleaseManager('0.0.0')\nrm.bump_minor();rm.create_release(['Alpha','CRUD','SQLite'])\nrm.bump_patch();rm.create_release(['Fix login','Better errors'])\nrm.bump_minor();rm.create_release(['Certificates','Payments'])\nrm.bump_major();rm.create_release(['Redesign','Production'])\nrm.get_changelog()\nprint(f'\\nCurrent:v{rm.version}')",
         "hint": "@property for version. bump_major resets minor and patch. releases.append(r).",
         "rubric": "@property version. bump_major resets minor/patch. releases tracked. Changelog reversed."
+      },
+      {
+        "title": "Creating Tags",
+        "theory": "## git tag\nTags are used to mark specific points in history as important. Typically used for release versions (e.g., v1.0.0).",
+        "instructions": "## Task: Tag Version\n1. Create a lightweight tag named `v1.0.0`.",
+        "starterCode": "git ___ ___",
+        "solution": "git tag v1.0.0",
+        "hint": "tag v1.0.0",
+        "rubric": "git tag command specified."
+      },
+      {
+        "title": "Pushing Tags",
+        "theory": "## git push --tags\nBy default, `git push` does not transfer tags to remote servers. You must push them explicitly.",
+        "instructions": "## Task: Push All Tags\n1. Provide the command to push all tags to origin.",
+        "starterCode": "git push ___ ___",
+        "solution": "git push origin --tags",
+        "hint": "origin --tags",
+        "rubric": "git push --tags command specified."
       }
     ]
   },
@@ -131,6 +338,24 @@
         "solution": "class GitRepo:\n    def __init__(self):\n        self.commits=[];self.staged=[];self.stash_stack=[];self._id=1\n    def commit(self,msg,files=None):\n        c={'id':self._id,'msg':msg,'files':files or self.staged.copy()}\n        self.commits.append(c);self.staged=[];self._id+=1\n        print(f'[{c[\"id\"]}] {msg}')\n    def stash(self):\n        if not self.staged:print('Nothing');return\n        self.stash_stack.append(self.staged.copy())\n        print(f'Stashed {len(self.staged)}')\n        self.staged=[]\n    def stash_pop(self):\n        if not self.stash_stack:print('No stash');return\n        restored=self.stash_stack.pop()\n        self.staged.extend(restored)\n        print(f'Restored {len(restored)}')\n    def reset_soft(self):\n        if not self.commits:return\n        last=self.commits.pop()\n        self.staged.extend(last['files'])\n        print(f'Undid [{last[\"id\"]}]:{last[\"msg\"]}')\n    def revert(self):\n        if not self.commits:return\n        last=self.commits[-1]\n        self.commit(f'Revert \"{last[\"msg\"]}\"',files=[f'~{f}' for f in last['files']])\n    def log(self):\n        for c in reversed(self.commits):print(f'  [{c[\"id\"]}] {c[\"msg\"]}')\nrepo=GitRepo()\nrepo.staged=['main.py','models.py'];repo.commit('Add initial files')\nrepo.staged=['bug.py'];repo.commit('Bug commit')\nprint('History:');repo.log()\nrepo.reset_soft()\nprint(f'Staged:{repo.staged}')\nrepo.staged=['fix.py'];repo.commit('Proper fix')\nrepo.revert()\nprint('\\nFinal:');repo.log()",
         "hint": "stash saves and clears staged. stash_pop uses .pop(). reset_soft uses .pop() from commits.",
         "rubric": "stash saves and clears. stash_pop restores. reset_soft removes commit re-stages files. revert adds new commit."
+      },
+      {
+        "title": "Reverting Commits",
+        "theory": "## git revert\n`git revert` creates a *new* commit that undoes the changes of a previous commit. This is safe for public history.",
+        "instructions": "## Task: Revert HEAD\n1. Revert the last commit (HEAD).",
+        "starterCode": "git ___ ___",
+        "solution": "git revert HEAD",
+        "hint": "revert HEAD",
+        "rubric": "git revert command specified."
+      },
+      {
+        "title": "Resetting Commits",
+        "theory": "## git reset\n`git reset` moves the branch pointer backward. `--hard` wipes the changes. Never do this on pushed public commits.",
+        "instructions": "## Task: Hard Reset\n1. Hard reset to the previous commit (HEAD~1).",
+        "starterCode": "git reset ___ ___",
+        "solution": "git reset --hard HEAD~1",
+        "hint": "--hard HEAD~1",
+        "rubric": "git reset --hard command specified."
       }
     ]
   },
@@ -145,6 +370,24 @@
         "solution": "import hashlib,json\nfrom datetime import datetime\nclass GitObjectStore:\n    def __init__(self):\n        self.objects={}\n    def hash_object(self,content):\n        if isinstance(content,str):content=content.encode()\n        return hashlib.sha1(content).hexdigest()\n    def write_blob(self,content):\n        data=f'blob {len(content)}\\0'+content\n        sha=self.hash_object(data)\n        self.objects[sha]={'type':'blob','content':content}\n        return sha\n    def write_tree(self,files):\n        tc=json.dumps(files)\n        sha=self.hash_object(tc)\n        self.objects[sha]={'type':'tree','content':files}\n        return sha\n    def write_commit(self,tree_sha,message,parent=None):\n        c={'tree':tree_sha,'parent':parent,'message':message,'author':'Ada','date':datetime.now().isoformat()}\n        sha=self.hash_object(json.dumps(c))\n        self.objects[sha]={'type':'commit','content':c}\n        return sha\n    def read(self,sha):\n        return self.objects.get(sha,None)\nstore=GitObjectStore()\nb1=store.write_blob('print(\"Hello\")')\nb2=store.write_blob('name=\"Ada\"')\ntree=store.write_tree({'main.py':b1,'config.py':b2})\nc1=store.write_commit(tree,'Initial commit')\nc2=store.write_commit(tree,'Second commit',parent=c1)\nprint(f'Blob:{b1[:8]}')\nprint(f'Tree:{tree[:8]}')\nprint(f'Commit:{c2[:8]}')\ncommit=store.read(c2)\nprint(f'Message:{commit[\"content\"][\"message\"]}')\nprint(f'Parent:{commit[\"content\"][\"parent\"][:8]}')",
         "hint": "hashlib.sha1(content).hexdigest(). Pass c1 as parent to c2. objects.get(sha) for read.",
         "rubric": "SHA-1 hash used. blob/tree/commit stored. read() retrieves. Parent chain verified."
+      },
+      {
+        "title": "The .git Directory",
+        "theory": "## Under the Hood\nGit stores all its objects (commits, trees, blobs) inside the hidden `.git` folder.",
+        "instructions": "## Task: Object Types\n1. Which object type stores file contents: 'blob' or 'tree'?",
+        "starterCode": "file_contents_object = '___'",
+        "solution": "file_contents_object = 'blob'",
+        "hint": "blob",
+        "rubric": "Git blob internal object identified."
+      },
+      {
+        "title": "SHA-1 Hashes",
+        "theory": "## Checksums\nEvery object in Git is checksummed with a 40-character SHA-1 hash. This ensures data integrity.",
+        "instructions": "## Task: Hash Length\n1. Set the integer length of a Git SHA-1 hash.",
+        "starterCode": "hash_length = ___",
+        "solution": "hash_length = 40",
+        "hint": "40",
+        "rubric": "SHA-1 hash length identified."
       }
     ]
   },
@@ -159,6 +402,24 @@
         "solution": "def test_workflow(python_version='3.11',test_cmd='pytest tests/ -v'):\n    return f'name: Tests\\n\\non:\\n  push:\\n    branches: [main,develop]\\n  pull_request:\\n    branches: [main]\\n\\njobs:\\n  test:\\n    runs-on: ubuntu-latest\\n    steps:\\n      - uses: actions/checkout@v4\\n      - uses: actions/setup-python@v4\\n        with:\\n          python-version: \\'{python_version}\\'\\n      - run: pip install -r requirements.txt\\n      - run: {test_cmd}\\n'\ndef deploy_workflow(service='render',branch='main'):\n    return f'name: Deploy to {service.title()}\\n\\non:\\n  push:\\n    branches: [{branch}]\\n\\njobs:\\n  deploy:\\n    runs-on: ubuntu-latest\\n    steps:\\n      - uses: actions/checkout@v4\\n      - run: echo \"Deploying to {service}\"\\n'\ndef lint_workflow():\n    return 'name: Lint\\n\\non: [push]\\n\\njobs:\\n  lint:\\n    runs-on: ubuntu-latest\\n    steps:\\n      - uses: actions/checkout@v4\\n      - run: pip install black flake8\\n      - run: black --check .\\n      - run: flake8 .\\n'\nfor name,content in [('tests.yml',test_workflow()),('deploy.yml',deploy_workflow()),('lint.yml',lint_workflow())]:\n    print(f'==={name}===')\n    print(content)\n    print()",
         "hint": "f-strings for YAML. python_version and test_cmd interpolated. 3 functions.",
         "rubric": "3 workflows. YAML with on/jobs/steps. python_version interpolated. All 3 printed."
+      },
+      {
+        "title": "Workflows",
+        "theory": "## GitHub Actions\nWorkflows are defined in YAML files placed in the `.github/workflows` directory of your repository.",
+        "instructions": "## Task: Workflow Directory\n1. Provide the directory path where GitHub Actions looks for workflows.",
+        "starterCode": "path = \"___\"",
+        "solution": "path = \".github/workflows\"",
+        "hint": ".github/workflows",
+        "rubric": "GitHub actions directory identified."
+      },
+      {
+        "title": "Triggers",
+        "theory": "## on:\nWorkflows run based on triggers, such as pushing code or opening a pull request.",
+        "instructions": "## Task: Push Trigger\n1. In YAML syntax, trigger the workflow `on: push`.",
+        "starterCode": "___: ___",
+        "solution": "on: push",
+        "hint": "on: push",
+        "rubric": "Workflow trigger defined."
       }
     ]
   },
@@ -173,6 +434,24 @@
         "solution": "import json\nSTRUCTURE={'apps':{'api':{'src':{'main.py':None,'routes':{}},'tests':{},'requirements.txt':None,'Dockerfile':None},'web':{'src':{'App.jsx':None,'components':{}},'public':{},'package.json':None}},'packages':{'shared':{'__init__.py':None,'models.py':None,'utils.py':None}},'tools':{'scripts':{'deploy.sh':None,'test_all.py':None}},'README.md':None,'.gitignore':None}\ndef print_tree(tree,prefix=''):\n    if not isinstance(tree,dict):return\n    items=list(tree.items())\n    for i,(name,content) in enumerate(items):\n        is_last=i==len(items)-1\n        conn='|-- '\n        icon='[D] ' if isinstance(content,dict) else '[F] '\n        print(f'{prefix}{conn}{icon}{name}')\n        if isinstance(content,dict):\n            ext='    ' if is_last else '|   '\n            print_tree(content,prefix+ext)\nroot_pkg={'name':'mabel-academy','version':'1.0.0','private':True,'workspaces':['apps/*','packages/*'],'scripts':{'test':'python tools/scripts/test_all.py','deploy':'bash deploy.sh','lint':'black apps/api'}}\nprint('mabel-academy/')\nprint_tree(STRUCTURE)\nprint('\\n=== package.json ===')\nprint(json.dumps(root_pkg,indent=2))",
         "hint": "isinstance(content, dict) checks if folder. Recursive call for nested. prefix extends for depth.",
         "rubric": "Recursive print_tree. Folder vs file icons. package.json with workspaces. Structure printed."
+      },
+      {
+        "title": "What is a Monorepo?",
+        "theory": "## Multiple Projects, One Repo\nA monorepo stores code for multiple projects (like frontend and backend) in a single repository.",
+        "instructions": "## Task: Monorepo truth\n1. True or False: In a monorepo, everything must be deployed together.",
+        "starterCode": "must_deploy_together = ___",
+        "solution": "must_deploy_together = False",
+        "hint": "False. You can deploy services independently.",
+        "rubric": "Monorepo concept understood."
+      },
+      {
+        "title": "Sparse Checkout",
+        "theory": "## git sparse-checkout\nIf a monorepo is huge, you can use sparse-checkout to only download the directories you need to work on.",
+        "instructions": "## Task: Sparse Concept\n1. Does sparse-checkout reduce the disk space used locally? (True/False)",
+        "starterCode": "reduces_disk_space = ___",
+        "solution": "reduces_disk_space = True",
+        "hint": "True.",
+        "rubric": "Sparse checkout benefit understood."
       }
     ]
   },
@@ -187,6 +466,24 @@
         "solution": "def recommend_strategy(team_size,releases_per_month,has_cicd,experience):\n    gf=0;tb=0\n    if team_size>=10:gf+=3\n    else:tb+=3\n    if releases_per_month>=10:tb+=3\n    elif releases_per_month<=2:gf+=3\n    if has_cicd:tb+=2\n    else:gf+=2\n    if experience=='senior':tb+=1\n    else:gf+=1\n    strategy='Git Flow' if gf>tb else 'Trunk-Based'\n    naming={'Git Flow':['feature/','release/','hotfix/','develop','main'],'Trunk-Based':['feature/','fix/','main']}\n    return{'recommended':strategy,'gf_score':gf,'tb_score':tb,'branch_naming':naming[strategy],'protection':['Require PR','CI must pass','1 approval','No direct push']}\nfor scenario in [(3,20,True,'senior'),(15,2,False,'mixed'),(6,8,True,'mixed')]:\n    r=recommend_strategy(*scenario)\n    print(f'Team:{scenario[0]} Releases:{scenario[1]}')\n    print(f'  Recommended:{r[\"recommended\"]}')\n    print(f'  Scores:GF={r[\"gf_score\"]} TB={r[\"tb_score\"]}')\n    print(f'  Branches:{r[\"branch_naming\"]}')\n    print()",
         "hint": "Score each strategy. strategy='Git Flow' if gf>tb. naming[strategy] picks correct list.",
         "rubric": "4 scoring criteria. strategy by comparison. naming from dict. 3 scenarios tested."
+      },
+      {
+        "title": "Git Flow",
+        "theory": "## Branching Models\nGit Flow uses strict branches: `main` (production), `develop` (next release), and ephemeral `feature` branches.",
+        "instructions": "## Task: Develop Branch\n1. In Git Flow, which branch serves as the integration branch for features?",
+        "starterCode": "integration_branch = '___'",
+        "solution": "integration_branch = 'develop'",
+        "hint": "develop",
+        "rubric": "Git Flow develop branch identified."
+      },
+      {
+        "title": "Trunk-Based Development",
+        "theory": "## TBD\nDevelopers merge small, frequent updates directly to `main` (the trunk) rather than maintaining long-lived feature branches.",
+        "instructions": "## Task: TBD Target\n1. In TBD, what is the target branch for daily merges?",
+        "starterCode": "target_branch = '___'",
+        "solution": "target_branch = 'main'",
+        "hint": "main",
+        "rubric": "Trunk-Based Development concept identified."
       }
     ]
   },
@@ -201,6 +498,24 @@
         "solution": "def pre_commit_hook():\n    return '#!/bin/bash\\npython -m pytest tests/ -q\\nif [ $? -ne 0 ]; then echo \"Tests failed\";exit 1;fi\\npython -m black --check . --quiet\\nif [ $? -ne 0 ]; then echo \"Format error\";exit 1;fi\\necho \"OK\"\\n'\ndef commit_msg_hook():\n    return '#!/bin/bash\\nMSG=$(cat \"$1\")\\nif ! echo \"$MSG\" | grep -qE \"^(feat|fix|docs|style|refactor|test|chore)(\\\\([a-z-]+\\\\))?: .{10,72}$\"; then\\n    echo \"Invalid\";exit 1\\nfi\\n'\ndef gitignore(project_type='python'):\n    py='# Python\\n__pycache__/\\n*.pyc\\nvenv/\\n.env\\ndist/'\n    node='# Node\\nnode_modules/\\ndist/\\n.env'\n    if project_type=='python':return py\n    elif project_type=='node':return node\n    return py+'\\n\\n'+node\ndef team_standards(team,lead):\n    return f'# Git Standards — {team}\\n\\n## Commits\\nConventional commits\\n\\n## Branches\\nfeature/, fix/, release/\\n\\n## PRs\\nMax 400 lines, 1 approval, CI must pass\\n\\nLead:{lead}\\n'\nfiles={'.git/hooks/pre-commit':pre_commit_hook(),'.git/hooks/commit-msg':commit_msg_hook(),'.gitignore':gitignore('python'),'GIT_STANDARDS.md':team_standards('Mabel Academy','ada@mabelacademy.com')}\nfor filename,content in files.items():\n    print(f'==={filename}===')\n    print(content[:200])\n    print()",
         "hint": "pre_commit_hook returns shell script. gitignore checks project_type. files.items() for printing.",
         "rubric": "4 files generated. pre-commit hook runs tests and black. commit-msg validates. gitignore correct."
+      },
+      {
+        "title": "Branch Protection",
+        "theory": "## GitHub Rules\nBranch protection rules prevent direct pushes to `main` and require approved pull requests and passing CI checks.",
+        "instructions": "## Task: Direct Pushes\n1. Can you force push to a protected branch? (True/False)",
+        "starterCode": "can_force_push = ___",
+        "solution": "can_force_push = False",
+        "hint": "False.",
+        "rubric": "Branch protection rule understood."
+      },
+      {
+        "title": "CODEOWNERS",
+        "theory": "## Auto-Reviewers\nA `CODEOWNERS` file automatically assigns PR reviewers based on which files were modified.",
+        "instructions": "## Task: Backend Owner\n1. In a CODEOWNERS file, assign `/backend/` to `@alice`.",
+        "starterCode": "/___/ @___",
+        "solution": "/backend/ @alice",
+        "hint": "/backend/ @alice",
+        "rubric": "CODEOWNERS syntax applied."
       }
     ]
   }
