@@ -4,7 +4,7 @@ import { useAuth } from '../AuthContext';
 
 const Assessment = () => {
   const { topic } = useParams();
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const navigate = useNavigate();
   
   const [questions, setQuestions] = useState([]);
@@ -25,7 +25,10 @@ const Assessment = () => {
     try {
       const res = await fetch('/assessments/generate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({
           topic: topic,
           level: user?.level || 'Beginner'
@@ -59,7 +62,10 @@ const Assessment = () => {
     try {
       const res = await fetch('/assessments/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({
           score: finalScore,
           max_score: questions.length,
