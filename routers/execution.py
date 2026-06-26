@@ -57,6 +57,7 @@ def run_docker(image: str, command: list, stdin_input: str, files: dict = None):
     ] + mount_args + [image] + (command if files else command[1:])
     
     try:
+        # 1. Try Docker first
         result = subprocess.run(
             docker_cmd,
             input=stdin_input,
@@ -64,6 +65,25 @@ def run_docker(image: str, command: list, stdin_input: str, files: dict = None):
             text=True,
             timeout=10
         )
+        
+        # 2. If Docker daemon is off, fallback to native execution
+        if result.returncode != 0 and "Cannot connect to the Docker daemon" in result.stderr:
+            native_cmd = command.copy()
+            if not files:
+                native_cmd = [command[0], "-c", stdin_input] if "python" in command[0] else [command[0], "-e", stdin_input]
+                
+            native_result = subprocess.run(
+                native_cmd,
+                cwd=temp_dir if files else None,
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+            return {
+                "output": native_result.stdout if native_result.returncode == 0 else native_result.stderr,
+                "exit_code": native_result.returncode
+            }
+            
         output = result.stdout
         error_output = result.stderr
         exit_code = result.returncode
