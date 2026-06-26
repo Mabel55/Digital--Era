@@ -11,6 +11,12 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('Beginner');
   const [overviewCourse, setOverviewCourse] = useState(null);
   const [certCourse, setCertCourse] = useState(null);
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
   // Find user's track based on goal, default to "Python Core"
   const getTrack = () => {
@@ -98,6 +104,13 @@ const Dashboard = () => {
           <div className="logo-text">Digital <span>Era</span></div>
         </div>
         <div className="nav-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button 
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            style={{ padding: '8px 12px', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', fontSize: '16px' }}
+            title="Toggle Light/Dark Mode"
+          >
+            {theme === 'dark' ? '☀️' : '🌙'}
+          </button>
           <button 
             onClick={() => navigate('/leaderboard')}
             style={{ padding: '8px 16px', background: 'var(--surface2)', color: 'var(--accent3)', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}

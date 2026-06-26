@@ -58,4 +58,11 @@ def enrich_track(file_path):
     print("All lessons enriched and saved!")
 
 if __name__ == "__main__":
-    enrich_track("curriculum/tracks/python_core.json")
+    tracks_dir = "curriculum/tracks"
+    for filename in os.listdir(tracks_dir):
+        if filename.endswith(".json"):
+            filepath = os.path.join(tracks_dir, filename)
+            enrich_track(filepath)
+    
+    # Run the build script after enrichment
+    os.system("python build_courses.py")
