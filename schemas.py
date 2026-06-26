@@ -92,8 +92,10 @@ class UserLogin(BaseModel):
     password: str
 
 class CodeSubmission(BaseModel):
-    code: str
+    code: Optional[str] = None
     language: str = "python"
+    files: Optional[dict[str, str]] = None
+    entrypoint: Optional[str] = "main.py"
 
 class ChatMessage(BaseModel):
     message: str

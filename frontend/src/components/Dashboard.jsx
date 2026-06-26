@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { curriculum, courseManifest } from '../data/courses';
+import { projectsManifest } from '../data/projects';
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
@@ -192,6 +193,23 @@ const Dashboard = () => {
             </div>
           </>
         )}
+
+        <div className="section-title">
+          🛠️ Guided Projects <span>Build real-world applications</span>
+        </div>
+        <div className="track-grid" style={{ marginBottom: '40px' }}>
+          {Object.values(projectsManifest).map(project => (
+            <div key={project.id} className="track-card" onClick={() => navigate(`/project/${project.id}`)} style={{ border: '1px solid var(--accent3)' }}>
+              <div className="track-card-icon">🏗️</div>
+              <div className="track-card-name">{project.title}</div>
+              <div className="track-card-desc">{project.description}</div>
+              <div className="track-card-meta">
+                <span className={`track-tag tag-intermediate`}>{project.difficulty}</span>
+                <span className="track-tag tag-beginner" style={{ marginLeft: '10px' }}>+{project.xp} XP</span>
+              </div>
+            </div>
+          ))}
+        </div>
 
         <div className="section-title">
           📚 Learning Path <span>Select your difficulty level</span>

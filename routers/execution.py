@@ -3,6 +3,9 @@ from schemas import CodeSubmission
 import subprocess
 import sqlite3
 import pandas as pd
+import tempfile
+import shutil
+import os
 
 router = APIRouter(tags=["Code Execution"])
 
@@ -10,13 +13,15 @@ router = APIRouter(tags=["Code Execution"])
 def execute_code(submission: CodeSubmission):
     language = submission.language.lower()
     code = submission.code
+    files = submission.files
+    entrypoint = submission.entrypoint
 
     try:
         if language == "python":
-            return run_docker("python:3.9-slim", ["python", "-"], code)
+            return run_docker("python:3.9-slim", ["python", entrypoint if files else "-"], code, files)
         
         elif language == "javascript" or language == "js":
-            return run_docker("node:18-slim", ["node", "-e", code], "") # Pass code to -e or via stdin. Stdin is safer.
+            return run_docker("node:18-slim", ["node", entrypoint if files else "-"], code, files)
             
         elif language == "sql":
             return run_sqlite(code)
@@ -30,29 +35,41 @@ def execute_code(submission: CodeSubmission):
         return {"output": f"Server Error: {str(e)}", "exit_code": 1}
 
 
-def run_docker(image: str, command: list, stdin_input: str):
-    # Adjust for node stdin
-    if "node" in image:
-        command = ["node", "-"]
-        stdin_input = stdin_input
-        
-    result = subprocess.run(
-        [
-            "docker", "run", "--rm", "-i", 
-            "--net", "none",
-            "--memory", "128m", 
-            "--cpus", "0.5", 
-            image
-        ] + command[1:],
-        input=stdin_input,
-        capture_output=True,
-        text=True,
-        timeout=10
-    )
+def run_docker(image: str, command: list, stdin_input: str, files: dict = None):
+    temp_dir = None
+    mount_args = []
     
-    output = result.stdout
-    error_output = result.stderr
-    exit_code = result.returncode
+    if files:
+        temp_dir = tempfile.mkdtemp()
+        for filename, content in files.items():
+            safe_name = os.path.basename(filename)
+            file_path = os.path.join(temp_dir, safe_name)
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(content)
+        mount_args = ["-v", f"{temp_dir}:/app", "-w", "/app"]
+        stdin_input = ""
+    
+    docker_cmd = [
+        "docker", "run", "--rm", "-i", 
+        "--net", "none",
+        "--memory", "128m", 
+        "--cpus", "0.5"
+    ] + mount_args + [image] + (command if files else command[1:])
+    
+    try:
+        result = subprocess.run(
+            docker_cmd,
+            input=stdin_input,
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+        output = result.stdout
+        error_output = result.stderr
+        exit_code = result.returncode
+    finally:
+        if temp_dir and os.path.exists(temp_dir):
+            shutil.rmtree(temp_dir, ignore_errors=True)
     
     final_output = output if exit_code == 0 else error_output
     
