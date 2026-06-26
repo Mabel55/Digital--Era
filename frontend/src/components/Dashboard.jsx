@@ -121,6 +121,25 @@ const Dashboard = () => {
                   <option key={trackName} value={trackName}>{trackName}</option>
                 ))}
               </select>
+              <button 
+                onClick={() => navigate(`/assessment/${encodeURIComponent(currentTrack)}`)}
+                style={{
+                  padding: '6px 12px',
+                  borderRadius: '6px',
+                  background: 'var(--accent3)',
+                  color: 'black',
+                  border: 'none',
+                  outline: 'none',
+                  fontFamily: 'inherit',
+                  fontSize: '13px',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  marginLeft: '10px',
+                  boxShadow: '0 0 10px rgba(245,158,11,0.4)'
+                }}
+              >
+                🎯 Test Your Skills
+              </button>
             </div>
             <div className="hero-stats">
               <div className="stat-item">

@@ -37,6 +37,7 @@ import routers.teachers
 import routers.courses
 import routers.ai_tutor
 import routers.execution
+import routers.assessments
 
 
 # 2. Initialize the web server
@@ -58,6 +59,7 @@ app.include_router(routers.teachers.router)
 app.include_router(routers.courses.router)
 app.include_router(routers.ai_tutor.router)
 app.include_router(routers.execution.router)
+app.include_router(routers.assessments.router)
 
 # 4. Root / Static File Endpoints
 # Mount the entire React app build directory

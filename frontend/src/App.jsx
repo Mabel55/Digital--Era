@@ -6,6 +6,7 @@ import Dashboard from './components/Dashboard';
 import Workspace from './components/Workspace';
 import DBWorkspace from './components/DBWorkspace';
 import TeacherDashboard from './components/TeacherDashboard';
+import Assessment from './components/Assessment';
 
 const ProtectedRoute = ({ children }) => {
   const { token, loading } = useAuth();
@@ -45,6 +46,11 @@ const App = () => {
           <Route path="/teacher" element={
             <ProtectedRoute>
               <TeacherDashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/assessment/:topic" element={
+            <ProtectedRoute>
+              <Assessment />
             </ProtectedRoute>
           } />
         </Routes>
