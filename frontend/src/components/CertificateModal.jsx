@@ -86,25 +86,69 @@ const CertificateModal = ({ courseName, studentName, onClose }) => {
     botGrad.addColorStop(0, 'transparent'); botGrad.addColorStop(1, 'rgba(0,229,160,0.06)');
     ctx.fillStyle = botGrad; ctx.fillRect(0, H-50, W, 50);
 
-    // XP badge
+    // XP badge (Move to left)
     ctx.fillStyle = 'rgba(0,229,160,0.1)'; ctx.strokeStyle = 'rgba(0,229,160,0.3)'; ctx.lineWidth = 1;
-    roundRect(ctx, W/2 - 60, H - 55, 120, 28, 14);
+    roundRect(ctx, 40, H - 65, 120, 28, 14);
     ctx.fill(); ctx.stroke();
+    ctx.textAlign = 'center';
     ctx.fillStyle = '#00e5a0'; ctx.font = 'bold 12px sans-serif';
-    ctx.fillText(`⚡ +500 XP Awarded`, W/2, H - 36);
+    ctx.fillText(`⚡ +500 XP Awarded`, 100, H - 46);
+
+    // --- GOLDEN SEAL ---
+    const sealX = W / 2;
+    const sealY = H - 65;
+    
+    // Ribbon tails
+    ctx.fillStyle = '#b71c1c';
+    ctx.beginPath();
+    ctx.moveTo(sealX - 15, sealY);
+    ctx.lineTo(sealX - 25, sealY + 40);
+    ctx.lineTo(sealX - 10, sealY + 30);
+    ctx.lineTo(sealX + 10, sealY + 30);
+    ctx.lineTo(sealX + 25, sealY + 40);
+    ctx.lineTo(sealX + 15, sealY);
+    ctx.fill();
+
+    // Gold circle
+    const goldGrad = ctx.createRadialGradient(sealX, sealY, 5, sealX, sealY, 25);
+    goldGrad.addColorStop(0, '#ffe55c');
+    goldGrad.addColorStop(1, '#d4af37');
+    ctx.fillStyle = goldGrad;
+    ctx.beginPath();
+    ctx.arc(sealX, sealY, 25, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#b8860b';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Inner gold details
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([2, 2]);
+    ctx.beginPath();
+    ctx.arc(sealX, sealY, 20, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]); // reset
+
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 10px serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('OFFICIAL', sealX, sealY - 2);
+    ctx.fillText('SEAL', sealX, sealY + 8);
 
     // --- INSTRUCTOR SIGNATURE BLOCK ---
     ctx.textAlign = 'right';
 
     ctx.fillStyle = '#ffffff'; 
-    ctx.font = 'italic 20px serif';
+    // Use a cursive font for a realistic signature
+    ctx.font = 'normal 32px "Brush Script MT", "Cedarville Cursive", cursive';
     ctx.fillText('Arua Mabel Chinasa', W - 50, H - 85);
 
     ctx.strokeStyle = 'rgba(0, 229, 160, 0.5)';
     ctx.lineWidth = 1;
     ctx.beginPath(); 
-    ctx.moveTo(W - 240, H - 75);
-    ctx.lineTo(W - 50, H - 75);
+    ctx.moveTo(W - 260, H - 75);
+    ctx.lineTo(W - 40, H - 75);
     ctx.stroke();
 
     ctx.fillStyle = '#6b7a99'; 
