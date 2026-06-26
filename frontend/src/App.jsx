@@ -7,6 +7,7 @@ import Workspace from './components/Workspace';
 import DBWorkspace from './components/DBWorkspace';
 import TeacherDashboard from './components/TeacherDashboard';
 import Assessment from './components/Assessment';
+import Leaderboard from './components/Leaderboard';
 
 const ProtectedRoute = ({ children }) => {
   const { token, loading } = useAuth();
@@ -51,6 +52,11 @@ const App = () => {
           <Route path="/assessment/:topic" element={
             <ProtectedRoute>
               <Assessment />
+            </ProtectedRoute>
+          } />
+          <Route path="/leaderboard" element={
+            <ProtectedRoute>
+              <Leaderboard />
             </ProtectedRoute>
           } />
         </Routes>

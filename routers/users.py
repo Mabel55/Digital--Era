@@ -68,6 +68,10 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
         print("LOGIN CRASH:", error_details) 
         raise HTTPException(status_code=500, detail=f"LOGIN ERROR: {str(e)}")
 
+@router.get("/leaderboard", response_model=list[schemas.UserResponse])
+def get_leaderboard(db: Session = Depends(get_db)):
+    return db.query(models.User).order_by(models.User.xp.desc()).limit(100).all()
+
 @router.get("/users/", response_model=list[schemas.UserResponse])
 def get_all_users(db: Session = Depends(get_db)):
     return db.query(models.User).all()

@@ -77,6 +77,12 @@ const Dashboard = () => {
           <div className="logo-text">Digital <span>Era</span></div>
         </div>
         <div className="nav-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button 
+            onClick={() => navigate('/leaderboard')}
+            style={{ padding: '8px 16px', background: 'var(--surface2)', color: 'var(--accent3)', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            🏆 Leaderboard
+          </button>
           <div className="streak-badge">🔥 <span>{user?.streak || 0}</span> day streak</div>
           {((user?.role || '').toLowerCase() === 'admin' || (user?.role || '').toLowerCase() === 'teacher' || user?.email === 'nasaadanna@gmail.com') && (
             <button 
