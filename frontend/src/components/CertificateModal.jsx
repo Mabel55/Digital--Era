@@ -134,7 +134,7 @@ const CertificateModal = ({ courseName, studentName, onClose }) => {
 
   const shareToLinkedIn = () => {
     // In production, this should point to a specific certificate verification page
-    const url = encodeURIComponent('https://digital-era.vercel.app'); 
+    const url = encodeURIComponent('https://digital-era.live'); 
     window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
   };
 
