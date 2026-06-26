@@ -21,6 +21,7 @@ const DBWorkspace = () => {
   const [chatInput, setChatInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [showStory, setShowStory] = useState(true);
   
   const chatEndRef = useRef(null);
 
@@ -68,6 +69,7 @@ const DBWorkspace = () => {
     setCode('# Write your code here\n');
     setTerminalOutput('');
     setActiveTab('theory');
+    setShowStory(true);
   };
 
   const handleRunCode = async () => {
@@ -80,7 +82,6 @@ const DBWorkspace = () => {
     if (!lesson) return;
     
     try {
-      // Feature 2: Call auto-grading endpoint
       const res = await fetch(`/lessons/${lesson.id}/submit`, {
         method: "POST",
         headers: { 
@@ -102,7 +103,6 @@ const DBWorkspace = () => {
         setHasError(codeHasError);
         
         if (!codeHasError) {
-          // Feature 3: Grant XP and Progress via DB lesson_id
           if (token) {
             try {
               const progressRes = await fetch('/users/me/progress', {
@@ -154,7 +154,6 @@ const DBWorkspace = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}` 
         },
-        // Feature 1: Context-Aware AI Chat sends lesson_id
         body: JSON.stringify({ message: userMsg, course: course?.title || "", lesson_id: currentLesson?.id })
       });
       const data = await res.json();
@@ -186,9 +185,11 @@ const DBWorkspace = () => {
           </div>
         </div>
         <div className="ws-topbar-right">
-          <button className="btn-run" onClick={handleRunCode} disabled={isRunning}>
-            ▶ {isRunning ? 'Evaluating...' : 'AI Auto-Grade'}
-          </button>
+          {!showStory && (
+            <button className="btn-run" onClick={handleRunCode} disabled={isRunning}>
+              ▶ {isRunning ? 'Evaluating...' : 'AI Auto-Grade'}
+            </button>
+          )}
           <button className="btn-submit" onClick={() => {
             if (currentLessonIdx < lessons.length - 1) {
               loadLesson(currentLessonIdx + 1);
@@ -205,89 +206,105 @@ const DBWorkspace = () => {
         <div className="progress-strip-fill" style={{ width: `${progressPct}%` }}></div>
       </div>
 
-      <div className="ws-layout">
-        {/* Left Panel - Exercise */}
-        <div className="ws-exercise">
-          <div className="exercise-tabs">
-            <div className={`ex-tab ${activeTab === 'theory' ? 'active' : ''}`} onClick={() => setActiveTab('theory')}>Lesson Content</div>
-          </div>
-          <div className="ex-tab-content">
-            <div className="exercise-title">{lesson.title}</div>
-            <div className="exercise-body" dangerouslySetInnerHTML={{ __html: marked(lesson.content || "No content") }}></div>
-          </div>
-        </div>
-
-        {/* Middle Panel - Editor & Terminal */}
-        <div className="ws-editor-panel">
-            <div className="editor-toolbar">
-            <div className="file-tab"><div className="dot"></div> solution.py</div>
-          </div>
-          <div style={{ flex: 1, minHeight: 0 }}>
-            <Editor
-              height="100%"
-              defaultLanguage="python"
-              theme="vs-dark"
-              value={code}
-              onChange={(value) => setCode(value)}
-              options={{ minimap: { enabled: false }, fontSize: 14 }}
-            />
-          </div>
-          <div className="terminal-panel">
-            <div className="terminal-header" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div className="terminal-dot dot-red"></div>
-                <div className="terminal-dot dot-yellow"></div>
-                <div className="terminal-dot dot-green"></div>
-                <span style={{ marginLeft: '8px' }}>AI Feedback Terminal</span>
-              </div>
-            </div>
-            <div id="terminal-output" className={terminalClass}>
-              {terminalOutput}
-            </div>
+      {showStory ? (
+        <div className="story-mode-container" style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', background: 'var(--bg)', padding: '40px', overflowY: 'auto' }}>
+          <div className="story-card" style={{ maxWidth: '800px', width: '100%', background: 'var(--surface)', padding: '60px', borderRadius: '16px', border: '1px solid var(--border)', boxShadow: '0 20px 60px rgba(0,0,0,0.5)', animation: 'slideUp 0.5s ease' }}>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '32px', color: 'var(--accent)', marginBottom: '24px' }}>{lesson.title}</h1>
+            <div className="exercise-body story-body" dangerouslySetInnerHTML={{ __html: marked(lesson.content || "No content") }} style={{ fontSize: '16px', lineHeight: '1.8', color: 'var(--text)', marginBottom: '40px' }}></div>
+            <button 
+              onClick={() => setShowStory(false)}
+              className="btn-submit"
+              style={{ width: '100%', padding: '16px', fontSize: '18px', display: 'flex', justifyContent: 'center', gap: '10px' }}
+            >
+              💻 I'm Ready to Practice
+            </button>
           </div>
         </div>
-
-        {/* Right Panel - AI Chat */}
-        <div className="ws-chat">
-          <div className="chat-header-bar">
-            <div className="ai-avatar">🤖</div>
-            <div className="ai-info">
-              <div className="ai-name">Mabel Tutor</div>
-              <div className="ai-status"><div className="status-dot"></div> Online (Context-Aware)</div>
+      ) : (
+        <div className="ws-layout">
+          {/* Left Panel - Exercise */}
+          <div className="ws-exercise">
+            <div className="exercise-tabs">
+              <div className={`ex-tab ${activeTab === 'theory' ? 'active' : ''}`} onClick={() => setActiveTab('theory')}>Lesson Content</div>
+            </div>
+            <div className="ex-tab-content">
+              <div className="exercise-title">{lesson.title}</div>
+              <div className="exercise-body" dangerouslySetInnerHTML={{ __html: marked(lesson.content || "No content") }}></div>
             </div>
           </div>
-          <div className="chat-messages">
-            {messages.map((msg, i) => (
-              <div key={i} className={`chat-msg ${msg.sender}`}>
-                <div className="msg-bubble" dangerouslySetInnerHTML={{ __html: marked(msg.text) }}></div>
-              </div>
-            ))}
-            {isTyping && (
-              <div className="chat-msg ai">
-                <div className="msg-bubble typing-indicator">
-                  <span></span><span></span><span></span>
+
+          {/* Middle Panel - Editor & Terminal */}
+          <div className="ws-editor-panel">
+              <div className="editor-toolbar">
+              <div className="file-tab"><div className="dot"></div> solution.py</div>
+            </div>
+            <div style={{ flex: 1, minHeight: 0 }}>
+              <Editor
+                height="100%"
+                defaultLanguage="python"
+                theme="vs-dark"
+                value={code}
+                onChange={(value) => setCode(value)}
+                options={{ minimap: { enabled: false }, fontSize: 14 }}
+              />
+            </div>
+            <div className="terminal-panel">
+              <div className="terminal-header" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div className="terminal-dot dot-red"></div>
+                  <div className="terminal-dot dot-yellow"></div>
+                  <div className="terminal-dot dot-green"></div>
+                  <span style={{ marginLeft: '8px' }}>AI Feedback Terminal</span>
                 </div>
               </div>
-            )}
-            <div ref={chatEndRef}></div>
+              <div id="terminal-output" className={terminalClass}>
+                {terminalOutput}
+              </div>
+            </div>
           </div>
-          <form className="chat-input-row" onSubmit={sendChat}>
-            <textarea 
-              className="chat-textarea" 
-              placeholder="Ask for help..." 
-              value={chatInput}
-              onChange={e => setChatInput(e.target.value)}
-              onKeyDown={e => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  e.preventDefault();
-                  sendChat();
-                }
-              }}
-            />
-            <button type="submit" className="chat-send-btn">↑</button>
-          </form>
+
+          {/* Right Panel - AI Chat */}
+          <div className="ws-chat">
+            <div className="chat-header-bar">
+              <div className="ai-avatar">🤖</div>
+              <div className="ai-info">
+                <div className="ai-name">Mabel Tutor</div>
+                <div className="ai-status"><div className="status-dot"></div> Online (Context-Aware)</div>
+              </div>
+            </div>
+            <div className="chat-messages">
+              {messages.map((msg, i) => (
+                <div key={i} className={`chat-msg ${msg.sender}`}>
+                  <div className="msg-bubble" dangerouslySetInnerHTML={{ __html: marked(msg.text) }}></div>
+                </div>
+              ))}
+              {isTyping && (
+                <div className="chat-msg ai">
+                  <div className="msg-bubble typing-indicator">
+                    <span></span><span></span><span></span>
+                  </div>
+                </div>
+              )}
+              <div ref={chatEndRef}></div>
+            </div>
+            <form className="chat-input-row" onSubmit={sendChat}>
+              <textarea 
+                className="chat-textarea" 
+                placeholder="Ask for help..." 
+                value={chatInput}
+                onChange={e => setChatInput(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendChat();
+                  }
+                }}
+              />
+              <button type="submit" className="chat-send-btn">↑</button>
+            </form>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

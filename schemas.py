@@ -93,6 +93,7 @@ class UserLogin(BaseModel):
 
 class CodeSubmission(BaseModel):
     code: str
+    language: str = "python"
 
 class ChatMessage(BaseModel):
     message: str
