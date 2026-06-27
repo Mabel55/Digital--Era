@@ -3,13 +3,13 @@
     "aiRubric": "Check logic, syntax, and output for Agent Foundations.",
     "lessons": [
       {
-        "title": "Agent Foundations - Coming Soon",
-        "theory": "## Agent Foundations\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Agent Foundations** is under development.",
-        "starterCode": "# Agent Foundations - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Agent Foundations\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "What is an AI Agent?",
+        "theory": "## Agents vs LLMs\nAn LLM just predicts text. An **Agent** is an LLM given a goal, a working memory, and tools to interact with the world.\n\n```python\n# LLM: Just answers a question\nanswer = llm(\"What is the weather?\")\n# Output: \"I cannot access real-time weather data.\"\n\n# Agent: Uses a tool to find the answer\nagent = Agent(tools=[weather_api])\nanswer = agent.run(\"What is the weather?\")\n# Output: \"It's 72F and sunny in your location.\"\n```",
+        "instructions": "## Task: Define an Agent\n1. Create an `Agent` class with `memory` and `tools` lists\n2. Implement an `add_tool(name)` method\n3. Print the agent's state",
+        "starterCode": "class Agent:\n    def __init__(self, name):\n        self.name = name\n        self.___ = []\n        self.___ = []\n        \n    def add_tool(self, tool_name):\n        self.tools.___(tool_name)\n        print(f\"[{self.name}] Tool added: {tool_name}\")\n        \nagent = Agent(\"DataBot\")\nagent.__(\"calculator\")\nagent.__(\"web_search\")\nprint(f\"Agent {agent.name} has {len(agent.tools)} tools.\")",
+        "solution": "class Agent:\n    def __init__(self, name):\n        self.name = name\n        self.memory = []\n        self.tools = []\n        \n    def add_tool(self, tool_name):\n        self.tools.append(tool_name)\n        print(f\"[{self.name}] Tool added: {tool_name}\")\n        \nagent = Agent(\"DataBot\")\nagent.add_tool(\"calculator\")\nagent.add_tool(\"web_search\")\nprint(f\"Agent {agent.name} has {len(agent.tools)} tools.\")",
+        "hint": "memory and tools are lists. .append() adds to lists.",
+        "rubric": "Agent created, tools added, and printed correctly."
       }
     ]
   },
@@ -17,13 +17,13 @@
     "aiRubric": "Check logic, syntax, and output for Tool Calling.",
     "lessons": [
       {
-        "title": "Tool Calling - Coming Soon",
-        "theory": "## Tool Calling\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Tool Calling** is under development.",
-        "starterCode": "# Tool Calling - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Tool Calling\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Function Calling",
+        "theory": "## Giving LLMs Tools\nWe describe tools to the LLM using a JSON schema, so it knows what it can call and what arguments to provide.\n\n```json\n{\n  \"name\": \"get_weather\",\n  \"description\": \"Get current weather\",\n  \"parameters\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"location\": {\"type\": \"string\"}\n    }\n  }\n}\n```",
+        "instructions": "## Task: Define a Tool Schema\n1. Create a dictionary representing a tool schema for a `calculator` tool\n2. It should have `name`, `description`, and `parameters`\n3. Parameters should include `operation` (add, subtract) and `numbers` (list of floats)",
+        "starterCode": "import json\n\ntool_schema = {\n    \"name\": \"calculator\",\n    \"description\": \"Perform basic math operations\",\n    \"parameters\": {\n        \"type\": \"___\",\n        \"properties\": {\n            \"operation\": {\n                \"type\": \"___\",\n                \"description\": \"The math operation (add, subtract, multiply, divide)\"\n            },\n            \"numbers\": {\n                \"type\": \"___\",\n                \"items\": {\"type\": \"number\"}\n            }\n        },\n        \"required\": [\"operation\", \"numbers\"]\n    }\n}\n\nprint(json.dumps(tool_schema, indent=2))",
+        "solution": "import json\n\ntool_schema = {\n    \"name\": \"calculator\",\n    \"description\": \"Perform basic math operations\",\n    \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n            \"operation\": {\n                \"type\": \"string\",\n                \"description\": \"The math operation (add, subtract, multiply, divide)\"\n            },\n            \"numbers\": {\n                \"type\": \"array\",\n                \"items\": {\"type\": \"number\"}\n            }\n        },\n        \"required\": [\"operation\", \"numbers\"]\n    }\n}\n\nprint(json.dumps(tool_schema, indent=2))",
+        "hint": "parameters is an 'object'. operation is a 'string'. numbers is an 'array'.",
+        "rubric": "Valid JSON schema printed with object, string, and array types."
       }
     ]
   },

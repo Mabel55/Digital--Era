@@ -53,13 +53,13 @@
     "aiRubric": "Check logic, syntax, and output for Prompt Engineering.",
     "lessons": [
       {
-        "title": "Prompt Engineering - Coming Soon",
-        "theory": "## Prompt Engineering\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Prompt Engineering** is under development.",
-        "starterCode": "# Prompt Engineering - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Prompt Engineering\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Few-Shot Prompting",
+        "theory": "## Teaching by Example\nSometimes the best way to get an LLM to follow a specific format is to show it examples (few-shot prompting).\n\n```\nZero-shot: Translate this to French: Hello\n\nFew-shot: \nEnglish: Apple -> French: Pomme\nEnglish: Dog -> French: Chien\nEnglish: Hello -> French: \n```",
+        "instructions": "## Task: Few-Shot Sentiment Prompt\n1. Create a prompt template that classifies text as Positive or Negative\n2. Provide 2 examples in the prompt\n3. Fill it with a new text",
+        "starterCode": "def build_few_shot_prompt(text):\n    prompt = \"\"\"\nClassify the sentiment of the text.\n\nText: \"I love this product!\"\nSentiment: ___\n\nText: \"Terrible service, very disappointed.\"\nSentiment: ___\n\nText: \"{}\"\nSentiment: \"\"\"\n    return prompt.format(text)\n\nprompt = build_few_shot_prompt(\"The battery life is amazing.\")\nprint(prompt)",
+        "solution": "def build_few_shot_prompt(text):\n    prompt = \"\"\"\nClassify the sentiment of the text.\n\nText: \"I love this product!\"\nSentiment: Positive\n\nText: \"Terrible service, very disappointed.\"\nSentiment: Negative\n\nText: \"{}\"\nSentiment: \"\"\"\n    return prompt.format(text)\n\nprompt = build_few_shot_prompt(\"The battery life is amazing.\")\nprint(prompt)",
+        "hint": "Provide Positive and Negative as the example answers.",
+        "rubric": "Prompt correctly incorporates examples and formats the new text."
       }
     ]
   },
