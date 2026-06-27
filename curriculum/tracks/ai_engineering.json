@@ -19,6 +19,15 @@
         "solution": "def select_temperature(task):\\n    task = task.lower()\\n    if 'extract JSON' in task or 'code' in task:\\n        return 0.1\\n    elif 'write a poem' in task or 'brainstorm' in task:\\n        return 0.9\\n    return 0.5\\n\\nprint(\"Task: Extract JSON -> Temp:\", select_temperature('extract JSON data'))\\nprint(\"Task: Write a poem -> Temp:\", select_temperature('write a poem about the sea'))",
         "hint": "Return 0.1 for data/code tasks. Return 0.9 for creative tasks.",
         "rubric": "Correctly returns 0.1 and 0.9."
+      },
+      {
+        "title": "Context Windows",
+        "theory": "## The Goldfish Memory\\nAn LLM's 'Context Window' is the maximum amount of text it can process at one time. If an LLM has a 4k token context window, it can only 'remember' about 3,000 words.\\n\\nIf you paste a 10,000-word essay into a 4k context window, the model will simply 'forget' the beginning of the essay. Modern models like Gemini 1.5 Pro boast massive context windows (1 million+ tokens).",
+        "instructions": "## Task: Context Truncator\\n1. Simulate a basic context window limit.\\n2. Create a function that slices a list of words to fit within the `max_tokens` limit, keeping the most recent (end of the list) words.",
+        "starterCode": "def apply_context_window(conversation_words, max_tokens):\\n    if len(conversation_words) > max_tokens:\\n        # Keep only the most recent (last) max_tokens words\\n        return conversation_words[___:]\\n    return conversation_words\\n\\nchat_log = [\"Hello\", \"how\", \"are\", \"you\", \"doing\", \"today\", \"robot\"]\\n\\n# The robot only has a context window of 3 words!\\nlimited_log = apply_context_window(chat_log, 3)\\n\\nprint(\"Full Chat:\", chat_log)\\nprint(\"What the Robot Remembers:\", limited_log)",
+        "solution": "def apply_context_window(conversation_words, max_tokens):\\n    if len(conversation_words) > max_tokens:\\n        # Keep only the most recent (last) max_tokens words\\n        return conversation_words[-max_tokens:]\\n    return conversation_words\\n\\nchat_log = [\"Hello\", \"how\", \"are\", \"you\", \"doing\", \"today\", \"robot\"]\\n\\n# The robot only has a context window of 3 words!\\nlimited_log = apply_context_window(chat_log, 3)\\n\\nprint(\"Full Chat:\", chat_log)\\nprint(\"What the Robot Remembers:\", limited_log)",
+        "hint": "Use negative slicing: [-max_tokens:]",
+        "rubric": "Correctly truncates the list to the last 3 words: ['doing', 'today', 'robot']"
       }
     ]
   },
@@ -42,6 +51,15 @@
         "solution": "def build_api_messages(user_message):\\n    system_prompt = {\"role\": \"system\", \"content\": \"You are a sarcastic robot. Be rude.\"}\\n    \\n    messages = []\\n    messages.append(system_prompt)\\n    messages.append({\"role\": \"user\", \"content\": user_message})\\n    \\n    return messages\\n\\nfor msg in build_api_messages(\"What time is it?\"):\\n    print(f\"[{msg['role'].upper()}]: {msg['content']}\")",
         "hint": "Append the system_prompt dictionary. The second role should be 'user'.",
         "rubric": "Messages list correctly contains the system prompt followed by the user message."
+      },
+      {
+        "title": "Chain of Thought",
+        "theory": "## Let's Think Step-by-Step\\nIf you ask an LLM a complex math puzzle, it might answer incorrectly because it tries to generate the final answer immediately.\\n\\n**Chain of Thought (CoT)** prompting is the technique of asking the model to show its work. Just by adding the phrase 'Let's think step by step' to your prompt, accuracy on reasoning tasks skyrockets.",
+        "instructions": "## Task: CoT Appender\\n1. Build an API wrapper that automatically appends the CoT magic phrase to math questions.",
+        "starterCode": "def enhance_prompt(user_query):\\n    magic_phrase = \"\\nLet's think step by step.\"\\n    \\n    # If the user asks a math/logic question, append the CoT phrase\\n    if 'calculate' in user_query or 'solve' in user_query:\\n        return user_query + ___\\n        \\n    return user_query\\n\\nprint(\"Query 1:\", enhance_prompt(\"What is the capital of France?\"))\\nprint(\"Query 2:\", enhance_prompt(\"Solve this puzzle: If I have 3 apples...\"))",
+        "solution": "def enhance_prompt(user_query):\\n    magic_phrase = \"\\nLet's think step by step.\"\\n    \\n    # If the user asks a math/logic question, append the CoT phrase\\n    if 'calculate' in user_query or 'solve' in user_query:\\n        return user_query + magic_phrase\\n        \\n    return user_query\\n\\nprint(\"Query 1:\", enhance_prompt(\"What is the capital of France?\"))\\nprint(\"Query 2:\", enhance_prompt(\"Solve this puzzle: If I have 3 apples...\"))",
+        "hint": "Append magic_phrase to the user_query.",
+        "rubric": "Appends the magic phrase to the second query but not the first."
       }
     ]
   },
@@ -65,6 +83,15 @@
         "solution": "import time\\n\\nmock_stream = [\"Hello\", \", \", \"how \", \"are \", \"you \", \"today?\"]\\n\\ndef process_stream(stream):\\n    for chunk in stream:\\n        # end='' prevents a newline after every print\\n        # flush=True forces the terminal to output immediately\\n        print(chunk, end='', flush=True)\\n        time.sleep(0.2) # Simulate network delay\\n    print() # Final newline\\n\\nprint(\"Starting stream...\")\\nprocess_stream(mock_stream)",
         "hint": "Print the 'chunk' variable.",
         "rubric": "Prints the full sentence smoothly."
+      },
+      {
+        "title": "Handling API Errors",
+        "theory": "## Rate Limits and Retries\\nWhen building production AI apps, the API will fail. You will encounter:\\n- **429 Too Many Requests**: You hit your rate limit.\\n- **500 Server Error**: The provider's servers are overloaded.\\n\\nYou must implement Exponential Backoff (retrying the request, waiting longer each time) to handle these gracefully.",
+        "instructions": "## Task: Exponential Backoff Simulator\\n1. Simulate a retry mechanism.\\n2. If the API fails, wait for `base_delay * (2 ^ attempt_number)` seconds before trying again.",
+        "starterCode": "import time\\n\\ndef mock_api_call(attempt):\\n    if attempt < 3: return \"Error 429\"\\n    return \"Success: 200 OK\"\\n\\ndef robust_api_request():\\n    base_delay = 1\\n    \\n    for attempt in range(5):\\n        result = mock_api_call(attempt)\\n        if \"Success\" in result:\\n            return result\\n            \\n        # Calculate exponential backoff delay\\n        wait_time = base_delay * (2 ** ___)\\n        print(f\"API Failed. Retrying in {wait_time}s...\")\\n        time.sleep(0.1) # Accelerated for this simulator\\n        \\n    return \"Failed completely\"\\n\\nprint(robust_api_request())",
+        "solution": "import time\\n\\ndef mock_api_call(attempt):\\n    if attempt < 3: return \"Error 429\"\\n    return \"Success: 200 OK\"\\n\\ndef robust_api_request():\\n    base_delay = 1\\n    \\n    for attempt in range(5):\\n        result = mock_api_call(attempt)\\n        if \"Success\" in result:\\n            return result\\n            \\n        # Calculate exponential backoff delay\\n        wait_time = base_delay * (2 ** attempt)\\n        print(f\"API Failed. Retrying in {wait_time}s...\")\\n        time.sleep(0.1) # Accelerated for this simulator\\n        \\n    return \"Failed completely\"\\n\\nprint(robust_api_request())",
+        "hint": "Use the 'attempt' variable as the exponent.",
+        "rubric": "Code correctly retries 3 times with exponentially increasing wait times (1s, 2s, 4s) before succeeding."
       }
     ]
   },
@@ -79,6 +106,15 @@
         "solution": "def build_rag_prompt(user_query, retrieved_doc):\\n    template = \"\"\"You are a helpful assistant.\\n\\nUse the following context to answer the user's question. If the answer is not in the context, say \"I don't know\".\\n\\nContext:\\n{}\\n\\nQuestion: {}\\n\\nAnswer:\"\"\"\\n    \\n    return template.format(retrieved_doc, user_query)\\n\\ndoc = \"The secret WiFi password is 'guest123'.\"\\nquery = \"What is the WiFi password?\"\\n\\nprint(build_rag_prompt(query, doc))",
         "hint": "Pass retrieved_doc first, then user_query.",
         "rubric": "Correctly formats the prompt with the doc as context and query as the question."
+      },
+      {
+        "title": "Chunking Strategies",
+        "theory": "## Splitting Documents\\nYou can't put a 500-page PDF into a Vector Database as a single vector. You must 'chunk' it into smaller pieces (e.g., 500 words per chunk).\\n\\nIf chunks are too small, you lose context. If they are too large, the vector becomes diluted. Overlapping chunks (e.g., Chunk 1 is words 0-500, Chunk 2 is words 400-900) prevents cutting sentences in half.",
+        "instructions": "## Task: Overlapping Chunker\\n1. Implement a function that splits a list of words into chunks of size 3, with an overlap of 1.",
+        "starterCode": "def chunk_text(words, chunk_size=3, overlap=1):\\n    chunks = []\\n    step = chunk_size - overlap\\n    \\n    # Iterate with the calculated step\\n    for i in range(0, len(words), step):\\n        chunk = words[i : i + ___]\\n        chunks.append(chunk)\\n        # Stop if the chunk reached the end of the text\\n        if i + chunk_size >= len(words):\\n            break\\n            \\n    return chunks\\n\\ntext = [\"A\", \"B\", \"C\", \"D\", \"E\", \"F\"]\\nprint(\"Original:\", text)\\nprint(\"Chunks:\", chunk_text(text))",
+        "solution": "def chunk_text(words, chunk_size=3, overlap=1):\\n    chunks = []\\n    step = chunk_size - overlap\\n    \\n    # Iterate with the calculated step\\n    for i in range(0, len(words), step):\\n        chunk = words[i : i + chunk_size]\\n        chunks.append(chunk)\\n        # Stop if the chunk reached the end of the text\\n        if i + chunk_size >= len(words):\\n            break\\n            \\n    return chunks\\n\\ntext = [\"A\", \"B\", \"C\", \"D\", \"E\", \"F\"]\\nprint(\"Original:\", text)\\nprint(\"Chunks:\", chunk_text(text))",
+        "hint": "Use chunk_size for the end of the slice.",
+        "rubric": "Successfully creates overlapping chunks: ['A', 'B', 'C'], ['C', 'D', 'E'], ['E', 'F']"
       }
     ]
   },
@@ -116,6 +152,15 @@
         "solution": "class MockLLM:\\n    def invoke(self, prompt):\\n        return f\"[LLM Output for: {prompt}]\"\\n\\ndef simple_chain(topic):\\n    template = f\"Write a 1 sentence summary about {topic}.\"\\n    \\n    llm = MockLLM()\\n    \\n    # Pass the formatted template into the LLM invoke method\\n    result = llm.invoke(template)\\n    return result\\n\\nprint(simple_chain(\"Artificial Intelligence\"))",
         "hint": "llm.invoke(template)",
         "rubric": "Successfully calls the invoke method with the template."
+      },
+      {
+        "title": "Memory in LangChain",
+        "theory": "## Remembering the Past\\nBy default, an LLM call is stateless; it doesn't remember the previous message.\\n\\nLangChain provides `ConversationBufferMemory` which automatically stores the chat history and injects it into the prompt for the next API call.",
+        "instructions": "## Task: Chat History Buffer\\n1. Simulate a Conversation Buffer that stores human and AI messages.\\n2. Format the buffer into a single string.",
+        "starterCode": "class ConversationBuffer:\\n    def __init__(self):\\n        self.history = []\\n        \\n    def add_message(self, role, text):\\n        self.history.append({\"role\": role, \"text\": text})\\n        \\n    def get_formatted_history(self):\\n        formatted = \"\"\\n        for msg in self.history:\\n            # Append the role and text, followed by a newline\\n            formatted += f\"{msg['___']}: {msg['___']}\\n\"\\n        return formatted\\n\\nbuffer = ConversationBuffer()\\nbuffer.add_message(\"Human\", \"Hi, my name is Bob.\")\\nbuffer.add_message(\"AI\", \"Hello Bob!\")\\nbuffer.add_message(\"Human\", \"What is my name?\")\\n\\nprint(\"--- Formatted Context to Inject into Prompt ---\")\\nprint(buffer.get_formatted_history())",
+        "solution": "class ConversationBuffer:\\n    def __init__(self):\\n        self.history = []\\n        \\n    def add_message(self, role, text):\\n        self.history.append({\"role\": role, \"text\": text})\\n        \\n    def get_formatted_history(self):\\n        formatted = \"\"\\n        for msg in self.history:\\n            # Append the role and text, followed by a newline\\n            formatted += f\"{msg['role']}: {msg['text']}\\n\"\\n        return formatted\\n\\nbuffer = ConversationBuffer()\\nbuffer.add_message(\"Human\", \"Hi, my name is Bob.\")\\nbuffer.add_message(\"AI\", \"Hello Bob!\")\\nbuffer.add_message(\"Human\", \"What is my name?\")\\n\\nprint(\"--- Formatted Context to Inject into Prompt ---\")\\nprint(buffer.get_formatted_history())",
+        "hint": "Use the keys 'role' and 'text'.",
+        "rubric": "Successfully formats the history into a string."
       }
     ]
   },
@@ -144,6 +189,15 @@
         "solution": "def get_weather(location):\\n    return f\"It is sunny in {location}!\"\\n    \\ndef calculate_math(expression):\\n    return f\"{expression} = 42\"\\n\\ndef execute_tool(llm_tool_call):\\n    tool_name = llm_tool_call['name']\\n    args = llm_tool_call['arguments']\\n    \\n    if tool_name == 'get_weather':\\n        return get_weather(args['location'])\\n    elif tool_name == 'calculate_math':\\n        return calculate_math(args['expression'])\\n    return \"Tool not found\"\\n\\n# Mock LLM Output\\ncall1 = {'name': 'get_weather', 'arguments': {'location': 'London'}}\\ncall2 = {'name': 'calculate_math', 'arguments': {'expression': '10 + 32'}}\\n\\nprint(execute_tool(call1))\\nprint(execute_tool(call2))",
         "hint": "Call get_weather and calculate_math.",
         "rubric": "Properly routes the tool calls to their respective functions."
+      },
+      {
+        "title": "Planning and Execution",
+        "theory": "## Plan-and-Solve Framework\\nAdvanced agents don't just blindly execute loops. They use a **Plan-and-Solve** architecture (like BabyAGI).\\n\\n1. **Planner LLM**: Looks at the goal and generates a list of 5 concrete tasks.\\n2. **Executor LLM**: Picks up the first task, uses tools to solve it, and marks it complete.\\n3. **Reviewer LLM**: Analyzes the result and updates the remaining task list if necessary.",
+        "instructions": "## Task: Task Queue Simulator\\n1. Simulate an Executor agent that pops tasks off a queue and executes them until the queue is empty.",
+        "starterCode": "class ExecutorAgent:\\n    def __init__(self, task_plan):\\n        self.task_queue = task_plan\\n        \\n    def run(self):\\n        while len(self.task_queue) > ___:\\n            # Pop the first task\\n            current_task = self.task_queue.___(0)\\n            print(f\"Executing: {current_task}...\")\\n            print(\"-> Done!\\n\")\\n        print(\"All tasks completed. Goal achieved!\")\\n\\nplan = [\\n    \"Search for latest TSLA stock price\",\\n    \"Calculate 10% profit margin\",\\n    \"Save report to PDF\"\\n]\\n\\nagent = ExecutorAgent(plan)\\nagent.run()",
+        "solution": "class ExecutorAgent:\\n    def __init__(self, task_plan):\\n        self.task_queue = task_plan\\n        \\n    def run(self):\\n        while len(self.task_queue) > 0:\\n            # Pop the first task\\n            current_task = self.task_queue.pop(0)\\n            print(f\"Executing: {current_task}...\")\\n            print(\"-> Done!\\n\")\\n        print(\"All tasks completed. Goal achieved!\")\\n\\nplan = [\\n    \"Search for latest TSLA stock price\",\\n    \"Calculate 10% profit margin\",\\n    \"Save report to PDF\"\\n]\\n\\nagent = ExecutorAgent(plan)\\nagent.run()",
+        "hint": "Loop while len > 0. Use pop(0) to remove the first element.",
+        "rubric": "Properly empties the queue and executes all three tasks."
       }
     ]
   },
@@ -158,6 +212,15 @@
         "solution": "def calculate_overlap(reference, generated):\n    ref_words = set(reference.lower().split())\n    gen_words = set(generated.lower().split())\n    \n    # Find intersection of both sets\n    overlap = ref_words.intersection(gen_words)\n    \n    # Calculate percentage (0.0 to 1.0)\n    score = len(overlap) / len(gen_words)\n    return score\n\nref = \"The quick brown fox jumps over the lazy dog\"\ngen = \"The fast brown fox jumps over a lazy dog\"\n\nscore = calculate_overlap(ref, gen)\nprint(f\"Overlap Score: {score * 100:.1f}%\")",
         "hint": "Use .lower() and .split(). Use .intersection() to find common words. Divide by len(gen_words).",
         "rubric": "Calculates an overlap score successfully."
+      },
+      {
+        "title": "Hallucination Detection",
+        "theory": "## Verifying Facts\\nLLMs are prone to 'Hallucinations' (confidently making up fake facts).\\n\\nTo detect hallucinations in a RAG system, you can use a secondary LLM as a judge. You ask the Judge: *'Does the generated answer contain any information that is NOT present in the source document?'* If yes, it's a hallucination.",
+        "instructions": "## Task: Strict Fact Checker\\n1. Simulate a programmatic fact checker.\\n2. If the AI Answer contains a word that is not in the Source Document, flag it as a hallucination.",
+        "starterCode": "def detect_hallucination(source_doc, ai_answer):\\n    source_words = set(source_doc.lower().split())\\n    answer_words = set(ai_answer.lower().split())\\n    \\n    for word in answer_words:\\n        if word not in ___:\\n            print(f\"HALLUCINATION DETECTED: The word '{word}' is not in the source!\")\\n            return True\\n            \\n    print(\"Pass: The answer is strictly grounded in the source.\")\\n    return False\\n\\nsource = \"The sky is blue and the grass is green\"\\ngood_ans = \"The grass is green\"\\nbad_ans = \"The grass is green and red\"\\n\\nprint(\"Checking good answer:\")\\ndetect_hallucination(source, good_ans)\\n\\nprint(\"\\nChecking bad answer:\")\\ndetect_hallucination(source, bad_ans)",
+        "solution": "def detect_hallucination(source_doc, ai_answer):\\n    source_words = set(source_doc.lower().split())\\n    answer_words = set(ai_answer.lower().split())\\n    \\n    for word in answer_words:\\n        if word not in source_words:\\n            print(f\"HALLUCINATION DETECTED: The word '{word}' is not in the source!\")\\n            return True\\n            \\n    print(\"Pass: The answer is strictly grounded in the source.\")\\n    return False\\n\\nsource = \"The sky is blue and the grass is green\"\\ngood_ans = \"The grass is green\"\\nbad_ans = \"The grass is green and red\"\\n\\nprint(\"Checking good answer:\")\\ndetect_hallucination(source, good_ans)\\n\\nprint(\"\\nChecking bad answer:\")\\ndetect_hallucination(source, bad_ans)",
+        "hint": "Check if word is not in source_words.",
+        "rubric": "Successfully flags the 'red' word as a hallucination in the bad answer."
       }
     ]
   }
