@@ -13,10 +13,10 @@
       },
       {
         "title": "Triggers and Actions",
-        "theory": "## The Anatomy of a Zap\\nA Zap consists of a Trigger (the event that starts the automation) and one or more Actions (what the automation does).",
-        "instructions": "## Task: Define a Zap\\nIdentify the trigger and action from the scenario: 'When I get an email, save it to Google Drive.'",
-        "starterCode": "trigger = '___'\\naction = '___'",
-        "solution": "trigger = 'Receive email'\\naction = 'Save to Google Drive'",
+        "theory": "## The Anatomy of a Zap\nA Zap consists of a Trigger (the event that starts the automation) and one or more Actions (what the automation does).",
+        "instructions": "## Task: Define a Zap\nIdentify the trigger and action from the scenario: 'When I get an email, save it to Google Drive.'",
+        "starterCode": "trigger = '___'\naction = '___'",
+        "solution": "trigger = 'Receive email'\naction = 'Save to Google Drive'",
         "hint": "trigger is receiving an email, action is saving to drive.",
         "rubric": "Trigger and action are correctly identified."
       }
@@ -41,10 +41,10 @@
     "lessons": [
       {
         "title": "Webhooks vs Polling",
-        "theory": "## Getting Real-time Data\\nIf you want an AI agent to respond when a new email arrives, how does it know an email arrived?\\n\\n- **Polling**: The agent asks the server every 5 minutes: \"Any new emails?\" (Inefficient, lots of wasted API calls).\\n- **Webhooks**: You give the email server a URL. When an email arrives, the server immediately sends a POST request to that URL (Efficient, instant).",
-        "instructions": "## Task: Webhook Server Mock\\n1. Build a mock webhook endpoint in Python.\\n2. When a `POST` request hits the endpoint, it should trigger the AI agent.\\n3. We will simulate this with a simple function call.",
-        "starterCode": "def ai_agent_process(data):\\n    print(\"AI Agent processing new data:\", data['message'])\\n\\ndef webhook_endpoint(request_method, payload):\\n    if request_method != '___':\\n        return \"Error: Only POST allowed\"\\n        \\n    # Webhooks usually send JSON payloads\\n    print(\"Webhook received payload!\")\\n    \\n    # Trigger the agent immediately\\n    ___(payload)\\n    \\n    return \"Success: 200 OK\"\\n\\n# Simulate GitHub sending a webhook when a repo gets a star\\ngithub_payload = {'event': 'star', 'message': 'User Bob starred your repo!'}\\n\\nprint(webhook_endpoint('GET', github_payload))\\nprint(\"---\")\\nprint(webhook_endpoint('POST', github_payload))",
-        "solution": "def ai_agent_process(data):\\n    print(\"AI Agent processing new data:\", data['message'])\\n\\ndef webhook_endpoint(request_method, payload):\\n    if request_method != 'POST':\\n        return \"Error: Only POST allowed\"\\n        \\n    # Webhooks usually send JSON payloads\\n    print(\"Webhook received payload!\")\\n    \\n    # Trigger the agent immediately\\n    ai_agent_process(payload)\\n    \\n    return \"Success: 200 OK\"\\n\\n# Simulate GitHub sending a webhook when a repo gets a star\\ngithub_payload = {'event': 'star', 'message': 'User Bob starred your repo!'}\\n\\nprint(webhook_endpoint('GET', github_payload))\\nprint(\"---\")\\nprint(webhook_endpoint('POST', github_payload))",
+        "theory": "## Getting Real-time Data\nIf you want an AI agent to respond when a new email arrives, how does it know an email arrived?\n\n- **Polling**: The agent asks the server every 5 minutes: \"Any new emails?\" (Inefficient, lots of wasted API calls).\n- **Webhooks**: You give the email server a URL. When an email arrives, the server immediately sends a POST request to that URL (Efficient, instant).",
+        "instructions": "## Task: Webhook Server Mock\n1. Build a mock webhook endpoint in Python.\n2. When a `POST` request hits the endpoint, it should trigger the AI agent.\n3. We will simulate this with a simple function call.",
+        "starterCode": "def ai_agent_process(data):\n    print(\"AI Agent processing new data:\", data['message'])\n\ndef webhook_endpoint(request_method, payload):\n    if request_method != '___':\n        return \"Error: Only POST allowed\"\n        \n    # Webhooks usually send JSON payloads\n    print(\"Webhook received payload!\")\n    \n    # Trigger the agent immediately\n    ___(payload)\n    \n    return \"Success: 200 OK\"\n\n# Simulate GitHub sending a webhook when a repo gets a star\ngithub_payload = {'event': 'star', 'message': 'User Bob starred your repo!'}\n\nprint(webhook_endpoint('GET', github_payload))\nprint(\"---\")\nprint(webhook_endpoint('POST', github_payload))",
+        "solution": "def ai_agent_process(data):\n    print(\"AI Agent processing new data:\", data['message'])\n\ndef webhook_endpoint(request_method, payload):\n    if request_method != 'POST':\n        return \"Error: Only POST allowed\"\n        \n    # Webhooks usually send JSON payloads\n    print(\"Webhook received payload!\")\n    \n    # Trigger the agent immediately\n    ai_agent_process(payload)\n    \n    return \"Success: 200 OK\"\n\n# Simulate GitHub sending a webhook when a repo gets a star\ngithub_payload = {'event': 'star', 'message': 'User Bob starred your repo!'}\n\nprint(webhook_endpoint('GET', github_payload))\nprint(\"---\")\nprint(webhook_endpoint('POST', github_payload))",
         "hint": "Method should be 'POST'. Call ai_agent_process(payload).",
         "rubric": "GET request is rejected. POST request triggers the AI agent processing."
       }
@@ -55,10 +55,10 @@
     "lessons": [
       {
         "title": "Content Generation",
-        "theory": "## AI Writers at Scale\\nAutomated content pipelines take raw data and turn it into polished content automatically.\\n\\nPipeline flow:\\n1. **Ingest**: Read a raw JSON feed (e.g., weather data).\\n2. **Prompt Construction**: Inject the data into a prompt template.\\n3. **LLM Generation**: Ask the AI to write a natural language summary.\\n4. **Publish**: Send the summary to a CMS or Twitter.",
-        "instructions": "## Task: Weather Bot Simulator\\n1. You have raw weather data in a dictionary.\\n2. Create a function that formats a prompt for the AI.\\n3. The prompt should say: \"Write a friendly weather report for [City]. The temp is [Temp] and it's [Condition].\"",
-        "starterCode": "def create_prompt(weather_data):\\n    city = weather_data['___']\\n    temp = weather_data['___']\\n    condition = weather_data['___']\\n    \\n    return f\"Write a friendly weather report for {___}. The temp is {___} and it's {___}.\"\\n\\nraw_data = {\\n    'city': 'Seattle',\\n    'temp': '65F',\\n    'condition': 'raining as usual'\\n}\\n\\nprompt = create_prompt(raw_data)\\nprint(\"Generated Prompt to send to LLM:\\n\", prompt)",
-        "solution": "def create_prompt(weather_data):\\n    city = weather_data['city']\\n    temp = weather_data['temp']\\n    condition = weather_data['condition']\\n    \\n    return f\"Write a friendly weather report for {city}. The temp is {temp} and it's {condition}.\"\\n\\nraw_data = {\\n    'city': 'Seattle',\\n    'temp': '65F',\\n    'condition': 'raining as usual'\\n}\\n\\nprompt = create_prompt(raw_data)\\nprint(\"Generated Prompt to send to LLM:\\n\", prompt)",
+        "theory": "## AI Writers at Scale\nAutomated content pipelines take raw data and turn it into polished content automatically.\n\nPipeline flow:\n1. **Ingest**: Read a raw JSON feed (e.g., weather data).\n2. **Prompt Construction**: Inject the data into a prompt template.\n3. **LLM Generation**: Ask the AI to write a natural language summary.\n4. **Publish**: Send the summary to a CMS or Twitter.",
+        "instructions": "## Task: Weather Bot Simulator\n1. You have raw weather data in a dictionary.\n2. Create a function that formats a prompt for the AI.\n3. The prompt should say: \"Write a friendly weather report for [City]. The temp is [Temp] and it's [Condition].\"",
+        "starterCode": "def create_prompt(weather_data):\n    city = weather_data['___']\n    temp = weather_data['___']\n    condition = weather_data['___']\n    \n    return f\"Write a friendly weather report for {___}. The temp is {___} and it's {___}.\"\n\nraw_data = {\n    'city': 'Seattle',\n    'temp': '65F',\n    'condition': 'raining as usual'\n}\n\nprompt = create_prompt(raw_data)\nprint(\"Generated Prompt to send to LLM:\n\", prompt)",
+        "solution": "def create_prompt(weather_data):\n    city = weather_data['city']\n    temp = weather_data['temp']\n    condition = weather_data['condition']\n    \n    return f\"Write a friendly weather report for {city}. The temp is {temp} and it's {condition}.\"\n\nraw_data = {\n    'city': 'Seattle',\n    'temp': '65F',\n    'condition': 'raining as usual'\n}\n\nprompt = create_prompt(raw_data)\nprint(\"Generated Prompt to send to LLM:\n\", prompt)",
         "hint": "Extract keys: 'city', 'temp', 'condition'. Inject them into the f-string.",
         "rubric": "Prompt correctly incorporates the data from the dictionary."
       }
@@ -69,10 +69,10 @@
     "lessons": [
       {
         "title": "Programmatic Email",
-        "theory": "## Sending and Receiving via API\\nAutomating emails is a core part of many workflows (e.g., sending receipts, newsletter campaigns, or having an AI read customer support emails).\\n\\n- **Sending (SMTP/APIs)**: Tools like SendGrid or AWS SES allow you to send emails via HTTP requests, which is much more reliable than SMTP.\\n- **Receiving (IMAP/Webhooks)**: Instead of polling an inbox with IMAP, modern systems use webhooks to instantly notify your server when an email arrives.",
-        "instructions": "## Task: SendGrid Simulator\\n1. Simulate sending an email using a mock SendGrid API function.\\n2. The function should accept `to_email`, `subject`, and `body`.\\n3. Return a success message with the recipient's email.",
-        "starterCode": "def mock_sendgrid_api(to_email, subject, body):\\n    # Simulate HTTP POST request to api.sendgrid.com\\n    payload = {\\n        \"personalizations\": [{\"to\": [{\"email\": to_email}]}],\\n        \"subject\": subject,\\n        \"content\": [{\"type\": \"text/plain\", \"value\": body}]\\n    }\\n    \\n    print(\"Sending payload to SendGrid:\\n\", payload)\\n    return f\"202 Accepted: Email sent to {___}\"\\n\\nresponse = mock_sendgrid_api(\"alice@example.com\", \"Welcome!\", \"Thanks for signing up.\")\\nprint(\"\\nResponse:\", response)",
-        "solution": "def mock_sendgrid_api(to_email, subject, body):\\n    # Simulate HTTP POST request to api.sendgrid.com\\n    payload = {\\n        \"personalizations\": [{\"to\": [{\"email\": to_email}]}],\\n        \"subject\": subject,\\n        \"content\": [{\"type\": \"text/plain\", \"value\": body}]\\n    }\\n    \\n    print(\"Sending payload to SendGrid:\\n\", payload)\\n    return f\"202 Accepted: Email sent to {to_email}\"\\n\\nresponse = mock_sendgrid_api(\"alice@example.com\", \"Welcome!\", \"Thanks for signing up.\")\\nprint(\"\\nResponse:\", response)",
+        "theory": "## Sending and Receiving via API\nAutomating emails is a core part of many workflows (e.g., sending receipts, newsletter campaigns, or having an AI read customer support emails).\n\n- **Sending (SMTP/APIs)**: Tools like SendGrid or AWS SES allow you to send emails via HTTP requests, which is much more reliable than SMTP.\n- **Receiving (IMAP/Webhooks)**: Instead of polling an inbox with IMAP, modern systems use webhooks to instantly notify your server when an email arrives.",
+        "instructions": "## Task: SendGrid Simulator\n1. Simulate sending an email using a mock SendGrid API function.\n2. The function should accept `to_email`, `subject`, and `body`.\n3. Return a success message with the recipient's email.",
+        "starterCode": "def mock_sendgrid_api(to_email, subject, body):\n    # Simulate HTTP POST request to api.sendgrid.com\n    payload = {\n        \"personalizations\": [{\"to\": [{\"email\": to_email}]}],\n        \"subject\": subject,\n        \"content\": [{\"type\": \"text/plain\", \"value\": body}]\n    }\n    \n    print(\"Sending payload to SendGrid:\n\", payload)\n    return f\"202 Accepted: Email sent to {___}\"\n\nresponse = mock_sendgrid_api(\"alice@example.com\", \"Welcome!\", \"Thanks for signing up.\")\nprint(\"\nResponse:\", response)",
+        "solution": "def mock_sendgrid_api(to_email, subject, body):\n    # Simulate HTTP POST request to api.sendgrid.com\n    payload = {\n        \"personalizations\": [{\"to\": [{\"email\": to_email}]}],\n        \"subject\": subject,\n        \"content\": [{\"type\": \"text/plain\", \"value\": body}]\n    }\n    \n    print(\"Sending payload to SendGrid:\n\", payload)\n    return f\"202 Accepted: Email sent to {to_email}\"\n\nresponse = mock_sendgrid_api(\"alice@example.com\", \"Welcome!\", \"Thanks for signing up.\")\nprint(\"\nResponse:\", response)",
         "hint": "Use the to_email variable in the return string.",
         "rubric": "Successfully simulates sending an email and prints the 202 Accepted message with the correct email."
       }
@@ -92,10 +92,10 @@
       },
       {
         "title": "Catching Webhooks",
-        "theory": "## Webhook Receivers\\nA webhook receiver is an endpoint that waits for incoming HTTP POST requests containing JSON data.",
-        "instructions": "## Task: Webhook Parser\\nExtract the 'event_type' from a webhook payload.",
-        "starterCode": "payload = {'event_type': 'user_signup', 'email': 'test@test.com'}\\nevent = payload[___]",
-        "solution": "payload = {'event_type': 'user_signup', 'email': 'test@test.com'}\\nevent = payload['event_type']",
+        "theory": "## Webhook Receivers\nA webhook receiver is an endpoint that waits for incoming HTTP POST requests containing JSON data.",
+        "instructions": "## Task: Webhook Parser\nExtract the 'event_type' from a webhook payload.",
+        "starterCode": "payload = {'event_type': 'user_signup', 'email': 'test@test.com'}\nevent = payload[___]",
+        "solution": "payload = {'event_type': 'user_signup', 'email': 'test@test.com'}\nevent = payload['event_type']",
         "hint": "Use the key 'event_type'",
         "rubric": "Extracts event_type correctly."
       }
@@ -148,19 +148,19 @@
     "lessons": [
       {
         "title": "n8n Self-Hosting",
-        "theory": "## Hosting n8n\\nn8n is a fair-code licensed automation tool that you can self-host. It uses a node-based interface to connect different APIs.",
-        "instructions": "## Task: Environment Setup\\nDefine the environment variable to enable webhook execution in n8n.",
-        "starterCode": "# Enable webhook URL for n8n\\nWEBHOOK_URL=___",
-        "solution": "# Enable webhook URL for n8n\\nWEBHOOK_URL=https://my-n8n.domain.com",
+        "theory": "## Hosting n8n\nn8n is a fair-code licensed automation tool that you can self-host. It uses a node-based interface to connect different APIs.",
+        "instructions": "## Task: Environment Setup\nDefine the environment variable to enable webhook execution in n8n.",
+        "starterCode": "# Enable webhook URL for n8n\nWEBHOOK_URL=___",
+        "solution": "# Enable webhook URL for n8n\nWEBHOOK_URL=https://my-n8n.domain.com",
         "hint": "Set it to a domain URL.",
         "rubric": "Webhook URL is defined."
       },
       {
         "title": "Data Transformation",
-        "theory": "## The Item Lists Node\\nIn n8n, data is processed as an array of items. The Item Lists node helps manipulate this data structure.",
-        "instructions": "## Task: Node Configuration\\nWrite a simple JS snippet for a Code node to return the first item.",
-        "starterCode": "for (let item of $input.all()) {\\n  return [___];\\n}",
-        "solution": "for (let item of $input.all()) {\\n  return [item];\\n}",
+        "theory": "## The Item Lists Node\nIn n8n, data is processed as an array of items. The Item Lists node helps manipulate this data structure.",
+        "instructions": "## Task: Node Configuration\nWrite a simple JS snippet for a Code node to return the first item.",
+        "starterCode": "for (let item of $input.all()) {\n  return [___];\n}",
+        "solution": "for (let item of $input.all()) {\n  return [item];\n}",
         "hint": "Return item",
         "rubric": "Returns item."
       }
@@ -171,10 +171,10 @@
     "lessons": [
       {
         "title": "Generating Posts via API",
-        "theory": "## Content Generation\\nUse LLMs to automatically generate social media posts based on news articles or RSS feeds.",
-        "instructions": "## Task: API Prompting\\nWrite a prompt to generate a tweet from a summary.",
-        "starterCode": "summary = 'AI agent passes Turing test.'\\nprompt = f'Write a short tweet about: {___}'",
-        "solution": "summary = 'AI agent passes Turing test.'\\nprompt = f'Write a short tweet about: {summary}'",
+        "theory": "## Content Generation\nUse LLMs to automatically generate social media posts based on news articles or RSS feeds.",
+        "instructions": "## Task: API Prompting\nWrite a prompt to generate a tweet from a summary.",
+        "starterCode": "summary = 'AI agent passes Turing test.'\nprompt = f'Write a short tweet about: {___}'",
+        "solution": "summary = 'AI agent passes Turing test.'\nprompt = f'Write a short tweet about: {summary}'",
         "hint": "summary",
         "rubric": "Uses summary."
       }
@@ -185,19 +185,19 @@
     "lessons": [
       {
         "title": "OpenAI in Workflows",
-        "theory": "## Automating with LLMs\\nIntegrating LLMs into automation tools allows you to process unstructured data, generate text, and make dynamic decisions within a workflow.",
-        "instructions": "## Task: API Request Setup\\nWrite the JSON body required to send a prompt to the OpenAI Chat Completions API.",
-        "starterCode": "payload = {\\n    'model': '___',\\n    'messages': [\\n        {'role': '___', 'content': 'You are a helpful assistant.'},\\n        {'role': 'user', 'content': 'Summarize this email.'}\\n    ]\\n}",
-        "solution": "payload = {\\n    'model': 'gpt-4o',\\n    'messages': [\\n        {'role': 'system', 'content': 'You are a helpful assistant.'},\\n        {'role': 'user', 'content': 'Summarize this email.'}\\n    ]\\n}",
+        "theory": "## Automating with LLMs\nIntegrating LLMs into automation tools allows you to process unstructured data, generate text, and make dynamic decisions within a workflow.",
+        "instructions": "## Task: API Request Setup\nWrite the JSON body required to send a prompt to the OpenAI Chat Completions API.",
+        "starterCode": "payload = {\n    'model': '___',\n    'messages': [\n        {'role': '___', 'content': 'You are a helpful assistant.'},\n        {'role': 'user', 'content': 'Summarize this email.'}\n    ]\n}",
+        "solution": "payload = {\n    'model': 'gpt-4o',\n    'messages': [\n        {'role': 'system', 'content': 'You are a helpful assistant.'},\n        {'role': 'user', 'content': 'Summarize this email.'}\n    ]\n}",
         "hint": "Use gpt-4o and system role.",
         "rubric": "Correctly constructs the JSON payload for OpenAI API."
       },
       {
         "title": "Handling Hallucinations in Flows",
-        "theory": "## Workflow Fallbacks\\nWhen an LLM hallucinates or returns invalid JSON in an automated workflow, the workflow breaks. You must use fallback routes and structured outputs to prevent this.",
-        "instructions": "## Task: Fallback Logic\\nCheck if the LLM output is valid JSON. If not, return a default dictionary.",
-        "starterCode": "import json\\n\\ndef parse_llm_response(response_text):\\n    try:\\n        return json.___(response_text)\\n    except ValueError:\\n        return {'status': '___', 'message': 'Invalid output'}",
-        "solution": "import json\\n\\ndef parse_llm_response(response_text):\\n    try:\\n        return json.loads(response_text)\\n    except ValueError:\\n        return {'status': 'error', 'message': 'Invalid output'}",
+        "theory": "## Workflow Fallbacks\nWhen an LLM hallucinates or returns invalid JSON in an automated workflow, the workflow breaks. You must use fallback routes and structured outputs to prevent this.",
+        "instructions": "## Task: Fallback Logic\nCheck if the LLM output is valid JSON. If not, return a default dictionary.",
+        "starterCode": "import json\n\ndef parse_llm_response(response_text):\n    try:\n        return json.___(response_text)\n    except ValueError:\n        return {'status': '___', 'message': 'Invalid output'}",
+        "solution": "import json\n\ndef parse_llm_response(response_text):\n    try:\n        return json.loads(response_text)\n    except ValueError:\n        return {'status': 'error', 'message': 'Invalid output'}",
         "hint": "Use json.loads and an error status.",
         "rubric": "Properly catches exceptions and parses JSON."
       }
@@ -208,19 +208,19 @@
     "lessons": [
       {
         "title": "Automated Document Ingestion",
-        "theory": "## Ingestion Pipelines\\nA robust RAG system requires an automated pipeline that detects new documents (e.g., in Google Drive), chunks them, and upserts them to a Vector DB automatically.",
-        "instructions": "## Task: Upsert Trigger\\nWrite a mock function that triggers when a new file is added and upserts it to Pinecone.",
-        "starterCode": "def on_file_added(file_content):\\n    chunks = chunk_text(file_content)\\n    embeddings = get_embeddings(chunks)\\n    # Upsert to vector db\\n    vector_db.___(___)",
-        "solution": "def on_file_added(file_content):\\n    chunks = chunk_text(file_content)\\n    embeddings = get_embeddings(chunks)\\n    # Upsert to vector db\\n    vector_db.upsert(embeddings)",
+        "theory": "## Ingestion Pipelines\nA robust RAG system requires an automated pipeline that detects new documents (e.g., in Google Drive), chunks them, and upserts them to a Vector DB automatically.",
+        "instructions": "## Task: Upsert Trigger\nWrite a mock function that triggers when a new file is added and upserts it to Pinecone.",
+        "starterCode": "def on_file_added(file_content):\n    chunks = chunk_text(file_content)\n    embeddings = get_embeddings(chunks)\n    # Upsert to vector db\n    vector_db.___(___)",
+        "solution": "def on_file_added(file_content):\n    chunks = chunk_text(file_content)\n    embeddings = get_embeddings(chunks)\n    # Upsert to vector db\n    vector_db.upsert(embeddings)",
         "hint": "Use the upsert method with embeddings.",
         "rubric": "Uses upsert function on the embeddings."
       },
       {
         "title": "Dynamic Context Retrieval",
-        "theory": "## Context Injection in Automation\\nWhen a user triggers an automation (like a customer support email), the workflow should automatically query the Vector DB for relevant context before sending it to the LLM.",
-        "instructions": "## Task: Context Query\\nRetrieve the top 3 similar documents from a query embedding.",
-        "starterCode": "def handle_support_ticket(ticket_text):\\n    query_embedding = get_embedding(ticket_text)\\n    # Retrieve top 3 results\\n    results = vector_db.___(query_embedding, top_k=___)\\n    return results",
-        "solution": "def handle_support_ticket(ticket_text):\\n    query_embedding = get_embedding(ticket_text)\\n    # Retrieve top 3 results\\n    results = vector_db.query(query_embedding, top_k=3)\\n    return results",
+        "theory": "## Context Injection in Automation\nWhen a user triggers an automation (like a customer support email), the workflow should automatically query the Vector DB for relevant context before sending it to the LLM.",
+        "instructions": "## Task: Context Query\nRetrieve the top 3 similar documents from a query embedding.",
+        "starterCode": "def handle_support_ticket(ticket_text):\n    query_embedding = get_embedding(ticket_text)\n    # Retrieve top 3 results\n    results = vector_db.___(query_embedding, top_k=___)\n    return results",
+        "solution": "def handle_support_ticket(ticket_text):\n    query_embedding = get_embedding(ticket_text)\n    # Retrieve top 3 results\n    results = vector_db.query(query_embedding, top_k=3)\n    return results",
         "hint": "Use query and top_k=3.",
         "rubric": "Correctly queries the DB with top_k."
       }
@@ -231,19 +231,19 @@
     "lessons": [
       {
         "title": "Headless Browser Automation",
-        "theory": "## Playwright & Puppeteer\\nWhen a website lacks an API, you can automate a headless browser to click buttons, fill forms, and extract data programmatically.",
-        "instructions": "## Task: Browser Script\\nWrite a simple Playwright snippet to navigate to a URL and print its title.",
-        "starterCode": "import asyncio\\nfrom playwright.async_api import async_playwright\\n\\nasync def main():\\n    async with async_playwright() as p:\\n        browser = await p.chromium.launch()\\n        page = await browser.new_page()\\n        await page.___(url)\\n        print(await page.___) \\n        await browser.close()",
-        "solution": "import asyncio\\nfrom playwright.async_api import async_playwright\\n\\nasync def main():\\n    async with async_playwright() as p:\\n        browser = await p.chromium.launch()\\n        page = await browser.new_page()\\n        await page.goto(url)\\n        print(await page.title()) \\n        await browser.close()",
+        "theory": "## Playwright & Puppeteer\nWhen a website lacks an API, you can automate a headless browser to click buttons, fill forms, and extract data programmatically.",
+        "instructions": "## Task: Browser Script\nWrite a simple Playwright snippet to navigate to a URL and print its title.",
+        "starterCode": "import asyncio\nfrom playwright.async_api import async_playwright\n\nasync def main():\n    async with async_playwright() as p:\n        browser = await p.chromium.launch()\n        page = await browser.new_page()\n        await page.___(url)\n        print(await page.___) \n        await browser.close()",
+        "solution": "import asyncio\nfrom playwright.async_api import async_playwright\n\nasync def main():\n    async with async_playwright() as p:\n        browser = await p.chromium.launch()\n        page = await browser.new_page()\n        await page.goto(url)\n        print(await page.title()) \n        await browser.close()",
         "hint": "Use goto and title()",
         "rubric": "Correctly navigates and prints title."
       },
       {
         "title": "Vision AI Scraping",
-        "theory": "## Reading Screenshots\\nModern web apps use dynamic CSS classes that break traditional scrapers. Multimodal LLMs can simply 'look' at a screenshot and extract the data you need.",
-        "instructions": "## Task: Image Prompting\\nWrite a prompt to extract a pricing table from an image.",
-        "starterCode": "image_url = 'https://example.com/pricing.png'\\nprompt = 'Extract the pricing tiers and features from this image into ___ format.'",
-        "solution": "image_url = 'https://example.com/pricing.png'\\nprompt = 'Extract the pricing tiers and features from this image into JSON format.'",
+        "theory": "## Reading Screenshots\nModern web apps use dynamic CSS classes that break traditional scrapers. Multimodal LLMs can simply 'look' at a screenshot and extract the data you need.",
+        "instructions": "## Task: Image Prompting\nWrite a prompt to extract a pricing table from an image.",
+        "starterCode": "image_url = 'https://example.com/pricing.png'\nprompt = 'Extract the pricing tiers and features from this image into ___ format.'",
+        "solution": "image_url = 'https://example.com/pricing.png'\nprompt = 'Extract the pricing tiers and features from this image into JSON format.'",
         "hint": "Use JSON",
         "rubric": "Requests JSON format."
       }
@@ -254,19 +254,19 @@
     "lessons": [
       {
         "title": "Hyper-Personalized Outreach",
-        "theory": "## Doing the Research\\nNobody replies to generic cold emails. AI agents can scrape a company's website, read their recent news, and craft an email that sounds 100% human.",
-        "instructions": "## Task: Prompting for Personalization\\nWrite a prompt that uses a company summary to generate a personalized opening line.",
-        "starterCode": "company_summary = 'Recent series B funding to build AI chips.'\\nprompt = f'Write a casual opening sentence for a cold email mentioning: {___}'",
-        "solution": "company_summary = 'Recent series B funding to build AI chips.'\\nprompt = f'Write a casual opening sentence for a cold email mentioning: {company_summary}'",
+        "theory": "## Doing the Research\nNobody replies to generic cold emails. AI agents can scrape a company's website, read their recent news, and craft an email that sounds 100% human.",
+        "instructions": "## Task: Prompting for Personalization\nWrite a prompt that uses a company summary to generate a personalized opening line.",
+        "starterCode": "company_summary = 'Recent series B funding to build AI chips.'\nprompt = f'Write a casual opening sentence for a cold email mentioning: {___}'",
+        "solution": "company_summary = 'Recent series B funding to build AI chips.'\nprompt = f'Write a casual opening sentence for a cold email mentioning: {company_summary}'",
         "hint": "company_summary",
         "rubric": "Uses company_summary in the prompt."
       },
       {
         "title": "Sentiment Routing in CRM",
-        "theory": "## Automated Inbox Management\\nInstead of manually reading replies, an LLM can analyze the sentiment of incoming emails and tag them in your CRM as 'Interested', 'Unsubscribe', or 'Questions'.",
-        "instructions": "## Task: Sentiment Classification\\nWrite an API call configuration that classifies email sentiment.",
-        "starterCode": "email = 'Stop emailing me.'\\nmessages = [{'role': 'system', 'content': 'Classify as Interested or Unsubscribe. Reply with only one word.'}, {'role': 'user', 'content': ___}]",
-        "solution": "email = 'Stop emailing me.'\\nmessages = [{'role': 'system', 'content': 'Classify as Interested or Unsubscribe. Reply with only one word.'}, {'role': 'user', 'content': email}]",
+        "theory": "## Automated Inbox Management\nInstead of manually reading replies, an LLM can analyze the sentiment of incoming emails and tag them in your CRM as 'Interested', 'Unsubscribe', or 'Questions'.",
+        "instructions": "## Task: Sentiment Classification\nWrite an API call configuration that classifies email sentiment.",
+        "starterCode": "email = 'Stop emailing me.'\nmessages = [{'role': 'system', 'content': 'Classify as Interested or Unsubscribe. Reply with only one word.'}, {'role': 'user', 'content': ___}]",
+        "solution": "email = 'Stop emailing me.'\nmessages = [{'role': 'system', 'content': 'Classify as Interested or Unsubscribe. Reply with only one word.'}, {'role': 'user', 'content': email}]",
         "hint": "Pass the email content.",
         "rubric": "Passes the email variable."
       }
@@ -277,19 +277,19 @@
     "lessons": [
       {
         "title": "Invoice Parsing",
-        "theory": "## Extracting Unstructured Data\\nPDF invoices come in thousands of formats. Instead of writing Regex for each one, LLMs can extract fields like 'Total Amount' reliably.",
-        "instructions": "## Task: Data Schema Setup\\nDefine a Pydantic schema for an invoice so the LLM knows what to extract.",
-        "starterCode": "from pydantic import BaseModel\\n\\nclass Invoice(BaseModel):\\n    vendor_name: str\\n    total_amount: ___\\n    date_issued: ___",
-        "solution": "from pydantic import BaseModel\\n\\nclass Invoice(BaseModel):\\n    vendor_name: str\\n    total_amount: float\\n    date_issued: str",
+        "theory": "## Extracting Unstructured Data\nPDF invoices come in thousands of formats. Instead of writing Regex for each one, LLMs can extract fields like 'Total Amount' reliably.",
+        "instructions": "## Task: Data Schema Setup\nDefine a Pydantic schema for an invoice so the LLM knows what to extract.",
+        "starterCode": "from pydantic import BaseModel\n\nclass Invoice(BaseModel):\n    vendor_name: str\n    total_amount: ___\n    date_issued: ___",
+        "solution": "from pydantic import BaseModel\n\nclass Invoice(BaseModel):\n    vendor_name: str\n    total_amount: float\n    date_issued: str",
         "hint": "float and str",
         "rubric": "Defines float for amount and str for date."
       },
       {
         "title": "Meeting Transcripts",
-        "theory": "## Whisper to Action Items\\nThe classic AI pipeline: Audio -> Whisper API (Transcription) -> GPT-4 (Summarization & Action Items).",
-        "instructions": "## Task: The Whisper API Call\\nWrite the basic structure to send an audio file to OpenAI's transcription endpoint.",
-        "starterCode": "with open('meeting.mp3', 'rb') as audio_file:\\n    transcript = client.audio.___.create(\\n        model='whisper-1',\\n        file=___\\n    )",
-        "solution": "with open('meeting.mp3', 'rb') as audio_file:\\n    transcript = client.audio.transcriptions.create(\\n        model='whisper-1',\\n        file=audio_file\\n    )",
+        "theory": "## Whisper to Action Items\nThe classic AI pipeline: Audio -> Whisper API (Transcription) -> GPT-4 (Summarization & Action Items).",
+        "instructions": "## Task: The Whisper API Call\nWrite the basic structure to send an audio file to OpenAI's transcription endpoint.",
+        "starterCode": "with open('meeting.mp3', 'rb') as audio_file:\n    transcript = client.audio.___.create(\n        model='whisper-1',\n        file=___\n    )",
+        "solution": "with open('meeting.mp3', 'rb') as audio_file:\n    transcript = client.audio.transcriptions.create(\n        model='whisper-1',\n        file=audio_file\n    )",
         "hint": "Use transcriptions and audio_file",
         "rubric": "Correctly calls transcriptions.create."
       }
@@ -300,19 +300,19 @@
     "lessons": [
       {
         "title": "Intelligent Ticket Routing",
-        "theory": "## Triage with AI\\nWhen a ticket arrives, AI can determine its urgency (e.g., 'Server down' = P1) and the correct department (e.g., 'Billing').",
-        "instructions": "## Task: Routing Logic\\nWrite a script that routes the ticket based on an LLM's JSON response.",
-        "starterCode": "ai_response = {'department': 'billing', 'urgency': 'high'}\\n\\nif ai_response['___'] == 'high':\\n    notify_on_call()\\nif ai_response['___'] == 'billing':\\n    assign_to_team('Finance')",
-        "solution": "ai_response = {'department': 'billing', 'urgency': 'high'}\\n\\nif ai_response['urgency'] == 'high':\\n    notify_on_call()\\nif ai_response['department'] == 'billing':\\n    assign_to_team('Finance')",
+        "theory": "## Triage with AI\nWhen a ticket arrives, AI can determine its urgency (e.g., 'Server down' = P1) and the correct department (e.g., 'Billing').",
+        "instructions": "## Task: Routing Logic\nWrite a script that routes the ticket based on an LLM's JSON response.",
+        "starterCode": "ai_response = {'department': 'billing', 'urgency': 'high'}\n\nif ai_response['___'] == 'high':\n    notify_on_call()\nif ai_response['___'] == 'billing':\n    assign_to_team('Finance')",
+        "solution": "ai_response = {'department': 'billing', 'urgency': 'high'}\n\nif ai_response['urgency'] == 'high':\n    notify_on_call()\nif ai_response['department'] == 'billing':\n    assign_to_team('Finance')",
         "hint": "urgency and department",
         "rubric": "Correctly accesses dictionary keys."
       },
       {
         "title": "Auto-Drafting Replies",
-        "theory": "## Human in the Loop\\nInstead of auto-replying (which is dangerous), use AI to draft a response inside Zendesk/Intercom. The human agent simply reviews, tweaks, and sends.",
-        "instructions": "## Task: Draft Mode\\nEnsure your automation sets the message as an internal note/draft, not a public reply.",
-        "starterCode": "ticket_update = {\\n    'body': llm_draft,\\n    'public': ___ # Set to false to keep it internal\\n}",
-        "solution": "ticket_update = {\\n    'body': llm_draft,\\n    'public': False # Set to false to keep it internal\\n}",
+        "theory": "## Human in the Loop\nInstead of auto-replying (which is dangerous), use AI to draft a response inside Zendesk/Intercom. The human agent simply reviews, tweaks, and sends.",
+        "instructions": "## Task: Draft Mode\nEnsure your automation sets the message as an internal note/draft, not a public reply.",
+        "starterCode": "ticket_update = {\n    'body': llm_draft,\n    'public': ___ # Set to false to keep it internal\n}",
+        "solution": "ticket_update = {\n    'body': llm_draft,\n    'public': False # Set to false to keep it internal\n}",
         "hint": "False",
         "rubric": "Sets public to False."
       }
@@ -323,19 +323,19 @@
     "lessons": [
       {
         "title": "Notion AI Automations",
-        "theory": "## Smarter Workspaces\\nNotion's API allows you to automatically tag incoming tasks, summarize meeting notes, or generate project timelines.",
-        "instructions": "## Task: Notion Property Update\\nWrite the JSON payload to update a Notion page's 'Status' property to 'Done'.",
-        "starterCode": "properties = {\\n    'Status': {\\n        'select': {\\n            'name': '___'\\n        }\\n    }\\n}",
-        "solution": "properties = {\\n    'Status': {\\n        'select': {\\n            'name': 'Done'\\n        }\\n    }\\n}",
+        "theory": "## Smarter Workspaces\nNotion's API allows you to automatically tag incoming tasks, summarize meeting notes, or generate project timelines.",
+        "instructions": "## Task: Notion Property Update\nWrite the JSON payload to update a Notion page's 'Status' property to 'Done'.",
+        "starterCode": "properties = {\n    'Status': {\n        'select': {\n            'name': '___'\n        }\n    }\n}",
+        "solution": "properties = {\n    'Status': {\n        'select': {\n            'name': 'Done'\n        }\n    }\n}",
         "hint": "Done",
         "rubric": "Sets name to Done."
       },
       {
         "title": "Bubble & OpenAI",
-        "theory": "## Building AI Interfaces\\nTools like Bubble let you build visual frontends for your AI tools without writing code. You use the 'API Connector' to talk to OpenAI.",
-        "instructions": "## Task: Dynamic Data\\nIn Bubble, parameters enclosed in <> are dynamic. Define a dynamic prompt parameter.",
-        "starterCode": "json_body = {\\n    \"prompt\": \"<___>\"\\n}",
-        "solution": "json_body = {\\n    \"prompt\": \"<user_input>\"\\n}",
+        "theory": "## Building AI Interfaces\nTools like Bubble let you build visual frontends for your AI tools without writing code. You use the 'API Connector' to talk to OpenAI.",
+        "instructions": "## Task: Dynamic Data\nIn Bubble, parameters enclosed in <> are dynamic. Define a dynamic prompt parameter.",
+        "starterCode": "json_body = {\n    \"prompt\": \"<___>\"\n}",
+        "solution": "json_body = {\n    \"prompt\": \"<user_input>\"\n}",
         "hint": "user_input (or any variable name)",
         "rubric": "Uses dynamic parameter syntax."
       }

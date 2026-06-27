@@ -177,8 +177,8 @@
     "lessons": [
       {
         "title": "Queries inside Queries",
-        "theory": "## Nesting SQL\\nA subquery is a SQL query nested inside a larger query.\\n\\n```sql\\n-- Find employees who earn more than the average salary\\nSELECT name, salary FROM employees\\nWHERE salary > (SELECT AVG(salary) FROM employees);\\n```\\n\\nThe inner query runs first, calculates the average, and passes that number to the outer query.",
-        "instructions": "## Task: Subquery Simulator\\n1. Simulate the subquery flow in Python.\\n2. First, calculate the average salary from the list.\\n3. Second, filter the list for salaries greater than the average.",
+        "theory": "## Nesting SQL\nA subquery is a SQL query nested inside a larger query.\n\n```sql\n-- Find employees who earn more than the average salary\nSELECT name, salary FROM employees\nWHERE salary > (SELECT AVG(salary) FROM employees);\n```\n\nThe inner query runs first, calculates the average, and passes that number to the outer query.",
+        "instructions": "## Task: Subquery Simulator\n1. Simulate the subquery flow in Python.\n2. First, calculate the average salary from the list.\n3. Second, filter the list for salaries greater than the average.",
         "starterCode": "employees = [\n    {'name': 'Alice', 'salary': 50000},\n    {'name': 'Bob', 'salary': 40000},\n    {'name': 'Charlie', 'salary': 90000},\n    {'name': 'Diana', 'salary': 45000}\n]\n\n# 1. Simulate the Subquery: SELECT AVG(salary) FROM employees\ntotal_salary = sum(emp['salary'] for emp in employees)\navg_salary = total_salary / len(___)\nprint(f\"Subquery returned: {avg_salary}\")\n\n# 2. Simulate Outer Query: SELECT name WHERE salary > avg_salary\nhigh_earners = []\nfor emp in employees:\n    if emp['salary'] > ___:\n        high_earners.append(emp['name'])\n        \nprint(\"High Earners:\", high_earners)",
         "solution": "employees = [\n    {'name': 'Alice', 'salary': 50000},\n    {'name': 'Bob', 'salary': 40000},\n    {'name': 'Charlie', 'salary': 90000},\n    {'name': 'Diana', 'salary': 45000}\n]\n\n# 1. Simulate the Subquery: SELECT AVG(salary) FROM employees\ntotal_salary = sum(emp['salary'] for emp in employees)\navg_salary = total_salary / len(employees)\nprint(f\"Subquery returned: {avg_salary}\")\n\n# 2. Simulate Outer Query: SELECT name WHERE salary > avg_salary\nhigh_earners = []\nfor emp in employees:\n    if emp['salary'] > avg_salary:\n        high_earners.append(emp['name'])\n        \nprint(\"High Earners:\", high_earners)",
         "hint": "Divide by len(employees). Compare against avg_salary.",
@@ -193,8 +193,8 @@
         "title": "Entity-Relationship (ER)",
         "theory": "## Modeling Data\nBefore writing SQL, you design the database using an ER diagram.\n\n- **Entities**: Nouns (Users, Products, Orders)\n- **Attributes**: Properties of entities (User: Name, Email)\n- **Relationships**: How entities connect\n  - 1-to-1: User has 1 Profile\n  - 1-to-Many: User has Many Orders\n  - Many-to-Many: Students have Many Classes, Classes have Many Students",
         "instructions": "## Task: Relationship Types\n1. Match the scenario to the correct relationship type.\n2. Types: '1-to-1', '1-to-Many', 'Many-to-Many'",
-        "starterCode": "relationships = {\n    'A Customer can place multiple Orders': '___',\n    'A Person has one Passport': '___',\n    'Authors write multiple Books; Books can have multiple Authors': '___'\n}\n\nfor scenario, rel_type in relationships.items():\n    print(f\"{scenario:65}\\n-> {rel_type}\\n\")",
-        "solution": "relationships = {\n    'A Customer can place multiple Orders': '1-to-Many',\n    'A Person has one Passport': '1-to-1',\n    'Authors write multiple Books; Books can have multiple Authors': 'Many-to-Many'\n}\n\nfor scenario, rel_type in relationships.items():\n    print(f\"{scenario:65}\\n-> {rel_type}\\n\")",
+        "starterCode": "relationships = {\n    'A Customer can place multiple Orders': '___',\n    'A Person has one Passport': '___',\n    'Authors write multiple Books; Books can have multiple Authors': '___'\n}\n\nfor scenario, rel_type in relationships.items():\n    print(f\"{scenario:65}\n-> {rel_type}\n\")",
+        "solution": "relationships = {\n    'A Customer can place multiple Orders': '1-to-Many',\n    'A Person has one Passport': '1-to-1',\n    'Authors write multiple Books; Books can have multiple Authors': 'Many-to-Many'\n}\n\nfor scenario, rel_type in relationships.items():\n    print(f\"{scenario:65}\n-> {rel_type}\n\")",
         "hint": "Customer->Orders is 1-to-Many. Authors<->Books is Many-to-Many.",
         "rubric": "Scenarios accurately mapped to their relationship types."
       }
@@ -205,10 +205,10 @@
     "lessons": [
       {
         "title": "Database Speed",
-        "theory": "## The Index of a Book\\nIf you want to find a specific word in a 1000-page book, you don't read every page (a Full Table Scan). You check the Index at the back, which tells you exactly what page the word is on.\\n\\nDatabase indexes work the same way. Creating an index on an `email` column creates a sorted data structure (usually a B-Tree) that points to the exact row in the database.\\n\\n*Tradeoff*: Indexes make READS incredibly fast, but WRITES slower (because the index must be updated).",
-        "instructions": "## Task: Index Lookup Simulator\\n1. You have an unsorted database table and a sorted index.\\n2. Searching the unsorted table takes O(N) steps.\\n3. Searching the sorted index takes O(log N) steps.",
-        "starterCode": "db_table = [{'id': 3, 'email': 'c@c.com'}, {'id': 1, 'email': 'a@a.com'}, {'id': 2, 'email': 'b@b.com'}]\n# Index maps email to the list index in the table\nemail_index = {'a@a.com': 1, 'b@b.com': 2, 'c@c.com': 0}\n\ntarget = 'b@b.com'\n\n# Without Index (Table Scan)\nprint(\"Scanning table...\")\nsteps = 0\nfor row in db_table:\n    steps += 1\n    if row['email'] == target:\n        print(f\"Found {target} in {steps} steps! (Row ID: {row['id']})\")\n        break\n\n# With Index\nprint(\"\\nUsing Index...\")\n# Dictionary lookup is O(1) in Python, simulating O(log N) B-Tree in SQL\nrow_position = email_index[___]\nfast_row = db_table[___]\nprint(f\"Found {target} in 1 step! (Row ID: {fast_row['id']})\")",
-        "solution": "db_table = [{'id': 3, 'email': 'c@c.com'}, {'id': 1, 'email': 'a@a.com'}, {'id': 2, 'email': 'b@b.com'}]\n# Index maps email to the list index in the table\nemail_index = {'a@a.com': 1, 'b@b.com': 2, 'c@c.com': 0}\n\ntarget = 'b@b.com'\n\n# Without Index (Table Scan)\nprint(\"Scanning table...\")\nsteps = 0\nfor row in db_table:\n    steps += 1\n    if row['email'] == target:\n        print(f\"Found {target} in {steps} steps! (Row ID: {row['id']})\")\n        break\n\n# With Index\nprint(\"\\nUsing Index...\")\n# Dictionary lookup is O(1) in Python, simulating O(log N) B-Tree in SQL\nrow_position = email_index[target]\nfast_row = db_table[row_position]\nprint(f\"Found {target} in 1 step! (Row ID: {fast_row['id']})\")",
+        "theory": "## The Index of a Book\nIf you want to find a specific word in a 1000-page book, you don't read every page (a Full Table Scan). You check the Index at the back, which tells you exactly what page the word is on.\n\nDatabase indexes work the same way. Creating an index on an `email` column creates a sorted data structure (usually a B-Tree) that points to the exact row in the database.\n\n*Tradeoff*: Indexes make READS incredibly fast, but WRITES slower (because the index must be updated).",
+        "instructions": "## Task: Index Lookup Simulator\n1. You have an unsorted database table and a sorted index.\n2. Searching the unsorted table takes O(N) steps.\n3. Searching the sorted index takes O(log N) steps.",
+        "starterCode": "db_table = [{'id': 3, 'email': 'c@c.com'}, {'id': 1, 'email': 'a@a.com'}, {'id': 2, 'email': 'b@b.com'}]\n# Index maps email to the list index in the table\nemail_index = {'a@a.com': 1, 'b@b.com': 2, 'c@c.com': 0}\n\ntarget = 'b@b.com'\n\n# Without Index (Table Scan)\nprint(\"Scanning table...\")\nsteps = 0\nfor row in db_table:\n    steps += 1\n    if row['email'] == target:\n        print(f\"Found {target} in {steps} steps! (Row ID: {row['id']})\")\n        break\n\n# With Index\nprint(\"\nUsing Index...\")\n# Dictionary lookup is O(1) in Python, simulating O(log N) B-Tree in SQL\nrow_position = email_index[___]\nfast_row = db_table[___]\nprint(f\"Found {target} in 1 step! (Row ID: {fast_row['id']})\")",
+        "solution": "db_table = [{'id': 3, 'email': 'c@c.com'}, {'id': 1, 'email': 'a@a.com'}, {'id': 2, 'email': 'b@b.com'}]\n# Index maps email to the list index in the table\nemail_index = {'a@a.com': 1, 'b@b.com': 2, 'c@c.com': 0}\n\ntarget = 'b@b.com'\n\n# Without Index (Table Scan)\nprint(\"Scanning table...\")\nsteps = 0\nfor row in db_table:\n    steps += 1\n    if row['email'] == target:\n        print(f\"Found {target} in {steps} steps! (Row ID: {row['id']})\")\n        break\n\n# With Index\nprint(\"\nUsing Index...\")\n# Dictionary lookup is O(1) in Python, simulating O(log N) B-Tree in SQL\nrow_position = email_index[target]\nfast_row = db_table[row_position]\nprint(f\"Found {target} in 1 step! (Row ID: {fast_row['id']})\")",
         "hint": "Use 'target' for the index key, and 'row_position' for the table lookup.",
         "rubric": "Code correctly retrieves ID 2 in 1 step using the index."
       }
@@ -219,8 +219,8 @@
     "lessons": [
       {
         "title": "Code in the Database",
-        "theory": "## Precompiled SQL\\nA Stored Procedure is a batch of SQL statements that are saved and executed on the database server itself, rather than in your application code (like Python or Node.js).\\n\\n- **Pros**: Very fast (avoids network latency between your app and the DB), allows complex logic (IF/ELSE, Loops) inside SQL.\\n- **Cons**: Harder to version control and debug than normal application code.",
-        "instructions": "## Task: Stored Procedure Mock\\n1. Simulate calling a stored procedure `sp_TransferFunds`.\\n2. The procedure should deduct money from one account and add it to another.\\n3. Because it runs on the 'server', we'll wrap it in a function.",
+        "theory": "## Precompiled SQL\nA Stored Procedure is a batch of SQL statements that are saved and executed on the database server itself, rather than in your application code (like Python or Node.js).\n\n- **Pros**: Very fast (avoids network latency between your app and the DB), allows complex logic (IF/ELSE, Loops) inside SQL.\n- **Cons**: Harder to version control and debug than normal application code.",
+        "instructions": "## Task: Stored Procedure Mock\n1. Simulate calling a stored procedure `sp_TransferFunds`.\n2. The procedure should deduct money from one account and add it to another.\n3. Because it runs on the 'server', we'll wrap it in a function.",
         "starterCode": "def mock_sp_TransferFunds(db, from_acc, to_acc, amount):\n    print(f\"[DB SERVER] Executing Stored Procedure: Transfer ${amount} from {from_acc} to {to_acc}\")\n    \n    if db[from_acc] < amount:\n        return \"Error: Insufficient Funds\"\n        \n    db[___] -= amount\n    db[___] += amount\n    return \"Success\"\n\n# Database State\nbank_db = {'Alice': 500, 'Bob': 100}\n\n# App calls the stored procedure\nresult = mock_sp_TransferFunds(bank_db, 'Alice', 'Bob', 200)\n\nprint(\"Result:\", result)\nprint(\"New State:\", bank_db)",
         "solution": "def mock_sp_TransferFunds(db, from_acc, to_acc, amount):\n    print(f\"[DB SERVER] Executing Stored Procedure: Transfer ${amount} from {from_acc} to {to_acc}\")\n    \n    if db[from_acc] < amount:\n        return \"Error: Insufficient Funds\"\n        \n    db[from_acc] -= amount\n    db[to_acc] += amount\n    return \"Success\"\n\n# Database State\nbank_db = {'Alice': 500, 'Bob': 100}\n\n# App calls the stored procedure\nresult = mock_sp_TransferFunds(bank_db, 'Alice', 'Bob', 200)\n\nprint(\"Result:\", result)\nprint(\"New State:\", bank_db)",
         "hint": "Subtract from from_acc, add to to_acc.",
@@ -233,8 +233,8 @@
     "lessons": [
       {
         "title": "EXPLAIN",
-        "theory": "## Looking Under the Hood\\nIf a SQL query is slow, you can put the word `EXPLAIN` (or `EXPLAIN ANALYZE`) in front of it.\\n\\nThe database won't return the data; instead, it returns an Execution Plan detailing exactly how it intends to find the data (e.g., 'Sequential Scan' vs 'Index Scan').\\n\\nYou can use this to figure out if you are missing an index, or if you are doing a very expensive JOIN.",
-        "instructions": "## Task: The EXPLAIN Output\\n1. Review the mock EXPLAIN output for a query.\\n2. If it says 'Seq Scan' (Sequential/Full Table Scan), it means it's slow.\\n3. If it says 'Index Scan', it means it's fast.",
+        "theory": "## Looking Under the Hood\nIf a SQL query is slow, you can put the word `EXPLAIN` (or `EXPLAIN ANALYZE`) in front of it.\n\nThe database won't return the data; instead, it returns an Execution Plan detailing exactly how it intends to find the data (e.g., 'Sequential Scan' vs 'Index Scan').\n\nYou can use this to figure out if you are missing an index, or if you are doing a very expensive JOIN.",
+        "instructions": "## Task: The EXPLAIN Output\n1. Review the mock EXPLAIN output for a query.\n2. If it says 'Seq Scan' (Sequential/Full Table Scan), it means it's slow.\n3. If it says 'Index Scan', it means it's fast.",
         "starterCode": "def analyze_explain_plan(plan_text):\n    if 'Seq Scan' in plan_text:\n        return \"WARNING: Full table scan detected. Consider adding an index!\"\n    elif '___' in plan_text:\n        return \"GOOD: Query is using an index.\"\n    return \"Unknown plan\"\n\nbad_plan = \"-> Seq Scan on users (cost=0.00..35.50 rows=1000)\"\ngood_plan = \"-> Index Scan using idx_email on users (cost=0.15..8.50 rows=1)\"\n\nprint(\"Query 1:\", analyze_explain_plan(bad_plan))\nprint(\"Query 2:\", analyze_explain_plan(good_plan))",
         "solution": "def analyze_explain_plan(plan_text):\n    if 'Seq Scan' in plan_text:\n        return \"WARNING: Full table scan detected. Consider adding an index!\"\n    elif 'Index Scan' in plan_text:\n        return \"GOOD: Query is using an index.\"\n    return \"Unknown plan\"\n\nbad_plan = \"-> Seq Scan on users (cost=0.00..35.50 rows=1000)\"\ngood_plan = \"-> Index Scan using idx_email on users (cost=0.15..8.50 rows=1)\"\n\nprint(\"Query 1:\", analyze_explain_plan(bad_plan))\nprint(\"Query 2:\", analyze_explain_plan(good_plan))",
         "hint": "Check for 'Index Scan'.",
@@ -247,8 +247,8 @@
     "lessons": [
       {
         "title": "Document Databases",
-        "theory": "## JSON-like Storage\\nNoSQL databases like MongoDB store data in flexible, JSON-like documents. Fields can vary from document to document, unlike strict SQL tables.",
-        "instructions": "## Task: Insert Document\\nWrite a MongoDB query to insert a user document with name 'Alice' and age 25 into the 'users' collection.",
+        "theory": "## JSON-like Storage\nNoSQL databases like MongoDB store data in flexible, JSON-like documents. Fields can vary from document to document, unlike strict SQL tables.",
+        "instructions": "## Task: Insert Document\nWrite a MongoDB query to insert a user document with name 'Alice' and age 25 into the 'users' collection.",
         "starterCode": "db.users.___({ name: '___', age: ___ })",
         "solution": "db.users.insertOne({ name: 'Alice', age: 25 })",
         "hint": "Use insertOne",
@@ -256,8 +256,8 @@
       },
       {
         "title": "Finding Documents",
-        "theory": "## Querying Collections\\nInstead of SELECT, NoSQL databases use methods like `find()` to retrieve documents that match a specific filter object.",
-        "instructions": "## Task: Find Users\\nFind all users in the 'users' collection where the age is greater than 20. Use the `$gt` operator.",
+        "theory": "## Querying Collections\nInstead of SELECT, NoSQL databases use methods like `find()` to retrieve documents that match a specific filter object.",
+        "instructions": "## Task: Find Users\nFind all users in the 'users' collection where the age is greater than 20. Use the `$gt` operator.",
         "starterCode": "db.users.___({ age: { ___: 20 } })",
         "solution": "db.users.find({ age: { $gt: 20 } })",
         "hint": "Use find and $gt",
@@ -270,19 +270,19 @@
     "lessons": [
       {
         "title": "FULL OUTER JOIN",
-        "theory": "## Combining Everything\\nA FULL OUTER JOIN returns all records when there is a match in either the left or the right table records. Unmatched rows will contain NULLs.",
-        "instructions": "## Task: Full Outer Join\\nJoin `employees` and `departments` on `dept_id` using a FULL OUTER JOIN.",
-        "starterCode": "SELECT e.name, d.dept_name \\nFROM employees e\\n___ ___ JOIN departments d \\nON e.dept_id = d.dept_id;",
-        "solution": "SELECT e.name, d.dept_name \\nFROM employees e\\nFULL OUTER JOIN departments d \\nON e.dept_id = d.dept_id;",
+        "theory": "## Combining Everything\nA FULL OUTER JOIN returns all records when there is a match in either the left or the right table records. Unmatched rows will contain NULLs.",
+        "instructions": "## Task: Full Outer Join\nJoin `employees` and `departments` on `dept_id` using a FULL OUTER JOIN.",
+        "starterCode": "SELECT e.name, d.dept_name \nFROM employees e\n___ ___ JOIN departments d \nON e.dept_id = d.dept_id;",
+        "solution": "SELECT e.name, d.dept_name \nFROM employees e\nFULL OUTER JOIN departments d \nON e.dept_id = d.dept_id;",
         "hint": "Use FULL OUTER JOIN",
         "rubric": "Correctly applies FULL OUTER JOIN syntax."
       },
       {
         "title": "Window Functions",
-        "theory": "## OVER Clause\\nWindow functions perform calculations across a set of table rows related to the current row, but unlike GROUP BY, they do not collapse the rows.",
-        "instructions": "## Task: Row Number\\nUse `ROW_NUMBER()` to assign a unique sequential integer to rows, ordered by salary descending.",
-        "starterCode": "SELECT name, salary,\\n  ___() OVER (ORDER BY salary ___) as rank\\nFROM employees;",
-        "solution": "SELECT name, salary,\\n  ROW_NUMBER() OVER (ORDER BY salary DESC) as rank\\nFROM employees;",
+        "theory": "## OVER Clause\nWindow functions perform calculations across a set of table rows related to the current row, but unlike GROUP BY, they do not collapse the rows.",
+        "instructions": "## Task: Row Number\nUse `ROW_NUMBER()` to assign a unique sequential integer to rows, ordered by salary descending.",
+        "starterCode": "SELECT name, salary,\n  ___() OVER (ORDER BY salary ___) as rank\nFROM employees;",
+        "solution": "SELECT name, salary,\n  ROW_NUMBER() OVER (ORDER BY salary DESC) as rank\nFROM employees;",
         "hint": "Use ROW_NUMBER() and DESC",
         "rubric": "Correctly uses ROW_NUMBER and DESC."
       }
@@ -293,19 +293,19 @@
     "lessons": [
       {
         "title": "BEGIN and COMMIT",
-        "theory": "## Atomic Operations\\nA transaction ensures that a series of database operations either all succeed (COMMIT) or all fail (ROLLBACK).",
-        "instructions": "## Task: Safe Transfer\\nWrap the two UPDATE statements in a transaction using BEGIN and COMMIT.",
-        "starterCode": "___;\\nUPDATE accounts SET balance = balance - 100 WHERE id = 1;\\nUPDATE accounts SET balance = balance + 100 WHERE id = 2;\\n___;",
-        "solution": "BEGIN;\\nUPDATE accounts SET balance = balance - 100 WHERE id = 1;\\nUPDATE accounts SET balance = balance + 100 WHERE id = 2;\\nCOMMIT;",
+        "theory": "## Atomic Operations\nA transaction ensures that a series of database operations either all succeed (COMMIT) or all fail (ROLLBACK).",
+        "instructions": "## Task: Safe Transfer\nWrap the two UPDATE statements in a transaction using BEGIN and COMMIT.",
+        "starterCode": "___;\nUPDATE accounts SET balance = balance - 100 WHERE id = 1;\nUPDATE accounts SET balance = balance + 100 WHERE id = 2;\n___;",
+        "solution": "BEGIN;\nUPDATE accounts SET balance = balance - 100 WHERE id = 1;\nUPDATE accounts SET balance = balance + 100 WHERE id = 2;\nCOMMIT;",
         "hint": "Use BEGIN and COMMIT",
         "rubric": "Correctly begins and commits the transaction."
       },
       {
         "title": "ROLLBACK",
-        "theory": "## Undoing Mistakes\\nIf something goes wrong during a transaction (or if a condition isn't met), you can issue a ROLLBACK to undo all changes since BEGIN.",
-        "instructions": "## Task: Abort Transaction\\nUndo the transaction changes using the appropriate SQL command.",
-        "starterCode": "BEGIN;\\nDELETE FROM important_table;\\n-- Oh no, wait!\\n___;",
-        "solution": "BEGIN;\\nDELETE FROM important_table;\\n-- Oh no, wait!\\nROLLBACK;",
+        "theory": "## Undoing Mistakes\nIf something goes wrong during a transaction (or if a condition isn't met), you can issue a ROLLBACK to undo all changes since BEGIN.",
+        "instructions": "## Task: Abort Transaction\nUndo the transaction changes using the appropriate SQL command.",
+        "starterCode": "BEGIN;\nDELETE FROM important_table;\n-- Oh no, wait!\n___;",
+        "solution": "BEGIN;\nDELETE FROM important_table;\n-- Oh no, wait!\nROLLBACK;",
         "hint": "Use ROLLBACK",
         "rubric": "Correctly uses ROLLBACK."
       }
@@ -316,17 +316,17 @@
     "lessons": [
       {
         "title": "JSONB Columns",
-        "theory": "## Semi-Structured Data\\nPostgreSQL allows you to store and query JSON data efficiently using the JSONB data type, giving you the best of both SQL and NoSQL.",
-        "instructions": "## Task: Query JSONB\\nExtract the 'role' key from the `metadata` JSONB column where the user id is 1.",
-        "starterCode": "SELECT metadata___'role' AS role \\nFROM users \\nWHERE id = 1;",
-        "solution": "SELECT metadata->>'role' AS role \\nFROM users \\nWHERE id = 1;",
+        "theory": "## Semi-Structured Data\nPostgreSQL allows you to store and query JSON data efficiently using the JSONB data type, giving you the best of both SQL and NoSQL.",
+        "instructions": "## Task: Query JSONB\nExtract the 'role' key from the `metadata` JSONB column where the user id is 1.",
+        "starterCode": "SELECT metadata___'role' AS role \nFROM users \nWHERE id = 1;",
+        "solution": "SELECT metadata->>'role' AS role \nFROM users \nWHERE id = 1;",
         "hint": "Use the ->> operator",
         "rubric": "Correctly uses the ->> operator to extract text from JSONB."
       },
       {
         "title": "Roles and Permissions",
-        "theory": "## Database Security\\nPostgreSQL uses roles to manage database access privileges. You can GRANT specific permissions to roles.",
-        "instructions": "## Task: Grant Select\\nGrant SELECT permission on the `reports` table to the `analyst` role.",
+        "theory": "## Database Security\nPostgreSQL uses roles to manage database access privileges. You can GRANT specific permissions to roles.",
+        "instructions": "## Task: Grant Select\nGrant SELECT permission on the `reports` table to the `analyst` role.",
         "starterCode": "___ SELECT ON reports TO ___;",
         "solution": "GRANT SELECT ON reports TO analyst;",
         "hint": "Use GRANT and analyst",
@@ -339,19 +339,19 @@
     "lessons": [
       {
         "title": "Star Schema",
-        "theory": "## Fact and Dimension Tables\\nIn data warehousing, a Star Schema consists of a central Fact table (events/transactions) connected to multiple Dimension tables (context like time, user, product).",
-        "instructions": "## Task: Fact Table Join\\nJoin the `sales_fact` table to the `date_dim` dimension table.",
-        "starterCode": "SELECT d.year, SUM(s.amount) \\nFROM sales_fact s\\nJOIN ___ d ON s.date_id = d.___ \\nGROUP BY d.year;",
-        "solution": "SELECT d.year, SUM(s.amount) \\nFROM sales_fact s\\nJOIN date_dim d ON s.date_id = d.id \\nGROUP BY d.year;",
+        "theory": "## Fact and Dimension Tables\nIn data warehousing, a Star Schema consists of a central Fact table (events/transactions) connected to multiple Dimension tables (context like time, user, product).",
+        "instructions": "## Task: Fact Table Join\nJoin the `sales_fact` table to the `date_dim` dimension table.",
+        "starterCode": "SELECT d.year, SUM(s.amount) \nFROM sales_fact s\nJOIN ___ d ON s.date_id = d.___ \nGROUP BY d.year;",
+        "solution": "SELECT d.year, SUM(s.amount) \nFROM sales_fact s\nJOIN date_dim d ON s.date_id = d.id \nGROUP BY d.year;",
         "hint": "Join date_dim on id",
         "rubric": "Correctly joins the dimension table."
       },
       {
         "title": "Materialized Views",
-        "theory": "## Caching Complex Queries\\nA materialized view saves the result of a complex query physically to the disk, speeding up read access at the cost of requiring periodic refreshes.",
-        "instructions": "## Task: Create Materialized View\\nCreate a materialized view named `daily_sales` from a SELECT query.",
-        "starterCode": "CREATE ___ ___ daily_sales AS \\nSELECT date, sum(amount) FROM sales GROUP BY date;",
-        "solution": "CREATE MATERIALIZED VIEW daily_sales AS \\nSELECT date, sum(amount) FROM sales GROUP BY date;",
+        "theory": "## Caching Complex Queries\nA materialized view saves the result of a complex query physically to the disk, speeding up read access at the cost of requiring periodic refreshes.",
+        "instructions": "## Task: Create Materialized View\nCreate a materialized view named `daily_sales` from a SELECT query.",
+        "starterCode": "CREATE ___ ___ daily_sales AS \nSELECT date, sum(amount) FROM sales GROUP BY date;",
+        "solution": "CREATE MATERIALIZED VIEW daily_sales AS \nSELECT date, sum(amount) FROM sales GROUP BY date;",
         "hint": "Use MATERIALIZED VIEW",
         "rubric": "Correctly uses CREATE MATERIALIZED VIEW."
       }

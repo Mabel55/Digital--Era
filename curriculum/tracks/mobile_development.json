@@ -20,8 +20,8 @@
         "title": "View and Text",
         "theory": "## The Building Blocks\nIn React Native, you use native-backed components instead of HTML.\n\n- **`<View>`**: Like a `<div>`. The fundamental container. Used for layout (Flexbox), styling, and grouping.\n- **`<Text>`**: Like a `<span>` or `<p>`. You CANNOT put text directly inside a `<View>`, it MUST be inside a `<Text>` component.",
         "instructions": "## Task: Component Validations\n1. Analyze some simulated React Native code blocks.\n2. Determine if they are valid (True) or invalid (False).\n3. Remember: Text must be inside `<Text>`.",
-        "starterCode": "validations = {\n    '<View>Hello World</View>': ___,\n    '<View><Text>Hello World</Text></View>': ___,\n    '<div><p>Hello</p></div>': ___  # This is React Native, not React Web!\n}\n\nfor code, is_valid in validations.items():\n    print(f\"Code: {code}\\nValid? {is_valid}\\n\")",
-        "solution": "validations = {\n    '<View>Hello World</View>': False,\n    '<View><Text>Hello World</Text></View>': True,\n    '<div><p>Hello</p></div>': False  # This is React Native, not React Web!\n}\n\nfor code, is_valid in validations.items():\n    print(f\"Code: {code}\\nValid? {is_valid}\\n\")",
+        "starterCode": "validations = {\n    '<View>Hello World</View>': ___,\n    '<View><Text>Hello World</Text></View>': ___,\n    '<div><p>Hello</p></div>': ___  # This is React Native, not React Web!\n}\n\nfor code, is_valid in validations.items():\n    print(f\"Code: {code}\nValid? {is_valid}\n\")",
+        "solution": "validations = {\n    '<View>Hello World</View>': False,\n    '<View><Text>Hello World</Text></View>': True,\n    '<div><p>Hello</p></div>': False  # This is React Native, not React Web!\n}\n\nfor code, is_valid in validations.items():\n    print(f\"Code: {code}\nValid? {is_valid}\n\")",
         "hint": "Text inside a View without <Text> is False. <div> is False in React Native.",
         "rubric": "Only the <View><Text> combination is marked as True."
       }
@@ -46,8 +46,8 @@
     "lessons": [
       {
         "title": "Web APIs",
-        "theory": "## Accessing Hardware from the Browser\\nModern browsers give websites access to native device hardware (with the user's permission).\\n\\n- **Geolocation API**: Get the user's GPS coordinates.\\n- **MediaDevices API**: Access the webcam or microphone.\\n- **Bluetooth API**: Connect to nearby BLE devices directly from a webpage.",
-        "instructions": "## Task: Geolocation Mock\\n1. Simulate calling the Geolocation API.\\n2. Because this involves user permission, it relies on a callback function or a Promise.",
+        "theory": "## Accessing Hardware from the Browser\nModern browsers give websites access to native device hardware (with the user's permission).\n\n- **Geolocation API**: Get the user's GPS coordinates.\n- **MediaDevices API**: Access the webcam or microphone.\n- **Bluetooth API**: Connect to nearby BLE devices directly from a webpage.",
+        "instructions": "## Task: Geolocation Mock\n1. Simulate calling the Geolocation API.\n2. Because this involves user permission, it relies on a callback function or a Promise.",
         "starterCode": "def mock_navigator_geolocation(success_callback, error_callback):\n    # Simulate user clicking \"Allow\"\n    user_allowed = True\n    \n    if user_allowed:\n        # Mock GPS data\n        position = {'coords': {'latitude': 37.7749, 'longitude': -122.4194}}\n        ___(position)\n    else:\n        ___(\"User denied Geolocation\")\n\ndef on_success(pos):\n    lat = pos['coords']['latitude']\n    lon = pos['coords']['longitude']\n    print(f\"Success! You are at {lat}, {lon}\")\n\ndef on_error(err):\n    print(f\"Error: {err}\")\n\n# Call the API\nmock_navigator_geolocation(on_success, on_error)",
         "solution": "def mock_navigator_geolocation(success_callback, error_callback):\n    # Simulate user clicking \"Allow\"\n    user_allowed = True\n    \n    if user_allowed:\n        # Mock GPS data\n        position = {'coords': {'latitude': 37.7749, 'longitude': -122.4194}}\n        success_callback(position)\n    else:\n        error_callback(\"User denied Geolocation\")\n\ndef on_success(pos):\n    lat = pos['coords']['latitude']\n    lon = pos['coords']['longitude']\n    print(f\"Success! You are at {lat}, {lon}\")\n\ndef on_error(err):\n    print(f\"Error: {err}\")\n\n# Call the API\nmock_navigator_geolocation(on_success, on_error)",
         "hint": "Call success_callback(position) and error_callback('User denied').",
@@ -118,8 +118,8 @@
         "title": "The JS Bridge",
         "theory": "## Understanding React Native Bottlenecks\nReact Native apps have two main threads:\n1. **The Native Thread**: Written in Java/Kotlin or Obj-C/Swift. Handles UI rendering.\n2. **The JavaScript Thread**: Runs your React code.\n\nThey communicate over a **Bridge** via JSON messages. If you send too much data across the bridge (like animating a view by sending layout updates from JS 60 times a second), the app will drop frames and stutter.\n\n**Solution**: Use `useNativeDriver: true` for animations so they run entirely on the Native thread without crossing the bridge.",
         "instructions": "## Task: Bridge Bottleneck Simulator\n1. Simulate the JS thread and the Native thread.\n2. The bridge can only handle 5 messages per frame. If more are sent, it drops them.\n3. Loop through 10 animation updates and see how many are dropped if sent over the bridge.",
-        "starterCode": "class JSBridge:\n    def __init__(self):\n        self.capacity_per_frame = 5\n        \n    def send_messages(self, num_messages):\n        if num_messages > self.___:\n            dropped = num_messages - self.___\n            print(f\"Warning: Bridge overloaded! Dropped {dropped} messages.\")\n            return self.capacity_per_frame\n        return num_messages\n\nbridge = JSBridge()\n\nprint(\"Sending 3 updates (Light load):\")\nprocessed = bridge.send_messages(3)\nprint(f\"Processed: {processed}\\n\")\n\nprint(\"Sending 10 updates (Heavy animation load):\")\nprocessed = bridge.send_messages(10)\nprint(f\"Processed: {processed}\")",
-        "solution": "class JSBridge:\n    def __init__(self):\n        self.capacity_per_frame = 5\n        \n    def send_messages(self, num_messages):\n        if num_messages > self.capacity_per_frame:\n            dropped = num_messages - self.capacity_per_frame\n            print(f\"Warning: Bridge overloaded! Dropped {dropped} messages.\")\n            return self.capacity_per_frame\n        return num_messages\n\nbridge = JSBridge()\n\nprint(\"Sending 3 updates (Light load):\")\nprocessed = bridge.send_messages(3)\nprint(f\"Processed: {processed}\\n\")\n\nprint(\"Sending 10 updates (Heavy animation load):\")\nprocessed = bridge.send_messages(10)\nprint(f\"Processed: {processed}\")",
+        "starterCode": "class JSBridge:\n    def __init__(self):\n        self.capacity_per_frame = 5\n        \n    def send_messages(self, num_messages):\n        if num_messages > self.___:\n            dropped = num_messages - self.___\n            print(f\"Warning: Bridge overloaded! Dropped {dropped} messages.\")\n            return self.capacity_per_frame\n        return num_messages\n\nbridge = JSBridge()\n\nprint(\"Sending 3 updates (Light load):\")\nprocessed = bridge.send_messages(3)\nprint(f\"Processed: {processed}\n\")\n\nprint(\"Sending 10 updates (Heavy animation load):\")\nprocessed = bridge.send_messages(10)\nprint(f\"Processed: {processed}\")",
+        "solution": "class JSBridge:\n    def __init__(self):\n        self.capacity_per_frame = 5\n        \n    def send_messages(self, num_messages):\n        if num_messages > self.capacity_per_frame:\n            dropped = num_messages - self.capacity_per_frame\n            print(f\"Warning: Bridge overloaded! Dropped {dropped} messages.\")\n            return self.capacity_per_frame\n        return num_messages\n\nbridge = JSBridge()\n\nprint(\"Sending 3 updates (Light load):\")\nprocessed = bridge.send_messages(3)\nprint(f\"Processed: {processed}\n\")\n\nprint(\"Sending 10 updates (Heavy animation load):\")\nprocessed = bridge.send_messages(10)\nprint(f\"Processed: {processed}\")",
         "hint": "Compare num_messages to self.capacity_per_frame.",
         "rubric": "Bridge successfully processes 3 messages, but warns and drops 5 messages when given 10."
       }
@@ -130,19 +130,19 @@
     "lessons": [
       {
         "title": "Widgets are Everything",
-        "theory": "## The Flutter Paradigm\\nIn Flutter, everything is a widget. A layout is a tree of widgets, and even structural elements like padding or alignment are themselves widgets.",
-        "instructions": "## Task: Create a Text Widget\\nReturn a simple Text widget with the string 'Hello Flutter' centered on the screen.",
-        "starterCode": "import 'package:flutter/material.dart';\\n\\nWidget buildHello() {\\n  return Center(\\n    child: ___('___'),\\n  );\\n}",
-        "solution": "import 'package:flutter/material.dart';\\n\\nWidget buildHello() {\\n  return Center(\\n    child: Text('Hello Flutter'),\\n  );\\n}",
+        "theory": "## The Flutter Paradigm\nIn Flutter, everything is a widget. A layout is a tree of widgets, and even structural elements like padding or alignment are themselves widgets.",
+        "instructions": "## Task: Create a Text Widget\nReturn a simple Text widget with the string 'Hello Flutter' centered on the screen.",
+        "starterCode": "import 'package:flutter/material.dart';\n\nWidget buildHello() {\n  return Center(\n    child: ___('___'),\n  );\n}",
+        "solution": "import 'package:flutter/material.dart';\n\nWidget buildHello() {\n  return Center(\n    child: Text('Hello Flutter'),\n  );\n}",
         "hint": "Use Text('Hello Flutter')",
         "rubric": "Correctly instantiates the Text widget with the string."
       },
       {
         "title": "Stateful vs Stateless",
-        "theory": "## Managing State\\n`StatelessWidget` is for static UI, while `StatefulWidget` is for UI that changes over time (like a counter or a form).",
-        "instructions": "## Task: SetState\\nUpdate the counter variable inside the `setState` method to trigger a UI rebuild.",
-        "starterCode": "void incrementCounter() {\\n  setState(() {\\n    _counter ___ 1;\\n  });\\n}",
-        "solution": "void incrementCounter() {\\n  setState(() {\\n    _counter += 1;\\n  });\\n}",
+        "theory": "## Managing State\n`StatelessWidget` is for static UI, while `StatefulWidget` is for UI that changes over time (like a counter or a form).",
+        "instructions": "## Task: SetState\nUpdate the counter variable inside the `setState` method to trigger a UI rebuild.",
+        "starterCode": "void incrementCounter() {\n  setState(() {\n    _counter ___ 1;\n  });\n}",
+        "solution": "void incrementCounter() {\n  setState(() {\n    _counter += 1;\n  });\n}",
         "hint": "Use += 1",
         "rubric": "Correctly increments the counter inside setState."
       }
@@ -153,19 +153,19 @@
     "lessons": [
       {
         "title": "Zustand Setup",
-        "theory": "## Lightweight Global State\\nZustand is a fast, scalable state-management solution for React Native. It uses hooks and avoids boilerplate.",
-        "instructions": "## Task: Create a Store\\nCreate a Zustand store with a `bears` count of 0 and an `increasePopulation` function.",
-        "starterCode": "import { create } from 'zustand'\\n\\nconst useStore = ___((set) => ({\\n  bears: 0,\\n  increasePopulation: () => set((state) => ({ bears: state.bears + ___ })),\\n}))",
-        "solution": "import { create } from 'zustand'\\n\\nconst useStore = create((set) => ({\\n  bears: 0,\\n  increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),\\n}))",
+        "theory": "## Lightweight Global State\nZustand is a fast, scalable state-management solution for React Native. It uses hooks and avoids boilerplate.",
+        "instructions": "## Task: Create a Store\nCreate a Zustand store with a `bears` count of 0 and an `increasePopulation` function.",
+        "starterCode": "import { create } from 'zustand'\n\nconst useStore = ___((set) => ({\n  bears: 0,\n  increasePopulation: () => set((state) => ({ bears: state.bears + ___ })),\n}))",
+        "solution": "import { create } from 'zustand'\n\nconst useStore = create((set) => ({\n  bears: 0,\n  increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),\n}))",
         "hint": "Use create and add 1",
         "rubric": "Correctly uses create and increments by 1."
       },
       {
         "title": "Redux Toolkit",
-        "theory": "## Robust State Architecture\\nFor larger apps, Redux Toolkit provides a standardized way to write Redux logic, including 'slices' that bundle reducers and actions.",
-        "instructions": "## Task: Create a Slice\\nDefine a slice named 'counter' with an initial state of 0.",
-        "starterCode": "import { createSlice } from '@reduxjs/toolkit'\\n\\nconst counterSlice = ___({\\n  name: '___',\\n  initialState: { value: 0 },\\n  reducers: {\\n    increment: (state) => { state.value += 1 }\\n  }\\n})",
-        "solution": "import { createSlice } from '@reduxjs/toolkit'\\n\\nconst counterSlice = createSlice({\\n  name: 'counter',\\n  initialState: { value: 0 },\\n  reducers: {\\n    increment: (state) => { state.value += 1 }\\n  }\\n})",
+        "theory": "## Robust State Architecture\nFor larger apps, Redux Toolkit provides a standardized way to write Redux logic, including 'slices' that bundle reducers and actions.",
+        "instructions": "## Task: Create a Slice\nDefine a slice named 'counter' with an initial state of 0.",
+        "starterCode": "import { createSlice } from '@reduxjs/toolkit'\n\nconst counterSlice = ___({\n  name: '___',\n  initialState: { value: 0 },\n  reducers: {\n    increment: (state) => { state.value += 1 }\n  }\n})",
+        "solution": "import { createSlice } from '@reduxjs/toolkit'\n\nconst counterSlice = createSlice({\n  name: 'counter',\n  initialState: { value: 0 },\n  reducers: {\n    increment: (state) => { state.value += 1 }\n  }\n})",
         "hint": "Use createSlice and name it 'counter'",
         "rubric": "Correctly invokes createSlice and names it."
       }
@@ -176,19 +176,19 @@
     "lessons": [
       {
         "title": "Requesting Permissions",
-        "theory": "## User Consent\\nBefore sending push notifications on iOS and Android (13+), you must explicitly request permission from the user.",
-        "instructions": "## Task: Expo Notifications\\nWrite the code to request permission using Expo's notification module.",
-        "starterCode": "import * as Notifications from 'expo-notifications';\\n\\nasync function requestPermissions() {\\n  const { status } = await Notifications.___();\\n  return status === '___';\\n}",
-        "solution": "import * as Notifications from 'expo-notifications';\\n\\nasync function requestPermissions() {\\n  const { status } = await Notifications.requestPermissionsAsync();\\n  return status === 'granted';\\n}",
+        "theory": "## User Consent\nBefore sending push notifications on iOS and Android (13+), you must explicitly request permission from the user.",
+        "instructions": "## Task: Expo Notifications\nWrite the code to request permission using Expo's notification module.",
+        "starterCode": "import * as Notifications from 'expo-notifications';\n\nasync function requestPermissions() {\n  const { status } = await Notifications.___();\n  return status === '___';\n}",
+        "solution": "import * as Notifications from 'expo-notifications';\n\nasync function requestPermissions() {\n  const { status } = await Notifications.requestPermissionsAsync();\n  return status === 'granted';\n}",
         "hint": "Use requestPermissionsAsync and 'granted'",
         "rubric": "Requests permissions and checks for 'granted' status."
       },
       {
         "title": "Handling Foreground Messages",
-        "theory": "## In-App Notifications\\nWhen the app is open (foreground), notifications don't show up in the system tray by default. You need an event listener to handle them.",
-        "instructions": "## Task: Notification Listener\\nSet up a listener to console log the notification when received in the foreground.",
-        "starterCode": "import * as Notifications from 'expo-notifications';\\n\\nNotifications.___(\\n  notification => {\\n    console.log('Received:', notification);\\n  }\\n);",
-        "solution": "import * as Notifications from 'expo-notifications';\\n\\nNotifications.addNotificationReceivedListener(\\n  notification => {\\n    console.log('Received:', notification);\\n  }\\n);",
+        "theory": "## In-App Notifications\nWhen the app is open (foreground), notifications don't show up in the system tray by default. You need an event listener to handle them.",
+        "instructions": "## Task: Notification Listener\nSet up a listener to console log the notification when received in the foreground.",
+        "starterCode": "import * as Notifications from 'expo-notifications';\n\nNotifications.___(\n  notification => {\n    console.log('Received:', notification);\n  }\n);",
+        "solution": "import * as Notifications from 'expo-notifications';\n\nNotifications.addNotificationReceivedListener(\n  notification => {\n    console.log('Received:', notification);\n  }\n);",
         "hint": "Use addNotificationReceivedListener",
         "rubric": "Correctly attaches the notification listener."
       }
@@ -199,19 +199,19 @@
     "lessons": [
       {
         "title": "AsyncStorage / SQLite",
-        "theory": "## Local Persistence\\nOffline-first apps save data locally first, then sync to the cloud. React Native uses AsyncStorage for small data or SQLite for complex relational data.",
-        "instructions": "## Task: Save to AsyncStorage\\nWrite the function to save a string value to AsyncStorage.",
-        "starterCode": "import AsyncStorage from '@react-native-async-storage/async-storage';\\n\\nasync function storeData(value) {\\n  try {\\n    await AsyncStorage.___('@my_key', ___);\\n  } catch (e) {\\n    console.error(e);\\n  }\\n}",
-        "solution": "import AsyncStorage from '@react-native-async-storage/async-storage';\\n\\nasync function storeData(value) {\\n  try {\\n    await AsyncStorage.setItem('@my_key', value);\\n  } catch (e) {\\n    console.error(e);\\n  }\\n}",
+        "theory": "## Local Persistence\nOffline-first apps save data locally first, then sync to the cloud. React Native uses AsyncStorage for small data or SQLite for complex relational data.",
+        "instructions": "## Task: Save to AsyncStorage\nWrite the function to save a string value to AsyncStorage.",
+        "starterCode": "import AsyncStorage from '@react-native-async-storage/async-storage';\n\nasync function storeData(value) {\n  try {\n    await AsyncStorage.___('@my_key', ___);\n  } catch (e) {\n    console.error(e);\n  }\n}",
+        "solution": "import AsyncStorage from '@react-native-async-storage/async-storage';\n\nasync function storeData(value) {\n  try {\n    await AsyncStorage.setItem('@my_key', value);\n  } catch (e) {\n    console.error(e);\n  }\n}",
         "hint": "Use setItem and the value",
         "rubric": "Correctly calls setItem with the key and value."
       },
       {
         "title": "Sync Queues",
-        "theory": "## Conflict Resolution\\nWhen offline, user actions are saved to a local 'Queue'. When the network returns, the app processes the queue and handles server conflicts.",
-        "instructions": "## Task: NetInfo Check\\nUse the NetInfo library to check if the device is connected before attempting a sync.",
-        "starterCode": "import NetInfo from '@react-native-community/netinfo';\\n\\nNetInfo.fetch().then(state => {\\n  if (state.___) {\\n    syncQueueToServer();\\n  }\\n});",
-        "solution": "import NetInfo from '@react-native-community/netinfo';\\n\\nNetInfo.fetch().then(state => {\\n  if (state.isConnected) {\\n    syncQueueToServer();\\n  }\\n});",
+        "theory": "## Conflict Resolution\nWhen offline, user actions are saved to a local 'Queue'. When the network returns, the app processes the queue and handles server conflicts.",
+        "instructions": "## Task: NetInfo Check\nUse the NetInfo library to check if the device is connected before attempting a sync.",
+        "starterCode": "import NetInfo from '@react-native-community/netinfo';\n\nNetInfo.fetch().then(state => {\n  if (state.___) {\n    syncQueueToServer();\n  }\n});",
+        "solution": "import NetInfo from '@react-native-community/netinfo';\n\nNetInfo.fetch().then(state => {\n  if (state.isConnected) {\n    syncQueueToServer();\n  }\n});",
         "hint": "Check the isConnected property",
         "rubric": "Checks if the state isConnected."
       }
@@ -222,19 +222,19 @@
     "lessons": [
       {
         "title": "Fastlane Basics",
-        "theory": "## Automating Deployments\\nFastlane automates tedious mobile development tasks like generating screenshots, managing provisioning profiles, and releasing to app stores.",
-        "instructions": "## Task: Fastfile Lane\\nDefine a fastlane 'lane' named 'beta' that builds the iOS app and uploads it to TestFlight.",
-        "starterCode": "lane :___ do\\n  build_app(workspace: \"MyApp.xcworkspace\", scheme: \"MyApp\")\\n  upload_to____\\nend",
-        "solution": "lane :beta do\\n  build_app(workspace: \"MyApp.xcworkspace\", scheme: \"MyApp\")\\n  upload_to_testflight\\nend",
+        "theory": "## Automating Deployments\nFastlane automates tedious mobile development tasks like generating screenshots, managing provisioning profiles, and releasing to app stores.",
+        "instructions": "## Task: Fastfile Lane\nDefine a fastlane 'lane' named 'beta' that builds the iOS app and uploads it to TestFlight.",
+        "starterCode": "lane :___ do\n  build_app(workspace: \"MyApp.xcworkspace\", scheme: \"MyApp\")\n  upload_to____\nend",
+        "solution": "lane :beta do\n  build_app(workspace: \"MyApp.xcworkspace\", scheme: \"MyApp\")\n  upload_to_testflight\nend",
         "hint": "beta and testflight",
         "rubric": "Defines the beta lane and uploads to testflight."
       },
       {
         "title": "EAS Build (Expo)",
-        "theory": "## Cloud Builds\\nExpo Application Services (EAS) Build allows you to compile native iOS and Android apps in the cloud without needing a Mac or Android Studio.",
-        "instructions": "## Task: EAS Config\\nDefine the eas.json build profile for production to auto-increment the build number.",
-        "starterCode": "{\\n  \"build\": {\\n    \"production\": {\\n      \"autoIncrement\": ___\\n    }\\n  }\\n}",
-        "solution": "{\\n  \"build\": {\\n    \"production\": {\\n      \"autoIncrement\": true\\n    }\\n  }\\n}",
+        "theory": "## Cloud Builds\nExpo Application Services (EAS) Build allows you to compile native iOS and Android apps in the cloud without needing a Mac or Android Studio.",
+        "instructions": "## Task: EAS Config\nDefine the eas.json build profile for production to auto-increment the build number.",
+        "starterCode": "{\n  \"build\": {\n    \"production\": {\n      \"autoIncrement\": ___\n    }\n  }\n}",
+        "solution": "{\n  \"build\": {\n    \"production\": {\n      \"autoIncrement\": true\n    }\n  }\n}",
         "hint": "Set autoIncrement to true",
         "rubric": "Sets autoIncrement to boolean true."
       }

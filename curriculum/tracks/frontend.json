@@ -191,10 +191,10 @@
     "lessons": [
       {
         "title": "Modern Layouts",
-        "theory": "## CSS Flexbox\\nFlexbox is designed for 1-dimensional layouts (a row OR a column). It makes aligning items incredibly easy.\\n\\n```css\\n.container {\\n  display: flex;\\n  justify-content: center; /* Horizontally centers */\\n  align-items: center;     /* Vertically centers */\\n}\\n```\\n## CSS Grid\\nGrid is designed for 2-dimensional layouts (rows AND columns, like a checkerboard).",
-        "instructions": "## Task: Flexbox Align\\n1. You have a simulated container with elements.\\n2. Match the flexbox property to what it does.",
-        "starterCode": "flex_props = {\\n    'Space out elements evenly across the main axis': 'justify-content: ___',\\n    'Center elements on the cross axis (vertical if flex-direction is row)': 'align-items: ___',\\n    'Stack elements vertically instead of horizontally': 'flex-direction: ___'\\n}\\n\\nfor desc, prop in flex_props.items():\\n    print(f\"{prop:30} -> {desc}\")",
-        "solution": "flex_props = {\\n    'Space out elements evenly across the main axis': 'justify-content: space-between',\\n    'Center elements on the cross axis (vertical if flex-direction is row)': 'align-items: center',\\n    'Stack elements vertically instead of horizontally': 'flex-direction: column'\\n}\\n\\nfor desc, prop in flex_props.items():\\n    print(f\"{prop:30} -> {desc}\")",
+        "theory": "## CSS Flexbox\nFlexbox is designed for 1-dimensional layouts (a row OR a column). It makes aligning items incredibly easy.\n\n```css\n.container {\n  display: flex;\n  justify-content: center; /* Horizontally centers */\n  align-items: center;     /* Vertically centers */\n}\n```\n## CSS Grid\nGrid is designed for 2-dimensional layouts (rows AND columns, like a checkerboard).",
+        "instructions": "## Task: Flexbox Align\n1. You have a simulated container with elements.\n2. Match the flexbox property to what it does.",
+        "starterCode": "flex_props = {\n    'Space out elements evenly across the main axis': 'justify-content: ___',\n    'Center elements on the cross axis (vertical if flex-direction is row)': 'align-items: ___',\n    'Stack elements vertically instead of horizontally': 'flex-direction: ___'\n}\n\nfor desc, prop in flex_props.items():\n    print(f\"{prop:30} -> {desc}\")",
+        "solution": "flex_props = {\n    'Space out elements evenly across the main axis': 'justify-content: space-between',\n    'Center elements on the cross axis (vertical if flex-direction is row)': 'align-items: center',\n    'Stack elements vertically instead of horizontally': 'flex-direction: column'\n}\n\nfor desc, prop in flex_props.items():\n    print(f\"{prop:30} -> {desc}\")",
         "hint": "space-between, center, column.",
         "rubric": "Properties correctly matched."
       }
@@ -228,8 +228,8 @@
     "lessons": [
       {
         "title": "Lazy Loading",
-        "theory": "## Don't Load Everything at Once\\nIf a user visits your homepage, they shouldn't have to download the JavaScript for your settings page or the high-res images at the bottom of the page.\\n\\n- **Code Splitting**: Breaking your JS bundle into smaller chunks.\\n- **Lazy Loading**: Only loading images or components when they enter the viewport (screen).\\n\\nIn React, you use `React.lazy()` to dynamically import components only when needed.",
-        "instructions": "## Task: Lazy Image Simulator\\n1. Simulate a lazy loading image script.\\n2. You have a list of images with a boolean `in_viewport`.\\n3. If `in_viewport` is True, load the image.",
+        "theory": "## Don't Load Everything at Once\nIf a user visits your homepage, they shouldn't have to download the JavaScript for your settings page or the high-res images at the bottom of the page.\n\n- **Code Splitting**: Breaking your JS bundle into smaller chunks.\n- **Lazy Loading**: Only loading images or components when they enter the viewport (screen).\n\nIn React, you use `React.lazy()` to dynamically import components only when needed.",
+        "instructions": "## Task: Lazy Image Simulator\n1. Simulate a lazy loading image script.\n2. You have a list of images with a boolean `in_viewport`.\n3. If `in_viewport` is True, load the image.",
         "starterCode": "images = [\n    {'src': 'hero.jpg', 'in_viewport': True},\n    {'src': 'footer.jpg', 'in_viewport': False},\n    {'src': 'ad.png', 'in_viewport': False}\n]\n\ndef handle_scroll(images):\n    for img in images:\n        if img['___'] == ___:\n            print(f\"Downloading {img['src']}...\")\n            # Once loaded, we could set a flag so we don't load it again\n        else:\n            print(f\"Skipping {img['src']} (Not visible yet)\")\n\nhandle_scroll(images)",
         "solution": "images = [\n    {'src': 'hero.jpg', 'in_viewport': True},\n    {'src': 'footer.jpg', 'in_viewport': False},\n    {'src': 'ad.png', 'in_viewport': False}\n]\n\ndef handle_scroll(images):\n    for img in images:\n        if img['in_viewport'] == True:\n            print(f\"Downloading {img['src']}...\")\n            # Once loaded, we could set a flag so we don't load it again\n        else:\n            print(f\"Skipping {img['src']} (Not visible yet)\")\n\nhandle_scroll(images)",
         "hint": "Check if img['in_viewport'] == True.",
@@ -265,8 +265,8 @@
     "lessons": [
       {
         "title": "Utility-First CSS",
-        "theory": "## The Utility Approach\\nInstead of writing custom CSS, Tailwind provides low-level utility classes like `flex`, `pt-4`, and `text-center` that let you build designs directly in your markup.",
-        "instructions": "## Task: Apply Tailwind Classes\\nStyle a button to have a blue background, white text, padding, and rounded corners.",
+        "theory": "## The Utility Approach\nInstead of writing custom CSS, Tailwind provides low-level utility classes like `flex`, `pt-4`, and `text-center` that let you build designs directly in your markup.",
+        "instructions": "## Task: Apply Tailwind Classes\nStyle a button to have a blue background, white text, padding, and rounded corners.",
         "starterCode": "<button class=\"___ ___ px-4 py-2 ___\">Click Me</button>",
         "solution": "<button class=\"bg-blue-500 text-white px-4 py-2 rounded\">Click Me</button>",
         "hint": "Use bg-blue-500, text-white, and rounded",
@@ -274,10 +274,10 @@
       },
       {
         "title": "Responsive Design",
-        "theory": "## Breakpoint Prefixes\\nTailwind makes responsive design easy by prefixing classes with screen sizes, e.g., `md:flex` applies flexbox only on medium screens and larger.",
-        "instructions": "## Task: Responsive Grid\\nCreate a grid that is 1 column on mobile, and 3 columns on medium screens.",
-        "starterCode": "<div class=\"grid grid-cols-1 md:___\">\\n  <div>Item 1</div>\\n  <div>Item 2</div>\\n  <div>Item 3</div>\\n</div>",
-        "solution": "<div class=\"grid grid-cols-1 md:grid-cols-3\">\\n  <div>Item 1</div>\\n  <div>Item 2</div>\\n  <div>Item 3</div>\\n</div>",
+        "theory": "## Breakpoint Prefixes\nTailwind makes responsive design easy by prefixing classes with screen sizes, e.g., `md:flex` applies flexbox only on medium screens and larger.",
+        "instructions": "## Task: Responsive Grid\nCreate a grid that is 1 column on mobile, and 3 columns on medium screens.",
+        "starterCode": "<div class=\"grid grid-cols-1 md:___\">\n  <div>Item 1</div>\n  <div>Item 2</div>\n  <div>Item 3</div>\n</div>",
+        "solution": "<div class=\"grid grid-cols-1 md:grid-cols-3\">\n  <div>Item 1</div>\n  <div>Item 2</div>\n  <div>Item 3</div>\n</div>",
         "hint": "Use md:grid-cols-3",
         "rubric": "Applies md:grid-cols-3 correctly."
       }
@@ -288,19 +288,19 @@
     "lessons": [
       {
         "title": "Declarative Rendering",
-        "theory": "## The Template Syntax\\nVue uses an HTML-based template syntax that allows you to declaratively bind the rendered DOM to the underlying component instance's data.",
-        "instructions": "## Task: Interpolation\\nUse Vue's mustache syntax to render the `message` variable.",
-        "starterCode": "<template>\\n  <div>\\n    <p>___</p>\\n  </div>\\n</template>\\n\\n<script setup>\\nimport { ref } from 'vue'\\nconst message = ref('Hello Vue!')\\n</script>",
-        "solution": "<template>\\n  <div>\\n    <p>{{ message }}</p>\\n  </div>\\n</template>\\n\\n<script setup>\\nimport { ref } from 'vue'\\nconst message = ref('Hello Vue!')\\n</script>",
+        "theory": "## The Template Syntax\nVue uses an HTML-based template syntax that allows you to declaratively bind the rendered DOM to the underlying component instance's data.",
+        "instructions": "## Task: Interpolation\nUse Vue's mustache syntax to render the `message` variable.",
+        "starterCode": "<template>\n  <div>\n    <p>___</p>\n  </div>\n</template>\n\n<script setup>\nimport { ref } from 'vue'\nconst message = ref('Hello Vue!')\n</script>",
+        "solution": "<template>\n  <div>\n    <p>{{ message }}</p>\n  </div>\n</template>\n\n<script setup>\nimport { ref } from 'vue'\nconst message = ref('Hello Vue!')\n</script>",
         "hint": "Use {{ message }}",
         "rubric": "Correctly renders the ref using double curly braces."
       },
       {
         "title": "Directives",
-        "theory": "## v-if and v-for\\nDirectives are special attributes with the `v-` prefix. `v-if` conditionally renders an element, while `v-for` renders a list of items.",
-        "instructions": "## Task: Rendering a List\\nUse `v-for` to render a list of items from an array.",
-        "starterCode": "<template>\\n  <ul>\\n    <li ___=\"item in items\" :key=\"item.id\">\\n      {{ item.name }}\\n    </li>\\n  </ul>\\n</template>\\n\\n<script setup>\\nimport { ref } from 'vue'\\nconst items = ref([{id: 1, name: 'Apple'}, {id: 2, name: 'Banana'}])\\n</script>",
-        "solution": "<template>\\n  <ul>\\n    <li v-for=\"item in items\" :key=\"item.id\">\\n      {{ item.name }}\\n    </li>\\n  </ul>\\n</template>\\n\\n<script setup>\\nimport { ref } from 'vue'\\nconst items = ref([{id: 1, name: 'Apple'}, {id: 2, name: 'Banana'}])\\n</script>",
+        "theory": "## v-if and v-for\nDirectives are special attributes with the `v-` prefix. `v-if` conditionally renders an element, while `v-for` renders a list of items.",
+        "instructions": "## Task: Rendering a List\nUse `v-for` to render a list of items from an array.",
+        "starterCode": "<template>\n  <ul>\n    <li ___=\"item in items\" :key=\"item.id\">\n      {{ item.name }}\n    </li>\n  </ul>\n</template>\n\n<script setup>\nimport { ref } from 'vue'\nconst items = ref([{id: 1, name: 'Apple'}, {id: 2, name: 'Banana'}])\n</script>",
+        "solution": "<template>\n  <ul>\n    <li v-for=\"item in items\" :key=\"item.id\">\n      {{ item.name }}\n    </li>\n  </ul>\n</template>\n\n<script setup>\nimport { ref } from 'vue'\nconst items = ref([{id: 1, name: 'Apple'}, {id: 2, name: 'Banana'}])\n</script>",
         "hint": "Use v-for",
         "rubric": "Correctly applies the v-for directive."
       }
@@ -311,19 +311,19 @@
     "lessons": [
       {
         "title": "Typing Props",
-        "theory": "## Interface Definitions\\nWhen building components (e.g. in React), defining the shape of your props using TypeScript Interfaces catches errors during development instead of runtime.",
-        "instructions": "## Task: Define Button Props\\nCreate an interface for a Button component that requires a string `label` and an optional boolean `disabled`.",
-        "starterCode": "interface ButtonProps {\\n    ___: ___;\\n    disabled___: ___;\\n}\\n\\nfunction Button({ label, disabled }: ButtonProps) {\\n    return <button disabled={disabled}>{label}</button>\\n}",
-        "solution": "interface ButtonProps {\\n    label: string;\\n    disabled?: boolean;\\n}\\n\\nfunction Button({ label, disabled }: ButtonProps) {\\n    return <button disabled={disabled}>{label}</button>\\n}",
+        "theory": "## Interface Definitions\nWhen building components (e.g. in React), defining the shape of your props using TypeScript Interfaces catches errors during development instead of runtime.",
+        "instructions": "## Task: Define Button Props\nCreate an interface for a Button component that requires a string `label` and an optional boolean `disabled`.",
+        "starterCode": "interface ButtonProps {\n    ___: ___;\n    disabled___: ___;\n}\n\nfunction Button({ label, disabled }: ButtonProps) {\n    return <button disabled={disabled}>{label}</button>\n}",
+        "solution": "interface ButtonProps {\n    label: string;\n    disabled?: boolean;\n}\n\nfunction Button({ label, disabled }: ButtonProps) {\n    return <button disabled={disabled}>{label}</button>\n}",
         "hint": "Use label: string and disabled?: boolean",
         "rubric": "Correctly types the required string and optional boolean."
       },
       {
         "title": "Generics in State",
-        "theory": "## Type Inference and Generics\\nSometimes you need to explicitly type state hooks when the initial value is null or empty, using Generics.",
-        "instructions": "## Task: Type useState\\nUse a generic to specify that the state can be a User object or null.",
-        "starterCode": "import { useState } from 'react';\\n\\ntype User = { name: string, age: number };\\n\\n// Specify that user can be User or null\\nconst [user, setUser] = useState<___>(null);",
-        "solution": "import { useState } from 'react';\\n\\ntype User = { name: string, age: number };\\n\\n// Specify that user can be User or null\\nconst [user, setUser] = useState<User | null>(null);",
+        "theory": "## Type Inference and Generics\nSometimes you need to explicitly type state hooks when the initial value is null or empty, using Generics.",
+        "instructions": "## Task: Type useState\nUse a generic to specify that the state can be a User object or null.",
+        "starterCode": "import { useState } from 'react';\n\ntype User = { name: string, age: number };\n\n// Specify that user can be User or null\nconst [user, setUser] = useState<___>(null);",
+        "solution": "import { useState } from 'react';\n\ntype User = { name: string, age: number };\n\n// Specify that user can be User or null\nconst [user, setUser] = useState<User | null>(null);",
         "hint": "Use User | null",
         "rubric": "Applies the correct union type generic."
       }
@@ -334,19 +334,19 @@
     "lessons": [
       {
         "title": "CSS Keyframes",
-        "theory": "## @keyframes\\nKeyframes allow you to control the intermediate steps in a CSS animation sequence.",
-        "instructions": "## Task: Define a Fade-In\\nWrite a keyframe animation that fades opacity from 0 to 1.",
-        "starterCode": "@keyframes fadeIn {\\n  from {\\n    opacity: ___;\\n  }\\n  to {\\n    opacity: ___;\\n  }\\n}\\n\\n.animated-box {\\n  animation: fadeIn 2s ease-in;\\n}",
-        "solution": "@keyframes fadeIn {\\n  from {\\n    opacity: 0;\\n  }\\n  to {\\n    opacity: 1;\\n  }\\n}\\n\\n.animated-box {\\n  animation: fadeIn 2s ease-in;\\n}",
+        "theory": "## @keyframes\nKeyframes allow you to control the intermediate steps in a CSS animation sequence.",
+        "instructions": "## Task: Define a Fade-In\nWrite a keyframe animation that fades opacity from 0 to 1.",
+        "starterCode": "@keyframes fadeIn {\n  from {\n    opacity: ___;\n  }\n  to {\n    opacity: ___;\n  }\n}\n\n.animated-box {\n  animation: fadeIn 2s ease-in;\n}",
+        "solution": "@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n\n.animated-box {\n  animation: fadeIn 2s ease-in;\n}",
         "hint": "Use 0 and 1 for opacity.",
         "rubric": "Correctly defines the start and end opacity."
       },
       {
         "title": "Framer Motion",
-        "theory": "## React Animations\\nFramer Motion is a production-ready motion library for React that simplifies complex animations.",
-        "instructions": "## Task: Animate a Div\\nUse the `motion.div` component to animate a box moving 100px to the right.",
-        "starterCode": "import { motion } from 'framer-motion';\\n\\nexport default function App() {\\n  return (\\n    <motion.div\\n      animate={{ x: ___ }}\\n      transition={{ duration: 0.5 }}\\n    >\\n      Sliding Box\\n    </motion.div>\\n  );\\n}",
-        "solution": "import { motion } from 'framer-motion';\\n\\nexport default function App() {\\n  return (\\n    <motion.div\\n      animate={{ x: 100 }}\\n      transition={{ duration: 0.5 }}\\n    >\\n      Sliding Box\\n    </motion.div>\\n  );\\n}",
+        "theory": "## React Animations\nFramer Motion is a production-ready motion library for React that simplifies complex animations.",
+        "instructions": "## Task: Animate a Div\nUse the `motion.div` component to animate a box moving 100px to the right.",
+        "starterCode": "import { motion } from 'framer-motion';\n\nexport default function App() {\n  return (\n    <motion.div\n      animate={{ x: ___ }}\n      transition={{ duration: 0.5 }}\n    >\n      Sliding Box\n    </motion.div>\n  );\n}",
+        "solution": "import { motion } from 'framer-motion';\n\nexport default function App() {\n  return (\n    <motion.div\n      animate={{ x: 100 }}\n      transition={{ duration: 0.5 }}\n    >\n      Sliding Box\n    </motion.div>\n  );\n}",
         "hint": "Set x to 100",
         "rubric": "Uses the correct translation value in the animate prop."
       }
@@ -357,19 +357,19 @@
     "lessons": [
       {
         "title": "React Testing Library",
-        "theory": "## Testing Behavior\\nReact Testing Library encourages testing applications in the way they are used by users, focusing on querying the DOM.",
-        "instructions": "## Task: Assert Element Presence\\nWrite an assertion that checks if an element with the text 'Submit' is in the document.",
-        "starterCode": "import { render, screen } from '@testing-library/react';\\nimport '@testing-library/jest-dom';\\nimport Button from './Button';\\n\\ntest('renders submit button', () => {\\n  render(<Button label=\"Submit\" />);\\n  const buttonElement = screen.getByText(/Submit/i);\\n  expect(buttonElement).___.toBeInTheDocument();\\n});",
-        "solution": "import { render, screen } from '@testing-library/react';\\nimport '@testing-library/jest-dom';\\nimport Button from './Button';\\n\\ntest('renders submit button', () => {\\n  render(<Button label=\"Submit\" />);\\n  const buttonElement = screen.getByText(/Submit/i);\\n  expect(buttonElement).toBeInTheDocument();\\n});",
+        "theory": "## Testing Behavior\nReact Testing Library encourages testing applications in the way they are used by users, focusing on querying the DOM.",
+        "instructions": "## Task: Assert Element Presence\nWrite an assertion that checks if an element with the text 'Submit' is in the document.",
+        "starterCode": "import { render, screen } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport Button from './Button';\n\ntest('renders submit button', () => {\n  render(<Button label=\"Submit\" />);\n  const buttonElement = screen.getByText(/Submit/i);\n  expect(buttonElement).___.toBeInTheDocument();\n});",
+        "solution": "import { render, screen } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport Button from './Button';\n\ntest('renders submit button', () => {\n  render(<Button label=\"Submit\" />);\n  const buttonElement = screen.getByText(/Submit/i);\n  expect(buttonElement).toBeInTheDocument();\n});",
         "hint": "Remove the blank space, it just calls toBeInTheDocument()",
         "rubric": "Correctly invokes toBeInTheDocument assertion."
       },
       {
         "title": "E2E with Cypress",
-        "theory": "## End-to-End Tests\\nCypress runs in the browser and tests the entire application flow, interacting with it exactly like a real user would.",
-        "instructions": "## Task: Visit and Type\\nWrite a Cypress test that visits a page, targets an input field, and types a value.",
-        "starterCode": "describe('Login Flow', () => {\\n  it('can type into email input', () => {\\n    cy.___('/login');\\n    cy.get('input[name=\"email\"]').___('test@example.com');\\n  });\\n});",
-        "solution": "describe('Login Flow', () => {\\n  it('can type into email input', () => {\\n    cy.visit('/login');\\n    cy.get('input[name=\"email\"]').type('test@example.com');\\n  });\\n});",
+        "theory": "## End-to-End Tests\nCypress runs in the browser and tests the entire application flow, interacting with it exactly like a real user would.",
+        "instructions": "## Task: Visit and Type\nWrite a Cypress test that visits a page, targets an input field, and types a value.",
+        "starterCode": "describe('Login Flow', () => {\n  it('can type into email input', () => {\n    cy.___('/login');\n    cy.get('input[name=\"email\"]').___('test@example.com');\n  });\n});",
+        "solution": "describe('Login Flow', () => {\n  it('can type into email input', () => {\n    cy.visit('/login');\n    cy.get('input[name=\"email\"]').type('test@example.com');\n  });\n});",
         "hint": "Use visit and type.",
         "rubric": "Correctly uses visit and type commands."
       }

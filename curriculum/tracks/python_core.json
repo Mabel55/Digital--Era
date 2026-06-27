@@ -254,10 +254,10 @@
     "lessons": [
       {
         "title": "Reading & Writing Files",
-        "theory": "## File Operations in Python\nPython makes it easy to read and write files.\n\n```python\n# Writing to a file\nwith open('output.txt', 'w') as f:\n    f.write('Hello, World!\\n')\n    f.write('Second line\\n')\n\n# Reading a file\nwith open('output.txt', 'r') as f:\n    content = f.read()\n    print(content)\n\n# Reading line by line\nwith open('output.txt', 'r') as f:\n    for line in f:\n        print(line.strip())\n```\n\nThe `with` statement automatically closes the file when done.",
+        "theory": "## File Operations in Python\nPython makes it easy to read and write files.\n\n```python\n# Writing to a file\nwith open('output.txt', 'w') as f:\n    f.write('Hello, World!\n')\n    f.write('Second line\n')\n\n# Reading a file\nwith open('output.txt', 'r') as f:\n    content = f.read()\n    print(content)\n\n# Reading line by line\nwith open('output.txt', 'r') as f:\n    for line in f:\n        print(line.strip())\n```\n\nThe `with` statement automatically closes the file when done.",
         "instructions": "## Task: Write and Read\n1. Write 3 names to a file called `students.txt` (one per line)\n2. Read the file back and print each name\n3. Count and print the total number of lines",
-        "starterCode": "# Write\nwith open('students.txt', '___') as f:\n    f.write('Alice\\n')\n    f.write('Bob\\n')\n    f.write('Charlie\\n')\n\n# Read\ncount = 0\nwith open('students.txt', '___') as f:\n    for line in f:\n        print(line.___())\n        count ___ 1\n\nprint(f'Total students: {count}')",
-        "solution": "# Write\nwith open('students.txt', 'w') as f:\n    f.write('Alice\\n')\n    f.write('Bob\\n')\n    f.write('Charlie\\n')\n\n# Read\ncount = 0\nwith open('students.txt', 'r') as f:\n    for line in f:\n        print(line.strip())\n        count += 1\n\nprint(f'Total students: {count}')",
+        "starterCode": "# Write\nwith open('students.txt', '___') as f:\n    f.write('Alice\n')\n    f.write('Bob\n')\n    f.write('Charlie\n')\n\n# Read\ncount = 0\nwith open('students.txt', '___') as f:\n    for line in f:\n        print(line.___())\n        count ___ 1\n\nprint(f'Total students: {count}')",
+        "solution": "# Write\nwith open('students.txt', 'w') as f:\n    f.write('Alice\n')\n    f.write('Bob\n')\n    f.write('Charlie\n')\n\n# Read\ncount = 0\nwith open('students.txt', 'r') as f:\n    for line in f:\n        print(line.strip())\n        count += 1\n\nprint(f'Total students: {count}')",
         "hint": "'w' for write, 'r' for read. .strip() removes whitespace. += 1 to count.",
         "rubric": "File written and read correctly. 3 names printed. Count is 3."
       },
@@ -283,8 +283,8 @@
         "title": "Error Handling with Files",
         "theory": "## Handling File Errors\nFiles might not exist, or you might not have permission. Use `try/except`.\n\n```python\ntry:\n    with open('missing.txt', 'r') as f:\n        content = f.read()\nexcept FileNotFoundError:\n    print('File does not exist!')\nexcept PermissionError:\n    print('No permission to read!')\nfinally:\n    print('Done trying.')\n```",
         "instructions": "## Task: Safe File Reader\n1. Try to read a file called `data.txt`\n2. Handle `FileNotFoundError` by creating the file with default content\n3. Then read and print the file",
-        "starterCode": "try:\n    with open('data.txt', 'r') as f:\n        content = f.read()\n        print(content)\nexcept ___:\n    print('File not found! Creating it...')\n    with open('data.txt', '___') as f:\n        f.write('Default data\\nLine 2')\n    # Now read it\n    with open('data.txt', 'r') as f:\n        print(f.read())",
-        "solution": "try:\n    with open('data.txt', 'r') as f:\n        content = f.read()\n        print(content)\nexcept FileNotFoundError:\n    print('File not found! Creating it...')\n    with open('data.txt', 'w') as f:\n        f.write('Default data\\nLine 2')\n    # Now read it\n    with open('data.txt', 'r') as f:\n        print(f.read())",
+        "starterCode": "try:\n    with open('data.txt', 'r') as f:\n        content = f.read()\n        print(content)\nexcept ___:\n    print('File not found! Creating it...')\n    with open('data.txt', '___') as f:\n        f.write('Default data\nLine 2')\n    # Now read it\n    with open('data.txt', 'r') as f:\n        print(f.read())",
+        "solution": "try:\n    with open('data.txt', 'r') as f:\n        content = f.read()\n        print(content)\nexcept FileNotFoundError:\n    print('File not found! Creating it...')\n    with open('data.txt', 'w') as f:\n        f.write('Default data\nLine 2')\n    # Now read it\n    with open('data.txt', 'r') as f:\n        print(f.read())",
         "hint": "FileNotFoundError is the exception class. 'w' to create and write.",
         "rubric": "Exception caught. File created on first run. Content printed."
       },
@@ -349,10 +349,10 @@
       },
       {
         "title": "Timing Decorator",
-        "theory": "## Measuring Execution Time\\nDecorators are functions that modify the behavior of other functions. A common use case is measuring how long a function takes to execute.",
-        "instructions": "## Task: Create a Timer\\n1. Implement a decorator `timer` that prints the time taken by the decorated function.",
-        "starterCode": "import time\\n\\ndef timer(func):\\n    def wrapper(*args, **kwargs):\\n        start = time.time()\\n        result = func(*args, **kwargs)\\n        end = time.time()\\n        print(f'{func.__name__} took {end - start:.4f}s')\\n        return result\\n    return ___\\n\\n@timer\\ndef slow_function():\\n    time.sleep(0.5)\\n    return 'Done'\\n\\nprint(slow_function())",
-        "solution": "import time\\n\\ndef timer(func):\\n    def wrapper(*args, **kwargs):\\n        start = time.time()\\n        result = func(*args, **kwargs)\\n        end = time.time()\\n        print(f'{func.__name__} took {end - start:.4f}s')\\n        return result\\n    return wrapper\\n\\n@timer\\ndef slow_function():\\n    time.sleep(0.5)\\n    return 'Done'\\n\\nprint(slow_function())",
+        "theory": "## Measuring Execution Time\nDecorators are functions that modify the behavior of other functions. A common use case is measuring how long a function takes to execute.",
+        "instructions": "## Task: Create a Timer\n1. Implement a decorator `timer` that prints the time taken by the decorated function.",
+        "starterCode": "import time\n\ndef timer(func):\n    def wrapper(*args, **kwargs):\n        start = time.time()\n        result = func(*args, **kwargs)\n        end = time.time()\n        print(f'{func.__name__} took {end - start:.4f}s')\n        return result\n    return ___\n\n@timer\ndef slow_function():\n    time.sleep(0.5)\n    return 'Done'\n\nprint(slow_function())",
+        "solution": "import time\n\ndef timer(func):\n    def wrapper(*args, **kwargs):\n        start = time.time()\n        result = func(*args, **kwargs)\n        end = time.time()\n        print(f'{func.__name__} took {end - start:.4f}s')\n        return result\n    return wrapper\n\n@timer\ndef slow_function():\n    time.sleep(0.5)\n    return 'Done'\n\nprint(slow_function())",
         "hint": "Return the wrapper function.",
         "rubric": "Decorator correctly returns wrapper and measures time."
       }
@@ -463,19 +463,19 @@
     "lessons": [
       {
         "title": "Asyncio in Depth",
-        "theory": "## Asyncio\\nLearn how the event loop works and how to write efficient asynchronous code in Python.",
-        "instructions": "## Task: Create a Task\\n1. Create an asyncio task for the `fetch_data` coroutine.",
-        "starterCode": "import asyncio\\n\\nasync def fetch_data():\\n    await asyncio.sleep(1)\\n    return 'Data'\\n\\n# Create task here\\ntask = ___",
-        "solution": "import asyncio\\n\\nasync def fetch_data():\\n    await asyncio.sleep(1)\\n    return 'Data'\\n\\ntask = asyncio.create_task(fetch_data())",
+        "theory": "## Asyncio\nLearn how the event loop works and how to write efficient asynchronous code in Python.",
+        "instructions": "## Task: Create a Task\n1. Create an asyncio task for the `fetch_data` coroutine.",
+        "starterCode": "import asyncio\n\nasync def fetch_data():\n    await asyncio.sleep(1)\n    return 'Data'\n\n# Create task here\ntask = ___",
+        "solution": "import asyncio\n\nasync def fetch_data():\n    await asyncio.sleep(1)\n    return 'Data'\n\ntask = asyncio.create_task(fetch_data())",
         "hint": "Use asyncio.create_task",
         "rubric": "Task created."
       },
       {
         "title": "Multiprocessing Pools",
-        "theory": "## Multiprocessing\\nBypass the GIL using the `multiprocessing` module for CPU-bound tasks.",
-        "instructions": "## Task: Create a Pool\\n1. Create a Multiprocessing Pool with 4 workers.",
-        "starterCode": "from multiprocessing import Pool\\n\\npool = ___",
-        "solution": "from multiprocessing import Pool\\n\\npool = Pool(processes=4)",
+        "theory": "## Multiprocessing\nBypass the GIL using the `multiprocessing` module for CPU-bound tasks.",
+        "instructions": "## Task: Create a Pool\n1. Create a Multiprocessing Pool with 4 workers.",
+        "starterCode": "from multiprocessing import Pool\n\npool = ___",
+        "solution": "from multiprocessing import Pool\n\npool = Pool(processes=4)",
         "hint": "Pool(processes=4)",
         "rubric": "Pool created."
       }
@@ -486,19 +486,19 @@
     "lessons": [
       {
         "title": "The Singleton Pattern",
-        "theory": "## Singleton\\nEnsure a class has only one instance and provide a global point of access to it.",
-        "instructions": "## Task: Implement Singleton\\n1. Implement the `__new__` method to return the existing instance if it exists.",
-        "starterCode": "class Singleton:\\n    _instance = None\\n    def __new__(cls):\\n        ___",
-        "solution": "class Singleton:\\n    _instance = None\\n    def __new__(cls):\\n        if cls._instance is None:\\n            cls._instance = super(Singleton, cls).__new__(cls)\\n        return cls._instance",
+        "theory": "## Singleton\nEnsure a class has only one instance and provide a global point of access to it.",
+        "instructions": "## Task: Implement Singleton\n1. Implement the `__new__` method to return the existing instance if it exists.",
+        "starterCode": "class Singleton:\n    _instance = None\n    def __new__(cls):\n        ___",
+        "solution": "class Singleton:\n    _instance = None\n    def __new__(cls):\n        if cls._instance is None:\n            cls._instance = super(Singleton, cls).__new__(cls)\n        return cls._instance",
         "hint": "Check if cls._instance is None",
         "rubric": "Singleton implemented."
       },
       {
         "title": "The Factory Pattern",
-        "theory": "## Factory\\nDefine an interface for creating an object, but let subclasses decide which class to instantiate.",
-        "instructions": "## Task: Create a Factory\\n1. Create a `ShapeFactory` that returns a `Circle` or `Square`.",
-        "starterCode": "class ShapeFactory:\\n    @staticmethod\\n    def get_shape(shape_type):\\n        ___",
-        "solution": "class ShapeFactory:\\n    @staticmethod\\n    def get_shape(shape_type):\\n        if shape_type == 'CIRCLE':\\n            return Circle()\\n        elif shape_type == 'SQUARE':\\n            return Square()\\n        return None",
+        "theory": "## Factory\nDefine an interface for creating an object, but let subclasses decide which class to instantiate.",
+        "instructions": "## Task: Create a Factory\n1. Create a `ShapeFactory` that returns a `Circle` or `Square`.",
+        "starterCode": "class ShapeFactory:\n    @staticmethod\n    def get_shape(shape_type):\n        ___",
+        "solution": "class ShapeFactory:\n    @staticmethod\n    def get_shape(shape_type):\n        if shape_type == 'CIRCLE':\n            return Circle()\n        elif shape_type == 'SQUARE':\n            return Square()\n        return None",
         "hint": "Return Circle() or Square() based on string matching",
         "rubric": "Factory implemented."
       }

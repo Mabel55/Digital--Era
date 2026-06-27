@@ -15,8 +15,8 @@
         "title": "Variables & Types",
         "theory": "## Declaring Variables\nGo has explicit types but also supports type inference.\n\n```go\n// Explicit typing\nvar age int = 25\nvar name string = \"Alice\"\n\n// Type inference\nvar score = 100\n\n// Short declaration (inside functions only)\ncity := \"New York\"\npi := 3.14\n```",
         "instructions": "## Task: Declare Variables\n1. Declare `year` as an int using explicit typing\n2. Declare `language` as a string using type inference (`var`)\n3. Declare `version` as a float using short declaration (`:=`)\n4. Print them all",
-        "starterCode": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    ___ year ___ = 2024\n    ___ language = \"Go\"\n    version ___ 1.22\n    \n    fmt.Printf(\"Year: %d, Language: %s, Version: %.2f\\n\", year, language, version)\n}",
-        "solution": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    var year int = 2024\n    var language = \"Go\"\n    version := 1.22\n    \n    fmt.Printf(\"Year: %d, Language: %s, Version: %.2f\\n\", year, language, version)\n}",
+        "starterCode": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    ___ year ___ = 2024\n    ___ language = \"Go\"\n    version ___ 1.22\n    \n    fmt.Printf(\"Year: %d, Language: %s, Version: %.2f\n\", year, language, version)\n}",
+        "solution": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    var year int = 2024\n    var language = \"Go\"\n    version := 1.22\n    \n    fmt.Printf(\"Year: %d, Language: %s, Version: %.2f\n\", year, language, version)\n}",
         "hint": "var name type. var name = value. name := value.",
         "rubric": "All three variable types declared correctly and printed."
       },
@@ -52,8 +52,8 @@
         "title": "Goroutines Basics",
         "theory": "## Lightweight Threads\nGoroutines are functions that run concurrently with other functions.\n\n```go\nfunc say(text string) {\n    fmt.Println(text)\n}\n\nfunc main() {\n    go say(\"World\")  // Runs in background\n    say(\"Hello\")     // Runs immediately\n    time.Sleep(time.Second) // Wait for goroutine to finish\n}\n```\n\nGoroutines are cheap — you can easily run thousands of them.",
         "instructions": "## Task: Start Goroutines\n1. Write a function `printNumbers(prefix string)` that prints 1 to 3\n2. Call it once normally, and once as a goroutine\n3. Simulate a small delay with `time.Sleep` in the loop",
-        "starterCode": "package main\n\nimport (\n    \"fmt\"\n    \"time\"\n)\n\nfunc printNumbers(prefix string) {\n    for i := 1; i <= 3; i++ {\n        time.Sleep(100 * time.Millisecond)\n        fmt.Printf(\"%s: %d\\n\", prefix, i)\n    }\n}\n\nfunc main() {\n    // Run as goroutine\n    ___ printNumbers(\"Async\")\n    \n    // Run normally (blocks)\n    ___(\"Sync\")\n    \n    // Give goroutine time to finish if Sync finishes first\n    time.Sleep(200 * time.Millisecond)\n}",
-        "solution": "package main\n\nimport (\n    \"fmt\"\n    \"time\"\n)\n\nfunc printNumbers(prefix string) {\n    for i := 1; i <= 3; i++ {\n        time.Sleep(100 * time.Millisecond)\n        fmt.Printf(\"%s: %d\\n\", prefix, i)\n    }\n}\n\nfunc main() {\n    // Run as goroutine\n    go printNumbers(\"Async\")\n    \n    // Run normally (blocks)\n    printNumbers(\"Sync\")\n    \n    // Give goroutine time to finish if Sync finishes first\n    time.Sleep(200 * time.Millisecond)\n}",
+        "starterCode": "package main\n\nimport (\n    \"fmt\"\n    \"time\"\n)\n\nfunc printNumbers(prefix string) {\n    for i := 1; i <= 3; i++ {\n        time.Sleep(100 * time.Millisecond)\n        fmt.Printf(\"%s: %d\n\", prefix, i)\n    }\n}\n\nfunc main() {\n    // Run as goroutine\n    ___ printNumbers(\"Async\")\n    \n    // Run normally (blocks)\n    ___(\"Sync\")\n    \n    // Give goroutine time to finish if Sync finishes first\n    time.Sleep(200 * time.Millisecond)\n}",
+        "solution": "package main\n\nimport (\n    \"fmt\"\n    \"time\"\n)\n\nfunc printNumbers(prefix string) {\n    for i := 1; i <= 3; i++ {\n        time.Sleep(100 * time.Millisecond)\n        fmt.Printf(\"%s: %d\n\", prefix, i)\n    }\n}\n\nfunc main() {\n    // Run as goroutine\n    go printNumbers(\"Async\")\n    \n    // Run normally (blocks)\n    printNumbers(\"Sync\")\n    \n    // Give goroutine time to finish if Sync finishes first\n    time.Sleep(200 * time.Millisecond)\n}",
         "hint": "Prefix function call with 'go' to start a goroutine.",
         "rubric": "Both Sync and Async print 1 to 3, likely interleaved."
       },
@@ -124,8 +124,8 @@
     "lessons": [
       {
         "title": "High-Speed APIs",
-        "theory": "## Faster than REST\\nREST uses HTTP/1.1 and JSON. JSON is heavy and slow to parse.\\n\\n**gRPC** (developed by Google) uses HTTP/2 and **Protocol Buffers** (Protobuf). Protobufs are binary, making them extremely fast and compact.\\n\\nWith gRPC, you define your service in a `.proto` file, and it automatically generates the server and client code for you in almost any language (Go, Python, Java, etc).",
-        "instructions": "## Task: Protobuf vs JSON Size\\n1. Compare the string length of a JSON object vs a mock Binary representation.\\n2. Print the difference in size.",
+        "theory": "## Faster than REST\nREST uses HTTP/1.1 and JSON. JSON is heavy and slow to parse.\n\n**gRPC** (developed by Google) uses HTTP/2 and **Protocol Buffers** (Protobuf). Protobufs are binary, making them extremely fast and compact.\n\nWith gRPC, you define your service in a `.proto` file, and it automatically generates the server and client code for you in almost any language (Go, Python, Java, etc).",
+        "instructions": "## Task: Protobuf vs JSON Size\n1. Compare the string length of a JSON object vs a mock Binary representation.\n2. Print the difference in size.",
         "starterCode": "import json\n\ndata = {\"id\": 104, \"name\": \"Alice\", \"active\": True}\n\n# Standard REST JSON string\njson_string = json.___(data)\njson_size = len(json_string)\n\n# Mock gRPC Protobuf binary (usually much smaller, just the raw data packed)\nmock_binary_string = \"104Alice1\"\nbinary_size = len(___)\n\nprint(f\"JSON Size: {json_size} bytes\")\nprint(f\"Protobuf Size: {binary_size} bytes\")\nprint(f\"gRPC is {json_size - binary_size} bytes smaller!\")",
         "solution": "import json\n\ndata = {\"id\": 104, \"name\": \"Alice\", \"active\": True}\n\n# Standard REST JSON string\njson_string = json.dumps(data)\njson_size = len(json_string)\n\n# Mock gRPC Protobuf binary (usually much smaller, just the raw data packed)\nmock_binary_string = \"104Alice1\"\nbinary_size = len(mock_binary_string)\n\nprint(f\"JSON Size: {json_size} bytes\")\nprint(f\"Protobuf Size: {binary_size} bytes\")\nprint(f\"gRPC is {json_size - binary_size} bytes smaller!\")",
         "hint": "Use json.dumps(). Check length of mock_binary_string.",
@@ -138,8 +138,8 @@
     "lessons": [
       {
         "title": "Managing Microservices",
-        "theory": "## Istio & Linkerd\\nWhen you have 50 microservices talking to each other, how do you handle security, retries, and monitoring? Doing it in the code is messy.\\n\\nA **Service Mesh** injects a 'Sidecar Proxy' next to every single service. When Service A wants to talk to Service B, it actually talks to its own proxy, which securely routes the traffic to B's proxy.\\n\\nThis allows you to enforce mTLS (mutual encryption) without writing a single line of application code.",
-        "instructions": "## Task: Sidecar Simulator\\n1. Simulate a request going through a sidecar proxy.\\n2. The proxy should intercept the request, encrypt it, and pass it to the destination.",
+        "theory": "## Istio & Linkerd\nWhen you have 50 microservices talking to each other, how do you handle security, retries, and monitoring? Doing it in the code is messy.\n\nA **Service Mesh** injects a 'Sidecar Proxy' next to every single service. When Service A wants to talk to Service B, it actually talks to its own proxy, which securely routes the traffic to B's proxy.\n\nThis allows you to enforce mTLS (mutual encryption) without writing a single line of application code.",
+        "instructions": "## Task: Sidecar Simulator\n1. Simulate a request going through a sidecar proxy.\n2. The proxy should intercept the request, encrypt it, and pass it to the destination.",
         "starterCode": "class SidecarProxy:\n    def __init__(self, service_name):\n        self.service_name = service_name\n        \n    def send(self, destination, data):\n        print(f\"[{self.service_name} Proxy] Encrypting data...\")\n        encrypted = f\"**{data}**\"\n        print(f\"[{self.service_name} Proxy] Sending to {destination.service_name} Proxy...\")\n        destination.___(encrypted)\n        \n    def receive(self, data):\n        print(f\"[{self.service_name} Proxy] Decrypting data...\")\n        decrypted = data.replace('*', '')\n        print(f\"[{self.service_name} App] Received: {decrypted}\")\n\napp_a = SidecarProxy(\"Service_A\")\napp_b = SidecarProxy(\"Service_B\")\n\napp_a.___(app_b, \"Hello Microservice!\")",
         "solution": "class SidecarProxy:\n    def __init__(self, service_name):\n        self.service_name = service_name\n        \n    def send(self, destination, data):\n        print(f\"[{self.service_name} Proxy] Encrypting data...\")\n        encrypted = f\"**{data}**\"\n        print(f\"[{self.service_name} Proxy] Sending to {destination.service_name} Proxy...\")\n        destination.receive(encrypted)\n        \n    def receive(self, data):\n        print(f\"[{self.service_name} Proxy] Decrypting data...\")\n        decrypted = data.replace('*', '')\n        print(f\"[{self.service_name} App] Received: {decrypted}\")\n\napp_a = SidecarProxy(\"Service_A\")\napp_b = SidecarProxy(\"Service_B\")\n\napp_a.send(app_b, \"Hello Microservice!\")",
         "hint": "destination.receive(encrypted) and app_a.send(app_b, ...)",
@@ -152,8 +152,8 @@
     "lessons": [
       {
         "title": "K8s Operators",
-        "theory": "## Automating Kubernetes\\nAn Operator is a software extension to Kubernetes that makes use of custom resources to manage applications and their components.\\n\\nInstead of a human reading a manual on how to backup a database, you write a K8s Operator that automatically knows how to backup, restore, and scale your specific database.",
-        "instructions": "## Task: Operator Loop\\n1. An operator constantly runs a 'Reconciliation Loop'.\\n2. It checks the 'Desired State' against the 'Current State'.\\n3. Simulate an operator checking if a database has a backup.",
+        "theory": "## Automating Kubernetes\nAn Operator is a software extension to Kubernetes that makes use of custom resources to manage applications and their components.\n\nInstead of a human reading a manual on how to backup a database, you write a K8s Operator that automatically knows how to backup, restore, and scale your specific database.",
+        "instructions": "## Task: Operator Loop\n1. An operator constantly runs a 'Reconciliation Loop'.\n2. It checks the 'Desired State' against the 'Current State'.\n3. Simulate an operator checking if a database has a backup.",
         "starterCode": "def reconcile_loop(current_state, desired_state):\n    print(\"--- Reconciliation Loop Running ---\")\n    \n    if current_state['needs_backup'] != desired_state['___']:\n        print(\"[Operator Action] Taking database backup to match desired state...\")\n        current_state['___'] = desired_state['___']\n        return \"Action Taken\"\n    \n    return \"No Action Needed\"\n\ndesired = {'needs_backup': False} # We don't want it to NEED a backup, we want it DONE\ncurrent = {'needs_backup': True}\n\nprint(reconcile_loop(current, desired))\n# Loop runs again later\nprint(reconcile_loop(current, desired))",
         "solution": "def reconcile_loop(current_state, desired_state):\n    print(\"--- Reconciliation Loop Running ---\")\n    \n    if current_state['needs_backup'] != desired_state['needs_backup']:\n        print(\"[Operator Action] Taking database backup to match desired state...\")\n        current_state['needs_backup'] = desired_state['needs_backup']\n        return \"Action Taken\"\n    \n    return \"No Action Needed\"\n\ndesired = {'needs_backup': False} # We don't want it to NEED a backup, we want it DONE\ncurrent = {'needs_backup': True}\n\nprint(reconcile_loop(current, desired))\n# Loop runs again later\nprint(reconcile_loop(current, desired))",
         "hint": "Key is 'needs_backup'.",
@@ -166,8 +166,8 @@
     "lessons": [
       {
         "title": "Go Mod Init",
-        "theory": "## Dependency Management\\nGo modules are the standard way to manage dependencies in Go projects. The `go mod init` command initializes a new module in your project directory.",
-        "instructions": "## Task: Init a Module\\nWrite the command to initialize a new module named 'github.com/mabel/app'.",
+        "theory": "## Dependency Management\nGo modules are the standard way to manage dependencies in Go projects. The `go mod init` command initializes a new module in your project directory.",
+        "instructions": "## Task: Init a Module\nWrite the command to initialize a new module named 'github.com/mabel/app'.",
         "starterCode": "go ___ ___ github.com/mabel/app",
         "solution": "go mod init github.com/mabel/app",
         "hint": "Use mod init",
@@ -175,10 +175,10 @@
       },
       {
         "title": "Importing Packages",
-        "theory": "## Standard Library\\nGo comes with a rich standard library. You use the `import` keyword to bring packages into your program.",
-        "instructions": "## Task: Import Formatting\\nImport the `fmt` package and use it to print 'Hello'.",
-        "starterCode": "package main\\n\\nimport \"___\"\\n\\nfunc main() {\\n    fmt.___(\"Hello\")\\n}",
-        "solution": "package main\\n\\nimport \"fmt\"\\n\\nfunc main() {\\n    fmt.Println(\"Hello\")\\n}",
+        "theory": "## Standard Library\nGo comes with a rich standard library. You use the `import` keyword to bring packages into your program.",
+        "instructions": "## Task: Import Formatting\nImport the `fmt` package and use it to print 'Hello'.",
+        "starterCode": "package main\n\nimport \"___\"\n\nfunc main() {\n    fmt.___(\"Hello\")\n}",
+        "solution": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    fmt.Println(\"Hello\")\n}",
         "hint": "Import fmt and use Println",
         "rubric": "Correctly imports fmt and calls Println."
       }
@@ -189,19 +189,19 @@
     "lessons": [
       {
         "title": "Channel Basics",
-        "theory": "## Safe Communication\\nChannels are the pipes that connect concurrent goroutines. You can send values into channels from one goroutine and receive those values into another.",
-        "instructions": "## Task: Send and Receive\\nCreate a channel of integers, send the number 42 into it, and receive it.",
-        "starterCode": "package main\\n\\nfunc main() {\\n    ch := ___(___ int)\\n    \\n    go func() {\\n        ch ___ 42\\n    }()\\n    \\n    val := ___ ch\\n}",
-        "solution": "package main\\n\\nfunc main() {\\n    ch := make(chan int)\\n    \\n    go func() {\\n        ch <- 42\\n    }()\\n    \\n    val := <-ch\\n}",
+        "theory": "## Safe Communication\nChannels are the pipes that connect concurrent goroutines. You can send values into channels from one goroutine and receive those values into another.",
+        "instructions": "## Task: Send and Receive\nCreate a channel of integers, send the number 42 into it, and receive it.",
+        "starterCode": "package main\n\nfunc main() {\n    ch := ___(___ int)\n    \n    go func() {\n        ch ___ 42\n    }()\n    \n    val := ___ ch\n}",
+        "solution": "package main\n\nfunc main() {\n    ch := make(chan int)\n    \n    go func() {\n        ch <- 42\n    }()\n    \n    val := <-ch\n}",
         "hint": "Use make(chan int) and the <- operator",
         "rubric": "Correctly uses make(chan int) and the send/receive operators."
       },
       {
         "title": "The Select Statement",
-        "theory": "## Multiplexing\\nThe `select` statement lets a goroutine wait on multiple communication operations. It blocks until one of its cases can run.",
-        "instructions": "## Task: Select on Two Channels\\nWrite a select statement that waits for a message from `ch1` or `ch2`.",
-        "starterCode": "select {\\ncase msg1 := ___ ch1:\\n    fmt.Println(\"Received from ch1\", msg1)\\n___ msg2 := ___ ch2:\\n    fmt.Println(\"Received from ch2\", msg2)\\n}",
-        "solution": "select {\\ncase msg1 := <-ch1:\\n    fmt.Println(\"Received from ch1\", msg1)\\ncase msg2 := <-ch2:\\n    fmt.Println(\"Received from ch2\", msg2)\\n}",
+        "theory": "## Multiplexing\nThe `select` statement lets a goroutine wait on multiple communication operations. It blocks until one of its cases can run.",
+        "instructions": "## Task: Select on Two Channels\nWrite a select statement that waits for a message from `ch1` or `ch2`.",
+        "starterCode": "select {\ncase msg1 := ___ ch1:\n    fmt.Println(\"Received from ch1\", msg1)\n___ msg2 := ___ ch2:\n    fmt.Println(\"Received from ch2\", msg2)\n}",
+        "solution": "select {\ncase msg1 := <-ch1:\n    fmt.Println(\"Received from ch1\", msg1)\ncase msg2 := <-ch2:\n    fmt.Println(\"Received from ch2\", msg2)\n}",
         "hint": "Use <- operator and case keyword",
         "rubric": "Correctly uses the case keyword and receive operator."
       }
@@ -212,8 +212,8 @@
     "lessons": [
       {
         "title": "The Package Manager",
-        "theory": "## Kubernetes Templates\\nHelm is the package manager for Kubernetes. A Helm 'Chart' is a collection of files that describe a related set of Kubernetes resources.",
-        "instructions": "## Task: Install a Chart\\nWrite the helm command to install a chart named 'my-redis' from the bitnami repository.",
+        "theory": "## Kubernetes Templates\nHelm is the package manager for Kubernetes. A Helm 'Chart' is a collection of files that describe a related set of Kubernetes resources.",
+        "instructions": "## Task: Install a Chart\nWrite the helm command to install a chart named 'my-redis' from the bitnami repository.",
         "starterCode": "helm ___ my-redis bitnami/___",
         "solution": "helm install my-redis bitnami/redis",
         "hint": "Use install and redis",
@@ -221,10 +221,10 @@
       },
       {
         "title": "Values injected in Templates",
-        "theory": "## Customizing Deployments\\nHelm templates use the Go template engine. You can pass a `values.yaml` file to customize the Kubernetes manifests before applying.",
-        "instructions": "## Task: Accessing Values\\nWrite the template syntax to inject the `replicaCount` from the values file.",
-        "starterCode": "spec:\\n  replicas: {{ .___.___ }}",
-        "solution": "spec:\\n  replicas: {{ .Values.replicaCount }}",
+        "theory": "## Customizing Deployments\nHelm templates use the Go template engine. You can pass a `values.yaml` file to customize the Kubernetes manifests before applying.",
+        "instructions": "## Task: Accessing Values\nWrite the template syntax to inject the `replicaCount` from the values file.",
+        "starterCode": "spec:\n  replicas: {{ .___.___ }}",
+        "solution": "spec:\n  replicas: {{ .Values.replicaCount }}",
         "hint": "Use .Values.replicaCount",
         "rubric": "Correctly references .Values.replicaCount."
       }
@@ -235,19 +235,19 @@
     "lessons": [
       {
         "title": "Custom Resource Definitions",
-        "theory": "## Extending the API\\nA Custom Resource Definition (CRD) allows you to define your own object types in the Kubernetes API, just like Pods or Deployments.",
-        "instructions": "## Task: Define a CRD Group\\nSpecify the `group` and `version` for a custom resource named `Database`.",
-        "starterCode": "apiVersion: apiextensions.k8s.io/v1\\nkind: CustomResourceDefinition\\nmetadata:\\n  name: databases.mabel.io\\nspec:\\n  group: ___\\n  versions:\\n    - name: ___",
-        "solution": "apiVersion: apiextensions.k8s.io/v1\\nkind: CustomResourceDefinition\\nmetadata:\\n  name: databases.mabel.io\\nspec:\\n  group: mabel.io\\n  versions:\\n    - name: v1",
+        "theory": "## Extending the API\nA Custom Resource Definition (CRD) allows you to define your own object types in the Kubernetes API, just like Pods or Deployments.",
+        "instructions": "## Task: Define a CRD Group\nSpecify the `group` and `version` for a custom resource named `Database`.",
+        "starterCode": "apiVersion: apiextensions.k8s.io/v1\nkind: CustomResourceDefinition\nmetadata:\n  name: databases.mabel.io\nspec:\n  group: ___\n  versions:\n    - name: ___",
+        "solution": "apiVersion: apiextensions.k8s.io/v1\nkind: CustomResourceDefinition\nmetadata:\n  name: databases.mabel.io\nspec:\n  group: mabel.io\n  versions:\n    - name: v1",
         "hint": "Use mabel.io and v1",
         "rubric": "Correctly extracts the group from the name and sets version v1."
       },
       {
         "title": "Reconciliation Loop",
-        "theory": "## The Control Loop\\nAn Operator contains a custom controller that watches your CRDs. Its core logic is the 'Reconcile' loop, which constantly ensures the current state matches the desired state.",
-        "instructions": "## Task: Return Result\\nIn a Kubebuilder Reconcile function, return a successful empty result so the loop knows it finished correctly.",
-        "starterCode": "func (r *DatabaseReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {\\n    // logic...\\n    return ctrl.Result{___}, ___\\n}",
-        "solution": "func (r *DatabaseReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {\\n    // logic...\\n    return ctrl.Result{}, nil\\n}",
+        "theory": "## The Control Loop\nAn Operator contains a custom controller that watches your CRDs. Its core logic is the 'Reconcile' loop, which constantly ensures the current state matches the desired state.",
+        "instructions": "## Task: Return Result\nIn a Kubebuilder Reconcile function, return a successful empty result so the loop knows it finished correctly.",
+        "starterCode": "func (r *DatabaseReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {\n    // logic...\n    return ctrl.Result{___}, ___\n}",
+        "solution": "func (r *DatabaseReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {\n    // logic...\n    return ctrl.Result{}, nil\n}",
         "hint": "Return empty struct {} and nil error",
         "rubric": "Correctly returns ctrl.Result{} and nil."
       }
@@ -258,19 +258,19 @@
     "lessons": [
       {
         "title": "Traffic Shifting",
-        "theory": "## Canary Deployments\\nIstio allows you to split traffic between different versions of a service seamlessly, which is perfect for A/B testing or Canary releases.",
-        "instructions": "## Task: Virtual Service Weights\\nConfigure an Istio VirtualService to send 90% of traffic to v1 and 10% to v2.",
-        "starterCode": "route:\\n- destination:\\n    host: my-service\\n    subset: v1\\n  weight: ___\\n- destination:\\n    host: my-service\\n    subset: v2\\n  weight: ___",
-        "solution": "route:\\n- destination:\\n    host: my-service\\n    subset: v1\\n  weight: 90\\n- destination:\\n    host: my-service\\n    subset: v2\\n  weight: 10",
+        "theory": "## Canary Deployments\nIstio allows you to split traffic between different versions of a service seamlessly, which is perfect for A/B testing or Canary releases.",
+        "instructions": "## Task: Virtual Service Weights\nConfigure an Istio VirtualService to send 90% of traffic to v1 and 10% to v2.",
+        "starterCode": "route:\n- destination:\n    host: my-service\n    subset: v1\n  weight: ___\n- destination:\n    host: my-service\n    subset: v2\n  weight: ___",
+        "solution": "route:\n- destination:\n    host: my-service\n    subset: v1\n  weight: 90\n- destination:\n    host: my-service\n    subset: v2\n  weight: 10",
         "hint": "Use 90 and 10",
         "rubric": "Correctly sets the weights to 90 and 10."
       },
       {
         "title": "Mutual TLS (mTLS)",
-        "theory": "## Secure Communication\\nIstio can automatically encrypt all traffic between microservices in your cluster using mTLS, without changing any application code.",
-        "instructions": "## Task: PeerAuthentication\\nSet the mTLS mode to STRICT for the entire 'default' namespace.",
-        "starterCode": "apiVersion: security.istio.io/v1beta1\\nkind: PeerAuthentication\\nmetadata:\\n  name: default\\n  namespace: default\\nspec:\\n  mtls:\\n    mode: ___",
-        "solution": "apiVersion: security.istio.io/v1beta1\\nkind: PeerAuthentication\\nmetadata:\\n  name: default\\n  namespace: default\\nspec:\\n  mtls:\\n    mode: STRICT",
+        "theory": "## Secure Communication\nIstio can automatically encrypt all traffic between microservices in your cluster using mTLS, without changing any application code.",
+        "instructions": "## Task: PeerAuthentication\nSet the mTLS mode to STRICT for the entire 'default' namespace.",
+        "starterCode": "apiVersion: security.istio.io/v1beta1\nkind: PeerAuthentication\nmetadata:\n  name: default\n  namespace: default\nspec:\n  mtls:\n    mode: ___",
+        "solution": "apiVersion: security.istio.io/v1beta1\nkind: PeerAuthentication\nmetadata:\n  name: default\n  namespace: default\nspec:\n  mtls:\n    mode: STRICT",
         "hint": "Use STRICT",
         "rubric": "Sets mTLS mode to STRICT."
       }

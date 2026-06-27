@@ -4,8 +4,8 @@
     "lessons": [
       {
         "title": "The Core of the Web",
-        "theory": "## Request and Response\\nThe internet runs on the Client-Server model.\\n\\n1. **Client**: A device or software (like your Chrome browser) that *requests* resources.\\n2. **Server**: A powerful computer waiting to *respond* to requests.\\n\\nClients are usually lightweight and rely on the Server to do the heavy lifting (database access, complex calculations).",
-        "instructions": "## Task: Request-Response Simulator\\n1. Simulate a basic Client requesting data from a Server.\\n2. The client asks for '/weather'. The server responds.",
+        "theory": "## Request and Response\nThe internet runs on the Client-Server model.\n\n1. **Client**: A device or software (like your Chrome browser) that *requests* resources.\n2. **Server**: A powerful computer waiting to *respond* to requests.\n\nClients are usually lightweight and rely on the Server to do the heavy lifting (database access, complex calculations).",
+        "instructions": "## Task: Request-Response Simulator\n1. Simulate a basic Client requesting data from a Server.\n2. The client asks for '/weather'. The server responds.",
         "starterCode": "class Server:\n    def handle_request(self, path):\n        if path == '/weather':\n            return \"200 OK: Sunny, 75F\"\n        return \"404 Not Found\"\n\nclass Client:\n    def __init__(self, server):\n        self.server = server\n        \n    def make_request(self, path):\n        print(f\"[Client] Sending request for {path}...\")\n        # Client calls the server\n        response = self.___.___(___)\n        print(f\"[Client] Received response: {response}\")\n\nmy_server = Server()\nmy_laptop = Client(my_server)\n\nmy_laptop.make_request('/weather')\nmy_laptop.make_request('/secret-data')",
         "solution": "class Server:\n    def handle_request(self, path):\n        if path == '/weather':\n            return \"200 OK: Sunny, 75F\"\n        return \"404 Not Found\"\n\nclass Client:\n    def __init__(self, server):\n        self.server = server\n        \n    def make_request(self, path):\n        print(f\"[Client] Sending request for {path}...\")\n        # Client calls the server\n        response = self.server.handle_request(path)\n        print(f\"[Client] Received response: {response}\")\n\nmy_server = Server()\nmy_laptop = Client(my_server)\n\nmy_laptop.make_request('/weather')\nmy_laptop.make_request('/secret-data')",
         "hint": "self.server.handle_request(path)",
@@ -18,8 +18,8 @@
     "lessons": [
       {
         "title": "Directing Traffic",
-        "theory": "## Phonebooks and Traffic Cops\\n- **DNS (Domain Name System)**: The phonebook of the internet. Translates human names (`google.com`) into computer IP addresses (`142.250.190.46`).\\n- **Load Balancer**: The traffic cop. When `google.com` gets 1 million requests a second, a Load Balancer receives them all and distributes them evenly across thousands of identical servers so no single server crashes.",
-        "instructions": "## Task: Round-Robin Load Balancer\\n1. Implement a Round-Robin algorithm. It sends the first request to Server 1, the second to Server 2, the third to Server 3, the fourth back to Server 1, etc.\\n2. Use the modulo operator `%`.",
+        "theory": "## Phonebooks and Traffic Cops\n- **DNS (Domain Name System)**: The phonebook of the internet. Translates human names (`google.com`) into computer IP addresses (`142.250.190.46`).\n- **Load Balancer**: The traffic cop. When `google.com` gets 1 million requests a second, a Load Balancer receives them all and distributes them evenly across thousands of identical servers so no single server crashes.",
+        "instructions": "## Task: Round-Robin Load Balancer\n1. Implement a Round-Robin algorithm. It sends the first request to Server 1, the second to Server 2, the third to Server 3, the fourth back to Server 1, etc.\n2. Use the modulo operator `%`.",
         "starterCode": "class LoadBalancer:\n    def __init__(self, servers):\n        self.servers = servers\n        self.current_index = 0\n        \n    def route_request(self, request_id):\n        # 1. Get the current server\n        target = self.servers[self.___]\n        \n        # 2. Update the index for the next request (wrap around to 0 if at the end)\n        self.current_index = (self.current_index + 1) % len(self.___)\n        \n        print(f\"Request {request_id} routed to {target}\")\n\nlb = LoadBalancer(['Server_A', 'Server_B', 'Server_C'])\n\nfor i in range(1, 6):\n    lb.route_request(f\"Req-{i}\")",
         "solution": "class LoadBalancer:\n    def __init__(self, servers):\n        self.servers = servers\n        self.current_index = 0\n        \n    def route_request(self, request_id):\n        # 1. Get the current server\n        target = self.servers[self.current_index]\n        \n        # 2. Update the index for the next request (wrap around to 0 if at the end)\n        self.current_index = (self.current_index + 1) % len(self.servers)\n        \n        print(f\"Request {request_id} routed to {target}\")\n\nlb = LoadBalancer(['Server_A', 'Server_B', 'Server_C'])\n\nfor i in range(1, 6):\n    lb.route_request(f\"Req-{i}\")",
         "hint": "Use self.current_index. Modulo by len(self.servers).",
@@ -48,8 +48,8 @@
         "title": "Splitting Data",
         "theory": "## Scaling Databases\nWhen a single database server gets too full (Vertical Scaling hits its limit), you must split the data across multiple servers (Horizontal Scaling / Sharding).\n\n- **Vertical Sharding**: Putting the Users table on DB1 and the Orders table on DB2.\n- **Horizontal Sharding**: Putting Users A-M on DB1 and Users N-Z on DB2.\n\nSharding is complex because joining data across servers is very slow.",
         "instructions": "## Task: Hash-Based Sharding\n1. You have 3 database servers (0, 1, 2).\n2. Implement a function to assign a user to a specific shard based on their ID.\n3. Use the modulo operator: `user_id % number_of_shards`.",
-        "starterCode": "class ShardedDatabase:\n    def __init__(self, num_shards):\n        self.num_shards = num_shards\n        self.shards = {i: [] for i in range(num_shards)}\n        \n    def insert(self, user_id, name):\n        # Determine which shard to put this user in\n        shard_id = user_id % self.___\n        \n        self.shards[shard_id].append(name)\n        print(f\"Inserted {name} into Shard {shard_id}\")\n\ndb = ShardedDatabase(3)\ndb.insert(100, \"Alice\")\ndb.insert(101, \"Bob\")\ndb.insert(102, \"Charlie\")\ndb.insert(103, \"Diana\")\n\nprint(\"\\nDatabase State:\", db.shards)",
-        "solution": "class ShardedDatabase:\n    def __init__(self, num_shards):\n        self.num_shards = num_shards\n        self.shards = {i: [] for i in range(num_shards)}\n        \n    def insert(self, user_id, name):\n        # Determine which shard to put this user in\n        shard_id = user_id % self.num_shards\n        \n        self.shards[shard_id].append(name)\n        print(f\"Inserted {name} into Shard {shard_id}\")\n\ndb = ShardedDatabase(3)\ndb.insert(100, \"Alice\")\ndb.insert(101, \"Bob\")\ndb.insert(102, \"Charlie\")\ndb.insert(103, \"Diana\")\n\nprint(\"\\nDatabase State:\", db.shards)",
+        "starterCode": "class ShardedDatabase:\n    def __init__(self, num_shards):\n        self.num_shards = num_shards\n        self.shards = {i: [] for i in range(num_shards)}\n        \n    def insert(self, user_id, name):\n        # Determine which shard to put this user in\n        shard_id = user_id % self.___\n        \n        self.shards[shard_id].append(name)\n        print(f\"Inserted {name} into Shard {shard_id}\")\n\ndb = ShardedDatabase(3)\ndb.insert(100, \"Alice\")\ndb.insert(101, \"Bob\")\ndb.insert(102, \"Charlie\")\ndb.insert(103, \"Diana\")\n\nprint(\"\nDatabase State:\", db.shards)",
+        "solution": "class ShardedDatabase:\n    def __init__(self, num_shards):\n        self.num_shards = num_shards\n        self.shards = {i: [] for i in range(num_shards)}\n        \n    def insert(self, user_id, name):\n        # Determine which shard to put this user in\n        shard_id = user_id % self.num_shards\n        \n        self.shards[shard_id].append(name)\n        print(f\"Inserted {name} into Shard {shard_id}\")\n\ndb = ShardedDatabase(3)\ndb.insert(100, \"Alice\")\ndb.insert(101, \"Bob\")\ndb.insert(102, \"Charlie\")\ndb.insert(103, \"Diana\")\n\nprint(\"\nDatabase State:\", db.shards)",
         "hint": "Modulo by self.num_shards.",
         "rubric": "Alice (100) goes to 1. Bob (101) to 2. Charlie (102) to 0. Diana (103) to 1."
       }
@@ -62,8 +62,8 @@
         "title": "Decoupling Systems",
         "theory": "## Asynchronous Messaging\nMessage queues (like RabbitMQ, Kafka, AWS SQS) allow systems to communicate asynchronously.\n\nInstead of Service A calling Service B directly (which fails if B is down), Service A puts a message on the queue. Service B reads it when ready.\n\nBenefits:\n- **Decoupling**: Services don't need to know about each other.\n- **Scalability**: Add more consumers if the queue gets too long.\n- **Reliability**: Messages aren't lost if a service crashes.",
         "instructions": "## Task: Message Queue Simulator\n1. Create a `MessageQueue` class with `publish` and `consume` methods\n2. Use a standard list to represent the queue (FIFO)\n3. Publish 3 tasks and consume them sequentially",
-        "starterCode": "class MessageQueue:\n    def __init__(self):\n        self.queue = []\n        \n    def publish(self, message):\n        self.queue.___(message)\n        print(f\"Published: {message}\")\n        \n    def consume(self):\n        if not self.queue:\n            return None\n        return self.queue.___(0)\n\nmq = MessageQueue()\nmq.publish(\"Process Order #123\")\nmq.publish(\"Send Email to Alice\")\nmq.publish(\"Generate PDF Report\")\n\nprint(\"\\n--- Consumer Worker ---\")\nwhile True:\n    task = mq.consume()\n    if task is None:\n        print(\"No more tasks!\")\n        break\n    print(f\"Working on: {task}\")",
-        "solution": "class MessageQueue:\n    def __init__(self):\n        self.queue = []\n        \n    def publish(self, message):\n        self.queue.append(message)\n        print(f\"Published: {message}\")\n        \n    def consume(self):\n        if not self.queue:\n            return None\n        return self.queue.pop(0)\n\nmq = MessageQueue()\nmq.publish(\"Process Order #123\")\nmq.publish(\"Send Email to Alice\")\nmq.publish(\"Generate PDF Report\")\n\nprint(\"\\n--- Consumer Worker ---\")\nwhile True:\n    task = mq.consume()\n    if task is None:\n        print(\"No more tasks!\")\n        break\n    print(f\"Working on: {task}\")",
+        "starterCode": "class MessageQueue:\n    def __init__(self):\n        self.queue = []\n        \n    def publish(self, message):\n        self.queue.___(message)\n        print(f\"Published: {message}\")\n        \n    def consume(self):\n        if not self.queue:\n            return None\n        return self.queue.___(0)\n\nmq = MessageQueue()\nmq.publish(\"Process Order #123\")\nmq.publish(\"Send Email to Alice\")\nmq.publish(\"Generate PDF Report\")\n\nprint(\"\n--- Consumer Worker ---\")\nwhile True:\n    task = mq.consume()\n    if task is None:\n        print(\"No more tasks!\")\n        break\n    print(f\"Working on: {task}\")",
+        "solution": "class MessageQueue:\n    def __init__(self):\n        self.queue = []\n        \n    def publish(self, message):\n        self.queue.append(message)\n        print(f\"Published: {message}\")\n        \n    def consume(self):\n        if not self.queue:\n            return None\n        return self.queue.pop(0)\n\nmq = MessageQueue()\nmq.publish(\"Process Order #123\")\nmq.publish(\"Send Email to Alice\")\nmq.publish(\"Generate PDF Report\")\n\nprint(\"\n--- Consumer Worker ---\")\nwhile True:\n    task = mq.consume()\n    if task is None:\n        print(\"No more tasks!\")\n        break\n    print(f\"Working on: {task}\")",
         "hint": ".append() adds to end. .pop(0) removes from front.",
         "rubric": "Messages published, then consumed in the same order (FIFO)."
       },
@@ -83,10 +83,10 @@
     "lessons": [
       {
         "title": "Pick Two",
-        "theory": "## The Core Law of Distributed Systems\\nThe CAP theorem states that a distributed database can only guarantee two out of three characteristics:\\n\\n1. **Consistency**: Every read receives the most recent write (or an error).\\n2. **Availability**: Every request receives a non-error response (but it might not be the most recent data).\\n3. **Partition Tolerance**: The system continues to operate despite network failures (partitions) between nodes.\\n\\nBecause networks *will* fail (Partition Tolerance is mandatory), you must choose between Consistency (CP) or Availability (AP) during a failure.",
-        "instructions": "## Task: CAP Decision Simulator\\n1. Simulate a network failure between two databases (Node A and Node B).\\n2. Decide whether to act as a CP or AP system when a user requests data from an isolated Node B.",
-        "starterCode": "class DistributedDatabase:\\n    def __init__(self, system_type):\\n        self.system_type = system_type # 'CP' or 'AP'\\n        self.network_partitioned = True\\n        \\n    def read_data(self, node):\\n        if self.network_partitioned:\\n            print(f\"[Network Failed] Cannot sync {node} with the main cluster.\")\\n            \\n            if self.system_type == '___':\\n                return \"ERROR: Cannot guarantee consistency. Aborting read.\"\\n            elif self.system_type == '___':\\n                return \"SUCCESS: Returning stale (old) data to keep system available.\"\\n\\ncp_system = DistributedDatabase('CP')\\nprint(\"Bank Balance Check (Needs CP):\", cp_system.read_data('Node_B'))\\n\\nap_system = DistributedDatabase('AP')\\nprint(\"\\nTwitter Feed Load (Needs AP):\", ap_system.read_data('Node_B'))",
-        "solution": "class DistributedDatabase:\\n    def __init__(self, system_type):\\n        self.system_type = system_type # 'CP' or 'AP'\\n        self.network_partitioned = True\\n        \\n    def read_data(self, node):\\n        if self.network_partitioned:\\n            print(f\"[Network Failed] Cannot sync {node} with the main cluster.\")\\n            \\n            if self.system_type == 'CP':\\n                return \"ERROR: Cannot guarantee consistency. Aborting read.\"\\n            elif self.system_type == 'AP':\\n                return \"SUCCESS: Returning stale (old) data to keep system available.\"\\n\\ncp_system = DistributedDatabase('CP')\\nprint(\"Bank Balance Check (Needs CP):\", cp_system.read_data('Node_B'))\\n\\nap_system = DistributedDatabase('AP')\\nprint(\"\\nTwitter Feed Load (Needs AP):\", ap_system.read_data('Node_B'))",
+        "theory": "## The Core Law of Distributed Systems\nThe CAP theorem states that a distributed database can only guarantee two out of three characteristics:\n\n1. **Consistency**: Every read receives the most recent write (or an error).\n2. **Availability**: Every request receives a non-error response (but it might not be the most recent data).\n3. **Partition Tolerance**: The system continues to operate despite network failures (partitions) between nodes.\n\nBecause networks *will* fail (Partition Tolerance is mandatory), you must choose between Consistency (CP) or Availability (AP) during a failure.",
+        "instructions": "## Task: CAP Decision Simulator\n1. Simulate a network failure between two databases (Node A and Node B).\n2. Decide whether to act as a CP or AP system when a user requests data from an isolated Node B.",
+        "starterCode": "class DistributedDatabase:\n    def __init__(self, system_type):\n        self.system_type = system_type # 'CP' or 'AP'\n        self.network_partitioned = True\n        \n    def read_data(self, node):\n        if self.network_partitioned:\n            print(f\"[Network Failed] Cannot sync {node} with the main cluster.\")\n            \n            if self.system_type == '___':\n                return \"ERROR: Cannot guarantee consistency. Aborting read.\"\n            elif self.system_type == '___':\n                return \"SUCCESS: Returning stale (old) data to keep system available.\"\n\ncp_system = DistributedDatabase('CP')\nprint(\"Bank Balance Check (Needs CP):\", cp_system.read_data('Node_B'))\n\nap_system = DistributedDatabase('AP')\nprint(\"\nTwitter Feed Load (Needs AP):\", ap_system.read_data('Node_B'))",
+        "solution": "class DistributedDatabase:\n    def __init__(self, system_type):\n        self.system_type = system_type # 'CP' or 'AP'\n        self.network_partitioned = True\n        \n    def read_data(self, node):\n        if self.network_partitioned:\n            print(f\"[Network Failed] Cannot sync {node} with the main cluster.\")\n            \n            if self.system_type == 'CP':\n                return \"ERROR: Cannot guarantee consistency. Aborting read.\"\n            elif self.system_type == 'AP':\n                return \"SUCCESS: Returning stale (old) data to keep system available.\"\n\ncp_system = DistributedDatabase('CP')\nprint(\"Bank Balance Check (Needs CP):\", cp_system.read_data('Node_B'))\n\nap_system = DistributedDatabase('AP')\nprint(\"\nTwitter Feed Load (Needs AP):\", ap_system.read_data('Node_B'))",
         "hint": "CP returns ERROR. AP returns SUCCESS (stale data).",
         "rubric": "Code correctly returns the error for CP and stale data for AP."
       }
@@ -122,8 +122,8 @@
         "title": "Matching Algorithm",
         "theory": "## Finding the Best Driver\nThe closest driver isn't always the best one. The matching algorithm considers:\n\n- **ETA**: Time to reach the rider (factoring in traffic).\n- **Direction**: Is the driver already heading that way?\n- **Driver Ratings**: Maintaining quality.\n\nThis requires heavy computational power, often using machine learning models.",
         "instructions": "## Task: Simple Matcher\n1. You have a rider at (10, 10).\n2. Calculate the 'Manhattan Distance' to 3 drivers.\n3. Return the ID of the closest driver.",
-        "starterCode": "def get_distance(x1, y1, x2, y2):\n    # Manhattan distance: |x1 - x2| + |y1 - y2|\n    return abs(x1 - x2) + abs(___ - ___)\n\nrider = (10, 10)\ndrivers = {\n    'DriverX': (15, 12),\n    'DriverY': (8, 9),\n    'DriverZ': (20, 20)\n}\n\nbest_driver = None\nmin_dist = float('inf')\n\nfor d_id, coords in drivers.items():\n    dist = get_distance(rider[0], rider[1], coords[0], coords[1])\n    print(f\"{d_id} is {dist} units away\")\n    if dist < ___:\n        ___ = dist\n        ___ = d_id\n\nprint(f\"\\nDispatching: {best_driver}\")",
-        "solution": "def get_distance(x1, y1, x2, y2):\n    # Manhattan distance: |x1 - x2| + |y1 - y2|\n    return abs(x1 - x2) + abs(y1 - y2)\n\nrider = (10, 10)\ndrivers = {\n    'DriverX': (15, 12),\n    'DriverY': (8, 9),\n    'DriverZ': (20, 20)\n}\n\nbest_driver = None\nmin_dist = float('inf')\n\nfor d_id, coords in drivers.items():\n    dist = get_distance(rider[0], rider[1], coords[0], coords[1])\n    print(f\"{d_id} is {dist} units away\")\n    if dist < min_dist:\n        min_dist = dist\n        best_driver = d_id\n\nprint(f\"\\nDispatching: {best_driver}\")",
+        "starterCode": "def get_distance(x1, y1, x2, y2):\n    # Manhattan distance: |x1 - x2| + |y1 - y2|\n    return abs(x1 - x2) + abs(___ - ___)\n\nrider = (10, 10)\ndrivers = {\n    'DriverX': (15, 12),\n    'DriverY': (8, 9),\n    'DriverZ': (20, 20)\n}\n\nbest_driver = None\nmin_dist = float('inf')\n\nfor d_id, coords in drivers.items():\n    dist = get_distance(rider[0], rider[1], coords[0], coords[1])\n    print(f\"{d_id} is {dist} units away\")\n    if dist < ___:\n        ___ = dist\n        ___ = d_id\n\nprint(f\"\nDispatching: {best_driver}\")",
+        "solution": "def get_distance(x1, y1, x2, y2):\n    # Manhattan distance: |x1 - x2| + |y1 - y2|\n    return abs(x1 - x2) + abs(y1 - y2)\n\nrider = (10, 10)\ndrivers = {\n    'DriverX': (15, 12),\n    'DriverY': (8, 9),\n    'DriverZ': (20, 20)\n}\n\nbest_driver = None\nmin_dist = float('inf')\n\nfor d_id, coords in drivers.items():\n    dist = get_distance(rider[0], rider[1], coords[0], coords[1])\n    print(f\"{d_id} is {dist} units away\")\n    if dist < min_dist:\n        min_dist = dist\n        best_driver = d_id\n\nprint(f\"\nDispatching: {best_driver}\")",
         "hint": "abs(y1 - y2). Check if dist < min_dist. Set min_dist and best_driver.",
         "rubric": "DriverY is chosen because they are 3 units away."
       }
@@ -148,19 +148,19 @@
     "lessons": [
       {
         "title": "Horizontal Scaling",
-        "theory": "## Scaling Out\\nWhen a single server cannot handle the traffic, you scale horizontally by adding more servers. A Load Balancer sits in front of them to distribute the incoming requests.",
-        "instructions": "## Task: Load Balancer Role\\nSelect the primary role of a load balancer from the options.",
-        "starterCode": "# Options:\\n# A. Store database backups\\n# B. Distribute incoming network traffic across multiple servers\\n# C. Compile code faster\\n\\nanswer = '___'",
-        "solution": "# Options:\\n# A. Store database backups\\n# B. Distribute incoming network traffic across multiple servers\\n# C. Compile code faster\\n\\nanswer = 'B'",
+        "theory": "## Scaling Out\nWhen a single server cannot handle the traffic, you scale horizontally by adding more servers. A Load Balancer sits in front of them to distribute the incoming requests.",
+        "instructions": "## Task: Load Balancer Role\nSelect the primary role of a load balancer from the options.",
+        "starterCode": "# Options:\n# A. Store database backups\n# B. Distribute incoming network traffic across multiple servers\n# C. Compile code faster\n\nanswer = '___'",
+        "solution": "# Options:\n# A. Store database backups\n# B. Distribute incoming network traffic across multiple servers\n# C. Compile code faster\n\nanswer = 'B'",
         "hint": "The answer is B",
         "rubric": "Correctly identifies B as the answer."
       },
       {
         "title": "Round Robin",
-        "theory": "## Traffic Distribution Algorithms\\nRound Robin is the simplest load balancing algorithm. It forwards requests to each server in the pool sequentially.",
-        "instructions": "## Task: Round Robin Logic\\nImplement a simple round-robin function that returns the next server from a list of servers based on the current request count.",
-        "starterCode": "servers = ['ServerA', 'ServerB', 'ServerC']\\n\\ndef get_next_server(request_count):\\n    index = request_count ___ len(servers)\\n    return servers[index]",
-        "solution": "servers = ['ServerA', 'ServerB', 'ServerC']\\n\\ndef get_next_server(request_count):\\n    index = request_count % len(servers)\\n    return servers[index]",
+        "theory": "## Traffic Distribution Algorithms\nRound Robin is the simplest load balancing algorithm. It forwards requests to each server in the pool sequentially.",
+        "instructions": "## Task: Round Robin Logic\nImplement a simple round-robin function that returns the next server from a list of servers based on the current request count.",
+        "starterCode": "servers = ['ServerA', 'ServerB', 'ServerC']\n\ndef get_next_server(request_count):\n    index = request_count ___ len(servers)\n    return servers[index]",
+        "solution": "servers = ['ServerA', 'ServerB', 'ServerC']\n\ndef get_next_server(request_count):\n    index = request_count % len(servers)\n    return servers[index]",
         "hint": "Use the modulo operator %",
         "rubric": "Correctly uses the modulo operator for round robin."
       }
@@ -171,19 +171,19 @@
     "lessons": [
       {
         "title": "The Single Entry Point",
-        "theory": "## Facade Pattern for Microservices\\nAn API Gateway acts as a single entry point for a group of microservices. It handles routing, authentication, and SSL termination so individual services don't have to.",
-        "instructions": "## Task: Routing Configuration\\nWrite a mock routing configuration that sends requests from `/users` to the User Service and `/orders` to the Order Service.",
-        "starterCode": "routes = {\\n    '/___': 'http://user-service:8080',\\n    '/___': 'http://order-service:8080'\\n}",
-        "solution": "routes = {\\n    '/users': 'http://user-service:8080',\\n    '/orders': 'http://order-service:8080'\\n}",
+        "theory": "## Facade Pattern for Microservices\nAn API Gateway acts as a single entry point for a group of microservices. It handles routing, authentication, and SSL termination so individual services don't have to.",
+        "instructions": "## Task: Routing Configuration\nWrite a mock routing configuration that sends requests from `/users` to the User Service and `/orders` to the Order Service.",
+        "starterCode": "routes = {\n    '/___': 'http://user-service:8080',\n    '/___': 'http://order-service:8080'\n}",
+        "solution": "routes = {\n    '/users': 'http://user-service:8080',\n    '/orders': 'http://order-service:8080'\n}",
         "hint": "Use users and orders",
         "rubric": "Correctly maps users and orders."
       },
       {
         "title": "Cross-Cutting Concerns",
-        "theory": "## Centralized Logic\\nInstead of writing authentication code in 50 different microservices, you write it once in the API Gateway.",
-        "instructions": "## Task: Gateway Middleware\\nWrite a simple middleware that checks for an 'Authorization' header before routing the request.",
-        "starterCode": "def api_gateway_handler(request):\\n    if '___' not in request.headers:\\n        return 401 // Unauthorized\\n    return route_request(request)",
-        "solution": "def api_gateway_handler(request):\\n    if 'Authorization' not in request.headers:\\n        return 401 // Unauthorized\\n    return route_request(request)",
+        "theory": "## Centralized Logic\nInstead of writing authentication code in 50 different microservices, you write it once in the API Gateway.",
+        "instructions": "## Task: Gateway Middleware\nWrite a simple middleware that checks for an 'Authorization' header before routing the request.",
+        "starterCode": "def api_gateway_handler(request):\n    if '___' not in request.headers:\n        return 401 // Unauthorized\n    return route_request(request)",
+        "solution": "def api_gateway_handler(request):\n    if 'Authorization' not in request.headers:\n        return 401 // Unauthorized\n    return route_request(request)",
         "hint": "Check for Authorization",
         "rubric": "Correctly checks for the Authorization header."
       }
@@ -194,17 +194,17 @@
     "lessons": [
       {
         "title": "The CAP Theorem",
-        "theory": "## Pick Two\\nThe CAP theorem states that a distributed data store can only simultaneously provide two of three guarantees: Consistency, Availability, and Partition Tolerance.",
-        "instructions": "## Task: Define CAP\\nAssign the three guarantees of the CAP theorem.",
-        "starterCode": "C = '___'\\nA = '___'\\nP = '___'",
-        "solution": "C = 'Consistency'\\nA = 'Availability'\\nP = 'Partition Tolerance'",
+        "theory": "## Pick Two\nThe CAP theorem states that a distributed data store can only simultaneously provide two of three guarantees: Consistency, Availability, and Partition Tolerance.",
+        "instructions": "## Task: Define CAP\nAssign the three guarantees of the CAP theorem.",
+        "starterCode": "C = '___'\nA = '___'\nP = '___'",
+        "solution": "C = 'Consistency'\nA = 'Availability'\nP = 'Partition Tolerance'",
         "hint": "Consistency, Availability, Partition Tolerance",
         "rubric": "Correctly spells out Consistency, Availability, and Partition Tolerance."
       },
       {
         "title": "Consensus Algorithms",
-        "theory": "## Raft and Paxos\\nIn distributed systems, servers must agree on a single state. Algorithms like Raft achieve this by electing a Leader to handle all writes, replicating them to Followers.",
-        "instructions": "## Task: Leader Election\\nIn the Raft algorithm, if a Follower doesn't hear from the Leader within a timeout period, it becomes a ___.",
+        "theory": "## Raft and Paxos\nIn distributed systems, servers must agree on a single state. Algorithms like Raft achieve this by electing a Leader to handle all writes, replicating them to Followers.",
+        "instructions": "## Task: Leader Election\nIn the Raft algorithm, if a Follower doesn't hear from the Leader within a timeout period, it becomes a ___.",
         "starterCode": "answer = '___'",
         "solution": "answer = 'Candidate'",
         "hint": "It becomes a Candidate",
@@ -217,17 +217,17 @@
     "lessons": [
       {
         "title": "Token Bucket",
-        "theory": "## The Token Bucket Algorithm\\nA bucket holds tokens. Tokens are added at a constant rate. A request costs 1 token. If the bucket is empty, the request is dropped.",
-        "instructions": "## Task: Bucket Logic\\nImplement the check to see if a request should be allowed based on token count.",
-        "starterCode": "def allow_request(tokens):\\n    if tokens ___ 0:\\n        tokens -= 1\\n        return True\\n    return ___",
-        "solution": "def allow_request(tokens):\\n    if tokens > 0:\\n        tokens -= 1\\n        return True\\n    return False",
+        "theory": "## The Token Bucket Algorithm\nA bucket holds tokens. Tokens are added at a constant rate. A request costs 1 token. If the bucket is empty, the request is dropped.",
+        "instructions": "## Task: Bucket Logic\nImplement the check to see if a request should be allowed based on token count.",
+        "starterCode": "def allow_request(tokens):\n    if tokens ___ 0:\n        tokens -= 1\n        return True\n    return ___",
+        "solution": "def allow_request(tokens):\n    if tokens > 0:\n        tokens -= 1\n        return True\n    return False",
         "hint": "Use > and False",
         "rubric": "Correctly checks if tokens > 0 and returns False."
       },
       {
         "title": "Leaky Bucket",
-        "theory": "## Smoothing Traffic\\nUnlike the Token Bucket which allows bursts of traffic, the Leaky Bucket processes requests at a constant, fixed rate (like water dripping from a hole).",
-        "instructions": "## Task: Identify Algorithm\\nWhich algorithm enforces a strict, constant output rate regardless of bursty input?",
+        "theory": "## Smoothing Traffic\nUnlike the Token Bucket which allows bursts of traffic, the Leaky Bucket processes requests at a constant, fixed rate (like water dripping from a hole).",
+        "instructions": "## Task: Identify Algorithm\nWhich algorithm enforces a strict, constant output rate regardless of bursty input?",
         "starterCode": "answer = '___ Bucket'",
         "solution": "answer = 'Leaky Bucket'",
         "hint": "Leaky Bucket",
