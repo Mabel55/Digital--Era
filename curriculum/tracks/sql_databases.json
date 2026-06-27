@@ -190,13 +190,13 @@
     "aiRubric": "Check logic, syntax, and output for Database Design.",
     "lessons": [
       {
-        "title": "Database Design - Coming Soon",
-        "theory": "## Database Design\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Database Design** is under development.",
-        "starterCode": "# Database Design - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Database Design\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Entity-Relationship (ER)",
+        "theory": "## Modeling Data\nBefore writing SQL, you design the database using an ER diagram.\n\n- **Entities**: Nouns (Users, Products, Orders)\n- **Attributes**: Properties of entities (User: Name, Email)\n- **Relationships**: How entities connect\n  - 1-to-1: User has 1 Profile\n  - 1-to-Many: User has Many Orders\n  - Many-to-Many: Students have Many Classes, Classes have Many Students",
+        "instructions": "## Task: Relationship Types\n1. Match the scenario to the correct relationship type.\n2. Types: '1-to-1', '1-to-Many', 'Many-to-Many'",
+        "starterCode": "relationships = {\n    'A Customer can place multiple Orders': '___',\n    'A Person has one Passport': '___',\n    'Authors write multiple Books; Books can have multiple Authors': '___'\n}\n\nfor scenario, rel_type in relationships.items():\n    print(f\"{scenario:65}\\n-> {rel_type}\\n\")",
+        "solution": "relationships = {\n    'A Customer can place multiple Orders': '1-to-Many',\n    'A Person has one Passport': '1-to-1',\n    'Authors write multiple Books; Books can have multiple Authors': 'Many-to-Many'\n}\n\nfor scenario, rel_type in relationships.items():\n    print(f\"{scenario:65}\\n-> {rel_type}\\n\")",
+        "hint": "Customer->Orders is 1-to-Many. Authors<->Books is Many-to-Many.",
+        "rubric": "Scenarios accurately mapped to their relationship types."
       }
     ]
   },

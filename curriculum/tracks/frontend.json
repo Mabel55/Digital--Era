@@ -241,13 +241,22 @@
     "aiRubric": "Check logic, syntax, and output for Web Accessibility.",
     "lessons": [
       {
-        "title": "Web Accessibility - Coming Soon",
-        "theory": "## Web Accessibility\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Web Accessibility** is under development.",
-        "starterCode": "# Web Accessibility - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Web Accessibility\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Semantic HTML",
+        "theory": "## Designing for Everyone\nAccessibility (a11y) ensures users with disabilities can use your app. Screen readers rely heavily on **Semantic HTML**.\n\n- Instead of `<div class=\"header\">`, use `<header>`\n- Instead of `<span class=\"button\">`, use `<button>`\n- Use `<nav>`, `<main>`, `<article>`, `<footer>`\n\nThis provides structural meaning to the browser and assistive technologies.",
+        "instructions": "## Task: Semantic Refactor\n1. You are given a string of bad HTML using only `div` tags.\n2. Create a mapped version that replaces the generic tags with semantic ones: `header`, `nav`, `main`, `footer`.",
+        "starterCode": "bad_html = {\n    'div_header': '___',\n    'div_nav': '___',\n    'div_content': '___',\n    'div_footer': '___'\n}\n\nfor bad, good in bad_html.items():\n    print(f\"Replace <{bad}> with semantic <{good}>\")",
+        "solution": "bad_html = {\n    'div_header': 'header',\n    'div_nav': 'nav',\n    'div_content': 'main',\n    'div_footer': 'footer'\n}\n\nfor bad, good in bad_html.items():\n    print(f\"Replace <{bad}> with semantic <{good}>\")",
+        "hint": "Match the class name to the semantic HTML5 tag.",
+        "rubric": "All 4 generic divs matched to their proper HTML5 semantic tags."
+      },
+      {
+        "title": "ARIA Attributes",
+        "theory": "## Accessible Rich Internet Applications\nWhen HTML5 tags aren't enough (e.g., for custom complex widgets), ARIA attributes provide extra context.\n\n- `aria-hidden=\"true\"`: Hides an element from screen readers (e.g., a decorative icon)\n- `aria-label`: Provides a label when there is no visible text (e.g., an icon-only button)\n- `aria-expanded`: Tells if a dropdown is open or closed",
+        "instructions": "## Task: Apply ARIA\n1. Match the use case to the correct ARIA attribute.\n2. Attributes: 'aria-hidden', 'aria-label', 'aria-expanded'",
+        "starterCode": "aria_usage = {\n    'Decorative SVG icon': '___',\n    'Button with only a magnifying glass icon': '___',\n    'Accordion menu that is currently open': '___'\n}\n\nfor usage, attr in aria_usage.items():\n    print(f\"{usage:42} -> {attr}\")",
+        "solution": "aria_usage = {\n    'Decorative SVG icon': 'aria-hidden',\n    'Button with only a magnifying glass icon': 'aria-label',\n    'Accordion menu that is currently open': 'aria-expanded'\n}\n\nfor usage, attr in aria_usage.items():\n    print(f\"{usage:42} -> {attr}\")",
+        "hint": "Hidden for decorative. Label for icon-only. Expanded for open/closed menus.",
+        "rubric": "Use cases correctly matched with their ARIA attributes."
       }
     ]
   }

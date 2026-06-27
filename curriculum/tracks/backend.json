@@ -181,13 +181,22 @@
     "aiRubric": "Check logic, syntax, and output for RESTful Design.",
     "lessons": [
       {
-        "title": "RESTful Design - Coming Soon",
-        "theory": "## RESTful Design\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **RESTful Design** is under development.",
-        "starterCode": "# RESTful Design - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# RESTful Design\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "REST Principles",
+        "theory": "## Representational State Transfer\nREST is an architectural style for designing networked applications.\n\nKey Principles:\n- **Client-Server**: Separation of concerns.\n- **Stateless**: Each request contains all information needed to process it (no server sessions).\n- **Cacheable**: Responses should specify if they can be cached.\n- **Uniform Interface**: Consistent ways to access resources (URIs).\n\nResources are nouns (e.g., `/users`), actions are HTTP verbs (e.g., `GET`, `POST`).",
+        "instructions": "## Task: RESTful Routing Matcher\n1. Match the action to the correct RESTful HTTP Verb + Route combination.\n2. Actions: 'Get all users', 'Create a user', 'Get specific user', 'Delete a user'\n3. Match them to: `GET /users`, `POST /users`, `GET /users/:id`, `DELETE /users/:id`",
+        "starterCode": "routes = {\n    'Get all users': '___',\n    'Create a user': '___',\n    'Get specific user': '___',\n    'Delete a user': '___'\n}\n\nfor action, route in routes.items():\n    print(f\"{action:20} -> {route}\")",
+        "solution": "routes = {\n    'Get all users': 'GET /users',\n    'Create a user': 'POST /users',\n    'Get specific user': 'GET /users/:id',\n    'Delete a user': 'DELETE /users/:id'\n}\n\nfor action, route in routes.items():\n    print(f\"{action:20} -> {route}\")",
+        "hint": "GET to fetch, POST to create, DELETE to remove. Use /users/:id for specific items.",
+        "rubric": "All 4 routes correctly matched to RESTful verbs and URIs."
+      },
+      {
+        "title": "HTTP Status Codes",
+        "theory": "## Server Responses\nWhen a server responds to a request, it includes a status code to indicate what happened.\n\n- **2xx Success**: 200 OK, 201 Created, 204 No Content\n- **3xx Redirection**: 301 Moved Permanently\n- **4xx Client Error**: 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found\n- **5xx Server Error**: 500 Internal Server Error, 502 Bad Gateway",
+        "instructions": "## Task: Status Code Handler\n1. Write a function that returns a human-readable message based on the HTTP status code.\n2. Handle 200, 401, 404, and 500.",
+        "starterCode": "def handle_status(code):\n    if code == ___:\n        return \"Success! Data fetched.\"\n    elif code == ___:\n        return \"Unauthorized! Please log in.\"\n    elif code == ___:\n        return \"Not Found! Resource does not exist.\"\n    elif code == ___:\n        return \"Server Error! Our engineers are on it.\"\n    return \"Unknown status code\"\n\ncodes = [200, 401, 404, 500]\nfor c in codes:\n    print(f\"{c}: {handle_status(c)}\")",
+        "solution": "def handle_status(code):\n    if code == 200:\n        return \"Success! Data fetched.\"\n    elif code == 401:\n        return \"Unauthorized! Please log in.\"\n    elif code == 404:\n        return \"Not Found! Resource does not exist.\"\n    elif code == 500:\n        return \"Server Error! Our engineers are on it.\"\n    return \"Unknown status code\"\n\ncodes = [200, 401, 404, 500]\nfor c in codes:\n    print(f\"{c}: {handle_status(c)}\")",
+        "hint": "Match the codes to the messages (200, 401, 404, 500).",
+        "rubric": "Function correctly identifies all 4 status codes."
       }
     ]
   },
@@ -209,13 +218,13 @@
     "aiRubric": "Check logic, syntax, and output for Microservices.",
     "lessons": [
       {
-        "title": "Microservices - Coming Soon",
-        "theory": "## Microservices\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Microservices** is under development.",
-        "starterCode": "# Microservices - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Microservices\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Monolith vs Microservices",
+        "theory": "## Breaking Up the App\n- **Monolith**: All code (auth, payments, catalog) is in one giant repository and runs as a single process. Hard to scale specific parts.\n- **Microservices**: Small, independent services that communicate via APIs. You can scale the Payment service independently of the Catalog service.\n\nMicroservices introduce complexity: network latency, distributed data, and harder debugging.",
+        "instructions": "## Task: Architecture Comparison\n1. Create a dictionary that categorizes traits to either 'Monolith' or 'Microservices'.\n2. Traits: 'Single Codebase', 'Independent Deployments', 'Complex Networking', 'Easier to Debug initially'",
+        "starterCode": "traits = {\n    'Single Codebase': '___',\n    'Independent Deployments': '___',\n    'Complex Networking': '___',\n    'Easier to Debug initially': '___'\n}\n\nfor trait, arch in traits.items():\n    print(f\"{trait:30} -> {arch}\")",
+        "solution": "traits = {\n    'Single Codebase': 'Monolith',\n    'Independent Deployments': 'Microservices',\n    'Complex Networking': 'Microservices',\n    'Easier to Debug initially': 'Monolith'\n}\n\nfor trait, arch in traits.items():\n    print(f\"{trait:30} -> {arch}\")",
+        "hint": "Monolith = single, easy to debug early on. Microservices = independent, complex network.",
+        "rubric": "Traits correctly mapped to Monolith or Microservices."
       }
     ]
   },

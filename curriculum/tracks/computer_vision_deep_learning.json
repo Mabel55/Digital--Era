@@ -3,13 +3,13 @@
     "aiRubric": "Check logic, syntax, and output for Image Processing.",
     "lessons": [
       {
-        "title": "Image Processing - Coming Soon",
-        "theory": "## Image Processing\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Image Processing** is under development.",
-        "starterCode": "# Image Processing - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Image Processing\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Pixels and Channels",
+        "theory": "## How Computers See Images\nAn image is just a massive grid (matrix) of numbers.\n\n- **Grayscale**: 2D grid. Values from 0 (black) to 255 (white).\n- **Color (RGB)**: 3D grid. It has 3 color \"channels\": Red, Green, and Blue.\n\nA 1080p image is `1920 x 1080 x 3` values.",
+        "instructions": "## Task: Image Matrix\n1. Create a simulated 2x2 grayscale image (a 2D list/array).\n2. Set the top-left to 0 (black) and bottom-right to 255 (white).\n3. Set the others to 128 (gray).",
+        "starterCode": "image_matrix = [\n    [___, ___],  # Top row (Black, Gray)\n    [___, ___]   # Bottom row (Gray, White)\n]\n\nprint(\"2x2 Grayscale Image Matrix:\")\nfor row in image_matrix:\n    print(row)",
+        "solution": "image_matrix = [\n    [0, 128],  # Top row (Black, Gray)\n    [128, 255]   # Bottom row (Gray, White)\n]\n\nprint(\"2x2 Grayscale Image Matrix:\")\nfor row in image_matrix:\n    print(row)",
+        "hint": "Black is 0, Gray is 128, White is 255.",
+        "rubric": "Matrix correctly constructed with [0, 128] and [128, 255]."
       }
     ]
   },
@@ -17,13 +17,13 @@
     "aiRubric": "Check logic, syntax, and output for OpenCV Basics.",
     "lessons": [
       {
-        "title": "OpenCV Basics - Coming Soon",
-        "theory": "## OpenCV Basics\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **OpenCV Basics** is under development.",
-        "starterCode": "# OpenCV Basics - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# OpenCV Basics\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "OpenCV Intro",
+        "theory": "## The Computer Vision Library\nOpenCV (`cv2` in Python) is the standard library for image processing.\n\n```python\nimport cv2\n\n# Read an image\nimg = cv2.imread('dog.jpg')\n\n# Convert to grayscale\ngray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)\n\n# Show image\ncv2.imshow('Gray Dog', gray)\n```\nNote: OpenCV uses BGR (Blue, Green, Red) format, not RGB!",
+        "instructions": "## Task: OpenCV Command Matcher\n1. Match the OpenCV function to its description.\n2. Functions: `imread`, `cvtColor`, `imwrite`, `imshow`",
+        "starterCode": "cv2_funcs = {\n    'Load image from disk': 'cv2.___',\n    'Change color space': 'cv2.___',\n    'Save image to disk': 'cv2.___',\n    'Display image in a window': 'cv2.___'\n}\n\nfor desc, func in cv2_funcs.items():\n    print(f\"{desc:30} -> {func}\")",
+        "solution": "cv2_funcs = {\n    'Load image from disk': 'cv2.imread',\n    'Change color space': 'cv2.cvtColor',\n    'Save image to disk': 'cv2.imwrite',\n    'Display image in a window': 'cv2.imshow'\n}\n\nfor desc, func in cv2_funcs.items():\n    print(f\"{desc:30} -> {func}\")",
+        "hint": "imread (read), cvtColor (convert color), imwrite (write), imshow (show).",
+        "rubric": "All 4 functions matched accurately to their descriptions."
       }
     ]
   },
