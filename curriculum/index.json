@@ -1,297 +1,308 @@
 {
   "Python Core": {
     "Beginner": [
-      "Python Fundamentals",
-      "Control Flow & Loops",
-      "Functions & Scope",
-      "Lists & Tuples",
-      "Dictionaries & Sets"
+      "Python Basics",
+      "Control Flow",
+      "Functions"
     ],
     "Intermediate": [
+      "Data Structures",
       "OOP in Python",
-      "File Handling & Exceptions",
-      "Modules & Packages",
-      "List Comprehensions",
-      "Iterators & Generators"
+      "File I/O"
     ],
     "Advanced": [
-      "Decorators & Closures",
-      "Concurrency in Python",
-      "Design Patterns",
-      "Metaprogramming",
-      "Memory & Performance"
+      "Decorators",
+      "Generators",
+      "Asyncio"
     ]
   },
   "Frontend": {
     "Beginner": [
-      "HTML Essentials",
-      "CSS Styling & Layout",
-      "JavaScript Basics",
-      "Forms & Validation",
-      "Responsive Design Basics",
-      "TypeScript: Beginner"
+      "HTML5 Essentials",
+      "CSS Styling",
+      "JS Basics"
     ],
     "Intermediate": [
-      "DOM Manipulation",
-      "Fetch API & AJAX",
-      "ES6+ Modern JS",
-      "CSS Animations",
-      "LocalStorage & State",
-      "TypeScript: Intermediate"
+      "React Fundamentals",
+      "State Management",
+      "CSS Grid & Flexbox"
     ],
     "Advanced": [
-      "React Fundamentals",
-      "React Hooks & Context",
-      "Performance Optimization",
-      "Testing Frontend Code",
-      "Build Tools & Webpack",
-      "TypeScript: Advanced"
+      "Next.js",
+      "Frontend Performance",
+      "Web Accessibility"
     ]
   },
   "Backend": {
     "Beginner": [
-      "Intro to Backend",
-      "HTTP & REST Concepts",
-      "Python for Web",
-      "JSON & APIs",
-      "Environment & Setup",
-      "Java: Beginner"
+      "HTTP & APIs",
+      "Node.js Basics",
+      "Express Server"
     ],
     "Intermediate": [
-      "REST APIs with FastAPI",
-      "Authentication & JWT",
-      "Django Web Framework",
-      "Flask Microframework",
       "Database Integration",
-      "Java: Intermediate",
-      "Node.js & Express"
+      "Authentication",
+      "RESTful Design"
     ],
     "Advanced": [
-      "Django REST Framework",
-      "Flask Advanced Patterns",
-      "Async Python",
-      "API Security & Rate Limiting",
-      "Deployment & Docker",
-      "Java: Advanced"
+      "GraphQL",
+      "Microservices",
+      "WebSockets"
     ]
   },
   "SQL & Databases": {
     "Beginner": [
-      "SQL Fundamentals",
-      "Filtering & Sorting",
-      "Joins & Relationships",
-      "Aggregations & Grouping",
-      "Subqueries"
+      "SQL SELECTs",
+      "Filtering Data",
+      "Basic Joins"
     ],
     "Intermediate": [
-      "Indexes & Performance",
-      "Stored Procedures",
-      "Transactions & ACID",
-      "Views & CTEs",
-      "PostgreSQL Deep Dive"
+      "Aggregations",
+      "Subqueries",
+      "Database Design"
     ],
     "Advanced": [
-      "Query Optimization",
-      "Database Design Patterns",
-      "NoSQL with MongoDB",
-      "ORMs with SQLAlchemy",
-      "Sharding & Replication"
+      "Indexing",
+      "Stored Procedures",
+      "Query Optimization"
     ]
   },
   "Data Science": {
     "Beginner": [
-      "Intro to Data Science",
-      "Pandas & NumPy Basics",
+      "Pandas Intro",
       "Data Cleaning",
-      "Exploratory Data Analysis",
-      "Data Visualization"
+      "Matplotlib"
     ],
     "Intermediate": [
       "Statistical Analysis",
-      "Intro to Machine Learning",
-      "Scikit-Learn Pipelines",
-      "Regression Models",
-      "Classification Models"
+      "Scikit-Learn",
+      "Feature Engineering"
     ],
     "Advanced": [
-      "Feature Engineering",
-      "Ensemble Methods",
-      "Model Evaluation & Tuning",
-      "Time Series Analysis",
-      "Deep Learning Basics"
+      "Time Series",
+      "NLP Basics",
+      "Advanced ML Models"
     ]
   },
   "AI Engineering": {
     "Beginner": [
-      "AI & ML Concepts",
-      "Python for AI",
-      "Working with APIs",
+      "Intro to LLMs",
       "Prompt Engineering",
-      "AI Use Cases"
+      "OpenAI API"
     ],
     "Intermediate": [
-      "LLM Fundamentals",
-      "RAG Pipelines",
-      "LangChain Basics",
+      "RAG Architecture",
       "Vector Databases",
-      "Fine-tuning Concepts"
+      "LangChain"
     ],
     "Advanced": [
-      "LangChain & Agents",
-      "Multi-Agent Systems",
-      "LLM Evaluation",
-      "Production AI Systems",
-      "AI Safety & Ethics"
+      "Fine-tuning Models",
+      "AI Agents",
+      "Evaluating AI Output"
     ]
   },
   "AI Automation": {
     "Beginner": [
-      "Intro to AI Automation",
-      "Python Automation Basics",
-      "Email & Calendar Automation"
+      "Zapier Basics",
+      "Make.com Workflows",
+      "API Connections"
     ],
     "Intermediate": [
-      "Web Scraping & Data Extraction",
-      "API Automation with Python",
-      "AI-Powered Bots",
-      "Visual Workflow Platforms"
+      "Automated Content",
+      "Email Automation",
+      "Custom Webhooks"
     ],
     "Advanced": [
-      "LLM Workflow Automation",
-      "Document Processing with AI",
-      "Scheduling & Task Automation"
+      "Enterprise AI Bots",
+      "Voice AI Agents",
+      "Multi-Agent Systems"
     ]
   },
   "Version Control": {
     "Beginner": [
-      "Git Fundamentals",
-      "Commits & History",
-      "Branching Basics",
-      "GitHub Essentials",
-      "Collaborative Workflows"
+      "Git Basics",
+      "Commits & Logs",
+      "Branches"
     ],
     "Intermediate": [
-      "Merging & Rebasing",
-      "Pull Requests & Code Review",
-      "Tags & Releases",
-      "Undoing Changes",
-      "Git Internals"
+      "Merging & Conflicts",
+      "Pull Requests",
+      "GitHub Actions"
     ],
     "Advanced": [
-      "CI/CD with GitHub Actions",
-      "Monorepo Strategies",
-      "Advanced Git Workflows",
-      "Git for Teams"
+      "Rebasing",
+      "Git Hooks",
+      "Monorepo Management"
     ]
   },
   "Mobile Development": {
     "Beginner": [
-      "Dart Fundamentals"
+      "React Native Intro",
+      "UI Components",
+      "Navigation"
     ],
     "Intermediate": [
-      "Flutter UI & Widgets"
+      "Device APIs",
+      "Local Storage",
+      "Animations"
     ],
     "Advanced": [
-      "Flutter State Management"
+      "App Deployment",
+      "Native Modules",
+      "Performance Profiling"
     ]
   },
   "Systems Programming": {
     "Beginner": [
-      "C++ Fundamentals"
+      "Rust Basics",
+      "Ownership & Borrowing",
+      "Memory Safety"
     ],
     "Intermediate": [
-      "Object-Oriented C++"
+      "Concurrency",
+      "File Systems",
+      "Macros"
     ],
     "Advanced": [
-      "Modern C++ & Memory"
+      "Unsafe Rust",
+      "FFI",
+      "Network Programming"
     ]
   },
   "Cloud Native & Go": {
     "Beginner": [
-      "Go Fundamentals"
+      "Go Syntax",
+      "Structs & Interfaces",
+      "Goroutines"
     ],
     "Intermediate": [
-      "Advanced Go & Concurrency"
+      "Go Web Servers",
+      "Docker Containers",
+      "Kubernetes Basics"
     ],
     "Advanced": [
-      "Cloud DevOps & Microservices"
+      "gRPC",
+      "Service Meshes",
+      "Cloud Operators"
     ]
   },
   "Cloud & DevOps": {
     "Beginner": [
-      "DevOps Fundamentals"
+      "AWS Basics",
+      "EC2 & S3",
+      "Linux Fundamentals"
     ],
     "Intermediate": [
-      "Containers & Infrastructure"
+      "Terraform",
+      "CI/CD Pipelines",
+      "Monitoring & Logging"
     ],
     "Advanced": [
-      "Orchestration & Observability"
+      "Serverless",
+      "Security Groups",
+      "Cost Optimization"
     ]
   },
   "System Design & Architecture": {
     "Beginner": [
-      "Architecture Fundamentals"
+      "Client-Server Model",
+      "DNS & Load Balancing",
+      "Caching Strategies"
     ],
     "Intermediate": [
-      "Distributed Systems"
+      "Database Sharding",
+      "Message Queues",
+      "CAP Theorem"
     ],
     "Advanced": [
-      "High Availability & Scalability"
+      "Distributed Consensus",
+      "Designing Uber",
+      "Designing Netflix"
     ]
   },
   "Agentic AI & MCP": {
     "Beginner": [
-      "Agent Foundations & Tools"
+      "Agent Foundations",
+      "Tool Calling",
+      "MCP Intro"
     ],
     "Intermediate": [
-      "Stateful Agents & Memory"
+      "ReAct Prompting",
+      "Memory Systems",
+      "MCP Servers"
     ],
     "Advanced": [
-      "Multi-Agent Orchestration"
+      "Swarm Architectures",
+      "Autonomous Execution",
+      "Evaluation"
     ]
   },
   "Computer Vision & Deep Learning": {
     "Beginner": [
-      "Computer Vision Fundamentals"
+      "Image Processing",
+      "OpenCV Basics",
+      "Neural Networks Intro"
     ],
     "Intermediate": [
-      "Deep Learning for Vision"
+      "PyTorch Tensors",
+      "CNN Architecture",
+      "Transfer Learning"
     ],
     "Advanced": [
-      "Advanced Vision & Deployment"
+      "Object Detection",
+      "GANs",
+      "Vision Transformers"
     ]
   },
   "Data Engineering & MLOps": {
     "Beginner": [
-      "Data Pipeline Engineering"
+      "ETL Pipelines",
+      "Data Warehouses",
+      "Apache Airflow"
     ],
     "Intermediate": [
-      "Feature Stores & Scale"
+      "Apache Spark",
+      "Kafka Streaming",
+      "ML Model Tracking"
     ],
     "Advanced": [
-      "LLMOps & Production"
+      "Model Deployment",
+      "Drift Detection",
+      "Feature Stores"
     ]
   },
   "C Programming": {
     "Beginner": [
-      "C Fundamentals"
+      "C Syntax",
+      "Pointers Basics",
+      "Arrays & Strings"
     ],
     "Intermediate": [
-      "Memory & Pointers"
+      "Dynamic Memory",
+      "Structs & Unions",
+      "File Handling"
     ],
     "Advanced": [
-      "Advanced C & Systems"
+      "Data Structures in C",
+      "Bit Manipulation",
+      "System Calls"
     ]
   },
   "Data Structures & Algorithms": {
     "Beginner": [
-      "DSA Foundations & Linear Data"
+      "Big O Notation",
+      "Arrays & Strings",
+      "Linked Lists"
     ],
     "Intermediate": [
-      "Hash Maps, Trees & Recursion"
+      "Stacks & Queues",
+      "Trees & Graphs",
+      "Sorting Algorithms"
     ],
     "Advanced": [
-      "Graphs & Dynamic Programming"
+      "Dynamic Programming",
+      "Tries",
+      "Graph Traversal"
     ]
   }
 }
