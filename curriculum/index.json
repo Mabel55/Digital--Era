@@ -27,7 +27,8 @@
       "Context Managers",
       "Concurrency & Asyncio",
       "Metaclasses",
-      "Type Hinting & Pydantic"
+      "Type Hinting & Pydantic",
+      "Advanced OOP & Magic Methods"
     ]
   },
   "Frontend": {
