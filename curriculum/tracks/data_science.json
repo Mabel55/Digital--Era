@@ -284,5 +284,28 @@
         "rubric": "Uses explained_variance_ratio_."
       }
     ]
+  },
+  "Unsupervised Learning": {
+    "aiRubric": "Assess clustering and unsupervised learning concepts",
+    "lessons": [
+      {
+        "title": "K-Means Clustering",
+        "theory": "## Finding Patterns\nUnsupervised learning models do not have target labels (y). K-Means algorithm partitions data into K distinct clusters based on feature similarity.",
+        "instructions": "## Task: Initialize K-Means\nInitialize a KMeans model from scikit-learn with 3 clusters.",
+        "starterCode": "from sklearn.cluster import KMeans\n\nkmeans = KMeans(n_clusters=___, random_state=42)",
+        "solution": "from sklearn.cluster import KMeans\n\nkmeans = KMeans(n_clusters=3, random_state=42)",
+        "hint": "Use 3 for n_clusters",
+        "rubric": "Sets n_clusters to 3."
+      },
+      {
+        "title": "DBSCAN",
+        "theory": "## Density-Based Spatial Clustering\nUnlike K-Means which forces every point into a cluster (often forming spherical shapes), DBSCAN groups together points that are closely packed together, and marks points in low-density regions as outliers (noise).",
+        "instructions": "## Task: Outlier Label\nIn scikit-learn's DBSCAN, what label is assigned to noisy/outlier points that don't belong to any cluster?",
+        "starterCode": "outlier_label = ___",
+        "solution": "outlier_label = -1",
+        "hint": "It is -1",
+        "rubric": "Identifies -1 as the outlier label."
+      }
+    ]
   }
 }

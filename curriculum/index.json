@@ -103,7 +103,8 @@
       "Scikit-Learn",
       "Feature Engineering",
       "Cross-Validation",
-      "Hyperparameter Tuning"
+      "Hyperparameter Tuning",
+      "Unsupervised Learning"
     ],
     "Advanced": [
       "Time Series",
