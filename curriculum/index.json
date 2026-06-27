@@ -74,7 +74,8 @@
       "WebSockets",
       "Message Queues & Kafka",
       "gRPC & Protocol Buffers",
-      "Advanced Authentication & Security"
+      "Advanced Authentication & Security",
+      "System Observability & Monitoring Masterclass"
     ]
   },
   "SQL & Databases": {
