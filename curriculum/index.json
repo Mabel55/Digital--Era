@@ -129,14 +129,17 @@
       "Intro to LLMs",
       "Prompt Engineering",
       "OpenAI API",
-      "Open Source LLMs"
+      "Open Source LLMs",
+      "Tokenization Basics"
     ],
     "Intermediate": [
       "RAG Architecture",
       "Vector Databases",
       "LangChain",
       "Semantic Routing",
-      "Function Calling & Tools"
+      "Function Calling & Tools",
+      "Caching LLM Responses",
+      "Structured Outputs"
     ],
     "Advanced": [
       "Fine-tuning Models",
@@ -147,7 +150,9 @@
       "AI Ethics and Safety",
       "Advanced Autonomous Agents",
       "Model Quantization",
-      "Graph RAG"
+      "Graph RAG",
+      "LoRA & QLoRA",
+      "Multi-Modal Models"
     ]
   },
   "AI Automation": {
