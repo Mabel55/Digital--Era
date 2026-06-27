@@ -45,13 +45,13 @@
     "aiRubric": "Check logic, syntax, and output for Apache Spark.",
     "lessons": [
       {
-        "title": "Apache Spark - Coming Soon",
-        "theory": "## Apache Spark\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Apache Spark** is under development.",
-        "starterCode": "# Apache Spark - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Apache Spark\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Big Data Processing",
+        "theory": "## In-Memory Speed\nWhen data is too big for Pandas (which requires all data to fit in RAM on one machine), we use **Apache Spark**.\n\nSpark distributes the data across a cluster of computers and processes it in parallel. It uses **RDDs** (Resilient Distributed Datasets) and DataFrames.\n\nBecause it does much of its processing in RAM, it's 100x faster than older Hadoop MapReduce systems.",
+        "instructions": "## Task: MapReduce Simulator\n1. Simulate the Map and Reduce phases of a distributed big data job.\n2. Map phase: Square every number in a list.\n3. Reduce phase: Sum all the squared numbers together.",
+        "starterCode": "def mock_spark_job(data):\n    print(\"Original Data:\", data)\n    \n    # 1. Map Phase (Applies function to every element)\n    # Square each number\n    mapped = list(map(lambda x: ___, data))\n    print(\"Mapped Data:\", mapped)\n    \n    # 2. Reduce Phase (Aggregates list into a single value)\n    from functools import reduce\n    # Sum all numbers\n    result = reduce(lambda a, b: ___, mapped)\n    \n    return result\n\nbig_data = [1, 2, 3, 4, 5]\nfinal_result = mock_spark_job(big_data)\nprint(\"Final Reduced Result:\", final_result)",
+        "solution": "def mock_spark_job(data):\n    print(\"Original Data:\", data)\n    \n    # 1. Map Phase (Applies function to every element)\n    # Square each number\n    mapped = list(map(lambda x: x**2, data))\n    print(\"Mapped Data:\", mapped)\n    \n    # 2. Reduce Phase (Aggregates list into a single value)\n    from functools import reduce\n    # Sum all numbers\n    result = reduce(lambda a, b: a + b, mapped)\n    \n    return result\n\nbig_data = [1, 2, 3, 4, 5]\nfinal_result = mock_spark_job(big_data)\nprint(\"Final Reduced Result:\", final_result)",
+        "hint": "lambda x: x**2 to square. lambda a, b: a + b to sum.",
+        "rubric": "Data is squared ([1, 4, 9, 16, 25]) and then summed (55)."
       }
     ]
   },
@@ -59,13 +59,13 @@
     "aiRubric": "Check logic, syntax, and output for Kafka Streaming.",
     "lessons": [
       {
-        "title": "Kafka Streaming - Coming Soon",
-        "theory": "## Kafka Streaming\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Kafka Streaming** is under development.",
-        "starterCode": "# Kafka Streaming - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Kafka Streaming\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Real-time Data Pipelines",
+        "theory": "## Event Streams\nTraditionally, data is processed in \"batches\" (e.g., every night at midnight). \n\n**Apache Kafka** enables \"streaming\" architecture. As soon as an event happens (e.g., a user clicks a button), it is published to a Kafka **Topic**. Consumers immediately read from that topic and process the data in real-time.",
+        "instructions": "## Task: Pub/Sub Architecture\n1. Simulate a simple Publisher/Subscriber model.\n2. Create a `Topic` class that holds subscribers.\n3. When `publish` is called, it iterates through all subscribers and calls their `receive` method.",
+        "starterCode": "class Topic:\n    def __init__(self, name):\n        self.name = name\n        self.subscribers = []\n        \n    def subscribe(self, sub):\n        self.subscribers.___(sub)\n        \n    def publish(self, message):\n        for sub in self.___:\n            sub.___(message)\n\nclass Consumer:\n    def __init__(self, name):\n        self.name = name\n        \n    def receive(self, message):\n        print(f\"{self.name} processed event: {message}\")\n\nclicks_topic = Topic(\"UserClicks\")\nclicks_topic.subscribe(Consumer(\"AnalyticsDB\"))\nclicks_topic.subscribe(Consumer(\"FraudDetection\"))\n\nclicks_topic.publish(\"User 99 clicked Checkout\")",
+        "solution": "class Topic:\n    def __init__(self, name):\n        self.name = name\n        self.subscribers = []\n        \n    def subscribe(self, sub):\n        self.subscribers.append(sub)\n        \n    def publish(self, message):\n        for sub in self.subscribers:\n            sub.receive(message)\n\nclass Consumer:\n    def __init__(self, name):\n        self.name = name\n        \n    def receive(self, message):\n        print(f\"{self.name} processed event: {message}\")\n\nclicks_topic = Topic(\"UserClicks\")\nclicks_topic.subscribe(Consumer(\"AnalyticsDB\"))\nclicks_topic.subscribe(Consumer(\"FraudDetection\"))\n\nclicks_topic.publish(\"User 99 clicked Checkout\")",
+        "hint": "append() to add. Loop over self.subscribers. Call sub.receive(message).",
+        "rubric": "Both AnalyticsDB and FraudDetection process the event when published."
       }
     ]
   },

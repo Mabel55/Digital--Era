@@ -118,13 +118,13 @@
     "aiRubric": "Check logic, syntax, and output for Feature Engineering.",
     "lessons": [
       {
-        "title": "Feature Engineering - Coming Soon",
-        "theory": "## Feature Engineering\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Feature Engineering** is under development.",
-        "starterCode": "# Feature Engineering - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Feature Engineering\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "One-Hot Encoding",
+        "theory": "## Converting Categories to Numbers\nMachine Learning models can't understand words like 'Red', 'Blue', or 'Green'. We must convert them to numbers.\n\nIf we just assign Red=1, Blue=2, Green=3 (Label Encoding), the model might think Green > Red. \n\n**One-Hot Encoding** creates a new binary column for each category.",
+        "instructions": "## Task: Create Dummy Variables\n1. Use Pandas `get_dummies()` to apply One-Hot Encoding to the 'Color' column.\n2. Note how it creates new columns with 0s and 1s.",
+        "starterCode": "import pandas as pd\n\ndf = pd.DataFrame({\n    'ID': [1, 2, 3],\n    'Color': ['Red', 'Blue', 'Red']\n})\n\nprint(\"Original:\")\nprint(df)\n\n# Apply One-Hot Encoding\ndf_encoded = pd.___(df, columns=['___'])\n\nprint(\"\\nEncoded:\")\nprint(df_encoded)",
+        "solution": "import pandas as pd\n\ndf = pd.DataFrame({\n    'ID': [1, 2, 3],\n    'Color': ['Red', 'Blue', 'Red']\n})\n\nprint(\"Original:\")\nprint(df)\n\n# Apply One-Hot Encoding\ndf_encoded = pd.get_dummies(df, columns=['Color'])\n\nprint(\"\\nEncoded:\")\nprint(df_encoded)",
+        "hint": "Use pd.get_dummies() and pass 'Color' as the column.",
+        "rubric": "Dataframe correctly expands into Color_Red and Color_Blue columns."
       }
     ]
   },
@@ -160,13 +160,13 @@
     "aiRubric": "Check logic, syntax, and output for Advanced ML Models.",
     "lessons": [
       {
-        "title": "Advanced ML Models - Coming Soon",
-        "theory": "## Advanced ML Models\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Advanced ML Models** is under development.",
-        "starterCode": "# Advanced ML Models - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Advanced ML Models\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Random Forests",
+        "theory": "## The Wisdom of Crowds\nA Decision Tree makes decisions based on simple splits (e.g., Is Age > 30?). However, single trees are prone to **overfitting** (memorizing the training data).\n\nA **Random Forest** trains hundreds of different Decision Trees on random subsets of the data and averages their predictions. This creates a much stronger, more robust model.",
+        "instructions": "## Task: Ensemble Simulator\n1. Simulate a Random Forest predicting whether it will rain.\n2. You have 3 simulated 'trees' that vote True or False.\n3. Return the majority vote.",
+        "starterCode": "def random_forest_predict(tree1_vote, tree2_vote, tree3_vote):\n    votes = [tree1_vote, tree2_vote, tree3_vote]\n    \n    # Count how many True votes there are\n    true_count = sum(___)\n    \n    # Return True if majority (>= 2) voted True\n    return true_count >= ___\n\n# Trees output: False, True, True\nprediction = random_forest_predict(False, True, True)\nprint(\"Random Forest Prediction (Will it rain?):\", prediction)",
+        "solution": "def random_forest_predict(tree1_vote, tree2_vote, tree3_vote):\n    votes = [tree1_vote, tree2_vote, tree3_vote]\n    \n    # Count how many True votes there are\n    true_count = sum(votes)\n    \n    # Return True if majority (>= 2) voted True\n    return true_count >= 2\n\n# Trees output: False, True, True\nprediction = random_forest_predict(False, True, True)\nprint(\"Random Forest Prediction (Will it rain?):\", prediction)",
+        "hint": "sum(votes) counts the True values (since True is 1 in Python). Check if it's >= 2.",
+        "rubric": "Function returns True because 2 out of 3 trees voted True."
       }
     ]
   }
