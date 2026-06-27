@@ -1587,13 +1587,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for ETL Pipelines.",
     "lessons": [
       {
-        "title": "ETL Pipelines - Coming Soon",
-        "theory": "## ETL Pipelines\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **ETL Pipelines** is under development.",
-        "starterCode": "# ETL Pipelines - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# ETL Pipelines\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "What is ETL?",
+        "theory": "## Extract, Transform, Load\nETL is the core process of Data Engineering.\n\n1. **Extract**: Pull data from sources (APIs, Databases, Logs)\n2. **Transform**: Clean, format, aggregate, and enrich the data\n3. **Load**: Save the data into a Data Warehouse for analytics\n\n```python\ndata = extract_from_api()\nclean_data = transform_remove_nulls(data)\nload_to_database(clean_data)\n```",
+        "instructions": "## Task: Simple ETL Pipeline\n1. Extract: Parse a messy CSV string\n2. Transform: Uppercase names, convert price to float, remove empty rows\n3. Load: Save to a clean dictionary list",
+        "starterCode": "messy_csv = \"\"\"\nAlice, 25.50\nBob, 10.00\n, \nCharlie, 45.25\n\"\"\"\n\ndef extract(data_string):\n    # Split by lines, ignore empty lines\n    return [line.split(',') for line in data_string.strip().split('\\n') if line.strip()]\n\ndef transform(raw_data):\n    clean_data = []\n    for row in raw_data:\n        name = row[0].strip()\n        price_str = row[1].strip()\n        if name and price_str:\n            clean_data.append({\n                'name': name.___(),\n                'price': ___(price_str)\n            })\n    return clean_data\n\ndef load(data):\n    print(\"Loading to Warehouse:\")\n    for item in data:\n        print(f\"User: {item['name']}, Spent: ${item['price']:.2f}\")\n\nraw = extract(messy_csv)\nclean = transform(raw)\nload(clean)",
+        "solution": "messy_csv = \"\"\"\nAlice, 25.50\nBob, 10.00\n, \nCharlie, 45.25\n\"\"\"\n\ndef extract(data_string):\n    # Split by lines, ignore empty lines\n    return [line.split(',') for line in data_string.strip().split('\\n') if line.strip()]\n\ndef transform(raw_data):\n    clean_data = []\n    for row in raw_data:\n        name = row[0].strip()\n        price_str = row[1].strip()\n        if name and price_str:\n            clean_data.append({\n                'name': name.upper(),\n                'price': float(price_str)\n            })\n    return clean_data\n\ndef load(data):\n    print(\"Loading to Warehouse:\")\n    for item in data:\n        print(f\"User: {item['name']}, Spent: ${item['price']:.2f}\")\n\nraw = extract(messy_csv)\nclean = transform(raw)\nload(clean)",
+        "hint": ".upper() for uppercase. float() for decimals.",
+        "rubric": "ETL pipeline extracts valid rows, converts to uppercase/floats, and prints clean output."
       }
     ]
   },
@@ -2293,13 +2293,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for React Native Intro.",
     "lessons": [
       {
-        "title": "React Native Intro - Coming Soon",
-        "theory": "## React Native Intro\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **React Native Intro** is under development.",
-        "starterCode": "# React Native Intro - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# React Native Intro\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "What is React Native?",
+        "theory": "## Build Mobile Apps with JS\nReact Native lets you build iOS and Android apps using React.\n\nInstead of HTML like `<div>` and `<span>`, you use native components:\n- `<View>` instead of `<div>`\n- `<Text>` instead of `<p>` or `<span>`\n- `<TextInput>` instead of `<input>`\n- `<TouchableOpacity>` for buttons",
+        "instructions": "## Task: Map Web to Native\n1. Create a dictionary that maps HTML web tags to React Native components\n2. Map: div, span, input, button, img",
+        "starterCode": "rn_mapping = {\n    'div': '___',\n    'span': '___',\n    'input': '___',\n    'button': '___',\n    'img': '___'\n}\n\nfor web, native in rn_mapping.items():\n    print(f'Web <{web}> -> React Native <{native}>')",
+        "solution": "rn_mapping = {\n    'div': 'View',\n    'span': 'Text',\n    'input': 'TextInput',\n    'button': 'TouchableOpacity',\n    'img': 'Image'\n}\n\nfor web, native in rn_mapping.items():\n    print(f'Web <{web}> -> React Native <{native}>')",
+        "hint": "View, Text, TextInput, TouchableOpacity, Image.",
+        "rubric": "All 5 HTML tags mapped correctly to React Native equivalents."
       }
     ]
   },

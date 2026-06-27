@@ -3,13 +3,13 @@
     "aiRubric": "Check logic, syntax, and output for React Native Intro.",
     "lessons": [
       {
-        "title": "React Native Intro - Coming Soon",
-        "theory": "## React Native Intro\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **React Native Intro** is under development.",
-        "starterCode": "# React Native Intro - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# React Native Intro\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "What is React Native?",
+        "theory": "## Build Mobile Apps with JS\nReact Native lets you build iOS and Android apps using React.\n\nInstead of HTML like `<div>` and `<span>`, you use native components:\n- `<View>` instead of `<div>`\n- `<Text>` instead of `<p>` or `<span>`\n- `<TextInput>` instead of `<input>`\n- `<TouchableOpacity>` for buttons",
+        "instructions": "## Task: Map Web to Native\n1. Create a dictionary that maps HTML web tags to React Native components\n2. Map: div, span, input, button, img",
+        "starterCode": "rn_mapping = {\n    'div': '___',\n    'span': '___',\n    'input': '___',\n    'button': '___',\n    'img': '___'\n}\n\nfor web, native in rn_mapping.items():\n    print(f'Web <{web}> -> React Native <{native}>')",
+        "solution": "rn_mapping = {\n    'div': 'View',\n    'span': 'Text',\n    'input': 'TextInput',\n    'button': 'TouchableOpacity',\n    'img': 'Image'\n}\n\nfor web, native in rn_mapping.items():\n    print(f'Web <{web}> -> React Native <{native}>')",
+        "hint": "View, Text, TextInput, TouchableOpacity, Image.",
+        "rubric": "All 5 HTML tags mapped correctly to React Native equivalents."
       }
     ]
   },
