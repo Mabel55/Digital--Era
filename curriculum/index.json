@@ -324,17 +324,22 @@
     "Beginner": [
       "ETL Pipelines",
       "Data Warehouses",
-      "Apache Airflow"
+      "Apache Airflow",
+      "Data Quality & Validation"
     ],
     "Intermediate": [
       "Apache Spark",
       "Kafka Streaming",
-      "ML Model Tracking"
+      "ML Model Tracking",
+      "dbt (Data Build Tool)",
+      "Data Lakes & Warehouses"
     ],
     "Advanced": [
       "Model Deployment",
       "Drift Detection",
-      "Feature Stores"
+      "Feature Stores",
+      "Model Monitoring & Drift",
+      "Kubeflow Pipelines"
     ]
   },
   "C Programming": {
