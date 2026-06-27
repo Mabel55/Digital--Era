@@ -204,13 +204,22 @@
     "aiRubric": "Check logic, syntax, and output for GraphQL.",
     "lessons": [
       {
-        "title": "GraphQL - Coming Soon",
-        "theory": "## GraphQL\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **GraphQL** is under development.",
-        "starterCode": "# GraphQL - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# GraphQL\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Intro to GraphQL",
+        "theory": "## A Query Language for APIs\nUnlike REST (where you hit multiple URLs for different data), GraphQL exposes a single endpoint (e.g., `/graphql`).\n\n- The **Client** dictates exactly what data it wants.\n- Prevents **Over-fetching** (getting too much data) and **Under-fetching** (needing to make 5 requests to get everything).\n\n```graphql\nquery {\n  user(id: 1) {\n    name\n    posts {\n      title\n    }\n  }\n}\n```",
+        "instructions": "## Task: The Problem with REST\n1. Define 'overfetching' as downloading more data than needed.\n2. Define 'underfetching' as needing multiple API calls to get enough data.\n3. Create a dictionary matching scenarios to these terms.",
+        "starterCode": "graphql_benefits = {\n    'Fetching a User profile just to get their name, but getting 5MB of history too': '___',\n    'Calling /users, then /users/1/posts, then /posts/2/comments just to show a page': '___'\n}\n\nfor scenario, term in graphql_benefits.items():\n    print(f\"Scenario:\\n{scenario}\\n-> Problem: {term}\\n\")",
+        "solution": "graphql_benefits = {\n    'Fetching a User profile just to get their name, but getting 5MB of history too': 'overfetching',\n    'Calling /users, then /users/1/posts, then /posts/2/comments just to show a page': 'underfetching'\n}\n\nfor scenario, term in graphql_benefits.items():\n    print(f\"Scenario:\\n{scenario}\\n-> Problem: {term}\\n\")",
+        "hint": "Overfetching = too much data. Underfetching = too many requests.",
+        "rubric": "Scenarios correctly matched to overfetching and underfetching."
+      },
+      {
+        "title": "Schemas and Resolvers",
+        "theory": "## How it Works\nOn the server, you define a **Schema** (the shape of the data) and **Resolvers** (functions that actually fetch the data).\n\n```javascript\n// 1. Schema\ntype Query {\n  hello: String\n}\n\n// 2. Resolver\nconst resolvers = {\n  Query: {\n    hello: () => 'Hello world!',\n  },\n};\n```",
+        "instructions": "## Task: Write a Resolver\n1. You have a simulated database `mock_db`.\n2. Write a resolver function `get_user(id)` that returns the user dict.\n3. Return `None` if the user doesn't exist.",
+        "starterCode": "mock_db = {\n    1: {'name': 'Alice', 'role': 'Admin'},\n    2: {'name': 'Bob', 'role': 'User'}\n}\n\ndef get_user_resolver(user_id):\n    # Return the user from mock_db or None\n    return mock_db.___(___)\n\n# Simulating a GraphQL Query: query { user(id: 1) { name } }\nresult = get_user_resolver(1)\nprint(\"User 1 Name:\", result['name'])\n\n# Simulating missing user\nprint(\"User 99:\", get_user_resolver(99))",
+        "solution": "mock_db = {\n    1: {'name': 'Alice', 'role': 'Admin'},\n    2: {'name': 'Bob', 'role': 'User'}\n}\n\ndef get_user_resolver(user_id):\n    # Return the user from mock_db or None\n    return mock_db.get(user_id)\n\n# Simulating a GraphQL Query: query { user(id: 1) { name } }\nresult = get_user_resolver(1)\nprint(\"User 1 Name:\", result['name'])\n\n# Simulating missing user\nprint(\"User 99:\", get_user_resolver(99))",
+        "hint": "Use the .get(key) dictionary method to safely fetch or return None.",
+        "rubric": "Resolver safely fetches existing users and returns None for missing ones."
       }
     ]
   },

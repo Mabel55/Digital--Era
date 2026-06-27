@@ -59,13 +59,13 @@
     "aiRubric": "Check logic, syntax, and output for Memory Systems.",
     "lessons": [
       {
-        "title": "Memory Systems - Coming Soon",
-        "theory": "## Memory Systems\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Memory Systems** is under development.",
-        "starterCode": "# Memory Systems - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Memory Systems\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Agent Memory",
+        "theory": "## Remembering Context\nAgents need memory to hold conversations. \n\n- **Short-term Memory**: The current chat history (often constrained by the LLM context window).\n- **Long-term Memory**: Saving important facts to a database (often a Vector DB) and retrieving them later.",
+        "instructions": "## Task: Short-Term Chat Buffer\n1. Create a `ChatMemory` class that stores a list of messages.\n2. Implement an `add_message(role, content)` method.\n3. Add a limit so it only keeps the last 3 messages (so we don't overflow the LLM token limit).",
+        "starterCode": "class ChatMemory:\n    def __init__(self, limit=3):\n        self.messages = []\n        self.limit = limit\n        \n    def add_message(self, role, content):\n        self.messages.append({'role': role, 'content': content})\n        # Ensure we don't exceed the limit by keeping only the last N items\n        if len(self.messages) > self.___:\n            self.messages = self.messages[-self.___:]\n            \n    def show(self):\n        for m in self.messages:\n            print(f\"[{m['role'].upper()}] {m['content']}\")\n\nmemory = ChatMemory(limit=2)\nmemory.add_message('user', 'Hi')\nmemory.add_message('assistant', 'Hello, how can I help?')\nmemory.add_message('user', 'What is your name?')\n\n# The first 'user: Hi' message should be forgotten\nmemory.show()",
+        "solution": "class ChatMemory:\n    def __init__(self, limit=3):\n        self.messages = []\n        self.limit = limit\n        \n    def add_message(self, role, content):\n        self.messages.append({'role': role, 'content': content})\n        # Ensure we don't exceed the limit by keeping only the last N items\n        if len(self.messages) > self.limit:\n            self.messages = self.messages[-self.limit:]\n            \n    def show(self):\n        for m in self.messages:\n            print(f\"[{m['role'].upper()}] {m['content']}\")\n\nmemory = ChatMemory(limit=2)\nmemory.add_message('user', 'Hi')\nmemory.add_message('assistant', 'Hello, how can I help?')\nmemory.add_message('user', 'What is your name?')\n\n# The first 'user: Hi' message should be forgotten\nmemory.show()",
+        "hint": "Use self.limit. Python list slicing [-limit:] gets the last N elements.",
+        "rubric": "Memory successfully truncates to the last 2 messages."
       }
     ]
   },

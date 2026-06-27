@@ -17,13 +17,13 @@
     "aiRubric": "Check logic, syntax, and output for UI Components.",
     "lessons": [
       {
-        "title": "UI Components - Coming Soon",
-        "theory": "## UI Components\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **UI Components** is under development.",
-        "starterCode": "# UI Components - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# UI Components\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "View and Text",
+        "theory": "## The Building Blocks\nIn React Native, you use native-backed components instead of HTML.\n\n- **`<View>`**: Like a `<div>`. The fundamental container. Used for layout (Flexbox), styling, and grouping.\n- **`<Text>`**: Like a `<span>` or `<p>`. You CANNOT put text directly inside a `<View>`, it MUST be inside a `<Text>` component.",
+        "instructions": "## Task: Component Validations\n1. Analyze some simulated React Native code blocks.\n2. Determine if they are valid (True) or invalid (False).\n3. Remember: Text must be inside `<Text>`.",
+        "starterCode": "validations = {\n    '<View>Hello World</View>': ___,\n    '<View><Text>Hello World</Text></View>': ___,\n    '<div><p>Hello</p></div>': ___  # This is React Native, not React Web!\n}\n\nfor code, is_valid in validations.items():\n    print(f\"Code: {code}\\nValid? {is_valid}\\n\")",
+        "solution": "validations = {\n    '<View>Hello World</View>': False,\n    '<View><Text>Hello World</Text></View>': True,\n    '<div><p>Hello</p></div>': False  # This is React Native, not React Web!\n}\n\nfor code, is_valid in validations.items():\n    print(f\"Code: {code}\\nValid? {is_valid}\\n\")",
+        "hint": "Text inside a View without <Text> is False. <div> is False in React Native.",
+        "rubric": "Only the <View><Text> combination is marked as True."
       }
     ]
   },
@@ -59,13 +59,13 @@
     "aiRubric": "Check logic, syntax, and output for Local Storage.",
     "lessons": [
       {
-        "title": "Local Storage - Coming Soon",
-        "theory": "## Local Storage\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Local Storage** is under development.",
-        "starterCode": "# Local Storage - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Local Storage\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "AsyncStorage",
+        "theory": "## Saving Data on the Device\nReact Native uses `AsyncStorage` (or similar libraries) to save key-value data persistently on the phone.\n\nIt is **asynchronous** (returns a Promise), unlike `localStorage` on the web.\n\n```javascript\n// Saving\nawait AsyncStorage.setItem('@theme', 'dark');\n\n// Reading\nconst theme = await AsyncStorage.getItem('@theme');\n```",
+        "instructions": "## Task: AsyncStorage Simulator\n1. Build a mock `AsyncStorage` class using Python's `async/await`.\n2. Implement `set_item(key, value)` and `get_item(key)`.",
+        "starterCode": "import asyncio\n\nclass MockAsyncStorage:\n    def __init__(self):\n        self.storage = {}\n        \n    ___ def set_item(self, key, value):\n        # Simulate a small delay\n        await asyncio.sleep(0.1)\n        self.storage[key] = ___\n        \n    ___ def get_item(self, key):\n        await asyncio.sleep(0.1)\n        return self.storage.___(___)\n\nasync def main():\n    db = MockAsyncStorage()\n    ___ db.set_item('@token', 'xyz_123')\n    token = ___ db.get_item('@token')\n    print(\"Retrieved Token:\", token)\n\n# Run the async function (simulate React Native environment)\nasyncio.run(main())",
+        "solution": "import asyncio\n\nclass MockAsyncStorage:\n    def __init__(self):\n        self.storage = {}\n        \n    async def set_item(self, key, value):\n        # Simulate a small delay\n        await asyncio.sleep(0.1)\n        self.storage[key] = value\n        \n    async def get_item(self, key):\n        await asyncio.sleep(0.1)\n        return self.storage.get(key)\n\nasync def main():\n    db = MockAsyncStorage()\n    await db.set_item('@token', 'xyz_123')\n    token = await db.get_item('@token')\n    print(\"Retrieved Token:\", token)\n\n# Run the async function (simulate React Native environment)\nasyncio.run(main())",
+        "hint": "Use `async def` for functions and `await` when calling them. Use `.get(key)` for dictionary lookup.",
+        "rubric": "Async functions implemented correctly and data is stored/retrieved."
       }
     ]
   },
