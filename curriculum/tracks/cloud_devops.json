@@ -123,13 +123,13 @@
     "aiRubric": "Check logic, syntax, and output for Serverless.",
     "lessons": [
       {
-        "title": "Serverless - Coming Soon",
-        "theory": "## Serverless\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Serverless** is under development.",
-        "starterCode": "# Serverless - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Serverless\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "What is Serverless?",
+        "theory": "## Functions as a Service (FaaS)\nServerless (like AWS Lambda) means you write code, and the cloud provider handles the servers. You only pay for the milliseconds your code actually runs.\n\n```python\n# Standard AWS Lambda Handler\ndef lambda_handler(event, context):\n    user_id = event.get('userId')\n    return {\n        'statusCode': 200,\n        'body': f\"Hello, User {user_id}!\"\n    }\n```",
+        "instructions": "## Task: Write a Lambda Function\n1. Implement `lambda_handler(event, context)`\n2. It should extract `action` and `amount` from the `event` dictionary\n3. Return a 200 status code and a success message in the body",
+        "starterCode": "def lambda_handler(event, context):\n    action = event.get('___')\n    amount = event.get('___')\n    \n    # Simulate some logic\n    message = f\"Successfully processed {action} for ${amount}\"\n    \n    return {\n        'statusCode': ___,\n        'body': ___\n    }\n\nmock_event = {'action': 'refund', 'amount': 45.50}\nresponse = lambda_handler(mock_event, {})\nprint(response)",
+        "solution": "def lambda_handler(event, context):\n    action = event.get('action')\n    amount = event.get('amount')\n    \n    # Simulate some logic\n    message = f\"Successfully processed {action} for ${amount}\"\n    \n    return {\n        'statusCode': 200,\n        'body': message\n    }\n\nmock_event = {'action': 'refund', 'amount': 45.50}\nresponse = lambda_handler(mock_event, {})\nprint(response)",
+        "hint": "Extract 'action' and 'amount'. Return 200 status and the message.",
+        "rubric": "Handler extracts data and returns proper dict format."
       }
     ]
   },

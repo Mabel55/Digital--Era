@@ -213,13 +213,13 @@
     "aiRubric": "Check logic, syntax, and output for Dynamic Programming.",
     "lessons": [
       {
-        "title": "Dynamic Programming - Coming Soon",
-        "theory": "## Dynamic Programming\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Dynamic Programming** is under development.",
-        "starterCode": "# Dynamic Programming - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Dynamic Programming\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Memoization",
+        "theory": "## Remembering Past Results\nDynamic Programming (DP) optimizes recursive algorithms by storing the results of expensive function calls.\n\nFibonacci is the classic example:\n```python\n# Slow (O(2^n))\ndef fib(n):\n    if n <= 1: return n\n    return fib(n-1) + fib(n-2)\n```\nIf we compute `fib(5)`, we compute `fib(3)` multiple times. DP fixes this.",
+        "instructions": "## Task: Memoized Fibonacci\n1. Implement Fibonacci using a dictionary (memo) to cache results\n2. Check if `n` is in `memo`. If so, return it.\n3. Otherwise, compute it, save it to `memo`, and return it",
+        "starterCode": "def fib_memo(n, memo=None):\n    if memo is None: memo = {}\n    \n    if n in ___:\n        return memo[n]\n    if n <= 1:\n        return n\n        \n    # Compute and save\n    result = fib_memo(n-1, memo) + fib_memo(n-2, memo)\n    ___[n] = result\n    \n    return result\n\nprint(\"Fib(10):\", fib_memo(10))\nprint(\"Fib(50):\", fib_memo(50)) # Would take years without memoization!",
+        "solution": "def fib_memo(n, memo=None):\n    if memo is None: memo = {}\n    \n    if n in memo:\n        return memo[n]\n    if n <= 1:\n        return n\n        \n    # Compute and save\n    result = fib_memo(n-1, memo) + fib_memo(n-2, memo)\n    memo[n] = result\n    \n    return result\n\nprint(\"Fib(10):\", fib_memo(10))\nprint(\"Fib(50):\", fib_memo(50)) # Would take years without memoization!",
+        "hint": "Check `if n in memo`. Save to `memo[n] = result`.",
+        "rubric": "Fib(50) computes instantly due to memoization."
       }
     ]
   },

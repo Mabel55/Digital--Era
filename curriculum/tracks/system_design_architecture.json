@@ -59,13 +59,22 @@
     "aiRubric": "Check logic, syntax, and output for Message Queues.",
     "lessons": [
       {
-        "title": "Message Queues - Coming Soon",
-        "theory": "## Message Queues\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Message Queues** is under development.",
-        "starterCode": "# Message Queues - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Message Queues\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Decoupling Systems",
+        "theory": "## Asynchronous Messaging\nMessage queues (like RabbitMQ, Kafka, AWS SQS) allow systems to communicate asynchronously.\n\nInstead of Service A calling Service B directly (which fails if B is down), Service A puts a message on the queue. Service B reads it when ready.\n\nBenefits:\n- **Decoupling**: Services don't need to know about each other.\n- **Scalability**: Add more consumers if the queue gets too long.\n- **Reliability**: Messages aren't lost if a service crashes.",
+        "instructions": "## Task: Message Queue Simulator\n1. Create a `MessageQueue` class with `publish` and `consume` methods\n2. Use a standard list to represent the queue (FIFO)\n3. Publish 3 tasks and consume them sequentially",
+        "starterCode": "class MessageQueue:\n    def __init__(self):\n        self.queue = []\n        \n    def publish(self, message):\n        self.queue.___(message)\n        print(f\"Published: {message}\")\n        \n    def consume(self):\n        if not self.queue:\n            return None\n        return self.queue.___(0)\n\nmq = MessageQueue()\nmq.publish(\"Process Order #123\")\nmq.publish(\"Send Email to Alice\")\nmq.publish(\"Generate PDF Report\")\n\nprint(\"\\n--- Consumer Worker ---\")\nwhile True:\n    task = mq.consume()\n    if task is None:\n        print(\"No more tasks!\")\n        break\n    print(f\"Working on: {task}\")",
+        "solution": "class MessageQueue:\n    def __init__(self):\n        self.queue = []\n        \n    def publish(self, message):\n        self.queue.append(message)\n        print(f\"Published: {message}\")\n        \n    def consume(self):\n        if not self.queue:\n            return None\n        return self.queue.pop(0)\n\nmq = MessageQueue()\nmq.publish(\"Process Order #123\")\nmq.publish(\"Send Email to Alice\")\nmq.publish(\"Generate PDF Report\")\n\nprint(\"\\n--- Consumer Worker ---\")\nwhile True:\n    task = mq.consume()\n    if task is None:\n        print(\"No more tasks!\")\n        break\n    print(f\"Working on: {task}\")",
+        "hint": ".append() adds to end. .pop(0) removes from front.",
+        "rubric": "Messages published, then consumed in the same order (FIFO)."
+      },
+      {
+        "title": "CAP Theorem",
+        "theory": "## Consistency, Availability, Partition Tolerance\nThe CAP Theorem states that a distributed database can only guarantee two of these three characteristics:\n\n1. **Consistency**: All nodes see the same data at the same time.\n2. **Availability**: Every request gets a response (success/failure).\n3. **Partition Tolerance**: The system continues to operate despite network failures between nodes.\n\nSince networks *will* fail (P is required), you must choose between Consistency (CP) or Availability (AP).",
+        "instructions": "## Task: CAP Matcher\n1. Match databases to their typical CAP categorization\n2. Match: 'MongoDB' (CP), 'Cassandra' (AP), 'Relational/MySQL' (CA - technically single node)\n3. Print the categorizations",
+        "starterCode": "databases = {\n    'MongoDB (Default)': '___',          # Chooses Consistency over Availability during partitions\n    'Cassandra': '___',                  # Chooses Availability over Consistency (eventual consistency)\n    'MySQL (Single Node)': '___'         # Doesn't handle partitions natively\n}\n\nfor db, category in databases.items():\n    print(f\"{db:22}: {category}\")",
+        "solution": "databases = {\n    'MongoDB (Default)': 'CP',          # Chooses Consistency over Availability during partitions\n    'Cassandra': 'AP',                  # Chooses Availability over Consistency (eventual consistency)\n    'MySQL (Single Node)': 'CA'         # Doesn't handle partitions natively\n}\n\nfor db, category in databases.items():\n    print(f\"{db:22}: {category}\")",
+        "hint": "MongoDB is CP. Cassandra is AP. MySQL single node is CA.",
+        "rubric": "Databases matched to their CAP categories correctly."
       }
     ]
   },

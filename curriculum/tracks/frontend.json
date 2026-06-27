@@ -176,13 +176,13 @@
     "aiRubric": "Check logic, syntax, and output for State Management.",
     "lessons": [
       {
-        "title": "State Management - Coming Soon",
-        "theory": "## State Management\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **State Management** is under development.",
-        "starterCode": "# State Management - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# State Management\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Global State",
+        "theory": "## Prop Drilling vs Global State\nWhen many components need the same data (like the logged-in user), passing it down as props is annoying (\"prop drilling\").\n\nGlobal State solutions (like Redux, Zustand, or React Context) store data outside the components so any component can access it directly.\n\n```javascript\n// Zustand example\nconst useStore = create((set) => ({\n  bears: 0,\n  increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),\n}))\n```",
+        "instructions": "## Task: Simple Global Store\n1. Create a Store class that holds state and listeners\n2. When state updates, call all listeners\n3. This simulates how Redux/Zustand works under the hood",
+        "starterCode": "class Store {\n  constructor(initialState) {\n    this.state = initialState;\n    this.listeners = [];\n  }\n  \n  subscribe(listener) {\n    this.listeners.___(listener);\n  }\n  \n  setState(newState) {\n    this.state = { ...this.state, ...newState };\n    // Notify all listeners\n    this.listeners.forEach(listener => ___(this.state));\n  }\n}\n\nconst store = new Store({ user: null, theme: 'light' });\n\nstore.subscribe((state) => console.log(\"Component A sees:\", state.theme));\nstore.subscribe((state) => console.log(\"Component B sees user:\", state.user));\n\nconsole.log(\"Updating theme...\");\nstore.setState({ theme: 'dark' });\n\nconsole.log(\"Logging in user...\");\nstore.setState({ user: 'Alice' });",
+        "solution": "class Store {\n  constructor(initialState) {\n    this.state = initialState;\n    this.listeners = [];\n  }\n  \n  subscribe(listener) {\n    this.listeners.push(listener);\n  }\n  \n  setState(newState) {\n    this.state = { ...this.state, ...newState };\n    // Notify all listeners\n    this.listeners.forEach(listener => listener(this.state));\n  }\n}\n\nconst store = new Store({ user: null, theme: 'light' });\n\nstore.subscribe((state) => console.log(\"Component A sees:\", state.theme));\nstore.subscribe((state) => console.log(\"Component B sees user:\", state.user));\n\nconsole.log(\"Updating theme...\");\nstore.setState({ theme: 'dark' });\n\nconsole.log(\"Logging in user...\");\nstore.setState({ user: 'Alice' });",
+        "hint": "push() to add listener. listener(this.state) to call it.",
+        "rubric": "Listeners are notified on every state change."
       }
     ]
   },

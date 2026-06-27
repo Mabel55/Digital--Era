@@ -167,13 +167,13 @@
     "aiRubric": "Check logic, syntax, and output for Authentication.",
     "lessons": [
       {
-        "title": "Authentication - Coming Soon",
-        "theory": "## Authentication\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Authentication** is under development.",
-        "starterCode": "# Authentication - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Authentication\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "JWT (JSON Web Tokens)",
+        "theory": "## Stateless Authentication\nInstead of storing session IDs in a database, JWTs contain the user data inside the token itself, signed with a secret key.\n\nThree parts of a JWT:\n1. **Header**: Algorithm used\n2. **Payload**: The user data (e.g., `{\"user_id\": 42}`)\n3. **Signature**: Cryptographic proof the token wasn't altered",
+        "instructions": "## Task: JWT Simulator\n1. Simulate creating a JWT by Base64 encoding a payload\n2. Use the `base64` library in Python\n3. Decode the token to read the payload",
+        "starterCode": "import base64\nimport json\n\ndef create_token(payload_dict):\n    json_str = json.dumps(payload_dict)\n    # Encode to bytes, then base64, then decode back to string\n    b64_bytes = base64.b64encode(json_str.encode('utf-8'))\n    return b64_bytes.decode('utf-8')\n\ndef decode_token(token_str):\n    json_bytes = base64.b64decode(___)\n    json_str = json_bytes.___('utf-8')\n    return json.___(___)\n\npayload = {'user_id': 123, 'role': 'admin'}\ntoken = create_token(payload)\nprint(\"Generated Token:\", token)\n\ndecoded = decode_token(token)\nprint(\"Decoded Payload:\", decoded)",
+        "solution": "import base64\nimport json\n\ndef create_token(payload_dict):\n    json_str = json.dumps(payload_dict)\n    # Encode to bytes, then base64, then decode back to string\n    b64_bytes = base64.b64encode(json_str.encode('utf-8'))\n    return b64_bytes.decode('utf-8')\n\ndef decode_token(token_str):\n    json_bytes = base64.b64decode(token_str)\n    json_str = json_bytes.decode('utf-8')\n    return json.loads(json_str)\n\npayload = {'user_id': 123, 'role': 'admin'}\ntoken = create_token(payload)\nprint(\"Generated Token:\", token)\n\ndecoded = decode_token(token)\nprint(\"Decoded Payload:\", decoded)",
+        "hint": "Pass token_str to b64decode. Use .decode() to convert to string. json.loads() converts string to dict.",
+        "rubric": "Token is encoded and decoded correctly back into a dictionary."
       }
     ]
   },
