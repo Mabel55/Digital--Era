@@ -95,17 +95,22 @@
     "Beginner": [
       "Pandas Intro",
       "Data Cleaning",
-      "Matplotlib"
+      "Matplotlib",
+      "Seaborn Visualization"
     ],
     "Intermediate": [
       "Statistical Analysis",
       "Scikit-Learn",
-      "Feature Engineering"
+      "Feature Engineering",
+      "Cross-Validation",
+      "Hyperparameter Tuning"
     ],
     "Advanced": [
       "Time Series",
       "NLP Basics",
-      "Advanced ML Models"
+      "Advanced ML Models",
+      "Ensemble Methods",
+      "Principal Component Analysis (PCA)"
     ]
   },
   "AI Engineering": {

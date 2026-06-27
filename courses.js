@@ -101,17 +101,22 @@ export const curriculum = {
     "Beginner": [
       "Pandas Intro",
       "Data Cleaning",
-      "Matplotlib"
+      "Matplotlib",
+      "Seaborn Visualization"
     ],
     "Intermediate": [
       "Statistical Analysis",
       "Scikit-Learn",
-      "Feature Engineering"
+      "Feature Engineering",
+      "Cross-Validation",
+      "Hyperparameter Tuning"
     ],
     "Advanced": [
       "Time Series",
       "NLP Basics",
-      "Advanced ML Models"
+      "Advanced ML Models",
+      "Ensemble Methods",
+      "Principal Component Analysis (PCA)"
     ]
   },
   "AI Engineering": {
@@ -3209,6 +3214,121 @@ export const courseManifest = {
         "solution": "def random_forest_predict(tree1_vote, tree2_vote, tree3_vote):\n    votes = [tree1_vote, tree2_vote, tree3_vote]\n    \n    # Count how many True votes there are\n    true_count = sum(votes)\n    \n    # Return True if majority (>= 2) voted True\n    return true_count >= 2\n\n# Trees output: False, True, True\nprediction = random_forest_predict(False, True, True)\nprint(\"Random Forest Prediction (Will it rain?):\", prediction)",
         "hint": "sum(votes) counts the True values (since True is 1 in Python). Check if it's >= 2.",
         "rubric": "Function returns True because 2 out of 3 trees voted True."
+      }
+    ]
+  },
+  "Seaborn Visualization": {
+    "aiRubric": "Assess Seaborn plotting skills",
+    "lessons": [
+      {
+        "title": "Statistical Plots",
+        "theory": "## High-Level Interface\nSeaborn is built on top of Matplotlib and makes it extremely easy to draw attractive statistical graphics like scatter plots with regression lines.",
+        "instructions": "## Task: Scatter Plot\nUse Seaborn to create a scatter plot of total_bill vs tip from a dataset.",
+        "starterCode": "import seaborn as sns\n\ntips = sns.load_dataset('tips')\nsns.___(x='total_bill', y='tip', data=tips)",
+        "solution": "import seaborn as sns\n\ntips = sns.load_dataset('tips')\nsns.scatterplot(x='total_bill', y='tip', data=tips)",
+        "hint": "Use scatterplot",
+        "rubric": "Correctly uses scatterplot()."
+      },
+      {
+        "title": "Heatmaps",
+        "theory": "## Visualizing Matrices\nHeatmaps are an excellent way to visualize a correlation matrix between features, using colors to indicate strength.",
+        "instructions": "## Task: Draw a Heatmap\nDraw a heatmap of the provided correlation matrix.",
+        "starterCode": "import seaborn as sns\n\ncorr = tips.corr(numeric_only=True)\nsns.___(corr, annot=True)",
+        "solution": "import seaborn as sns\n\ncorr = tips.corr(numeric_only=True)\nsns.heatmap(corr, annot=True)",
+        "hint": "Use heatmap",
+        "rubric": "Correctly uses heatmap()."
+      }
+    ]
+  },
+  "Cross-Validation": {
+    "aiRubric": "Assess cross-validation techniques",
+    "lessons": [
+      {
+        "title": "K-Fold Split",
+        "theory": "## Robust Evaluation\nInstead of a single train/test split, K-Fold Cross-Validation splits the data into K parts, training on K-1 and testing on 1, rotating until all parts have been the test set.",
+        "instructions": "## Task: Set K Folds\nInstantiate KFold from scikit-learn with 5 splits.",
+        "starterCode": "from sklearn.model_selection import KFold\n\nkf = KFold(n_splits=___, shuffle=True)",
+        "solution": "from sklearn.model_selection import KFold\n\nkf = KFold(n_splits=5, shuffle=True)",
+        "hint": "Use 5 for n_splits",
+        "rubric": "Sets n_splits to 5."
+      },
+      {
+        "title": "Cross Val Score",
+        "theory": "## Automation\nThe `cross_val_score` function automates the entire process of fitting the model K times and returning the accuracy for each fold.",
+        "instructions": "## Task: Run Cross Val\nCalculate the cross-validation scores for the model.",
+        "starterCode": "from sklearn.model_selection import cross_val_score\n\nscores = ___(model, X, y, cv=5)",
+        "solution": "from sklearn.model_selection import cross_val_score\n\nscores = cross_val_score(model, X, y, cv=5)",
+        "hint": "Use cross_val_score",
+        "rubric": "Uses cross_val_score."
+      }
+    ]
+  },
+  "Hyperparameter Tuning": {
+    "aiRubric": "Assess model tuning",
+    "lessons": [
+      {
+        "title": "Grid Search",
+        "theory": "## Exhaustive Search\nGrid Search tries every possible combination of hyperparameters provided in a dictionary to find the best performing model.",
+        "instructions": "## Task: Define the Grid\nDefine a parameter grid for an SVM searching over 'C' values 1 and 10, and 'kernel' values 'linear' and 'rbf'.",
+        "starterCode": "param_grid = {\n    '___': [1, 10],\n    '___': ['linear', 'rbf']\n}",
+        "solution": "param_grid = {\n    'C': [1, 10],\n    'kernel': ['linear', 'rbf']\n}",
+        "hint": "The keys are 'C' and 'kernel'",
+        "rubric": "Sets the correct keys in the grid."
+      },
+      {
+        "title": "Randomized Search",
+        "theory": "## Faster Tuning\nWhen the grid is too large, `RandomizedSearchCV` samples a fixed number of combinations randomly, which is much faster and often finds a near-optimal solution.",
+        "instructions": "## Task: Number of Iterations\nSet the randomized search to try exactly 20 random combinations.",
+        "starterCode": "from sklearn.model_selection import RandomizedSearchCV\n\nrs = RandomizedSearchCV(model, param_grid, n_iter=___)",
+        "solution": "from sklearn.model_selection import RandomizedSearchCV\n\nrs = RandomizedSearchCV(model, param_grid, n_iter=20)",
+        "hint": "Set n_iter to 20",
+        "rubric": "Sets n_iter to 20."
+      }
+    ]
+  },
+  "Ensemble Methods": {
+    "aiRubric": "Assess ensemble models",
+    "lessons": [
+      {
+        "title": "Random Forests",
+        "theory": "## Bagging\nA Random Forest builds multiple decision trees on bootstrap samples of the data and averages their predictions to reduce variance and prevent overfitting.",
+        "instructions": "## Task: Number of Trees\nInitialize a RandomForestClassifier with 100 trees.",
+        "starterCode": "from sklearn.ensemble import RandomForestClassifier\n\nrf = RandomForestClassifier(n_estimators=___)",
+        "solution": "from sklearn.ensemble import RandomForestClassifier\n\nrf = RandomForestClassifier(n_estimators=100)",
+        "hint": "Use 100 for n_estimators",
+        "rubric": "Sets n_estimators to 100."
+      },
+      {
+        "title": "Gradient Boosting",
+        "theory": "## Boosting\nInstead of building independent trees, Gradient Boosting builds trees sequentially. Each new tree tries to correct the errors (residuals) made by the previous trees.",
+        "instructions": "## Task: Learning Rate\nInitialize a GradientBoostingClassifier with a learning rate of 0.01.",
+        "starterCode": "from sklearn.ensemble import GradientBoostingClassifier\n\ngbm = GradientBoostingClassifier(learning_rate=___)",
+        "solution": "from sklearn.ensemble import GradientBoostingClassifier\n\ngbm = GradientBoostingClassifier(learning_rate=0.01)",
+        "hint": "Use 0.01",
+        "rubric": "Sets learning_rate to 0.01."
+      }
+    ]
+  },
+  "Principal Component Analysis (PCA)": {
+    "aiRubric": "Assess PCA and dimensionality reduction",
+    "lessons": [
+      {
+        "title": "Dimensionality Reduction",
+        "theory": "## Finding Principal Components\nPCA reduces the number of features in a dataset while retaining as much variance as possible. It is great for visualizing high-dimensional data.",
+        "instructions": "## Task: Reduce to 2D\nInitialize PCA to reduce the dataset down to 2 principal components.",
+        "starterCode": "from sklearn.decomposition import PCA\n\npca = PCA(n_components=___)",
+        "solution": "from sklearn.decomposition import PCA\n\npca = PCA(n_components=2)",
+        "hint": "Use 2 for n_components",
+        "rubric": "Sets n_components to 2."
+      },
+      {
+        "title": "Explained Variance",
+        "theory": "## Information Retention\nAfter fitting PCA, you can check `explained_variance_ratio_` to see what percentage of the original data's variance is captured by the new components.",
+        "instructions": "## Task: Total Variance\nCalculate the total variance explained by the components.",
+        "starterCode": "total_variance = sum(pca.___) * 100",
+        "solution": "total_variance = sum(pca.explained_variance_ratio_) * 100",
+        "hint": "Use explained_variance_ratio_",
+        "rubric": "Uses explained_variance_ratio_."
       }
     ]
   },
