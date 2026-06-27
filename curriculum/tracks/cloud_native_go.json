@@ -123,13 +123,13 @@
     "aiRubric": "Check logic, syntax, and output for gRPC.",
     "lessons": [
       {
-        "title": "gRPC - Coming Soon",
-        "theory": "## gRPC\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **gRPC** is under development.",
-        "starterCode": "# gRPC - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# gRPC\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "High-Speed APIs",
+        "theory": "## Faster than REST\\nREST uses HTTP/1.1 and JSON. JSON is heavy and slow to parse.\\n\\n**gRPC** (developed by Google) uses HTTP/2 and **Protocol Buffers** (Protobuf). Protobufs are binary, making them extremely fast and compact.\\n\\nWith gRPC, you define your service in a `.proto` file, and it automatically generates the server and client code for you in almost any language (Go, Python, Java, etc).",
+        "instructions": "## Task: Protobuf vs JSON Size\\n1. Compare the string length of a JSON object vs a mock Binary representation.\\n2. Print the difference in size.",
+        "starterCode": "import json\n\ndata = {\"id\": 104, \"name\": \"Alice\", \"active\": True}\n\n# Standard REST JSON string\njson_string = json.___(data)\njson_size = len(json_string)\n\n# Mock gRPC Protobuf binary (usually much smaller, just the raw data packed)\nmock_binary_string = \"104Alice1\"\nbinary_size = len(___)\n\nprint(f\"JSON Size: {json_size} bytes\")\nprint(f\"Protobuf Size: {binary_size} bytes\")\nprint(f\"gRPC is {json_size - binary_size} bytes smaller!\")",
+        "solution": "import json\n\ndata = {\"id\": 104, \"name\": \"Alice\", \"active\": True}\n\n# Standard REST JSON string\njson_string = json.dumps(data)\njson_size = len(json_string)\n\n# Mock gRPC Protobuf binary (usually much smaller, just the raw data packed)\nmock_binary_string = \"104Alice1\"\nbinary_size = len(mock_binary_string)\n\nprint(f\"JSON Size: {json_size} bytes\")\nprint(f\"Protobuf Size: {binary_size} bytes\")\nprint(f\"gRPC is {json_size - binary_size} bytes smaller!\")",
+        "hint": "Use json.dumps(). Check length of mock_binary_string.",
+        "rubric": "Shows JSON is larger (around 40 bytes) compared to the mock binary (9 bytes)."
       }
     ]
   },
@@ -137,13 +137,13 @@
     "aiRubric": "Check logic, syntax, and output for Service Meshes.",
     "lessons": [
       {
-        "title": "Service Meshes - Coming Soon",
-        "theory": "## Service Meshes\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Service Meshes** is under development.",
-        "starterCode": "# Service Meshes - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Service Meshes\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Managing Microservices",
+        "theory": "## Istio & Linkerd\\nWhen you have 50 microservices talking to each other, how do you handle security, retries, and monitoring? Doing it in the code is messy.\\n\\nA **Service Mesh** injects a 'Sidecar Proxy' next to every single service. When Service A wants to talk to Service B, it actually talks to its own proxy, which securely routes the traffic to B's proxy.\\n\\nThis allows you to enforce mTLS (mutual encryption) without writing a single line of application code.",
+        "instructions": "## Task: Sidecar Simulator\\n1. Simulate a request going through a sidecar proxy.\\n2. The proxy should intercept the request, encrypt it, and pass it to the destination.",
+        "starterCode": "class SidecarProxy:\n    def __init__(self, service_name):\n        self.service_name = service_name\n        \n    def send(self, destination, data):\n        print(f\"[{self.service_name} Proxy] Encrypting data...\")\n        encrypted = f\"**{data}**\"\n        print(f\"[{self.service_name} Proxy] Sending to {destination.service_name} Proxy...\")\n        destination.___(encrypted)\n        \n    def receive(self, data):\n        print(f\"[{self.service_name} Proxy] Decrypting data...\")\n        decrypted = data.replace('*', '')\n        print(f\"[{self.service_name} App] Received: {decrypted}\")\n\napp_a = SidecarProxy(\"Service_A\")\napp_b = SidecarProxy(\"Service_B\")\n\napp_a.___(app_b, \"Hello Microservice!\")",
+        "solution": "class SidecarProxy:\n    def __init__(self, service_name):\n        self.service_name = service_name\n        \n    def send(self, destination, data):\n        print(f\"[{self.service_name} Proxy] Encrypting data...\")\n        encrypted = f\"**{data}**\"\n        print(f\"[{self.service_name} Proxy] Sending to {destination.service_name} Proxy...\")\n        destination.receive(encrypted)\n        \n    def receive(self, data):\n        print(f\"[{self.service_name} Proxy] Decrypting data...\")\n        decrypted = data.replace('*', '')\n        print(f\"[{self.service_name} App] Received: {decrypted}\")\n\napp_a = SidecarProxy(\"Service_A\")\napp_b = SidecarProxy(\"Service_B\")\n\napp_a.send(app_b, \"Hello Microservice!\")",
+        "hint": "destination.receive(encrypted) and app_a.send(app_b, ...)",
+        "rubric": "Data successfully routes A Proxy -> B Proxy -> B App."
       }
     ]
   },
@@ -151,13 +151,13 @@
     "aiRubric": "Check logic, syntax, and output for Cloud Operators.",
     "lessons": [
       {
-        "title": "Cloud Operators - Coming Soon",
-        "theory": "## Cloud Operators\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Cloud Operators** is under development.",
-        "starterCode": "# Cloud Operators - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Cloud Operators\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "K8s Operators",
+        "theory": "## Automating Kubernetes\\nAn Operator is a software extension to Kubernetes that makes use of custom resources to manage applications and their components.\\n\\nInstead of a human reading a manual on how to backup a database, you write a K8s Operator that automatically knows how to backup, restore, and scale your specific database.",
+        "instructions": "## Task: Operator Loop\\n1. An operator constantly runs a 'Reconciliation Loop'.\\n2. It checks the 'Desired State' against the 'Current State'.\\n3. Simulate an operator checking if a database has a backup.",
+        "starterCode": "def reconcile_loop(current_state, desired_state):\n    print(\"--- Reconciliation Loop Running ---\")\n    \n    if current_state['needs_backup'] != desired_state['___']:\n        print(\"[Operator Action] Taking database backup to match desired state...\")\n        current_state['___'] = desired_state['___']\n        return \"Action Taken\"\n    \n    return \"No Action Needed\"\n\ndesired = {'needs_backup': False} # We don't want it to NEED a backup, we want it DONE\ncurrent = {'needs_backup': True}\n\nprint(reconcile_loop(current, desired))\n# Loop runs again later\nprint(reconcile_loop(current, desired))",
+        "solution": "def reconcile_loop(current_state, desired_state):\n    print(\"--- Reconciliation Loop Running ---\")\n    \n    if current_state['needs_backup'] != desired_state['needs_backup']:\n        print(\"[Operator Action] Taking database backup to match desired state...\")\n        current_state['needs_backup'] = desired_state['needs_backup']\n        return \"Action Taken\"\n    \n    return \"No Action Needed\"\n\ndesired = {'needs_backup': False} # We don't want it to NEED a backup, we want it DONE\ncurrent = {'needs_backup': True}\n\nprint(reconcile_loop(current, desired))\n# Loop runs again later\nprint(reconcile_loop(current, desired))",
+        "hint": "Key is 'needs_backup'.",
+        "rubric": "First loop takes action, second loop takes no action."
       }
     ]
   }

@@ -153,13 +153,13 @@
     "aiRubric": "Check logic, syntax, and output for Database Integration.",
     "lessons": [
       {
-        "title": "Database Integration - Coming Soon",
-        "theory": "## Database Integration\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Database Integration** is under development.",
-        "starterCode": "# Database Integration - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Database Integration\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Text-to-SQL",
+        "theory": "## Giving AI Data Access\\nInstead of teaching an AI to read millions of rows of data, you give it the ability to write SQL queries.\\n\\nFlow:\\n1. User asks: 'How many users joined yesterday?'\\n2. AI generates SQL: `SELECT COUNT(*) FROM users WHERE date = yesterday;`\\n3. Your system runs the SQL on the Database.\\n4. Your system gives the result (e.g., '145') back to the AI.\\n5. AI replies: '145 users joined yesterday!'",
+        "instructions": "## Task: SQL Generation Mock\\n1. Simulate the Text-to-SQL flow.\\n2. Create a function that accepts a user question and returns a mock SQL query.",
+        "starterCode": "def ai_text_to_sql(question):\\n    question = question.lower()\\n    if 'active users' in question:\\n        return \"SELECT COUNT(*) FROM users WHERE status = 'active';\"\\n    elif 'total revenue' in question:\\n        return \"___\"\\n    return \"SELECT 1;\"\n\ndef execute_query(sql):\n    if 'revenue' in sql.lower():\n        return \"$45,000\"\n    return \"842\"\n\nquestion = \"What is our total revenue?\"\nprint(f\"User: {question}\")\n\nsql = ai_text_to_sql(question)\nprint(f\"AI Generated SQL: {sql}\")\n\nresult = execute_query(sql)\nprint(f\"Database Result: {result}\")\nprint(f\"AI Final Answer: The total revenue is {result}!\")",
+        "solution": "def ai_text_to_sql(question):\\n    question = question.lower()\\n    if 'active users' in question:\\n        return \"SELECT COUNT(*) FROM users WHERE status = 'active';\"\\n    elif 'total revenue' in question:\\n        return \"SELECT SUM(amount) FROM payments;\"\\n    return \"SELECT 1;\"\n\ndef execute_query(sql):\n    if 'revenue' in sql.lower() or 'payments' in sql.lower():\n        return \"$45,000\"\n    return \"842\"\n\nquestion = \"What is our total revenue?\"\nprint(f\"User: {question}\")\n\nsql = ai_text_to_sql(question)\nprint(f\"AI Generated SQL: {sql}\")\n\nresult = execute_query(sql)\nprint(f\"Database Result: {result}\")\nprint(f\"AI Final Answer: The total revenue is {result}!\")",
+        "hint": "Return a mock SQL query like SELECT SUM(amount) FROM payments;",
+        "rubric": "Code correctly returns a SQL string and completes the flow."
       }
     ]
   },
