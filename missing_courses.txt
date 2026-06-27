@@ -1,11 +1,3 @@
-Data Warehouses
-Feature Stores
-Matplotlib
-Statistical Analysis
-Sorting Algorithms
-Tries
-Graph Traversal
-CSS Grid & Flexbox
 Frontend Performance
 Device APIs
 Subqueries

@@ -227,13 +227,13 @@
     "aiRubric": "Check logic, syntax, and output for Frontend Performance.",
     "lessons": [
       {
-        "title": "Frontend Performance - Coming Soon",
-        "theory": "## Frontend Performance\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Frontend Performance** is under development.",
-        "starterCode": "# Frontend Performance - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Frontend Performance\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Lazy Loading",
+        "theory": "## Don't Load Everything at Once\\nIf a user visits your homepage, they shouldn't have to download the JavaScript for your settings page or the high-res images at the bottom of the page.\\n\\n- **Code Splitting**: Breaking your JS bundle into smaller chunks.\\n- **Lazy Loading**: Only loading images or components when they enter the viewport (screen).\\n\\nIn React, you use `React.lazy()` to dynamically import components only when needed.",
+        "instructions": "## Task: Lazy Image Simulator\\n1. Simulate a lazy loading image script.\\n2. You have a list of images with a boolean `in_viewport`.\\n3. If `in_viewport` is True, load the image.",
+        "starterCode": "images = [\n    {'src': 'hero.jpg', 'in_viewport': True},\n    {'src': 'footer.jpg', 'in_viewport': False},\n    {'src': 'ad.png', 'in_viewport': False}\n]\n\ndef handle_scroll(images):\n    for img in images:\n        if img['___'] == ___:\n            print(f\"Downloading {img['src']}...\")\n            # Once loaded, we could set a flag so we don't load it again\n        else:\n            print(f\"Skipping {img['src']} (Not visible yet)\")\n\nhandle_scroll(images)",
+        "solution": "images = [\n    {'src': 'hero.jpg', 'in_viewport': True},\n    {'src': 'footer.jpg', 'in_viewport': False},\n    {'src': 'ad.png', 'in_viewport': False}\n]\n\ndef handle_scroll(images):\n    for img in images:\n        if img['in_viewport'] == True:\n            print(f\"Downloading {img['src']}...\")\n            # Once loaded, we could set a flag so we don't load it again\n        else:\n            print(f\"Skipping {img['src']} (Not visible yet)\")\n\nhandle_scroll(images)",
+        "hint": "Check if img['in_viewport'] == True.",
+        "rubric": "Successfully downloads hero.jpg and skips the rest."
       }
     ]
   },

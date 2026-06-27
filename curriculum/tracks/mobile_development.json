@@ -45,13 +45,13 @@
     "aiRubric": "Check logic, syntax, and output for Device APIs.",
     "lessons": [
       {
-        "title": "Device APIs - Coming Soon",
-        "theory": "## Device APIs\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Device APIs** is under development.",
-        "starterCode": "# Device APIs - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Device APIs\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Web APIs",
+        "theory": "## Accessing Hardware from the Browser\\nModern browsers give websites access to native device hardware (with the user's permission).\\n\\n- **Geolocation API**: Get the user's GPS coordinates.\\n- **MediaDevices API**: Access the webcam or microphone.\\n- **Bluetooth API**: Connect to nearby BLE devices directly from a webpage.",
+        "instructions": "## Task: Geolocation Mock\\n1. Simulate calling the Geolocation API.\\n2. Because this involves user permission, it relies on a callback function or a Promise.",
+        "starterCode": "def mock_navigator_geolocation(success_callback, error_callback):\n    # Simulate user clicking \"Allow\"\n    user_allowed = True\n    \n    if user_allowed:\n        # Mock GPS data\n        position = {'coords': {'latitude': 37.7749, 'longitude': -122.4194}}\n        ___(position)\n    else:\n        ___(\"User denied Geolocation\")\n\ndef on_success(pos):\n    lat = pos['coords']['latitude']\n    lon = pos['coords']['longitude']\n    print(f\"Success! You are at {lat}, {lon}\")\n\ndef on_error(err):\n    print(f\"Error: {err}\")\n\n# Call the API\nmock_navigator_geolocation(on_success, on_error)",
+        "solution": "def mock_navigator_geolocation(success_callback, error_callback):\n    # Simulate user clicking \"Allow\"\n    user_allowed = True\n    \n    if user_allowed:\n        # Mock GPS data\n        position = {'coords': {'latitude': 37.7749, 'longitude': -122.4194}}\n        success_callback(position)\n    else:\n        error_callback(\"User denied Geolocation\")\n\ndef on_success(pos):\n    lat = pos['coords']['latitude']\n    lon = pos['coords']['longitude']\n    print(f\"Success! You are at {lat}, {lon}\")\n\ndef on_error(err):\n    print(f\"Error: {err}\")\n\n# Call the API\nmock_navigator_geolocation(on_success, on_error)",
+        "hint": "Call success_callback(position) and error_callback('User denied').",
+        "rubric": "Successfully triggers the success_callback and prints the coordinates."
       }
     ]
   },

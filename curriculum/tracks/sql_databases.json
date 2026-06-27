@@ -176,13 +176,13 @@
     "aiRubric": "Check logic, syntax, and output for Subqueries.",
     "lessons": [
       {
-        "title": "Subqueries - Coming Soon",
-        "theory": "## Subqueries\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Subqueries** is under development.",
-        "starterCode": "# Subqueries - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Subqueries\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Queries inside Queries",
+        "theory": "## Nesting SQL\\nA subquery is a SQL query nested inside a larger query.\\n\\n```sql\\n-- Find employees who earn more than the average salary\\nSELECT name, salary FROM employees\\nWHERE salary > (SELECT AVG(salary) FROM employees);\\n```\\n\\nThe inner query runs first, calculates the average, and passes that number to the outer query.",
+        "instructions": "## Task: Subquery Simulator\\n1. Simulate the subquery flow in Python.\\n2. First, calculate the average salary from the list.\\n3. Second, filter the list for salaries greater than the average.",
+        "starterCode": "employees = [\n    {'name': 'Alice', 'salary': 50000},\n    {'name': 'Bob', 'salary': 40000},\n    {'name': 'Charlie', 'salary': 90000},\n    {'name': 'Diana', 'salary': 45000}\n]\n\n# 1. Simulate the Subquery: SELECT AVG(salary) FROM employees\ntotal_salary = sum(emp['salary'] for emp in employees)\navg_salary = total_salary / len(___)\nprint(f\"Subquery returned: {avg_salary}\")\n\n# 2. Simulate Outer Query: SELECT name WHERE salary > avg_salary\nhigh_earners = []\nfor emp in employees:\n    if emp['salary'] > ___:\n        high_earners.append(emp['name'])\n        \nprint(\"High Earners:\", high_earners)",
+        "solution": "employees = [\n    {'name': 'Alice', 'salary': 50000},\n    {'name': 'Bob', 'salary': 40000},\n    {'name': 'Charlie', 'salary': 90000},\n    {'name': 'Diana', 'salary': 45000}\n]\n\n# 1. Simulate the Subquery: SELECT AVG(salary) FROM employees\ntotal_salary = sum(emp['salary'] for emp in employees)\navg_salary = total_salary / len(employees)\nprint(f\"Subquery returned: {avg_salary}\")\n\n# 2. Simulate Outer Query: SELECT name WHERE salary > avg_salary\nhigh_earners = []\nfor emp in employees:\n    if emp['salary'] > avg_salary:\n        high_earners.append(emp['name'])\n        \nprint(\"High Earners:\", high_earners)",
+        "hint": "Divide by len(employees). Compare against avg_salary.",
+        "rubric": "Average is 56250. High earner is Charlie."
       }
     ]
   },
@@ -204,13 +204,13 @@
     "aiRubric": "Check logic, syntax, and output for Indexing.",
     "lessons": [
       {
-        "title": "Indexing - Coming Soon",
-        "theory": "## Indexing\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Indexing** is under development.",
-        "starterCode": "# Indexing - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Indexing\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Database Speed",
+        "theory": "## The Index of a Book\\nIf you want to find a specific word in a 1000-page book, you don't read every page (a Full Table Scan). You check the Index at the back, which tells you exactly what page the word is on.\\n\\nDatabase indexes work the same way. Creating an index on an `email` column creates a sorted data structure (usually a B-Tree) that points to the exact row in the database.\\n\\n*Tradeoff*: Indexes make READS incredibly fast, but WRITES slower (because the index must be updated).",
+        "instructions": "## Task: Index Lookup Simulator\\n1. You have an unsorted database table and a sorted index.\\n2. Searching the unsorted table takes O(N) steps.\\n3. Searching the sorted index takes O(log N) steps.",
+        "starterCode": "db_table = [{'id': 3, 'email': 'c@c.com'}, {'id': 1, 'email': 'a@a.com'}, {'id': 2, 'email': 'b@b.com'}]\n# Index maps email to the list index in the table\nemail_index = {'a@a.com': 1, 'b@b.com': 2, 'c@c.com': 0}\n\ntarget = 'b@b.com'\n\n# Without Index (Table Scan)\nprint(\"Scanning table...\")\nsteps = 0\nfor row in db_table:\n    steps += 1\n    if row['email'] == target:\n        print(f\"Found {target} in {steps} steps! (Row ID: {row['id']})\")\n        break\n\n# With Index\nprint(\"\\nUsing Index...\")\n# Dictionary lookup is O(1) in Python, simulating O(log N) B-Tree in SQL\nrow_position = email_index[___]\nfast_row = db_table[___]\nprint(f\"Found {target} in 1 step! (Row ID: {fast_row['id']})\")",
+        "solution": "db_table = [{'id': 3, 'email': 'c@c.com'}, {'id': 1, 'email': 'a@a.com'}, {'id': 2, 'email': 'b@b.com'}]\n# Index maps email to the list index in the table\nemail_index = {'a@a.com': 1, 'b@b.com': 2, 'c@c.com': 0}\n\ntarget = 'b@b.com'\n\n# Without Index (Table Scan)\nprint(\"Scanning table...\")\nsteps = 0\nfor row in db_table:\n    steps += 1\n    if row['email'] == target:\n        print(f\"Found {target} in {steps} steps! (Row ID: {row['id']})\")\n        break\n\n# With Index\nprint(\"\\nUsing Index...\")\n# Dictionary lookup is O(1) in Python, simulating O(log N) B-Tree in SQL\nrow_position = email_index[target]\nfast_row = db_table[row_position]\nprint(f\"Found {target} in 1 step! (Row ID: {fast_row['id']})\")",
+        "hint": "Use 'target' for the index key, and 'row_position' for the table lookup.",
+        "rubric": "Code correctly retrieves ID 2 in 1 step using the index."
       }
     ]
   },
@@ -218,13 +218,13 @@
     "aiRubric": "Check logic, syntax, and output for Stored Procedures.",
     "lessons": [
       {
-        "title": "Stored Procedures - Coming Soon",
-        "theory": "## Stored Procedures\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Stored Procedures** is under development.",
-        "starterCode": "# Stored Procedures - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Stored Procedures\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Code in the Database",
+        "theory": "## Precompiled SQL\\nA Stored Procedure is a batch of SQL statements that are saved and executed on the database server itself, rather than in your application code (like Python or Node.js).\\n\\n- **Pros**: Very fast (avoids network latency between your app and the DB), allows complex logic (IF/ELSE, Loops) inside SQL.\\n- **Cons**: Harder to version control and debug than normal application code.",
+        "instructions": "## Task: Stored Procedure Mock\\n1. Simulate calling a stored procedure `sp_TransferFunds`.\\n2. The procedure should deduct money from one account and add it to another.\\n3. Because it runs on the 'server', we'll wrap it in a function.",
+        "starterCode": "def mock_sp_TransferFunds(db, from_acc, to_acc, amount):\n    print(f\"[DB SERVER] Executing Stored Procedure: Transfer ${amount} from {from_acc} to {to_acc}\")\n    \n    if db[from_acc] < amount:\n        return \"Error: Insufficient Funds\"\n        \n    db[___] -= amount\n    db[___] += amount\n    return \"Success\"\n\n# Database State\nbank_db = {'Alice': 500, 'Bob': 100}\n\n# App calls the stored procedure\nresult = mock_sp_TransferFunds(bank_db, 'Alice', 'Bob', 200)\n\nprint(\"Result:\", result)\nprint(\"New State:\", bank_db)",
+        "solution": "def mock_sp_TransferFunds(db, from_acc, to_acc, amount):\n    print(f\"[DB SERVER] Executing Stored Procedure: Transfer ${amount} from {from_acc} to {to_acc}\")\n    \n    if db[from_acc] < amount:\n        return \"Error: Insufficient Funds\"\n        \n    db[from_acc] -= amount\n    db[to_acc] += amount\n    return \"Success\"\n\n# Database State\nbank_db = {'Alice': 500, 'Bob': 100}\n\n# App calls the stored procedure\nresult = mock_sp_TransferFunds(bank_db, 'Alice', 'Bob', 200)\n\nprint(\"Result:\", result)\nprint(\"New State:\", bank_db)",
+        "hint": "Subtract from from_acc, add to to_acc.",
+        "rubric": "Alice's balance drops to 300, Bob's rises to 300."
       }
     ]
   },
@@ -232,13 +232,13 @@
     "aiRubric": "Check logic, syntax, and output for Query Optimization.",
     "lessons": [
       {
-        "title": "Query Optimization - Coming Soon",
-        "theory": "## Query Optimization\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Query Optimization** is under development.",
-        "starterCode": "# Query Optimization - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Query Optimization\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "EXPLAIN",
+        "theory": "## Looking Under the Hood\\nIf a SQL query is slow, you can put the word `EXPLAIN` (or `EXPLAIN ANALYZE`) in front of it.\\n\\nThe database won't return the data; instead, it returns an Execution Plan detailing exactly how it intends to find the data (e.g., 'Sequential Scan' vs 'Index Scan').\\n\\nYou can use this to figure out if you are missing an index, or if you are doing a very expensive JOIN.",
+        "instructions": "## Task: The EXPLAIN Output\\n1. Review the mock EXPLAIN output for a query.\\n2. If it says 'Seq Scan' (Sequential/Full Table Scan), it means it's slow.\\n3. If it says 'Index Scan', it means it's fast.",
+        "starterCode": "def analyze_explain_plan(plan_text):\n    if 'Seq Scan' in plan_text:\n        return \"WARNING: Full table scan detected. Consider adding an index!\"\n    elif '___' in plan_text:\n        return \"GOOD: Query is using an index.\"\n    return \"Unknown plan\"\n\nbad_plan = \"-> Seq Scan on users (cost=0.00..35.50 rows=1000)\"\ngood_plan = \"-> Index Scan using idx_email on users (cost=0.15..8.50 rows=1)\"\n\nprint(\"Query 1:\", analyze_explain_plan(bad_plan))\nprint(\"Query 2:\", analyze_explain_plan(good_plan))",
+        "solution": "def analyze_explain_plan(plan_text):\n    if 'Seq Scan' in plan_text:\n        return \"WARNING: Full table scan detected. Consider adding an index!\"\n    elif 'Index Scan' in plan_text:\n        return \"GOOD: Query is using an index.\"\n    return \"Unknown plan\"\n\nbad_plan = \"-> Seq Scan on users (cost=0.00..35.50 rows=1000)\"\ngood_plan = \"-> Index Scan using idx_email on users (cost=0.15..8.50 rows=1)\"\n\nprint(\"Query 1:\", analyze_explain_plan(bad_plan))\nprint(\"Query 2:\", analyze_explain_plan(good_plan))",
+        "hint": "Check for 'Index Scan'.",
+        "rubric": "Correctly identifies the good plan using Index Scan."
       }
     ]
   }

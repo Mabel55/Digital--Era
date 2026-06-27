@@ -2607,13 +2607,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Frontend Performance.",
     "lessons": [
       {
-        "title": "Frontend Performance - Coming Soon",
-        "theory": "## Frontend Performance\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Frontend Performance** is under development.",
-        "starterCode": "# Frontend Performance - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Frontend Performance\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Lazy Loading",
+        "theory": "## Don't Load Everything at Once\\nIf a user visits your homepage, they shouldn't have to download the JavaScript for your settings page or the high-res images at the bottom of the page.\\n\\n- **Code Splitting**: Breaking your JS bundle into smaller chunks.\\n- **Lazy Loading**: Only loading images or components when they enter the viewport (screen).\\n\\nIn React, you use `React.lazy()` to dynamically import components only when needed.",
+        "instructions": "## Task: Lazy Image Simulator\\n1. Simulate a lazy loading image script.\\n2. You have a list of images with a boolean `in_viewport`.\\n3. If `in_viewport` is True, load the image.",
+        "starterCode": "images = [\n    {'src': 'hero.jpg', 'in_viewport': True},\n    {'src': 'footer.jpg', 'in_viewport': False},\n    {'src': 'ad.png', 'in_viewport': False}\n]\n\ndef handle_scroll(images):\n    for img in images:\n        if img['___'] == ___:\n            print(f\"Downloading {img['src']}...\")\n            # Once loaded, we could set a flag so we don't load it again\n        else:\n            print(f\"Skipping {img['src']} (Not visible yet)\")\n\nhandle_scroll(images)",
+        "solution": "images = [\n    {'src': 'hero.jpg', 'in_viewport': True},\n    {'src': 'footer.jpg', 'in_viewport': False},\n    {'src': 'ad.png', 'in_viewport': False}\n]\n\ndef handle_scroll(images):\n    for img in images:\n        if img['in_viewport'] == True:\n            print(f\"Downloading {img['src']}...\")\n            # Once loaded, we could set a flag so we don't load it again\n        else:\n            print(f\"Skipping {img['src']} (Not visible yet)\")\n\nhandle_scroll(images)",
+        "hint": "Check if img['in_viewport'] == True.",
+        "rubric": "Successfully downloads hero.jpg and skips the rest."
       }
     ]
   },
@@ -2686,13 +2686,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Device APIs.",
     "lessons": [
       {
-        "title": "Device APIs - Coming Soon",
-        "theory": "## Device APIs\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Device APIs** is under development.",
-        "starterCode": "# Device APIs - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Device APIs\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Web APIs",
+        "theory": "## Accessing Hardware from the Browser\\nModern browsers give websites access to native device hardware (with the user's permission).\\n\\n- **Geolocation API**: Get the user's GPS coordinates.\\n- **MediaDevices API**: Access the webcam or microphone.\\n- **Bluetooth API**: Connect to nearby BLE devices directly from a webpage.",
+        "instructions": "## Task: Geolocation Mock\\n1. Simulate calling the Geolocation API.\\n2. Because this involves user permission, it relies on a callback function or a Promise.",
+        "starterCode": "def mock_navigator_geolocation(success_callback, error_callback):\n    # Simulate user clicking \"Allow\"\n    user_allowed = True\n    \n    if user_allowed:\n        # Mock GPS data\n        position = {'coords': {'latitude': 37.7749, 'longitude': -122.4194}}\n        ___(position)\n    else:\n        ___(\"User denied Geolocation\")\n\ndef on_success(pos):\n    lat = pos['coords']['latitude']\n    lon = pos['coords']['longitude']\n    print(f\"Success! You are at {lat}, {lon}\")\n\ndef on_error(err):\n    print(f\"Error: {err}\")\n\n# Call the API\nmock_navigator_geolocation(on_success, on_error)",
+        "solution": "def mock_navigator_geolocation(success_callback, error_callback):\n    # Simulate user clicking \"Allow\"\n    user_allowed = True\n    \n    if user_allowed:\n        # Mock GPS data\n        position = {'coords': {'latitude': 37.7749, 'longitude': -122.4194}}\n        success_callback(position)\n    else:\n        error_callback(\"User denied Geolocation\")\n\ndef on_success(pos):\n    lat = pos['coords']['latitude']\n    lon = pos['coords']['longitude']\n    print(f\"Success! You are at {lat}, {lon}\")\n\ndef on_error(err):\n    print(f\"Error: {err}\")\n\n# Call the API\nmock_navigator_geolocation(on_success, on_error)",
+        "hint": "Call success_callback(position) and error_callback('User denied').",
+        "rubric": "Successfully triggers the success_callback and prints the coordinates."
       }
     ]
   },
@@ -3393,13 +3393,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Subqueries.",
     "lessons": [
       {
-        "title": "Subqueries - Coming Soon",
-        "theory": "## Subqueries\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Subqueries** is under development.",
-        "starterCode": "# Subqueries - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Subqueries\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Queries inside Queries",
+        "theory": "## Nesting SQL\\nA subquery is a SQL query nested inside a larger query.\\n\\n```sql\\n-- Find employees who earn more than the average salary\\nSELECT name, salary FROM employees\\nWHERE salary > (SELECT AVG(salary) FROM employees);\\n```\\n\\nThe inner query runs first, calculates the average, and passes that number to the outer query.",
+        "instructions": "## Task: Subquery Simulator\\n1. Simulate the subquery flow in Python.\\n2. First, calculate the average salary from the list.\\n3. Second, filter the list for salaries greater than the average.",
+        "starterCode": "employees = [\n    {'name': 'Alice', 'salary': 50000},\n    {'name': 'Bob', 'salary': 40000},\n    {'name': 'Charlie', 'salary': 90000},\n    {'name': 'Diana', 'salary': 45000}\n]\n\n# 1. Simulate the Subquery: SELECT AVG(salary) FROM employees\ntotal_salary = sum(emp['salary'] for emp in employees)\navg_salary = total_salary / len(___)\nprint(f\"Subquery returned: {avg_salary}\")\n\n# 2. Simulate Outer Query: SELECT name WHERE salary > avg_salary\nhigh_earners = []\nfor emp in employees:\n    if emp['salary'] > ___:\n        high_earners.append(emp['name'])\n        \nprint(\"High Earners:\", high_earners)",
+        "solution": "employees = [\n    {'name': 'Alice', 'salary': 50000},\n    {'name': 'Bob', 'salary': 40000},\n    {'name': 'Charlie', 'salary': 90000},\n    {'name': 'Diana', 'salary': 45000}\n]\n\n# 1. Simulate the Subquery: SELECT AVG(salary) FROM employees\ntotal_salary = sum(emp['salary'] for emp in employees)\navg_salary = total_salary / len(employees)\nprint(f\"Subquery returned: {avg_salary}\")\n\n# 2. Simulate Outer Query: SELECT name WHERE salary > avg_salary\nhigh_earners = []\nfor emp in employees:\n    if emp['salary'] > avg_salary:\n        high_earners.append(emp['name'])\n        \nprint(\"High Earners:\", high_earners)",
+        "hint": "Divide by len(employees). Compare against avg_salary.",
+        "rubric": "Average is 56250. High earner is Charlie."
       }
     ]
   },
@@ -3421,13 +3421,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Indexing.",
     "lessons": [
       {
-        "title": "Indexing - Coming Soon",
-        "theory": "## Indexing\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Indexing** is under development.",
-        "starterCode": "# Indexing - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Indexing\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Database Speed",
+        "theory": "## The Index of a Book\\nIf you want to find a specific word in a 1000-page book, you don't read every page (a Full Table Scan). You check the Index at the back, which tells you exactly what page the word is on.\\n\\nDatabase indexes work the same way. Creating an index on an `email` column creates a sorted data structure (usually a B-Tree) that points to the exact row in the database.\\n\\n*Tradeoff*: Indexes make READS incredibly fast, but WRITES slower (because the index must be updated).",
+        "instructions": "## Task: Index Lookup Simulator\\n1. You have an unsorted database table and a sorted index.\\n2. Searching the unsorted table takes O(N) steps.\\n3. Searching the sorted index takes O(log N) steps.",
+        "starterCode": "db_table = [{'id': 3, 'email': 'c@c.com'}, {'id': 1, 'email': 'a@a.com'}, {'id': 2, 'email': 'b@b.com'}]\n# Index maps email to the list index in the table\nemail_index = {'a@a.com': 1, 'b@b.com': 2, 'c@c.com': 0}\n\ntarget = 'b@b.com'\n\n# Without Index (Table Scan)\nprint(\"Scanning table...\")\nsteps = 0\nfor row in db_table:\n    steps += 1\n    if row['email'] == target:\n        print(f\"Found {target} in {steps} steps! (Row ID: {row['id']})\")\n        break\n\n# With Index\nprint(\"\\nUsing Index...\")\n# Dictionary lookup is O(1) in Python, simulating O(log N) B-Tree in SQL\nrow_position = email_index[___]\nfast_row = db_table[___]\nprint(f\"Found {target} in 1 step! (Row ID: {fast_row['id']})\")",
+        "solution": "db_table = [{'id': 3, 'email': 'c@c.com'}, {'id': 1, 'email': 'a@a.com'}, {'id': 2, 'email': 'b@b.com'}]\n# Index maps email to the list index in the table\nemail_index = {'a@a.com': 1, 'b@b.com': 2, 'c@c.com': 0}\n\ntarget = 'b@b.com'\n\n# Without Index (Table Scan)\nprint(\"Scanning table...\")\nsteps = 0\nfor row in db_table:\n    steps += 1\n    if row['email'] == target:\n        print(f\"Found {target} in {steps} steps! (Row ID: {row['id']})\")\n        break\n\n# With Index\nprint(\"\\nUsing Index...\")\n# Dictionary lookup is O(1) in Python, simulating O(log N) B-Tree in SQL\nrow_position = email_index[target]\nfast_row = db_table[row_position]\nprint(f\"Found {target} in 1 step! (Row ID: {fast_row['id']})\")",
+        "hint": "Use 'target' for the index key, and 'row_position' for the table lookup.",
+        "rubric": "Code correctly retrieves ID 2 in 1 step using the index."
       }
     ]
   },
@@ -3435,13 +3435,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Stored Procedures.",
     "lessons": [
       {
-        "title": "Stored Procedures - Coming Soon",
-        "theory": "## Stored Procedures\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Stored Procedures** is under development.",
-        "starterCode": "# Stored Procedures - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Stored Procedures\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Code in the Database",
+        "theory": "## Precompiled SQL\\nA Stored Procedure is a batch of SQL statements that are saved and executed on the database server itself, rather than in your application code (like Python or Node.js).\\n\\n- **Pros**: Very fast (avoids network latency between your app and the DB), allows complex logic (IF/ELSE, Loops) inside SQL.\\n- **Cons**: Harder to version control and debug than normal application code.",
+        "instructions": "## Task: Stored Procedure Mock\\n1. Simulate calling a stored procedure `sp_TransferFunds`.\\n2. The procedure should deduct money from one account and add it to another.\\n3. Because it runs on the 'server', we'll wrap it in a function.",
+        "starterCode": "def mock_sp_TransferFunds(db, from_acc, to_acc, amount):\n    print(f\"[DB SERVER] Executing Stored Procedure: Transfer ${amount} from {from_acc} to {to_acc}\")\n    \n    if db[from_acc] < amount:\n        return \"Error: Insufficient Funds\"\n        \n    db[___] -= amount\n    db[___] += amount\n    return \"Success\"\n\n# Database State\nbank_db = {'Alice': 500, 'Bob': 100}\n\n# App calls the stored procedure\nresult = mock_sp_TransferFunds(bank_db, 'Alice', 'Bob', 200)\n\nprint(\"Result:\", result)\nprint(\"New State:\", bank_db)",
+        "solution": "def mock_sp_TransferFunds(db, from_acc, to_acc, amount):\n    print(f\"[DB SERVER] Executing Stored Procedure: Transfer ${amount} from {from_acc} to {to_acc}\")\n    \n    if db[from_acc] < amount:\n        return \"Error: Insufficient Funds\"\n        \n    db[from_acc] -= amount\n    db[to_acc] += amount\n    return \"Success\"\n\n# Database State\nbank_db = {'Alice': 500, 'Bob': 100}\n\n# App calls the stored procedure\nresult = mock_sp_TransferFunds(bank_db, 'Alice', 'Bob', 200)\n\nprint(\"Result:\", result)\nprint(\"New State:\", bank_db)",
+        "hint": "Subtract from from_acc, add to to_acc.",
+        "rubric": "Alice's balance drops to 300, Bob's rises to 300."
       }
     ]
   },
@@ -3449,13 +3449,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Query Optimization.",
     "lessons": [
       {
-        "title": "Query Optimization - Coming Soon",
-        "theory": "## Query Optimization\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Query Optimization** is under development.",
-        "starterCode": "# Query Optimization - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Query Optimization\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "EXPLAIN",
+        "theory": "## Looking Under the Hood\\nIf a SQL query is slow, you can put the word `EXPLAIN` (or `EXPLAIN ANALYZE`) in front of it.\\n\\nThe database won't return the data; instead, it returns an Execution Plan detailing exactly how it intends to find the data (e.g., 'Sequential Scan' vs 'Index Scan').\\n\\nYou can use this to figure out if you are missing an index, or if you are doing a very expensive JOIN.",
+        "instructions": "## Task: The EXPLAIN Output\\n1. Review the mock EXPLAIN output for a query.\\n2. If it says 'Seq Scan' (Sequential/Full Table Scan), it means it's slow.\\n3. If it says 'Index Scan', it means it's fast.",
+        "starterCode": "def analyze_explain_plan(plan_text):\n    if 'Seq Scan' in plan_text:\n        return \"WARNING: Full table scan detected. Consider adding an index!\"\n    elif '___' in plan_text:\n        return \"GOOD: Query is using an index.\"\n    return \"Unknown plan\"\n\nbad_plan = \"-> Seq Scan on users (cost=0.00..35.50 rows=1000)\"\ngood_plan = \"-> Index Scan using idx_email on users (cost=0.15..8.50 rows=1)\"\n\nprint(\"Query 1:\", analyze_explain_plan(bad_plan))\nprint(\"Query 2:\", analyze_explain_plan(good_plan))",
+        "solution": "def analyze_explain_plan(plan_text):\n    if 'Seq Scan' in plan_text:\n        return \"WARNING: Full table scan detected. Consider adding an index!\"\n    elif 'Index Scan' in plan_text:\n        return \"GOOD: Query is using an index.\"\n    return \"Unknown plan\"\n\nbad_plan = \"-> Seq Scan on users (cost=0.00..35.50 rows=1000)\"\ngood_plan = \"-> Index Scan using idx_email on users (cost=0.15..8.50 rows=1)\"\n\nprint(\"Query 1:\", analyze_explain_plan(bad_plan))\nprint(\"Query 2:\", analyze_explain_plan(good_plan))",
+        "hint": "Check for 'Index Scan'.",
+        "rubric": "Correctly identifies the good plan using Index Scan."
       }
     ]
   },
@@ -3643,13 +3643,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Client-Server Model.",
     "lessons": [
       {
-        "title": "Client-Server Model - Coming Soon",
-        "theory": "## Client-Server Model\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Client-Server Model** is under development.",
-        "starterCode": "# Client-Server Model - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Client-Server Model\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "The Core of the Web",
+        "theory": "## Request and Response\\nThe internet runs on the Client-Server model.\\n\\n1. **Client**: A device or software (like your Chrome browser) that *requests* resources.\\n2. **Server**: A powerful computer waiting to *respond* to requests.\\n\\nClients are usually lightweight and rely on the Server to do the heavy lifting (database access, complex calculations).",
+        "instructions": "## Task: Request-Response Simulator\\n1. Simulate a basic Client requesting data from a Server.\\n2. The client asks for '/weather'. The server responds.",
+        "starterCode": "class Server:\n    def handle_request(self, path):\n        if path == '/weather':\n            return \"200 OK: Sunny, 75F\"\n        return \"404 Not Found\"\n\nclass Client:\n    def __init__(self, server):\n        self.server = server\n        \n    def make_request(self, path):\n        print(f\"[Client] Sending request for {path}...\")\n        # Client calls the server\n        response = self.___.___(___)\n        print(f\"[Client] Received response: {response}\")\n\nmy_server = Server()\nmy_laptop = Client(my_server)\n\nmy_laptop.make_request('/weather')\nmy_laptop.make_request('/secret-data')",
+        "solution": "class Server:\n    def handle_request(self, path):\n        if path == '/weather':\n            return \"200 OK: Sunny, 75F\"\n        return \"404 Not Found\"\n\nclass Client:\n    def __init__(self, server):\n        self.server = server\n        \n    def make_request(self, path):\n        print(f\"[Client] Sending request for {path}...\")\n        # Client calls the server\n        response = self.server.handle_request(path)\n        print(f\"[Client] Received response: {response}\")\n\nmy_server = Server()\nmy_laptop = Client(my_server)\n\nmy_laptop.make_request('/weather')\nmy_laptop.make_request('/secret-data')",
+        "hint": "self.server.handle_request(path)",
+        "rubric": "Client correctly calls handle_request on the server object and receives the 200 OK and 404 responses."
       }
     ]
   },
@@ -3657,13 +3657,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for DNS & Load Balancing.",
     "lessons": [
       {
-        "title": "DNS & Load Balancing - Coming Soon",
-        "theory": "## DNS & Load Balancing\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **DNS & Load Balancing** is under development.",
-        "starterCode": "# DNS & Load Balancing - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# DNS & Load Balancing\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Directing Traffic",
+        "theory": "## Phonebooks and Traffic Cops\\n- **DNS (Domain Name System)**: The phonebook of the internet. Translates human names (`google.com`) into computer IP addresses (`142.250.190.46`).\\n- **Load Balancer**: The traffic cop. When `google.com` gets 1 million requests a second, a Load Balancer receives them all and distributes them evenly across thousands of identical servers so no single server crashes.",
+        "instructions": "## Task: Round-Robin Load Balancer\\n1. Implement a Round-Robin algorithm. It sends the first request to Server 1, the second to Server 2, the third to Server 3, the fourth back to Server 1, etc.\\n2. Use the modulo operator `%`.",
+        "starterCode": "class LoadBalancer:\n    def __init__(self, servers):\n        self.servers = servers\n        self.current_index = 0\n        \n    def route_request(self, request_id):\n        # 1. Get the current server\n        target = self.servers[self.___]\n        \n        # 2. Update the index for the next request (wrap around to 0 if at the end)\n        self.current_index = (self.current_index + 1) % len(self.___)\n        \n        print(f\"Request {request_id} routed to {target}\")\n\nlb = LoadBalancer(['Server_A', 'Server_B', 'Server_C'])\n\nfor i in range(1, 6):\n    lb.route_request(f\"Req-{i}\")",
+        "solution": "class LoadBalancer:\n    def __init__(self, servers):\n        self.servers = servers\n        self.current_index = 0\n        \n    def route_request(self, request_id):\n        # 1. Get the current server\n        target = self.servers[self.current_index]\n        \n        # 2. Update the index for the next request (wrap around to 0 if at the end)\n        self.current_index = (self.current_index + 1) % len(self.servers)\n        \n        print(f\"Request {request_id} routed to {target}\")\n\nlb = LoadBalancer(['Server_A', 'Server_B', 'Server_C'])\n\nfor i in range(1, 6):\n    lb.route_request(f\"Req-{i}\")",
+        "hint": "Use self.current_index. Modulo by len(self.servers).",
+        "rubric": "Requests correctly route A, B, C, A, B in order."
       }
     ]
   },

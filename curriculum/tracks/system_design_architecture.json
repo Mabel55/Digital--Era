@@ -3,13 +3,13 @@
     "aiRubric": "Check logic, syntax, and output for Client-Server Model.",
     "lessons": [
       {
-        "title": "Client-Server Model - Coming Soon",
-        "theory": "## Client-Server Model\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Client-Server Model** is under development.",
-        "starterCode": "# Client-Server Model - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Client-Server Model\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "The Core of the Web",
+        "theory": "## Request and Response\\nThe internet runs on the Client-Server model.\\n\\n1. **Client**: A device or software (like your Chrome browser) that *requests* resources.\\n2. **Server**: A powerful computer waiting to *respond* to requests.\\n\\nClients are usually lightweight and rely on the Server to do the heavy lifting (database access, complex calculations).",
+        "instructions": "## Task: Request-Response Simulator\\n1. Simulate a basic Client requesting data from a Server.\\n2. The client asks for '/weather'. The server responds.",
+        "starterCode": "class Server:\n    def handle_request(self, path):\n        if path == '/weather':\n            return \"200 OK: Sunny, 75F\"\n        return \"404 Not Found\"\n\nclass Client:\n    def __init__(self, server):\n        self.server = server\n        \n    def make_request(self, path):\n        print(f\"[Client] Sending request for {path}...\")\n        # Client calls the server\n        response = self.___.___(___)\n        print(f\"[Client] Received response: {response}\")\n\nmy_server = Server()\nmy_laptop = Client(my_server)\n\nmy_laptop.make_request('/weather')\nmy_laptop.make_request('/secret-data')",
+        "solution": "class Server:\n    def handle_request(self, path):\n        if path == '/weather':\n            return \"200 OK: Sunny, 75F\"\n        return \"404 Not Found\"\n\nclass Client:\n    def __init__(self, server):\n        self.server = server\n        \n    def make_request(self, path):\n        print(f\"[Client] Sending request for {path}...\")\n        # Client calls the server\n        response = self.server.handle_request(path)\n        print(f\"[Client] Received response: {response}\")\n\nmy_server = Server()\nmy_laptop = Client(my_server)\n\nmy_laptop.make_request('/weather')\nmy_laptop.make_request('/secret-data')",
+        "hint": "self.server.handle_request(path)",
+        "rubric": "Client correctly calls handle_request on the server object and receives the 200 OK and 404 responses."
       }
     ]
   },
@@ -17,13 +17,13 @@
     "aiRubric": "Check logic, syntax, and output for DNS & Load Balancing.",
     "lessons": [
       {
-        "title": "DNS & Load Balancing - Coming Soon",
-        "theory": "## DNS & Load Balancing\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **DNS & Load Balancing** is under development.",
-        "starterCode": "# DNS & Load Balancing - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# DNS & Load Balancing\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Directing Traffic",
+        "theory": "## Phonebooks and Traffic Cops\\n- **DNS (Domain Name System)**: The phonebook of the internet. Translates human names (`google.com`) into computer IP addresses (`142.250.190.46`).\\n- **Load Balancer**: The traffic cop. When `google.com` gets 1 million requests a second, a Load Balancer receives them all and distributes them evenly across thousands of identical servers so no single server crashes.",
+        "instructions": "## Task: Round-Robin Load Balancer\\n1. Implement a Round-Robin algorithm. It sends the first request to Server 1, the second to Server 2, the third to Server 3, the fourth back to Server 1, etc.\\n2. Use the modulo operator `%`.",
+        "starterCode": "class LoadBalancer:\n    def __init__(self, servers):\n        self.servers = servers\n        self.current_index = 0\n        \n    def route_request(self, request_id):\n        # 1. Get the current server\n        target = self.servers[self.___]\n        \n        # 2. Update the index for the next request (wrap around to 0 if at the end)\n        self.current_index = (self.current_index + 1) % len(self.___)\n        \n        print(f\"Request {request_id} routed to {target}\")\n\nlb = LoadBalancer(['Server_A', 'Server_B', 'Server_C'])\n\nfor i in range(1, 6):\n    lb.route_request(f\"Req-{i}\")",
+        "solution": "class LoadBalancer:\n    def __init__(self, servers):\n        self.servers = servers\n        self.current_index = 0\n        \n    def route_request(self, request_id):\n        # 1. Get the current server\n        target = self.servers[self.current_index]\n        \n        # 2. Update the index for the next request (wrap around to 0 if at the end)\n        self.current_index = (self.current_index + 1) % len(self.servers)\n        \n        print(f\"Request {request_id} routed to {target}\")\n\nlb = LoadBalancer(['Server_A', 'Server_B', 'Server_C'])\n\nfor i in range(1, 6):\n    lb.route_request(f\"Req-{i}\")",
+        "hint": "Use self.current_index. Modulo by len(self.servers).",
+        "rubric": "Requests correctly route A, B, C, A, B in order."
       }
     ]
   },
