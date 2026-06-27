@@ -87,13 +87,13 @@
     "aiRubric": "Check logic, syntax, and output for Model Deployment.",
     "lessons": [
       {
-        "title": "Model Deployment - Coming Soon",
-        "theory": "## Model Deployment\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Model Deployment** is under development.",
-        "starterCode": "# Model Deployment - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Model Deployment\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Serving ML Models",
+        "theory": "## From Notebook to Production\nTraining a model in a Jupyter Notebook is easy. Serving it to thousands of users is hard.\n\nWays to deploy:\n- **Batch Inference**: Run the model once a day on new data and save the results to a database.\n- **Real-time API**: Wrap the model in a FastAPI or Flask app. Users send HTTP requests with data, the model predicts and returns the result instantly.\n- **Edge Computing**: Run the model directly on the user's phone (e.g., Apple CoreML).",
+        "instructions": "## Task: Mock FastAPI Deployment\n1. Simulate wrapping an ML model inside a web API.\n2. Create a function `predict_endpoint` that takes a JSON dictionary payload.\n3. The model needs a 'feature_x' to predict. If it's missing, return a 400 Error.",
+        "starterCode": "def mock_model_predict(x):\n    return x * 2.5\n\ndef predict_endpoint(payload):\n    # 1. Validate payload\n    if 'feature_x' not in ___:\n        return {\"status\": 400, \"error\": \"Missing feature_x\"}\n        \n    # 2. Extract data\n    x = payload['___']\n    \n    # 3. Call model\n    prediction = mock_model_predict(x)\n    \n    # 4. Return result\n    return {\"status\": ___, \"prediction\": prediction}\n\nprint(\"Valid Request:\", predict_endpoint({\"feature_x\": 10}))\nprint(\"Invalid Request:\", predict_endpoint({\"age\": 25}))",
+        "solution": "def mock_model_predict(x):\n    return x * 2.5\n\ndef predict_endpoint(payload):\n    # 1. Validate payload\n    if 'feature_x' not in payload:\n        return {\"status\": 400, \"error\": \"Missing feature_x\"}\n        \n    # 2. Extract data\n    x = payload['feature_x']\n    \n    # 3. Call model\n    prediction = mock_model_predict(x)\n    \n    # 4. Return result\n    return {\"status\": 200, \"prediction\": prediction}\n\nprint(\"Valid Request:\", predict_endpoint({\"feature_x\": 10}))\nprint(\"Invalid Request:\", predict_endpoint({\"age\": 25}))",
+        "hint": "Check if 'feature_x' is in payload. Extract payload['feature_x']. Return status 200.",
+        "rubric": "Valid request returns status 200 and prediction 25.0. Invalid request returns 400."
       }
     ]
   },
@@ -101,13 +101,13 @@
     "aiRubric": "Check logic, syntax, and output for Drift Detection.",
     "lessons": [
       {
-        "title": "Drift Detection - Coming Soon",
-        "theory": "## Drift Detection\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Drift Detection** is under development.",
-        "starterCode": "# Drift Detection - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Drift Detection\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Concept Drift",
+        "theory": "## Models Degrade Over Time\nIf you train a model to predict housing prices in 2019, it will be terrible at predicting prices in 2024. The world changes, but the model doesn't.\n\n- **Data Drift**: The incoming data changes (e.g., a sensor breaks and starts sending weird numbers).\n- **Concept Drift**: The relationship between the data and the target changes (e.g., inflation changes the meaning of a '$500,000 house').\n\nYou must monitor the *distribution* of incoming data to detect drift and trigger a retraining pipeline.",
+        "instructions": "## Task: Simple Drift Detector\n1. Calculate the average (mean) of a feature in the training data.\n2. Compare it to the average of the live production data.\n3. If the difference is greater than the threshold (10.0), flag it as drift.",
+        "starterCode": "def check_drift(train_data, live_data, threshold=10.0):\n    # Calculate averages\n    train_mean = sum(train_data) / len(___)\n    live_mean = sum(live_data) / len(___)\n    \n    # Calculate absolute difference\n    diff = abs(train_mean - ___)\n    print(f\"Train Mean: {train_mean:.1f} | Live Mean: {live_mean:.1f} | Diff: {diff:.1f}\")\n    \n    if diff > ___:\n        return \"ALERT: Data Drift Detected! Retrain Model.\"\n    return \"Data is stable.\"\n\ntrain = [50, 52, 48, 51, 49]\nlive_week1 = [51, 49, 53, 50, 48] # Stable\nlive_week2 = [75, 80, 72, 78, 85] # Drifted\n\nprint(\"Week 1 Check:\", check_drift(train, live_week1))\nprint(\"\\nWeek 2 Check:\", check_drift(train, live_week2))",
+        "solution": "def check_drift(train_data, live_data, threshold=10.0):\n    # Calculate averages\n    train_mean = sum(train_data) / len(train_data)\n    live_mean = sum(live_data) / len(live_data)\n    \n    # Calculate absolute difference\n    diff = abs(train_mean - live_mean)\n    print(f\"Train Mean: {train_mean:.1f} | Live Mean: {live_mean:.1f} | Diff: {diff:.1f}\")\n    \n    if diff > threshold:\n        return \"ALERT: Data Drift Detected! Retrain Model.\"\n    return \"Data is stable.\"\n\ntrain = [50, 52, 48, 51, 49]\nlive_week1 = [51, 49, 53, 50, 48] # Stable\nlive_week2 = [75, 80, 72, 78, 85] # Drifted\n\nprint(\"Week 1 Check:\", check_drift(train, live_week1))\nprint(\"\\nWeek 2 Check:\", check_drift(train, live_week2))",
+        "hint": "len(train_data), len(live_data). abs(train_mean - live_mean). Compare diff to threshold.",
+        "rubric": "Code correctly identifies Week 1 as stable and Week 2 as drifted."
       }
     ]
   },

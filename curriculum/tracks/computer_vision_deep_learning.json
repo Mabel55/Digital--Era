@@ -73,13 +73,13 @@
     "aiRubric": "Check logic, syntax, and output for Transfer Learning.",
     "lessons": [
       {
-        "title": "Transfer Learning - Coming Soon",
-        "theory": "## Transfer Learning\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Transfer Learning** is under development.",
-        "starterCode": "# Transfer Learning - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Transfer Learning\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Don't Start from Scratch",
+        "theory": "## Standing on the Shoulders of Giants\nTraining an image recognition model from scratch requires millions of images and thousands of dollars in GPU time.\n\n**Transfer Learning** allows you to download a pre-trained model (like ResNet, trained by Google/Microsoft) that already knows how to see shapes, edges, and objects.\n\nYou \"freeze\" the early layers (so they don't change), and only train the very last layer on your specific dataset (e.g., distinguishing between hotdogs and not hotdogs).",
+        "instructions": "## Task: Freeze Layers\n1. Simulate a pre-trained model as a list of layers.\n2. Iterate through the layers. If the layer is not the 'Final_Classification_Layer', set its `trainable` property to False.\n3. This freezes the foundational knowledge of the model.",
+        "starterCode": "class Layer:\n    def __init__(self, name):\n        self.name = name\n        self.trainable = True # By default, layers can be trained\n\nmodel_layers = [\n    Layer(\"Conv1_Edges\"),\n    Layer(\"Conv2_Shapes\"),\n    Layer(\"Conv3_Objects\"),\n    Layer(\"Final_Classification_Layer\")\n]\n\ndef apply_transfer_learning(layers):\n    for layer in layers:\n        if layer.name != \"___\":\n            layer.___ = ___\n            print(f\"Froze {layer.name}\")\n        else:\n            print(f\"Kept {layer.name} trainable\")\n\napply_transfer_learning(model_layers)",
+        "solution": "class Layer:\n    def __init__(self, name):\n        self.name = name\n        self.trainable = True # By default, layers can be trained\n\nmodel_layers = [\n    Layer(\"Conv1_Edges\"),\n    Layer(\"Conv2_Shapes\"),\n    Layer(\"Conv3_Objects\"),\n    Layer(\"Final_Classification_Layer\")\n]\n\ndef apply_transfer_learning(layers):\n    for layer in layers:\n        if layer.name != \"Final_Classification_Layer\":\n            layer.trainable = False\n            print(f\"Froze {layer.name}\")\n        else:\n            print(f\"Kept {layer.name} trainable\")\n\napply_transfer_learning(model_layers)",
+        "hint": "Check against 'Final_Classification_Layer'. Set layer.trainable to False.",
+        "rubric": "All layers except the final one are frozen (trainable = False)."
       }
     ]
   },
@@ -87,13 +87,13 @@
     "aiRubric": "Check logic, syntax, and output for Object Detection.",
     "lessons": [
       {
-        "title": "Object Detection - Coming Soon",
-        "theory": "## Object Detection\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Object Detection** is under development.",
-        "starterCode": "# Object Detection - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Object Detection\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Bounding Boxes",
+        "theory": "## Where is the Object?\nImage Classification says: \"This is a picture of a dog.\"\nObject Detection says: \"There is a dog at coordinates (X, Y) with width W and height H.\"\n\nPopular Object Detection algorithms:\n- **YOLO (You Only Look Once)**: Extremely fast, great for real-time video.\n- **Faster R-CNN**: Very accurate, but slower.",
+        "instructions": "## Task: Bounding Box Area\n1. You are given the coordinates of a bounding box: `(x_min, y_min, x_max, y_max)`.\n2. Calculate the width and height of the box.\n3. Calculate the area of the box (width * height).",
+        "starterCode": "def calculate_bbox_area(bbox):\n    x_min, y_min, x_max, y_max = bbox\n    \n    width = ___ - ___\n    height = ___ - ___\n    \n    area = ___ * ___\n    return area\n\n# A box representing a detected car\ncar_box = (100, 50, 300, 150) # (x_min, y_min, x_max, y_max)\n\nprint(\"Bounding Box Area:\", calculate_bbox_area(car_box), \"pixels\")",
+        "solution": "def calculate_bbox_area(bbox):\n    x_min, y_min, x_max, y_max = bbox\n    \n    width = x_max - x_min\n    height = y_max - y_min\n    \n    area = width * height\n    return area\n\n# A box representing a detected car\ncar_box = (100, 50, 300, 150) # (x_min, y_min, x_max, y_max)\n\nprint(\"Bounding Box Area:\", calculate_bbox_area(car_box), \"pixels\")",
+        "hint": "Width is x_max - x_min. Height is y_max - y_min.",
+        "rubric": "Calculates the area correctly as 20000 pixels."
       }
     ]
   },
@@ -101,13 +101,13 @@
     "aiRubric": "Check logic, syntax, and output for GANs.",
     "lessons": [
       {
-        "title": "GANs - Coming Soon",
-        "theory": "## GANs\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **GANs** is under development.",
-        "starterCode": "# GANs - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# GANs\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Generative Adversarial Networks",
+        "theory": "## The Forger and the Detective\nGANs are used to generate fake images (like deepfakes or AI art).\n\nThey consist of two neural networks fighting each other:\n1. **Generator**: The \"Forger\". It tries to create fake images from random noise.\n2. **Discriminator**: The \"Detective\". It looks at images and tries to guess if they are real (from the dataset) or fake (from the Generator).\n\nThey train together until the Generator makes images so good that the Discriminator is forced to guess 50/50.",
+        "instructions": "## Task: GAN Simulator\n1. Simulate the training loop of a GAN.\n2. The Generator's skill increases by 1 each epoch.\n3. The Discriminator's skill increases by 1 each epoch.\n4. If the Generator's skill is equal to or greater than the Discriminator's, the Generator \"wins\" that round.",
+        "starterCode": "def simulate_gan_training(epochs):\n    generator_skill = 10\n    discriminator_skill = 15 # Detective starts with an advantage\n    \n    for epoch in range(1, epochs + 1):\n        # Both get better over time, but generator learns slightly faster here\n        generator_skill += 2\n        discriminator_skill += 1\n        \n        if generator_skill >= ___:\n            print(f\"Epoch {epoch}: Generator fooled the Discriminator!\")\n        else:\n            print(f\"Epoch {epoch}: Discriminator caught the fake.\")\n\nsimulate_gan_training(7)",
+        "solution": "def simulate_gan_training(epochs):\n    generator_skill = 10\n    discriminator_skill = 15 # Detective starts with an advantage\n    \n    for epoch in range(1, epochs + 1):\n        # Both get better over time, but generator learns slightly faster here\n        generator_skill += 2\n        discriminator_skill += 1\n        \n        if generator_skill >= discriminator_skill:\n            print(f\"Epoch {epoch}: Generator fooled the Discriminator!\")\n        else:\n            print(f\"Epoch {epoch}: Discriminator caught the fake.\")\n\nsimulate_gan_training(7)",
+        "hint": "Compare generator_skill to discriminator_skill.",
+        "rubric": "Generator eventually catches up and fools the discriminator around epoch 5."
       }
     ]
   },
