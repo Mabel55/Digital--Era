@@ -83,3 +83,27 @@ class ChatMessage(Base):
     # Relationship to easily link messages back to a user profile
     user = relationship("User", back_populates="chat_messages")
 
+class ForumThread(Base):
+    __tablename__ = "forum_threads"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, index=True)
+    lesson_name = Column(String, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    created_at = Column(DateTime, default=datetime.utcnow)
+    
+    user = relationship("User")
+    comments = relationship("ForumComment", back_populates="thread", cascade="all, delete-orphan")
+
+class ForumComment(Base):
+    __tablename__ = "forum_comments"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    thread_id = Column(Integer, ForeignKey("forum_threads.id"))
+    user_id = Column(Integer, ForeignKey("users.id"))
+    content = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    
+    thread = relationship("ForumThread", back_populates="comments")
+    user = relationship("User")
+

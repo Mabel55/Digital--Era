@@ -1,6 +1,7 @@
 from __future__ import annotations
 from pydantic import BaseModel, Field, AliasChoices
 from typing import Optional, List
+from datetime import datetime
 
 # --- STUDENT SCHEMAS ---
 class StudentCreate(BaseModel):
@@ -104,6 +105,39 @@ class UserResetPassword(BaseModel):
     email: str
     new_password: str
 
+# --- FORUM SCHEMAS ---
+class ForumCommentBase(BaseModel):
+    content: str
+
+class ForumCommentCreate(ForumCommentBase):
+    pass
+
+class ForumCommentResponse(ForumCommentBase):
+    id: int
+    thread_id: int
+    user_id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class ForumThreadBase(BaseModel):
+    title: str
+    lesson_name: str
+
+class ForumThreadCreate(ForumThreadBase):
+    pass
+
+class ForumThreadResponse(ForumThreadBase):
+    id: int
+    user_id: int
+    created_at: datetime
+    comments: List[ForumCommentResponse] = []
+
+    class Config:
+        from_attributes = True
+
 # Rebuild models
 LessonResponse.model_rebuild()
 CourseResponse.model_rebuild()
+ForumThreadResponse.model_rebuild()

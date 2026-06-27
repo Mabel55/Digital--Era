@@ -4,6 +4,7 @@ import { useAuth } from '../AuthContext';
 import Editor from '@monaco-editor/react';
 import { marked } from 'marked';
 import { courseManifest } from '../data/courses';
+import LessonDiscussion from './LessonDiscussion';
 
 const Workspace = () => {
   const { courseId } = useParams();
@@ -258,6 +259,8 @@ const Workspace = () => {
                   Get Detail Explanation
                 </button>
               )}
+              
+              <LessonDiscussion lessonName={lesson.title} />
             </div>
           </div>
 

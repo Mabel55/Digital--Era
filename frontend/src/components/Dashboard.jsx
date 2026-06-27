@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { curriculum, courseManifest } from '../data/courses';
@@ -12,6 +13,11 @@ const Dashboard = () => {
   const [overviewCourse, setOverviewCourse] = useState(null);
   const [certCourse, setCertCourse] = useState(null);
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+  const { t, i18n } = useTranslation();
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -104,6 +110,14 @@ const Dashboard = () => {
           <div className="logo-text">Digital <span>Era</span></div>
         </div>
         <div className="nav-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <select 
+            onChange={(e) => changeLanguage(e.target.value)}
+            value={i18n.language}
+            style={{ padding: '6px', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: '8px' }}
+          >
+            <option value="en">English</option>
+            <option value="es">Español</option>
+          </select>
           <button 
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             style={{ padding: '8px 12px', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', fontSize: '16px' }}
@@ -138,7 +152,7 @@ const Dashboard = () => {
       <div className="dash-body">
         <div className="dash-hero">
           <div className="hero-left">
-            <h2>Welcome back, <span>{user?.name?.split(' ')[0] || 'Student'}</span>!</h2>
+            <h2>{t('dashboard.welcome')}, <span>{user?.name?.split(' ')[0] || 'Student'}</span>!</h2>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px', color: 'var(--text-dim)' }}>
               Your current track:
               <select 
