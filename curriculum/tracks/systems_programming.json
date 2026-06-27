@@ -155,13 +155,13 @@
     "aiRubric": "Check logic, syntax, and output for FFI.",
     "lessons": [
       {
-        "title": "FFI - Coming Soon",
-        "theory": "## FFI\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **FFI** is under development.",
-        "starterCode": "# FFI - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# FFI\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Foreign Function Interface",
+        "theory": "## Calling C from Rust\nRust can talk to other languages (mostly C). This is called FFI.\n\nYou have to use `extern \"C\"` to define the C functions you want to call, and you MUST call them inside an `unsafe` block because Rust can't guarantee that the C code is safe.\n\n```rust\nextern \"C\" {\n    fn abs(input: i32) -> i32;\n}\n\nfn main() {\n    unsafe {\n        println!(\"Absolute value of -3 according to C: {}\", abs(-3));\n    }\n}\n```",
+        "instructions": "## Task: Call a C Function\n1. Declare an external C function `sqrt(input: f64) -> f64`.\n2. Call it from `main` to find the square root of 64.0.\n3. Remember the `unsafe` block!",
+        "starterCode": "extern \"C\" {\n    fn ___(input: f64) -> f64;\n}\n\nfn main() {\n    let number = 64.0;\n    \n    // Calling C code is unsafe!\n    ___ {\n        let result = ___(number);\n        println!(\"Square root of {} is {}\", number, result);\n    }\n}",
+        "solution": "extern \"C\" {\n    fn sqrt(input: f64) -> f64;\n}\n\nfn main() {\n    let number = 64.0;\n    \n    // Calling C code is unsafe!\n    unsafe {\n        let result = sqrt(number);\n        println!(\"Square root of {} is {}\", number, result);\n    }\n}",
+        "hint": "fn sqrt. unsafe { }. sqrt(number).",
+        "rubric": "Properly declares sqrt and calls it inside an unsafe block."
       }
     ]
   },

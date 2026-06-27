@@ -59,13 +59,13 @@
     "aiRubric": "Check logic, syntax, and output for CNN Architecture.",
     "lessons": [
       {
-        "title": "CNN Architecture - Coming Soon",
-        "theory": "## CNN Architecture\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **CNN Architecture** is under development.",
-        "starterCode": "# CNN Architecture - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# CNN Architecture\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Convolutional Neural Networks",
+        "theory": "## How AI Sees Images\nStandard Neural Networks (Dense layers) are terrible for images because they flatten the image, losing spatial context (what pixels are next to what).\n\n**CNNs** slide a small filter (like a 3x3 window) across the image. \n- Early layers find simple edges and corners.\n- Later layers combine edges to find shapes (wheels, eyes).\n- Final layers recognize objects (cars, faces).",
+        "instructions": "## Task: Layer Matcher\n1. Match the CNN component to its function.\n2. Components: 'Convolutional Layer', 'Pooling Layer', 'Fully Connected Layer'\n3. Functions: 'Extracts features (edges/shapes)', 'Reduces image size/resolution', 'Makes the final classification guess'",
+        "starterCode": "cnn_layers = {\n    'Extracts features (edges/shapes) by sliding filters': '___',\n    'Reduces image size (downsampling) to save memory': '___',\n    'Flattens the data to make the final classification guess': '___'\n}\n\nfor desc, layer in cnn_layers.items():\n    print(f\"{layer:25} -> {desc}\")",
+        "solution": "cnn_layers = {\n    'Extracts features (edges/shapes) by sliding filters': 'Convolutional Layer',\n    'Reduces image size (downsampling) to save memory': 'Pooling Layer',\n    'Flattens the data to make the final classification guess': 'Fully Connected Layer'\n}\n\nfor desc, layer in cnn_layers.items():\n    print(f\"{layer:25} -> {desc}\")",
+        "hint": "Conv layer extracts. Pooling reduces size. Fully Connected classifies.",
+        "rubric": "Layers correctly matched to their functions."
       }
     ]
   },

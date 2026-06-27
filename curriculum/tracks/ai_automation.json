@@ -45,13 +45,13 @@
     "aiRubric": "Check logic, syntax, and output for Automated Content.",
     "lessons": [
       {
-        "title": "Automated Content - Coming Soon",
-        "theory": "## Automated Content\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Automated Content** is under development.",
-        "starterCode": "# Automated Content - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Automated Content\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Content Generation",
+        "theory": "## AI Writers at Scale\nAutomated content pipelines take raw data and turn it into polished content automatically.\n\nPipeline flow:\n1. **Ingest**: Read a raw JSON feed (e.g., weather data).\n2. **Prompt Construction**: Inject the data into a prompt template.\n3. **LLM Generation**: Ask the AI to write a natural language summary.\n4. **Publish**: Send the summary to a CMS or Twitter.",
+        "instructions": "## Task: Weather Bot Simulator\n1. You have raw weather data in a dictionary.\n2. Create a function that formats a prompt for the AI.\n3. The prompt should say: \"Write a friendly weather report for [City]. The temp is [Temp] and it's [Condition].\"",
+        "starterCode": "def create_prompt(weather_data):\n    city = weather_data['___']\n    temp = weather_data['___']\n    condition = weather_data['___']\n    \n    return f\"Write a friendly weather report for {___}. The temp is {___} and it's {___}.\"\n\nraw_data = {\n    'city': 'Seattle',\n    'temp': '65F',\n    'condition': 'raining as usual'\n}\n\nprompt = create_prompt(raw_data)\nprint(\"Generated Prompt to send to LLM:\\n\", prompt)",
+        "solution": "def create_prompt(weather_data):\n    city = weather_data['city']\n    temp = weather_data['temp']\n    condition = weather_data['condition']\n    \n    return f\"Write a friendly weather report for {city}. The temp is {temp} and it's {condition}.\"\n\nraw_data = {\n    'city': 'Seattle',\n    'temp': '65F',\n    'condition': 'raining as usual'\n}\n\nprompt = create_prompt(raw_data)\nprint(\"Generated Prompt to send to LLM:\\n\", prompt)",
+        "hint": "Extract keys: 'city', 'temp', 'condition'. Inject them into the f-string.",
+        "rubric": "Prompt correctly incorporates the data from the dictionary."
       }
     ]
   },

@@ -96,13 +96,13 @@
     "aiRubric": "Check logic, syntax, and output for Distributed Consensus.",
     "lessons": [
       {
-        "title": "Distributed Consensus - Coming Soon",
-        "theory": "## Distributed Consensus\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Distributed Consensus** is under development.",
-        "starterCode": "# Distributed Consensus - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Distributed Consensus\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Who is the Leader?",
+        "theory": "## The Split-Brain Problem\nIn a distributed database (like MongoDB or Kafka), multiple servers work together. If the leader server crashes, the other servers must elect a new leader.\n\nBut what if the network splits, and two groups of servers both think the other group died? You could get TWO leaders (Split-Brain), leading to corrupted data.\n\n**Consensus Algorithms** (like Raft or Paxos) solve this. A leader can only be elected if a **majority** (quorum) of servers vote for it. If you have 5 servers, you need 3 votes. You can never have two majorities!",
+        "instructions": "## Task: Quorum Calculator\n1. Write a function that calculates the required quorum (majority) for a given number of nodes.\n2. Formula: `(N / 2) + 1` (integer division).\n3. Calculate quorum for 3, 4, 5, and 100 nodes.",
+        "starterCode": "def get_quorum(total_nodes):\n    # Calculate majority using integer division\n    return (total_nodes ___ 2) + ___\n\nnodes_list = [3, 4, 5, 100]\nfor n in nodes_list:\n    q = get_quorum(n)\n    print(f\"Total Nodes: {n} -> Quorum Needed: {q}\")",
+        "solution": "def get_quorum(total_nodes):\n    # Calculate majority using integer division\n    return (total_nodes // 2) + 1\n\nnodes_list = [3, 4, 5, 100]\nfor n in nodes_list:\n    q = get_quorum(n)\n    print(f\"Total Nodes: {n} -> Quorum Needed: {q}\")",
+        "hint": "Use // for integer division. Add 1.",
+        "rubric": "Returns 2 for 3 nodes, 3 for 4 nodes, 3 for 5 nodes, 51 for 100 nodes."
       }
     ]
   },
