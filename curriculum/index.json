@@ -3,12 +3,15 @@
     "Beginner": [
       "Python Basics",
       "Control Flow",
-      "Functions"
+      "Functions",
+      "String Manipulation"
     ],
     "Intermediate": [
       "Data Structures",
       "OOP in Python",
-      "File I/O"
+      "File I/O",
+      "Error Handling",
+      "List Comprehensions"
     ],
     "Advanced": [
       "Decorators",
@@ -17,7 +20,9 @@
       "Advanced Python Concurrency",
       "Python Design Patterns",
       "Python Testing Frameworks",
-      "Python Security Practices"
+      "Python Security Practices",
+      "Context Managers",
+      "Concurrency & Asyncio"
     ]
   },
   "Frontend": {
