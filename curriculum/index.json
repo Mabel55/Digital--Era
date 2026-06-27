@@ -385,7 +385,8 @@
       "Drift Detection",
       "Feature Stores",
       "Model Monitoring & Drift",
-      "Kubeflow Pipelines"
+      "Kubeflow Pipelines",
+      "Distributed Computing & Spark Masterclass"
     ]
   },
   "C Programming": {
