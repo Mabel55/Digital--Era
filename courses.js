@@ -975,13 +975,22 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for AWS Basics.",
     "lessons": [
       {
-        "title": "AWS Basics - Coming Soon",
-        "theory": "## AWS Basics\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **AWS Basics** is under development.",
-        "starterCode": "# AWS Basics - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# AWS Basics\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Introduction to AWS",
+        "theory": "## The Cloud Giant\nAmazon Web Services (AWS) is the most popular cloud provider. It provides on-demand computing power, storage, and databases.\n\nKey Concepts:\n- **Regions**: Physical locations around the world (e.g., us-east-1, eu-west-1)\n- **Availability Zones (AZs)**: Distinct data centers within a region for redundancy\n- **IAM**: Identity and Access Management (who can do what)\n- **VPC**: Virtual Private Cloud (your private network in AWS)",
+        "instructions": "## Task: AWS Terminology Matcher\n1. Create a dictionary mapping AWS terms to their definitions\n2. Include: 'Region', 'AZ', 'IAM', 'VPC'\n3. Print the terms and definitions",
+        "starterCode": "aws_terms = {\n    'Region': '___',\n    'AZ': '___',\n    'IAM': '___',\n    'VPC': '___'\n}\n\nfor term, defi in aws_terms.items():\n    print(f\"{term:8}: {defi}\")",
+        "solution": "aws_terms = {\n    'Region': 'A physical geographical location',\n    'AZ': 'A distinct data center within a region',\n    'IAM': 'Identity and Access Management',\n    'VPC': 'Virtual Private Cloud'\n}\n\nfor term, defi in aws_terms.items():\n    print(f\"{term:8}: {defi}\")",
+        "hint": "Match the definitions from the theory section.",
+        "rubric": "All 4 terms matched with correct definitions."
+      },
+      {
+        "title": "Core Services",
+        "theory": "## The Big Three\nMost AWS architectures start with these three core services:\n\n1. **EC2 (Elastic Compute Cloud)**: Virtual servers (compute)\n2. **S3 (Simple Storage Service)**: Object storage (files, images)\n3. **RDS (Relational Database Service)**: Managed databases (PostgreSQL, MySQL)\n\nOthers:\n- **Lambda**: Serverless computing (run code without servers)\n- **DynamoDB**: Managed NoSQL database",
+        "instructions": "## Task: Architecture Builder\n1. Design a simple web app architecture using AWS services\n2. Map 'Frontend Hosting', 'Backend API', and 'Database' to the appropriate AWS service\n3. Print your architecture",
+        "starterCode": "architecture = {\n    'Frontend Hosting': '___',    # Where to store static files (HTML/CSS/JS)\n    'Backend API': '___',         # Where to run your Python/Node server\n    'Database': '___'             # Where to store relational user data\n}\n\nprint(\"My AWS Architecture:\")\nfor component, service in architecture.items():\n    print(f\"- {component} -> {service}\")",
+        "solution": "architecture = {\n    'Frontend Hosting': 'S3',    # Where to store static files (HTML/CSS/JS)\n    'Backend API': 'EC2',         # Where to run your Python/Node server\n    'Database': 'RDS'             # Where to store relational user data\n}\n\nprint(\"My AWS Architecture:\")\nfor component, service in architecture.items():\n    print(f\"- {component} -> {service}\")",
+        "hint": "S3 for static hosting. EC2 for servers. RDS for relational DBs.",
+        "rubric": "Architecture uses S3, EC2, and RDS correctly."
       }
     ]
   },
@@ -989,13 +998,22 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for EC2 & S3.",
     "lessons": [
       {
-        "title": "EC2 & S3 - Coming Soon",
-        "theory": "## EC2 & S3\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **EC2 & S3** is under development.",
-        "starterCode": "# EC2 & S3 - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# EC2 & S3\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "EC2 Instances",
+        "theory": "## Virtual Servers\nEC2 allows you to rent virtual computers. You pay per second of use.\n\nInstance Types:\n- `t2.micro`: General purpose, free tier eligible\n- `c5.large`: Compute optimized (CPU heavy tasks)\n- `m5.large`: Memory optimized (RAM heavy tasks)\n- `p3.2xlarge`: GPU instances (Machine Learning)\n\nYou connect to Linux EC2 instances using SSH.",
+        "instructions": "## Task: EC2 Instance Selector\n1. Create a function that recommends an EC2 instance type based on the workload\n2. Workloads: 'web_server', 'machine_learning', 'database'\n3. Return t2.micro, p3.2xlarge, and m5.large respectively",
+        "starterCode": "def recommend_ec2(workload):\n    if workload == 'web_server':\n        return '___'\n    elif workload == 'machine_learning':\n        return '___'\n    elif workload == 'database':\n        return '___'\n    else:\n        return 'Unknown workload'\n\nworkloads = ['web_server', 'machine_learning', 'database', 'mining']\nfor w in workloads:\n    print(f\"Workload: {w:16} -> Instance: {recommend_ec2(w)}\")",
+        "solution": "def recommend_ec2(workload):\n    if workload == 'web_server':\n        return 't2.micro'\n    elif workload == 'machine_learning':\n        return 'p3.2xlarge'\n    elif workload == 'database':\n        return 'm5.large'\n    else:\n        return 'Unknown workload'\n\nworkloads = ['web_server', 'machine_learning', 'database', 'mining']\nfor w in workloads:\n    print(f\"Workload: {w:16} -> Instance: {recommend_ec2(w)}\")",
+        "hint": "Match the instance types to the workloads described in the theory.",
+        "rubric": "Function returns correct instance type for each workload."
+      },
+      {
+        "title": "S3 Buckets",
+        "theory": "## Object Storage\nS3 is infinitely scalable storage for \"objects\" (files). It doesn't have folders like a hard drive; it uses a flat structure with key-value pairs.\n\n- **Bucket**: The top-level container (must have a globally unique name)\n- **Key**: The file path/name (e.g., `images/logo.png`)\n- **Value**: The file data\n\nS3 is extremely durable (11 nines: 99.999999999% durability).",
+        "instructions": "## Task: S3 Path Simulator\n1. Create a function that generates a full S3 URI\n2. It should take a bucket name and a file key\n3. Format: `s3://bucket-name/file-key`",
+        "starterCode": "def get_s3_uri(bucket, key):\n    # Strip leading slashes from key just in case\n    clean_key = key.lstrip('/')\n    return f\"s3://___/___\"\n\nimages = ['logo.png', '/users/profile.jpg', 'data/backup.zip']\nbucket_name = 'my-app-storage'\n\nfor img in images:\n    print(get_s3_uri(bucket_name, img))",
+        "solution": "def get_s3_uri(bucket, key):\n    # Strip leading slashes from key just in case\n    clean_key = key.lstrip('/')\n    return f\"s3://{bucket}/{clean_key}\"\n\nimages = ['logo.png', '/users/profile.jpg', 'data/backup.zip']\nbucket_name = 'my-app-storage'\n\nfor img in images:\n    print(get_s3_uri(bucket_name, img))",
+        "hint": "Use f-strings to combine the bucket and clean_key.",
+        "rubric": "URIs generated correctly without double slashes after the bucket name."
       }
     ]
   },
@@ -1003,13 +1021,22 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Linux Fundamentals.",
     "lessons": [
       {
-        "title": "Linux Fundamentals - Coming Soon",
-        "theory": "## Linux Fundamentals\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Linux Fundamentals** is under development.",
-        "starterCode": "# Linux Fundamentals - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Linux Fundamentals\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "The Linux Command Line",
+        "theory": "## Shell Basics\nAs a developer, you will spend a lot of time in the Linux terminal (bash or zsh).\n\nNavigation:\n- `pwd`: Print Working Directory\n- `ls`: List files\n- `cd`: Change Directory (`cd ..` goes up one level)\n\nFile Operations:\n- `touch file.txt`: Create empty file\n- `mkdir dir_name`: Create directory\n- `rm file.txt`: Delete file\n- `rm -r dir_name`: Delete directory and contents",
+        "instructions": "## Task: Terminal Command Matcher\n1. Match the Linux commands to their descriptions\n2. Commands: `pwd`, `ls -la`, `cd ..`, `mkdir`, `rm -rf`\n3. Print the matches",
+        "starterCode": "linux_commands = {\n    'pwd': '___',\n    'ls -la': '___',\n    'cd ..': '___',\n    'mkdir': '___',\n    'rm -rf': '___'\n}\n\nfor cmd, desc in linux_commands.items():\n    print(f\"{cmd:10} -> {desc}\")",
+        "solution": "linux_commands = {\n    'pwd': 'Print current directory path',\n    'ls -la': 'List all files including hidden ones with details',\n    'cd ..': 'Move up one directory level',\n    'mkdir': 'Create a new directory',\n    'rm -rf': 'Force delete a directory and its contents recursively'\n}\n\nfor cmd, desc in linux_commands.items():\n    print(f\"{cmd:10} -> {desc}\")",
+        "hint": "Describe what each command does.",
+        "rubric": "All 5 commands described accurately."
+      },
+      {
+        "title": "File Permissions",
+        "theory": "## User, Group, Others\nLinux permissions are split into three categories: User (owner), Group, and Others.\nEach category has Read (r), Write (w), and Execute (x) permissions.\n\nNumeric notation:\n- `r` = 4\n- `w` = 2\n- `x` = 1\n\nExample: `chmod 755 script.sh`\n- User: 7 (4+2+1 = rwx)\n- Group: 5 (4+1 = rx)\n- Others: 5 (4+1 = rx)",
+        "instructions": "## Task: Permission Calculator\n1. Write a function that converts r, w, x strings to their numeric equivalent\n2. e.g., 'rwx' -> 7, 'r-x' -> 5, 'rw-' -> 6\n3. Calculate the full 3-digit chmod number for a file",
+        "starterCode": "def calc_perm(rwx_string):\n    val = 0\n    if rwx_string[0] == 'r': val += ___\n    if rwx_string[1] == 'w': val += ___\n    if rwx_string[2] == 'x': val += ___\n    return val\n\ndef get_chmod(user, group, other):\n    u = calc_perm(user)\n    g = calc_perm(group)\n    o = calc_perm(other)\n    return f\"{u}{g}{o}\"\n\nprint(\"script.sh permissions (rwx r-x r-x): chmod\", get_chmod('rwx', 'r-x', 'r-x'))\nprint(\"secret.txt permissions (rw- --- ---): chmod\", get_chmod('rw-', '---', '---'))",
+        "solution": "def calc_perm(rwx_string):\n    val = 0\n    if rwx_string[0] == 'r': val += 4\n    if rwx_string[1] == 'w': val += 2\n    if rwx_string[2] == 'x': val += 1\n    return val\n\ndef get_chmod(user, group, other):\n    u = calc_perm(user)\n    g = calc_perm(group)\n    o = calc_perm(other)\n    return f\"{u}{g}{o}\"\n\nprint(\"script.sh permissions (rwx r-x r-x): chmod\", get_chmod('rwx', 'r-x', 'r-x'))\nprint(\"secret.txt permissions (rw- --- ---): chmod\", get_chmod('rw-', '---', '---'))",
+        "hint": "r is 4, w is 2, x is 1.",
+        "rubric": "script.sh returns 755. secret.txt returns 600."
       }
     ]
   },
@@ -1817,13 +1844,22 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Data Cleaning.",
     "lessons": [
       {
-        "title": "Data Cleaning - Coming Soon",
-        "theory": "## Data Cleaning\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Data Cleaning** is under development.",
-        "starterCode": "# Data Cleaning - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Data Cleaning\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Handling Missing Data",
+        "theory": "## Dirty Data\nReal-world data is messy. It has missing values (`NaN`), duplicates, and incorrect formats.\n\nPandas missing data methods:\n- `df.isna()`: Check for missing values\n- `df.dropna()`: Drop rows with missing values\n- `df.fillna(value)`: Fill missing values with a specific value or the mean",
+        "instructions": "## Task: Clean the Dataset\n1. Given a dataset with missing ages and scores\n2. Fill missing ages with the median age\n3. Drop rows that are missing a score",
+        "starterCode": "import pandas as pd\nimport numpy as np\n\ndf = pd.DataFrame({\n    'Name': ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve'],\n    'Age': [25, np.nan, 22, 28, np.nan],\n    'Score': [95, 82, np.nan, 73, 85]\n})\n\nprint(\"Original:\\n\", df)\n\n# 1. Fill missing Age with median\nmedian_age = df['Age'].___()\ndf['Age'] = df['Age'].___(median_age)\n\n# 2. Drop rows missing Score\ndf = df.___subset=['Score'])\n\nprint(\"\\nCleaned:\\n\", df)",
+        "solution": "import pandas as pd\nimport numpy as np\n\ndf = pd.DataFrame({\n    'Name': ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve'],\n    'Age': [25, np.nan, 22, 28, np.nan],\n    'Score': [95, 82, np.nan, 73, 85]\n})\n\nprint(\"Original:\\n\", df)\n\n# 1. Fill missing Age with median\nmedian_age = df['Age'].median()\ndf['Age'] = df['Age'].fillna(median_age)\n\n# 2. Drop rows missing Score\ndf = df.dropna(subset=['Score'])\n\nprint(\"\\nCleaned:\\n\", df)",
+        "hint": ".median() calculates median. .fillna() fills NaNs. .dropna() removes NaNs.",
+        "rubric": "Missing ages filled with 25.0. Charlie's row dropped due to missing score."
+      },
+      {
+        "title": "Removing Duplicates",
+        "theory": "## Duplicate Records\nDuplicates can skew your analysis and ML models.\n\n```python\n# Check for duplicates\ndf.duplicated()\n\n# Drop duplicates\ndf.drop_duplicates(inplace=True)\n\n# Drop duplicates based on specific columns\ndf.drop_duplicates(subset=['Email'], keep='last')\n```",
+        "instructions": "## Task: Deduplication\n1. Find and remove duplicate users based on their 'ID' column\n2. Keep the 'last' occurrence of the duplicate (most recent data)",
+        "starterCode": "import pandas as pd\n\ndf = pd.DataFrame({\n    'ID': [1, 2, 1, 3, 2],\n    'Name': ['Alice', 'Bob', 'Alice_Old', 'Charlie', 'Bob_Updated'],\n    'Score': [90, 80, 85, 95, 82]\n})\n\nprint(\"Original Size:\", len(df))\n\n# Drop duplicates based on ID, keep last\ndf_clean = df.___(___=['ID'], keep='___')\n\nprint(\"Cleaned Size:\", len(df_clean))\nprint(df_clean)",
+        "solution": "import pandas as pd\n\ndf = pd.DataFrame({\n    'ID': [1, 2, 1, 3, 2],\n    'Name': ['Alice', 'Bob', 'Alice_Old', 'Charlie', 'Bob_Updated'],\n    'Score': [90, 80, 85, 95, 82]\n})\n\nprint(\"Original Size:\", len(df))\n\n# Drop duplicates based on ID, keep last\ndf_clean = df.drop_duplicates(subset=['ID'], keep='last')\n\nprint(\"Cleaned Size:\", len(df_clean))\nprint(df_clean)",
+        "hint": ".drop_duplicates(subset=['ColName'], keep='last')",
+        "rubric": "Dataframe drops to 3 rows. Keeps Alice_Old (ID 1) and Bob_Updated (ID 2)."
       }
     ]
   },
@@ -1859,13 +1895,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Scikit-Learn.",
     "lessons": [
       {
-        "title": "Scikit-Learn - Coming Soon",
-        "theory": "## Scikit-Learn\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Scikit-Learn** is under development.",
-        "starterCode": "# Scikit-Learn - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Scikit-Learn\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Intro to Machine Learning",
+        "theory": "## Scikit-Learn (sklearn)\nThe standard machine learning library for Python. It provides simple and efficient tools for predictive data analysis.\n\nWorkflow:\n1. Prepare data (X = features, y = target)\n2. Split into train/test sets\n3. Initialize a model (e.g., `LinearRegression()`)\n4. Fit the model to training data (`model.fit(X_train, y_train)`)\n5. Make predictions (`model.predict(X_test)`)\n6. Evaluate accuracy",
+        "instructions": "## Task: ML Workflow Simulation\n1. Create a mock class for a Scikit-Learn model\n2. Implement `fit` and `predict` methods\n3. Simulate training and predicting",
+        "starterCode": "class MockLinearRegression:\n    def __init__(self):\n        self.is_trained = False\n        self.weights = None\n        \n    def fit(self, X, y):\n        print(f\"Training model on {len(X)} samples...\")\n        self.is_trained = ___\n        self.weights = 2.5 # Mock weight\n        \n    def predict(self, X):\n        if not self.___:\n            raise Exception(\"Model must be fitted before predicting!\")\n        print(f\"Predicting for {len(X)} samples...\")\n        return [x * self.weights for x in X]\n\n# Simulated data\nX_train = [1, 2, 3, 4, 5]\ny_train = [2.5, 5.0, 7.5, 10.0, 12.5]\nX_test = [6, 7]\n\nmodel = MockLinearRegression()\nmodel.___(X_train, y_train)\npreds = model.___(X_test)\nprint(\"Predictions:\", preds)",
+        "solution": "class MockLinearRegression:\n    def __init__(self):\n        self.is_trained = False\n        self.weights = None\n        \n    def fit(self, X, y):\n        print(f\"Training model on {len(X)} samples...\")\n        self.is_trained = True\n        self.weights = 2.5 # Mock weight\n        \n    def predict(self, X):\n        if not self.is_trained:\n            raise Exception(\"Model must be fitted before predicting!\")\n        print(f\"Predicting for {len(X)} samples...\")\n        return [x * self.weights for x in X]\n\n# Simulated data\nX_train = [1, 2, 3, 4, 5]\ny_train = [2.5, 5.0, 7.5, 10.0, 12.5]\nX_test = [6, 7]\n\nmodel = MockLinearRegression()\nmodel.fit(X_train, y_train)\npreds = model.predict(X_test)\nprint(\"Predictions:\", preds)",
+        "hint": "is_trained becomes True after fitting. Call .fit() then .predict().",
+        "rubric": "Model trains and predicts. Predictions are [15.0, 17.5]."
       }
     ]
   },
@@ -2281,13 +2317,22 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for React Fundamentals.",
     "lessons": [
       {
-        "title": "React Fundamentals - Coming Soon",
-        "theory": "## React Fundamentals\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **React Fundamentals** is under development.",
-        "starterCode": "# React Fundamentals - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# React Fundamentals\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "What is React?",
+        "theory": "## Component-Based UI\nReact is a JavaScript library for building user interfaces. It uses **components** to break complex UIs into small, reusable pieces.\n\n```jsx\n// A functional component\nfunction Welcome(props) {\n  return <h1>Hello, {props.name}</h1>;\n}\n\n// Using the component\nfunction App() {\n  return (\n    <div>\n      <Welcome name=\"Alice\" />\n      <Welcome name=\"Bob\" />\n    </div>\n  );\n}\n```\n\nJSX allows you to write HTML-like syntax inside JavaScript.",
+        "instructions": "## Task: Create a React Component\n1. Define a `ProfileCard` functional component\n2. It should accept `props.username` and `props.bio`\n3. Return a simulated JSX string representing the UI",
+        "starterCode": "function ProfileCard(props) {\n  return `\n    <div class=\"card\">\n      <h2>${___}</h2>\n      <p>${___}</p>\n    </div>\n  `;\n}\n\nfunction App() {\n  const html1 = ProfileCard({ username: \"Coder99\", bio: \"I love React!\" });\n  const html2 = ProfileCard({ username: \"DesignGuru\", bio: \"CSS is my passion.\" });\n  \n  console.log(html1);\n  console.log(html2);\n}\n\nApp();",
+        "solution": "function ProfileCard(props) {\n  return `\n    <div class=\"card\">\n      <h2>${props.username}</h2>\n      <p>${props.bio}</p>\n    </div>\n  `;\n}\n\nfunction App() {\n  const html1 = ProfileCard({ username: \"Coder99\", bio: \"I love React!\" });\n  const html2 = ProfileCard({ username: \"DesignGuru\", bio: \"CSS is my passion.\" });\n  \n  console.log(html1);\n  console.log(html2);\n}\n\nApp();",
+        "hint": "Access props properties using props.propertyName.",
+        "rubric": "ProfileCard generates correct simulated HTML strings using props."
+      },
+      {
+        "title": "State (useState)",
+        "theory": "## Remembering Things\nComponents need to \"remember\" things: current input, whether a modal is open, or a counter value. This is called **state**.\n\n```jsx\nimport { useState } from 'react';\n\nfunction Counter() {\n  // stateVar, setterFunction = useState(initialValue)\n  const [count, setCount] = useState(0);\n\n  return (\n    <button onClick={() => setCount(count + 1)}>\n      Clicked {count} times\n    </button>\n  );\n}\n```\n\nWhen state changes, React re-renders the component automatically!",
+        "instructions": "## Task: State Simulator\n1. Create a `useState` mock function that returns a value and a setter\n2. Use it to simulate a counter component's logic\n3. Call the setter and see the value update",
+        "starterCode": "let internalState;\nfunction mockUseState(initial) {\n  if (internalState === undefined) internalState = initial;\n  \n  const setState = (newValue) => {\n    internalState = ___;\n    console.log(\"Re-rendering with new state:\", internalState);\n  };\n  \n  return [___, ___];\n}\n\n// Simulate component cycle\nlet [count, setCount] = mockUseState(0);\nconsole.log(\"Initial render count:\", count);\n\n// Simulate user clicking a button\nsetCount(count + 1);\n\n// Re-run hook after re-render\n[count, setCount] = mockUseState(0);\nconsole.log(\"Second render count:\", count);",
+        "solution": "let internalState;\nfunction mockUseState(initial) {\n  if (internalState === undefined) internalState = initial;\n  \n  const setState = (newValue) => {\n    internalState = newValue;\n    console.log(\"Re-rendering with new state:\", internalState);\n  };\n  \n  return [internalState, setState];\n}\n\n// Simulate component cycle\nlet [count, setCount] = mockUseState(0);\nconsole.log(\"Initial render count:\", count);\n\n// Simulate user clicking a button\nsetCount(count + 1);\n\n// Re-run hook after re-render\n[count, setCount] = mockUseState(0);\nconsole.log(\"Second render count:\", count);",
+        "hint": "Set internalState to newValue. Return [internalState, setState] array.",
+        "rubric": "State updates to 1. Re-render preserves state value (1, not 0)."
       }
     ]
   },

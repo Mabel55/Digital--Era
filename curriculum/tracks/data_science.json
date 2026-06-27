@@ -53,13 +53,22 @@
     "aiRubric": "Check logic, syntax, and output for Data Cleaning.",
     "lessons": [
       {
-        "title": "Data Cleaning - Coming Soon",
-        "theory": "## Data Cleaning\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Data Cleaning** is under development.",
-        "starterCode": "# Data Cleaning - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Data Cleaning\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Handling Missing Data",
+        "theory": "## Dirty Data\nReal-world data is messy. It has missing values (`NaN`), duplicates, and incorrect formats.\n\nPandas missing data methods:\n- `df.isna()`: Check for missing values\n- `df.dropna()`: Drop rows with missing values\n- `df.fillna(value)`: Fill missing values with a specific value or the mean",
+        "instructions": "## Task: Clean the Dataset\n1. Given a dataset with missing ages and scores\n2. Fill missing ages with the median age\n3. Drop rows that are missing a score",
+        "starterCode": "import pandas as pd\nimport numpy as np\n\ndf = pd.DataFrame({\n    'Name': ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve'],\n    'Age': [25, np.nan, 22, 28, np.nan],\n    'Score': [95, 82, np.nan, 73, 85]\n})\n\nprint(\"Original:\\n\", df)\n\n# 1. Fill missing Age with median\nmedian_age = df['Age'].___()\ndf['Age'] = df['Age'].___(median_age)\n\n# 2. Drop rows missing Score\ndf = df.___subset=['Score'])\n\nprint(\"\\nCleaned:\\n\", df)",
+        "solution": "import pandas as pd\nimport numpy as np\n\ndf = pd.DataFrame({\n    'Name': ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve'],\n    'Age': [25, np.nan, 22, 28, np.nan],\n    'Score': [95, 82, np.nan, 73, 85]\n})\n\nprint(\"Original:\\n\", df)\n\n# 1. Fill missing Age with median\nmedian_age = df['Age'].median()\ndf['Age'] = df['Age'].fillna(median_age)\n\n# 2. Drop rows missing Score\ndf = df.dropna(subset=['Score'])\n\nprint(\"\\nCleaned:\\n\", df)",
+        "hint": ".median() calculates median. .fillna() fills NaNs. .dropna() removes NaNs.",
+        "rubric": "Missing ages filled with 25.0. Charlie's row dropped due to missing score."
+      },
+      {
+        "title": "Removing Duplicates",
+        "theory": "## Duplicate Records\nDuplicates can skew your analysis and ML models.\n\n```python\n# Check for duplicates\ndf.duplicated()\n\n# Drop duplicates\ndf.drop_duplicates(inplace=True)\n\n# Drop duplicates based on specific columns\ndf.drop_duplicates(subset=['Email'], keep='last')\n```",
+        "instructions": "## Task: Deduplication\n1. Find and remove duplicate users based on their 'ID' column\n2. Keep the 'last' occurrence of the duplicate (most recent data)",
+        "starterCode": "import pandas as pd\n\ndf = pd.DataFrame({\n    'ID': [1, 2, 1, 3, 2],\n    'Name': ['Alice', 'Bob', 'Alice_Old', 'Charlie', 'Bob_Updated'],\n    'Score': [90, 80, 85, 95, 82]\n})\n\nprint(\"Original Size:\", len(df))\n\n# Drop duplicates based on ID, keep last\ndf_clean = df.___(___=['ID'], keep='___')\n\nprint(\"Cleaned Size:\", len(df_clean))\nprint(df_clean)",
+        "solution": "import pandas as pd\n\ndf = pd.DataFrame({\n    'ID': [1, 2, 1, 3, 2],\n    'Name': ['Alice', 'Bob', 'Alice_Old', 'Charlie', 'Bob_Updated'],\n    'Score': [90, 80, 85, 95, 82]\n})\n\nprint(\"Original Size:\", len(df))\n\n# Drop duplicates based on ID, keep last\ndf_clean = df.drop_duplicates(subset=['ID'], keep='last')\n\nprint(\"Cleaned Size:\", len(df_clean))\nprint(df_clean)",
+        "hint": ".drop_duplicates(subset=['ColName'], keep='last')",
+        "rubric": "Dataframe drops to 3 rows. Keeps Alice_Old (ID 1) and Bob_Updated (ID 2)."
       }
     ]
   },
@@ -95,13 +104,13 @@
     "aiRubric": "Check logic, syntax, and output for Scikit-Learn.",
     "lessons": [
       {
-        "title": "Scikit-Learn - Coming Soon",
-        "theory": "## Scikit-Learn\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Scikit-Learn** is under development.",
-        "starterCode": "# Scikit-Learn - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Scikit-Learn\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Intro to Machine Learning",
+        "theory": "## Scikit-Learn (sklearn)\nThe standard machine learning library for Python. It provides simple and efficient tools for predictive data analysis.\n\nWorkflow:\n1. Prepare data (X = features, y = target)\n2. Split into train/test sets\n3. Initialize a model (e.g., `LinearRegression()`)\n4. Fit the model to training data (`model.fit(X_train, y_train)`)\n5. Make predictions (`model.predict(X_test)`)\n6. Evaluate accuracy",
+        "instructions": "## Task: ML Workflow Simulation\n1. Create a mock class for a Scikit-Learn model\n2. Implement `fit` and `predict` methods\n3. Simulate training and predicting",
+        "starterCode": "class MockLinearRegression:\n    def __init__(self):\n        self.is_trained = False\n        self.weights = None\n        \n    def fit(self, X, y):\n        print(f\"Training model on {len(X)} samples...\")\n        self.is_trained = ___\n        self.weights = 2.5 # Mock weight\n        \n    def predict(self, X):\n        if not self.___:\n            raise Exception(\"Model must be fitted before predicting!\")\n        print(f\"Predicting for {len(X)} samples...\")\n        return [x * self.weights for x in X]\n\n# Simulated data\nX_train = [1, 2, 3, 4, 5]\ny_train = [2.5, 5.0, 7.5, 10.0, 12.5]\nX_test = [6, 7]\n\nmodel = MockLinearRegression()\nmodel.___(X_train, y_train)\npreds = model.___(X_test)\nprint(\"Predictions:\", preds)",
+        "solution": "class MockLinearRegression:\n    def __init__(self):\n        self.is_trained = False\n        self.weights = None\n        \n    def fit(self, X, y):\n        print(f\"Training model on {len(X)} samples...\")\n        self.is_trained = True\n        self.weights = 2.5 # Mock weight\n        \n    def predict(self, X):\n        if not self.is_trained:\n            raise Exception(\"Model must be fitted before predicting!\")\n        print(f\"Predicting for {len(X)} samples...\")\n        return [x * self.weights for x in X]\n\n# Simulated data\nX_train = [1, 2, 3, 4, 5]\ny_train = [2.5, 5.0, 7.5, 10.0, 12.5]\nX_test = [6, 7]\n\nmodel = MockLinearRegression()\nmodel.fit(X_train, y_train)\npreds = model.predict(X_test)\nprint(\"Predictions:\", preds)",
+        "hint": "is_trained becomes True after fitting. Call .fit() then .predict().",
+        "rubric": "Model trains and predicts. Predictions are [15.0, 17.5]."
       }
     ]
   },

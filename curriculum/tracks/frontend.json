@@ -153,13 +153,22 @@
     "aiRubric": "Check logic, syntax, and output for React Fundamentals.",
     "lessons": [
       {
-        "title": "React Fundamentals - Coming Soon",
-        "theory": "## React Fundamentals\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **React Fundamentals** is under development.",
-        "starterCode": "# React Fundamentals - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# React Fundamentals\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "What is React?",
+        "theory": "## Component-Based UI\nReact is a JavaScript library for building user interfaces. It uses **components** to break complex UIs into small, reusable pieces.\n\n```jsx\n// A functional component\nfunction Welcome(props) {\n  return <h1>Hello, {props.name}</h1>;\n}\n\n// Using the component\nfunction App() {\n  return (\n    <div>\n      <Welcome name=\"Alice\" />\n      <Welcome name=\"Bob\" />\n    </div>\n  );\n}\n```\n\nJSX allows you to write HTML-like syntax inside JavaScript.",
+        "instructions": "## Task: Create a React Component\n1. Define a `ProfileCard` functional component\n2. It should accept `props.username` and `props.bio`\n3. Return a simulated JSX string representing the UI",
+        "starterCode": "function ProfileCard(props) {\n  return `\n    <div class=\"card\">\n      <h2>${___}</h2>\n      <p>${___}</p>\n    </div>\n  `;\n}\n\nfunction App() {\n  const html1 = ProfileCard({ username: \"Coder99\", bio: \"I love React!\" });\n  const html2 = ProfileCard({ username: \"DesignGuru\", bio: \"CSS is my passion.\" });\n  \n  console.log(html1);\n  console.log(html2);\n}\n\nApp();",
+        "solution": "function ProfileCard(props) {\n  return `\n    <div class=\"card\">\n      <h2>${props.username}</h2>\n      <p>${props.bio}</p>\n    </div>\n  `;\n}\n\nfunction App() {\n  const html1 = ProfileCard({ username: \"Coder99\", bio: \"I love React!\" });\n  const html2 = ProfileCard({ username: \"DesignGuru\", bio: \"CSS is my passion.\" });\n  \n  console.log(html1);\n  console.log(html2);\n}\n\nApp();",
+        "hint": "Access props properties using props.propertyName.",
+        "rubric": "ProfileCard generates correct simulated HTML strings using props."
+      },
+      {
+        "title": "State (useState)",
+        "theory": "## Remembering Things\nComponents need to \"remember\" things: current input, whether a modal is open, or a counter value. This is called **state**.\n\n```jsx\nimport { useState } from 'react';\n\nfunction Counter() {\n  // stateVar, setterFunction = useState(initialValue)\n  const [count, setCount] = useState(0);\n\n  return (\n    <button onClick={() => setCount(count + 1)}>\n      Clicked {count} times\n    </button>\n  );\n}\n```\n\nWhen state changes, React re-renders the component automatically!",
+        "instructions": "## Task: State Simulator\n1. Create a `useState` mock function that returns a value and a setter\n2. Use it to simulate a counter component's logic\n3. Call the setter and see the value update",
+        "starterCode": "let internalState;\nfunction mockUseState(initial) {\n  if (internalState === undefined) internalState = initial;\n  \n  const setState = (newValue) => {\n    internalState = ___;\n    console.log(\"Re-rendering with new state:\", internalState);\n  };\n  \n  return [___, ___];\n}\n\n// Simulate component cycle\nlet [count, setCount] = mockUseState(0);\nconsole.log(\"Initial render count:\", count);\n\n// Simulate user clicking a button\nsetCount(count + 1);\n\n// Re-run hook after re-render\n[count, setCount] = mockUseState(0);\nconsole.log(\"Second render count:\", count);",
+        "solution": "let internalState;\nfunction mockUseState(initial) {\n  if (internalState === undefined) internalState = initial;\n  \n  const setState = (newValue) => {\n    internalState = newValue;\n    console.log(\"Re-rendering with new state:\", internalState);\n  };\n  \n  return [internalState, setState];\n}\n\n// Simulate component cycle\nlet [count, setCount] = mockUseState(0);\nconsole.log(\"Initial render count:\", count);\n\n// Simulate user clicking a button\nsetCount(count + 1);\n\n// Re-run hook after re-render\n[count, setCount] = mockUseState(0);\nconsole.log(\"Second render count:\", count);",
+        "hint": "Set internalState to newValue. Return [internalState, setState] array.",
+        "rubric": "State updates to 1. Re-render preserves state value (1, not 0)."
       }
     ]
   },
