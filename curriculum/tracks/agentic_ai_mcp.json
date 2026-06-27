@@ -31,13 +31,13 @@
     "aiRubric": "Check logic, syntax, and output for MCP Intro.",
     "lessons": [
       {
-        "title": "MCP Intro - Coming Soon",
-        "theory": "## MCP Intro\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **MCP Intro** is under development.",
-        "starterCode": "# MCP Intro - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# MCP Intro\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Model Context Protocol",
+        "theory": "## Connecting AI to Tools\nThe Model Context Protocol (MCP) is an open standard that enables AI models to securely connect to external data sources and tools.\n\nInstead of hardcoding every integration (like Slack, GitHub, Database) directly into an AI, MCP provides a universal bridge. The AI connects to an MCP Server, which handles the specific API calls.",
+        "instructions": "## Task: The Protocol Bridge\n1. Identify the 3 main components of the MCP architecture.\n2. Create a dictionary matching them: 'MCP Client', 'MCP Server', 'External Data Source'.",
+        "starterCode": "mcp_architecture = {\n    'The AI application (like Claude Desktop or an Agent)': '___',\n    'The bridge that translates standard MCP requests into specific API calls': '___',\n    'The actual system (like GitHub or a SQL database)': '___'\n}\n\nfor desc, component in mcp_architecture.items():\n    print(f\"{component:25} -> {desc}\")",
+        "solution": "mcp_architecture = {\n    'The AI application (like Claude Desktop or an Agent)': 'MCP Client',\n    'The bridge that translates standard MCP requests into specific API calls': 'MCP Server',\n    'The actual system (like GitHub or a SQL database)': 'External Data Source'\n}\n\nfor desc, component in mcp_architecture.items():\n    print(f\"{component:25} -> {desc}\")",
+        "hint": "Client is the AI. Server is the bridge. External Data Source is the system.",
+        "rubric": "Architecture components correctly mapped to their descriptions."
       }
     ]
   },
@@ -45,13 +45,13 @@
     "aiRubric": "Check logic, syntax, and output for ReAct Prompting.",
     "lessons": [
       {
-        "title": "ReAct Prompting - Coming Soon",
-        "theory": "## ReAct Prompting\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **ReAct Prompting** is under development.",
-        "starterCode": "# ReAct Prompting - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# ReAct Prompting\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Reasoning and Acting",
+        "theory": "## Think, Then Act\nReAct (Reasoning and Acting) is a prompting framework that forces the LLM to explain its thought process *before* it takes an action.\n\n`Thought: I need to find the capital of France.`\n`Action: Search[Capital of France]`\n`Observation: Paris is the capital.`\n`Thought: Now I have the answer.`\n`Final Answer: The capital is Paris.`",
+        "instructions": "## Task: ReAct Parser\n1. Write a function that parses a ReAct output string.\n2. Extract the 'Thought' and the 'Action'.",
+        "starterCode": "def parse_react(text):\n    lines = text.split('\\n')\n    thought = None\n    action = None\n    \n    for line in lines:\n        if line.startswith('Thought: '):\n            thought = line.split('Thought: ')[___]\n        elif line.startswith('Action: '):\n            action = line.split('Action: ')[___]\n            \n    return thought, action\n\noutput = \"\"\"Thought: I need to check the weather in Tokyo.\nAction: WeatherAPI[Tokyo]\nObservation: 75F and sunny.\"\"\"\n\nt, a = parse_react(output)\nprint(\"Extracted Thought:\", t)\nprint(\"Extracted Action:\", a)",
+        "solution": "def parse_react(text):\n    lines = text.split('\\n')\n    thought = None\n    action = None\n    \n    for line in lines:\n        if line.startswith('Thought: '):\n            thought = line.split('Thought: ')[1]\n        elif line.startswith('Action: '):\n            action = line.split('Action: ')[1]\n            \n    return thought, action\n\noutput = \"\"\"Thought: I need to check the weather in Tokyo.\nAction: WeatherAPI[Tokyo]\nObservation: 75F and sunny.\"\"\"\n\nt, a = parse_react(output)\nprint(\"Extracted Thought:\", t)\nprint(\"Extracted Action:\", a)",
+        "hint": "Use index [1] to get the second part of the split string.",
+        "rubric": "Successfully extracts 'I need to check the weather in Tokyo.' and 'WeatherAPI[Tokyo]'."
       }
     ]
   },
@@ -73,13 +73,13 @@
     "aiRubric": "Check logic, syntax, and output for MCP Servers.",
     "lessons": [
       {
-        "title": "MCP Servers - Coming Soon",
-        "theory": "## MCP Servers\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **MCP Servers** is under development.",
-        "starterCode": "# MCP Servers - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# MCP Servers\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Building an MCP Server",
+        "theory": "## Exposing Tools\nAn MCP Server exposes 'Resources', 'Prompts', and 'Tools' to the MCP Client.\n\n- **Resources**: Static data (e.g., read a file).\n- **Prompts**: Reusable prompt templates.\n- **Tools**: Functions the AI can execute (e.g., run a bash command, query a database).",
+        "instructions": "## Task: Tool Definition\n1. Define a mock MCP Tool in JSON format.\n2. The tool is named 'calculator', it takes two 'number' inputs (a and b), and returns a number.",
+        "starterCode": "import json\n\nmock_tool_definition = {\n    \"name\": \"calculator\",\n    \"description\": \"Adds two numbers together.\",\n    \"inputSchema\": {\n        \"type\": \"object\",\n        \"properties\": {\n            \"a\": {\"type\": \"___\"},\n            \"b\": {\"type\": \"___\"}\n        },\n        \"required\": [\"a\", \"b\"]\n    }\n}\n\nprint(json.dumps(mock_tool_definition, indent=2))",
+        "solution": "import json\n\nmock_tool_definition = {\n    \"name\": \"calculator\",\n    \"description\": \"Adds two numbers together.\",\n    \"inputSchema\": {\n        \"type\": \"object\",\n        \"properties\": {\n            \"a\": {\"type\": \"number\"},\n            \"b\": {\"type\": \"number\"}\n        },\n        \"required\": [\"a\", \"b\"]\n    }\n}\n\nprint(json.dumps(mock_tool_definition, indent=2))",
+        "hint": "The type should be 'number'.",
+        "rubric": "Tool schema is correctly defined with 'number' types."
       }
     ]
   },

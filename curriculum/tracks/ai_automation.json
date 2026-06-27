@@ -3,13 +3,13 @@
     "aiRubric": "Check logic, syntax, and output for Zapier Basics.",
     "lessons": [
       {
-        "title": "Zapier Basics - Coming Soon",
-        "theory": "## Zapier Basics\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Zapier Basics** is under development.",
-        "starterCode": "# Zapier Basics - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Zapier Basics\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "No-Code Automation",
+        "theory": "## Triggers and Actions\nZapier connects thousands of apps without writing code.\n\nA Zap consists of:\n- **Trigger**: The event that starts the automation (e.g., \"When a new row is added to Google Sheets\").\n- **Action(s)**: What happens next (e.g., \"Send a message in Slack\").",
+        "instructions": "## Task: Mock Zap Runner\n1. Simulate a Zap.\n2. When a trigger event occurs, execute all actions in order.",
+        "starterCode": "class MockZap:\n    def __init__(self, trigger_name):\n        self.trigger = trigger_name\n        self.actions = []\n        \n    def add_action(self, action_func):\n        self.actions.___(action_func)\n        \n    def run(self, data):\n        print(f\"--- Zap Triggered by: {self.trigger} ---\")\n        print(f\"Data: {data}\")\n        for action in self.___:\n            action(data)\n\ndef send_slack(data):\n    print(f\"[Slack] New Lead: {data['name']}\")\n\ndef add_to_crm(data):\n    print(f\"[CRM] Added {data['name']} to Sales Pipeline.\")\n\nzap = MockZap(\"New Google Sheet Row\")\nzap.add_action(___)\nzap.add_action(___)\n\n# Trigger event happens\nzap.run({'name': 'Alice Smith', 'email': 'alice@example.com'})",
+        "solution": "class MockZap:\n    def __init__(self, trigger_name):\n        self.trigger = trigger_name\n        self.actions = []\n        \n    def add_action(self, action_func):\n        self.actions.append(action_func)\n        \n    def run(self, data):\n        print(f\"--- Zap Triggered by: {self.trigger} ---\")\n        print(f\"Data: {data}\")\n        for action in self.actions:\n            action(data)\n\ndef send_slack(data):\n    print(f\"[Slack] New Lead: {data['name']}\")\n\ndef add_to_crm(data):\n    print(f\"[CRM] Added {data['name']} to Sales Pipeline.\")\n\nzap = MockZap(\"New Google Sheet Row\")\nzap.add_action(send_slack)\nzap.add_action(add_to_crm)\n\n# Trigger event happens\nzap.run({'name': 'Alice Smith', 'email': 'alice@example.com'})",
+        "hint": "append action_func. Loop over self.actions. Pass send_slack and add_to_crm.",
+        "rubric": "Zap successfully triggers the Slack and CRM functions in order."
       }
     ]
   },
@@ -73,13 +73,13 @@
     "aiRubric": "Check logic, syntax, and output for Custom Webhooks.",
     "lessons": [
       {
-        "title": "Custom Webhooks - Coming Soon",
-        "theory": "## Custom Webhooks\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Custom Webhooks** is under development.",
-        "starterCode": "# Custom Webhooks - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Custom Webhooks\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Connecting to APIs",
+        "theory": "## Webhooks Overview\nWebhooks are automated messages sent from apps when something happens. They have a payload (usually JSON) and are sent to a unique URL.",
+        "instructions": "## Task: Handle Incoming Webhook\n1. Write a function that acts as a webhook receiver.\n2. It must verify that the payload contains an 'event_type'.",
+        "starterCode": "def handle_webhook(payload):\n    if '___' not in payload:\n        return \"Error: Missing event type\"\n        \n    event = payload['___']\n    if event == 'user_signup':\n        return \"Processed new user!\"\n    else:\n        return f\"Ignored event: {event}\"\n\nprint(handle_webhook({'event_type': 'user_signup', 'email': 'test@test.com'}))\nprint(handle_webhook({'data': 'no event type'}))",
+        "solution": "def handle_webhook(payload):\n    if 'event_type' not in payload:\n        return \"Error: Missing event type\"\n        \n    event = payload['event_type']\n    if event == 'user_signup':\n        return \"Processed new user!\"\n    else:\n        return f\"Ignored event: {event}\"\n\nprint(handle_webhook({'event_type': 'user_signup', 'email': 'test@test.com'}))\nprint(handle_webhook({'data': 'no event type'}))",
+        "hint": "Check for 'event_type'.",
+        "rubric": "Correctly processes the signup and rejects the missing type."
       }
     ]
   },
@@ -87,13 +87,13 @@
     "aiRubric": "Check logic, syntax, and output for Enterprise AI Bots.",
     "lessons": [
       {
-        "title": "Enterprise AI Bots - Coming Soon",
-        "theory": "## Enterprise AI Bots\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Enterprise AI Bots** is under development.",
-        "starterCode": "# Enterprise AI Bots - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Enterprise AI Bots\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Internal Knowledge Base",
+        "theory": "## RAG in the Enterprise\nEnterprises don't want to upload their secret documents to public AI models. They build internal RAG pipelines using private vector databases.",
+        "instructions": "## Task: Document Access Control\n1. Before returning a RAG document, verify the user has the correct role.",
+        "starterCode": "docs = {\n    'doc1': {'text': 'Company Holiday Schedule', 'required_role': 'employee'},\n    'doc2': {'text': 'Q3 Financial Projections', 'required_role': 'exec'}\n}\n\ndef rag_search(doc_id, user_role):\n    doc = docs.get(doc_id)\n    if not doc:\n        return \"Doc not found\"\n        \n    if doc['required_role'] == 'exec' and user_role != '___':\n        return \"Access Denied\"\n        \n    return doc['text']\n\nprint(\"Employee asking for Q3:\", rag_search('doc2', 'employee'))\nprint(\"Exec asking for Q3:\", rag_search('doc2', 'exec'))",
+        "solution": "docs = {\n    'doc1': {'text': 'Company Holiday Schedule', 'required_role': 'employee'},\n    'doc2': {'text': 'Q3 Financial Projections', 'required_role': 'exec'}\n}\n\ndef rag_search(doc_id, user_role):\n    doc = docs.get(doc_id)\n    if not doc:\n        return \"Doc not found\"\n        \n    if doc['required_role'] == 'exec' and user_role != 'exec':\n        return \"Access Denied\"\n        \n    return doc['text']\n\nprint(\"Employee asking for Q3:\", rag_search('doc2', 'employee'))\nprint(\"Exec asking for Q3:\", rag_search('doc2', 'exec'))",
+        "hint": "Check if user_role != 'exec'.",
+        "rubric": "Access is denied to the employee and granted to the exec."
       }
     ]
   },
@@ -101,13 +101,13 @@
     "aiRubric": "Check logic, syntax, and output for Voice AI Agents.",
     "lessons": [
       {
-        "title": "Voice AI Agents - Coming Soon",
-        "theory": "## Voice AI Agents\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Voice AI Agents** is under development.",
-        "starterCode": "# Voice AI Agents - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Voice AI Agents\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Speech-to-Text Pipelines",
+        "theory": "## STT -> LLM -> TTS\nA Voice AI consists of:\n1. **Speech-to-Text (STT)**: Whisper converts audio to text.\n2. **LLM**: Processes text and generates a response.\n3. **Text-to-Speech (TTS)**: ElevenLabs converts response text back to audio.",
+        "instructions": "## Task: Voice Pipeline Mock\n1. Simulate the three steps of a voice agent.",
+        "starterCode": "def stt_mock(audio_bytes):\n    return \"What time is it?\"\n    \ndef llm_mock(text):\n    return \"It is 3 PM.\"\n    \ndef tts_mock(text):\n    return f\"[AUDIO DATA of '{text}']\"\n\ndef run_voice_agent(audio_input):\n    user_text = ___(audio_input)\n    ai_response = ___(user_text)\n    audio_output = ___(ai_response)\n    return audio_output\n\nprint(run_voice_agent(\"[USER AUDIO BYTES]\"))",
+        "solution": "def stt_mock(audio_bytes):\n    return \"What time is it?\"\n    \ndef llm_mock(text):\n    return \"It is 3 PM.\"\n    \ndef tts_mock(text):\n    return f\"[AUDIO DATA of '{text}']\"\n\ndef run_voice_agent(audio_input):\n    user_text = stt_mock(audio_input)\n    ai_response = llm_mock(user_text)\n    audio_output = tts_mock(ai_response)\n    return audio_output\n\nprint(run_voice_agent(\"[USER AUDIO BYTES]\"))",
+        "hint": "Call stt, then llm, then tts in order.",
+        "rubric": "Successfully simulates the STT -> LLM -> TTS flow."
       }
     ]
   },

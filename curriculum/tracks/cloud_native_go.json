@@ -35,13 +35,13 @@
     "aiRubric": "Check logic, syntax, and output for Structs & Interfaces.",
     "lessons": [
       {
-        "title": "Structs & Interfaces - Coming Soon",
-        "theory": "## Structs & Interfaces\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Structs & Interfaces** is under development.",
-        "starterCode": "# Structs & Interfaces - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Structs & Interfaces\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Object-Oriented Go?",
+        "theory": "## Structs over Classes\nGo doesn't have classes. It has `structs` (custom data types) and `interfaces` (behavior contracts).\n\n```go\ntype Animal interface {\n    Speak() string\n}\n\ntype Dog struct {}\nfunc (d Dog) Speak() string { return \"Woof\" }\n```",
+        "instructions": "## Task: Implement an Interface\n1. Create a `Circle` struct.\n2. Implement the `Shape` interface's `Area` method.",
+        "starterCode": "// Go pseudocode syntax for understanding\ntype Shape interface {\n    Area() float64\n}\n\ntype Circle struct {\n    Radius float64\n}\n\n// Method receiver attached to Circle\nfunc (c ___) Area() float64 {\n    return 3.14 * c.Radius * c.Radius\n}\n\nfunc main() {\n    c := Circle{Radius: 5}\n    print(\"Area:\", c.Area())\n}\n\n// PYTHON SIMULATOR\nclass Circle:\n    def __init__(self, r): self.Radius = r\n    def Area(self): return 3.14 * self.Radius ** 2\n\nprint(\"Python output:\", Circle(5).Area())",
+        "solution": "// Go pseudocode syntax for understanding\ntype Shape interface {\n    Area() float64\n}\n\ntype Circle struct {\n    Radius float64\n}\n\n// Method receiver attached to Circle\nfunc (c Circle) Area() float64 {\n    return 3.14 * c.Radius * c.Radius\n}\n\nfunc main() {\n    c := Circle{Radius: 5}\n    print(\"Area:\", c.Area())\n}\n\n// PYTHON SIMULATOR\nclass Circle:\n    def __init__(self, r): self.Radius = r\n    def Area(self): return 3.14 * self.Radius ** 2\n\nprint(\"Python output:\", Circle(5).Area())",
+        "hint": "The method receiver needs the struct name 'Circle'.",
+        "rubric": "Go pseudocode demonstrates a proper method receiver for the interface."
       }
     ]
   },
@@ -72,13 +72,13 @@
     "aiRubric": "Check logic, syntax, and output for Go Web Servers.",
     "lessons": [
       {
-        "title": "Go Web Servers - Coming Soon",
-        "theory": "## Go Web Servers\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Go Web Servers** is under development.",
-        "starterCode": "# Go Web Servers - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Go Web Servers\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "net/http",
+        "theory": "## Built-in Web Servers\nGo's standard library `net/http` is incredibly powerful. You often don't even need a framework to build a fast web server.",
+        "instructions": "## Task: Simple HTTP Handler\n1. Write a basic HTTP handler function that writes 'Hello Go' to the response.",
+        "starterCode": "/*\npackage main\n\nimport (\n    \"fmt\"\n    \"net/http\"\n)\n\nfunc handler(w http.ResponseWriter, r *http.Request) {\n    fmt.Fprintf(___, \"Hello Go\")\n}\n\nfunc main() {\n    http.HandleFunc(\"/\", ___)\n    http.ListenAndServe(\":8080\", nil)\n}\n*/\nprint(\"Review the Go code in comments!\")",
+        "solution": "/*\npackage main\n\nimport (\n    \"fmt\"\n    \"net/http\"\n)\n\nfunc handler(w http.ResponseWriter, r *http.Request) {\n    fmt.Fprintf(w, \"Hello Go\")\n}\n\nfunc main() {\n    http.HandleFunc(\"/\", handler)\n    http.ListenAndServe(\":8080\", nil)\n}\n*/\nprint(\"Review the Go code in comments!\")",
+        "hint": "Use 'w' for ResponseWriter and pass 'handler' to HandleFunc.",
+        "rubric": "Go pseudocode correctly defines a basic net/http handler."
       }
     ]
   },
@@ -109,13 +109,13 @@
     "aiRubric": "Check logic, syntax, and output for Kubernetes Basics.",
     "lessons": [
       {
-        "title": "Kubernetes Basics - Coming Soon",
-        "theory": "## Kubernetes Basics\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Kubernetes Basics** is under development.",
-        "starterCode": "# Kubernetes Basics - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Kubernetes Basics\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Orchestrating Containers",
+        "theory": "## Managing Docker at Scale\nIf you have 1 container, use Docker. If you have 10,000 containers across 50 servers, use Kubernetes (K8s).\n\n- **Pod**: The smallest unit in K8s (usually contains 1 container).\n- **Deployment**: Manages Pods (e.g., \"Make sure exactly 3 copies of my API pod are always running\").\n- **Service**: Gives a stable IP address so other parts of the app can talk to the Pods.",
+        "instructions": "## Task: YAML Matcher\n1. Match the K8s object type to its role.\n2. Roles: 'Pod', 'Deployment', 'Service'",
+        "starterCode": "k8s_objects = {\n    'Provides a stable network IP for internal communication': '___',\n    'Ensures exactly N replicas are running at all times': '___',\n    'The actual running container(s)': '___'\n}\n\nfor desc, obj in k8s_objects.items():\n    print(f\"{obj:15}: {desc}\")",
+        "solution": "k8s_objects = {\n    'Provides a stable network IP for internal communication': 'Service',\n    'Ensures exactly N replicas are running at all times': 'Deployment',\n    'The actual running container(s)': 'Pod'\n}\n\nfor desc, obj in k8s_objects.items():\n    print(f\"{obj:15}: {desc}\")",
+        "hint": "Service for Network. Deployment for Replicas. Pod for Container.",
+        "rubric": "Objects correctly mapped to their roles."
       }
     ]
   },
