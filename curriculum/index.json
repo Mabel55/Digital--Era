@@ -73,7 +73,8 @@
       "Microservices",
       "WebSockets",
       "Message Queues & Kafka",
-      "gRPC & Protocol Buffers"
+      "gRPC & Protocol Buffers",
+      "Advanced Authentication & Security"
     ]
   },
   "SQL & Databases": {
