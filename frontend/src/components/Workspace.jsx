@@ -26,8 +26,37 @@ const Workspace = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [quizResult, setQuizResult] = useState(null);
   const [showStory, setShowStory] = useState(true); // Story Mode State
+  const [pyodide, setPyodide] = useState(null);
   
   const chatEndRef = useRef(null);
+
+  useEffect(() => {
+    const loadPyodideScript = async () => {
+      if (!document.getElementById('pyodide-script')) {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js';
+        script.id = 'pyodide-script';
+        script.async = true;
+        document.body.appendChild(script);
+        
+        script.onload = async () => {
+          try {
+            const pyodideInstance = await window.loadPyodide();
+            pyodideInstance.runPython(`
+              import sys
+              import io
+              sys.stdout = io.StringIO()
+            `);
+            setPyodide(pyodideInstance);
+            console.log("Pyodide loaded successfully.");
+          } catch (e) {
+            console.error("Pyodide load failed", e);
+          }
+        };
+      }
+    };
+    loadPyodideScript();
+  }, []);
 
   useEffect(() => {
     if (manifest && manifest.lessons.length > 0) {
@@ -60,17 +89,84 @@ const Workspace = () => {
     return 'python'; // Default
   };
 
+  const triggerProgressUpdate = async () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        try {
+            const progressRes = await fetch('/users/me/progress', {
+                method: 'POST',
+                headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` 
+                },
+                body: JSON.stringify({ 
+                course_name: courseName, 
+                lesson_index: currentLessonIdx 
+                })
+            });
+            
+            if (progressRes.ok) {
+                const userData = await progressRes.json();
+                setTerminalOutput(prev => prev + `\n\n🎉 Lesson Passed! +10 XP Awarded! You are now level: ${userData.level}`);
+            }
+        } catch (e) {
+            console.error("Failed to update progress", e);
+        }
+    }
+  };
+
   const handleRunCode = async () => {
     setIsRunning(true);
     setTerminalOutput('Executing...');
     setTerminalClass('');
     setHasError(false);
     
+    const lang = determineLanguage();
+
     try {
+      // 1. PYTHON CLIENT-SIDE (PYODIDE)
+      if (lang === 'python' && pyodide) {
+        try {
+          pyodide.runPython("sys.stdout = io.StringIO()");
+          pyodide.runPython(code);
+          const stdout = pyodide.runPython("sys.stdout.getvalue()");
+          setTerminalOutput(stdout || "No output.");
+          setTerminalClass('success');
+          triggerProgressUpdate();
+        } catch (err) {
+          setTerminalOutput(err.toString());
+          setTerminalClass('error');
+          setHasError(true);
+        }
+        setIsRunning(false);
+        return;
+      }
+      
+      // 2. JAVASCRIPT CLIENT-SIDE
+      if (lang === 'javascript') {
+        try {
+            let logs = [];
+            const originalLog = console.log;
+            console.log = (...args) => { logs.push(args.join(' ')); };
+            new Function(code)();
+            console.log = originalLog;
+            setTerminalOutput(logs.join('\n') || "No output.");
+            setTerminalClass('success');
+            triggerProgressUpdate();
+        } catch (err) {
+            setTerminalOutput(err.toString());
+            setTerminalClass('error');
+            setHasError(true);
+        }
+        setIsRunning(false);
+        return;
+      }
+
+      // 3. FALLBACK TO BACKEND DOCKER (C, SQL, Go, etc.)
       const res = await fetch('/run-code/', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code, language: determineLanguage() })
+        body: JSON.stringify({ code, language: lang })
       });
       const data = await res.json();
       
@@ -85,33 +181,11 @@ const Workspace = () => {
         setHasError(codeHasError);
         
         if (!codeHasError) {
-          const token = localStorage.getItem('token');
-          if (token) {
-            try {
-              const progressRes = await fetch('/users/me/progress', {
-                method: 'POST',
-                headers: { 
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${token}` 
-                },
-                body: JSON.stringify({ 
-                  course_name: courseName, 
-                  lesson_index: currentLessonIdx 
-                })
-              });
-              
-              if (progressRes.ok) {
-                const userData = await progressRes.json();
-                setTerminalOutput(prev => prev + `\n\n🎉 Lesson Passed! +10 XP Awarded! You are now level: ${userData.level}`);
-              }
-            } catch (e) {
-              console.error("Failed to update progress", e);
-            }
-          }
+          triggerProgressUpdate();
         }
       }
     } catch (err) {
-      setTerminalOutput("Execution failed. Ensure Docker is running.");
+      setTerminalOutput("Execution failed. Ensure backend/Docker is running.");
       setTerminalClass('error');
       setHasError(true);
     } finally {
