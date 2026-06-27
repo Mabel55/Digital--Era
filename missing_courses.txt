@@ -1,0 +1,125 @@
+MCP Intro
+ReAct Prompting
+Memory Systems
+MCP Servers
+Swarm Architectures
+Autonomous Execution
+Evaluation
+Zapier Basics
+Make.com Workflows
+API Connections
+Automated Content
+Email Automation
+Custom Webhooks
+Enterprise AI Bots
+Voice AI Agents
+Multi-Agent Systems
+OpenAI API
+RAG Architecture
+Vector Databases
+LangChain
+Fine-tuning Models
+AI Agents
+Evaluating AI Output
+Database Integration
+Authentication
+RESTful Design
+GraphQL
+Microservices
+WebSockets
+AWS Basics
+EC2 & S3
+Linux Fundamentals
+Terraform
+CI/CD Pipelines
+Monitoring & Logging
+Serverless
+Security Groups
+Cost Optimization
+Structs & Interfaces
+Go Web Servers
+Kubernetes Basics
+gRPC
+Service Meshes
+Cloud Operators
+Image Processing
+OpenCV Basics
+Neural Networks Intro
+PyTorch Tensors
+CNN Architecture
+Transfer Learning
+Object Detection
+GANs
+Vision Transformers
+Dynamic Memory
+Structs & Unions
+File Handling
+Data Structures in C
+Bit Manipulation
+System Calls
+Data Warehouses
+Apache Airflow
+Apache Spark
+Kafka Streaming
+ML Model Tracking
+Model Deployment
+Drift Detection
+Feature Stores
+Data Cleaning
+Matplotlib
+Statistical Analysis
+Scikit-Learn
+Feature Engineering
+Time Series
+NLP Basics
+Advanced ML Models
+Stacks & Queues
+Trees & Graphs
+Sorting Algorithms
+Dynamic Programming
+Tries
+Graph Traversal
+React Fundamentals
+State Management
+CSS Grid & Flexbox
+Next.js
+Frontend Performance
+Web Accessibility
+UI Components
+Navigation
+Device APIs
+Local Storage
+Animations
+App Deployment
+Native Modules
+Performance Profiling
+Aggregations
+Subqueries
+Database Design
+Indexing
+Stored Procedures
+Query Optimization
+Rust Basics
+Ownership & Borrowing
+Memory Safety
+Concurrency
+File Systems
+Macros
+Unsafe Rust
+FFI
+Network Programming
+Client-Server Model
+DNS & Load Balancing
+Caching Strategies
+Database Sharding
+Message Queues
+CAP Theorem
+Distributed Consensus
+Designing Uber
+Designing Netflix
+Merging & Conflicts
+Pull Requests
+GitHub Actions
+Rebasing
+Git Hooks
+Monorepo Management

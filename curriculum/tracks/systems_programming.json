@@ -3,13 +3,49 @@
     "aiRubric": "Check logic, syntax, and output for Rust Basics.",
     "lessons": [
       {
-        "title": "Rust Basics - Coming Soon",
-        "theory": "## Rust Basics\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Rust Basics** is under development.",
-        "starterCode": "# Rust Basics - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Rust Basics\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Hello Rust",
+        "theory": "## Welcome to Rust\nRust is a systems programming language focused on safety and performance.\n\n```rust\nfn main() {\n    println!(\"Hello, World!\");\n}\n```\n\n- `fn main()` is the entry point.\n- `println!` (with a `!`) is a **macro**, not a normal function.\n- Statements end with a semicolon `;`.",
+        "instructions": "## Task: Your First Rust Program\n1. Write a `main` function\n2. Use the `println!` macro to print your name\n3. Print your favorite programming language on the next line",
+        "starterCode": "___ main() {\n    ___!(\"Name: Mabel\");\n    ___!(\"Language: Rust\");\n}",
+        "solution": "fn main() {\n    println!(\"Name: Mabel\");\n    println!(\"Language: Rust\");\n}",
+        "hint": "fn main(). println! for printing.",
+        "rubric": "Code uses fn and println! correctly."
+      },
+      {
+        "title": "Variables & Mutability",
+        "theory": "## Immutable by Default\nIn Rust, variables are **immutable** (cannot be changed) by default.\n\n```rust\nlet x = 5;\n// x = 6; // ERROR: x is immutable\n\nlet mut y = 10; // 'mut' makes it mutable\ny = 11; // OK!\n\n// Constants require explicit types\nconst MAX_POINTS: u32 = 100_000;\n```",
+        "instructions": "## Task: Mutable Variables\n1. Declare an immutable variable `name`\n2. Declare a **mutable** variable `score` starting at 0\n3. Add 10 to the score\n4. Print both",
+        "starterCode": "fn main() {\n    let name = \"Alice\";\n    ___ ___ score = 0;\n    \n    score ___ 10;\n    \n    println!(\"{} scored {}\", name, score);\n}",
+        "solution": "fn main() {\n    let name = \"Alice\";\n    let mut score = 0;\n    \n    score += 10;\n    \n    println!(\"{} scored {}\", name, score);\n}",
+        "hint": "let mut score = 0. += to add.",
+        "rubric": "Score declared as mut and modified correctly."
+      },
+      {
+        "title": "Data Types",
+        "theory": "## Rust Types\nRust is statically typed. Types are often inferred, but sometimes explicit.\n\n```rust\n// Integers (i32, u32, i64, etc.)\nlet age: u32 = 25;  // Unsigned 32-bit\n\n// Floats (f32, f64)\nlet pi: f64 = 3.14159;\n\n// Boolean\nlet is_active: bool = true;\n\n// Character (4 bytes, Unicode)\nlet emoji: char = '😻';\n\n// Tuples\nlet point: (i32, f64) = (10, 3.5);\n```",
+        "instructions": "## Task: Working with Types\n1. Create a boolean `is_learning`\n2. Create a tuple `coords` with two integers (x, y)\n3. Extract x and y from the tuple using dot notation (`coords.0`)",
+        "starterCode": "fn main() {\n    let is_learning: ___ = true;\n    let coords = (42, 99);\n    \n    let x = coords.___;\n    let y = coords.___;\n    \n    println!(\"Learning: {}\", is_learning);\n    println!(\"X: {}, Y: {}\", x, y);\n}",
+        "solution": "fn main() {\n    let is_learning: bool = true;\n    let coords = (42, 99);\n    \n    let x = coords.0;\n    let y = coords.1;\n    \n    println!(\"Learning: {}\", is_learning);\n    println!(\"X: {}, Y: {}\", x, y);\n}",
+        "hint": "bool type. .0 gets first tuple element, .1 gets second.",
+        "rubric": "Correct types and tuple extraction used."
+      },
+      {
+        "title": "Functions in Rust",
+        "theory": "## Defining Functions\n\n```rust\n// Parameters MUST have types\nfn add(a: i32, b: i32) -> i32 {\n    a + b // No semicolon means return this value!\n}\n\n// Or explicit return\nfn multiply(a: i32, b: i32) -> i32 {\n    return a * b;\n}\n```\n\nNotice how omitting the semicolon at the end of an expression implicitly returns it.",
+        "instructions": "## Task: Write a Function\n1. Write a function `is_even(n: i32) -> bool`\n2. Return true if n is even, false otherwise\n3. Use implicit return (no semicolon on the last line)\n4. Test it in main",
+        "starterCode": "fn is_even(n: ___) -> ___ {\n    n % 2 ___ 0  // No semicolon!\n}\n\nfn main() {\n    println!(\"Is 4 even? {}\", is_even(4));\n    println!(\"Is 7 even? {}\", is_even(7));\n}",
+        "solution": "fn is_even(n: i32) -> bool {\n    n % 2 == 0  // No semicolon!\n}\n\nfn main() {\n    println!(\"Is 4 even? {}\", is_even(4));\n    println!(\"Is 7 even? {}\", is_even(7));\n}",
+        "hint": "i32 and bool types. == for comparison.",
+        "rubric": "Function signature correct. Implicit return works."
+      },
+      {
+        "title": "Control Flow",
+        "theory": "## If and Loops\n\n```rust\n// If expressions (can return values!)\nlet condition = true;\nlet number = if condition { 5 } else { 6 };\n\n// loop (infinite)\nloop { break; }\n\n// while loop\nwhile n > 0 { n -= 1; }\n\n// for loop (iterator)\nfor i in 0..5 { \n    println!(\"{}\", i); // 0 to 4\n}\n```",
+        "instructions": "## Task: Loop and Branch\n1. Loop from 1 to 10 (inclusive, use `1..=10`)\n2. Print \"Even\" or \"Odd\" for each number using an `if/else`",
+        "starterCode": "fn main() {\n    for i in 1..___10 {\n        if i % 2 == 0 {\n            println!(\"{} is Even\", i);\n        } ___ {\n            println!(\"{} is Odd\", i);\n        }\n    }\n}",
+        "solution": "fn main() {\n    for i in 1..=10 {\n        if i % 2 == 0 {\n            println!(\"{} is Even\", i);\n        } else {\n            println!(\"{} is Odd\", i);\n        }\n    }\n}",
+        "hint": "1..=10 for inclusive range. else for the alternative branch.",
+        "rubric": "Loop runs 1 to 10. Correctly identifies even and odd."
       }
     ]
   },
@@ -17,13 +53,31 @@
     "aiRubric": "Check logic, syntax, and output for Ownership & Borrowing.",
     "lessons": [
       {
-        "title": "Ownership & Borrowing - Coming Soon",
-        "theory": "## Ownership & Borrowing\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Ownership & Borrowing** is under development.",
-        "starterCode": "# Ownership & Borrowing - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Ownership & Borrowing\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "The Ownership Rules",
+        "theory": "## Memory Safety without Garbage Collection\nRust's most unique feature is its ownership system.\n\n1. Each value has a variable called its **owner**.\n2. There can only be **one owner** at a time.\n3. When the owner goes out of scope, the value is **dropped** (memory freed).\n\n```rust\nlet s1 = String::from(\"hello\");\nlet s2 = s1; // s1 is MOVED to s2. s1 is no longer valid!\n\n// println!(\"{}\", s1); // ERROR: value borrowed here after move\n```",
+        "instructions": "## Task: Understand Moves\n1. Create a String `s1`\n2. \"Move\" it to `s2` (assign s1 to s2)\n3. To keep `s1` valid, you must **clone** it instead: `let s2 = s1.clone();`\n4. Fix the code to use clone so both print statements work",
+        "starterCode": "fn main() {\n    let s1 = String::from(\"Rust\");\n    \n    // Fix this line to clone instead of move\n    let s2 = s1.___(); \n    \n    println!(\"s1: {}\", s1); // This will crash if s1 was moved!\n    println!(\"s2: {}\", s2);\n}",
+        "solution": "fn main() {\n    let s1 = String::from(\"Rust\");\n    \n    // Fix this line to clone instead of move\n    let s2 = s1.clone(); \n    \n    println!(\"s1: {}\", s1); // This will crash if s1 was moved!\n    println!(\"s2: {}\", s2);\n}",
+        "hint": ".clone() creates a deep copy so ownership isn't moved.",
+        "rubric": "Code compiles and prints both strings by using clone()."
+      },
+      {
+        "title": "Borrowing (References)",
+        "theory": "## Borrowing data\nInstead of taking ownership (or cloning, which is slow), we can **borrow** data using references (`&`).\n\n```rust\nfn calculate_length(s: &String) -> usize {\n    s.len() // We have a reference, we don't own it\n}\n\nfn main() {\n    let s1 = String::from(\"hello\");\n    let len = calculate_length(&s1); // Pass a reference\n    // s1 is still valid here!\n}\n```",
+        "instructions": "## Task: Pass by Reference\n1. Create a function `print_length` that takes a reference to a String (`&String`)\n2. Pass a String to it from main using `&`\n3. Print the string again in main to prove you didn't lose ownership",
+        "starterCode": "fn print_length(s: ___) {\n    println!(\"Length: {}\", s.len());\n}\n\nfn main() {\n    let text = String::from(\"Borrowing is cool\");\n    \n    // Pass a reference\n    print_length(___text);\n    \n    // text is still valid!\n    println!(\"Text is still: {}\", text);\n}",
+        "solution": "fn print_length(s: &String) {\n    println!(\"Length: {}\", s.len());\n}\n\nfn main() {\n    let text = String::from(\"Borrowing is cool\");\n    \n    // Pass a reference\n    print_length(&text);\n    \n    // text is still valid!\n    println!(\"Text is still: {}\", text);\n}",
+        "hint": "&String for the type. &text to pass the reference.",
+        "rubric": "Function takes &String. Main passes &text. Ownership is preserved."
+      },
+      {
+        "title": "Mutable References",
+        "theory": "## Changing Borrowed Data\nYou can modify borrowed data if you use a **mutable reference** (`&mut`).\n\n**The Big Rule:** At any given time, you can have either:\n- ONE mutable reference (`&mut T`)\n- OR ANY NUMBER of immutable references (`&T`)\n\nThis prevents data races at compile time!",
+        "instructions": "## Task: Mutable Borrow\n1. Create a mutable String\n2. Create a function `append_world(s: &mut String)`\n3. Use `s.push_str(\" World\")` inside the function\n4. Pass a mutable reference to the function",
+        "starterCode": "fn append_world(s: ___) {\n    s.push_str(\" World\");\n}\n\nfn main() {\n    // Must be mut to borrow mutably\n    let ___ greeting = String::from(\"Hello\");\n    \n    // Pass mutable reference\n    append_world(___greeting);\n    \n    println!(\"{}\", greeting);\n}",
+        "solution": "fn append_world(s: &mut String) {\n    s.push_str(\" World\");\n}\n\nfn main() {\n    // Must be mut to borrow mutably\n    let mut greeting = String::from(\"Hello\");\n    \n    // Pass mutable reference\n    append_world(&mut greeting);\n    \n    println!(\"{}\", greeting);\n}",
+        "hint": "&mut String for the type. let mut for the variable. &mut greeting to pass.",
+        "rubric": "Code correctly modifies the string via mutable reference."
       }
     ]
   },

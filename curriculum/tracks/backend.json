@@ -223,13 +223,22 @@
     "aiRubric": "Check logic, syntax, and output for WebSockets.",
     "lessons": [
       {
-        "title": "WebSockets - Coming Soon",
-        "theory": "## WebSockets\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **WebSockets** is under development.",
-        "starterCode": "# WebSockets - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# WebSockets\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "What are WebSockets?",
+        "theory": "## Real-time Communication\nHTTP is request/response (client asks, server answers).\nWebSockets provide a **persistent, two-way connection**.\n\n- Server can push data to client instantly (chat, stock tickers)\n- Lower overhead than HTTP polling\n\n```javascript\n// In the browser\nconst ws = new WebSocket('ws://localhost:8080');\nws.onmessage = (event) => console.log(event.data);\nws.send('Hello Server!');\n```",
+        "instructions": "## Task: WebSocket Server Simulation\n1. Simulate a basic WebSocket server class\n2. Store connected clients in a list\n3. Implement a `broadcast(message)` method that sends data to all clients",
+        "starterCode": "class WSServer {\n  constructor() { this.clients = []; }\n  \n  connect(client) {\n    this.clients.___(client);\n    console.log(`Client ${client.id} connected. Total: ${this.clients.length}`);\n  }\n  \n  broadcast(message) {\n    for (const client of this.___) {\n      client.send(message);\n    }\n  }\n}\n\n// Mock client\nclass Client {\n  constructor(id) { this.id = id; }\n  send(msg) { console.log(`[Client ${this.id} received]: ${msg}`); }\n}\n\nconst server = new WSServer();\nserver.connect(new Client(1));\nserver.connect(new Client(2));\nserver.broadcast(\"System going down for maintenance!\");",
+        "solution": "class WSServer {\n  constructor() { this.clients = []; }\n  \n  connect(client) {\n    this.clients.push(client);\n    console.log(`Client ${client.id} connected. Total: ${this.clients.length}`);\n  }\n  \n  broadcast(message) {\n    for (const client of this.clients) {\n      client.send(message);\n    }\n  }\n}\n\n// Mock client\nclass Client {\n  constructor(id) { this.id = id; }\n  send(msg) { console.log(`[Client ${this.id} received]: ${msg}`); }\n}\n\nconst server = new WSServer();\nserver.connect(new Client(1));\nserver.connect(new Client(2));\nserver.broadcast(\"System going down for maintenance!\");",
+        "hint": ".push() to add. Loop over this.clients.",
+        "rubric": "Broadcast method sends the message to all connected clients."
+      },
+      {
+        "title": "Handling Events",
+        "theory": "## Socket.io / WS Events\nWebSocket frameworks like `socket.io` or `ws` handle events like 'connection', 'message', 'disconnect'.\n\n```javascript\nio.on('connection', (socket) => {\n  console.log('User connected');\n  \n  socket.on('chat message', (msg) => {\n    io.emit('chat message', msg); // Send to everyone\n  });\n  \n  socket.on('disconnect', () => {\n    console.log('User disconnected');\n  });\n});\n```",
+        "instructions": "## Task: Event Emitter System\n1. Build a simple Event Emitter to handle custom events\n2. `on(event, callback)` registers a listener\n3. `emit(event, data)` calls all listeners for that event",
+        "starterCode": "class EventEmitter {\n  constructor() { this.events = {}; }\n  \n  on(event, callback) {\n    if (!this.events[event]) this.events[event] = [];\n    this.events[event].___(callback);\n  }\n  \n  emit(event, data) {\n    if (this.events[___]) {\n      this.events[event].forEach(cb => ___(data));\n    }\n  }\n}\n\nconst socket = new EventEmitter();\nsocket.on('message', (data) => console.log('Listener 1:', data));\nsocket.on('message', (data) => console.log('Listener 2:', data));\n\nsocket.emit('message', 'Hello World!');",
+        "solution": "class EventEmitter {\n  constructor() { this.events = {}; }\n  \n  on(event, callback) {\n    if (!this.events[event]) this.events[event] = [];\n    this.events[event].push(callback);\n  }\n  \n  emit(event, data) {\n    if (this.events[event]) {\n      this.events[event].forEach(cb => cb(data));\n    }\n  }\n}\n\nconst socket = new EventEmitter();\nsocket.on('message', (data) => console.log('Listener 1:', data));\nsocket.on('message', (data) => console.log('Listener 2:', data));\n\nsocket.emit('message', 'Hello World!');",
+        "hint": "push() to array. Check this.events[event]. Call cb(data).",
+        "rubric": "Both listeners receive the message data when emitted."
       }
     ]
   }

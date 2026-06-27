@@ -153,13 +153,22 @@
     "aiRubric": "Check logic, syntax, and output for Stacks & Queues.",
     "lessons": [
       {
-        "title": "Stacks & Queues - Coming Soon",
-        "theory": "## Stacks & Queues\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Stacks & Queues** is under development.",
-        "starterCode": "# Stacks & Queues - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Stacks & Queues\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Stack (LIFO)",
+        "theory": "## Last In, First Out\nA stack is like a stack of plates. You add to the top (push) and remove from the top (pop).\n\nUse cases:\n- Function call stack\n- Undo mechanisms\n- Browser history (Back button)\n\nIn Python, a standard `list` is a perfect stack (using `.append()` and `.pop()`).",
+        "instructions": "## Task: Balanced Parentheses\n1. Use a stack to check if a string of parentheses is balanced\n2. Push on `(`, pop on `)`\n3. If you try to pop an empty stack, or if the stack isn't empty at the end, it's unbalanced",
+        "starterCode": "def is_balanced(s):\n    stack = []\n    for char in s:\n        if char == '(':\n            stack.___(char)\n        elif char == ')':\n            if not stack: # Empty stack!\n                return ___\n            stack.___()\n    return len(___) == 0\n\nprint(\"(())\", is_balanced(\"(())\"))\nprint(\"(()\", is_balanced(\"(()\"))\nprint(\")(\", is_balanced(\")(\"))",
+        "solution": "def is_balanced(s):\n    stack = []\n    for char in s:\n        if char == '(':\n            stack.append(char)\n        elif char == ')':\n            if not stack: # Empty stack!\n                return False\n            stack.pop()\n    return len(stack) == 0\n\nprint(\"(())\", is_balanced(\"(())\"))\nprint(\"(()\", is_balanced(\"(()\"))\nprint(\")(\", is_balanced(\")(\"))",
+        "hint": "append() to push. pop() to remove. Return False if stack empty on ')'. Check len(stack) at end.",
+        "rubric": "(()) is True. (() and )( are False."
+      },
+      {
+        "title": "Queue (FIFO)",
+        "theory": "## First In, First Out\nA queue is like a line at a store. The first person in line is the first one served.\n\nUse cases:\n- Print spooler\n- Breadth-First Search (BFS)\n- Task processing queues\n\nIn Python, use `collections.deque` for O(1) pops from the front. Standard lists are O(n) to pop from the front.",
+        "instructions": "## Task: Hot Potato Simulation\n1. Use a queue (standard list for simplicity here) to simulate hot potato\n2. Dequeue from front, enqueue to back `num` times\n3. The person at the front is eliminated. Repeat until 1 left.",
+        "starterCode": "def hot_potato(names, num):\n    queue = names.copy()\n    \n    while len(queue) > 1:\n        for _ in range(num):\n            # Move person from front to back\n            person = queue.pop(___)\n            queue.___(person)\n        # Eliminate person at front\n        eliminated = queue.___(0)\n        print(f\"Eliminated: {eliminated}\")\n        \n    return queue[0]\n\nwinner = hot_potato([\"Alice\", \"Bob\", \"Charlie\", \"David\", \"Eve\"], 3)\nprint(f\"Winner is: {winner}\")",
+        "solution": "def hot_potato(names, num):\n    queue = names.copy()\n    \n    while len(queue) > 1:\n        for _ in range(num):\n            # Move person from front to back\n            person = queue.pop(0)\n            queue.append(person)\n        # Eliminate person at front\n        eliminated = queue.pop(0)\n        print(f\"Eliminated: {eliminated}\")\n        \n    return queue[0]\n\nwinner = hot_potato([\"Alice\", \"Bob\", \"Charlie\", \"David\", \"Eve\"], 3)\nprint(f\"Winner is: {winner}\")",
+        "hint": "pop(0) removes from front. append() adds to back.",
+        "rubric": "People are eliminated correctly until only 1 winner remains."
       }
     ]
   },
@@ -167,13 +176,22 @@
     "aiRubric": "Check logic, syntax, and output for Trees & Graphs.",
     "lessons": [
       {
-        "title": "Trees & Graphs - Coming Soon",
-        "theory": "## Trees & Graphs\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Trees & Graphs** is under development.",
-        "starterCode": "# Trees & Graphs - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Trees & Graphs\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Binary Trees",
+        "theory": "## Hierarchical Data\nA tree consists of nodes with parent-child relationships. A **Binary Tree** means each node has at most 2 children (left and right).\n\n```python\nclass TreeNode:\n    def __init__(self, val):\n        self.val = val\n        self.left = None\n        self.right = None\n```\n\nThe top node is the **root**. Nodes with no children are **leaves**.",
+        "instructions": "## Task: Build a Binary Tree\n1. Create a TreeNode class\n2. Create a root node with value 10\n3. Add left child 5, right child 15\n4. Add left child 2 to node 5",
+        "starterCode": "class TreeNode:\n    def __init__(self, val):\n        self.val = val\n        self.left = None\n        self.right = None\n\nroot = TreeNode(___)\nroot.left = TreeNode(___)\nroot.right = TreeNode(___)\nroot.left.left = TreeNode(___)\n\nprint(f\"Root: {root.val}\")\nprint(f\"Left child: {root.left.val}\")\nprint(f\"Right child: {root.right.val}\")\nprint(f\"Deepest left: {root.left.left.val}\")",
+        "solution": "class TreeNode:\n    def __init__(self, val):\n        self.val = val\n        self.left = None\n        self.right = None\n\nroot = TreeNode(10)\nroot.left = TreeNode(5)\nroot.right = TreeNode(15)\nroot.left.left = TreeNode(2)\n\nprint(f\"Root: {root.val}\")\nprint(f\"Left child: {root.left.val}\")\nprint(f\"Right child: {root.right.val}\")\nprint(f\"Deepest left: {root.left.left.val}\")",
+        "hint": "Assign TreeNode objects to .left and .right properties.",
+        "rubric": "Tree built with values 10, 5, 15, and 2 in the correct places."
+      },
+      {
+        "title": "Tree Traversal",
+        "theory": "## Visiting Every Node\nHow do you print every node in a tree? Recursion is the easiest way!\n\n- **Inorder**: Left, Node, Right (prints sorted in BSTs)\n- **Preorder**: Node, Left, Right\n- **Postorder**: Left, Right, Node\n\n```python\ndef inorder(node):\n    if not node: return\n    inorder(node.left)\n    print(node.val)\n    inorder(node.right)\n```",
+        "instructions": "## Task: Inorder Traversal\n1. Write a recursive `inorder(node)` function\n2. It should append values to a global list (or just print them)\n3. Test it on a simple tree",
+        "starterCode": "class TreeNode:\n    def __init__(self, val): self.val = val; self.left = None; self.right = None\n\ndef inorder(node, result):\n    if node is ___: \n        return\n    \n    # 1. Traverse left\n    inorder(node.___, result)\n    # 2. Visit node\n    result.___(node.val)\n    # 3. Traverse right\n    inorder(node.___, result)\n\nroot = TreeNode(10)\nroot.left = TreeNode(5)\nroot.right = TreeNode(15)\nroot.left.left = TreeNode(2)\nroot.left.right = TreeNode(7)\n\nres = []\ninorder(root, res)\nprint(\"Inorder Traversal:\", res)",
+        "solution": "class TreeNode:\n    def __init__(self, val): self.val = val; self.left = None; self.right = None\n\ndef inorder(node, result):\n    if node is None: \n        return\n    \n    # 1. Traverse left\n    inorder(node.left, result)\n    # 2. Visit node\n    result.append(node.val)\n    # 3. Traverse right\n    inorder(node.right, result)\n\nroot = TreeNode(10)\nroot.left = TreeNode(5)\nroot.right = TreeNode(15)\nroot.left.left = TreeNode(2)\nroot.left.right = TreeNode(7)\n\nres = []\ninorder(root, res)\nprint(\"Inorder Traversal:\", res)",
+        "hint": "Check if node is None. Recursively call left, append val, recursively call right.",
+        "rubric": "Output is [2, 5, 7, 10, 15]. Nodes are sorted!"
       }
     ]
   },

@@ -952,13 +952,22 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for WebSockets.",
     "lessons": [
       {
-        "title": "WebSockets - Coming Soon",
-        "theory": "## WebSockets\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **WebSockets** is under development.",
-        "starterCode": "# WebSockets - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# WebSockets\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "What are WebSockets?",
+        "theory": "## Real-time Communication\nHTTP is request/response (client asks, server answers).\nWebSockets provide a **persistent, two-way connection**.\n\n- Server can push data to client instantly (chat, stock tickers)\n- Lower overhead than HTTP polling\n\n```javascript\n// In the browser\nconst ws = new WebSocket('ws://localhost:8080');\nws.onmessage = (event) => console.log(event.data);\nws.send('Hello Server!');\n```",
+        "instructions": "## Task: WebSocket Server Simulation\n1. Simulate a basic WebSocket server class\n2. Store connected clients in a list\n3. Implement a `broadcast(message)` method that sends data to all clients",
+        "starterCode": "class WSServer {\n  constructor() { this.clients = []; }\n  \n  connect(client) {\n    this.clients.___(client);\n    console.log(`Client ${client.id} connected. Total: ${this.clients.length}`);\n  }\n  \n  broadcast(message) {\n    for (const client of this.___) {\n      client.send(message);\n    }\n  }\n}\n\n// Mock client\nclass Client {\n  constructor(id) { this.id = id; }\n  send(msg) { console.log(`[Client ${this.id} received]: ${msg}`); }\n}\n\nconst server = new WSServer();\nserver.connect(new Client(1));\nserver.connect(new Client(2));\nserver.broadcast(\"System going down for maintenance!\");",
+        "solution": "class WSServer {\n  constructor() { this.clients = []; }\n  \n  connect(client) {\n    this.clients.push(client);\n    console.log(`Client ${client.id} connected. Total: ${this.clients.length}`);\n  }\n  \n  broadcast(message) {\n    for (const client of this.clients) {\n      client.send(message);\n    }\n  }\n}\n\n// Mock client\nclass Client {\n  constructor(id) { this.id = id; }\n  send(msg) { console.log(`[Client ${this.id} received]: ${msg}`); }\n}\n\nconst server = new WSServer();\nserver.connect(new Client(1));\nserver.connect(new Client(2));\nserver.broadcast(\"System going down for maintenance!\");",
+        "hint": ".push() to add. Loop over this.clients.",
+        "rubric": "Broadcast method sends the message to all connected clients."
+      },
+      {
+        "title": "Handling Events",
+        "theory": "## Socket.io / WS Events\nWebSocket frameworks like `socket.io` or `ws` handle events like 'connection', 'message', 'disconnect'.\n\n```javascript\nio.on('connection', (socket) => {\n  console.log('User connected');\n  \n  socket.on('chat message', (msg) => {\n    io.emit('chat message', msg); // Send to everyone\n  });\n  \n  socket.on('disconnect', () => {\n    console.log('User disconnected');\n  });\n});\n```",
+        "instructions": "## Task: Event Emitter System\n1. Build a simple Event Emitter to handle custom events\n2. `on(event, callback)` registers a listener\n3. `emit(event, data)` calls all listeners for that event",
+        "starterCode": "class EventEmitter {\n  constructor() { this.events = {}; }\n  \n  on(event, callback) {\n    if (!this.events[event]) this.events[event] = [];\n    this.events[event].___(callback);\n  }\n  \n  emit(event, data) {\n    if (this.events[___]) {\n      this.events[event].forEach(cb => ___(data));\n    }\n  }\n}\n\nconst socket = new EventEmitter();\nsocket.on('message', (data) => console.log('Listener 1:', data));\nsocket.on('message', (data) => console.log('Listener 2:', data));\n\nsocket.emit('message', 'Hello World!');",
+        "solution": "class EventEmitter {\n  constructor() { this.events = {}; }\n  \n  on(event, callback) {\n    if (!this.events[event]) this.events[event] = [];\n    this.events[event].push(callback);\n  }\n  \n  emit(event, data) {\n    if (this.events[event]) {\n      this.events[event].forEach(cb => cb(data));\n    }\n  }\n}\n\nconst socket = new EventEmitter();\nsocket.on('message', (data) => console.log('Listener 1:', data));\nsocket.on('message', (data) => console.log('Listener 2:', data));\n\nsocket.emit('message', 'Hello World!');",
+        "hint": "push() to array. Check this.events[event]. Call cb(data).",
+        "rubric": "Both listeners receive the message data when emitted."
       }
     ]
   },
@@ -1022,13 +1031,22 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for CI/CD Pipelines.",
     "lessons": [
       {
-        "title": "CI/CD Pipelines - Coming Soon",
-        "theory": "## CI/CD Pipelines\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **CI/CD Pipelines** is under development.",
-        "starterCode": "# CI/CD Pipelines - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# CI/CD Pipelines\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "What is CI/CD?",
+        "theory": "## Automation for Code\n- **CI (Continuous Integration)**: Automatically build and test code every time someone commits.\n- **CD (Continuous Deployment)**: Automatically deploy the code to production if tests pass.\n\nBenefits: Catches bugs early, prevents manual deployment errors, speeds up release cycles.\n\nTools: GitHub Actions, Jenkins, GitLab CI.",
+        "instructions": "## Task: Pipeline Simulator\n1. Create a Pipeline class\n2. Add stages: `lint`, `test`, `build`, `deploy`\n3. If any stage returns False (fails), the pipeline must stop and fail",
+        "starterCode": "class Pipeline:\n    def __init__(self):\n        self.stages = []\n        \n    def add_stage(self, name, func):\n        self.stages.append({'name': name, 'func': func})\n        \n    def run(self):\n        for stage in self.stages:\n            print(f\"Running {stage['name']}...\")\n            success = stage['___']()\n            if not success:\n                print(f\"Pipeline FAILED at {stage['name']}\")\n                return ___\n        print(\"Pipeline SUCCESS! Deploying to production.\")\n        return True\n\n# Mock functions\ndef lint(): print(\"  Lint ok\"); return True\ndef test(): print(\"  Tests failed!\"); return False\ndef build(): print(\"  Build ok\"); return True\n\np = Pipeline()\np.add_stage('Lint', lint)\np.add_stage('Test', test)\np.add_stage('Build', build)\np.run()",
+        "solution": "class Pipeline:\n    def __init__(self):\n        self.stages = []\n        \n    def add_stage(self, name, func):\n        self.stages.append({'name': name, 'func': func})\n        \n    def run(self):\n        for stage in self.stages:\n            print(f\"Running {stage['name']}...\")\n            success = stage['func']()\n            if not success:\n                print(f\"Pipeline FAILED at {stage['name']}\")\n                return False\n        print(\"Pipeline SUCCESS! Deploying to production.\")\n        return True\n\n# Mock functions\ndef lint(): print(\"  Lint ok\"); return True\ndef test(): print(\"  Tests failed!\"); return False\ndef build(): print(\"  Build ok\"); return True\n\np = Pipeline()\np.add_stage('Lint', lint)\np.add_stage('Test', test)\np.add_stage('Build', build)\np.run()",
+        "hint": "Call the 'func'. Return False if it fails.",
+        "rubric": "Pipeline stops at Test and does not run Build."
+      },
+      {
+        "title": "GitHub Actions",
+        "theory": "## Workflows as Code\nGitHub Actions are defined in YAML files inside `.github/workflows/`.\n\n```yaml\nname: Python CI\non: [push, pull_request] # Triggers\n\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n    - uses: actions/checkout@v3\n    - name: Set up Python\n      uses: actions/setup-python@v4\n    - name: Run Tests\n      run: pytest\n```",
+        "instructions": "## Task: YAML Generator\n1. Create a function that generates a basic GitHub Actions YAML string\n2. Fill in the job name, OS, and the command to run tests\n3. Print the YAML",
+        "starterCode": "def generate_yaml(job_name, os, test_command):\n    yaml = f\"\"\"name: CI\non: [push]\n\njobs:\n  {___}:\n    runs-on: {___}\n    steps:\n    - uses: actions/checkout@v3\n    - name: Run tests\n      run: {___}\n\"\"\"\n    return yaml\n\nprint(generate_yaml('node-tests', 'ubuntu-latest', 'npm test'))",
+        "solution": "def generate_yaml(job_name, os, test_command):\n    yaml = f\"\"\"name: CI\non: [push]\n\njobs:\n  {job_name}:\n    runs-on: {os}\n    steps:\n    - uses: actions/checkout@v3\n    - name: Run tests\n      run: {test_command}\n\"\"\"\n    return yaml\n\nprint(generate_yaml('node-tests', 'ubuntu-latest', 'npm test'))",
+        "hint": "Use the f-string variables {job_name}, {os}, {test_command}.",
+        "rubric": "Valid YAML string generated with the correct variables injected."
       }
     ]
   },
@@ -1036,13 +1054,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Monitoring & Logging.",
     "lessons": [
       {
-        "title": "Monitoring & Logging - Coming Soon",
-        "theory": "## Monitoring & Logging\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Monitoring & Logging** is under development.",
-        "starterCode": "# Monitoring & Logging - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Monitoring & Logging\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Logging Levels",
+        "theory": "## Why Log?\n`print()` isn't enough in production. You need structured logs with levels.\n\n- `DEBUG`: Verbose diagnostic info\n- `INFO`: Normal app events (e.g., \"User logged in\")\n- `WARN`: Something weird happened, but app still works\n- `ERROR`: Something failed, user affected\n- `FATAL`: App crashing immediately\n\nLogs should go to a central system (e.g., Datadog, ELK stack).",
+        "instructions": "## Task: Build a Logger\n1. Create a `Logger` class with a minimum log level threshold\n2. Add methods for info, warn, and error\n3. Only print messages if their level is >= the threshold",
+        "starterCode": "class Logger:\n    LEVELS = {'DEBUG': 1, 'INFO': 2, 'WARN': 3, 'ERROR': 4}\n    \n    def __init__(self, threshold='INFO'):\n        self.threshold = self.LEVELS[threshold]\n        \n    def log(self, level_name, msg):\n        level_val = self.LEVELS[___]\n        if level_val >= self.___:\n            print(f\"[{level_name}] {msg}\")\n            \n    def debug(self, msg): self.log('DEBUG', msg)\n    def info(self, msg): self.log('INFO', msg)\n    def error(self, msg): self.log('ERROR', msg)\n\nlog = Logger('INFO')\nlog.debug(\"Connecting to DB...\") # Shouldn't print\nlog.info(\"Server started on port 80\")\nlog.error(\"DB Connection failed!\")",
+        "solution": "class Logger:\n    LEVELS = {'DEBUG': 1, 'INFO': 2, 'WARN': 3, 'ERROR': 4}\n    \n    def __init__(self, threshold='INFO'):\n        self.threshold = self.LEVELS[threshold]\n        \n    def log(self, level_name, msg):\n        level_val = self.LEVELS[level_name]\n        if level_val >= self.threshold:\n            print(f\"[{level_name}] {msg}\")\n            \n    def debug(self, msg): self.log('DEBUG', msg)\n    def info(self, msg): self.log('INFO', msg)\n    def error(self, msg): self.log('ERROR', msg)\n\nlog = Logger('INFO')\nlog.debug(\"Connecting to DB...\") # Shouldn't print\nlog.info(\"Server started on port 80\")\nlog.error(\"DB Connection failed!\")",
+        "hint": "Get level_val using level_name. Check against self.threshold.",
+        "rubric": "Debug message is ignored. Info and Error messages are printed."
       }
     ]
   },
@@ -2011,13 +2029,22 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Stacks & Queues.",
     "lessons": [
       {
-        "title": "Stacks & Queues - Coming Soon",
-        "theory": "## Stacks & Queues\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Stacks & Queues** is under development.",
-        "starterCode": "# Stacks & Queues - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Stacks & Queues\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Stack (LIFO)",
+        "theory": "## Last In, First Out\nA stack is like a stack of plates. You add to the top (push) and remove from the top (pop).\n\nUse cases:\n- Function call stack\n- Undo mechanisms\n- Browser history (Back button)\n\nIn Python, a standard `list` is a perfect stack (using `.append()` and `.pop()`).",
+        "instructions": "## Task: Balanced Parentheses\n1. Use a stack to check if a string of parentheses is balanced\n2. Push on `(`, pop on `)`\n3. If you try to pop an empty stack, or if the stack isn't empty at the end, it's unbalanced",
+        "starterCode": "def is_balanced(s):\n    stack = []\n    for char in s:\n        if char == '(':\n            stack.___(char)\n        elif char == ')':\n            if not stack: # Empty stack!\n                return ___\n            stack.___()\n    return len(___) == 0\n\nprint(\"(())\", is_balanced(\"(())\"))\nprint(\"(()\", is_balanced(\"(()\"))\nprint(\")(\", is_balanced(\")(\"))",
+        "solution": "def is_balanced(s):\n    stack = []\n    for char in s:\n        if char == '(':\n            stack.append(char)\n        elif char == ')':\n            if not stack: # Empty stack!\n                return False\n            stack.pop()\n    return len(stack) == 0\n\nprint(\"(())\", is_balanced(\"(())\"))\nprint(\"(()\", is_balanced(\"(()\"))\nprint(\")(\", is_balanced(\")(\"))",
+        "hint": "append() to push. pop() to remove. Return False if stack empty on ')'. Check len(stack) at end.",
+        "rubric": "(()) is True. (() and )( are False."
+      },
+      {
+        "title": "Queue (FIFO)",
+        "theory": "## First In, First Out\nA queue is like a line at a store. The first person in line is the first one served.\n\nUse cases:\n- Print spooler\n- Breadth-First Search (BFS)\n- Task processing queues\n\nIn Python, use `collections.deque` for O(1) pops from the front. Standard lists are O(n) to pop from the front.",
+        "instructions": "## Task: Hot Potato Simulation\n1. Use a queue (standard list for simplicity here) to simulate hot potato\n2. Dequeue from front, enqueue to back `num` times\n3. The person at the front is eliminated. Repeat until 1 left.",
+        "starterCode": "def hot_potato(names, num):\n    queue = names.copy()\n    \n    while len(queue) > 1:\n        for _ in range(num):\n            # Move person from front to back\n            person = queue.pop(___)\n            queue.___(person)\n        # Eliminate person at front\n        eliminated = queue.___(0)\n        print(f\"Eliminated: {eliminated}\")\n        \n    return queue[0]\n\nwinner = hot_potato([\"Alice\", \"Bob\", \"Charlie\", \"David\", \"Eve\"], 3)\nprint(f\"Winner is: {winner}\")",
+        "solution": "def hot_potato(names, num):\n    queue = names.copy()\n    \n    while len(queue) > 1:\n        for _ in range(num):\n            # Move person from front to back\n            person = queue.pop(0)\n            queue.append(person)\n        # Eliminate person at front\n        eliminated = queue.pop(0)\n        print(f\"Eliminated: {eliminated}\")\n        \n    return queue[0]\n\nwinner = hot_potato([\"Alice\", \"Bob\", \"Charlie\", \"David\", \"Eve\"], 3)\nprint(f\"Winner is: {winner}\")",
+        "hint": "pop(0) removes from front. append() adds to back.",
+        "rubric": "People are eliminated correctly until only 1 winner remains."
       }
     ]
   },
@@ -2025,13 +2052,22 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Trees & Graphs.",
     "lessons": [
       {
-        "title": "Trees & Graphs - Coming Soon",
-        "theory": "## Trees & Graphs\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Trees & Graphs** is under development.",
-        "starterCode": "# Trees & Graphs - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Trees & Graphs\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Binary Trees",
+        "theory": "## Hierarchical Data\nA tree consists of nodes with parent-child relationships. A **Binary Tree** means each node has at most 2 children (left and right).\n\n```python\nclass TreeNode:\n    def __init__(self, val):\n        self.val = val\n        self.left = None\n        self.right = None\n```\n\nThe top node is the **root**. Nodes with no children are **leaves**.",
+        "instructions": "## Task: Build a Binary Tree\n1. Create a TreeNode class\n2. Create a root node with value 10\n3. Add left child 5, right child 15\n4. Add left child 2 to node 5",
+        "starterCode": "class TreeNode:\n    def __init__(self, val):\n        self.val = val\n        self.left = None\n        self.right = None\n\nroot = TreeNode(___)\nroot.left = TreeNode(___)\nroot.right = TreeNode(___)\nroot.left.left = TreeNode(___)\n\nprint(f\"Root: {root.val}\")\nprint(f\"Left child: {root.left.val}\")\nprint(f\"Right child: {root.right.val}\")\nprint(f\"Deepest left: {root.left.left.val}\")",
+        "solution": "class TreeNode:\n    def __init__(self, val):\n        self.val = val\n        self.left = None\n        self.right = None\n\nroot = TreeNode(10)\nroot.left = TreeNode(5)\nroot.right = TreeNode(15)\nroot.left.left = TreeNode(2)\n\nprint(f\"Root: {root.val}\")\nprint(f\"Left child: {root.left.val}\")\nprint(f\"Right child: {root.right.val}\")\nprint(f\"Deepest left: {root.left.left.val}\")",
+        "hint": "Assign TreeNode objects to .left and .right properties.",
+        "rubric": "Tree built with values 10, 5, 15, and 2 in the correct places."
+      },
+      {
+        "title": "Tree Traversal",
+        "theory": "## Visiting Every Node\nHow do you print every node in a tree? Recursion is the easiest way!\n\n- **Inorder**: Left, Node, Right (prints sorted in BSTs)\n- **Preorder**: Node, Left, Right\n- **Postorder**: Left, Right, Node\n\n```python\ndef inorder(node):\n    if not node: return\n    inorder(node.left)\n    print(node.val)\n    inorder(node.right)\n```",
+        "instructions": "## Task: Inorder Traversal\n1. Write a recursive `inorder(node)` function\n2. It should append values to a global list (or just print them)\n3. Test it on a simple tree",
+        "starterCode": "class TreeNode:\n    def __init__(self, val): self.val = val; self.left = None; self.right = None\n\ndef inorder(node, result):\n    if node is ___: \n        return\n    \n    # 1. Traverse left\n    inorder(node.___, result)\n    # 2. Visit node\n    result.___(node.val)\n    # 3. Traverse right\n    inorder(node.___, result)\n\nroot = TreeNode(10)\nroot.left = TreeNode(5)\nroot.right = TreeNode(15)\nroot.left.left = TreeNode(2)\nroot.left.right = TreeNode(7)\n\nres = []\ninorder(root, res)\nprint(\"Inorder Traversal:\", res)",
+        "solution": "class TreeNode:\n    def __init__(self, val): self.val = val; self.left = None; self.right = None\n\ndef inorder(node, result):\n    if node is None: \n        return\n    \n    # 1. Traverse left\n    inorder(node.left, result)\n    # 2. Visit node\n    result.append(node.val)\n    # 3. Traverse right\n    inorder(node.right, result)\n\nroot = TreeNode(10)\nroot.left = TreeNode(5)\nroot.right = TreeNode(15)\nroot.left.left = TreeNode(2)\nroot.left.right = TreeNode(7)\n\nres = []\ninorder(root, res)\nprint(\"Inorder Traversal:\", res)",
+        "hint": "Check if node is None. Recursively call left, append val, recursively call right.",
+        "rubric": "Output is [2, 5, 7, 10, 15]. Nodes are sorted!"
       }
     ]
   },
@@ -3139,13 +3175,49 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Rust Basics.",
     "lessons": [
       {
-        "title": "Rust Basics - Coming Soon",
-        "theory": "## Rust Basics\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Rust Basics** is under development.",
-        "starterCode": "# Rust Basics - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Rust Basics\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Hello Rust",
+        "theory": "## Welcome to Rust\nRust is a systems programming language focused on safety and performance.\n\n```rust\nfn main() {\n    println!(\"Hello, World!\");\n}\n```\n\n- `fn main()` is the entry point.\n- `println!` (with a `!`) is a **macro**, not a normal function.\n- Statements end with a semicolon `;`.",
+        "instructions": "## Task: Your First Rust Program\n1. Write a `main` function\n2. Use the `println!` macro to print your name\n3. Print your favorite programming language on the next line",
+        "starterCode": "___ main() {\n    ___!(\"Name: Mabel\");\n    ___!(\"Language: Rust\");\n}",
+        "solution": "fn main() {\n    println!(\"Name: Mabel\");\n    println!(\"Language: Rust\");\n}",
+        "hint": "fn main(). println! for printing.",
+        "rubric": "Code uses fn and println! correctly."
+      },
+      {
+        "title": "Variables & Mutability",
+        "theory": "## Immutable by Default\nIn Rust, variables are **immutable** (cannot be changed) by default.\n\n```rust\nlet x = 5;\n// x = 6; // ERROR: x is immutable\n\nlet mut y = 10; // 'mut' makes it mutable\ny = 11; // OK!\n\n// Constants require explicit types\nconst MAX_POINTS: u32 = 100_000;\n```",
+        "instructions": "## Task: Mutable Variables\n1. Declare an immutable variable `name`\n2. Declare a **mutable** variable `score` starting at 0\n3. Add 10 to the score\n4. Print both",
+        "starterCode": "fn main() {\n    let name = \"Alice\";\n    ___ ___ score = 0;\n    \n    score ___ 10;\n    \n    println!(\"{} scored {}\", name, score);\n}",
+        "solution": "fn main() {\n    let name = \"Alice\";\n    let mut score = 0;\n    \n    score += 10;\n    \n    println!(\"{} scored {}\", name, score);\n}",
+        "hint": "let mut score = 0. += to add.",
+        "rubric": "Score declared as mut and modified correctly."
+      },
+      {
+        "title": "Data Types",
+        "theory": "## Rust Types\nRust is statically typed. Types are often inferred, but sometimes explicit.\n\n```rust\n// Integers (i32, u32, i64, etc.)\nlet age: u32 = 25;  // Unsigned 32-bit\n\n// Floats (f32, f64)\nlet pi: f64 = 3.14159;\n\n// Boolean\nlet is_active: bool = true;\n\n// Character (4 bytes, Unicode)\nlet emoji: char = '😻';\n\n// Tuples\nlet point: (i32, f64) = (10, 3.5);\n```",
+        "instructions": "## Task: Working with Types\n1. Create a boolean `is_learning`\n2. Create a tuple `coords` with two integers (x, y)\n3. Extract x and y from the tuple using dot notation (`coords.0`)",
+        "starterCode": "fn main() {\n    let is_learning: ___ = true;\n    let coords = (42, 99);\n    \n    let x = coords.___;\n    let y = coords.___;\n    \n    println!(\"Learning: {}\", is_learning);\n    println!(\"X: {}, Y: {}\", x, y);\n}",
+        "solution": "fn main() {\n    let is_learning: bool = true;\n    let coords = (42, 99);\n    \n    let x = coords.0;\n    let y = coords.1;\n    \n    println!(\"Learning: {}\", is_learning);\n    println!(\"X: {}, Y: {}\", x, y);\n}",
+        "hint": "bool type. .0 gets first tuple element, .1 gets second.",
+        "rubric": "Correct types and tuple extraction used."
+      },
+      {
+        "title": "Functions in Rust",
+        "theory": "## Defining Functions\n\n```rust\n// Parameters MUST have types\nfn add(a: i32, b: i32) -> i32 {\n    a + b // No semicolon means return this value!\n}\n\n// Or explicit return\nfn multiply(a: i32, b: i32) -> i32 {\n    return a * b;\n}\n```\n\nNotice how omitting the semicolon at the end of an expression implicitly returns it.",
+        "instructions": "## Task: Write a Function\n1. Write a function `is_even(n: i32) -> bool`\n2. Return true if n is even, false otherwise\n3. Use implicit return (no semicolon on the last line)\n4. Test it in main",
+        "starterCode": "fn is_even(n: ___) -> ___ {\n    n % 2 ___ 0  // No semicolon!\n}\n\nfn main() {\n    println!(\"Is 4 even? {}\", is_even(4));\n    println!(\"Is 7 even? {}\", is_even(7));\n}",
+        "solution": "fn is_even(n: i32) -> bool {\n    n % 2 == 0  // No semicolon!\n}\n\nfn main() {\n    println!(\"Is 4 even? {}\", is_even(4));\n    println!(\"Is 7 even? {}\", is_even(7));\n}",
+        "hint": "i32 and bool types. == for comparison.",
+        "rubric": "Function signature correct. Implicit return works."
+      },
+      {
+        "title": "Control Flow",
+        "theory": "## If and Loops\n\n```rust\n// If expressions (can return values!)\nlet condition = true;\nlet number = if condition { 5 } else { 6 };\n\n// loop (infinite)\nloop { break; }\n\n// while loop\nwhile n > 0 { n -= 1; }\n\n// for loop (iterator)\nfor i in 0..5 { \n    println!(\"{}\", i); // 0 to 4\n}\n```",
+        "instructions": "## Task: Loop and Branch\n1. Loop from 1 to 10 (inclusive, use `1..=10`)\n2. Print \"Even\" or \"Odd\" for each number using an `if/else`",
+        "starterCode": "fn main() {\n    for i in 1..___10 {\n        if i % 2 == 0 {\n            println!(\"{} is Even\", i);\n        } ___ {\n            println!(\"{} is Odd\", i);\n        }\n    }\n}",
+        "solution": "fn main() {\n    for i in 1..=10 {\n        if i % 2 == 0 {\n            println!(\"{} is Even\", i);\n        } else {\n            println!(\"{} is Odd\", i);\n        }\n    }\n}",
+        "hint": "1..=10 for inclusive range. else for the alternative branch.",
+        "rubric": "Loop runs 1 to 10. Correctly identifies even and odd."
       }
     ]
   },
@@ -3153,13 +3225,31 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Ownership & Borrowing.",
     "lessons": [
       {
-        "title": "Ownership & Borrowing - Coming Soon",
-        "theory": "## Ownership & Borrowing\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Ownership & Borrowing** is under development.",
-        "starterCode": "# Ownership & Borrowing - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Ownership & Borrowing\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "The Ownership Rules",
+        "theory": "## Memory Safety without Garbage Collection\nRust's most unique feature is its ownership system.\n\n1. Each value has a variable called its **owner**.\n2. There can only be **one owner** at a time.\n3. When the owner goes out of scope, the value is **dropped** (memory freed).\n\n```rust\nlet s1 = String::from(\"hello\");\nlet s2 = s1; // s1 is MOVED to s2. s1 is no longer valid!\n\n// println!(\"{}\", s1); // ERROR: value borrowed here after move\n```",
+        "instructions": "## Task: Understand Moves\n1. Create a String `s1`\n2. \"Move\" it to `s2` (assign s1 to s2)\n3. To keep `s1` valid, you must **clone** it instead: `let s2 = s1.clone();`\n4. Fix the code to use clone so both print statements work",
+        "starterCode": "fn main() {\n    let s1 = String::from(\"Rust\");\n    \n    // Fix this line to clone instead of move\n    let s2 = s1.___(); \n    \n    println!(\"s1: {}\", s1); // This will crash if s1 was moved!\n    println!(\"s2: {}\", s2);\n}",
+        "solution": "fn main() {\n    let s1 = String::from(\"Rust\");\n    \n    // Fix this line to clone instead of move\n    let s2 = s1.clone(); \n    \n    println!(\"s1: {}\", s1); // This will crash if s1 was moved!\n    println!(\"s2: {}\", s2);\n}",
+        "hint": ".clone() creates a deep copy so ownership isn't moved.",
+        "rubric": "Code compiles and prints both strings by using clone()."
+      },
+      {
+        "title": "Borrowing (References)",
+        "theory": "## Borrowing data\nInstead of taking ownership (or cloning, which is slow), we can **borrow** data using references (`&`).\n\n```rust\nfn calculate_length(s: &String) -> usize {\n    s.len() // We have a reference, we don't own it\n}\n\nfn main() {\n    let s1 = String::from(\"hello\");\n    let len = calculate_length(&s1); // Pass a reference\n    // s1 is still valid here!\n}\n```",
+        "instructions": "## Task: Pass by Reference\n1. Create a function `print_length` that takes a reference to a String (`&String`)\n2. Pass a String to it from main using `&`\n3. Print the string again in main to prove you didn't lose ownership",
+        "starterCode": "fn print_length(s: ___) {\n    println!(\"Length: {}\", s.len());\n}\n\nfn main() {\n    let text = String::from(\"Borrowing is cool\");\n    \n    // Pass a reference\n    print_length(___text);\n    \n    // text is still valid!\n    println!(\"Text is still: {}\", text);\n}",
+        "solution": "fn print_length(s: &String) {\n    println!(\"Length: {}\", s.len());\n}\n\nfn main() {\n    let text = String::from(\"Borrowing is cool\");\n    \n    // Pass a reference\n    print_length(&text);\n    \n    // text is still valid!\n    println!(\"Text is still: {}\", text);\n}",
+        "hint": "&String for the type. &text to pass the reference.",
+        "rubric": "Function takes &String. Main passes &text. Ownership is preserved."
+      },
+      {
+        "title": "Mutable References",
+        "theory": "## Changing Borrowed Data\nYou can modify borrowed data if you use a **mutable reference** (`&mut`).\n\n**The Big Rule:** At any given time, you can have either:\n- ONE mutable reference (`&mut T`)\n- OR ANY NUMBER of immutable references (`&T`)\n\nThis prevents data races at compile time!",
+        "instructions": "## Task: Mutable Borrow\n1. Create a mutable String\n2. Create a function `append_world(s: &mut String)`\n3. Use `s.push_str(\" World\")` inside the function\n4. Pass a mutable reference to the function",
+        "starterCode": "fn append_world(s: ___) {\n    s.push_str(\" World\");\n}\n\nfn main() {\n    // Must be mut to borrow mutably\n    let ___ greeting = String::from(\"Hello\");\n    \n    // Pass mutable reference\n    append_world(___greeting);\n    \n    println!(\"{}\", greeting);\n}",
+        "solution": "fn append_world(s: &mut String) {\n    s.push_str(\" World\");\n}\n\nfn main() {\n    // Must be mut to borrow mutably\n    let mut greeting = String::from(\"Hello\");\n    \n    // Pass mutable reference\n    append_world(&mut greeting);\n    \n    println!(\"{}\", greeting);\n}",
+        "hint": "&mut String for the type. let mut for the variable. &mut greeting to pass.",
+        "rubric": "Code correctly modifies the string via mutable reference."
       }
     ]
   },

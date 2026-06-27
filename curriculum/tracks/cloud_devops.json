@@ -59,13 +59,22 @@
     "aiRubric": "Check logic, syntax, and output for CI/CD Pipelines.",
     "lessons": [
       {
-        "title": "CI/CD Pipelines - Coming Soon",
-        "theory": "## CI/CD Pipelines\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **CI/CD Pipelines** is under development.",
-        "starterCode": "# CI/CD Pipelines - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# CI/CD Pipelines\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "What is CI/CD?",
+        "theory": "## Automation for Code\n- **CI (Continuous Integration)**: Automatically build and test code every time someone commits.\n- **CD (Continuous Deployment)**: Automatically deploy the code to production if tests pass.\n\nBenefits: Catches bugs early, prevents manual deployment errors, speeds up release cycles.\n\nTools: GitHub Actions, Jenkins, GitLab CI.",
+        "instructions": "## Task: Pipeline Simulator\n1. Create a Pipeline class\n2. Add stages: `lint`, `test`, `build`, `deploy`\n3. If any stage returns False (fails), the pipeline must stop and fail",
+        "starterCode": "class Pipeline:\n    def __init__(self):\n        self.stages = []\n        \n    def add_stage(self, name, func):\n        self.stages.append({'name': name, 'func': func})\n        \n    def run(self):\n        for stage in self.stages:\n            print(f\"Running {stage['name']}...\")\n            success = stage['___']()\n            if not success:\n                print(f\"Pipeline FAILED at {stage['name']}\")\n                return ___\n        print(\"Pipeline SUCCESS! Deploying to production.\")\n        return True\n\n# Mock functions\ndef lint(): print(\"  Lint ok\"); return True\ndef test(): print(\"  Tests failed!\"); return False\ndef build(): print(\"  Build ok\"); return True\n\np = Pipeline()\np.add_stage('Lint', lint)\np.add_stage('Test', test)\np.add_stage('Build', build)\np.run()",
+        "solution": "class Pipeline:\n    def __init__(self):\n        self.stages = []\n        \n    def add_stage(self, name, func):\n        self.stages.append({'name': name, 'func': func})\n        \n    def run(self):\n        for stage in self.stages:\n            print(f\"Running {stage['name']}...\")\n            success = stage['func']()\n            if not success:\n                print(f\"Pipeline FAILED at {stage['name']}\")\n                return False\n        print(\"Pipeline SUCCESS! Deploying to production.\")\n        return True\n\n# Mock functions\ndef lint(): print(\"  Lint ok\"); return True\ndef test(): print(\"  Tests failed!\"); return False\ndef build(): print(\"  Build ok\"); return True\n\np = Pipeline()\np.add_stage('Lint', lint)\np.add_stage('Test', test)\np.add_stage('Build', build)\np.run()",
+        "hint": "Call the 'func'. Return False if it fails.",
+        "rubric": "Pipeline stops at Test and does not run Build."
+      },
+      {
+        "title": "GitHub Actions",
+        "theory": "## Workflows as Code\nGitHub Actions are defined in YAML files inside `.github/workflows/`.\n\n```yaml\nname: Python CI\non: [push, pull_request] # Triggers\n\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n    - uses: actions/checkout@v3\n    - name: Set up Python\n      uses: actions/setup-python@v4\n    - name: Run Tests\n      run: pytest\n```",
+        "instructions": "## Task: YAML Generator\n1. Create a function that generates a basic GitHub Actions YAML string\n2. Fill in the job name, OS, and the command to run tests\n3. Print the YAML",
+        "starterCode": "def generate_yaml(job_name, os, test_command):\n    yaml = f\"\"\"name: CI\non: [push]\n\njobs:\n  {___}:\n    runs-on: {___}\n    steps:\n    - uses: actions/checkout@v3\n    - name: Run tests\n      run: {___}\n\"\"\"\n    return yaml\n\nprint(generate_yaml('node-tests', 'ubuntu-latest', 'npm test'))",
+        "solution": "def generate_yaml(job_name, os, test_command):\n    yaml = f\"\"\"name: CI\non: [push]\n\njobs:\n  {job_name}:\n    runs-on: {os}\n    steps:\n    - uses: actions/checkout@v3\n    - name: Run tests\n      run: {test_command}\n\"\"\"\n    return yaml\n\nprint(generate_yaml('node-tests', 'ubuntu-latest', 'npm test'))",
+        "hint": "Use the f-string variables {job_name}, {os}, {test_command}.",
+        "rubric": "Valid YAML string generated with the correct variables injected."
       }
     ]
   },
@@ -73,13 +82,13 @@
     "aiRubric": "Check logic, syntax, and output for Monitoring & Logging.",
     "lessons": [
       {
-        "title": "Monitoring & Logging - Coming Soon",
-        "theory": "## Monitoring & Logging\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Monitoring & Logging** is under development.",
-        "starterCode": "# Monitoring & Logging - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Monitoring & Logging\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Logging Levels",
+        "theory": "## Why Log?\n`print()` isn't enough in production. You need structured logs with levels.\n\n- `DEBUG`: Verbose diagnostic info\n- `INFO`: Normal app events (e.g., \"User logged in\")\n- `WARN`: Something weird happened, but app still works\n- `ERROR`: Something failed, user affected\n- `FATAL`: App crashing immediately\n\nLogs should go to a central system (e.g., Datadog, ELK stack).",
+        "instructions": "## Task: Build a Logger\n1. Create a `Logger` class with a minimum log level threshold\n2. Add methods for info, warn, and error\n3. Only print messages if their level is >= the threshold",
+        "starterCode": "class Logger:\n    LEVELS = {'DEBUG': 1, 'INFO': 2, 'WARN': 3, 'ERROR': 4}\n    \n    def __init__(self, threshold='INFO'):\n        self.threshold = self.LEVELS[threshold]\n        \n    def log(self, level_name, msg):\n        level_val = self.LEVELS[___]\n        if level_val >= self.___:\n            print(f\"[{level_name}] {msg}\")\n            \n    def debug(self, msg): self.log('DEBUG', msg)\n    def info(self, msg): self.log('INFO', msg)\n    def error(self, msg): self.log('ERROR', msg)\n\nlog = Logger('INFO')\nlog.debug(\"Connecting to DB...\") # Shouldn't print\nlog.info(\"Server started on port 80\")\nlog.error(\"DB Connection failed!\")",
+        "solution": "class Logger:\n    LEVELS = {'DEBUG': 1, 'INFO': 2, 'WARN': 3, 'ERROR': 4}\n    \n    def __init__(self, threshold='INFO'):\n        self.threshold = self.LEVELS[threshold]\n        \n    def log(self, level_name, msg):\n        level_val = self.LEVELS[level_name]\n        if level_val >= self.threshold:\n            print(f\"[{level_name}] {msg}\")\n            \n    def debug(self, msg): self.log('DEBUG', msg)\n    def info(self, msg): self.log('INFO', msg)\n    def error(self, msg): self.log('ERROR', msg)\n\nlog = Logger('INFO')\nlog.debug(\"Connecting to DB...\") # Shouldn't print\nlog.info(\"Server started on port 80\")\nlog.error(\"DB Connection failed!\")",
+        "hint": "Get level_val using level_name. Check against self.threshold.",
+        "rubric": "Debug message is ignored. Info and Error messages are printed."
       }
     ]
   },
