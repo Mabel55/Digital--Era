@@ -101,13 +101,13 @@
     "aiRubric": "Check logic, syntax, and output for Native Modules.",
     "lessons": [
       {
-        "title": "Native Modules - Coming Soon",
-        "theory": "## Native Modules\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Native Modules** is under development.",
-        "starterCode": "# Native Modules - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Native Modules\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Bridging to Swift/Kotlin",
+        "theory": "## When JS Isn't Enough\nSometimes you need to access a phone feature that React Native doesn't support out of the box (like a specific Bluetooth protocol or a custom camera API).\n\nYou write the code in Swift (iOS) or Kotlin/Java (Android), and expose it to JavaScript via a **Native Module**.\n\nJS calls the module over the Bridge. The native code executes, and sends the result back to JS as a Promise.",
+        "instructions": "## Task: Native Module Bridge Simulator\n1. Simulate a JS call to a Native Android module.\n2. In Python, create a JS environment that passes a message to an Android environment.\n3. The Android environment processes it and returns a simulated Promise string.",
+        "starterCode": "class AndroidNativeModule:\n    def get_battery_level(self):\n        # Simulate native Java/Kotlin code reading hardware\n        print(\"[Android Code executing...]\")\n        return 87 # 87%\n\nclass JSEnvironment:\n    def __init__(self, native_module):\n        self.native = native_module\n        \n    def check_battery(self):\n        print(\"[JS] Requesting battery level over bridge...\")\n        # Call the native method\n        level = self.___.___()\n        print(f\"[JS] Promise resolved: Battery is at {___}%\")\n\n# Setup\nandroid_hardware = AndroidNativeModule()\nreact_app = JSEnvironment(android_hardware)\n\n# Execute\nreact_app.check_battery()",
+        "solution": "class AndroidNativeModule:\n    def get_battery_level(self):\n        # Simulate native Java/Kotlin code reading hardware\n        print(\"[Android Code executing...]\")\n        return 87 # 87%\n\nclass JSEnvironment:\n    def __init__(self, native_module):\n        self.native = native_module\n        \n    def check_battery(self):\n        print(\"[JS] Requesting battery level over bridge...\")\n        # Call the native method\n        level = self.native.get_battery_level()\n        print(f\"[JS] Promise resolved: Battery is at {level}%\")\n\n# Setup\nandroid_hardware = AndroidNativeModule()\nreact_app = JSEnvironment(android_hardware)\n\n# Execute\nreact_app.check_battery()",
+        "hint": "Call self.native.get_battery_level(). Insert 'level' in the print statement.",
+        "rubric": "JS correctly calls the native module and retrieves the 87% battery level."
       }
     ]
   },

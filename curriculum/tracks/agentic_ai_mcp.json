@@ -87,13 +87,22 @@
     "aiRubric": "Check logic, syntax, and output for Swarm Architectures.",
     "lessons": [
       {
-        "title": "Swarm Architectures - Coming Soon",
-        "theory": "## Swarm Architectures\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Swarm Architectures** is under development.",
-        "starterCode": "# Swarm Architectures - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Swarm Architectures\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Agent Swarms",
+        "theory": "## Decentralized Intelligence\nA 'Swarm' is a massive group of AI agents working together without a strict top-down manager.\n\nLike ants or bees, each agent has simple rules, but together they solve complex problems.\n\n- **Broadcasting**: One agent shouts a problem to the swarm. Whoever is best equipped answers.\n- **Emergence**: Complex solutions emerge from simple local interactions.",
+        "instructions": "## Task: Swarm Broadcast Simulator\n1. You have a swarm of 3 specialized agents.\n2. A user broadcasts a task: \"Translate this text to French\".\n3. Iterate through the agents, check their `specialty`, and if they match 'translation', assign them the task.",
+        "starterCode": "class Agent:\n    def __init__(self, name, specialty):\n        self.name = name\n        self.specialty = specialty\n        \n    def accept_task(self, task):\n        print(f\"{self.name} (Specialty: {self.specialty}) accepted task: {task}\")\n\nswarm = [\n    Agent(\"DataBot\", \"data_cleaning\"),\n    Agent(\"Polyglot\", \"translation\"),\n    Agent(\"Coder\", \"programming\")\n]\n\ntask = \"Translate this text to French\"\ntask_type = \"translation\"\n\nprint(\"Broadcasting task to swarm...\")\nfor agent in swarm:\n    if agent.___ == ___:\n        agent.___(task)\n        break",
+        "solution": "class Agent:\n    def __init__(self, name, specialty):\n        self.name = name\n        self.specialty = specialty\n        \n    def accept_task(self, task):\n        print(f\"{self.name} (Specialty: {self.specialty}) accepted task: {task}\")\n\nswarm = [\n    Agent(\"DataBot\", \"data_cleaning\"),\n    Agent(\"Polyglot\", \"translation\"),\n    Agent(\"Coder\", \"programming\")\n]\n\ntask = \"Translate this text to French\"\ntask_type = \"translation\"\n\nprint(\"Broadcasting task to swarm...\")\nfor agent in swarm:\n    if agent.specialty == task_type:\n        agent.accept_task(task)\n        break",
+        "hint": "Check if agent.specialty == task_type. Call agent.accept_task(task).",
+        "rubric": "Polyglot accepts the task because its specialty matches."
+      },
+      {
+        "title": "Autonomous Execution",
+        "theory": "## Letting the AI Drive\nAn autonomous agent doesn't stop after answering one question. It operates in a loop (like AutoGPT).\n\n1. **Think**: \"What should I do next?\"\n2. **Act**: Use a tool (e.g., search Google).\n3. **Observe**: Read the search results.\n4. **Loop**: Go back to step 1 until the final goal is reached.\n\n*Danger*: If the loop has no limits, it can rack up huge API bills or get stuck in infinite loops.",
+        "instructions": "## Task: The ReAct Loop\n1. Simulate an autonomous loop that runs until `goal_reached` is True.\n2. Add a `max_steps` safeguard to prevent infinite loops.\n3. The loop should stop after 3 steps, returning 'Timeout' if the goal wasn't reached.",
+        "starterCode": "def autonomous_agent(goal, max_steps=3):\n    step = 0\n    goal_reached = False\n    \n    while not goal_reached and step < ___:\n        step += 1\n        print(f\"Step {step}: Thinking & Acting...\")\n        \n        # Simulate finding the answer on step 4 (which is past the limit!)\n        if step == 4:\n            goal_reached = True\n            \n    if not goal_reached:\n        return \"Error: ___ reached without solving goal.\"\n    return \"Success!\"\n\nresult = autonomous_agent(\"Find the cure for aging\")\nprint(result)",
+        "solution": "def autonomous_agent(goal, max_steps=3):\n    step = 0\n    goal_reached = False\n    \n    while not goal_reached and step < max_steps:\n        step += 1\n        print(f\"Step {step}: Thinking & Acting...\")\n        \n        # Simulate finding the answer on step 4 (which is past the limit!)\n        if step == 4:\n            goal_reached = True\n            \n    if not goal_reached:\n        return \"Error: Timeout reached without solving goal.\"\n    return \"Success!\"\n\nresult = autonomous_agent(\"Find the cure for aging\")\nprint(result)",
+        "hint": "step < max_steps. Return 'Timeout'.",
+        "rubric": "Loop runs 3 times and returns the Timeout error, successfully preventing an infinite loop."
       }
     ]
   },

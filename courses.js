@@ -402,13 +402,22 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Swarm Architectures.",
     "lessons": [
       {
-        "title": "Swarm Architectures - Coming Soon",
-        "theory": "## Swarm Architectures\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Swarm Architectures** is under development.",
-        "starterCode": "# Swarm Architectures - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Swarm Architectures\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Agent Swarms",
+        "theory": "## Decentralized Intelligence\nA 'Swarm' is a massive group of AI agents working together without a strict top-down manager.\n\nLike ants or bees, each agent has simple rules, but together they solve complex problems.\n\n- **Broadcasting**: One agent shouts a problem to the swarm. Whoever is best equipped answers.\n- **Emergence**: Complex solutions emerge from simple local interactions.",
+        "instructions": "## Task: Swarm Broadcast Simulator\n1. You have a swarm of 3 specialized agents.\n2. A user broadcasts a task: \"Translate this text to French\".\n3. Iterate through the agents, check their `specialty`, and if they match 'translation', assign them the task.",
+        "starterCode": "class Agent:\n    def __init__(self, name, specialty):\n        self.name = name\n        self.specialty = specialty\n        \n    def accept_task(self, task):\n        print(f\"{self.name} (Specialty: {self.specialty}) accepted task: {task}\")\n\nswarm = [\n    Agent(\"DataBot\", \"data_cleaning\"),\n    Agent(\"Polyglot\", \"translation\"),\n    Agent(\"Coder\", \"programming\")\n]\n\ntask = \"Translate this text to French\"\ntask_type = \"translation\"\n\nprint(\"Broadcasting task to swarm...\")\nfor agent in swarm:\n    if agent.___ == ___:\n        agent.___(task)\n        break",
+        "solution": "class Agent:\n    def __init__(self, name, specialty):\n        self.name = name\n        self.specialty = specialty\n        \n    def accept_task(self, task):\n        print(f\"{self.name} (Specialty: {self.specialty}) accepted task: {task}\")\n\nswarm = [\n    Agent(\"DataBot\", \"data_cleaning\"),\n    Agent(\"Polyglot\", \"translation\"),\n    Agent(\"Coder\", \"programming\")\n]\n\ntask = \"Translate this text to French\"\ntask_type = \"translation\"\n\nprint(\"Broadcasting task to swarm...\")\nfor agent in swarm:\n    if agent.specialty == task_type:\n        agent.accept_task(task)\n        break",
+        "hint": "Check if agent.specialty == task_type. Call agent.accept_task(task).",
+        "rubric": "Polyglot accepts the task because its specialty matches."
+      },
+      {
+        "title": "Autonomous Execution",
+        "theory": "## Letting the AI Drive\nAn autonomous agent doesn't stop after answering one question. It operates in a loop (like AutoGPT).\n\n1. **Think**: \"What should I do next?\"\n2. **Act**: Use a tool (e.g., search Google).\n3. **Observe**: Read the search results.\n4. **Loop**: Go back to step 1 until the final goal is reached.\n\n*Danger*: If the loop has no limits, it can rack up huge API bills or get stuck in infinite loops.",
+        "instructions": "## Task: The ReAct Loop\n1. Simulate an autonomous loop that runs until `goal_reached` is True.\n2. Add a `max_steps` safeguard to prevent infinite loops.\n3. The loop should stop after 3 steps, returning 'Timeout' if the goal wasn't reached.",
+        "starterCode": "def autonomous_agent(goal, max_steps=3):\n    step = 0\n    goal_reached = False\n    \n    while not goal_reached and step < ___:\n        step += 1\n        print(f\"Step {step}: Thinking & Acting...\")\n        \n        # Simulate finding the answer on step 4 (which is past the limit!)\n        if step == 4:\n            goal_reached = True\n            \n    if not goal_reached:\n        return \"Error: ___ reached without solving goal.\"\n    return \"Success!\"\n\nresult = autonomous_agent(\"Find the cure for aging\")\nprint(result)",
+        "solution": "def autonomous_agent(goal, max_steps=3):\n    step = 0\n    goal_reached = False\n    \n    while not goal_reached and step < max_steps:\n        step += 1\n        print(f\"Step {step}: Thinking & Acting...\")\n        \n        # Simulate finding the answer on step 4 (which is past the limit!)\n        if step == 4:\n            goal_reached = True\n            \n    if not goal_reached:\n        return \"Error: Timeout reached without solving goal.\"\n    return \"Success!\"\n\nresult = autonomous_agent(\"Find the cure for aging\")\nprint(result)",
+        "hint": "step < max_steps. Return 'Timeout'.",
+        "rubric": "Loop runs 3 times and returns the Timeout error, successfully preventing an infinite loop."
       }
     ]
   },
@@ -1975,13 +1984,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Apache Airflow.",
     "lessons": [
       {
-        "title": "Apache Airflow - Coming Soon",
-        "theory": "## Apache Airflow\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Apache Airflow** is under development.",
-        "starterCode": "# Apache Airflow - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Apache Airflow\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Workflow Orchestration",
+        "theory": "## Scheduling Data Pipelines\nData Engineering relies on Airflow to schedule and monitor workflows. \n\nAirflow uses **DAGs** (Directed Acyclic Graphs). A DAG is a collection of tasks with defined dependencies.\n\n- **Directed**: Task A goes to Task B.\n- **Acyclic**: No loops! Task B cannot point back to Task A.\n\n```python\n# In Airflow:\ntask1 = BashOperator(task_id='print_date', bash_command='date')\ntask2 = BashOperator(task_id='sleep', bash_command='sleep 5')\n\ntask1 >> task2 # Sets dependency (task1 runs before task2)\n```",
+        "instructions": "## Task: Defining Dependencies\n1. You have 3 tasks: `extract_data`, `transform_data`, `load_data`.\n2. In a Python dictionary `dag_edges`, define the dependencies as lists of \"To\" nodes.\n3. Extract goes to Transform. Transform goes to Load.",
+        "starterCode": "tasks = ['extract', 'transform', 'load']\n\ndag_edges = {\n    'extract': ['___'],\n    'transform': ['___'],\n    'load': [] # End of pipeline\n}\n\ndef run_dag(start_node):\n    current = start_node\n    while current:\n        print(f\"Running Task: {current}\")\n        next_nodes = dag_edges[current]\n        if not next_nodes:\n            break\n        # Just take the first next node for this simple simulation\n        current = next_nodes[___]\n    print(\"DAG Completed!\")\n\nrun_dag('extract')",
+        "solution": "tasks = ['extract', 'transform', 'load']\n\ndag_edges = {\n    'extract': ['transform'],\n    'transform': ['load'],\n    'load': [] # End of pipeline\n}\n\ndef run_dag(start_node):\n    current = start_node\n    while current:\n        print(f\"Running Task: {current}\")\n        next_nodes = dag_edges[current]\n        if not next_nodes:\n            break\n        # Just take the first next node for this simple simulation\n        current = next_nodes[0]\n    print(\"DAG Completed!\")\n\nrun_dag('extract')",
+        "hint": "extract -> transform. transform -> load. Use [0] to get the first next_node.",
+        "rubric": "DAG runs extract, then transform, then load in order."
       }
     ]
   },
@@ -2017,13 +2026,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for ML Model Tracking.",
     "lessons": [
       {
-        "title": "ML Model Tracking - Coming Soon",
-        "theory": "## ML Model Tracking\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **ML Model Tracking** is under development.",
-        "starterCode": "# ML Model Tracking - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# ML Model Tracking\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Experiment Tracking",
+        "theory": "## MLflow & Weights & Biases\nWhen training ML models, you run hundreds of experiments, tweaking hyperparameters (like learning rate or tree depth).\n\nIf you don't track them, you'll forget which settings produced the best accuracy.\n\nTools like **MLflow** log:\n- **Parameters**: `learning_rate=0.01`\n- **Metrics**: `accuracy=0.95`, `loss=0.05`\n- **Artifacts**: The actual saved model file.",
+        "instructions": "## Task: ML Experiment Logger\n1. Create an `ExperimentTracker` class.\n2. It should have a `log_run` method that takes `run_name`, `params` (dict), and `metrics` (dict).\n3. Find the run with the highest accuracy.",
+        "starterCode": "class ExperimentTracker:\n    def __init__(self):\n        self.runs = []\n        \n    def log_run(self, name, params, metrics):\n        self.runs.___({\n            'name': name,\n            'params': params,\n            'metrics': metrics\n        })\n        \n    def get_best_run(self):\n        best_run = None\n        best_acc = -1\n        for run in self.___:\n            acc = run['metrics']['accuracy']\n            if acc > best_acc:\n                best_acc = acc\n                best_run = ___\n        return best_run\n\ntracker = ExperimentTracker()\ntracker.log_run(\"Run_1\", {'lr': 0.1}, {'accuracy': 0.82})\ntracker.log_run(\"Run_2\", {'lr': 0.01}, {'accuracy': 0.91})\ntracker.log_run(\"Run_3\", {'lr': 0.001}, {'accuracy': 0.88})\n\nbest = tracker.get_best_run()\nprint(f\"Best Run: {best['name']} with Accuracy {best['metrics']['accuracy']}\")",
+        "solution": "class ExperimentTracker:\n    def __init__(self):\n        self.runs = []\n        \n    def log_run(self, name, params, metrics):\n        self.runs.append({\n            'name': name,\n            'params': params,\n            'metrics': metrics\n        })\n        \n    def get_best_run(self):\n        best_run = None\n        best_acc = -1\n        for run in self.runs:\n            acc = run['metrics']['accuracy']\n            if acc > best_acc:\n                best_acc = acc\n                best_run = run\n        return best_run\n\ntracker = ExperimentTracker()\ntracker.log_run(\"Run_1\", {'lr': 0.1}, {'accuracy': 0.82})\ntracker.log_run(\"Run_2\", {'lr': 0.01}, {'accuracy': 0.91})\ntracker.log_run(\"Run_3\", {'lr': 0.001}, {'accuracy': 0.88})\n\nbest = tracker.get_best_run()\nprint(f\"Best Run: {best['name']} with Accuracy {best['metrics']['accuracy']}\")",
+        "hint": "append() the run. Iterate over self.runs. Assign best_run = run.",
+        "rubric": "Code successfully identifies Run_2 as the best run."
       }
     ]
   },
@@ -2805,13 +2814,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Native Modules.",
     "lessons": [
       {
-        "title": "Native Modules - Coming Soon",
-        "theory": "## Native Modules\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Native Modules** is under development.",
-        "starterCode": "# Native Modules - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Native Modules\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Bridging to Swift/Kotlin",
+        "theory": "## When JS Isn't Enough\nSometimes you need to access a phone feature that React Native doesn't support out of the box (like a specific Bluetooth protocol or a custom camera API).\n\nYou write the code in Swift (iOS) or Kotlin/Java (Android), and expose it to JavaScript via a **Native Module**.\n\nJS calls the module over the Bridge. The native code executes, and sends the result back to JS as a Promise.",
+        "instructions": "## Task: Native Module Bridge Simulator\n1. Simulate a JS call to a Native Android module.\n2. In Python, create a JS environment that passes a message to an Android environment.\n3. The Android environment processes it and returns a simulated Promise string.",
+        "starterCode": "class AndroidNativeModule:\n    def get_battery_level(self):\n        # Simulate native Java/Kotlin code reading hardware\n        print(\"[Android Code executing...]\")\n        return 87 # 87%\n\nclass JSEnvironment:\n    def __init__(self, native_module):\n        self.native = native_module\n        \n    def check_battery(self):\n        print(\"[JS] Requesting battery level over bridge...\")\n        # Call the native method\n        level = self.___.___()\n        print(f\"[JS] Promise resolved: Battery is at {___}%\")\n\n# Setup\nandroid_hardware = AndroidNativeModule()\nreact_app = JSEnvironment(android_hardware)\n\n# Execute\nreact_app.check_battery()",
+        "solution": "class AndroidNativeModule:\n    def get_battery_level(self):\n        # Simulate native Java/Kotlin code reading hardware\n        print(\"[Android Code executing...]\")\n        return 87 # 87%\n\nclass JSEnvironment:\n    def __init__(self, native_module):\n        self.native = native_module\n        \n    def check_battery(self):\n        print(\"[JS] Requesting battery level over bridge...\")\n        # Call the native method\n        level = self.native.get_battery_level()\n        print(f\"[JS] Promise resolved: Battery is at {level}%\")\n\n# Setup\nandroid_hardware = AndroidNativeModule()\nreact_app = JSEnvironment(android_hardware)\n\n# Execute\nreact_app.check_battery()",
+        "hint": "Call self.native.get_battery_level(). Insert 'level' in the print statement.",
+        "rubric": "JS correctly calls the native module and retrieves the 87% battery level."
       }
     ]
   },

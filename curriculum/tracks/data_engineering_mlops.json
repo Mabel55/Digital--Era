@@ -31,13 +31,13 @@
     "aiRubric": "Check logic, syntax, and output for Apache Airflow.",
     "lessons": [
       {
-        "title": "Apache Airflow - Coming Soon",
-        "theory": "## Apache Airflow\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Apache Airflow** is under development.",
-        "starterCode": "# Apache Airflow - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Apache Airflow\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Workflow Orchestration",
+        "theory": "## Scheduling Data Pipelines\nData Engineering relies on Airflow to schedule and monitor workflows. \n\nAirflow uses **DAGs** (Directed Acyclic Graphs). A DAG is a collection of tasks with defined dependencies.\n\n- **Directed**: Task A goes to Task B.\n- **Acyclic**: No loops! Task B cannot point back to Task A.\n\n```python\n# In Airflow:\ntask1 = BashOperator(task_id='print_date', bash_command='date')\ntask2 = BashOperator(task_id='sleep', bash_command='sleep 5')\n\ntask1 >> task2 # Sets dependency (task1 runs before task2)\n```",
+        "instructions": "## Task: Defining Dependencies\n1. You have 3 tasks: `extract_data`, `transform_data`, `load_data`.\n2. In a Python dictionary `dag_edges`, define the dependencies as lists of \"To\" nodes.\n3. Extract goes to Transform. Transform goes to Load.",
+        "starterCode": "tasks = ['extract', 'transform', 'load']\n\ndag_edges = {\n    'extract': ['___'],\n    'transform': ['___'],\n    'load': [] # End of pipeline\n}\n\ndef run_dag(start_node):\n    current = start_node\n    while current:\n        print(f\"Running Task: {current}\")\n        next_nodes = dag_edges[current]\n        if not next_nodes:\n            break\n        # Just take the first next node for this simple simulation\n        current = next_nodes[___]\n    print(\"DAG Completed!\")\n\nrun_dag('extract')",
+        "solution": "tasks = ['extract', 'transform', 'load']\n\ndag_edges = {\n    'extract': ['transform'],\n    'transform': ['load'],\n    'load': [] # End of pipeline\n}\n\ndef run_dag(start_node):\n    current = start_node\n    while current:\n        print(f\"Running Task: {current}\")\n        next_nodes = dag_edges[current]\n        if not next_nodes:\n            break\n        # Just take the first next node for this simple simulation\n        current = next_nodes[0]\n    print(\"DAG Completed!\")\n\nrun_dag('extract')",
+        "hint": "extract -> transform. transform -> load. Use [0] to get the first next_node.",
+        "rubric": "DAG runs extract, then transform, then load in order."
       }
     ]
   },
@@ -73,13 +73,13 @@
     "aiRubric": "Check logic, syntax, and output for ML Model Tracking.",
     "lessons": [
       {
-        "title": "ML Model Tracking - Coming Soon",
-        "theory": "## ML Model Tracking\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **ML Model Tracking** is under development.",
-        "starterCode": "# ML Model Tracking - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# ML Model Tracking\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Experiment Tracking",
+        "theory": "## MLflow & Weights & Biases\nWhen training ML models, you run hundreds of experiments, tweaking hyperparameters (like learning rate or tree depth).\n\nIf you don't track them, you'll forget which settings produced the best accuracy.\n\nTools like **MLflow** log:\n- **Parameters**: `learning_rate=0.01`\n- **Metrics**: `accuracy=0.95`, `loss=0.05`\n- **Artifacts**: The actual saved model file.",
+        "instructions": "## Task: ML Experiment Logger\n1. Create an `ExperimentTracker` class.\n2. It should have a `log_run` method that takes `run_name`, `params` (dict), and `metrics` (dict).\n3. Find the run with the highest accuracy.",
+        "starterCode": "class ExperimentTracker:\n    def __init__(self):\n        self.runs = []\n        \n    def log_run(self, name, params, metrics):\n        self.runs.___({\n            'name': name,\n            'params': params,\n            'metrics': metrics\n        })\n        \n    def get_best_run(self):\n        best_run = None\n        best_acc = -1\n        for run in self.___:\n            acc = run['metrics']['accuracy']\n            if acc > best_acc:\n                best_acc = acc\n                best_run = ___\n        return best_run\n\ntracker = ExperimentTracker()\ntracker.log_run(\"Run_1\", {'lr': 0.1}, {'accuracy': 0.82})\ntracker.log_run(\"Run_2\", {'lr': 0.01}, {'accuracy': 0.91})\ntracker.log_run(\"Run_3\", {'lr': 0.001}, {'accuracy': 0.88})\n\nbest = tracker.get_best_run()\nprint(f\"Best Run: {best['name']} with Accuracy {best['metrics']['accuracy']}\")",
+        "solution": "class ExperimentTracker:\n    def __init__(self):\n        self.runs = []\n        \n    def log_run(self, name, params, metrics):\n        self.runs.append({\n            'name': name,\n            'params': params,\n            'metrics': metrics\n        })\n        \n    def get_best_run(self):\n        best_run = None\n        best_acc = -1\n        for run in self.runs:\n            acc = run['metrics']['accuracy']\n            if acc > best_acc:\n                best_acc = acc\n                best_run = run\n        return best_run\n\ntracker = ExperimentTracker()\ntracker.log_run(\"Run_1\", {'lr': 0.1}, {'accuracy': 0.82})\ntracker.log_run(\"Run_2\", {'lr': 0.01}, {'accuracy': 0.91})\ntracker.log_run(\"Run_3\", {'lr': 0.001}, {'accuracy': 0.88})\n\nbest = tracker.get_best_run()\nprint(f\"Best Run: {best['name']} with Accuracy {best['metrics']['accuracy']}\")",
+        "hint": "append() the run. Iterate over self.runs. Assign best_run = run.",
+        "rubric": "Code successfully identifies Run_2 as the best run."
       }
     ]
   },
