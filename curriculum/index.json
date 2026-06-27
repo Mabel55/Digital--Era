@@ -117,12 +117,15 @@
     "Beginner": [
       "Intro to LLMs",
       "Prompt Engineering",
-      "OpenAI API"
+      "OpenAI API",
+      "Open Source LLMs"
     ],
     "Intermediate": [
       "RAG Architecture",
       "Vector Databases",
-      "LangChain"
+      "LangChain",
+      "Semantic Routing",
+      "Function Calling & Tools"
     ],
     "Advanced": [
       "Fine-tuning Models",
@@ -131,7 +134,9 @@
       "RAG Systems In Depth",
       "LLM Fine-Tuning",
       "AI Ethics and Safety",
-      "Advanced Autonomous Agents"
+      "Advanced Autonomous Agents",
+      "Model Quantization",
+      "Graph RAG"
     ]
   },
   "AI Automation": {
