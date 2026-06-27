@@ -113,13 +113,13 @@
     "aiRubric": "Check logic, syntax, and output for File Systems.",
     "lessons": [
       {
-        "title": "File Systems - Coming Soon",
-        "theory": "## File Systems\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **File Systems** is under development.",
-        "starterCode": "# File Systems - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# File Systems\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Reading and Writing",
+        "theory": "## File I/O in Rust\nRust's `std::fs` module provides functionality for interacting with the file system.\n\n```rust\nuse std::fs;\n\n// Read entire file to string\nlet contents = fs::read_to_string(\"file.txt\").expect(\"Failed to read file\");\n\n// Write string to file (overwrites)\nfs::write(\"output.txt\", \"Hello World!\").expect(\"Failed to write\");\n```\nNote the use of `.expect()`. File operations return a `Result` enum because they can fail (e.g., file not found, permission denied).",
+        "instructions": "## Task: File Operations\n1. Write a function that reads a simulated file and counts its characters.\n2. Use a mock `read_to_string` function that returns a `Result` (Ok or Err).",
+        "starterCode": "enum Result<T, E> {\n    Ok(T),\n    Err(E),\n}\n\ndef mock_read_to_string(filename):\n    if filename == \"valid.txt\":\n        return Result.Ok(\"Hello Rust\")\n    return Result.Err(\"File not found\")\n\ndef count_chars(filename):\n    result = mock_read_to_string(filename)\n    # Simulating Rust's match statement\n    if isinstance(result, Result.Ok):\n        return len(result.value)\n    else:\n        return \"Error: \" + result.value\n\n# NOTE: Above is pseudocode concept. Below is the Python task:\n\ndef python_file_handler(filename):\n    mock_fs = {'valid.txt': 'Hello Rust'}\n    \n    # Simulate fs::read_to_string with .expect()\n    content = mock_fs.get(filename)\n    if content is None:\n        raise Exception(\"Failed to read file\")\n    return ___(content)\n\nprint(\"Chars in valid.txt:\", python_file_handler('valid.txt'))\ntry:\n    python_file_handler('missing.txt')\nexcept Exception as e:\n    print(e)",
+        "solution": "enum Result<T, E> {\n    Ok(T),\n    Err(E),\n}\n\ndef mock_read_to_string(filename):\n    if filename == \"valid.txt\":\n        return Result.Ok(\"Hello Rust\")\n    return Result.Err(\"File not found\")\n\ndef count_chars(filename):\n    result = mock_read_to_string(filename)\n    # Simulating Rust's match statement\n    if isinstance(result, Result.Ok):\n        return len(result.value)\n    else:\n        return \"Error: \" + result.value\n\n# NOTE: Above is pseudocode concept. Below is the Python task:\n\ndef python_file_handler(filename):\n    mock_fs = {'valid.txt': 'Hello Rust'}\n    \n    # Simulate fs::read_to_string with .expect()\n    content = mock_fs.get(filename)\n    if content is None:\n        raise Exception(\"Failed to read file\")\n    return len(content)\n\nprint(\"Chars in valid.txt:\", python_file_handler('valid.txt'))\ntry:\n    python_file_handler('missing.txt')\nexcept Exception as e:\n    print(e)",
+        "hint": "Return len(content) to get the character count.",
+        "rubric": "Code successfully returns 10 for valid.txt and throws an exception for missing.txt."
       }
     ]
   },

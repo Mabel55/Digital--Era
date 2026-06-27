@@ -115,13 +115,13 @@
     "aiRubric": "Check logic, syntax, and output for Evaluation.",
     "lessons": [
       {
-        "title": "Evaluation - Coming Soon",
-        "theory": "## Evaluation\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Evaluation** is under development.",
-        "starterCode": "# Evaluation - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Evaluation\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Evaluating LLM Outputs",
+        "theory": "## How do you test AI?\nStandard unit tests (`assert 2+2 == 4`) don't work for generative AI because the output is slightly different every time.\n\nEvaluation methods:\n1. **Exact Match / Regex**: Check if the output contains a specific keyword or JSON structure.\n2. **Semantic Similarity**: Use embeddings to check if the *meaning* is close to a reference answer.\n3. **LLM-as-a-Judge**: Use a stronger LLM (like GPT-4) to grade the output of a smaller model (like Llama 3) based on a rubric.",
+        "instructions": "## Task: LLM as a Judge\n1. Simulate an LLM judge evaluating a generated response.\n2. If the response contains the word 'sorry' or 'cannot', score it 0 (refusal).\n3. Otherwise, score it 100.",
+        "starterCode": "def llm_judge(generated_text):\n    lower_text = generated_text.___()\n    if 'sorry' in lower_text or 'cannot' in lower_text:\n        return ___\n    return ___\n\nresponse1 = \"I'm sorry, I cannot fulfill that request as it violates safety policies.\"\nresponse2 = \"The capital of France is Paris.\"\n\nprint(f\"Response 1 Score: {llm_judge(response1)}\")\nprint(f\"Response 2 Score: {llm_judge(response2)}\")",
+        "solution": "def llm_judge(generated_text):\n    lower_text = generated_text.lower()\n    if 'sorry' in lower_text or 'cannot' in lower_text:\n        return 0\n    return 100\n\nresponse1 = \"I'm sorry, I cannot fulfill that request as it violates safety policies.\"\nresponse2 = \"The capital of France is Paris.\"\n\nprint(f\"Response 1 Score: {llm_judge(response1)}\")\nprint(f\"Response 2 Score: {llm_judge(response2)}\")",
+        "hint": "Convert to lower(). Return 0 for refusal, 100 for success.",
+        "rubric": "Response 1 scores 0, Response 2 scores 100."
       }
     ]
   }

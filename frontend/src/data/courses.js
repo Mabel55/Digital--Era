@@ -430,13 +430,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Evaluation.",
     "lessons": [
       {
-        "title": "Evaluation - Coming Soon",
-        "theory": "## Evaluation\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Evaluation** is under development.",
-        "starterCode": "# Evaluation - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Evaluation\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Evaluating LLM Outputs",
+        "theory": "## How do you test AI?\nStandard unit tests (`assert 2+2 == 4`) don't work for generative AI because the output is slightly different every time.\n\nEvaluation methods:\n1. **Exact Match / Regex**: Check if the output contains a specific keyword or JSON structure.\n2. **Semantic Similarity**: Use embeddings to check if the *meaning* is close to a reference answer.\n3. **LLM-as-a-Judge**: Use a stronger LLM (like GPT-4) to grade the output of a smaller model (like Llama 3) based on a rubric.",
+        "instructions": "## Task: LLM as a Judge\n1. Simulate an LLM judge evaluating a generated response.\n2. If the response contains the word 'sorry' or 'cannot', score it 0 (refusal).\n3. Otherwise, score it 100.",
+        "starterCode": "def llm_judge(generated_text):\n    lower_text = generated_text.___()\n    if 'sorry' in lower_text or 'cannot' in lower_text:\n        return ___\n    return ___\n\nresponse1 = \"I'm sorry, I cannot fulfill that request as it violates safety policies.\"\nresponse2 = \"The capital of France is Paris.\"\n\nprint(f\"Response 1 Score: {llm_judge(response1)}\")\nprint(f\"Response 2 Score: {llm_judge(response2)}\")",
+        "solution": "def llm_judge(generated_text):\n    lower_text = generated_text.lower()\n    if 'sorry' in lower_text or 'cannot' in lower_text:\n        return 0\n    return 100\n\nresponse1 = \"I'm sorry, I cannot fulfill that request as it violates safety policies.\"\nresponse2 = \"The capital of France is Paris.\"\n\nprint(f\"Response 1 Score: {llm_judge(response1)}\")\nprint(f\"Response 2 Score: {llm_judge(response2)}\")",
+        "hint": "Convert to lower(). Return 0 for refusal, 100 for success.",
+        "rubric": "Response 1 scores 0, Response 2 scores 100."
       }
     ]
   },
@@ -500,13 +500,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Email Automation.",
     "lessons": [
       {
-        "title": "Email Automation - Coming Soon",
-        "theory": "## Email Automation\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Email Automation** is under development.",
-        "starterCode": "# Email Automation - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Email Automation\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Programmatic Email",
+        "theory": "## Sending and Receiving via API\nAutomating emails is a core part of many workflows (e.g., sending receipts, newsletter campaigns, or having an AI read customer support emails).\n\n- **Sending (SMTP/APIs)**: Tools like SendGrid or AWS SES allow you to send emails via HTTP requests, which is much more reliable than SMTP.\n- **Receiving (IMAP/Webhooks)**: Instead of polling an inbox with IMAP, modern systems use webhooks to instantly notify your server when an email arrives.",
+        "instructions": "## Task: SendGrid Simulator\n1. Simulate sending an email using a mock SendGrid API function.\n2. The function should accept `to_email`, `subject`, and `body`.\n3. Return a success message with the recipient's email.",
+        "starterCode": "def mock_sendgrid_api(to_email, subject, body):\n    # Simulate HTTP POST request to api.sendgrid.com\n    payload = {\n        \"personalizations\": [{\"to\": [{\"email\": to_email}]}],\n        \"subject\": subject,\n        \"content\": [{\"type\": \"text/plain\", \"value\": body}]\n    }\n    \n    print(\"Sending payload to SendGrid:\\n\", payload)\n    return f\"202 Accepted: Email sent to {___}\"\n\nresponse = mock_sendgrid_api(\"alice@example.com\", \"Welcome!\", \"Thanks for signing up.\")\nprint(\"\\nResponse:\", response)",
+        "solution": "def mock_sendgrid_api(to_email, subject, body):\n    # Simulate HTTP POST request to api.sendgrid.com\n    payload = {\n        \"personalizations\": [{\"to\": [{\"email\": to_email}]}],\n        \"subject\": subject,\n        \"content\": [{\"type\": \"text/plain\", \"value\": body}]\n    }\n    \n    print(\"Sending payload to SendGrid:\\n\", payload)\n    return f\"202 Accepted: Email sent to {to_email}\"\n\nresponse = mock_sendgrid_api(\"alice@example.com\", \"Welcome!\", \"Thanks for signing up.\")\nprint(\"\\nResponse:\", response)",
+        "hint": "Use the to_email variable in the return string.",
+        "rubric": "Successfully simulates sending an email and prints the 202 Accepted message with the correct email."
       }
     ]
   },
@@ -556,13 +556,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Multi-Agent Systems.",
     "lessons": [
       {
-        "title": "Multi-Agent Systems - Coming Soon",
-        "theory": "## Multi-Agent Systems\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Multi-Agent Systems** is under development.",
-        "starterCode": "# Multi-Agent Systems - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Multi-Agent Systems\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Agent Collaboration",
+        "theory": "## Division of Labor\nInstead of one massive AI trying to do everything (which often leads to hallucination and confusion), you can use multiple specialized agents.\n\n- **Researcher Agent**: Has tools to search the web and scrape data.\n- **Writer Agent**: Takes the researcher's notes and writes a blog post.\n- **Reviewer Agent**: Checks the blog post for errors and tone.\n\nFrameworks like CrewAI or AutoGen manage these interactions.",
+        "instructions": "## Task: Crew Simulator\n1. Build a simplified multi-agent workflow.\n2. Pass a topic to the Researcher, pass the result to the Writer, and pass that to the Reviewer.",
+        "starterCode": "def researcher(topic):\n    return f\"[Notes] {topic} is a popular framework for building user interfaces.\"\n\ndef writer(notes):\n    return f\"[Draft] Did you know? {notes}\"\n\ndef reviewer(draft):\n    return f\"[Final Polish] Here is the article: {draft}\"\n\ndef run_crew(topic):\n    step1 = ___(topic)\n    step2 = ___(step1)\n    step3 = ___(step2)\n    return step3\n\nfinal_output = run_crew(\"React\")\nprint(final_output)",
+        "solution": "def researcher(topic):\n    return f\"[Notes] {topic} is a popular framework for building user interfaces.\"\n\ndef writer(notes):\n    return f\"[Draft] Did you know? {notes}\"\n\ndef reviewer(draft):\n    return f\"[Final Polish] Here is the article: {draft}\"\n\ndef run_crew(topic):\n    step1 = researcher(topic)\n    step2 = writer(step1)\n    step3 = reviewer(step2)\n    return step3\n\nfinal_output = run_crew(\"React\")\nprint(final_output)",
+        "hint": "Call researcher, then writer, then reviewer in order, passing the previous result.",
+        "rubric": "The agents successfully pass data sequentially to produce the final polished article."
       }
     ]
   },
@@ -2819,13 +2819,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Performance Profiling.",
     "lessons": [
       {
-        "title": "Performance Profiling - Coming Soon",
-        "theory": "## Performance Profiling\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Performance Profiling** is under development.",
-        "starterCode": "# Performance Profiling - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Performance Profiling\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "The JS Bridge",
+        "theory": "## Understanding React Native Bottlenecks\nReact Native apps have two main threads:\n1. **The Native Thread**: Written in Java/Kotlin or Obj-C/Swift. Handles UI rendering.\n2. **The JavaScript Thread**: Runs your React code.\n\nThey communicate over a **Bridge** via JSON messages. If you send too much data across the bridge (like animating a view by sending layout updates from JS 60 times a second), the app will drop frames and stutter.\n\n**Solution**: Use `useNativeDriver: true` for animations so they run entirely on the Native thread without crossing the bridge.",
+        "instructions": "## Task: Bridge Bottleneck Simulator\n1. Simulate the JS thread and the Native thread.\n2. The bridge can only handle 5 messages per frame. If more are sent, it drops them.\n3. Loop through 10 animation updates and see how many are dropped if sent over the bridge.",
+        "starterCode": "class JSBridge:\n    def __init__(self):\n        self.capacity_per_frame = 5\n        \n    def send_messages(self, num_messages):\n        if num_messages > self.___:\n            dropped = num_messages - self.___\n            print(f\"Warning: Bridge overloaded! Dropped {dropped} messages.\")\n            return self.capacity_per_frame\n        return num_messages\n\nbridge = JSBridge()\n\nprint(\"Sending 3 updates (Light load):\")\nprocessed = bridge.send_messages(3)\nprint(f\"Processed: {processed}\\n\")\n\nprint(\"Sending 10 updates (Heavy animation load):\")\nprocessed = bridge.send_messages(10)\nprint(f\"Processed: {processed}\")",
+        "solution": "class JSBridge:\n    def __init__(self):\n        self.capacity_per_frame = 5\n        \n    def send_messages(self, num_messages):\n        if num_messages > self.capacity_per_frame:\n            dropped = num_messages - self.capacity_per_frame\n            print(f\"Warning: Bridge overloaded! Dropped {dropped} messages.\")\n            return self.capacity_per_frame\n        return num_messages\n\nbridge = JSBridge()\n\nprint(\"Sending 3 updates (Light load):\")\nprocessed = bridge.send_messages(3)\nprint(f\"Processed: {processed}\\n\")\n\nprint(\"Sending 10 updates (Heavy animation load):\")\nprocessed = bridge.send_messages(10)\nprint(f\"Processed: {processed}\")",
+        "hint": "Compare num_messages to self.capacity_per_frame.",
+        "rubric": "Bridge successfully processes 3 messages, but warns and drops 5 messages when given 10."
       }
     ]
   },
@@ -3636,13 +3636,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for File Systems.",
     "lessons": [
       {
-        "title": "File Systems - Coming Soon",
-        "theory": "## File Systems\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **File Systems** is under development.",
-        "starterCode": "# File Systems - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# File Systems\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Reading and Writing",
+        "theory": "## File I/O in Rust\nRust's `std::fs` module provides functionality for interacting with the file system.\n\n```rust\nuse std::fs;\n\n// Read entire file to string\nlet contents = fs::read_to_string(\"file.txt\").expect(\"Failed to read file\");\n\n// Write string to file (overwrites)\nfs::write(\"output.txt\", \"Hello World!\").expect(\"Failed to write\");\n```\nNote the use of `.expect()`. File operations return a `Result` enum because they can fail (e.g., file not found, permission denied).",
+        "instructions": "## Task: File Operations\n1. Write a function that reads a simulated file and counts its characters.\n2. Use a mock `read_to_string` function that returns a `Result` (Ok or Err).",
+        "starterCode": "enum Result<T, E> {\n    Ok(T),\n    Err(E),\n}\n\ndef mock_read_to_string(filename):\n    if filename == \"valid.txt\":\n        return Result.Ok(\"Hello Rust\")\n    return Result.Err(\"File not found\")\n\ndef count_chars(filename):\n    result = mock_read_to_string(filename)\n    # Simulating Rust's match statement\n    if isinstance(result, Result.Ok):\n        return len(result.value)\n    else:\n        return \"Error: \" + result.value\n\n# NOTE: Above is pseudocode concept. Below is the Python task:\n\ndef python_file_handler(filename):\n    mock_fs = {'valid.txt': 'Hello Rust'}\n    \n    # Simulate fs::read_to_string with .expect()\n    content = mock_fs.get(filename)\n    if content is None:\n        raise Exception(\"Failed to read file\")\n    return ___(content)\n\nprint(\"Chars in valid.txt:\", python_file_handler('valid.txt'))\ntry:\n    python_file_handler('missing.txt')\nexcept Exception as e:\n    print(e)",
+        "solution": "enum Result<T, E> {\n    Ok(T),\n    Err(E),\n}\n\ndef mock_read_to_string(filename):\n    if filename == \"valid.txt\":\n        return Result.Ok(\"Hello Rust\")\n    return Result.Err(\"File not found\")\n\ndef count_chars(filename):\n    result = mock_read_to_string(filename)\n    # Simulating Rust's match statement\n    if isinstance(result, Result.Ok):\n        return len(result.value)\n    else:\n        return \"Error: \" + result.value\n\n# NOTE: Above is pseudocode concept. Below is the Python task:\n\ndef python_file_handler(filename):\n    mock_fs = {'valid.txt': 'Hello Rust'}\n    \n    # Simulate fs::read_to_string with .expect()\n    content = mock_fs.get(filename)\n    if content is None:\n        raise Exception(\"Failed to read file\")\n    return len(content)\n\nprint(\"Chars in valid.txt:\", python_file_handler('valid.txt'))\ntry:\n    python_file_handler('missing.txt')\nexcept Exception as e:\n    print(e)",
+        "hint": "Return len(content) to get the character count.",
+        "rubric": "Code successfully returns 10 for valid.txt and throws an exception for missing.txt."
       }
     ]
   },

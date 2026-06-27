@@ -115,13 +115,13 @@
     "aiRubric": "Check logic, syntax, and output for Performance Profiling.",
     "lessons": [
       {
-        "title": "Performance Profiling - Coming Soon",
-        "theory": "## Performance Profiling\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Performance Profiling** is under development.",
-        "starterCode": "# Performance Profiling - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Performance Profiling\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "The JS Bridge",
+        "theory": "## Understanding React Native Bottlenecks\nReact Native apps have two main threads:\n1. **The Native Thread**: Written in Java/Kotlin or Obj-C/Swift. Handles UI rendering.\n2. **The JavaScript Thread**: Runs your React code.\n\nThey communicate over a **Bridge** via JSON messages. If you send too much data across the bridge (like animating a view by sending layout updates from JS 60 times a second), the app will drop frames and stutter.\n\n**Solution**: Use `useNativeDriver: true` for animations so they run entirely on the Native thread without crossing the bridge.",
+        "instructions": "## Task: Bridge Bottleneck Simulator\n1. Simulate the JS thread and the Native thread.\n2. The bridge can only handle 5 messages per frame. If more are sent, it drops them.\n3. Loop through 10 animation updates and see how many are dropped if sent over the bridge.",
+        "starterCode": "class JSBridge:\n    def __init__(self):\n        self.capacity_per_frame = 5\n        \n    def send_messages(self, num_messages):\n        if num_messages > self.___:\n            dropped = num_messages - self.___\n            print(f\"Warning: Bridge overloaded! Dropped {dropped} messages.\")\n            return self.capacity_per_frame\n        return num_messages\n\nbridge = JSBridge()\n\nprint(\"Sending 3 updates (Light load):\")\nprocessed = bridge.send_messages(3)\nprint(f\"Processed: {processed}\\n\")\n\nprint(\"Sending 10 updates (Heavy animation load):\")\nprocessed = bridge.send_messages(10)\nprint(f\"Processed: {processed}\")",
+        "solution": "class JSBridge:\n    def __init__(self):\n        self.capacity_per_frame = 5\n        \n    def send_messages(self, num_messages):\n        if num_messages > self.capacity_per_frame:\n            dropped = num_messages - self.capacity_per_frame\n            print(f\"Warning: Bridge overloaded! Dropped {dropped} messages.\")\n            return self.capacity_per_frame\n        return num_messages\n\nbridge = JSBridge()\n\nprint(\"Sending 3 updates (Light load):\")\nprocessed = bridge.send_messages(3)\nprint(f\"Processed: {processed}\\n\")\n\nprint(\"Sending 10 updates (Heavy animation load):\")\nprocessed = bridge.send_messages(10)\nprint(f\"Processed: {processed}\")",
+        "hint": "Compare num_messages to self.capacity_per_frame.",
+        "rubric": "Bridge successfully processes 3 messages, but warns and drops 5 messages when given 10."
       }
     ]
   }

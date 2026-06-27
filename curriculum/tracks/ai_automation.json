@@ -59,13 +59,13 @@
     "aiRubric": "Check logic, syntax, and output for Email Automation.",
     "lessons": [
       {
-        "title": "Email Automation - Coming Soon",
-        "theory": "## Email Automation\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Email Automation** is under development.",
-        "starterCode": "# Email Automation - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Email Automation\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Programmatic Email",
+        "theory": "## Sending and Receiving via API\nAutomating emails is a core part of many workflows (e.g., sending receipts, newsletter campaigns, or having an AI read customer support emails).\n\n- **Sending (SMTP/APIs)**: Tools like SendGrid or AWS SES allow you to send emails via HTTP requests, which is much more reliable than SMTP.\n- **Receiving (IMAP/Webhooks)**: Instead of polling an inbox with IMAP, modern systems use webhooks to instantly notify your server when an email arrives.",
+        "instructions": "## Task: SendGrid Simulator\n1. Simulate sending an email using a mock SendGrid API function.\n2. The function should accept `to_email`, `subject`, and `body`.\n3. Return a success message with the recipient's email.",
+        "starterCode": "def mock_sendgrid_api(to_email, subject, body):\n    # Simulate HTTP POST request to api.sendgrid.com\n    payload = {\n        \"personalizations\": [{\"to\": [{\"email\": to_email}]}],\n        \"subject\": subject,\n        \"content\": [{\"type\": \"text/plain\", \"value\": body}]\n    }\n    \n    print(\"Sending payload to SendGrid:\\n\", payload)\n    return f\"202 Accepted: Email sent to {___}\"\n\nresponse = mock_sendgrid_api(\"alice@example.com\", \"Welcome!\", \"Thanks for signing up.\")\nprint(\"\\nResponse:\", response)",
+        "solution": "def mock_sendgrid_api(to_email, subject, body):\n    # Simulate HTTP POST request to api.sendgrid.com\n    payload = {\n        \"personalizations\": [{\"to\": [{\"email\": to_email}]}],\n        \"subject\": subject,\n        \"content\": [{\"type\": \"text/plain\", \"value\": body}]\n    }\n    \n    print(\"Sending payload to SendGrid:\\n\", payload)\n    return f\"202 Accepted: Email sent to {to_email}\"\n\nresponse = mock_sendgrid_api(\"alice@example.com\", \"Welcome!\", \"Thanks for signing up.\")\nprint(\"\\nResponse:\", response)",
+        "hint": "Use the to_email variable in the return string.",
+        "rubric": "Successfully simulates sending an email and prints the 202 Accepted message with the correct email."
       }
     ]
   },
@@ -115,13 +115,13 @@
     "aiRubric": "Check logic, syntax, and output for Multi-Agent Systems.",
     "lessons": [
       {
-        "title": "Multi-Agent Systems - Coming Soon",
-        "theory": "## Multi-Agent Systems\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Multi-Agent Systems** is under development.",
-        "starterCode": "# Multi-Agent Systems - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Multi-Agent Systems\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Agent Collaboration",
+        "theory": "## Division of Labor\nInstead of one massive AI trying to do everything (which often leads to hallucination and confusion), you can use multiple specialized agents.\n\n- **Researcher Agent**: Has tools to search the web and scrape data.\n- **Writer Agent**: Takes the researcher's notes and writes a blog post.\n- **Reviewer Agent**: Checks the blog post for errors and tone.\n\nFrameworks like CrewAI or AutoGen manage these interactions.",
+        "instructions": "## Task: Crew Simulator\n1. Build a simplified multi-agent workflow.\n2. Pass a topic to the Researcher, pass the result to the Writer, and pass that to the Reviewer.",
+        "starterCode": "def researcher(topic):\n    return f\"[Notes] {topic} is a popular framework for building user interfaces.\"\n\ndef writer(notes):\n    return f\"[Draft] Did you know? {notes}\"\n\ndef reviewer(draft):\n    return f\"[Final Polish] Here is the article: {draft}\"\n\ndef run_crew(topic):\n    step1 = ___(topic)\n    step2 = ___(step1)\n    step3 = ___(step2)\n    return step3\n\nfinal_output = run_crew(\"React\")\nprint(final_output)",
+        "solution": "def researcher(topic):\n    return f\"[Notes] {topic} is a popular framework for building user interfaces.\"\n\ndef writer(notes):\n    return f\"[Draft] Did you know? {notes}\"\n\ndef reviewer(draft):\n    return f\"[Final Polish] Here is the article: {draft}\"\n\ndef run_crew(topic):\n    step1 = researcher(topic)\n    step2 = writer(step1)\n    step3 = reviewer(step2)\n    return step3\n\nfinal_output = run_crew(\"React\")\nprint(final_output)",
+        "hint": "Call researcher, then writer, then reviewer in order, passing the previous result.",
+        "rubric": "The agents successfully pass data sequentially to produce the final polished article."
       }
     ]
   }
