@@ -4,14 +4,17 @@
       "Python Basics",
       "Control Flow",
       "Functions",
-      "String Manipulation"
+      "String Manipulation",
+      "Dictionaries & Sets"
     ],
     "Intermediate": [
       "Data Structures",
       "OOP in Python",
       "File I/O",
       "Error Handling",
-      "List Comprehensions"
+      "List Comprehensions",
+      "Lambda Functions & Map/Filter",
+      "Regular Expressions in Python"
     ],
     "Advanced": [
       "Decorators",
@@ -22,7 +25,9 @@
       "Python Testing Frameworks",
       "Python Security Practices",
       "Context Managers",
-      "Concurrency & Asyncio"
+      "Concurrency & Asyncio",
+      "Metaclasses",
+      "Type Hinting & Pydantic"
     ]
   },
   "Frontend": {
