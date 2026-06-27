@@ -3,13 +3,49 @@
     "aiRubric": "Check logic, syntax, and output for Pandas Intro.",
     "lessons": [
       {
-        "title": "Pandas Intro - Coming Soon",
-        "theory": "## Pandas Intro\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Pandas Intro** is under development.",
-        "starterCode": "# Pandas Intro - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Pandas Intro\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Creating DataFrames",
+        "theory": "## Pandas DataFrames\nA DataFrame is a 2D table (like a spreadsheet) for data analysis.\n\n```python\nimport pandas as pd\n\n# From dictionary\ndf = pd.DataFrame({\n    'Name': ['Alice', 'Bob', 'Charlie'],\n    'Age': [25, 30, 35],\n    'City': ['NYC', 'LA', 'Chicago']\n})\n\nprint(df)\nprint(df.shape)    # (3, 3) rows, cols\nprint(df.columns)  # Index(['Name', 'Age', 'City'])\n```",
+        "instructions": "## Task: Student DataFrame\n1. Create a DataFrame with columns: Name, Grade, Score\n2. Add 5 students\n3. Print the shape, columns, and first 3 rows",
+        "starterCode": "import pandas as pd\n\ndf = pd.DataFrame({\n    'Name': ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve'],\n    'Grade': ['A', 'B', 'A', 'C', 'B'],\n    'Score': [95, 82, 91, 73, 85]\n})\n\nprint(df.___)\nprint(df.___)\nprint(df.___(3))",
+        "solution": "import pandas as pd\n\ndf = pd.DataFrame({\n    'Name': ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve'],\n    'Grade': ['A', 'B', 'A', 'C', 'B'],\n    'Score': [95, 82, 91, 73, 85]\n})\n\nprint(df.shape)\nprint(df.columns)\nprint(df.head(3))",
+        "hint": ".shape for dimensions. .columns for column names. .head(n) for first n rows.",
+        "rubric": "Shape: (5, 3). Columns listed. First 3 rows displayed."
+      },
+      {
+        "title": "Selecting Data",
+        "theory": "## Accessing DataFrame Data\n\n```python\n# Select column\ndf['Name']            # Series\ndf[['Name', 'Age']]   # DataFrame (multiple cols)\n\n# Select rows by condition\ndf[df['Age'] > 25]\n\n# Select by index\ndf.iloc[0]      # First row\ndf.iloc[1:3]    # Rows 1-2\ndf.loc[0, 'Name']  # Specific cell\n```",
+        "instructions": "## Task: Filter Students\n1. Select only the 'Name' and 'Score' columns\n2. Filter students with Score > 85\n3. Get the student in the last row using iloc",
+        "starterCode": "import pandas as pd\n\ndf = pd.DataFrame({\n    'Name': ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve'],\n    'Score': [95, 82, 91, 73, 85]\n})\n\nprint(df[['___', '___']])\nprint(df[df['Score'] ___ 85])\nprint(df.___[-1])",
+        "solution": "import pandas as pd\n\ndf = pd.DataFrame({\n    'Name': ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve'],\n    'Score': [95, 82, 91, 73, 85]\n})\n\nprint(df[['Name', 'Score']])\nprint(df[df['Score'] > 85])\nprint(df.iloc[-1])",
+        "hint": "Double brackets for multiple columns. > for filtering. iloc[-1] for last row.",
+        "rubric": "Two columns selected. Filter shows Alice and Charlie. Last row is Eve."
+      },
+      {
+        "title": "Basic Statistics",
+        "theory": "## Descriptive Statistics\n\n```python\ndf['Score'].mean()    # Average\ndf['Score'].median()  # Middle value\ndf['Score'].std()     # Standard deviation\ndf['Score'].min()     # Minimum\ndf['Score'].max()     # Maximum\n\n# All at once\ndf.describe()\n\n# Value counts\ndf['Grade'].value_counts()\n```",
+        "instructions": "## Task: Score Analysis\n1. Calculate mean, median, min, max of scores\n2. Use describe() for full summary\n3. Count how many students got each grade",
+        "starterCode": "import pandas as pd\n\ndf = pd.DataFrame({\n    'Name': ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve'],\n    'Grade': ['A', 'B', 'A', 'C', 'B'],\n    'Score': [95, 82, 91, 73, 85]\n})\n\nprint(f\"Mean: {df['Score'].___():.1f}\")\nprint(f\"Median: {df['Score'].___()}\")\nprint(f\"Min: {df['Score'].___()}, Max: {df['Score'].___()}\")\nprint()\nprint(df.___()\nprint()\nprint(df['Grade'].___())",
+        "solution": "import pandas as pd\n\ndf = pd.DataFrame({\n    'Name': ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve'],\n    'Grade': ['A', 'B', 'A', 'C', 'B'],\n    'Score': [95, 82, 91, 73, 85]\n})\n\nprint(f\"Mean: {df['Score'].mean():.1f}\")\nprint(f\"Median: {df['Score'].median()}\")\nprint(f\"Min: {df['Score'].min()}, Max: {df['Score'].max()}\")\nprint()\nprint(df.describe())\nprint()\nprint(df['Grade'].value_counts())",
+        "hint": ".mean(), .median(), .min(), .max() for stats. .describe() for all. .value_counts() for frequency.",
+        "rubric": "Mean: 85.2. All stats correct. Grade counts: A:2, B:2, C:1."
+      },
+      {
+        "title": "Adding & Modifying Columns",
+        "theory": "## Modifying DataFrames\n\n```python\n# Add new column\ndf['Bonus'] = df['Score'] * 0.1\n\n# Conditional column\ndf['Pass'] = df['Score'] >= 60\n\n# Apply function\ndf['Grade_Upper'] = df['Grade'].apply(lambda x: x.upper())\n\n# Rename columns\ndf.rename(columns={'Score': 'Test_Score'}, inplace=True)\n\n# Drop column\ndf.drop('Bonus', axis=1, inplace=True)\n```",
+        "instructions": "## Task: Enhance Student Data\n1. Add a 'Percentage' column (Score out of 100, formatted)\n2. Add a 'Status' column: 'Pass' if Score >= 60, else 'Fail'\n3. Add a 'Letter' column using a function",
+        "starterCode": "import pandas as pd\n\ndf = pd.DataFrame({\n    'Name': ['Alice', 'Bob', 'Charlie', 'Diana'],\n    'Score': [95, 45, 72, 88]\n})\n\ndf['Percentage'] = df['Score'].apply(lambda x: f'{x}%')\ndf['Status'] = df['Score'].apply(lambda x: '___' if x >= 60 else '___')\n\ndef get_letter(score):\n    if score >= 90: return 'A'\n    elif score >= 80: return 'B'\n    elif score >= 70: return 'C'\n    elif score >= 60: return 'D'\n    else: return 'F'\n\ndf['Letter'] = df['Score'].___(get_letter)\nprint(df)",
+        "solution": "import pandas as pd\n\ndf = pd.DataFrame({\n    'Name': ['Alice', 'Bob', 'Charlie', 'Diana'],\n    'Score': [95, 45, 72, 88]\n})\n\ndf['Percentage'] = df['Score'].apply(lambda x: f'{x}%')\ndf['Status'] = df['Score'].apply(lambda x: 'Pass' if x >= 60 else 'Fail')\n\ndef get_letter(score):\n    if score >= 90: return 'A'\n    elif score >= 80: return 'B'\n    elif score >= 70: return 'C'\n    elif score >= 60: return 'D'\n    else: return 'F'\n\ndf['Letter'] = df['Score'].apply(get_letter)\nprint(df)",
+        "hint": "lambda for inline. .apply(function) maps function to each value.",
+        "rubric": "Percentage formatted. Pass/Fail correct. Letter grades match scores."
+      },
+      {
+        "title": "GroupBy & Aggregation",
+        "theory": "## Grouping Data\n\n```python\n# Group by category and aggregate\ndf.groupby('Department')['Salary'].mean()\n\n# Multiple aggregations\ndf.groupby('Department').agg({\n    'Salary': ['mean', 'max'],\n    'Age': 'mean'\n})\n\n# Group by multiple columns\ndf.groupby(['Department', 'Level'])['Salary'].mean()\n```",
+        "instructions": "## Task: Sales Analysis\n1. Create a sales DataFrame with Region, Product, Amount\n2. Group by Region to find total sales per region\n3. Group by Product to find average sale amount",
+        "starterCode": "import pandas as pd\n\ndf = pd.DataFrame({\n    'Region': ['North', 'South', 'North', 'South', 'North', 'South'],\n    'Product': ['Laptop', 'Phone', 'Laptop', 'Laptop', 'Phone', 'Phone'],\n    'Amount': [1200, 800, 1100, 1300, 750, 850]\n})\n\nprint('Total by Region:')\nprint(df.groupby('___')['Amount'].___())\nprint()\nprint('Average by Product:')\nprint(df.groupby('___')['Amount'].___())",
+        "solution": "import pandas as pd\n\ndf = pd.DataFrame({\n    'Region': ['North', 'South', 'North', 'South', 'North', 'South'],\n    'Product': ['Laptop', 'Phone', 'Laptop', 'Laptop', 'Phone', 'Phone'],\n    'Amount': [1200, 800, 1100, 1300, 750, 850]\n})\n\nprint('Total by Region:')\nprint(df.groupby('Region')['Amount'].sum())\nprint()\nprint('Average by Product:')\nprint(df.groupby('Product')['Amount'].mean())",
+        "hint": "groupby('col') groups rows. .sum() for total, .mean() for average.",
+        "rubric": "Regional totals correct. Product averages calculated."
       }
     ]
   },
