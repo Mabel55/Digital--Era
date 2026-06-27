@@ -190,13 +190,13 @@
     "aiRubric": "Check logic, syntax, and output for CSS Grid & Flexbox.",
     "lessons": [
       {
-        "title": "CSS Grid & Flexbox - Coming Soon",
-        "theory": "## CSS Grid & Flexbox\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **CSS Grid & Flexbox** is under development.",
-        "starterCode": "# CSS Grid & Flexbox - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# CSS Grid & Flexbox\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Modern Layouts",
+        "theory": "## CSS Flexbox\\nFlexbox is designed for 1-dimensional layouts (a row OR a column). It makes aligning items incredibly easy.\\n\\n```css\\n.container {\\n  display: flex;\\n  justify-content: center; /* Horizontally centers */\\n  align-items: center;     /* Vertically centers */\\n}\\n```\\n## CSS Grid\\nGrid is designed for 2-dimensional layouts (rows AND columns, like a checkerboard).",
+        "instructions": "## Task: Flexbox Align\\n1. You have a simulated container with elements.\\n2. Match the flexbox property to what it does.",
+        "starterCode": "flex_props = {\\n    'Space out elements evenly across the main axis': 'justify-content: ___',\\n    'Center elements on the cross axis (vertical if flex-direction is row)': 'align-items: ___',\\n    'Stack elements vertically instead of horizontally': 'flex-direction: ___'\\n}\\n\\nfor desc, prop in flex_props.items():\\n    print(f\"{prop:30} -> {desc}\")",
+        "solution": "flex_props = {\\n    'Space out elements evenly across the main axis': 'justify-content: space-between',\\n    'Center elements on the cross axis (vertical if flex-direction is row)': 'align-items: center',\\n    'Stack elements vertically instead of horizontally': 'flex-direction: column'\\n}\\n\\nfor desc, prop in flex_props.items():\\n    print(f\"{prop:30} -> {desc}\")",
+        "hint": "space-between, center, column.",
+        "rubric": "Properties correctly matched."
       }
     ]
   },

@@ -17,13 +17,13 @@
     "aiRubric": "Check logic, syntax, and output for Data Warehouses.",
     "lessons": [
       {
-        "title": "Data Warehouses - Coming Soon",
-        "theory": "## Data Warehouses\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Data Warehouses** is under development.",
-        "starterCode": "# Data Warehouses - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Data Warehouses\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "OLTP vs OLAP",
+        "theory": "## Where does data live?\\n- **OLTP (Online Transaction Processing)**: Databases like PostgreSQL. Built for fast, individual transactions (e.g., creating a user, buying an item).\\n- **OLAP (Online Analytical Processing)**: Data Warehouses like Snowflake or BigQuery. Built for analyzing massive amounts of data at once (e.g., calculating total sales for every day last year).\\n\\nData is moved from OLTP databases into an OLAP warehouse using ETL (Extract, Transform, Load) pipelines.",
+        "instructions": "## Task: Database Router\\n1. Simulate a router that sends a query to either the OLTP database or the OLAP warehouse.\\n2. If the query asks for a 'single user' or 'insert', send it to OLTP.\\n3. If it asks for 'monthly report' or 'average', send it to OLAP.",
+        "starterCode": "def route_query(query):\\n    query = query.lower()\\n    \\n    if 'insert' in query or 'single user' in query:\\n        return \"___\"\\n    elif 'monthly report' in query or 'average' in query:\\n        return \"___\"\\n    return \"Unknown\"\\n\\nqueries = [\\n    \"INSERT INTO users VALUES ('Alice')\",\\n    \"SELECT average(revenue) FROM sales\",\\n    \"Get single user profile for ID 5\",\\n    \"Generate monthly report for 2023\"\\n]\\n\\nfor q in queries:\\n    print(f\"Query: {q:35} -> Routing to: {route_query(q)}\")",
+        "solution": "def route_query(query):\\n    query = query.lower()\\n    \\n    if 'insert' in query or 'single user' in query:\\n        return \"OLTP\"\\n    elif 'monthly report' in query or 'average' in query:\\n        return \"OLAP\"\\n    return \"Unknown\"\\n\\nqueries = [\\n    \"INSERT INTO users VALUES ('Alice')\",\\n    \"SELECT average(revenue) FROM sales\",\\n    \"Get single user profile for ID 5\",\\n    \"Generate monthly report for 2023\"\\n]\\n\\nfor q in queries:\\n    print(f\"Query: {q:35} -> Routing to: {route_query(q)}\")",
+        "hint": "OLTP for fast/single transactions. OLAP for big analytics.",
+        "rubric": "Queries successfully routed to OLTP, OLAP, OLTP, OLAP respectively."
       }
     ]
   },
@@ -115,13 +115,13 @@
     "aiRubric": "Check logic, syntax, and output for Feature Stores.",
     "lessons": [
       {
-        "title": "Feature Stores - Coming Soon",
-        "theory": "## Feature Stores\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Feature Stores** is under development.",
-        "starterCode": "# Feature Stores - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Feature Stores\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Reusing ML Features",
+        "theory": "## Don't Repeat Yourself\\nIn Machine Learning, a 'Feature' is an input variable (e.g., 'User's average spend over 30 days').\\n\\nInstead of every Data Scientist writing their own SQL to calculate this feature from raw data, companies use a **Feature Store** (like Feast). It's a central hub where features are calculated once and shared across all models.",
+        "instructions": "## Task: Feature Store Mock\\n1. Simulate a Feature Store.\\n2. When a model asks for 'avg_spend_30d', the feature store checks if it has cached the value. If not, it calculates it and caches it.",
+        "starterCode": "class FeatureStore:\\n    def __init__(self):\\n        self.cache = {}\\n        \\n    def get_feature(self, feature_name, user_id):\\n        cache_key = f\"{feature_name}_{user_id}\"\\n        \\n        if cache_key in self.___:\\n            print(\"[CACHE HIT] Returning saved feature.\")\\n            return self.___[cache_key]\\n            \\n        print(\"[CACHE MISS] Calculating heavy SQL query...\")\\n        # Simulate calculation\\n        val = 145.50 if user_id == 1 else 0.0\\n        \\n        # Save to cache\\n        self.___[___] = val\\n        return val\\n\\nstore = FeatureStore()\\nprint(\"First call:\", store.get_feature('avg_spend_30d', 1))\\nprint(\"Second call:\", store.get_feature('avg_spend_30d', 1))",
+        "solution": "class FeatureStore:\\n    def __init__(self):\\n        self.cache = {}\\n        \\n    def get_feature(self, feature_name, user_id):\\n        cache_key = f\"{feature_name}_{user_id}\"\\n        \\n        if cache_key in self.cache:\\n            print(\"[CACHE HIT] Returning saved feature.\")\\n            return self.cache[cache_key]\\n            \\n        print(\"[CACHE MISS] Calculating heavy SQL query...\")\\n        # Simulate calculation\\n        val = 145.50 if user_id == 1 else 0.0\\n        \\n        # Save to cache\\n        self.cache[cache_key] = val\\n        return val\\n\\nstore = FeatureStore()\\nprint(\"First call:\", store.get_feature('avg_spend_30d', 1))\\nprint(\"Second call:\", store.get_feature('avg_spend_30d', 1))",
+        "hint": "Check self.cache. Save val to self.cache[cache_key].",
+        "rubric": "First call is a miss, second call is a hit."
       }
     ]
   }

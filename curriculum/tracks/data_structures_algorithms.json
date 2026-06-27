@@ -199,13 +199,13 @@
     "aiRubric": "Check logic, syntax, and output for Sorting Algorithms.",
     "lessons": [
       {
-        "title": "Sorting Algorithms - Coming Soon",
-        "theory": "## Sorting Algorithms\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Sorting Algorithms** is under development.",
-        "starterCode": "# Sorting Algorithms - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Sorting Algorithms\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Bubble Sort",
+        "theory": "## O(N^2) Complexity\\nBubble Sort is a simple but very slow algorithm. It repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. It continues until the list is sorted.",
+        "instructions": "## Task: Swap Elements\\n1. Implement the core mechanic of Bubble Sort: swapping adjacent elements.\\n2. Iterate through a list. If element `i` is greater than `i+1`, swap them.\\n3. This is just one pass (not the full sort), which moves the largest element to the end.",
+        "starterCode": "def bubble_sort_single_pass(arr):\\n    # Iterate up to the second-to-last element\\n    for i in range(len(arr) - 1):\\n        if arr[i] > arr[i + 1]:\\n            # Swap them using Python's tuple unpacking\\n            arr[i], arr[___] = arr[___], arr[i]\\n    return arr\\n\\nmy_list = [5, 3, 8, 2, 1]\\nprint(\"Original:\", my_list)\\n\\n# One pass\\nresult = bubble_sort_single_pass(my_list)\\nprint(\"After 1 Pass:\", result)\\nprint(\"(Notice how the largest number, 8, 'bubbled' to the end!)\")",
+        "solution": "def bubble_sort_single_pass(arr):\\n    # Iterate up to the second-to-last element\\n    for i in range(len(arr) - 1):\\n        if arr[i] > arr[i + 1]:\\n            # Swap them using Python's tuple unpacking\\n            arr[i], arr[i + 1] = arr[i + 1], arr[i]\\n    return arr\\n\\nmy_list = [5, 3, 8, 2, 1]\\nprint(\"Original:\", my_list)\\n\\n# One pass\\nresult = bubble_sort_single_pass(my_list)\\nprint(\"After 1 Pass:\", result)\\nprint(\"(Notice how the largest number, 8, 'bubbled' to the end!)\")",
+        "hint": "arr[i], arr[i + 1] = arr[i + 1], arr[i]",
+        "rubric": "Successfully swaps elements. Result is [3, 5, 2, 1, 8]."
       }
     ]
   },
@@ -227,13 +227,13 @@
     "aiRubric": "Check logic, syntax, and output for Tries.",
     "lessons": [
       {
-        "title": "Tries - Coming Soon",
-        "theory": "## Tries\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Tries** is under development.",
-        "starterCode": "# Tries - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Tries\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Prefix Trees",
+        "theory": "## Autocomplete Engine\\nA Trie (pronounced 'try') is a tree-like data structure used for efficient string searching. It's the engine behind 'Autocomplete' when you type in a search bar.\\n\\nInstead of storing whole words, it stores individual characters in nodes. Words sharing a prefix (like 'car' and 'cat') share the same branch ('c' -> 'a').",
+        "instructions": "## Task: Insert a Word\\n1. Build a basic Trie structure using nested dictionaries.\\n2. Insert the word 'cat' into the Trie.",
+        "starterCode": "class SimpleTrie:\\n    def __init__(self):\\n        self.root = {}\\n        \\n    def insert(self, word):\\n        current_node = self.root\\n        for char in word:\\n            if char not in current_node:\\n                # Create a new empty dict for this character\\n                current_node[char] = {}\\n            # Move down the tree\\n            current_node = current_node[___]\\n        # Mark the end of the word\\n        current_node['*'] = True\\n\\ntrie = SimpleTrie()\\ntrie.insert(\"cat\")\\ntrie.insert(\"car\")\\n\\n# Should output a nested dict structure sharing 'c' and 'a'\\nprint(\"Trie Structure:\")\\nimport json\\nprint(json.dumps(trie.root, indent=2))",
+        "solution": "class SimpleTrie:\\n    def __init__(self):\\n        self.root = {}\\n        \\n    def insert(self, word):\\n        current_node = self.root\\n        for char in word:\\n            if char not in current_node:\\n                # Create a new empty dict for this character\\n                current_node[char] = {}\\n            # Move down the tree\\n            current_node = current_node[char]\\n        # Mark the end of the word\\n        current_node['*'] = True\\n\\ntrie = SimpleTrie()\\ntrie.insert(\"cat\")\\ntrie.insert(\"car\")\\n\\n# Should output a nested dict structure sharing 'c' and 'a'\\nprint(\"Trie Structure:\")\\nimport json\\nprint(json.dumps(trie.root, indent=2))",
+        "hint": "Move down by setting current_node = current_node[char].",
+        "rubric": "Trie correctly builds a nested dict sharing 'c' and 'a', branching at 't' and 'r'."
       }
     ]
   },
@@ -241,13 +241,13 @@
     "aiRubric": "Check logic, syntax, and output for Graph Traversal.",
     "lessons": [
       {
-        "title": "Graph Traversal - Coming Soon",
-        "theory": "## Graph Traversal\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Graph Traversal** is under development.",
-        "starterCode": "# Graph Traversal - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Graph Traversal\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "BFS vs DFS",
+        "theory": "## Searching a Network\\nHow do you find the shortest path in a maze? Or the degrees of separation between two people on LinkedIn?\\n\\n- **BFS (Breadth-First Search)**: Searches layer by layer (neighbors first). Guarantees the shortest path. Uses a Queue.\\n- **DFS (Depth-First Search)**: Explores as far as possible down one branch before backtracking. Uses a Stack (or recursion).",
+        "instructions": "## Task: BFS Queue\\n1. Simulate a Breadth-First Search using a Queue (list).\\n2. Start at Node 'A'. Visit its neighbors before moving deeper.",
+        "starterCode": "graph = {\\n    'A': ['B', 'C'],\\n    'B': ['D', 'E'],\\n    'C': ['F'],\\n    'D': [], 'E': [], 'F': []\\n}\\n\\ndef bfs(graph, start):\\n    queue = [start]\\n    visited = set()\\n    \\n    while queue:\\n        # Pop the first element (FIFO)\\n        node = queue.pop(___)\\n        \\n        if node not in visited:\\n            print(f\"Visiting: {node}\")\\n            visited.add(___)\\n            \\n            # Add neighbors to the queue\\n            for neighbor in graph[node]:\\n                queue.append(___)\\n\\nprint(\"BFS Traversal Order:\")\\nbfs(graph, 'A')",
+        "solution": "graph = {\\n    'A': ['B', 'C'],\\n    'B': ['D', 'E'],\\n    'C': ['F'],\\n    'D': [], 'E': [], 'F': []\\n}\\n\\ndef bfs(graph, start):\\n    queue = [start]\\n    visited = set()\\n    \\n    while queue:\\n        # Pop the first element (FIFO)\\n        node = queue.pop(0)\\n        \\n        if node not in visited:\\n            print(f\"Visiting: {node}\")\\n            visited.add(node)\\n            \\n            # Add neighbors to the queue\\n            for neighbor in graph[node]:\\n                queue.append(neighbor)\\n\\nprint(\"BFS Traversal Order:\")\\nbfs(graph, 'A')",
+        "hint": "queue.pop(0) for FIFO. visited.add(node). queue.append(neighbor).",
+        "rubric": "Visits in layer order: A, B, C, D, E, F."
       }
     ]
   }

@@ -76,13 +76,13 @@
     "aiRubric": "Check logic, syntax, and output for Matplotlib.",
     "lessons": [
       {
-        "title": "Matplotlib - Coming Soon",
-        "theory": "## Matplotlib\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Matplotlib** is under development.",
-        "starterCode": "# Matplotlib - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Matplotlib\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Data Visualization",
+        "theory": "## A Picture is Worth 1000 Rows\\nMatplotlib is the standard library for creating charts in Python.\\n\\n```python\\nimport matplotlib.pyplot as plt\\n\\nplt.plot([1, 2, 3], [10, 20, 30])\\nplt.title(\"My Chart\")\\nplt.show()\\n```",
+        "instructions": "## Task: Plotting Simulator\\n1. We can't display actual images in this text console, but we can simulate the commands!\\n2. Write the 3 standard Matplotlib commands to plot data, set a title, and display the graph.",
+        "starterCode": "class MockPyPlot:\\n    def plot(self, x, y): print(f\"Plotted line from {x} to {y}\")\\n    def title(self, text): print(f\"Set title: {text}\")\\n    def show(self): print(\"Displaying graph to user!\")\\n\\nplt = MockPyPlot()\\n\\nx_data = [1, 2, 3, 4]\\ny_data = [10, 15, 25, 30]\\n\\n# 1. Plot the data\\nplt.___(x_data, y_data)\\n\\n# 2. Add a title \"Growth\"\\nplt.___(\"Growth\")\\n\\n# 3. Show the graph\\nplt.___()",
+        "solution": "class MockPyPlot:\\n    def plot(self, x, y): print(f\"Plotted line from {x} to {y}\")\\n    def title(self, text): print(f\"Set title: {text}\")\\n    def show(self): print(\"Displaying graph to user!\")\\n\\nplt = MockPyPlot()\\n\\nx_data = [1, 2, 3, 4]\\ny_data = [10, 15, 25, 30]\\n\\n# 1. Plot the data\\nplt.plot(x_data, y_data)\\n\\n# 2. Add a title \"Growth\"\\nplt.title(\"Growth\")\\n\\n# 3. Show the graph\\nplt.show()",
+        "hint": ".plot(), .title(), .show()",
+        "rubric": "Successfully calls the mock plotting functions in order."
       }
     ]
   },
@@ -90,13 +90,13 @@
     "aiRubric": "Check logic, syntax, and output for Statistical Analysis.",
     "lessons": [
       {
-        "title": "Statistical Analysis - Coming Soon",
-        "theory": "## Statistical Analysis\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Statistical Analysis** is under development.",
-        "starterCode": "# Statistical Analysis - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Statistical Analysis\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Mean, Median, Mode",
+        "theory": "## Understanding Distributions\\n- **Mean**: The average. Very sensitive to outliers (e.g., if Elon Musk walks into a bar, the *mean* wealth of everyone in the bar becomes a billion dollars).\\n- **Median**: The middle number. Much more robust to outliers.\\n- **Mode**: The most frequent number.",
+        "instructions": "## Task: Outlier Impact\\n1. Calculate the Mean and the Median of a dataset with an extreme outlier.\\n2. Observe how the outlier pulls the mean up, but leaves the median intact.",
+        "starterCode": "def calculate_mean(data):\\n    return sum(___) / len(___)\\n\\ndef calculate_median(data):\\n    sorted_data = sorted(___)\\n    mid = len(sorted_data) // 2\\n    return sorted_data[___]\\n\\n# Salaries at a coffee shop (in thousands). The last one is the CEO!\\nsalaries = [30, 32, 35, 40, 45, 900]\\n\\nmean_val = calculate_mean(salaries)\\nmedian_val = calculate_median(salaries)\\n\\nprint(f\"Mean Salary: ${mean_val:.1f}k\")\\nprint(f\"Median Salary: ${median_val:.1f}k\")\\nprint(\"Notice how the CEO salary distorts the Mean!\")",
+        "solution": "def calculate_mean(data):\\n    return sum(data) / len(data)\\n\\ndef calculate_median(data):\\n    sorted_data = sorted(data)\\n    mid = len(sorted_data) // 2\\n    return sorted_data[mid]\\n\\n# Salaries at a coffee shop (in thousands). The last one is the CEO!\\nsalaries = [30, 32, 35, 40, 45, 900]\\n\\nmean_val = calculate_mean(salaries)\\nmedian_val = calculate_median(salaries)\\n\\nprint(f\"Mean Salary: ${mean_val:.1f}k\")\\nprint(f\"Median Salary: ${median_val:.1f}k\")\\nprint(\"Notice how the CEO salary distorts the Mean!\")",
+        "hint": "sum(data) / len(data). sorted_data[mid].",
+        "rubric": "Calculates Mean as 180.3k and Median as 40.0k."
       }
     ]
   },
