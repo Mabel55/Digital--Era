@@ -31,13 +31,13 @@
     "aiRubric": "Check logic, syntax, and output for API Connections.",
     "lessons": [
       {
-        "title": "API Connections - Coming Soon",
-        "theory": "## API Connections\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **API Connections** is under development.",
-        "starterCode": "# API Connections - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# API Connections\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Webhooks vs Polling",
+        "theory": "## Getting Real-time Data\nIf you want an AI agent to respond when a new email arrives, how does it know an email arrived?\n\n- **Polling**: The agent asks the server every 5 minutes: \"Any new emails?\" (Inefficient, lots of wasted API calls).\n- **Webhooks**: You give the email server a URL. When an email arrives, the server immediately sends a POST request to that URL (Efficient, instant).",
+        "instructions": "## Task: Webhook Server Mock\n1. Build a mock webhook endpoint in Python.\n2. When a `POST` request hits the endpoint, it should trigger the AI agent.\n3. We will simulate this with a simple function call.",
+        "starterCode": "def ai_agent_process(data):\n    print(\"AI Agent processing new data:\", data['message'])\n\ndef webhook_endpoint(request_method, payload):\n    if request_method != '___':\n        return \"Error: Only POST allowed\"\n        \n    # Webhooks usually send JSON payloads\n    print(\"Webhook received payload!\")\n    \n    # Trigger the agent immediately\n    ___(payload)\n    \n    return \"Success: 200 OK\"\n\n# Simulate GitHub sending a webhook when a repo gets a star\ngithub_payload = {'event': 'star', 'message': 'User Bob starred your repo!'}\n\nprint(webhook_endpoint('GET', github_payload))\nprint(\"---\")\nprint(webhook_endpoint('POST', github_payload))",
+        "solution": "def ai_agent_process(data):\n    print(\"AI Agent processing new data:\", data['message'])\n\ndef webhook_endpoint(request_method, payload):\n    if request_method != 'POST':\n        return \"Error: Only POST allowed\"\n        \n    # Webhooks usually send JSON payloads\n    print(\"Webhook received payload!\")\n    \n    # Trigger the agent immediately\n    ai_agent_process(payload)\n    \n    return \"Success: 200 OK\"\n\n# Simulate GitHub sending a webhook when a repo gets a star\ngithub_payload = {'event': 'star', 'message': 'User Bob starred your repo!'}\n\nprint(webhook_endpoint('GET', github_payload))\nprint(\"---\")\nprint(webhook_endpoint('POST', github_payload))",
+        "hint": "Method should be 'POST'. Call ai_agent_process(payload).",
+        "rubric": "GET request is rejected. POST request triggers the AI agent processing."
       }
     ]
   },

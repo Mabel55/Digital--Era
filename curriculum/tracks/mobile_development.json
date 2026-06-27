@@ -87,13 +87,13 @@
     "aiRubric": "Check logic, syntax, and output for App Deployment.",
     "lessons": [
       {
-        "title": "App Deployment - Coming Soon",
-        "theory": "## App Deployment\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **App Deployment** is under development.",
-        "starterCode": "# App Deployment - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# App Deployment\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Expo vs CLI",
+        "theory": "## Getting to the App Store\nThere are two main ways to build React Native apps:\n\n- **Expo**: A framework and platform for universal React apps. Extremely easy to use. Handles builds via Expo Application Services (EAS). You rarely touch native Android/iOS code.\n- **React Native CLI**: The barebones approach. Gives you full control over Xcode and Android Studio, but requires a Mac to build iOS apps.",
+        "instructions": "## Task: Deployment Matcher\n1. Match the tool to its description.\n2. Tools: 'Expo Go', 'EAS Build', 'Xcode', 'Play Console'\n3. Print the matches.",
+        "starterCode": "rn_tools = {\n    'App used to preview your Expo app on a physical device instantly': '___',\n    'Expo cloud service that builds your app into an .apk or .ipa': '___',\n    'Apple IDE required to build bare React Native iOS apps': '___',\n    'Where you upload your Android app for public release': '___'\n}\n\nfor desc, tool in rn_tools.items():\n    print(f\"{tool:15}: {desc}\")",
+        "solution": "rn_tools = {\n    'App used to preview your Expo app on a physical device instantly': 'Expo Go',\n    'Expo cloud service that builds your app into an .apk or .ipa': 'EAS Build',\n    'Apple IDE required to build bare React Native iOS apps': 'Xcode',\n    'Where you upload your Android app for public release': 'Play Console'\n}\n\nfor desc, tool in rn_tools.items():\n    print(f\"{tool:15}: {desc}\")",
+        "hint": "Expo Go (preview), EAS Build (cloud build), Xcode (Apple IDE), Play Console (Android store).",
+        "rubric": "Tools correctly matched to their descriptions."
       }
     ]
   },

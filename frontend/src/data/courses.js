@@ -472,13 +472,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for API Connections.",
     "lessons": [
       {
-        "title": "API Connections - Coming Soon",
-        "theory": "## API Connections\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **API Connections** is under development.",
-        "starterCode": "# API Connections - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# API Connections\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Webhooks vs Polling",
+        "theory": "## Getting Real-time Data\nIf you want an AI agent to respond when a new email arrives, how does it know an email arrived?\n\n- **Polling**: The agent asks the server every 5 minutes: \"Any new emails?\" (Inefficient, lots of wasted API calls).\n- **Webhooks**: You give the email server a URL. When an email arrives, the server immediately sends a POST request to that URL (Efficient, instant).",
+        "instructions": "## Task: Webhook Server Mock\n1. Build a mock webhook endpoint in Python.\n2. When a `POST` request hits the endpoint, it should trigger the AI agent.\n3. We will simulate this with a simple function call.",
+        "starterCode": "def ai_agent_process(data):\n    print(\"AI Agent processing new data:\", data['message'])\n\ndef webhook_endpoint(request_method, payload):\n    if request_method != '___':\n        return \"Error: Only POST allowed\"\n        \n    # Webhooks usually send JSON payloads\n    print(\"Webhook received payload!\")\n    \n    # Trigger the agent immediately\n    ___(payload)\n    \n    return \"Success: 200 OK\"\n\n# Simulate GitHub sending a webhook when a repo gets a star\ngithub_payload = {'event': 'star', 'message': 'User Bob starred your repo!'}\n\nprint(webhook_endpoint('GET', github_payload))\nprint(\"---\")\nprint(webhook_endpoint('POST', github_payload))",
+        "solution": "def ai_agent_process(data):\n    print(\"AI Agent processing new data:\", data['message'])\n\ndef webhook_endpoint(request_method, payload):\n    if request_method != 'POST':\n        return \"Error: Only POST allowed\"\n        \n    # Webhooks usually send JSON payloads\n    print(\"Webhook received payload!\")\n    \n    # Trigger the agent immediately\n    ai_agent_process(payload)\n    \n    return \"Success: 200 OK\"\n\n# Simulate GitHub sending a webhook when a repo gets a star\ngithub_payload = {'event': 'star', 'message': 'User Bob starred your repo!'}\n\nprint(webhook_endpoint('GET', github_payload))\nprint(\"---\")\nprint(webhook_endpoint('POST', github_payload))",
+        "hint": "Method should be 'POST'. Call ai_agent_process(payload).",
+        "rubric": "GET request is rejected. POST request triggers the AI agent processing."
       }
     ]
   },
@@ -2791,13 +2791,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for App Deployment.",
     "lessons": [
       {
-        "title": "App Deployment - Coming Soon",
-        "theory": "## App Deployment\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **App Deployment** is under development.",
-        "starterCode": "# App Deployment - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# App Deployment\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Expo vs CLI",
+        "theory": "## Getting to the App Store\nThere are two main ways to build React Native apps:\n\n- **Expo**: A framework and platform for universal React apps. Extremely easy to use. Handles builds via Expo Application Services (EAS). You rarely touch native Android/iOS code.\n- **React Native CLI**: The barebones approach. Gives you full control over Xcode and Android Studio, but requires a Mac to build iOS apps.",
+        "instructions": "## Task: Deployment Matcher\n1. Match the tool to its description.\n2. Tools: 'Expo Go', 'EAS Build', 'Xcode', 'Play Console'\n3. Print the matches.",
+        "starterCode": "rn_tools = {\n    'App used to preview your Expo app on a physical device instantly': '___',\n    'Expo cloud service that builds your app into an .apk or .ipa': '___',\n    'Apple IDE required to build bare React Native iOS apps': '___',\n    'Where you upload your Android app for public release': '___'\n}\n\nfor desc, tool in rn_tools.items():\n    print(f\"{tool:15}: {desc}\")",
+        "solution": "rn_tools = {\n    'App used to preview your Expo app on a physical device instantly': 'Expo Go',\n    'Expo cloud service that builds your app into an .apk or .ipa': 'EAS Build',\n    'Apple IDE required to build bare React Native iOS apps': 'Xcode',\n    'Where you upload your Android app for public release': 'Play Console'\n}\n\nfor desc, tool in rn_tools.items():\n    print(f\"{tool:15}: {desc}\")",
+        "hint": "Expo Go (preview), EAS Build (cloud build), Xcode (Apple IDE), Play Console (Android store).",
+        "rubric": "Tools correctly matched to their descriptions."
       }
     ]
   },
@@ -3734,13 +3734,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Caching Strategies.",
     "lessons": [
       {
-        "title": "Caching Strategies - Coming Soon",
-        "theory": "## Caching Strategies\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Caching Strategies** is under development.",
-        "starterCode": "# Caching Strategies - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Caching Strategies\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Why Cache?",
+        "theory": "## Speeding Up Access\nReading from a database (disk) is slow. Reading from a cache (RAM) is extremely fast.\n\nCaching strategies:\n- **Cache-Aside**: The application checks the cache. If data isn't there (Cache Miss), it fetches from the DB, saves to cache, and returns it.\n- **Write-Through**: The application writes data to the DB and the Cache at the same time. Slower writes, faster reads.\n- **Write-Behind**: The application writes data only to the Cache, which later syncs with the DB asynchronously. Fast writes, but risky if the cache crashes.",
+        "instructions": "## Task: Cache-Aside Simulator\n1. Implement a `get_user(user_id)` function using the Cache-Aside pattern.\n2. You have a `cache` dictionary (fast) and a `database` dictionary (slow).\n3. On a cache miss, fetch from DB, save to cache, and return.",
+        "starterCode": "cache = {}\ndatabase = {1: \"Alice\", 2: \"Bob\", 3: \"Charlie\"}\n\ndef get_user(user_id):\n    # 1. Check cache first\n    if user_id in ___:\n        print(\"Cache HIT!\")\n        return cache[___]\n        \n    print(\"Cache MISS! Fetching from DB...\")\n    # 2. Fetch from DB\n    user_data = database.get(___)\n    \n    # 3. Save to cache for next time\n    if user_data:\n        ___[user_id] = user_data\n        \n    return user_data\n\nprint(get_user(2))\nprint(get_user(2)) # Should be a HIT now",
+        "solution": "cache = {}\ndatabase = {1: \"Alice\", 2: \"Bob\", 3: \"Charlie\"}\n\ndef get_user(user_id):\n    # 1. Check cache first\n    if user_id in cache:\n        print(\"Cache HIT!\")\n        return cache[user_id]\n        \n    print(\"Cache MISS! Fetching from DB...\")\n    # 2. Fetch from DB\n    user_data = database.get(user_id)\n    \n    # 3. Save to cache for next time\n    if user_data:\n        cache[user_id] = user_data\n        \n    return user_data\n\nprint(get_user(2))\nprint(get_user(2)) # Should be a HIT now",
+        "hint": "Check `cache`. Fetch from `database`. Save to `cache`.",
+        "rubric": "First call is a miss, second call is a hit. Both return 'Bob'."
       }
     ]
   },
@@ -3748,13 +3748,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Database Sharding.",
     "lessons": [
       {
-        "title": "Database Sharding - Coming Soon",
-        "theory": "## Database Sharding\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Database Sharding** is under development.",
-        "starterCode": "# Database Sharding - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Database Sharding\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Splitting Data",
+        "theory": "## Scaling Databases\nWhen a single database server gets too full (Vertical Scaling hits its limit), you must split the data across multiple servers (Horizontal Scaling / Sharding).\n\n- **Vertical Sharding**: Putting the Users table on DB1 and the Orders table on DB2.\n- **Horizontal Sharding**: Putting Users A-M on DB1 and Users N-Z on DB2.\n\nSharding is complex because joining data across servers is very slow.",
+        "instructions": "## Task: Hash-Based Sharding\n1. You have 3 database servers (0, 1, 2).\n2. Implement a function to assign a user to a specific shard based on their ID.\n3. Use the modulo operator: `user_id % number_of_shards`.",
+        "starterCode": "class ShardedDatabase:\n    def __init__(self, num_shards):\n        self.num_shards = num_shards\n        self.shards = {i: [] for i in range(num_shards)}\n        \n    def insert(self, user_id, name):\n        # Determine which shard to put this user in\n        shard_id = user_id % self.___\n        \n        self.shards[shard_id].append(name)\n        print(f\"Inserted {name} into Shard {shard_id}\")\n\ndb = ShardedDatabase(3)\ndb.insert(100, \"Alice\")\ndb.insert(101, \"Bob\")\ndb.insert(102, \"Charlie\")\ndb.insert(103, \"Diana\")\n\nprint(\"\\nDatabase State:\", db.shards)",
+        "solution": "class ShardedDatabase:\n    def __init__(self, num_shards):\n        self.num_shards = num_shards\n        self.shards = {i: [] for i in range(num_shards)}\n        \n    def insert(self, user_id, name):\n        # Determine which shard to put this user in\n        shard_id = user_id % self.num_shards\n        \n        self.shards[shard_id].append(name)\n        print(f\"Inserted {name} into Shard {shard_id}\")\n\ndb = ShardedDatabase(3)\ndb.insert(100, \"Alice\")\ndb.insert(101, \"Bob\")\ndb.insert(102, \"Charlie\")\ndb.insert(103, \"Diana\")\n\nprint(\"\\nDatabase State:\", db.shards)",
+        "hint": "Modulo by self.num_shards.",
+        "rubric": "Alice (100) goes to 1. Bob (101) to 2. Charlie (102) to 0. Diana (103) to 1."
       }
     ]
   },
