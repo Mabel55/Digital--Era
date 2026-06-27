@@ -31,13 +31,13 @@
     "aiRubric": "Check logic, syntax, and output for Navigation.",
     "lessons": [
       {
-        "title": "Navigation - Coming Soon",
-        "theory": "## Navigation\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Navigation** is under development.",
-        "starterCode": "# Navigation - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Navigation\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "React Navigation",
+        "theory": "## Moving Between Screens\nMobile apps don't have URLs like websites. They use a \"Stack\" to manage screens.\n\n`react-navigation` is the standard library for this.\n- **Stack Navigator**: Pushes a new screen on top of the old one (like a stack of cards).\n- **Tab Navigator**: Bottom tabs (Home, Search, Profile).\n- **Drawer Navigator**: Hamburger menu that slides out from the side.",
+        "instructions": "## Task: Stack Simulator\n1. Implement a Stack simulator using a standard Python list.\n2. `push(screen)` adds a screen to the top of the stack.\n3. `pop()` removes the top screen (going \"back\").\n4. `current()` returns the top screen.",
+        "starterCode": "class StackNavigator:\n    def __init__(self, initial_route):\n        self.stack = [initial_route]\n        \n    def push(self, screen):\n        self.stack.___(screen)\n        print(f\"Navigated to {screen}\")\n        \n    def pop(self):\n        if len(self.stack) > 1:\n            removed = self.stack.___()\n            print(f\"Went back from {removed}\")\n        else:\n            print(\"Cannot go back, at root screen!\")\n            \n    def current(self):\n        return self.stack[___]\n\nnav = StackNavigator('Home')\nnav.push('Profile')\nnav.push('Settings')\nprint(\"Current screen:\", nav.current())\nnav.pop()\nprint(\"Current screen:\", nav.current())",
+        "solution": "class StackNavigator:\n    def __init__(self, initial_route):\n        self.stack = [initial_route]\n        \n    def push(self, screen):\n        self.stack.append(screen)\n        print(f\"Navigated to {screen}\")\n        \n    def pop(self):\n        if len(self.stack) > 1:\n            removed = self.stack.pop()\n            print(f\"Went back from {removed}\")\n        else:\n            print(\"Cannot go back, at root screen!\")\n            \n    def current(self):\n        return self.stack[-1]\n\nnav = StackNavigator('Home')\nnav.push('Profile')\nnav.push('Settings')\nprint(\"Current screen:\", nav.current())\nnav.pop()\nprint(\"Current screen:\", nav.current())",
+        "hint": "Use .append() for push, .pop() for pop, and [-1] to get the last item.",
+        "rubric": "Stack pushes to Settings, pops back to Profile."
       }
     ]
   },
@@ -73,13 +73,13 @@
     "aiRubric": "Check logic, syntax, and output for Animations.",
     "lessons": [
       {
-        "title": "Animations - Coming Soon",
-        "theory": "## Animations\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Animations** is under development.",
-        "starterCode": "# Animations - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Animations\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Animated API",
+        "theory": "## Smooth UI Transitions\nReact Native's `Animated` API allows for fluid, 60fps animations.\n\nInstead of standard `View` or `Text`, you must use `Animated.View` or `Animated.Text` to apply animated styles.\n\n```javascript\n// Starting value\nconst fadeAnim = useRef(new Animated.Value(0)).current;\n\n// Trigger animation\nAnimated.timing(fadeAnim, {\n  toValue: 1,\n  duration: 1000,\n  useNativeDriver: true // Moves work off the JS thread\n}).start();\n```",
+        "instructions": "## Task: Animation Frame Simulator\n1. Simulate a fade-in animation loop.\n2. Start opacity at 0.0, target is 1.0.\n3. Increase opacity by a `step` amount (0.2) until it hits 1.0.\n4. Print the opacity at each frame.",
+        "starterCode": "def simulate_fade_in():\n    opacity = 0.0\n    target = 1.0\n    step = 0.2\n    \n    frame = 1\n    while opacity < target:\n        print(f\"Frame {frame}: Opacity = {opacity:.1f}\")\n        opacity += ___\n        # Prevent floating point precision errors\n        opacity = round(opacity, 1)\n        frame += 1\n        \n    print(f\"Frame {frame}: Opacity = {opacity:.1f} (Done!)\")\n\nsimulate_fade_in()",
+        "solution": "def simulate_fade_in():\n    opacity = 0.0\n    target = 1.0\n    step = 0.2\n    \n    frame = 1\n    while opacity < target:\n        print(f\"Frame {frame}: Opacity = {opacity:.1f}\")\n        opacity += step\n        # Prevent floating point precision errors\n        opacity = round(opacity, 1)\n        frame += 1\n        \n    print(f\"Frame {frame}: Opacity = {opacity:.1f} (Done!)\")\n\nsimulate_fade_in()",
+        "hint": "Add 'step' to 'opacity' inside the loop.",
+        "rubric": "Opacity increases from 0.0 to 1.0 smoothly in steps of 0.2."
       }
     ]
   },

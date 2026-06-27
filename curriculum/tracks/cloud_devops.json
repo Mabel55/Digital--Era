@@ -137,13 +137,13 @@
     "aiRubric": "Check logic, syntax, and output for Security Groups.",
     "lessons": [
       {
-        "title": "Security Groups - Coming Soon",
-        "theory": "## Security Groups\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Security Groups** is under development.",
-        "starterCode": "# Security Groups - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Security Groups\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Virtual Firewalls",
+        "theory": "## Protecting EC2 Instances\nA Security Group (SG) is a virtual firewall for your EC2 instances. It controls inbound and outbound traffic.\n\n- **Inbound Rules**: What traffic is allowed IN (e.g., allow HTTP on port 80 from anywhere `0.0.0.0/0`).\n- **Outbound Rules**: What traffic is allowed OUT (by default, everything is allowed).\n- SGs are **Stateful**: If you send a request out, the response is automatically allowed back in.",
+        "instructions": "## Task: Firewall Simulator\n1. Create a `Firewall` class that checks if a request is allowed.\n2. Store rules in a list of allowed ports.\n3. If a request comes in on an allowed port, return True, else False.",
+        "starterCode": "class SecurityGroup:\n    def __init__(self):\n        self.allowed_ports = []\n        \n    def add_rule(self, port):\n        self.allowed_ports.___(port)\n        \n    def allow_inbound(self, port):\n        if port in self.___:\n            return True\n        return ___\n\nsg = SecurityGroup()\n# Allow SSH and HTTP\nsg.add_rule(22)\nsg.add_rule(80)\n\nprint(\"HTTP (80) allowed?\", sg.allow_inbound(80))\nprint(\"MySQL (3306) allowed?\", sg.allow_inbound(3306))",
+        "solution": "class SecurityGroup:\n    def __init__(self):\n        self.allowed_ports = []\n        \n    def add_rule(self, port):\n        self.allowed_ports.append(port)\n        \n    def allow_inbound(self, port):\n        if port in self.allowed_ports:\n            return True\n        return False\n\nsg = SecurityGroup()\n# Allow SSH and HTTP\nsg.add_rule(22)\nsg.add_rule(80)\n\nprint(\"HTTP (80) allowed?\", sg.allow_inbound(80))\nprint(\"MySQL (3306) allowed?\", sg.allow_inbound(3306))",
+        "hint": "append() to add a rule. Check if port is in self.allowed_ports. Return False otherwise.",
+        "rubric": "HTTP is True, MySQL is False."
       }
     ]
   },
@@ -151,13 +151,13 @@
     "aiRubric": "Check logic, syntax, and output for Cost Optimization.",
     "lessons": [
       {
-        "title": "Cost Optimization - Coming Soon",
-        "theory": "## Cost Optimization\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Cost Optimization** is under development.",
-        "starterCode": "# Cost Optimization - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Cost Optimization\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Cloud Billing",
+        "theory": "## Don't Go Bankrupt\nThe cloud is easy to use, but also easy to accidentally spend thousands of dollars on.\n\nKey Strategies:\n1. **Right-Sizing**: Don't use a 16-core server if a 2-core server is enough.\n2. **Reserved Instances**: Commit to using a server for 1-3 years for massive discounts.\n3. **Spot Instances**: Bid on unused AWS capacity (up to 90% cheaper), but AWS can terminate them at any time.\n4. **Auto-Scaling**: Automatically shut down servers at night when traffic is low.",
+        "instructions": "## Task: Cost Calculator\n1. Calculate the monthly cost of a server running 24/7 (730 hours/month).\n2. On-demand cost is $0.10/hr.\n3. Spot instance cost is $0.03/hr.\n4. Calculate savings.",
+        "starterCode": "def calculate_costs(hours):\n    on_demand_rate = 0.10\n    spot_rate = 0.03\n    \n    on_demand_total = hours * ___\n    spot_total = hours * ___\n    savings = on_demand_total - ___\n    \n    return on_demand_total, spot_total, savings\n\nod, sp, sav = calculate_costs(730)\nprint(f\"On-Demand Cost: ${od:.2f}\")\nprint(f\"Spot Cost: ${sp:.2f}\")\nprint(f\"Total Savings: ${sav:.2f}\")",
+        "solution": "def calculate_costs(hours):\n    on_demand_rate = 0.10\n    spot_rate = 0.03\n    \n    on_demand_total = hours * on_demand_rate\n    spot_total = hours * spot_rate\n    savings = on_demand_total - spot_total\n    \n    return on_demand_total, spot_total, savings\n\nod, sp, sav = calculate_costs(730)\nprint(f\"On-Demand Cost: ${od:.2f}\")\nprint(f\"Spot Cost: ${sp:.2f}\")\nprint(f\"Total Savings: ${sav:.2f}\")",
+        "hint": "Multiply hours by the rates. Savings is on-demand minus spot.",
+        "rubric": "Calculates On-Demand as $73.00, Spot as $21.90, Savings as $51.10."
       }
     ]
   }

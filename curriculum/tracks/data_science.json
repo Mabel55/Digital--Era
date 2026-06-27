@@ -132,13 +132,13 @@
     "aiRubric": "Check logic, syntax, and output for Time Series.",
     "lessons": [
       {
-        "title": "Time Series - Coming Soon",
-        "theory": "## Time Series\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Time Series** is under development.",
-        "starterCode": "# Time Series - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Time Series\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Handling Dates",
+        "theory": "## Time is a Dimension\nTime Series data involves measurements taken over time (stock prices, weather, server metrics).\n\nIn Pandas, you must ensure your dates are actually stored as datetime objects, not strings, so you can easily group by month, year, or day of the week.\n\n```python\n# Convert string to datetime\ndf['date'] = pd.to_datetime(df['date'])\n\n# Set date as index\ndf.set_index('date', inplace=True)\n```",
+        "instructions": "## Task: Parse Dates\n1. Convert a list of date strings into Pandas datetime objects.\n2. Extract the year from the datetimes.",
+        "starterCode": "import pandas as pd\n\ndates_str = ['2023-01-15', '2023-05-20', '2024-11-01']\n\n# Convert to datetime\ndt_series = pd.___(dates_str)\n\nprint(\"Datetime Objects:\")\nprint(dt_series)\n\n# Extract the year\nyears = dt_series.___.year\nprint(\"\\nYears extracted:\")\nprint(years.tolist())",
+        "solution": "import pandas as pd\n\ndates_str = ['2023-01-15', '2023-05-20', '2024-11-01']\n\n# Convert to datetime\ndt_series = pd.to_datetime(dates_str)\n\nprint(\"Datetime Objects:\")\nprint(dt_series)\n\n# Extract the year\nyears = dt_series.dt.year\nprint(\"\\nYears extracted:\")\nprint(years.tolist())",
+        "hint": "Use pd.to_datetime(). Use .dt.year to get the year from a series.",
+        "rubric": "Converts correctly and prints years [2023, 2023, 2024]."
       }
     ]
   },
@@ -146,13 +146,13 @@
     "aiRubric": "Check logic, syntax, and output for NLP Basics.",
     "lessons": [
       {
-        "title": "NLP Basics - Coming Soon",
-        "theory": "## NLP Basics\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **NLP Basics** is under development.",
-        "starterCode": "# NLP Basics - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# NLP Basics\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Text Preprocessing",
+        "theory": "## Cleaning Text for AI\nComputers can't read text natively; we have to clean and convert it.\n\nStandard NLP pipeline:\n1. **Lowercasing**: \"Hello\" -> \"hello\"\n2. **Removing Punctuation**: \"hello!\" -> \"hello\"\n3. **Tokenization**: Splitting sentences into words: \"hello world\" -> `['hello', 'world']`\n4. **Stopword Removal**: Removing common, low-meaning words (e.g., 'the', 'is', 'a')",
+        "instructions": "## Task: Basic NLP Pipeline\n1. Write a function that takes a messy sentence and cleans it.\n2. Lowercase it, remove punctuation (periods and commas), and split it into a list of words.",
+        "starterCode": "def clean_text(sentence):\n    # 1. Lowercase\n    text = sentence.___()\n    \n    # 2. Remove punctuation (simple replace for this exercise)\n    text = text.replace('.', '').replace(',', '')\n    \n    # 3. Tokenize (split by space)\n    tokens = text.___(' ')\n    \n    return tokens\n\nraw = \"Hello, World. This is AI!\"\n# Also replacing exclamation mark for this specific string\nraw = raw.replace('!', '')\n\nprint(\"Raw:\", raw)\nprint(\"Tokens:\", clean_text(raw))",
+        "solution": "def clean_text(sentence):\n    # 1. Lowercase\n    text = sentence.lower()\n    \n    # 2. Remove punctuation (simple replace for this exercise)\n    text = text.replace('.', '').replace(',', '')\n    \n    # 3. Tokenize (split by space)\n    tokens = text.split(' ')\n    \n    return tokens\n\nraw = \"Hello, World. This is AI!\"\n# Also replacing exclamation mark for this specific string\nraw = raw.replace('!', '')\n\nprint(\"Raw:\", raw)\nprint(\"Tokens:\", clean_text(raw))",
+        "hint": ".lower() for lowercase. .split(' ') to split by spaces.",
+        "rubric": "Outputs ['hello', 'world', 'this', 'is', 'ai']."
       }
     ]
   },

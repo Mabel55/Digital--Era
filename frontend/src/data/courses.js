@@ -1388,13 +1388,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Security Groups.",
     "lessons": [
       {
-        "title": "Security Groups - Coming Soon",
-        "theory": "## Security Groups\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Security Groups** is under development.",
-        "starterCode": "# Security Groups - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Security Groups\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Virtual Firewalls",
+        "theory": "## Protecting EC2 Instances\nA Security Group (SG) is a virtual firewall for your EC2 instances. It controls inbound and outbound traffic.\n\n- **Inbound Rules**: What traffic is allowed IN (e.g., allow HTTP on port 80 from anywhere `0.0.0.0/0`).\n- **Outbound Rules**: What traffic is allowed OUT (by default, everything is allowed).\n- SGs are **Stateful**: If you send a request out, the response is automatically allowed back in.",
+        "instructions": "## Task: Firewall Simulator\n1. Create a `Firewall` class that checks if a request is allowed.\n2. Store rules in a list of allowed ports.\n3. If a request comes in on an allowed port, return True, else False.",
+        "starterCode": "class SecurityGroup:\n    def __init__(self):\n        self.allowed_ports = []\n        \n    def add_rule(self, port):\n        self.allowed_ports.___(port)\n        \n    def allow_inbound(self, port):\n        if port in self.___:\n            return True\n        return ___\n\nsg = SecurityGroup()\n# Allow SSH and HTTP\nsg.add_rule(22)\nsg.add_rule(80)\n\nprint(\"HTTP (80) allowed?\", sg.allow_inbound(80))\nprint(\"MySQL (3306) allowed?\", sg.allow_inbound(3306))",
+        "solution": "class SecurityGroup:\n    def __init__(self):\n        self.allowed_ports = []\n        \n    def add_rule(self, port):\n        self.allowed_ports.append(port)\n        \n    def allow_inbound(self, port):\n        if port in self.allowed_ports:\n            return True\n        return False\n\nsg = SecurityGroup()\n# Allow SSH and HTTP\nsg.add_rule(22)\nsg.add_rule(80)\n\nprint(\"HTTP (80) allowed?\", sg.allow_inbound(80))\nprint(\"MySQL (3306) allowed?\", sg.allow_inbound(3306))",
+        "hint": "append() to add a rule. Check if port is in self.allowed_ports. Return False otherwise.",
+        "rubric": "HTTP is True, MySQL is False."
       }
     ]
   },
@@ -1402,13 +1402,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Cost Optimization.",
     "lessons": [
       {
-        "title": "Cost Optimization - Coming Soon",
-        "theory": "## Cost Optimization\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Cost Optimization** is under development.",
-        "starterCode": "# Cost Optimization - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Cost Optimization\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Cloud Billing",
+        "theory": "## Don't Go Bankrupt\nThe cloud is easy to use, but also easy to accidentally spend thousands of dollars on.\n\nKey Strategies:\n1. **Right-Sizing**: Don't use a 16-core server if a 2-core server is enough.\n2. **Reserved Instances**: Commit to using a server for 1-3 years for massive discounts.\n3. **Spot Instances**: Bid on unused AWS capacity (up to 90% cheaper), but AWS can terminate them at any time.\n4. **Auto-Scaling**: Automatically shut down servers at night when traffic is low.",
+        "instructions": "## Task: Cost Calculator\n1. Calculate the monthly cost of a server running 24/7 (730 hours/month).\n2. On-demand cost is $0.10/hr.\n3. Spot instance cost is $0.03/hr.\n4. Calculate savings.",
+        "starterCode": "def calculate_costs(hours):\n    on_demand_rate = 0.10\n    spot_rate = 0.03\n    \n    on_demand_total = hours * ___\n    spot_total = hours * ___\n    savings = on_demand_total - ___\n    \n    return on_demand_total, spot_total, savings\n\nod, sp, sav = calculate_costs(730)\nprint(f\"On-Demand Cost: ${od:.2f}\")\nprint(f\"Spot Cost: ${sp:.2f}\")\nprint(f\"Total Savings: ${sav:.2f}\")",
+        "solution": "def calculate_costs(hours):\n    on_demand_rate = 0.10\n    spot_rate = 0.03\n    \n    on_demand_total = hours * on_demand_rate\n    spot_total = hours * spot_rate\n    savings = on_demand_total - spot_total\n    \n    return on_demand_total, spot_total, savings\n\nod, sp, sav = calculate_costs(730)\nprint(f\"On-Demand Cost: ${od:.2f}\")\nprint(f\"Spot Cost: ${sp:.2f}\")\nprint(f\"Total Savings: ${sav:.2f}\")",
+        "hint": "Multiply hours by the rates. Savings is on-demand minus spot.",
+        "rubric": "Calculates On-Demand as $73.00, Spot as $21.90, Savings as $51.10."
       }
     ]
   },
@@ -2202,13 +2202,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Time Series.",
     "lessons": [
       {
-        "title": "Time Series - Coming Soon",
-        "theory": "## Time Series\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Time Series** is under development.",
-        "starterCode": "# Time Series - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Time Series\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Handling Dates",
+        "theory": "## Time is a Dimension\nTime Series data involves measurements taken over time (stock prices, weather, server metrics).\n\nIn Pandas, you must ensure your dates are actually stored as datetime objects, not strings, so you can easily group by month, year, or day of the week.\n\n```python\n# Convert string to datetime\ndf['date'] = pd.to_datetime(df['date'])\n\n# Set date as index\ndf.set_index('date', inplace=True)\n```",
+        "instructions": "## Task: Parse Dates\n1. Convert a list of date strings into Pandas datetime objects.\n2. Extract the year from the datetimes.",
+        "starterCode": "import pandas as pd\n\ndates_str = ['2023-01-15', '2023-05-20', '2024-11-01']\n\n# Convert to datetime\ndt_series = pd.___(dates_str)\n\nprint(\"Datetime Objects:\")\nprint(dt_series)\n\n# Extract the year\nyears = dt_series.___.year\nprint(\"\\nYears extracted:\")\nprint(years.tolist())",
+        "solution": "import pandas as pd\n\ndates_str = ['2023-01-15', '2023-05-20', '2024-11-01']\n\n# Convert to datetime\ndt_series = pd.to_datetime(dates_str)\n\nprint(\"Datetime Objects:\")\nprint(dt_series)\n\n# Extract the year\nyears = dt_series.dt.year\nprint(\"\\nYears extracted:\")\nprint(years.tolist())",
+        "hint": "Use pd.to_datetime(). Use .dt.year to get the year from a series.",
+        "rubric": "Converts correctly and prints years [2023, 2023, 2024]."
       }
     ]
   },
@@ -2216,13 +2216,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for NLP Basics.",
     "lessons": [
       {
-        "title": "NLP Basics - Coming Soon",
-        "theory": "## NLP Basics\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **NLP Basics** is under development.",
-        "starterCode": "# NLP Basics - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# NLP Basics\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Text Preprocessing",
+        "theory": "## Cleaning Text for AI\nComputers can't read text natively; we have to clean and convert it.\n\nStandard NLP pipeline:\n1. **Lowercasing**: \"Hello\" -> \"hello\"\n2. **Removing Punctuation**: \"hello!\" -> \"hello\"\n3. **Tokenization**: Splitting sentences into words: \"hello world\" -> `['hello', 'world']`\n4. **Stopword Removal**: Removing common, low-meaning words (e.g., 'the', 'is', 'a')",
+        "instructions": "## Task: Basic NLP Pipeline\n1. Write a function that takes a messy sentence and cleans it.\n2. Lowercase it, remove punctuation (periods and commas), and split it into a list of words.",
+        "starterCode": "def clean_text(sentence):\n    # 1. Lowercase\n    text = sentence.___()\n    \n    # 2. Remove punctuation (simple replace for this exercise)\n    text = text.replace('.', '').replace(',', '')\n    \n    # 3. Tokenize (split by space)\n    tokens = text.___(' ')\n    \n    return tokens\n\nraw = \"Hello, World. This is AI!\"\n# Also replacing exclamation mark for this specific string\nraw = raw.replace('!', '')\n\nprint(\"Raw:\", raw)\nprint(\"Tokens:\", clean_text(raw))",
+        "solution": "def clean_text(sentence):\n    # 1. Lowercase\n    text = sentence.lower()\n    \n    # 2. Remove punctuation (simple replace for this exercise)\n    text = text.replace('.', '').replace(',', '')\n    \n    # 3. Tokenize (split by space)\n    tokens = text.split(' ')\n    \n    return tokens\n\nraw = \"Hello, World. This is AI!\"\n# Also replacing exclamation mark for this specific string\nraw = raw.replace('!', '')\n\nprint(\"Raw:\", raw)\nprint(\"Tokens:\", clean_text(raw))",
+        "hint": ".lower() for lowercase. .split(' ') to split by spaces.",
+        "rubric": "Outputs ['hello', 'world', 'this', 'is', 'ai']."
       }
     ]
   },
@@ -2735,13 +2735,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Navigation.",
     "lessons": [
       {
-        "title": "Navigation - Coming Soon",
-        "theory": "## Navigation\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Navigation** is under development.",
-        "starterCode": "# Navigation - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Navigation\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "React Navigation",
+        "theory": "## Moving Between Screens\nMobile apps don't have URLs like websites. They use a \"Stack\" to manage screens.\n\n`react-navigation` is the standard library for this.\n- **Stack Navigator**: Pushes a new screen on top of the old one (like a stack of cards).\n- **Tab Navigator**: Bottom tabs (Home, Search, Profile).\n- **Drawer Navigator**: Hamburger menu that slides out from the side.",
+        "instructions": "## Task: Stack Simulator\n1. Implement a Stack simulator using a standard Python list.\n2. `push(screen)` adds a screen to the top of the stack.\n3. `pop()` removes the top screen (going \"back\").\n4. `current()` returns the top screen.",
+        "starterCode": "class StackNavigator:\n    def __init__(self, initial_route):\n        self.stack = [initial_route]\n        \n    def push(self, screen):\n        self.stack.___(screen)\n        print(f\"Navigated to {screen}\")\n        \n    def pop(self):\n        if len(self.stack) > 1:\n            removed = self.stack.___()\n            print(f\"Went back from {removed}\")\n        else:\n            print(\"Cannot go back, at root screen!\")\n            \n    def current(self):\n        return self.stack[___]\n\nnav = StackNavigator('Home')\nnav.push('Profile')\nnav.push('Settings')\nprint(\"Current screen:\", nav.current())\nnav.pop()\nprint(\"Current screen:\", nav.current())",
+        "solution": "class StackNavigator:\n    def __init__(self, initial_route):\n        self.stack = [initial_route]\n        \n    def push(self, screen):\n        self.stack.append(screen)\n        print(f\"Navigated to {screen}\")\n        \n    def pop(self):\n        if len(self.stack) > 1:\n            removed = self.stack.pop()\n            print(f\"Went back from {removed}\")\n        else:\n            print(\"Cannot go back, at root screen!\")\n            \n    def current(self):\n        return self.stack[-1]\n\nnav = StackNavigator('Home')\nnav.push('Profile')\nnav.push('Settings')\nprint(\"Current screen:\", nav.current())\nnav.pop()\nprint(\"Current screen:\", nav.current())",
+        "hint": "Use .append() for push, .pop() for pop, and [-1] to get the last item.",
+        "rubric": "Stack pushes to Settings, pops back to Profile."
       }
     ]
   },
@@ -2777,13 +2777,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Animations.",
     "lessons": [
       {
-        "title": "Animations - Coming Soon",
-        "theory": "## Animations\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Animations** is under development.",
-        "starterCode": "# Animations - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Animations\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Animated API",
+        "theory": "## Smooth UI Transitions\nReact Native's `Animated` API allows for fluid, 60fps animations.\n\nInstead of standard `View` or `Text`, you must use `Animated.View` or `Animated.Text` to apply animated styles.\n\n```javascript\n// Starting value\nconst fadeAnim = useRef(new Animated.Value(0)).current;\n\n// Trigger animation\nAnimated.timing(fadeAnim, {\n  toValue: 1,\n  duration: 1000,\n  useNativeDriver: true // Moves work off the JS thread\n}).start();\n```",
+        "instructions": "## Task: Animation Frame Simulator\n1. Simulate a fade-in animation loop.\n2. Start opacity at 0.0, target is 1.0.\n3. Increase opacity by a `step` amount (0.2) until it hits 1.0.\n4. Print the opacity at each frame.",
+        "starterCode": "def simulate_fade_in():\n    opacity = 0.0\n    target = 1.0\n    step = 0.2\n    \n    frame = 1\n    while opacity < target:\n        print(f\"Frame {frame}: Opacity = {opacity:.1f}\")\n        opacity += ___\n        # Prevent floating point precision errors\n        opacity = round(opacity, 1)\n        frame += 1\n        \n    print(f\"Frame {frame}: Opacity = {opacity:.1f} (Done!)\")\n\nsimulate_fade_in()",
+        "solution": "def simulate_fade_in():\n    opacity = 0.0\n    target = 1.0\n    step = 0.2\n    \n    frame = 1\n    while opacity < target:\n        print(f\"Frame {frame}: Opacity = {opacity:.1f}\")\n        opacity += step\n        # Prevent floating point precision errors\n        opacity = round(opacity, 1)\n        frame += 1\n        \n    print(f\"Frame {frame}: Opacity = {opacity:.1f} (Done!)\")\n\nsimulate_fade_in()",
+        "hint": "Add 'step' to 'opacity' inside the loop.",
+        "rubric": "Opacity increases from 0.0 to 1.0 smoothly in steps of 0.2."
       }
     ]
   },
