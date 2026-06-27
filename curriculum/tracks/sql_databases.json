@@ -153,13 +153,22 @@
     "aiRubric": "Check logic, syntax, and output for Aggregations.",
     "lessons": [
       {
-        "title": "Aggregations - Coming Soon",
-        "theory": "## Aggregations\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Aggregations** is under development.",
-        "starterCode": "# Aggregations - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Aggregations\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "GROUP BY",
+        "theory": "## Summarizing Data\n`GROUP BY` groups rows that have the same values into summary rows, like \"find the number of customers in each country\".\n\nIt is often used with aggregate functions:\n- `COUNT()`: Number of rows\n- `SUM()`: Total sum of a numeric column\n- `AVG()`: Average value\n- `MAX()` / `MIN()`: Highest / Lowest value\n\n```sql\nSELECT country, COUNT(customer_id)\nFROM customers\nGROUP BY country;\n```",
+        "instructions": "## Task: Aggregate Sales Data\n1. Simulate a SQL GROUP BY using Python\n2. Group a list of sales by 'department'\n3. Calculate the total sum of sales for each department",
+        "starterCode": "sales_data = [\n    {'dept': 'Electronics', 'amount': 500},\n    {'dept': 'Clothing', 'amount': 120},\n    {'dept': 'Electronics', 'amount': 800},\n    {'dept': 'Clothing', 'amount': 50},\n    {'dept': 'Food', 'amount': 30}\n]\n\ndef group_by_dept(data):\n    grouped = {}\n    for row in data:\n        dept = row['___']\n        amt = row['___']\n        if dept in grouped:\n            grouped[dept] += ___\n        else:\n            grouped[dept] = ___\n    return grouped\n\nresults = group_by_dept(sales_data)\nfor dept, total in results.items():\n    print(f\"Dept: {dept}, Total Sales: ${total}\")",
+        "solution": "sales_data = [\n    {'dept': 'Electronics', 'amount': 500},\n    {'dept': 'Clothing', 'amount': 120},\n    {'dept': 'Electronics', 'amount': 800},\n    {'dept': 'Clothing', 'amount': 50},\n    {'dept': 'Food', 'amount': 30}\n]\n\ndef group_by_dept(data):\n    grouped = {}\n    for row in data:\n        dept = row['dept']\n        amt = row['amount']\n        if dept in grouped:\n            grouped[dept] += amt\n        else:\n            grouped[dept] = amt\n    return grouped\n\nresults = group_by_dept(sales_data)\nfor dept, total in results.items():\n    print(f\"Dept: {dept}, Total Sales: ${total}\")",
+        "hint": "Access keys 'dept' and 'amount'. Add amt to grouped[dept].",
+        "rubric": "Electronics: $1300, Clothing: $170, Food: $30."
+      },
+      {
+        "title": "HAVING Clause",
+        "theory": "## Filtering Groups\n`WHERE` filters rows BEFORE grouping. `HAVING` filters rows AFTER grouping.\n\n```sql\n-- Find countries with more than 100 customers\nSELECT country, COUNT(customer_id)\nFROM customers\nGROUP BY country\nHAVING COUNT(customer_id) > 100;\n```",
+        "instructions": "## Task: Python 'HAVING'\n1. Modify the grouped sales data from the previous lesson\n2. Filter the dictionary to only return departments with total sales > $200\n3. This simulates a SQL HAVING clause",
+        "starterCode": "grouped_sales = {\n    'Electronics': 1300,\n    'Clothing': 170,\n    'Food': 30,\n    'Furniture': 450\n}\n\ndef filter_having(grouped_data, min_amount):\n    filtered = {}\n    for dept, total in grouped_data.___():\n        if total ___ min_amount:\n            filtered[dept] = ___\n    return filtered\n\nhigh_sales = filter_having(grouped_sales, 200)\nprint(\"Departments with > $200 in sales:\")\nfor dept, total in high_sales.items():\n    print(f\"- {dept}: ${total}\")",
+        "solution": "grouped_sales = {\n    'Electronics': 1300,\n    'Clothing': 170,\n    'Food': 30,\n    'Furniture': 450\n}\n\ndef filter_having(grouped_data, min_amount):\n    filtered = {}\n    for dept, total in grouped_data.items():\n        if total > min_amount:\n            filtered[dept] = total\n    return filtered\n\nhigh_sales = filter_having(grouped_sales, 200)\nprint(\"Departments with > $200 in sales:\")\nfor dept, total in high_sales.items():\n    print(f\"- {dept}: ${total}\")",
+        "hint": ".items() to iterate dict. > for comparison. Assign total to filtered[dept].",
+        "rubric": "Only Electronics and Furniture are printed."
       }
     ]
   },

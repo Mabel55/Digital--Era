@@ -458,13 +458,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Make.com Workflows.",
     "lessons": [
       {
-        "title": "Make.com Workflows - Coming Soon",
-        "theory": "## Make.com Workflows\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Make.com Workflows** is under development.",
-        "starterCode": "# Make.com Workflows - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Make.com Workflows\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Visual Automation",
+        "theory": "## Connecting Apps visually\nMake.com (formerly Integromat) is a no-code visual workflow builder. It connects apps like Gmail, Slack, and OpenAI.\n\nA workflow is called a **Scenario**. It consists of:\n1. **Trigger**: An event that starts the scenario (e.g., 'Watch Emails')\n2. **Actions**: Steps that do something (e.g., 'Send a Slack message')\n3. **Iterators/Routers**: Logic tools to split paths or loop over arrays",
+        "instructions": "## Task: Scenario Simulator\n1. Create a Scenario class that holds a trigger and a list of actions\n2. Implement a `run(event_data)` method\n3. Pass the event data through each action in the list",
+        "starterCode": "class Scenario:\n    def __init__(self, name):\n        self.name = name\n        self.actions = []\n        \n    def add_action(self, func):\n        self.actions.___(func)\n        \n    def run(self, event_data):\n        print(f\"Scenario '{self.name}' triggered!\")\n        current_data = event_data\n        for action in self.___:\n            current_data = action(current_data)\n            if current_data is None:\n                print(\"Scenario stopped early.\")\n                return\n        print(\"Scenario completed successfully.\")\n\n# Actions\ndef read_email(data): print(\"Reading email:\", data['subject']); return data['body']\ndef ask_ai(text): print(\"Asking AI to summarize...\"); return f\"Summary of: {text}\"\ndef send_slack(summary): print(\"Sending Slack message:\", summary); return True\n\nscenario = Scenario(\"Email Summarizer\")\nscenario.add_action(read_email)\nscenario.add_action(ask_ai)\nscenario.add_action(send_slack)\n\nevent = {'subject': 'Meeting notes', 'body': 'We discussed Q3 goals and hired Alice.'}\nscenario.run(event)",
+        "solution": "class Scenario:\n    def __init__(self, name):\n        self.name = name\n        self.actions = []\n        \n    def add_action(self, func):\n        self.actions.append(func)\n        \n    def run(self, event_data):\n        print(f\"Scenario '{self.name}' triggered!\")\n        current_data = event_data\n        for action in self.actions:\n            current_data = action(current_data)\n            if current_data is None:\n                print(\"Scenario stopped early.\")\n                return\n        print(\"Scenario completed successfully.\")\n\n# Actions\ndef read_email(data): print(\"Reading email:\", data['subject']); return data['body']\ndef ask_ai(text): print(\"Asking AI to summarize...\"); return f\"Summary of: {text}\"\ndef send_slack(summary): print(\"Sending Slack message:\", summary); return True\n\nscenario = Scenario(\"Email Summarizer\")\nscenario.add_action(read_email)\nscenario.add_action(ask_ai)\nscenario.add_action(send_slack)\n\nevent = {'subject': 'Meeting notes', 'body': 'We discussed Q3 goals and hired Alice.'}\nscenario.run(event)",
+        "hint": ".append() adds to actions. Iterate over self.actions.",
+        "rubric": "Scenario runs all three actions sequentially, modifying data along the way."
       }
     ]
   },
@@ -1044,13 +1044,13 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Terraform.",
     "lessons": [
       {
-        "title": "Terraform - Coming Soon",
-        "theory": "## Terraform\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Terraform** is under development.",
-        "starterCode": "# Terraform - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Terraform\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Infrastructure as Code",
+        "theory": "## Automating Cloud Deployment\nInstead of clicking through the AWS console to create a server, you write code to define it.\n\nTerraform uses HCL (HashiCorp Configuration Language).\n\n```hcl\nresource \"aws_instance\" \"web\" {\n  ami           = \"ami-0ff8a91507f77f867\"\n  instance_type = \"t2.micro\"\n\n  tags = {\n    Name = \"HelloWorld\"\n  }\n}\n```\n\nKey commands:\n- `terraform init`: Download providers (like AWS)\n- `terraform plan`: See what will be created/destroyed\n- `terraform apply`: Actually create the infrastructure",
+        "instructions": "## Task: Terraform HCL Generator\n1. Write a function that generates a simple Terraform HCL block\n2. Accept inputs for resource_name, ami, and instance_type\n3. Use string formatting to output the block",
+        "starterCode": "def generate_terraform(resource_name, ami, instance_type):\n    hcl = f\"\"\"\nresource \"aws_instance\" \"{___}\" {{\n  ami           = \"{___}\"\n  instance_type = \"{___}\"\n}}\n\"\"\"\n    return hcl.strip()\n\nconfig = generate_terraform(\"my_web_server\", \"ami-12345\", \"t2.small\")\nprint(config)",
+        "solution": "def generate_terraform(resource_name, ami, instance_type):\n    hcl = f\"\"\"\nresource \"aws_instance\" \"{resource_name}\" {{\n  ami           = \"{ami}\"\n  instance_type = \"{instance_type}\"\n}}\n\"\"\"\n    return hcl.strip()\n\nconfig = generate_terraform(\"my_web_server\", \"ami-12345\", \"t2.small\")\nprint(config)",
+        "hint": "Use f-string bracket replacement. Note that double brackets {{ }} escape the brackets in an f-string.",
+        "rubric": "Valid HCL string printed with the correct variables."
       }
     ]
   },
@@ -2368,13 +2368,22 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Next.js.",
     "lessons": [
       {
-        "title": "Next.js - Coming Soon",
-        "theory": "## Next.js\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Next.js** is under development.",
-        "starterCode": "# Next.js - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Next.js\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Intro to Next.js",
+        "theory": "## The React Framework\nNext.js is a framework built on top of React. It provides:\n- **Server-Side Rendering (SSR)**: HTML is generated on the server (better for SEO)\n- **Static Site Generation (SSG)**: HTML is generated at build time (super fast)\n- **File-system Routing**: Files in the `pages/` or `app/` directory automatically become routes\n- **API Routes**: Build your backend API directly in Next.js",
+        "instructions": "## Task: Routing in Next.js\n1. Next.js uses file-based routing. Match the file path to its URL route.\n2. Match: `pages/index.js`, `pages/about.js`, `pages/blog/[id].js`\n3. URL patterns: `/`, `/about`, `/blog/123`",
+        "starterCode": "routes = {\n    'pages/index.js': '___',\n    'pages/about.js': '___',\n    'pages/blog/[id].js': '___'\n}\n\nfor file, url in routes.items():\n    print(f\"File: {file} -> URL: {url}\")",
+        "solution": "routes = {\n    'pages/index.js': '/',\n    'pages/about.js': '/about',\n    'pages/blog/[id].js': '/blog/123'\n}\n\nfor file, url in routes.items():\n    print(f\"File: {file} -> URL: {url}\")",
+        "hint": "index.js maps to the root (/). Brackets [id] mean a dynamic route.",
+        "rubric": "Files correctly mapped to their Next.js URLs."
+      },
+      {
+        "title": "Data Fetching",
+        "theory": "## getServerSideProps vs getStaticProps\nNext.js allows you to fetch data before the page loads.\n\n- `getStaticProps`: Fetches data at **build time**. Use for blogs, documentation (doesn't change often).\n- `getServerSideProps`: Fetches data on **every request**. Use for user dashboards, real-time data.\n- `useEffect` (Client-side): Fetches data in the browser after the page loads.",
+        "instructions": "## Task: Choose Data Fetching Method\n1. Recommend a fetching method based on the use case\n2. Use cases: 'public_blog', 'user_dashboard', 'real_time_chat'\n3. Methods: 'getStaticProps', 'getServerSideProps', 'client-side'",
+        "starterCode": "def choose_fetch_method(use_case):\n    if use_case == 'public_blog':\n        return '___'\n    elif use_case == 'user_dashboard':\n        return '___'\n    elif use_case == 'real_time_chat':\n        return '___'\n    else:\n        return 'unknown'\n\ncases = ['public_blog', 'user_dashboard', 'real_time_chat']\nfor c in cases:\n    print(f\"{c}: {choose_fetch_method(c)}\")",
+        "solution": "def choose_fetch_method(use_case):\n    if use_case == 'public_blog':\n        return 'getStaticProps'\n    elif use_case == 'user_dashboard':\n        return 'getServerSideProps'\n    elif use_case == 'real_time_chat':\n        return 'client-side'\n    else:\n        return 'unknown'\n\ncases = ['public_blog', 'user_dashboard', 'real_time_chat']\nfor c in cases:\n    print(f\"{c}: {choose_fetch_method(c)}\")",
+        "hint": "Blog = static. Dashboard = server-side. Chat = client-side.",
+        "rubric": "Methods correctly matched to their use cases."
       }
     ]
   },
@@ -3136,13 +3145,22 @@ export const courseManifest = {
     "aiRubric": "Check logic, syntax, and output for Aggregations.",
     "lessons": [
       {
-        "title": "Aggregations - Coming Soon",
-        "theory": "## Aggregations\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Aggregations** is under development.",
-        "starterCode": "# Aggregations - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Aggregations\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "GROUP BY",
+        "theory": "## Summarizing Data\n`GROUP BY` groups rows that have the same values into summary rows, like \"find the number of customers in each country\".\n\nIt is often used with aggregate functions:\n- `COUNT()`: Number of rows\n- `SUM()`: Total sum of a numeric column\n- `AVG()`: Average value\n- `MAX()` / `MIN()`: Highest / Lowest value\n\n```sql\nSELECT country, COUNT(customer_id)\nFROM customers\nGROUP BY country;\n```",
+        "instructions": "## Task: Aggregate Sales Data\n1. Simulate a SQL GROUP BY using Python\n2. Group a list of sales by 'department'\n3. Calculate the total sum of sales for each department",
+        "starterCode": "sales_data = [\n    {'dept': 'Electronics', 'amount': 500},\n    {'dept': 'Clothing', 'amount': 120},\n    {'dept': 'Electronics', 'amount': 800},\n    {'dept': 'Clothing', 'amount': 50},\n    {'dept': 'Food', 'amount': 30}\n]\n\ndef group_by_dept(data):\n    grouped = {}\n    for row in data:\n        dept = row['___']\n        amt = row['___']\n        if dept in grouped:\n            grouped[dept] += ___\n        else:\n            grouped[dept] = ___\n    return grouped\n\nresults = group_by_dept(sales_data)\nfor dept, total in results.items():\n    print(f\"Dept: {dept}, Total Sales: ${total}\")",
+        "solution": "sales_data = [\n    {'dept': 'Electronics', 'amount': 500},\n    {'dept': 'Clothing', 'amount': 120},\n    {'dept': 'Electronics', 'amount': 800},\n    {'dept': 'Clothing', 'amount': 50},\n    {'dept': 'Food', 'amount': 30}\n]\n\ndef group_by_dept(data):\n    grouped = {}\n    for row in data:\n        dept = row['dept']\n        amt = row['amount']\n        if dept in grouped:\n            grouped[dept] += amt\n        else:\n            grouped[dept] = amt\n    return grouped\n\nresults = group_by_dept(sales_data)\nfor dept, total in results.items():\n    print(f\"Dept: {dept}, Total Sales: ${total}\")",
+        "hint": "Access keys 'dept' and 'amount'. Add amt to grouped[dept].",
+        "rubric": "Electronics: $1300, Clothing: $170, Food: $30."
+      },
+      {
+        "title": "HAVING Clause",
+        "theory": "## Filtering Groups\n`WHERE` filters rows BEFORE grouping. `HAVING` filters rows AFTER grouping.\n\n```sql\n-- Find countries with more than 100 customers\nSELECT country, COUNT(customer_id)\nFROM customers\nGROUP BY country\nHAVING COUNT(customer_id) > 100;\n```",
+        "instructions": "## Task: Python 'HAVING'\n1. Modify the grouped sales data from the previous lesson\n2. Filter the dictionary to only return departments with total sales > $200\n3. This simulates a SQL HAVING clause",
+        "starterCode": "grouped_sales = {\n    'Electronics': 1300,\n    'Clothing': 170,\n    'Food': 30,\n    'Furniture': 450\n}\n\ndef filter_having(grouped_data, min_amount):\n    filtered = {}\n    for dept, total in grouped_data.___():\n        if total ___ min_amount:\n            filtered[dept] = ___\n    return filtered\n\nhigh_sales = filter_having(grouped_sales, 200)\nprint(\"Departments with > $200 in sales:\")\nfor dept, total in high_sales.items():\n    print(f\"- {dept}: ${total}\")",
+        "solution": "grouped_sales = {\n    'Electronics': 1300,\n    'Clothing': 170,\n    'Food': 30,\n    'Furniture': 450\n}\n\ndef filter_having(grouped_data, min_amount):\n    filtered = {}\n    for dept, total in grouped_data.items():\n        if total > min_amount:\n            filtered[dept] = total\n    return filtered\n\nhigh_sales = filter_having(grouped_sales, 200)\nprint(\"Departments with > $200 in sales:\")\nfor dept, total in high_sales.items():\n    print(f\"- {dept}: ${total}\")",
+        "hint": ".items() to iterate dict. > for comparison. Assign total to filtered[dept].",
+        "rubric": "Only Electronics and Furniture are printed."
       }
     ]
   },

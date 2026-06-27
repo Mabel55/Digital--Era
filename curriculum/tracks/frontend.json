@@ -204,13 +204,22 @@
     "aiRubric": "Check logic, syntax, and output for Next.js.",
     "lessons": [
       {
-        "title": "Next.js - Coming Soon",
-        "theory": "## Next.js\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Next.js** is under development.",
-        "starterCode": "# Next.js - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Next.js\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Intro to Next.js",
+        "theory": "## The React Framework\nNext.js is a framework built on top of React. It provides:\n- **Server-Side Rendering (SSR)**: HTML is generated on the server (better for SEO)\n- **Static Site Generation (SSG)**: HTML is generated at build time (super fast)\n- **File-system Routing**: Files in the `pages/` or `app/` directory automatically become routes\n- **API Routes**: Build your backend API directly in Next.js",
+        "instructions": "## Task: Routing in Next.js\n1. Next.js uses file-based routing. Match the file path to its URL route.\n2. Match: `pages/index.js`, `pages/about.js`, `pages/blog/[id].js`\n3. URL patterns: `/`, `/about`, `/blog/123`",
+        "starterCode": "routes = {\n    'pages/index.js': '___',\n    'pages/about.js': '___',\n    'pages/blog/[id].js': '___'\n}\n\nfor file, url in routes.items():\n    print(f\"File: {file} -> URL: {url}\")",
+        "solution": "routes = {\n    'pages/index.js': '/',\n    'pages/about.js': '/about',\n    'pages/blog/[id].js': '/blog/123'\n}\n\nfor file, url in routes.items():\n    print(f\"File: {file} -> URL: {url}\")",
+        "hint": "index.js maps to the root (/). Brackets [id] mean a dynamic route.",
+        "rubric": "Files correctly mapped to their Next.js URLs."
+      },
+      {
+        "title": "Data Fetching",
+        "theory": "## getServerSideProps vs getStaticProps\nNext.js allows you to fetch data before the page loads.\n\n- `getStaticProps`: Fetches data at **build time**. Use for blogs, documentation (doesn't change often).\n- `getServerSideProps`: Fetches data on **every request**. Use for user dashboards, real-time data.\n- `useEffect` (Client-side): Fetches data in the browser after the page loads.",
+        "instructions": "## Task: Choose Data Fetching Method\n1. Recommend a fetching method based on the use case\n2. Use cases: 'public_blog', 'user_dashboard', 'real_time_chat'\n3. Methods: 'getStaticProps', 'getServerSideProps', 'client-side'",
+        "starterCode": "def choose_fetch_method(use_case):\n    if use_case == 'public_blog':\n        return '___'\n    elif use_case == 'user_dashboard':\n        return '___'\n    elif use_case == 'real_time_chat':\n        return '___'\n    else:\n        return 'unknown'\n\ncases = ['public_blog', 'user_dashboard', 'real_time_chat']\nfor c in cases:\n    print(f\"{c}: {choose_fetch_method(c)}\")",
+        "solution": "def choose_fetch_method(use_case):\n    if use_case == 'public_blog':\n        return 'getStaticProps'\n    elif use_case == 'user_dashboard':\n        return 'getServerSideProps'\n    elif use_case == 'real_time_chat':\n        return 'client-side'\n    else:\n        return 'unknown'\n\ncases = ['public_blog', 'user_dashboard', 'real_time_chat']\nfor c in cases:\n    print(f\"{c}: {choose_fetch_method(c)}\")",
+        "hint": "Blog = static. Dashboard = server-side. Chat = client-side.",
+        "rubric": "Methods correctly matched to their use cases."
       }
     ]
   },

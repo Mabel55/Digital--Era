@@ -72,13 +72,13 @@
     "aiRubric": "Check logic, syntax, and output for Terraform.",
     "lessons": [
       {
-        "title": "Terraform - Coming Soon",
-        "theory": "## Terraform\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Terraform** is under development.",
-        "starterCode": "# Terraform - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Terraform\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Infrastructure as Code",
+        "theory": "## Automating Cloud Deployment\nInstead of clicking through the AWS console to create a server, you write code to define it.\n\nTerraform uses HCL (HashiCorp Configuration Language).\n\n```hcl\nresource \"aws_instance\" \"web\" {\n  ami           = \"ami-0ff8a91507f77f867\"\n  instance_type = \"t2.micro\"\n\n  tags = {\n    Name = \"HelloWorld\"\n  }\n}\n```\n\nKey commands:\n- `terraform init`: Download providers (like AWS)\n- `terraform plan`: See what will be created/destroyed\n- `terraform apply`: Actually create the infrastructure",
+        "instructions": "## Task: Terraform HCL Generator\n1. Write a function that generates a simple Terraform HCL block\n2. Accept inputs for resource_name, ami, and instance_type\n3. Use string formatting to output the block",
+        "starterCode": "def generate_terraform(resource_name, ami, instance_type):\n    hcl = f\"\"\"\nresource \"aws_instance\" \"{___}\" {{\n  ami           = \"{___}\"\n  instance_type = \"{___}\"\n}}\n\"\"\"\n    return hcl.strip()\n\nconfig = generate_terraform(\"my_web_server\", \"ami-12345\", \"t2.small\")\nprint(config)",
+        "solution": "def generate_terraform(resource_name, ami, instance_type):\n    hcl = f\"\"\"\nresource \"aws_instance\" \"{resource_name}\" {{\n  ami           = \"{ami}\"\n  instance_type = \"{instance_type}\"\n}}\n\"\"\"\n    return hcl.strip()\n\nconfig = generate_terraform(\"my_web_server\", \"ami-12345\", \"t2.small\")\nprint(config)",
+        "hint": "Use f-string bracket replacement. Note that double brackets {{ }} escape the brackets in an f-string.",
+        "rubric": "Valid HCL string printed with the correct variables."
       }
     ]
   },
