@@ -153,13 +153,13 @@
     "aiRubric": "Check logic, syntax, and output for Merging & Conflicts.",
     "lessons": [
       {
-        "title": "Merging & Conflicts - Coming Soon",
-        "theory": "## Merging & Conflicts\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Merging & Conflicts** is under development.",
-        "starterCode": "# Merging & Conflicts - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Merging & Conflicts\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Git Merge",
+        "theory": "## Combining Branches\\nWhen two people edit the same file on different branches, Git doesn't know whose changes to keep. This causes a **Merge Conflict**.\\n\\nGit will insert markers into the file:\\n```\\n<<<<<<< HEAD\\nprint(\"My code\")\\n=======\\nprint(\"Their code\")\\n>>>>>>> feature-branch\\n```\\nYou must manually delete the markers and choose which code to keep, then commit.",
+        "instructions": "## Task: Resolve Conflict\\n1. You are given a string representing a file with merge conflict markers.\\n2. Resolve it by keeping 'My code' and removing the markers and 'Their code'.",
+        "starterCode": "conflicted_file = \"\"\"\\ndef hello():\\n<<<<<<< HEAD\\n    print(\"My code\")\\n=======\\n    print(\"Their code\")\\n>>>>>>> feature-branch\\n\"\"\"\\n\\ndef resolve_conflict(text):\\n    # Simplify the text to just the correct function\\n    resolved = \"\"\"\\ndef hello():\\n    print(\"___\")\\n\"\"\"\\n    return resolved.strip()\\n\\nprint(\"Conflicted:\")\\nprint(conflicted_file)\\nprint(\"--- Resolving ---\")\\nprint(resolve_conflict(conflicted_file))",
+        "solution": "conflicted_file = \"\"\"\\ndef hello():\\n<<<<<<< HEAD\\n    print(\"My code\")\\n=======\\n    print(\"Their code\")\\n>>>>>>> feature-branch\\n\"\"\"\\n\\ndef resolve_conflict(text):\\n    # Simplify the text to just the correct function\\n    resolved = \"\"\"\\ndef hello():\\n    print(\"My code\")\\n\"\"\"\\n    return resolved.strip()\\n\\nprint(\"Conflicted:\")\\nprint(conflicted_file)\\nprint(\"--- Resolving ---\")\\nprint(resolve_conflict(conflicted_file))",
+        "hint": "Replace ___ with My code",
+        "rubric": "Outputs a clean function containing 'print(\"My code\")'."
       }
     ]
   },
@@ -167,13 +167,13 @@
     "aiRubric": "Check logic, syntax, and output for Pull Requests.",
     "lessons": [
       {
-        "title": "Pull Requests - Coming Soon",
-        "theory": "## Pull Requests\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Pull Requests** is under development.",
-        "starterCode": "# Pull Requests - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Pull Requests\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Code Review",
+        "theory": "## PRs\\nA Pull Request (PR) is a way to tell your team: \"I've pushed a branch. Please review my code before we merge it into the main codebase.\"\\n\\nPRs act as the gatekeepers of code quality. They allow for discussion, automated testing, and mandatory approvals before deployment.",
+        "instructions": "## Task: PR Gatekeeper\\n1. Simulate a GitHub PR system.\\n2. A PR can only be merged if it has at least 1 approval and 0 failing tests.",
+        "starterCode": "class PullRequest:\\n    def __init__(self):\\n        self.approvals = 0\\n        self.failing_tests = 2\\n        \\n    def can_merge(self):\\n        if self.approvals >= ___ and self.failing_tests == ___:\\n            return True\\n        return False\\n\\npr = PullRequest()\\nprint(\"Initial Merge Attempt:\", pr.can_merge())\\n\\n# Fix tests and get approval\\npr.failing_tests = 0\\npr.approvals = 1\\nprint(\"After Fixes Merge Attempt:\", pr.can_merge())",
+        "solution": "class PullRequest:\\n    def __init__(self):\\n        self.approvals = 0\\n        self.failing_tests = 2\\n        \\n    def can_merge(self):\\n        if self.approvals >= 1 and self.failing_tests == 0:\\n            return True\\n        return False\\n\\npr = PullRequest()\\nprint(\"Initial Merge Attempt:\", pr.can_merge())\\n\\n# Fix tests and get approval\\npr.failing_tests = 0\\npr.approvals = 1\\nprint(\"After Fixes Merge Attempt:\", pr.can_merge())",
+        "hint": "approvals >= 1, failing_tests == 0",
+        "rubric": "can_merge returns False initially, then True."
       }
     ]
   },
@@ -181,13 +181,13 @@
     "aiRubric": "Check logic, syntax, and output for GitHub Actions.",
     "lessons": [
       {
-        "title": "GitHub Actions - Coming Soon",
-        "theory": "## GitHub Actions\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **GitHub Actions** is under development.",
-        "starterCode": "# GitHub Actions - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# GitHub Actions\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "CI/CD Workflows",
+        "theory": "## Automation on Push\\nGitHub Actions allows you to run automated scripts every time an event (like a push or a PR) happens.\\n\\nYou define a workflow in a `.yaml` file inside the `.github/workflows/` directory. It spins up a temporary virtual machine (Runner), checks out your code, and runs your commands (e.g., `npm test`).",
+        "instructions": "## Task: Action Trigger\\n1. Simulate a GitHub Action trigger.\\n2. If the event is 'push' to the branch 'main', execute the deployment script.",
+        "starterCode": "def github_action_workflow(event_type, branch):\\n    print(f\"Event received: {event_type} on {branch}\")\\n    \\n    if event_type == '___' and branch == '___':\\n        print(\"-> TRIGGER: Running deployment pipeline...\")\\n    else:\\n        print(\"-> IGNORE: Conditions not met.\")\\n\\n# A push to a feature branch (should ignore)\\ngithub_action_workflow('push', 'feature/login')\\n\\n# A push to main (should trigger)\\ngithub_action_workflow('push', 'main')",
+        "solution": "def github_action_workflow(event_type, branch):\\n    print(f\"Event received: {event_type} on {branch}\")\\n    \\n    if event_type == 'push' and branch == 'main':\\n        print(\"-> TRIGGER: Running deployment pipeline...\")\\n    else:\\n        print(\"-> IGNORE: Conditions not met.\")\\n\\n# A push to a feature branch (should ignore)\\ngithub_action_workflow('push', 'feature/login')\\n\\n# A push to main (should trigger)\\ngithub_action_workflow('push', 'main')",
+        "hint": "Check for 'push' and 'main'.",
+        "rubric": "Successfully ignores the feature branch and triggers on the main branch push."
       }
     ]
   },
@@ -195,13 +195,13 @@
     "aiRubric": "Check logic, syntax, and output for Rebasing.",
     "lessons": [
       {
-        "title": "Rebasing - Coming Soon",
-        "theory": "## Rebasing\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Rebasing** is under development.",
-        "starterCode": "# Rebasing - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Rebasing\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Rewriting History",
+        "theory": "## Merge vs Rebase\\n- `git merge`: Combines two branches, creating a new \"Merge Commit\". Keeps history exactly as it happened.\\n- `git rebase`: Takes your branch's commits and replays them on top of another branch. This rewrites history to make it perfectly linear.\\n\\n**Golden Rule**: Never rebase a public branch that other people are working on, because rewriting history will break their local copies!",
+        "instructions": "## Task: Rebase Simulator\\n1. Simulate a rebase by taking a list of commits from a feature branch and appending them to the main branch.",
+        "starterCode": "main_branch = ['M1', 'M2', 'M3']\\nfeature_branch = ['F1', 'F2']\\n\\ndef git_rebase(main, feature):\\n    # A rebase essentially unplugs the feature commits and replays them \\n    # at the very end of the main branch.\\n    rebased_history = main.copy()\\n    for commit in ___:\\n        rebased_history.append(___)\\n    return rebased_history\\n\\nprint(\"Before Rebase:\", main_branch, \"|\", feature_branch)\\n\\nlinear_history = git_rebase(main_branch, feature_branch)\\nprint(\"\\nAfter Rebase (Linear History):\", linear_history)",
+        "solution": "main_branch = ['M1', 'M2', 'M3']\\nfeature_branch = ['F1', 'F2']\\n\\ndef git_rebase(main, feature):\\n    # A rebase essentially unplugs the feature commits and replays them \\n    # at the very end of the main branch.\\n    rebased_history = main.copy()\\n    for commit in feature:\\n        rebased_history.append(commit)\\n    return rebased_history\\n\\nprint(\"Before Rebase:\", main_branch, \"|\", feature_branch)\\n\\nlinear_history = git_rebase(main_branch, feature_branch)\\nprint(\"\\nAfter Rebase (Linear History):\", linear_history)",
+        "hint": "Iterate over 'feature'. Append 'commit'.",
+        "rubric": "Outputs ['M1', 'M2', 'M3', 'F1', 'F2']."
       }
     ]
   },
@@ -209,13 +209,13 @@
     "aiRubric": "Check logic, syntax, and output for Git Hooks.",
     "lessons": [
       {
-        "title": "Git Hooks - Coming Soon",
-        "theory": "## Git Hooks\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Git Hooks** is under development.",
-        "starterCode": "# Git Hooks - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Git Hooks\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Pre-Commit Checks",
+        "theory": "## Client-side Automation\\nGit Hooks are custom scripts that Git executes before or after events such as: commit, push, and receive.\\n\\nA `pre-commit` hook is very popular. When you type `git commit`, the hook runs (e.g., running a code linter or formatter). If the hook script fails (returns a non-zero exit code), the commit is aborted.",
+        "instructions": "## Task: Pre-Commit Linter\\n1. Simulate a pre-commit hook that checks if a file contains the word 'TODO'.\\n2. If it does, abort the commit.",
+        "starterCode": "def pre_commit_hook(file_content):\\n    if '___' in file_content:\\n        print(\"Hook Failed: Remove TODOs before committing!\")\\n        return False # Abort commit\\n    \\n    print(\"Hook Passed: Code looks good.\")\\n    return ___ # Allow commit\\n\\ngood_code = \"def add(a, b): return a + b\"\\nbad_code = \"def add(a, b):\\n    # TODO: implement this\\n    pass\"\\n\\nprint(\"Attempting to commit good code:\")\\npre_commit_hook(good_code)\\n\\nprint(\"\\nAttempting to commit bad code:\")\\npre_commit_hook(bad_code)",
+        "solution": "def pre_commit_hook(file_content):\\n    if 'TODO' in file_content:\\n        print(\"Hook Failed: Remove TODOs before committing!\")\\n        return False # Abort commit\\n    \\n    print(\"Hook Passed: Code looks good.\")\\n    return True # Allow commit\\n\\ngood_code = \"def add(a, b): return a + b\"\\nbad_code = \"def add(a, b):\\n    # TODO: implement this\\n    pass\"\\n\\nprint(\"Attempting to commit good code:\")\\npre_commit_hook(good_code)\\n\\nprint(\"\\nAttempting to commit bad code:\")\\npre_commit_hook(bad_code)",
+        "hint": "Check for 'TODO'. Return True if passed.",
+        "rubric": "The hook passes the good code and aborts the bad code."
       }
     ]
   },
@@ -223,13 +223,13 @@
     "aiRubric": "Check logic, syntax, and output for Monorepo Management.",
     "lessons": [
       {
-        "title": "Monorepo Management - Coming Soon",
-        "theory": "## Monorepo Management\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Monorepo Management** is under development.",
-        "starterCode": "# Monorepo Management - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Monorepo Management\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "One Repo to Rule Them All",
+        "theory": "## Monorepos vs Polyrepos\\n- **Polyrepo**: Every microservice, frontend, and library has its own Git repository.\\n- **Monorepo**: All projects for the entire company live inside a single massive Git repository (Google, Meta, and Microsoft use this).\\n\\nMonorepos make sharing code and cross-project refactoring much easier, but require advanced tooling (like Bazel, Nx, or Turborepo) to build efficiently (so you don't rebuild the entire company's codebase when you change one CSS file).",
+        "instructions": "## Task: Targeted Builds\\n1. Simulate a Monorepo build tool.\\n2. You modified `frontend/app.js`. The tool should only build the `frontend` project, not the `backend` or `ios` projects.",
+        "starterCode": "projects = ['frontend', 'backend', 'ios']\\n\\ndef monorepo_build(changed_files):\\n    for proj in projects:\\n        # Check if any changed file starts with the project name\\n        needs_build = any(file.startswith(___) for file in changed_files)\\n        \\n        if needs_build:\\n            print(f\"Building {proj}...\")\\n        else:\\n            print(f\"Skipping {proj} (No changes detected).\")\\n\\n# We changed one file in the frontend\\ncommits = ['frontend/app.js', 'frontend/index.css']\\n\\nprint(\"Running Monorepo CI Pipeline:\")\\nmonorepo_build(commits)",
+        "solution": "projects = ['frontend', 'backend', 'ios']\\n\\ndef monorepo_build(changed_files):\\n    for proj in projects:\\n        # Check if any changed file starts with the project name\\n        needs_build = any(file.startswith(proj) for file in changed_files)\\n        \\n        if needs_build:\\n            print(f\"Building {proj}...\")\\n        else:\\n            print(f\"Skipping {proj} (No changes detected).\")\\n\\n# We changed one file in the frontend\\ncommits = ['frontend/app.js', 'frontend/index.css']\\n\\nprint(\"Running Monorepo CI Pipeline:\")\\nmonorepo_build(commits)",
+        "hint": "Check if file.startswith(proj).",
+        "rubric": "Builds the frontend and successfully skips backend and ios."
       }
     ]
   }

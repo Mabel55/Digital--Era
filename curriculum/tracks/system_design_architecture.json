@@ -82,13 +82,13 @@
     "aiRubric": "Check logic, syntax, and output for CAP Theorem.",
     "lessons": [
       {
-        "title": "CAP Theorem - Coming Soon",
-        "theory": "## CAP Theorem\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **CAP Theorem** is under development.",
-        "starterCode": "# CAP Theorem - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# CAP Theorem\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Pick Two",
+        "theory": "## The Core Law of Distributed Systems\\nThe CAP theorem states that a distributed database can only guarantee two out of three characteristics:\\n\\n1. **Consistency**: Every read receives the most recent write (or an error).\\n2. **Availability**: Every request receives a non-error response (but it might not be the most recent data).\\n3. **Partition Tolerance**: The system continues to operate despite network failures (partitions) between nodes.\\n\\nBecause networks *will* fail (Partition Tolerance is mandatory), you must choose between Consistency (CP) or Availability (AP) during a failure.",
+        "instructions": "## Task: CAP Decision Simulator\\n1. Simulate a network failure between two databases (Node A and Node B).\\n2. Decide whether to act as a CP or AP system when a user requests data from an isolated Node B.",
+        "starterCode": "class DistributedDatabase:\\n    def __init__(self, system_type):\\n        self.system_type = system_type # 'CP' or 'AP'\\n        self.network_partitioned = True\\n        \\n    def read_data(self, node):\\n        if self.network_partitioned:\\n            print(f\"[Network Failed] Cannot sync {node} with the main cluster.\")\\n            \\n            if self.system_type == '___':\\n                return \"ERROR: Cannot guarantee consistency. Aborting read.\"\\n            elif self.system_type == '___':\\n                return \"SUCCESS: Returning stale (old) data to keep system available.\"\\n\\ncp_system = DistributedDatabase('CP')\\nprint(\"Bank Balance Check (Needs CP):\", cp_system.read_data('Node_B'))\\n\\nap_system = DistributedDatabase('AP')\\nprint(\"\\nTwitter Feed Load (Needs AP):\", ap_system.read_data('Node_B'))",
+        "solution": "class DistributedDatabase:\\n    def __init__(self, system_type):\\n        self.system_type = system_type # 'CP' or 'AP'\\n        self.network_partitioned = True\\n        \\n    def read_data(self, node):\\n        if self.network_partitioned:\\n            print(f\"[Network Failed] Cannot sync {node} with the main cluster.\")\\n            \\n            if self.system_type == 'CP':\\n                return \"ERROR: Cannot guarantee consistency. Aborting read.\"\\n            elif self.system_type == 'AP':\\n                return \"SUCCESS: Returning stale (old) data to keep system available.\"\\n\\ncp_system = DistributedDatabase('CP')\\nprint(\"Bank Balance Check (Needs CP):\", cp_system.read_data('Node_B'))\\n\\nap_system = DistributedDatabase('AP')\\nprint(\"\\nTwitter Feed Load (Needs AP):\", ap_system.read_data('Node_B'))",
+        "hint": "CP returns ERROR. AP returns SUCCESS (stale data).",
+        "rubric": "Code correctly returns the error for CP and stale data for AP."
       }
     ]
   },

@@ -1,11 +1,3 @@
-Frontend Performance
-Device APIs
-Subqueries
-Indexing
-Stored Procedures
-Query Optimization
-Client-Server Model
-DNS & Load Balancing
 CAP Theorem
 Merging & Conflicts
 Pull Requests
