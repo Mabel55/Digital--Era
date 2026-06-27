@@ -13,58 +13,77 @@
     "Advanced": [
       "Decorators",
       "Generators",
-      "Asyncio"
+      "Asyncio",
+      "Advanced Python Concurrency",
+      "Python Design Patterns",
+      "Python Testing Frameworks",
+      "Python Security Practices"
     ]
   },
   "Frontend": {
     "Beginner": [
       "HTML5 Essentials",
       "CSS Styling",
-      "JS Basics"
+      "JS Basics",
+      "Tailwind CSS Basics"
     ],
     "Intermediate": [
       "React Fundamentals",
       "State Management",
-      "CSS Grid & Flexbox"
+      "CSS Grid & Flexbox",
+      "Vue.js Fundamentals",
+      "TypeScript for Frontend"
     ],
     "Advanced": [
       "Next.js",
       "Frontend Performance",
-      "Web Accessibility"
+      "Web Accessibility",
+      "Web Animations",
+      "Frontend Testing"
     ]
   },
   "Backend": {
     "Beginner": [
       "HTTP & APIs",
       "Node.js Basics",
-      "Express Server"
+      "Express Server",
+      "Python FastAPI Basics"
     ],
     "Intermediate": [
       "Database Integration",
       "Authentication",
-      "RESTful Design"
+      "RESTful Design",
+      "Caching with Redis",
+      "Serverless Functions"
     ],
     "Advanced": [
       "GraphQL",
       "Microservices",
-      "WebSockets"
+      "WebSockets",
+      "Message Queues & Kafka",
+      "gRPC & Protocol Buffers"
     ]
   },
   "SQL & Databases": {
     "Beginner": [
       "SQL SELECTs",
       "Filtering Data",
-      "Basic Joins"
+      "Basic Joins",
+      "NoSQL Basics"
     ],
     "Intermediate": [
       "Aggregations",
       "Subqueries",
-      "Database Design"
+      "Database Design",
+      "Advanced Joins & Window Functions",
+      "Transactions & ACID"
     ],
     "Advanced": [
       "Indexing",
       "Stored Procedures",
-      "Query Optimization"
+      "Query Optimization",
+      "PostgreSQL Administration",
+      "Data Warehousing"
     ]
   },
   "Data Science": {
@@ -98,24 +117,37 @@
     "Advanced": [
       "Fine-tuning Models",
       "AI Agents",
-      "Evaluating AI Output"
+      "Evaluating AI Output",
+      "RAG Systems In Depth",
+      "LLM Fine-Tuning",
+      "AI Ethics and Safety",
+      "Advanced Autonomous Agents"
     ]
   },
   "AI Automation": {
     "Beginner": [
       "Zapier Basics",
       "Make.com Workflows",
-      "API Connections"
+      "API Connections",
+      "No-Code AI Apps"
     ],
     "Intermediate": [
       "Automated Content",
       "Email Automation",
-      "Custom Webhooks"
+      "Custom Webhooks",
+      "n8n Workflows",
+      "Web Scraping & RPA",
+      "Document & Audio Pipelines",
+      "AI Support Helpdesks"
     ],
     "Advanced": [
       "Enterprise AI Bots",
       "Voice AI Agents",
-      "Multi-Agent Systems"
+      "Multi-Agent Systems",
+      "Automated Social Media",
+      "LLM Automation APIs",
+      "RAG Automation Workflows",
+      "AI Lead Generation"
     ]
   },
   "Version Control": {
@@ -139,119 +171,153 @@
     "Beginner": [
       "React Native Intro",
       "UI Components",
-      "Navigation"
+      "Navigation",
+      "Flutter Intro"
     ],
     "Intermediate": [
       "Device APIs",
       "Local Storage",
-      "Animations"
+      "Animations",
+      "State Management in React Native",
+      "Push Notifications"
     ],
     "Advanced": [
       "App Deployment",
       "Native Modules",
-      "Performance Profiling"
+      "Performance Profiling",
+      "Offline-First Apps",
+      "Mobile CI/CD"
     ]
   },
   "Systems Programming": {
     "Beginner": [
       "Rust Basics",
       "Ownership & Borrowing",
-      "Memory Safety"
+      "Memory Safety",
+      "C++ Fundamentals"
     ],
     "Intermediate": [
       "Concurrency",
       "File Systems",
-      "Macros"
+      "Macros",
+      "Multithreading & Mutexes",
+      "System Calls in C"
     ],
     "Advanced": [
       "Unsafe Rust",
       "FFI",
-      "Network Programming"
+      "Network Programming",
+      "Embedded Systems Basics",
+      "Writing Kernel Modules"
     ]
   },
   "Cloud Native & Go": {
     "Beginner": [
       "Go Syntax",
       "Structs & Interfaces",
-      "Goroutines"
+      "Goroutines",
+      "Go Modules and Packages"
     ],
     "Intermediate": [
       "Go Web Servers",
       "Docker Containers",
-      "Kubernetes Basics"
+      "Kubernetes Basics",
+      "Channels & Select",
+      "Helm Charts"
     ],
     "Advanced": [
       "gRPC",
       "Service Meshes",
-      "Cloud Operators"
+      "Cloud Operators",
+      "Advanced Kubernetes Operators",
+      "Istio Service Mesh"
     ]
   },
   "Cloud & DevOps": {
     "Beginner": [
       "AWS Basics",
       "EC2 & S3",
-      "Linux Fundamentals"
+      "Linux Fundamentals",
+      "Bash Scripting Basics"
     ],
     "Intermediate": [
       "Terraform",
       "CI/CD Pipelines",
-      "Monitoring & Logging"
+      "Monitoring & Logging",
+      "Terraform Fundamentals",
+      "GitHub Actions"
     ],
     "Advanced": [
       "Serverless",
       "Security Groups",
-      "Cost Optimization"
+      "Cost Optimization",
+      "Prometheus & Grafana",
+      "Site Reliability Engineering (SRE)"
     ]
   },
   "System Design & Architecture": {
     "Beginner": [
       "Client-Server Model",
       "DNS & Load Balancing",
-      "Caching Strategies"
+      "Caching Strategies",
+      "Load Balancing Basics"
     ],
     "Intermediate": [
       "Database Sharding",
       "Message Queues",
-      "CAP Theorem"
+      "CAP Theorem",
+      "API Gateways"
     ],
     "Advanced": [
       "Distributed Consensus",
       "Designing Uber",
-      "Designing Netflix"
+      "Designing Netflix",
+      "CAP Theorem & Consensus",
+      "Rate Limiting Algorithms"
     ]
   },
   "Agentic AI & MCP": {
     "Beginner": [
       "Agent Foundations",
       "Tool Calling",
-      "MCP Intro"
+      "MCP Intro",
+      "Prompt Engineering for Agents"
     ],
     "Intermediate": [
       "ReAct Prompting",
       "Memory Systems",
-      "MCP Servers"
+      "MCP Servers",
+      "LangChain & LlamaIndex",
+      "Vector DBs in Agents"
     ],
     "Advanced": [
       "Swarm Architectures",
       "Autonomous Execution",
-      "Evaluation"
+      "Evaluation",
+      "Human in the Loop (HITL)",
+      "Agentic Security & Guardrails"
     ]
   },
   "Computer Vision & Deep Learning": {
     "Beginner": [
       "Image Processing",
       "OpenCV Basics",
-      "Neural Networks Intro"
+      "Neural Networks Intro",
+      "Image Processing Basics"
     ],
     "Intermediate": [
       "PyTorch Tensors",
       "CNN Architecture",
-      "Transfer Learning"
+      "Transfer Learning",
+      "Convolutional Neural Networks",
+      "Object Detection (YOLO)"
     ],
     "Advanced": [
       "Object Detection",
       "GANs",
-      "Vision Transformers"
+      "Vision Transformers",
+      "Generative Adversarial Networks (GANs)",
+      "Vision Transformers (ViT)"
     ]
   },
   "Data Engineering & MLOps": {

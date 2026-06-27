@@ -346,6 +346,15 @@
         "solution": "def uppercase(func):\n    def wrapper(*args, **kwargs):\n        result = func(*args, **kwargs)\n        return result.upper()\n    return wrapper\n\ndef add_greeting(func):\n    def wrapper(*args, **kwargs):\n        result = func(*args, **kwargs)\n        return f'Hello! {result}'\n    return wrapper\n\n@uppercase\n@add_greeting\ndef get_name():\n    return 'Mabel'\n\nprint(get_name())",
         "hint": ".upper() for uppercase. Decorators apply bottom to top.",
         "rubric": "Output: HELLO! MABEL (greeting added first, then uppercased)"
+      },
+      {
+        "title": "Timing Decorator",
+        "theory": "## Measuring Execution Time\\nDecorators are functions that modify the behavior of other functions. A common use case is measuring how long a function takes to execute.",
+        "instructions": "## Task: Create a Timer\\n1. Implement a decorator `timer` that prints the time taken by the decorated function.",
+        "starterCode": "import time\\n\\ndef timer(func):\\n    def wrapper(*args, **kwargs):\\n        start = time.time()\\n        result = func(*args, **kwargs)\\n        end = time.time()\\n        print(f'{func.__name__} took {end - start:.4f}s')\\n        return result\\n    return ___\\n\\n@timer\\ndef slow_function():\\n    time.sleep(0.5)\\n    return 'Done'\\n\\nprint(slow_function())",
+        "solution": "import time\\n\\ndef timer(func):\\n    def wrapper(*args, **kwargs):\\n        start = time.time()\\n        result = func(*args, **kwargs)\\n        end = time.time()\\n        print(f'{func.__name__} took {end - start:.4f}s')\\n        return result\\n    return wrapper\\n\\n@timer\\ndef slow_function():\\n    time.sleep(0.5)\\n    return 'Done'\\n\\nprint(slow_function())",
+        "hint": "Return the wrapper function.",
+        "rubric": "Decorator correctly returns wrapper and measures time."
       }
     ]
   },
@@ -446,6 +455,80 @@
         "solution": "import asyncio\nimport random\n\nasync def fetch(url):\n    await asyncio.sleep(0.5)\n    if random.random() < 0.5:\n        raise ConnectionError(f'Timeout: {url}')\n    return f'OK: {url}'\n\nasync def fetch_with_retry(url, retries=3):\n    for attempt in range(1, retries + 1):\n        try:\n            result = await fetch(url)\n            return result\n        except ConnectionError as e:\n            print(f'Attempt {attempt} failed for {url}')\n    return f'FAILED: {url}'\n\nasync def main():\n    urls = ['api.com/users', 'api.com/posts', 'api.com/comments']\n    for url in urls:\n        result = await fetch_with_retry(url)\n        print(result)\n\nasyncio.run(main())",
         "hint": "try/except inside the retry loop. await fetch(url) in the try block.",
         "rubric": "Retries on failure. Each URL either succeeds or reports FAILED after 3 attempts."
+      }
+    ]
+  },
+  "Advanced Python Concurrency": {
+    "title": "Advanced Python Concurrency",
+    "lessons": [
+      {
+        "title": "Asyncio in Depth",
+        "theory": "## Asyncio\\nLearn how the event loop works and how to write efficient asynchronous code in Python.",
+        "instructions": "## Task: Create a Task\\n1. Create an asyncio task for the `fetch_data` coroutine.",
+        "starterCode": "import asyncio\\n\\nasync def fetch_data():\\n    await asyncio.sleep(1)\\n    return 'Data'\\n\\n# Create task here\\ntask = ___",
+        "solution": "import asyncio\\n\\nasync def fetch_data():\\n    await asyncio.sleep(1)\\n    return 'Data'\\n\\ntask = asyncio.create_task(fetch_data())",
+        "hint": "Use asyncio.create_task",
+        "rubric": "Task created."
+      },
+      {
+        "title": "Multiprocessing Pools",
+        "theory": "## Multiprocessing\\nBypass the GIL using the `multiprocessing` module for CPU-bound tasks.",
+        "instructions": "## Task: Create a Pool\\n1. Create a Multiprocessing Pool with 4 workers.",
+        "starterCode": "from multiprocessing import Pool\\n\\npool = ___",
+        "solution": "from multiprocessing import Pool\\n\\npool = Pool(processes=4)",
+        "hint": "Pool(processes=4)",
+        "rubric": "Pool created."
+      }
+    ]
+  },
+  "Python Design Patterns": {
+    "title": "Python Design Patterns",
+    "lessons": [
+      {
+        "title": "The Singleton Pattern",
+        "theory": "## Singleton\\nEnsure a class has only one instance and provide a global point of access to it.",
+        "instructions": "## Task: Implement Singleton\\n1. Implement the `__new__` method to return the existing instance if it exists.",
+        "starterCode": "class Singleton:\\n    _instance = None\\n    def __new__(cls):\\n        ___",
+        "solution": "class Singleton:\\n    _instance = None\\n    def __new__(cls):\\n        if cls._instance is None:\\n            cls._instance = super(Singleton, cls).__new__(cls)\\n        return cls._instance",
+        "hint": "Check if cls._instance is None",
+        "rubric": "Singleton implemented."
+      },
+      {
+        "title": "The Factory Pattern",
+        "theory": "## Factory\\nDefine an interface for creating an object, but let subclasses decide which class to instantiate.",
+        "instructions": "## Task: Create a Factory\\n1. Create a `ShapeFactory` that returns a `Circle` or `Square`.",
+        "starterCode": "class ShapeFactory:\\n    @staticmethod\\n    def get_shape(shape_type):\\n        ___",
+        "solution": "class ShapeFactory:\\n    @staticmethod\\n    def get_shape(shape_type):\\n        if shape_type == 'CIRCLE':\\n            return Circle()\\n        elif shape_type == 'SQUARE':\\n            return Square()\\n        return None",
+        "hint": "Return Circle() or Square() based on string matching",
+        "rubric": "Factory implemented."
+      }
+    ]
+  },
+  "Python Testing Frameworks": {
+    "aiRubric": "Assess testing concepts",
+    "lessons": [
+      {
+        "title": "Pytest Basics",
+        "theory": "## Pytest\nPytest is a popular testing framework that makes it easy to write small tests.",
+        "instructions": "## Task: Write a test\nWrite a test for the `add` function.",
+        "starterCode": "def add(a, b):\n    return a + b\n\ndef test_add():\n    assert add(2, 3) == ___",
+        "solution": "def add(a, b):\n    return a + b\n\ndef test_add():\n    assert add(2, 3) == 5",
+        "hint": "5",
+        "rubric": "Test is correct."
+      }
+    ]
+  },
+  "Python Security Practices": {
+    "aiRubric": "Assess security practices",
+    "lessons": [
+      {
+        "title": "SQL Injection Prevention",
+        "theory": "## Parameterized Queries\nAlways use parameterized queries instead of string concatenation to prevent SQL injection.",
+        "instructions": "## Task: Secure the query\nFix the query to use parameterized inputs.",
+        "starterCode": "username = 'admin'\nquery = f\"SELECT * FROM users WHERE username = '{username}'\" # INSECURE",
+        "solution": "username = 'admin'\nquery = \"SELECT * FROM users WHERE username = ?\" # SECURE",
+        "hint": "Use '?' for parameters.",
+        "rubric": "Query uses parameters."
       }
     ]
   }

@@ -138,6 +138,15 @@
         "solution": "class MockPinecone:\n    def __init__(self):\n        # Text attached to vectors\n        self.data = [\n            (\"To reset your password, click 'Forgot Password'.\", [0.8, 0.1]),\n            (\"Our refund policy is 30 days.\", [0.2, 0.9])\n        ]\n        \n    def search(self, query_vector):\n        # Mock search: Return the first item if vector[0] is high, else second\n        if query_vector[0] > 0.5:\n            return self.data[0][0]\n        return self.data[1][0]\n\ndef embed_text(text):\n    # Mock embedding\n    if 'password' in text.lower(): return [0.9, 0.0]\n    if 'refund' in text.lower(): return [0.1, 0.8]\n    return [0.5, 0.5]\n\ndb = MockPinecone()\n\nuser_question = \"How do I get a refund?\"\nvector = embed_text(user_question)\nanswer = db.search(vector)\n\nprint(f\"Q: {user_question}\")\nprint(f\"Found Info: {answer}\")",
         "hint": "Call embed_text on the question. Call db.search on the vector.",
         "rubric": "Pipeline successfully retrieves the refund policy based on the mock vector search."
+      },
+      {
+        "title": "Cosine Similarity",
+        "theory": "## Measuring Distance\\nVector Databases find related concepts by calculating the distance between vectors. The most common metric is Cosine Similarity, which measures the angle between two vectors rather than their magnitude.",
+        "instructions": "## Task: Calculate Similarity\\n1. Implement a simple cosine similarity calculation between two 1D lists (vectors) using pure Python.",
+        "starterCode": "import math\\n\\ndef cosine_similarity(v1, v2):\\n    dot_product = sum(a*b for a, b in zip(v1, v2))\\n    mag1 = math.sqrt(sum(a*a for a in v1))\\n    mag2 = math.sqrt(sum(b*b for b in v2))\\n    \\n    return dot_product / (___ * ___)\\n\\nvector_a = [1, 0, 1]\\nvector_b = [0, 1, 1]\\n\\nprint('Similarity:', cosine_similarity(vector_a, vector_b))",
+        "solution": "import math\\n\\ndef cosine_similarity(v1, v2):\\n    dot_product = sum(a*b for a, b in zip(v1, v2))\\n    mag1 = math.sqrt(sum(a*a for a in v1))\\n    mag2 = math.sqrt(sum(b*b for b in v2))\\n    \\n    return dot_product / (mag1 * mag2)\\n\\nvector_a = [1, 0, 1]\\nvector_b = [0, 1, 1]\\n\\nprint('Similarity:', cosine_similarity(vector_a, vector_b))",
+        "hint": "Multiply the magnitudes in the denominator.",
+        "rubric": "Calculates the correct cosine similarity."
       }
     ]
   },
@@ -175,6 +184,15 @@
         "solution": "scenarios = {\n    'Teaching a model to output strict proprietary JSON structures.': 'Fine-tuning',\n    'Allowing a model to answer questions about todays news.': 'RAG',\n    'Telling a model to be polite in a single instruction.': 'Prompt Engineering'\n}\n\nfor scenario, method in scenarios.items():\n    print(f\"Scenario: {scenario}\\nMethod: {method}\\n\")",
         "hint": "Format/Structure = Fine-tuning. New knowledge = RAG. Simple instruction = Prompt Engineering.",
         "rubric": "Scenarios are correctly matched to Fine-tuning, RAG, and Prompt Engineering."
+      },
+      {
+        "title": "Dataset Preparation",
+        "theory": "## Instruction Tuning Format\\nTo fine-tune an LLM to follow instructions, your dataset must be formatted in a specific way, often called ChatML or an Alpaca-style JSONL format.\\nEach example needs a 'system' prompt, a 'user' query, and an 'assistant' response.",
+        "instructions": "## Task: Format Converter\\n1. Convert a simple Q&A dictionary into the standard messages list format required by OpenAI/Anthropic APIs.",
+        "starterCode": "def format_for_finetuning(system_prompt, question, answer):\\n    return {\\n        'messages': [\\n            {'role': 'system', 'content': ___},\\n            {'role': 'user', 'content': ___},\\n            {'role': 'assistant', 'content': ___}\\n        ]\\n    }\\n\\nprint(format_for_finetuning('You are a helpful bot.', 'What is 2+2?', 'It is 4.'))",
+        "solution": "def format_for_finetuning(system_prompt, question, answer):\\n    return {\\n        'messages': [\\n            {'role': 'system', 'content': system_prompt},\\n            {'role': 'user', 'content': question},\\n            {'role': 'assistant', 'content': answer}\\n        ]\\n    }\\n\\nprint(format_for_finetuning('You are a helpful bot.', 'What is 2+2?', 'It is 4.'))",
+        "hint": "Map the arguments to the content fields.",
+        "rubric": "Successfully constructs the messages list."
       }
     ]
   },
@@ -221,6 +239,80 @@
         "solution": "def detect_hallucination(source_doc, ai_answer):\\n    source_words = set(source_doc.lower().split())\\n    answer_words = set(ai_answer.lower().split())\\n    \\n    for word in answer_words:\\n        if word not in source_words:\\n            print(f\"HALLUCINATION DETECTED: The word '{word}' is not in the source!\")\\n            return True\\n            \\n    print(\"Pass: The answer is strictly grounded in the source.\")\\n    return False\\n\\nsource = \"The sky is blue and the grass is green\"\\ngood_ans = \"The grass is green\"\\nbad_ans = \"The grass is green and red\"\\n\\nprint(\"Checking good answer:\")\\ndetect_hallucination(source, good_ans)\\n\\nprint(\"\\nChecking bad answer:\")\\ndetect_hallucination(source, bad_ans)",
         "hint": "Check if word is not in source_words.",
         "rubric": "Successfully flags the 'red' word as a hallucination in the bad answer."
+      }
+    ]
+  },
+  "RAG Systems In Depth": {
+    "title": "RAG Systems In Depth",
+    "lessons": [
+      {
+        "title": "Vector Embeddings Pipeline",
+        "theory": "## Embeddings\\nUnderstand how to encode text into dense vectors for retrieval.",
+        "instructions": "## Task: Initialize Embedding Model\\n1. Initialize `SentenceTransformer` with 'all-MiniLM-L6-v2'.",
+        "starterCode": "from sentence_transformers import SentenceTransformer\\n\\nmodel = ___",
+        "solution": "from sentence_transformers import SentenceTransformer\\n\\nmodel = SentenceTransformer('all-MiniLM-L6-v2')",
+        "hint": "SentenceTransformer('all-MiniLM-L6-v2')",
+        "rubric": "Model initialized."
+      },
+      {
+        "title": "Vector Databases Integration",
+        "theory": "## Vector DBs\\nStore and query embeddings efficiently.",
+        "instructions": "## Task: Connect to ChromaDB\\n1. Create a PersistentClient in ChromaDB.",
+        "starterCode": "import chromadb\\n\\nclient = ___",
+        "solution": "import chromadb\\n\\nclient = chromadb.PersistentClient(path='./chroma_db')",
+        "hint": "chromadb.PersistentClient",
+        "rubric": "Chroma connected."
+      }
+    ]
+  },
+  "LLM Fine-Tuning": {
+    "title": "LLM Fine-Tuning",
+    "lessons": [
+      {
+        "title": "LoRA and QLoRA",
+        "theory": "## Parameter-Efficient Fine-Tuning\\nLearn how LoRA reduces the number of trainable parameters.",
+        "instructions": "## Task: Configure LoRA\\n1. Set up a LoraConfig with r=8.",
+        "starterCode": "from peft import LoraConfig\\n\\nconfig = ___",
+        "solution": "from peft import LoraConfig\\n\\nconfig = LoraConfig(r=8, lora_alpha=16, target_modules=['q_proj', 'v_proj'], lora_dropout=0.05, bias='none', task_type='CAUSAL_LM')",
+        "hint": "LoraConfig(r=8, ...)",
+        "rubric": "LoRA configured."
+      },
+      {
+        "title": "Supervised Fine Tuning (SFT)",
+        "theory": "## SFTTrainer\\nUse the TRL library to fine-tune language models.",
+        "instructions": "## Task: Initialize SFTTrainer\\n1. Set up the trainer object.",
+        "starterCode": "from trl import SFTTrainer\\n\\ntrainer = ___",
+        "solution": "from trl import SFTTrainer\\n\\ntrainer = SFTTrainer(model=model, train_dataset=dataset, dataset_text_field='text', max_seq_length=512)",
+        "hint": "SFTTrainer(model=model, ...)",
+        "rubric": "Trainer initialized."
+      }
+    ]
+  },
+  "AI Ethics and Safety": {
+    "aiRubric": "Assess AI ethics",
+    "lessons": [
+      {
+        "title": "Bias Detection",
+        "theory": "## Model Bias\nAI models can reflect biases in their training data. We must actively test for and mitigate these biases.",
+        "instructions": "## Task: Detect Bias\nIdentify if the output exhibits gender bias.",
+        "starterCode": "output = 'The doctor told the nurse she should...'\nbias_detected = ___",
+        "solution": "output = 'The doctor told the nurse she should...'\nbias_detected = True",
+        "hint": "True",
+        "rubric": "Bias correctly identified."
+      }
+    ]
+  },
+  "Advanced Autonomous Agents": {
+    "aiRubric": "Assess advanced agents",
+    "lessons": [
+      {
+        "title": "Multi-Agent Collaboration",
+        "theory": "## Agent Swarms\nMultiple specialized agents can collaborate to solve complex problems better than a single general agent.",
+        "instructions": "## Task: Create a Swarm\nInstantiate two agents and pass a message between them.",
+        "starterCode": "agent1 = Agent('Researcher')\nagent2 = Agent('Writer')\n# Message from agent1 to agent2\nmsg = agent1.send(___, 'Here is the research')",
+        "solution": "agent1 = Agent('Researcher')\nagent2 = Agent('Writer')\n# Message from agent1 to agent2\nmsg = agent1.send(agent2, 'Here is the research')",
+        "hint": "Send to agent2.",
+        "rubric": "Message sent correctly."
       }
     ]
   }

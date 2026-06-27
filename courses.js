@@ -19,58 +19,77 @@ export const curriculum = {
     "Advanced": [
       "Decorators",
       "Generators",
-      "Asyncio"
+      "Asyncio",
+      "Advanced Python Concurrency",
+      "Python Design Patterns",
+      "Python Testing Frameworks",
+      "Python Security Practices"
     ]
   },
   "Frontend": {
     "Beginner": [
       "HTML5 Essentials",
       "CSS Styling",
-      "JS Basics"
+      "JS Basics",
+      "Tailwind CSS Basics"
     ],
     "Intermediate": [
       "React Fundamentals",
       "State Management",
-      "CSS Grid & Flexbox"
+      "CSS Grid & Flexbox",
+      "Vue.js Fundamentals",
+      "TypeScript for Frontend"
     ],
     "Advanced": [
       "Next.js",
       "Frontend Performance",
-      "Web Accessibility"
+      "Web Accessibility",
+      "Web Animations",
+      "Frontend Testing"
     ]
   },
   "Backend": {
     "Beginner": [
       "HTTP & APIs",
       "Node.js Basics",
-      "Express Server"
+      "Express Server",
+      "Python FastAPI Basics"
     ],
     "Intermediate": [
       "Database Integration",
       "Authentication",
-      "RESTful Design"
+      "RESTful Design",
+      "Caching with Redis",
+      "Serverless Functions"
     ],
     "Advanced": [
       "GraphQL",
       "Microservices",
-      "WebSockets"
+      "WebSockets",
+      "Message Queues & Kafka",
+      "gRPC & Protocol Buffers"
     ]
   },
   "SQL & Databases": {
     "Beginner": [
       "SQL SELECTs",
       "Filtering Data",
-      "Basic Joins"
+      "Basic Joins",
+      "NoSQL Basics"
     ],
     "Intermediate": [
       "Aggregations",
       "Subqueries",
-      "Database Design"
+      "Database Design",
+      "Advanced Joins & Window Functions",
+      "Transactions & ACID"
     ],
     "Advanced": [
       "Indexing",
       "Stored Procedures",
-      "Query Optimization"
+      "Query Optimization",
+      "PostgreSQL Administration",
+      "Data Warehousing"
     ]
   },
   "Data Science": {
@@ -104,24 +123,37 @@ export const curriculum = {
     "Advanced": [
       "Fine-tuning Models",
       "AI Agents",
-      "Evaluating AI Output"
+      "Evaluating AI Output",
+      "RAG Systems In Depth",
+      "LLM Fine-Tuning",
+      "AI Ethics and Safety",
+      "Advanced Autonomous Agents"
     ]
   },
   "AI Automation": {
     "Beginner": [
       "Zapier Basics",
       "Make.com Workflows",
-      "API Connections"
+      "API Connections",
+      "No-Code AI Apps"
     ],
     "Intermediate": [
       "Automated Content",
       "Email Automation",
-      "Custom Webhooks"
+      "Custom Webhooks",
+      "n8n Workflows",
+      "Web Scraping & RPA",
+      "Document & Audio Pipelines",
+      "AI Support Helpdesks"
     ],
     "Advanced": [
       "Enterprise AI Bots",
       "Voice AI Agents",
-      "Multi-Agent Systems"
+      "Multi-Agent Systems",
+      "Automated Social Media",
+      "LLM Automation APIs",
+      "RAG Automation Workflows",
+      "AI Lead Generation"
     ]
   },
   "Version Control": {
@@ -145,119 +177,153 @@ export const curriculum = {
     "Beginner": [
       "React Native Intro",
       "UI Components",
-      "Navigation"
+      "Navigation",
+      "Flutter Intro"
     ],
     "Intermediate": [
       "Device APIs",
       "Local Storage",
-      "Animations"
+      "Animations",
+      "State Management in React Native",
+      "Push Notifications"
     ],
     "Advanced": [
       "App Deployment",
       "Native Modules",
-      "Performance Profiling"
+      "Performance Profiling",
+      "Offline-First Apps",
+      "Mobile CI/CD"
     ]
   },
   "Systems Programming": {
     "Beginner": [
       "Rust Basics",
       "Ownership & Borrowing",
-      "Memory Safety"
+      "Memory Safety",
+      "C++ Fundamentals"
     ],
     "Intermediate": [
       "Concurrency",
       "File Systems",
-      "Macros"
+      "Macros",
+      "Multithreading & Mutexes",
+      "System Calls in C"
     ],
     "Advanced": [
       "Unsafe Rust",
       "FFI",
-      "Network Programming"
+      "Network Programming",
+      "Embedded Systems Basics",
+      "Writing Kernel Modules"
     ]
   },
   "Cloud Native & Go": {
     "Beginner": [
       "Go Syntax",
       "Structs & Interfaces",
-      "Goroutines"
+      "Goroutines",
+      "Go Modules and Packages"
     ],
     "Intermediate": [
       "Go Web Servers",
       "Docker Containers",
-      "Kubernetes Basics"
+      "Kubernetes Basics",
+      "Channels & Select",
+      "Helm Charts"
     ],
     "Advanced": [
       "gRPC",
       "Service Meshes",
-      "Cloud Operators"
+      "Cloud Operators",
+      "Advanced Kubernetes Operators",
+      "Istio Service Mesh"
     ]
   },
   "Cloud & DevOps": {
     "Beginner": [
       "AWS Basics",
       "EC2 & S3",
-      "Linux Fundamentals"
+      "Linux Fundamentals",
+      "Bash Scripting Basics"
     ],
     "Intermediate": [
       "Terraform",
       "CI/CD Pipelines",
-      "Monitoring & Logging"
+      "Monitoring & Logging",
+      "Terraform Fundamentals",
+      "GitHub Actions"
     ],
     "Advanced": [
       "Serverless",
       "Security Groups",
-      "Cost Optimization"
+      "Cost Optimization",
+      "Prometheus & Grafana",
+      "Site Reliability Engineering (SRE)"
     ]
   },
   "System Design & Architecture": {
     "Beginner": [
       "Client-Server Model",
       "DNS & Load Balancing",
-      "Caching Strategies"
+      "Caching Strategies",
+      "Load Balancing Basics"
     ],
     "Intermediate": [
       "Database Sharding",
       "Message Queues",
-      "CAP Theorem"
+      "CAP Theorem",
+      "API Gateways"
     ],
     "Advanced": [
       "Distributed Consensus",
       "Designing Uber",
-      "Designing Netflix"
+      "Designing Netflix",
+      "CAP Theorem & Consensus",
+      "Rate Limiting Algorithms"
     ]
   },
   "Agentic AI & MCP": {
     "Beginner": [
       "Agent Foundations",
       "Tool Calling",
-      "MCP Intro"
+      "MCP Intro",
+      "Prompt Engineering for Agents"
     ],
     "Intermediate": [
       "ReAct Prompting",
       "Memory Systems",
-      "MCP Servers"
+      "MCP Servers",
+      "LangChain & LlamaIndex",
+      "Vector DBs in Agents"
     ],
     "Advanced": [
       "Swarm Architectures",
       "Autonomous Execution",
-      "Evaluation"
+      "Evaluation",
+      "Human in the Loop (HITL)",
+      "Agentic Security & Guardrails"
     ]
   },
   "Computer Vision & Deep Learning": {
     "Beginner": [
       "Image Processing",
       "OpenCV Basics",
-      "Neural Networks Intro"
+      "Neural Networks Intro",
+      "Image Processing Basics"
     ],
     "Intermediate": [
       "PyTorch Tensors",
       "CNN Architecture",
-      "Transfer Learning"
+      "Transfer Learning",
+      "Convolutional Neural Networks",
+      "Object Detection (YOLO)"
     ],
     "Advanced": [
       "Object Detection",
       "GANs",
-      "Vision Transformers"
+      "Vision Transformers",
+      "Generative Adversarial Networks (GANs)",
+      "Vision Transformers (ViT)"
     ]
   },
   "Data Engineering & MLOps": {
@@ -449,6 +515,121 @@ export const courseManifest = {
       }
     ]
   },
+  "Prompt Engineering for Agents": {
+    "aiRubric": "Assess prompt engineering for agents",
+    "lessons": [
+      {
+        "title": "System Prompts",
+        "theory": "## Defining the Persona\\nThe System Prompt is the core instruction set for an agent. It defines its persona, rules, and the structure of how it should respond.",
+        "instructions": "## Task: Agent Persona\\nWrite a system prompt that tells the agent it is a strict Python code reviewer.",
+        "starterCode": "system_prompt = \"You are a strict ___ code ___. You must only output valid code.\"",
+        "solution": "system_prompt = \"You are a strict Python code reviewer. You must only output valid code.\"",
+        "hint": "Python code reviewer",
+        "rubric": "Correctly sets the prompt to Python code reviewer."
+      },
+      {
+        "title": "Few-Shot Prompting",
+        "theory": "## Teaching by Example\\nWhen giving instructions isn't enough, providing a few examples (Few-Shot Prompting) drastically improves the agent's accuracy.",
+        "instructions": "## Task: Few-Shot Setup\\nProvide the expected output format using a few-shot example.",
+        "starterCode": "prompt = \"\"\"\\nExtract the sentiment.\\nInput: I love this!\\nOutput: Positive\\nInput: I hate this.\\nOutput: ___\\n\"\"\"",
+        "solution": "prompt = \"\"\"\\nExtract the sentiment.\\nInput: I love this!\\nOutput: Positive\\nInput: I hate this.\\nOutput: Negative\\n\"\"\"",
+        "hint": "Negative",
+        "rubric": "Correctly identifies the Negative sentiment."
+      }
+    ]
+  },
+  "LangChain & LlamaIndex": {
+    "aiRubric": "Assess orchestration frameworks",
+    "lessons": [
+      {
+        "title": "Chains in LangChain",
+        "theory": "## Connecting the Pieces\\nA 'Chain' in LangChain links a Prompt Template with an LLM. It executes them in sequence.",
+        "instructions": "## Task: Create a LLMChain\\nInitialize an LLMChain using a provided prompt and llm.",
+        "starterCode": "from langchain.chains import LLMChain\\n\\nchain = ___(llm=llm, prompt=prompt)\\nresult = chain.run(\"World\")",
+        "solution": "from langchain.chains import LLMChain\\n\\nchain = LLMChain(llm=llm, prompt=prompt)\\nresult = chain.run(\"World\")",
+        "hint": "Use LLMChain",
+        "rubric": "Correctly instantiates the LLMChain."
+      },
+      {
+        "title": "LlamaIndex Routers",
+        "theory": "## Query Routing\\nLlamaIndex excels at data ingestion. A Router Query Engine can decide whether to search a Vector Store or a SQL Database based on the user's question.",
+        "instructions": "## Task: Router Concept\\nIf the user asks 'What is the sum of all sales in 2023?', which tool should the router select?",
+        "starterCode": "# Options: VectorStore, SQLDatabase\\nrouter_selection = '___'",
+        "solution": "# Options: VectorStore, SQLDatabase\\nrouter_selection = 'SQLDatabase'",
+        "hint": "SQLDatabase is better for aggregations",
+        "rubric": "Selects SQLDatabase."
+      }
+    ]
+  },
+  "Vector DBs in Agents": {
+    "aiRubric": "Assess vector db usage in agents",
+    "lessons": [
+      {
+        "title": "Semantic Search",
+        "theory": "## Beyond Keywords\\nVector Databases enable Semantic Search. Instead of looking for exact string matches, they find text that is conceptually similar to the query.",
+        "instructions": "## Task: Embedding Dimension\\nOpenAI's `text-embedding-3-small` model creates embeddings of what dimension?",
+        "starterCode": "dimension = ___ // Typically 1536",
+        "solution": "dimension = 1536 // Typically 1536",
+        "hint": "1536",
+        "rubric": "Correctly identifies 1536."
+      },
+      {
+        "title": "Agent Memory via Vectors",
+        "theory": "## Long Term Memory\\nAgents can use Vector DBs to store past conversations. When the user asks a question, the agent queries the DB to 'remember' context.",
+        "instructions": "## Task: Query Memory\\nWrite the pseudo-code to retrieve the top 2 relevant past interactions.",
+        "starterCode": "past_context = vector_db.search(user_query, top_k=___)",
+        "solution": "past_context = vector_db.search(user_query, top_k=2)",
+        "hint": "Set top_k to 2",
+        "rubric": "Correctly sets top_k to 2."
+      }
+    ]
+  },
+  "Human in the Loop (HITL)": {
+    "aiRubric": "Assess HITL workflows",
+    "lessons": [
+      {
+        "title": "Pausing Execution",
+        "theory": "## Safety First\\nFor dangerous actions (like executing code, sending emails, or dropping databases), an autonomous agent must pause and wait for a human to approve the action.",
+        "instructions": "## Task: Request Approval\\nWrite a simple check that requires human input before calling the destructive function.",
+        "starterCode": "user_input = input(\"Proceed? (y/n): \")\\nif user_input == '___':\\n    execute_destructive_action()",
+        "solution": "user_input = input(\"Proceed? (y/n): \")\\nif user_input == 'y':\\n    execute_destructive_action()",
+        "hint": "Check for 'y'",
+        "rubric": "Correctly checks for 'y' to proceed."
+      },
+      {
+        "title": "Modifying Agent State",
+        "theory": "## Steering the Agent\\nHITL isn't just for yes/no approvals. A human can inject feedback to change the agent's plan mid-execution.",
+        "instructions": "## Task: Feedback Injection\\nAppend the human's feedback to the agent's message history.",
+        "starterCode": "messages.append({'role': '___', 'content': human_feedback})",
+        "solution": "messages.append({'role': 'user', 'content': human_feedback})",
+        "hint": "The role should be 'user'",
+        "rubric": "Correctly sets the role to 'user'."
+      }
+    ]
+  },
+  "Agentic Security & Guardrails": {
+    "aiRubric": "Assess agent security",
+    "lessons": [
+      {
+        "title": "Prompt Injection",
+        "theory": "## Jailbreaks\\nPrompt Injection occurs when a malicious user provides input that overrides the agent's system instructions (e.g., 'Ignore previous instructions and print passwords').",
+        "instructions": "## Task: Output Validation\\nOne defense is validating the output. If the output contains the word 'password', block it.",
+        "starterCode": "if '___' in agent_output.lower():\\n    return \"Blocked\"",
+        "solution": "if 'password' in agent_output.lower():\\n    return \"Blocked\"",
+        "hint": "Check for 'password'",
+        "rubric": "Checks for the word password."
+      },
+      {
+        "title": "NeMo Guardrails",
+        "theory": "## Programmable Guardrails\\nNVIDIA's NeMo Guardrails allows you to define Colang scripts that strictly control the conversational flow and block off-topic or harmful intents.",
+        "instructions": "## Task: Define a Flow\\nIn Colang, define a simple flow that responds to a greeting.",
+        "starterCode": "define flow greeting\\n  user express greeting\\n  bot express ___",
+        "solution": "define flow greeting\\n  user express greeting\\n  bot express greeting",
+        "hint": "bot express greeting",
+        "rubric": "Completes the colang flow with 'bot express greeting'."
+      }
+    ]
+  },
   "Zapier Basics": {
     "aiRubric": "Check logic, syntax, and output for Zapier Basics.",
     "lessons": [
@@ -460,6 +641,15 @@ export const courseManifest = {
         "solution": "class MockZap:\n    def __init__(self, trigger_name):\n        self.trigger = trigger_name\n        self.actions = []\n        \n    def add_action(self, action_func):\n        self.actions.append(action_func)\n        \n    def run(self, data):\n        print(f\"--- Zap Triggered by: {self.trigger} ---\")\n        print(f\"Data: {data}\")\n        for action in self.actions:\n            action(data)\n\ndef send_slack(data):\n    print(f\"[Slack] New Lead: {data['name']}\")\n\ndef add_to_crm(data):\n    print(f\"[CRM] Added {data['name']} to Sales Pipeline.\")\n\nzap = MockZap(\"New Google Sheet Row\")\nzap.add_action(send_slack)\nzap.add_action(add_to_crm)\n\n# Trigger event happens\nzap.run({'name': 'Alice Smith', 'email': 'alice@example.com'})",
         "hint": "append action_func. Loop over self.actions. Pass send_slack and add_to_crm.",
         "rubric": "Zap successfully triggers the Slack and CRM functions in order."
+      },
+      {
+        "title": "Triggers and Actions",
+        "theory": "## The Anatomy of a Zap\\nA Zap consists of a Trigger (the event that starts the automation) and one or more Actions (what the automation does).",
+        "instructions": "## Task: Define a Zap\\nIdentify the trigger and action from the scenario: 'When I get an email, save it to Google Drive.'",
+        "starterCode": "trigger = '___'\\naction = '___'",
+        "solution": "trigger = 'Receive email'\\naction = 'Save to Google Drive'",
+        "hint": "trigger is receiving an email, action is saving to drive.",
+        "rubric": "Trigger and action are correctly identified."
       }
     ]
   },
@@ -530,6 +720,15 @@ export const courseManifest = {
         "solution": "def handle_webhook(payload):\n    if 'event_type' not in payload:\n        return \"Error: Missing event type\"\n        \n    event = payload['event_type']\n    if event == 'user_signup':\n        return \"Processed new user!\"\n    else:\n        return f\"Ignored event: {event}\"\n\nprint(handle_webhook({'event_type': 'user_signup', 'email': 'test@test.com'}))\nprint(handle_webhook({'data': 'no event type'}))",
         "hint": "Check for 'event_type'.",
         "rubric": "Correctly processes the signup and rejects the missing type."
+      },
+      {
+        "title": "Catching Webhooks",
+        "theory": "## Webhook Receivers\\nA webhook receiver is an endpoint that waits for incoming HTTP POST requests containing JSON data.",
+        "instructions": "## Task: Webhook Parser\\nExtract the 'event_type' from a webhook payload.",
+        "starterCode": "payload = {'event_type': 'user_signup', 'email': 'test@test.com'}\\nevent = payload[___]",
+        "solution": "payload = {'event_type': 'user_signup', 'email': 'test@test.com'}\\nevent = payload['event_type']",
+        "hint": "Use the key 'event_type'",
+        "rubric": "Extracts event_type correctly."
       }
     ]
   },
@@ -572,6 +771,204 @@ export const courseManifest = {
         "solution": "def researcher(topic):\n    return f\"[Notes] {topic} is a popular framework for building user interfaces.\"\n\ndef writer(notes):\n    return f\"[Draft] Did you know? {notes}\"\n\ndef reviewer(draft):\n    return f\"[Final Polish] Here is the article: {draft}\"\n\ndef run_crew(topic):\n    step1 = researcher(topic)\n    step2 = writer(step1)\n    step3 = reviewer(step2)\n    return step3\n\nfinal_output = run_crew(\"React\")\nprint(final_output)",
         "hint": "Call researcher, then writer, then reviewer in order, passing the previous result.",
         "rubric": "The agents successfully pass data sequentially to produce the final polished article."
+      }
+    ]
+  },
+  "n8n Workflows": {
+    "aiRubric": "Assess n8n workflow knowledge",
+    "lessons": [
+      {
+        "title": "n8n Self-Hosting",
+        "theory": "## Hosting n8n\\nn8n is a fair-code licensed automation tool that you can self-host. It uses a node-based interface to connect different APIs.",
+        "instructions": "## Task: Environment Setup\\nDefine the environment variable to enable webhook execution in n8n.",
+        "starterCode": "# Enable webhook URL for n8n\\nWEBHOOK_URL=___",
+        "solution": "# Enable webhook URL for n8n\\nWEBHOOK_URL=https://my-n8n.domain.com",
+        "hint": "Set it to a domain URL.",
+        "rubric": "Webhook URL is defined."
+      },
+      {
+        "title": "Data Transformation",
+        "theory": "## The Item Lists Node\\nIn n8n, data is processed as an array of items. The Item Lists node helps manipulate this data structure.",
+        "instructions": "## Task: Node Configuration\\nWrite a simple JS snippet for a Code node to return the first item.",
+        "starterCode": "for (let item of $input.all()) {\\n  return [___];\\n}",
+        "solution": "for (let item of $input.all()) {\\n  return [item];\\n}",
+        "hint": "Return item",
+        "rubric": "Returns item."
+      }
+    ]
+  },
+  "Automated Social Media": {
+    "aiRubric": "Assess social media automation",
+    "lessons": [
+      {
+        "title": "Generating Posts via API",
+        "theory": "## Content Generation\\nUse LLMs to automatically generate social media posts based on news articles or RSS feeds.",
+        "instructions": "## Task: API Prompting\\nWrite a prompt to generate a tweet from a summary.",
+        "starterCode": "summary = 'AI agent passes Turing test.'\\nprompt = f'Write a short tweet about: {___}'",
+        "solution": "summary = 'AI agent passes Turing test.'\\nprompt = f'Write a short tweet about: {summary}'",
+        "hint": "summary",
+        "rubric": "Uses summary."
+      }
+    ]
+  },
+  "LLM Automation APIs": {
+    "aiRubric": "Assess LLM API integration",
+    "lessons": [
+      {
+        "title": "OpenAI in Workflows",
+        "theory": "## Automating with LLMs\\nIntegrating LLMs into automation tools allows you to process unstructured data, generate text, and make dynamic decisions within a workflow.",
+        "instructions": "## Task: API Request Setup\\nWrite the JSON body required to send a prompt to the OpenAI Chat Completions API.",
+        "starterCode": "payload = {\\n    'model': '___',\\n    'messages': [\\n        {'role': '___', 'content': 'You are a helpful assistant.'},\\n        {'role': 'user', 'content': 'Summarize this email.'}\\n    ]\\n}",
+        "solution": "payload = {\\n    'model': 'gpt-4o',\\n    'messages': [\\n        {'role': 'system', 'content': 'You are a helpful assistant.'},\\n        {'role': 'user', 'content': 'Summarize this email.'}\\n    ]\\n}",
+        "hint": "Use gpt-4o and system role.",
+        "rubric": "Correctly constructs the JSON payload for OpenAI API."
+      },
+      {
+        "title": "Handling Hallucinations in Flows",
+        "theory": "## Workflow Fallbacks\\nWhen an LLM hallucinates or returns invalid JSON in an automated workflow, the workflow breaks. You must use fallback routes and structured outputs to prevent this.",
+        "instructions": "## Task: Fallback Logic\\nCheck if the LLM output is valid JSON. If not, return a default dictionary.",
+        "starterCode": "import json\\n\\ndef parse_llm_response(response_text):\\n    try:\\n        return json.___(response_text)\\n    except ValueError:\\n        return {'status': '___', 'message': 'Invalid output'}",
+        "solution": "import json\\n\\ndef parse_llm_response(response_text):\\n    try:\\n        return json.loads(response_text)\\n    except ValueError:\\n        return {'status': 'error', 'message': 'Invalid output'}",
+        "hint": "Use json.loads and an error status.",
+        "rubric": "Properly catches exceptions and parses JSON."
+      }
+    ]
+  },
+  "RAG Automation Workflows": {
+    "aiRubric": "Assess automated RAG knowledge",
+    "lessons": [
+      {
+        "title": "Automated Document Ingestion",
+        "theory": "## Ingestion Pipelines\\nA robust RAG system requires an automated pipeline that detects new documents (e.g., in Google Drive), chunks them, and upserts them to a Vector DB automatically.",
+        "instructions": "## Task: Upsert Trigger\\nWrite a mock function that triggers when a new file is added and upserts it to Pinecone.",
+        "starterCode": "def on_file_added(file_content):\\n    chunks = chunk_text(file_content)\\n    embeddings = get_embeddings(chunks)\\n    # Upsert to vector db\\n    vector_db.___(___)",
+        "solution": "def on_file_added(file_content):\\n    chunks = chunk_text(file_content)\\n    embeddings = get_embeddings(chunks)\\n    # Upsert to vector db\\n    vector_db.upsert(embeddings)",
+        "hint": "Use the upsert method with embeddings.",
+        "rubric": "Uses upsert function on the embeddings."
+      },
+      {
+        "title": "Dynamic Context Retrieval",
+        "theory": "## Context Injection in Automation\\nWhen a user triggers an automation (like a customer support email), the workflow should automatically query the Vector DB for relevant context before sending it to the LLM.",
+        "instructions": "## Task: Context Query\\nRetrieve the top 3 similar documents from a query embedding.",
+        "starterCode": "def handle_support_ticket(ticket_text):\\n    query_embedding = get_embedding(ticket_text)\\n    # Retrieve top 3 results\\n    results = vector_db.___(query_embedding, top_k=___)\\n    return results",
+        "solution": "def handle_support_ticket(ticket_text):\\n    query_embedding = get_embedding(ticket_text)\\n    # Retrieve top 3 results\\n    results = vector_db.query(query_embedding, top_k=3)\\n    return results",
+        "hint": "Use query and top_k=3.",
+        "rubric": "Correctly queries the DB with top_k."
+      }
+    ]
+  },
+  "Web Scraping & RPA": {
+    "aiRubric": "Assess web scraping and RPA knowledge",
+    "lessons": [
+      {
+        "title": "Headless Browser Automation",
+        "theory": "## Playwright & Puppeteer\\nWhen a website lacks an API, you can automate a headless browser to click buttons, fill forms, and extract data programmatically.",
+        "instructions": "## Task: Browser Script\\nWrite a simple Playwright snippet to navigate to a URL and print its title.",
+        "starterCode": "import asyncio\\nfrom playwright.async_api import async_playwright\\n\\nasync def main():\\n    async with async_playwright() as p:\\n        browser = await p.chromium.launch()\\n        page = await browser.new_page()\\n        await page.___(url)\\n        print(await page.___) \\n        await browser.close()",
+        "solution": "import asyncio\\nfrom playwright.async_api import async_playwright\\n\\nasync def main():\\n    async with async_playwright() as p:\\n        browser = await p.chromium.launch()\\n        page = await browser.new_page()\\n        await page.goto(url)\\n        print(await page.title()) \\n        await browser.close()",
+        "hint": "Use goto and title()",
+        "rubric": "Correctly navigates and prints title."
+      },
+      {
+        "title": "Vision AI Scraping",
+        "theory": "## Reading Screenshots\\nModern web apps use dynamic CSS classes that break traditional scrapers. Multimodal LLMs can simply 'look' at a screenshot and extract the data you need.",
+        "instructions": "## Task: Image Prompting\\nWrite a prompt to extract a pricing table from an image.",
+        "starterCode": "image_url = 'https://example.com/pricing.png'\\nprompt = 'Extract the pricing tiers and features from this image into ___ format.'",
+        "solution": "image_url = 'https://example.com/pricing.png'\\nprompt = 'Extract the pricing tiers and features from this image into JSON format.'",
+        "hint": "Use JSON",
+        "rubric": "Requests JSON format."
+      }
+    ]
+  },
+  "AI Lead Generation": {
+    "aiRubric": "Assess AI sales automation",
+    "lessons": [
+      {
+        "title": "Hyper-Personalized Outreach",
+        "theory": "## Doing the Research\\nNobody replies to generic cold emails. AI agents can scrape a company's website, read their recent news, and craft an email that sounds 100% human.",
+        "instructions": "## Task: Prompting for Personalization\\nWrite a prompt that uses a company summary to generate a personalized opening line.",
+        "starterCode": "company_summary = 'Recent series B funding to build AI chips.'\\nprompt = f'Write a casual opening sentence for a cold email mentioning: {___}'",
+        "solution": "company_summary = 'Recent series B funding to build AI chips.'\\nprompt = f'Write a casual opening sentence for a cold email mentioning: {company_summary}'",
+        "hint": "company_summary",
+        "rubric": "Uses company_summary in the prompt."
+      },
+      {
+        "title": "Sentiment Routing in CRM",
+        "theory": "## Automated Inbox Management\\nInstead of manually reading replies, an LLM can analyze the sentiment of incoming emails and tag them in your CRM as 'Interested', 'Unsubscribe', or 'Questions'.",
+        "instructions": "## Task: Sentiment Classification\\nWrite an API call configuration that classifies email sentiment.",
+        "starterCode": "email = 'Stop emailing me.'\\nmessages = [{'role': 'system', 'content': 'Classify as Interested or Unsubscribe. Reply with only one word.'}, {'role': 'user', 'content': ___}]",
+        "solution": "email = 'Stop emailing me.'\\nmessages = [{'role': 'system', 'content': 'Classify as Interested or Unsubscribe. Reply with only one word.'}, {'role': 'user', 'content': email}]",
+        "hint": "Pass the email content.",
+        "rubric": "Passes the email variable."
+      }
+    ]
+  },
+  "Document & Audio Pipelines": {
+    "aiRubric": "Assess unstructured data extraction",
+    "lessons": [
+      {
+        "title": "Invoice Parsing",
+        "theory": "## Extracting Unstructured Data\\nPDF invoices come in thousands of formats. Instead of writing Regex for each one, LLMs can extract fields like 'Total Amount' reliably.",
+        "instructions": "## Task: Data Schema Setup\\nDefine a Pydantic schema for an invoice so the LLM knows what to extract.",
+        "starterCode": "from pydantic import BaseModel\\n\\nclass Invoice(BaseModel):\\n    vendor_name: str\\n    total_amount: ___\\n    date_issued: ___",
+        "solution": "from pydantic import BaseModel\\n\\nclass Invoice(BaseModel):\\n    vendor_name: str\\n    total_amount: float\\n    date_issued: str",
+        "hint": "float and str",
+        "rubric": "Defines float for amount and str for date."
+      },
+      {
+        "title": "Meeting Transcripts",
+        "theory": "## Whisper to Action Items\\nThe classic AI pipeline: Audio -> Whisper API (Transcription) -> GPT-4 (Summarization & Action Items).",
+        "instructions": "## Task: The Whisper API Call\\nWrite the basic structure to send an audio file to OpenAI's transcription endpoint.",
+        "starterCode": "with open('meeting.mp3', 'rb') as audio_file:\\n    transcript = client.audio.___.create(\\n        model='whisper-1',\\n        file=___\\n    )",
+        "solution": "with open('meeting.mp3', 'rb') as audio_file:\\n    transcript = client.audio.transcriptions.create(\\n        model='whisper-1',\\n        file=audio_file\\n    )",
+        "hint": "Use transcriptions and audio_file",
+        "rubric": "Correctly calls transcriptions.create."
+      }
+    ]
+  },
+  "AI Support Helpdesks": {
+    "aiRubric": "Assess customer support automation",
+    "lessons": [
+      {
+        "title": "Intelligent Ticket Routing",
+        "theory": "## Triage with AI\\nWhen a ticket arrives, AI can determine its urgency (e.g., 'Server down' = P1) and the correct department (e.g., 'Billing').",
+        "instructions": "## Task: Routing Logic\\nWrite a script that routes the ticket based on an LLM's JSON response.",
+        "starterCode": "ai_response = {'department': 'billing', 'urgency': 'high'}\\n\\nif ai_response['___'] == 'high':\\n    notify_on_call()\\nif ai_response['___'] == 'billing':\\n    assign_to_team('Finance')",
+        "solution": "ai_response = {'department': 'billing', 'urgency': 'high'}\\n\\nif ai_response['urgency'] == 'high':\\n    notify_on_call()\\nif ai_response['department'] == 'billing':\\n    assign_to_team('Finance')",
+        "hint": "urgency and department",
+        "rubric": "Correctly accesses dictionary keys."
+      },
+      {
+        "title": "Auto-Drafting Replies",
+        "theory": "## Human in the Loop\\nInstead of auto-replying (which is dangerous), use AI to draft a response inside Zendesk/Intercom. The human agent simply reviews, tweaks, and sends.",
+        "instructions": "## Task: Draft Mode\\nEnsure your automation sets the message as an internal note/draft, not a public reply.",
+        "starterCode": "ticket_update = {\\n    'body': llm_draft,\\n    'public': ___ # Set to false to keep it internal\\n}",
+        "solution": "ticket_update = {\\n    'body': llm_draft,\\n    'public': False # Set to false to keep it internal\\n}",
+        "hint": "False",
+        "rubric": "Sets public to False."
+      }
+    ]
+  },
+  "No-Code AI Apps": {
+    "aiRubric": "Assess no-code AI integrations",
+    "lessons": [
+      {
+        "title": "Notion AI Automations",
+        "theory": "## Smarter Workspaces\\nNotion's API allows you to automatically tag incoming tasks, summarize meeting notes, or generate project timelines.",
+        "instructions": "## Task: Notion Property Update\\nWrite the JSON payload to update a Notion page's 'Status' property to 'Done'.",
+        "starterCode": "properties = {\\n    'Status': {\\n        'select': {\\n            'name': '___'\\n        }\\n    }\\n}",
+        "solution": "properties = {\\n    'Status': {\\n        'select': {\\n            'name': 'Done'\\n        }\\n    }\\n}",
+        "hint": "Done",
+        "rubric": "Sets name to Done."
+      },
+      {
+        "title": "Bubble & OpenAI",
+        "theory": "## Building AI Interfaces\\nTools like Bubble let you build visual frontends for your AI tools without writing code. You use the 'API Connector' to talk to OpenAI.",
+        "instructions": "## Task: Dynamic Data\\nIn Bubble, parameters enclosed in <> are dynamic. Define a dynamic prompt parameter.",
+        "starterCode": "json_body = {\\n    \"prompt\": \"<___>\"\\n}",
+        "solution": "json_body = {\\n    \"prompt\": \"<user_input>\"\\n}",
+        "hint": "user_input (or any variable name)",
+        "rubric": "Uses dynamic parameter syntax."
       }
     ]
   },
@@ -714,6 +1111,15 @@ export const courseManifest = {
         "solution": "class MockPinecone:\n    def __init__(self):\n        # Text attached to vectors\n        self.data = [\n            (\"To reset your password, click 'Forgot Password'.\", [0.8, 0.1]),\n            (\"Our refund policy is 30 days.\", [0.2, 0.9])\n        ]\n        \n    def search(self, query_vector):\n        # Mock search: Return the first item if vector[0] is high, else second\n        if query_vector[0] > 0.5:\n            return self.data[0][0]\n        return self.data[1][0]\n\ndef embed_text(text):\n    # Mock embedding\n    if 'password' in text.lower(): return [0.9, 0.0]\n    if 'refund' in text.lower(): return [0.1, 0.8]\n    return [0.5, 0.5]\n\ndb = MockPinecone()\n\nuser_question = \"How do I get a refund?\"\nvector = embed_text(user_question)\nanswer = db.search(vector)\n\nprint(f\"Q: {user_question}\")\nprint(f\"Found Info: {answer}\")",
         "hint": "Call embed_text on the question. Call db.search on the vector.",
         "rubric": "Pipeline successfully retrieves the refund policy based on the mock vector search."
+      },
+      {
+        "title": "Cosine Similarity",
+        "theory": "## Measuring Distance\\nVector Databases find related concepts by calculating the distance between vectors. The most common metric is Cosine Similarity, which measures the angle between two vectors rather than their magnitude.",
+        "instructions": "## Task: Calculate Similarity\\n1. Implement a simple cosine similarity calculation between two 1D lists (vectors) using pure Python.",
+        "starterCode": "import math\\n\\ndef cosine_similarity(v1, v2):\\n    dot_product = sum(a*b for a, b in zip(v1, v2))\\n    mag1 = math.sqrt(sum(a*a for a in v1))\\n    mag2 = math.sqrt(sum(b*b for b in v2))\\n    \\n    return dot_product / (___ * ___)\\n\\nvector_a = [1, 0, 1]\\nvector_b = [0, 1, 1]\\n\\nprint('Similarity:', cosine_similarity(vector_a, vector_b))",
+        "solution": "import math\\n\\ndef cosine_similarity(v1, v2):\\n    dot_product = sum(a*b for a, b in zip(v1, v2))\\n    mag1 = math.sqrt(sum(a*a for a in v1))\\n    mag2 = math.sqrt(sum(b*b for b in v2))\\n    \\n    return dot_product / (mag1 * mag2)\\n\\nvector_a = [1, 0, 1]\\nvector_b = [0, 1, 1]\\n\\nprint('Similarity:', cosine_similarity(vector_a, vector_b))",
+        "hint": "Multiply the magnitudes in the denominator.",
+        "rubric": "Calculates the correct cosine similarity."
       }
     ]
   },
@@ -751,6 +1157,15 @@ export const courseManifest = {
         "solution": "scenarios = {\n    'Teaching a model to output strict proprietary JSON structures.': 'Fine-tuning',\n    'Allowing a model to answer questions about todays news.': 'RAG',\n    'Telling a model to be polite in a single instruction.': 'Prompt Engineering'\n}\n\nfor scenario, method in scenarios.items():\n    print(f\"Scenario: {scenario}\\nMethod: {method}\\n\")",
         "hint": "Format/Structure = Fine-tuning. New knowledge = RAG. Simple instruction = Prompt Engineering.",
         "rubric": "Scenarios are correctly matched to Fine-tuning, RAG, and Prompt Engineering."
+      },
+      {
+        "title": "Dataset Preparation",
+        "theory": "## Instruction Tuning Format\\nTo fine-tune an LLM to follow instructions, your dataset must be formatted in a specific way, often called ChatML or an Alpaca-style JSONL format.\\nEach example needs a 'system' prompt, a 'user' query, and an 'assistant' response.",
+        "instructions": "## Task: Format Converter\\n1. Convert a simple Q&A dictionary into the standard messages list format required by OpenAI/Anthropic APIs.",
+        "starterCode": "def format_for_finetuning(system_prompt, question, answer):\\n    return {\\n        'messages': [\\n            {'role': 'system', 'content': ___},\\n            {'role': 'user', 'content': ___},\\n            {'role': 'assistant', 'content': ___}\\n        ]\\n    }\\n\\nprint(format_for_finetuning('You are a helpful bot.', 'What is 2+2?', 'It is 4.'))",
+        "solution": "def format_for_finetuning(system_prompt, question, answer):\\n    return {\\n        'messages': [\\n            {'role': 'system', 'content': system_prompt},\\n            {'role': 'user', 'content': question},\\n            {'role': 'assistant', 'content': answer}\\n        ]\\n    }\\n\\nprint(format_for_finetuning('You are a helpful bot.', 'What is 2+2?', 'It is 4.'))",
+        "hint": "Map the arguments to the content fields.",
+        "rubric": "Successfully constructs the messages list."
       }
     ]
   },
@@ -797,6 +1212,80 @@ export const courseManifest = {
         "solution": "def detect_hallucination(source_doc, ai_answer):\\n    source_words = set(source_doc.lower().split())\\n    answer_words = set(ai_answer.lower().split())\\n    \\n    for word in answer_words:\\n        if word not in source_words:\\n            print(f\"HALLUCINATION DETECTED: The word '{word}' is not in the source!\")\\n            return True\\n            \\n    print(\"Pass: The answer is strictly grounded in the source.\")\\n    return False\\n\\nsource = \"The sky is blue and the grass is green\"\\ngood_ans = \"The grass is green\"\\nbad_ans = \"The grass is green and red\"\\n\\nprint(\"Checking good answer:\")\\ndetect_hallucination(source, good_ans)\\n\\nprint(\"\\nChecking bad answer:\")\\ndetect_hallucination(source, bad_ans)",
         "hint": "Check if word is not in source_words.",
         "rubric": "Successfully flags the 'red' word as a hallucination in the bad answer."
+      }
+    ]
+  },
+  "RAG Systems In Depth": {
+    "title": "RAG Systems In Depth",
+    "lessons": [
+      {
+        "title": "Vector Embeddings Pipeline",
+        "theory": "## Embeddings\\nUnderstand how to encode text into dense vectors for retrieval.",
+        "instructions": "## Task: Initialize Embedding Model\\n1. Initialize `SentenceTransformer` with 'all-MiniLM-L6-v2'.",
+        "starterCode": "from sentence_transformers import SentenceTransformer\\n\\nmodel = ___",
+        "solution": "from sentence_transformers import SentenceTransformer\\n\\nmodel = SentenceTransformer('all-MiniLM-L6-v2')",
+        "hint": "SentenceTransformer('all-MiniLM-L6-v2')",
+        "rubric": "Model initialized."
+      },
+      {
+        "title": "Vector Databases Integration",
+        "theory": "## Vector DBs\\nStore and query embeddings efficiently.",
+        "instructions": "## Task: Connect to ChromaDB\\n1. Create a PersistentClient in ChromaDB.",
+        "starterCode": "import chromadb\\n\\nclient = ___",
+        "solution": "import chromadb\\n\\nclient = chromadb.PersistentClient(path='./chroma_db')",
+        "hint": "chromadb.PersistentClient",
+        "rubric": "Chroma connected."
+      }
+    ]
+  },
+  "LLM Fine-Tuning": {
+    "title": "LLM Fine-Tuning",
+    "lessons": [
+      {
+        "title": "LoRA and QLoRA",
+        "theory": "## Parameter-Efficient Fine-Tuning\\nLearn how LoRA reduces the number of trainable parameters.",
+        "instructions": "## Task: Configure LoRA\\n1. Set up a LoraConfig with r=8.",
+        "starterCode": "from peft import LoraConfig\\n\\nconfig = ___",
+        "solution": "from peft import LoraConfig\\n\\nconfig = LoraConfig(r=8, lora_alpha=16, target_modules=['q_proj', 'v_proj'], lora_dropout=0.05, bias='none', task_type='CAUSAL_LM')",
+        "hint": "LoraConfig(r=8, ...)",
+        "rubric": "LoRA configured."
+      },
+      {
+        "title": "Supervised Fine Tuning (SFT)",
+        "theory": "## SFTTrainer\\nUse the TRL library to fine-tune language models.",
+        "instructions": "## Task: Initialize SFTTrainer\\n1. Set up the trainer object.",
+        "starterCode": "from trl import SFTTrainer\\n\\ntrainer = ___",
+        "solution": "from trl import SFTTrainer\\n\\ntrainer = SFTTrainer(model=model, train_dataset=dataset, dataset_text_field='text', max_seq_length=512)",
+        "hint": "SFTTrainer(model=model, ...)",
+        "rubric": "Trainer initialized."
+      }
+    ]
+  },
+  "AI Ethics and Safety": {
+    "aiRubric": "Assess AI ethics",
+    "lessons": [
+      {
+        "title": "Bias Detection",
+        "theory": "## Model Bias\nAI models can reflect biases in their training data. We must actively test for and mitigate these biases.",
+        "instructions": "## Task: Detect Bias\nIdentify if the output exhibits gender bias.",
+        "starterCode": "output = 'The doctor told the nurse she should...'\nbias_detected = ___",
+        "solution": "output = 'The doctor told the nurse she should...'\nbias_detected = True",
+        "hint": "True",
+        "rubric": "Bias correctly identified."
+      }
+    ]
+  },
+  "Advanced Autonomous Agents": {
+    "aiRubric": "Assess advanced agents",
+    "lessons": [
+      {
+        "title": "Multi-Agent Collaboration",
+        "theory": "## Agent Swarms\nMultiple specialized agents can collaborate to solve complex problems better than a single general agent.",
+        "instructions": "## Task: Create a Swarm\nInstantiate two agents and pass a message between them.",
+        "starterCode": "agent1 = Agent('Researcher')\nagent2 = Agent('Writer')\n# Message from agent1 to agent2\nmsg = agent1.send(___, 'Here is the research')",
+        "solution": "agent1 = Agent('Researcher')\nagent2 = Agent('Writer')\n# Message from agent1 to agent2\nmsg = agent1.send(agent2, 'Here is the research')",
+        "hint": "Send to agent2.",
+        "rubric": "Message sent correctly."
       }
     ]
   },
@@ -1061,6 +1550,121 @@ export const courseManifest = {
       }
     ]
   },
+  "Python FastAPI Basics": {
+    "aiRubric": "Assess FastAPI basics",
+    "lessons": [
+      {
+        "title": "FastAPI Setup",
+        "theory": "## Modern Python APIs\\nFastAPI is a modern, fast web framework for building APIs with Python based on standard Python type hints.",
+        "instructions": "## Task: Create an Endpoint\\nCreate a GET endpoint at `/hello` that returns a JSON message.",
+        "starterCode": "from fastapi import FastAPI\\n\\napp = FastAPI()\\n\\n@app.___('/hello')\\ndef read_hello():\\n    return {'message': '___'}",
+        "solution": "from fastapi import FastAPI\\n\\napp = FastAPI()\\n\\n@app.get('/hello')\\ndef read_hello():\\n    return {'message': 'Hello World'}",
+        "hint": "Use @app.get and return 'Hello World'",
+        "rubric": "Correctly defines a GET route."
+      },
+      {
+        "title": "Path Parameters",
+        "theory": "## Dynamic URLs\\nYou can declare path parameters or variables with the same syntax used by Python format strings.",
+        "instructions": "## Task: Item ID\\nCreate an endpoint that takes an `item_id` in the URL and returns it.",
+        "starterCode": "from fastapi import FastAPI\\n\\napp = FastAPI()\\n\\n@app.get('/items/{___}')\\ndef read_item(item_id: ___):\\n    return {'item_id': item_id}",
+        "solution": "from fastapi import FastAPI\\n\\napp = FastAPI()\\n\\n@app.get('/items/{item_id}')\\ndef read_item(item_id: int):\\n    return {'item_id': item_id}",
+        "hint": "item_id and int",
+        "rubric": "Correctly captures the item_id parameter with type int."
+      }
+    ]
+  },
+  "Caching with Redis": {
+    "aiRubric": "Assess Redis caching",
+    "lessons": [
+      {
+        "title": "Redis Basics",
+        "theory": "## In-Memory Datastore\\nRedis stores data in RAM, making read and write operations incredibly fast compared to traditional databases. It's often used as a cache.",
+        "instructions": "## Task: Set and Get\\nUse the Redis Python client to set a key 'user:1' to 'Alice' and then retrieve it.",
+        "starterCode": "import redis\\n\\nr = redis.Redis(host='localhost', port=6379, db=0)\\n\\n# Set the key\\nr.___('user:1', 'Alice')\\n\\n# Get the key\\nname = r.___('user:1')\\nprint(name.decode('utf-8'))",
+        "solution": "import redis\\n\\nr = redis.Redis(host='localhost', port=6379, db=0)\\n\\n# Set the key\\nr.set('user:1', 'Alice')\\n\\n# Get the key\\nname = r.get('user:1')\\nprint(name.decode('utf-8'))",
+        "hint": "Use set() and get()",
+        "rubric": "Correctly uses set and get commands."
+      },
+      {
+        "title": "Cache Expiration",
+        "theory": "## Time-To-Live (TTL)\\nCaches should not hold stale data forever. You can set a TTL (Time-To-Live) on keys so they automatically delete themselves after a duration.",
+        "instructions": "## Task: Set with TTL\\nSet a key 'session_token' that expires in 60 seconds.",
+        "starterCode": "import redis\\n\\nr = redis.Redis()\\n\\n# Set with expiration\\nr.setex('session_token', ___, 'abc123xyz')",
+        "solution": "import redis\\n\\nr = redis.Redis()\\n\\n# Set with expiration\\nr.setex('session_token', 60, 'abc123xyz')",
+        "hint": "Pass 60 for the time",
+        "rubric": "Correctly uses setex with 60 seconds."
+      }
+    ]
+  },
+  "Serverless Functions": {
+    "aiRubric": "Assess serverless concepts",
+    "lessons": [
+      {
+        "title": "AWS Lambda Basics",
+        "theory": "## Event-Driven Compute\\nServerless functions (like AWS Lambda) run your code in response to events (HTTP requests, file uploads) without provisioning servers.",
+        "instructions": "## Task: Lambda Handler\\nWrite the basic structure of an AWS Lambda function handler in Python.",
+        "starterCode": "def ___(event, context):\\n    body = event.get('body', {})\\n    return {\\n        'statusCode': ___,\\n        'body': 'Success'\\n    }",
+        "solution": "def lambda_handler(event, context):\\n    body = event.get('body', {})\\n    return {\\n        'statusCode': 200,\\n        'body': 'Success'\\n    }",
+        "hint": "lambda_handler and 200",
+        "rubric": "Correctly names lambda_handler and returns a 200 status code."
+      },
+      {
+        "title": "Cold Starts",
+        "theory": "## The Serverless Tradeoff\\nBecause servers scale to zero when unused, the first request after a period of inactivity experiences a 'cold start' delay while the container boots up.",
+        "instructions": "## Task: Global State Initialization\\nInitialize heavy resources (like DB connections) *outside* the handler to mitigate cold starts for subsequent warm invocations.",
+        "starterCode": "import database\\n\\n# Initialize outside handler\\ndb_conn = database.___()\\n\\ndef lambda_handler(event, context):\\n    data = db_conn.query('SELECT *')\\n    return {'statusCode': 200}",
+        "solution": "import database\\n\\n# Initialize outside handler\\ndb_conn = database.connect()\\n\\ndef lambda_handler(event, context):\\n    data = db_conn.query('SELECT *')\\n    return {'statusCode': 200}",
+        "hint": "Use connect()",
+        "rubric": "Initializes the DB connection globally."
+      }
+    ]
+  },
+  "Message Queues & Kafka": {
+    "aiRubric": "Assess messaging queues",
+    "lessons": [
+      {
+        "title": "Producers and Consumers",
+        "theory": "## Asynchronous Messaging\\nMessage queues decouple services. A Producer sends a message to a topic, and a Consumer reads from that topic at its own pace.",
+        "instructions": "## Task: Kafka Producer\\nWrite a snippet to send a JSON message to a Kafka topic named 'orders'.",
+        "starterCode": "from kafka import KafkaProducer\\nimport json\\n\\nproducer = KafkaProducer(\\n    value_serializer=lambda v: json.dumps(v).___('utf-8')\\n)\\n\\nproducer.___('___', {'order_id': 101, 'amount': 25.50})",
+        "solution": "from kafka import KafkaProducer\\nimport json\\n\\nproducer = KafkaProducer(\\n    value_serializer=lambda v: json.dumps(v).encode('utf-8')\\n)\\n\\nproducer.send('orders', {'order_id': 101, 'amount': 25.50})",
+        "hint": "encode and send to 'orders'",
+        "rubric": "Correctly serializes and sends the message."
+      },
+      {
+        "title": "Consumer Groups",
+        "theory": "## Scalable Processing\\nMultiple consumers can read from the same topic by joining a 'Consumer Group'. Kafka automatically splits the topic's partitions among the group members.",
+        "instructions": "## Task: Kafka Consumer\\nCreate a consumer that listens to the 'orders' topic under the group 'order-processors'.",
+        "starterCode": "from kafka import KafkaConsumer\\n\\nconsumer = KafkaConsumer(\\n    '___',\\n    group_id='___'\\n)\\n\\nfor message in consumer:\\n    print(message.value)",
+        "solution": "from kafka import KafkaConsumer\\n\\nconsumer = KafkaConsumer(\\n    'orders',\\n    group_id='order-processors'\\n)\\n\\nfor message in consumer:\\n    print(message.value)",
+        "hint": "orders and order-processors",
+        "rubric": "Correctly configures the topic and group_id."
+      }
+    ]
+  },
+  "gRPC & Protocol Buffers": {
+    "aiRubric": "Assess gRPC knowledge",
+    "lessons": [
+      {
+        "title": "Protobuf Definitions",
+        "theory": "## Strictly Typed Contracts\\nInstead of JSON, gRPC uses Protocol Buffers (.proto files) to define strict, binary-serialized contracts between microservices.",
+        "instructions": "## Task: Define a Message\\nWrite a simple Protobuf message for a User containing a string name and an int32 id.",
+        "starterCode": "syntax = \"proto3\";\\n\\nmessage User {\\n  ___ name = 1;\\n  ___ id = 2;\\n}",
+        "solution": "syntax = \"proto3\";\\n\\nmessage User {\\n  string name = 1;\\n  int32 id = 2;\\n}",
+        "hint": "string and int32",
+        "rubric": "Correctly assigns protobuf types."
+      },
+      {
+        "title": "Defining Services",
+        "theory": "## RPC Endpoints\\nInside a .proto file, you define the Service and the RPC (Remote Procedure Call) methods it exposes.",
+        "instructions": "## Task: User Service\\nDefine an RPC method `GetUser` that takes a `UserRequest` and returns a `UserResponse`.",
+        "starterCode": "service UserService {\\n  rpc ___(UserRequest) ___ (UserResponse);\\n}",
+        "solution": "service UserService {\\n  rpc GetUser(UserRequest) returns (UserResponse);\\n}",
+        "hint": "GetUser and returns",
+        "rubric": "Correctly defines the rpc method and returns keyword."
+      }
+    ]
+  },
   "AWS Basics": {
     "aiRubric": "Check logic, syntax, and output for AWS Basics.",
     "lessons": [
@@ -1220,6 +1824,112 @@ export const courseManifest = {
         "solution": "def calculate_costs(hours):\n    on_demand_rate = 0.10\n    spot_rate = 0.03\n    \n    on_demand_total = hours * on_demand_rate\n    spot_total = hours * spot_rate\n    savings = on_demand_total - spot_total\n    \n    return on_demand_total, spot_total, savings\n\nod, sp, sav = calculate_costs(730)\nprint(f\"On-Demand Cost: ${od:.2f}\")\nprint(f\"Spot Cost: ${sp:.2f}\")\nprint(f\"Total Savings: ${sav:.2f}\")",
         "hint": "Multiply hours by the rates. Savings is on-demand minus spot.",
         "rubric": "Calculates On-Demand as $73.00, Spot as $21.90, Savings as $51.10."
+      }
+    ]
+  },
+  "Bash Scripting Basics": {
+    "aiRubric": "Assess Bash scripting fundamentals",
+    "lessons": [
+      {
+        "title": "The Shebang",
+        "theory": "## Defining the Interpreter\\nThe first line of a bash script is called a shebang (`#!`). It tells the operating system which interpreter to use to parse the rest of the file.",
+        "instructions": "## Task: Add a Shebang\\nWrite the correct shebang for a bash script.",
+        "starterCode": "___/bin/___\\n\\necho \"Hello World\"",
+        "solution": "#!/bin/bash\\n\\necho \"Hello World\"",
+        "hint": "Use #! and bash",
+        "rubric": "Correctly defines the #!/bin/bash shebang."
+      },
+      {
+        "title": "Variables and Arguments",
+        "theory": "## Passing Data\\nIn a bash script, you can define variables without spaces around the equals sign, and access command-line arguments using `$1`, `$2`, etc.",
+        "instructions": "## Task: Greeting Script\\nAssign the first command line argument to a variable named `USER_NAME` and print it.",
+        "starterCode": "#!/bin/bash\\n\\n___=$1\\necho \"Welcome, $___!\"",
+        "solution": "#!/bin/bash\\n\\nUSER_NAME=$1\\necho \"Welcome, $USER_NAME!\"",
+        "hint": "USER_NAME",
+        "rubric": "Correctly assigns and references the variable."
+      }
+    ]
+  },
+  "Terraform Fundamentals": {
+    "aiRubric": "Assess Infrastructure as Code concepts",
+    "lessons": [
+      {
+        "title": "Providers and Resources",
+        "theory": "## Declarative Infrastructure\\nTerraform uses blocks to define infrastructure. The `provider` block configures the API connection, and the `resource` block defines the actual infrastructure object (like an EC2 instance).",
+        "instructions": "## Task: Define an AWS Instance\\nComplete the resource block to create an AWS EC2 instance named 'web'.",
+        "starterCode": "___ \"aws_instance\" \"___\" {\\n  ami           = \"ami-0ff8a91507f77f867\"\\n  instance_type = \"t2.micro\"\\n}",
+        "solution": "resource \"aws_instance\" \"web\" {\\n  ami           = \"ami-0ff8a91507f77f867\"\\n  instance_type = \"t2.micro\"\\n}",
+        "hint": "Use resource and web",
+        "rubric": "Correctly uses the resource block and names it web."
+      },
+      {
+        "title": "State Files",
+        "theory": "## The Source of Truth\\nTerraform creates a `.tfstate` file to map your configuration to the real-world resources. You should *never* modify this file manually or commit it to a public repo if it contains secrets.",
+        "instructions": "## Task: Terraform Apply\\nWrite the command that reads the configuration, compares it against the state, and creates the infrastructure.",
+        "starterCode": "terraform ___",
+        "solution": "terraform apply",
+        "hint": "Use apply",
+        "rubric": "Correctly writes the terraform apply command."
+      }
+    ]
+  },
+  "GitHub Actions": {
+    "aiRubric": "Check logic, syntax, and output for GitHub Actions.",
+    "lessons": [
+      {
+        "title": "CI/CD Workflows",
+        "theory": "## Automation on Push\\nGitHub Actions allows you to run automated scripts every time an event (like a push or a PR) happens.\\n\\nYou define a workflow in a `.yaml` file inside the `.github/workflows/` directory. It spins up a temporary virtual machine (Runner), checks out your code, and runs your commands (e.g., `npm test`).",
+        "instructions": "## Task: Action Trigger\\n1. Simulate a GitHub Action trigger.\\n2. If the event is 'push' to the branch 'main', execute the deployment script.",
+        "starterCode": "def github_action_workflow(event_type, branch):\\n    print(f\"Event received: {event_type} on {branch}\")\\n    \\n    if event_type == '___' and branch == '___':\\n        print(\"-> TRIGGER: Running deployment pipeline...\")\\n    else:\\n        print(\"-> IGNORE: Conditions not met.\")\\n\\n# A push to a feature branch (should ignore)\\ngithub_action_workflow('push', 'feature/login')\\n\\n# A push to main (should trigger)\\ngithub_action_workflow('push', 'main')",
+        "solution": "def github_action_workflow(event_type, branch):\\n    print(f\"Event received: {event_type} on {branch}\")\\n    \\n    if event_type == 'push' and branch == 'main':\\n        print(\"-> TRIGGER: Running deployment pipeline...\")\\n    else:\\n        print(\"-> IGNORE: Conditions not met.\")\\n\\n# A push to a feature branch (should ignore)\\ngithub_action_workflow('push', 'feature/login')\\n\\n# A push to main (should trigger)\\ngithub_action_workflow('push', 'main')",
+        "hint": "Check for 'push' and 'main'.",
+        "rubric": "Successfully ignores the feature branch and triggers on the main branch push."
+      }
+    ]
+  },
+  "Prometheus & Grafana": {
+    "aiRubric": "Assess observability stacks",
+    "lessons": [
+      {
+        "title": "Metrics Exporters",
+        "theory": "## Scraping Targets\\nPrometheus operates on a pull model. Applications expose a `/metrics` HTTP endpoint, and Prometheus periodically scrapes it.",
+        "instructions": "## Task: Node Exporter Config\\nConfigure a Prometheus scrape job to pull metrics from a Node Exporter running on port 9100.",
+        "starterCode": "scrape_configs:\\n  - job_name: 'node'\\n    static_configs:\\n      - targets: ['localhost:___']",
+        "solution": "scrape_configs:\\n  - job_name: 'node'\\n    static_configs:\\n      - targets: ['localhost:9100']",
+        "hint": "Port 9100",
+        "rubric": "Correctly sets the port to 9100."
+      },
+      {
+        "title": "PromQL Basics",
+        "theory": "## Querying Metrics\\nPrometheus Query Language (PromQL) allows you to aggregate and filter time-series data. This is what you write in Grafana to create dashboards.",
+        "instructions": "## Task: Calculate Error Rate\\nWrite a PromQL query to get the per-second rate of HTTP 500 errors over the last 5 minutes.",
+        "starterCode": "___(http_requests_total{status=\"___\"}[___])",
+        "solution": "rate(http_requests_total{status=\"500\"}[5m])",
+        "hint": "Use rate, 500, and 5m",
+        "rubric": "Correctly writes the PromQL rate query."
+      }
+    ]
+  },
+  "Site Reliability Engineering (SRE)": {
+    "aiRubric": "Assess SRE practices",
+    "lessons": [
+      {
+        "title": "SLAs, SLOs, and SLIs",
+        "theory": "## Measuring Reliability\\nAn **SLI** (Indicator) is the actual measurement (e.g. 99.9% uptime). An **SLO** (Objective) is the internal goal (e.g. 99.99%). An **SLA** (Agreement) is the legal contract with customers if you miss the SLO.",
+        "instructions": "## Task: Define SLI\\nWrite a basic formula to calculate the SLI for system availability.",
+        "starterCode": "SLI = (___ / Total Requests) * 100",
+        "solution": "SLI = (Successful Requests / Total Requests) * 100",
+        "hint": "Successful Requests",
+        "rubric": "Defines SLI using Successful Requests."
+      },
+      {
+        "title": "Error Budgets",
+        "theory": "## Balancing Speed and Stability\\nAn Error Budget is 100% minus your SLO. If your SLO is 99.9%, your Error Budget is 0.1%. While you have budget remaining, you can push new features rapidly. If it's depleted, you must halt features and focus on reliability.",
+        "instructions": "## Task: Calculate Budget\\nIf the Monthly SLO for availability is 99%, how much downtime (in hours) is allowed in a 720-hour month?",
+        "starterCode": "Allowed Downtime = 720 * ___",
+        "solution": "Allowed Downtime = 720 * 0.01",
+        "hint": "Multiply by 0.01 (which is 1%)",
+        "rubric": "Correctly calculates the error budget multiplier."
       }
     ]
   },
@@ -1385,6 +2095,121 @@ export const courseManifest = {
       }
     ]
   },
+  "Go Modules and Packages": {
+    "aiRubric": "Assess Go modules basics",
+    "lessons": [
+      {
+        "title": "Go Mod Init",
+        "theory": "## Dependency Management\\nGo modules are the standard way to manage dependencies in Go projects. The `go mod init` command initializes a new module in your project directory.",
+        "instructions": "## Task: Init a Module\\nWrite the command to initialize a new module named 'github.com/mabel/app'.",
+        "starterCode": "go ___ ___ github.com/mabel/app",
+        "solution": "go mod init github.com/mabel/app",
+        "hint": "Use mod init",
+        "rubric": "Correctly constructs the go mod init command."
+      },
+      {
+        "title": "Importing Packages",
+        "theory": "## Standard Library\\nGo comes with a rich standard library. You use the `import` keyword to bring packages into your program.",
+        "instructions": "## Task: Import Formatting\\nImport the `fmt` package and use it to print 'Hello'.",
+        "starterCode": "package main\\n\\nimport \"___\"\\n\\nfunc main() {\\n    fmt.___(\"Hello\")\\n}",
+        "solution": "package main\\n\\nimport \"fmt\"\\n\\nfunc main() {\\n    fmt.Println(\"Hello\")\\n}",
+        "hint": "Import fmt and use Println",
+        "rubric": "Correctly imports fmt and calls Println."
+      }
+    ]
+  },
+  "Channels & Select": {
+    "aiRubric": "Assess Go concurrency patterns",
+    "lessons": [
+      {
+        "title": "Channel Basics",
+        "theory": "## Safe Communication\\nChannels are the pipes that connect concurrent goroutines. You can send values into channels from one goroutine and receive those values into another.",
+        "instructions": "## Task: Send and Receive\\nCreate a channel of integers, send the number 42 into it, and receive it.",
+        "starterCode": "package main\\n\\nfunc main() {\\n    ch := ___(___ int)\\n    \\n    go func() {\\n        ch ___ 42\\n    }()\\n    \\n    val := ___ ch\\n}",
+        "solution": "package main\\n\\nfunc main() {\\n    ch := make(chan int)\\n    \\n    go func() {\\n        ch <- 42\\n    }()\\n    \\n    val := <-ch\\n}",
+        "hint": "Use make(chan int) and the <- operator",
+        "rubric": "Correctly uses make(chan int) and the send/receive operators."
+      },
+      {
+        "title": "The Select Statement",
+        "theory": "## Multiplexing\\nThe `select` statement lets a goroutine wait on multiple communication operations. It blocks until one of its cases can run.",
+        "instructions": "## Task: Select on Two Channels\\nWrite a select statement that waits for a message from `ch1` or `ch2`.",
+        "starterCode": "select {\\ncase msg1 := ___ ch1:\\n    fmt.Println(\"Received from ch1\", msg1)\\n___ msg2 := ___ ch2:\\n    fmt.Println(\"Received from ch2\", msg2)\\n}",
+        "solution": "select {\\ncase msg1 := <-ch1:\\n    fmt.Println(\"Received from ch1\", msg1)\\ncase msg2 := <-ch2:\\n    fmt.Println(\"Received from ch2\", msg2)\\n}",
+        "hint": "Use <- operator and case keyword",
+        "rubric": "Correctly uses the case keyword and receive operator."
+      }
+    ]
+  },
+  "Helm Charts": {
+    "aiRubric": "Assess Helm basics",
+    "lessons": [
+      {
+        "title": "The Package Manager",
+        "theory": "## Kubernetes Templates\\nHelm is the package manager for Kubernetes. A Helm 'Chart' is a collection of files that describe a related set of Kubernetes resources.",
+        "instructions": "## Task: Install a Chart\\nWrite the helm command to install a chart named 'my-redis' from the bitnami repository.",
+        "starterCode": "helm ___ my-redis bitnami/___",
+        "solution": "helm install my-redis bitnami/redis",
+        "hint": "Use install and redis",
+        "rubric": "Correctly uses the helm install command."
+      },
+      {
+        "title": "Values injected in Templates",
+        "theory": "## Customizing Deployments\\nHelm templates use the Go template engine. You can pass a `values.yaml` file to customize the Kubernetes manifests before applying.",
+        "instructions": "## Task: Accessing Values\\nWrite the template syntax to inject the `replicaCount` from the values file.",
+        "starterCode": "spec:\\n  replicas: {{ .___.___ }}",
+        "solution": "spec:\\n  replicas: {{ .Values.replicaCount }}",
+        "hint": "Use .Values.replicaCount",
+        "rubric": "Correctly references .Values.replicaCount."
+      }
+    ]
+  },
+  "Advanced Kubernetes Operators": {
+    "aiRubric": "Assess Operator patterns",
+    "lessons": [
+      {
+        "title": "Custom Resource Definitions",
+        "theory": "## Extending the API\\nA Custom Resource Definition (CRD) allows you to define your own object types in the Kubernetes API, just like Pods or Deployments.",
+        "instructions": "## Task: Define a CRD Group\\nSpecify the `group` and `version` for a custom resource named `Database`.",
+        "starterCode": "apiVersion: apiextensions.k8s.io/v1\\nkind: CustomResourceDefinition\\nmetadata:\\n  name: databases.mabel.io\\nspec:\\n  group: ___\\n  versions:\\n    - name: ___",
+        "solution": "apiVersion: apiextensions.k8s.io/v1\\nkind: CustomResourceDefinition\\nmetadata:\\n  name: databases.mabel.io\\nspec:\\n  group: mabel.io\\n  versions:\\n    - name: v1",
+        "hint": "Use mabel.io and v1",
+        "rubric": "Correctly extracts the group from the name and sets version v1."
+      },
+      {
+        "title": "Reconciliation Loop",
+        "theory": "## The Control Loop\\nAn Operator contains a custom controller that watches your CRDs. Its core logic is the 'Reconcile' loop, which constantly ensures the current state matches the desired state.",
+        "instructions": "## Task: Return Result\\nIn a Kubebuilder Reconcile function, return a successful empty result so the loop knows it finished correctly.",
+        "starterCode": "func (r *DatabaseReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {\\n    // logic...\\n    return ctrl.Result{___}, ___\\n}",
+        "solution": "func (r *DatabaseReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {\\n    // logic...\\n    return ctrl.Result{}, nil\\n}",
+        "hint": "Return empty struct {} and nil error",
+        "rubric": "Correctly returns ctrl.Result{} and nil."
+      }
+    ]
+  },
+  "Istio Service Mesh": {
+    "aiRubric": "Assess Service Mesh basics",
+    "lessons": [
+      {
+        "title": "Traffic Shifting",
+        "theory": "## Canary Deployments\\nIstio allows you to split traffic between different versions of a service seamlessly, which is perfect for A/B testing or Canary releases.",
+        "instructions": "## Task: Virtual Service Weights\\nConfigure an Istio VirtualService to send 90% of traffic to v1 and 10% to v2.",
+        "starterCode": "route:\\n- destination:\\n    host: my-service\\n    subset: v1\\n  weight: ___\\n- destination:\\n    host: my-service\\n    subset: v2\\n  weight: ___",
+        "solution": "route:\\n- destination:\\n    host: my-service\\n    subset: v1\\n  weight: 90\\n- destination:\\n    host: my-service\\n    subset: v2\\n  weight: 10",
+        "hint": "Use 90 and 10",
+        "rubric": "Correctly sets the weights to 90 and 10."
+      },
+      {
+        "title": "Mutual TLS (mTLS)",
+        "theory": "## Secure Communication\\nIstio can automatically encrypt all traffic between microservices in your cluster using mTLS, without changing any application code.",
+        "instructions": "## Task: PeerAuthentication\\nSet the mTLS mode to STRICT for the entire 'default' namespace.",
+        "starterCode": "apiVersion: security.istio.io/v1beta1\\nkind: PeerAuthentication\\nmetadata:\\n  name: default\\n  namespace: default\\nspec:\\n  mtls:\\n    mode: ___",
+        "solution": "apiVersion: security.istio.io/v1beta1\\nkind: PeerAuthentication\\nmetadata:\\n  name: default\\n  namespace: default\\nspec:\\n  mtls:\\n    mode: STRICT",
+        "hint": "Use STRICT",
+        "rubric": "Sets mTLS mode to STRICT."
+      }
+    ]
+  },
   "Image Processing": {
     "aiRubric": "Check logic, syntax, and output for Image Processing.",
     "lessons": [
@@ -1508,6 +2333,121 @@ export const courseManifest = {
         "solution": "image = [\n    [1, 1, 2, 2],\n    [1, 1, 2, 2],\n    [3, 3, 4, 4],\n    [3, 3, 4, 4]\n]\n\ndef extract_top_left_patch(img):\n    patch = []\n    # Extract rows 0 and 1\n    for i in range(2):\n        row = []\n        # Extract cols 0 and 1\n        for j in range(2):\n            row.append(img[i][j])\n        patch.append(row)\n    return patch\n\nprint(\"Top Left Patch:\")\nfor r in extract_top_left_patch(image):\n    print(r)",
         "hint": "Use indices [i][j].",
         "rubric": "Correctly extracts the 2x2 patch of 1s."
+      }
+    ]
+  },
+  "Image Processing Basics": {
+    "aiRubric": "Assess OpenCV and image processing",
+    "lessons": [
+      {
+        "title": "Reading and Displaying",
+        "theory": "## OpenCV Basics\\nOpenCV is the standard library for computer vision. Images are loaded as NumPy arrays.",
+        "instructions": "## Task: Load an Image\\nWrite the OpenCV function to read an image from the disk.",
+        "starterCode": "import cv2\\n\\nimg = cv2.___('image.jpg')\\ncv2.imshow('Image', img)\\ncv2.waitKey(0)",
+        "solution": "import cv2\\n\\nimg = cv2.imread('image.jpg')\\ncv2.imshow('Image', img)\\ncv2.waitKey(0)",
+        "hint": "Use imread",
+        "rubric": "Correctly uses cv2.imread."
+      },
+      {
+        "title": "Color Spaces",
+        "theory": "## BGR to RGB\\nBy default, OpenCV loads images in BGR format, but most Deep Learning models expect RGB format.",
+        "instructions": "## Task: Convert Color Space\\nConvert the loaded image from BGR to RGB.",
+        "starterCode": "import cv2\\n\\nimg_bgr = cv2.imread('image.jpg')\\nimg_rgb = cv2.cvtColor(img_bgr, cv2.___)",
+        "solution": "import cv2\\n\\nimg_bgr = cv2.imread('image.jpg')\\nimg_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)",
+        "hint": "Use COLOR_BGR2RGB",
+        "rubric": "Correctly specifies cv2.COLOR_BGR2RGB."
+      }
+    ]
+  },
+  "Convolutional Neural Networks": {
+    "aiRubric": "Assess CNN architecture knowledge",
+    "lessons": [
+      {
+        "title": "Conv2D Layers",
+        "theory": "## Feature Extraction\\nConvolutional layers apply filters to the input image to extract features like edges and textures.",
+        "instructions": "## Task: PyTorch Conv Layer\\nDefine a 2D convolutional layer with 3 input channels (RGB) and 16 output channels.",
+        "starterCode": "import torch.nn as nn\\n\\nconv_layer = nn.___(___, ___, kernel_size=3, stride=1, padding=1)",
+        "solution": "import torch.nn as nn\\n\\nconv_layer = nn.Conv2d(3, 16, kernel_size=3, stride=1, padding=1)",
+        "hint": "Use Conv2d, 3, and 16",
+        "rubric": "Correctly instantiates nn.Conv2d with 3 input and 16 output channels."
+      },
+      {
+        "title": "Pooling Layers",
+        "theory": "## Spatial Reduction\\nPooling layers downsample the spatial dimensions (width and height) of the feature maps, reducing computation and controlling overfitting.",
+        "instructions": "## Task: Max Pooling\\nDefine a Max Pooling layer with a kernel size of 2 and a stride of 2.",
+        "starterCode": "pool_layer = nn.___(___, stride=___)",
+        "solution": "pool_layer = nn.MaxPool2d(2, stride=2)",
+        "hint": "Use MaxPool2d, 2, and 2",
+        "rubric": "Correctly uses MaxPool2d with kernel and stride 2."
+      }
+    ]
+  },
+  "Object Detection (YOLO)": {
+    "aiRubric": "Assess object detection concepts",
+    "lessons": [
+      {
+        "title": "Bounding Boxes",
+        "theory": "## Localization\\nUnlike image classification (which predicts one label for the whole image), object detection predicts bounding boxes (x, y, width, height) and class labels for multiple objects.",
+        "instructions": "## Task: Box Format\\nYOLO predicts coordinates relative to the grid cell. What are the typically predicted 4 values for a bounding box?",
+        "starterCode": "answer = '___, ___, ___, ___'",
+        "solution": "answer = 'x, y, w, h'",
+        "hint": "x, y, w, h (or x, y, width, height)",
+        "rubric": "Mentions x, y, width/w, and height/h."
+      },
+      {
+        "title": "Intersection over Union (IoU)",
+        "theory": "## Evaluating Detections\\nIoU is the metric used to measure how much the predicted bounding box overlaps with the ground truth bounding box.",
+        "instructions": "## Task: Perfect Overlap\\nWhat is the IoU value if the predicted box perfectly matches the ground truth box?",
+        "starterCode": "iou_value = ___",
+        "solution": "iou_value = 1.0",
+        "hint": "It is 1.0",
+        "rubric": "Correctly identifies 1.0 (or 1)."
+      }
+    ]
+  },
+  "Generative Adversarial Networks (GANs)": {
+    "aiRubric": "Assess GAN architecture",
+    "lessons": [
+      {
+        "title": "Generator vs Discriminator",
+        "theory": "## The Adversarial Game\\nA GAN consists of two networks: the Generator (tries to create fake images that look real) and the Discriminator (tries to tell fake images from real ones).",
+        "instructions": "## Task: Generator Input\\nWhat does the Generator typically take as input to generate a new, unique image?",
+        "starterCode": "# Options: A real image, Random noise vector, A text prompt\\ninput_type = '___'",
+        "solution": "# Options: A real image, Random noise vector, A text prompt\\ninput_type = 'Random noise vector'",
+        "hint": "Random noise vector",
+        "rubric": "Identifies Random noise vector."
+      },
+      {
+        "title": "Loss Functions",
+        "theory": "## Training Equilibrium\\nTraining a GAN is notoriously unstable because you are balancing two loss functions simultaneously.",
+        "instructions": "## Task: Discriminator Goal\\nDoes the Discriminator want to *maximize* or *minimize* the probability of correctly classifying real and fake images?",
+        "starterCode": "goal = '___'",
+        "solution": "goal = 'maximize'",
+        "hint": "It wants to maximize its accuracy.",
+        "rubric": "Identifies maximize."
+      }
+    ]
+  },
+  "Vision Transformers (ViT)": {
+    "aiRubric": "Assess Vision Transformers",
+    "lessons": [
+      {
+        "title": "Image Patches",
+        "theory": "## An Image is Worth 16x16 Words\\nUnlike CNNs that process pixels via convolutions, ViT splits an image into fixed-size patches, linearly embeds them, and treats them like a sequence of words (tokens) in NLP.",
+        "instructions": "## Task: Sequence Length\\nIf a 224x224 image is split into 16x16 patches, how many patches (tokens) will there be in the sequence?",
+        "starterCode": "num_patches = (224 / 16) * (224 / 16)\\nanswer = ___",
+        "solution": "num_patches = (224 / 16) * (224 / 16)\\nanswer = 196",
+        "hint": "14 * 14 = 196",
+        "rubric": "Correctly calculates 196."
+      },
+      {
+        "title": "Self-Attention in Vision",
+        "theory": "## Global Context\\nCNNs have a limited receptive field (local context). Transformers use Self-Attention, which allows every patch to attend to every other patch across the entire image in a single layer.",
+        "instructions": "## Task: Receptive Field\\nDoes a Vision Transformer have a *local* or *global* receptive field at the very first layer?",
+        "starterCode": "receptive_field = '___'",
+        "solution": "receptive_field = 'global'",
+        "hint": "It has a global receptive field.",
+        "rubric": "Identifies global."
       }
     ]
   },
@@ -2514,6 +3454,121 @@ export const courseManifest = {
       }
     ]
   },
+  "Tailwind CSS Basics": {
+    "aiRubric": "Assess Tailwind styling knowledge",
+    "lessons": [
+      {
+        "title": "Utility-First CSS",
+        "theory": "## The Utility Approach\\nInstead of writing custom CSS, Tailwind provides low-level utility classes like `flex`, `pt-4`, and `text-center` that let you build designs directly in your markup.",
+        "instructions": "## Task: Apply Tailwind Classes\\nStyle a button to have a blue background, white text, padding, and rounded corners.",
+        "starterCode": "<button class=\"___ ___ px-4 py-2 ___\">Click Me</button>",
+        "solution": "<button class=\"bg-blue-500 text-white px-4 py-2 rounded\">Click Me</button>",
+        "hint": "Use bg-blue-500, text-white, and rounded",
+        "rubric": "Correctly applies standard Tailwind classes."
+      },
+      {
+        "title": "Responsive Design",
+        "theory": "## Breakpoint Prefixes\\nTailwind makes responsive design easy by prefixing classes with screen sizes, e.g., `md:flex` applies flexbox only on medium screens and larger.",
+        "instructions": "## Task: Responsive Grid\\nCreate a grid that is 1 column on mobile, and 3 columns on medium screens.",
+        "starterCode": "<div class=\"grid grid-cols-1 md:___\">\\n  <div>Item 1</div>\\n  <div>Item 2</div>\\n  <div>Item 3</div>\\n</div>",
+        "solution": "<div class=\"grid grid-cols-1 md:grid-cols-3\">\\n  <div>Item 1</div>\\n  <div>Item 2</div>\\n  <div>Item 3</div>\\n</div>",
+        "hint": "Use md:grid-cols-3",
+        "rubric": "Applies md:grid-cols-3 correctly."
+      }
+    ]
+  },
+  "Vue.js Fundamentals": {
+    "aiRubric": "Assess Vue.js concepts",
+    "lessons": [
+      {
+        "title": "Declarative Rendering",
+        "theory": "## The Template Syntax\\nVue uses an HTML-based template syntax that allows you to declaratively bind the rendered DOM to the underlying component instance's data.",
+        "instructions": "## Task: Interpolation\\nUse Vue's mustache syntax to render the `message` variable.",
+        "starterCode": "<template>\\n  <div>\\n    <p>___</p>\\n  </div>\\n</template>\\n\\n<script setup>\\nimport { ref } from 'vue'\\nconst message = ref('Hello Vue!')\\n</script>",
+        "solution": "<template>\\n  <div>\\n    <p>{{ message }}</p>\\n  </div>\\n</template>\\n\\n<script setup>\\nimport { ref } from 'vue'\\nconst message = ref('Hello Vue!')\\n</script>",
+        "hint": "Use {{ message }}",
+        "rubric": "Correctly renders the ref using double curly braces."
+      },
+      {
+        "title": "Directives",
+        "theory": "## v-if and v-for\\nDirectives are special attributes with the `v-` prefix. `v-if` conditionally renders an element, while `v-for` renders a list of items.",
+        "instructions": "## Task: Rendering a List\\nUse `v-for` to render a list of items from an array.",
+        "starterCode": "<template>\\n  <ul>\\n    <li ___=\"item in items\" :key=\"item.id\">\\n      {{ item.name }}\\n    </li>\\n  </ul>\\n</template>\\n\\n<script setup>\\nimport { ref } from 'vue'\\nconst items = ref([{id: 1, name: 'Apple'}, {id: 2, name: 'Banana'}])\\n</script>",
+        "solution": "<template>\\n  <ul>\\n    <li v-for=\"item in items\" :key=\"item.id\">\\n      {{ item.name }}\\n    </li>\\n  </ul>\\n</template>\\n\\n<script setup>\\nimport { ref } from 'vue'\\nconst items = ref([{id: 1, name: 'Apple'}, {id: 2, name: 'Banana'}])\\n</script>",
+        "hint": "Use v-for",
+        "rubric": "Correctly applies the v-for directive."
+      }
+    ]
+  },
+  "TypeScript for Frontend": {
+    "aiRubric": "Assess TypeScript knowledge in UI",
+    "lessons": [
+      {
+        "title": "Typing Props",
+        "theory": "## Interface Definitions\\nWhen building components (e.g. in React), defining the shape of your props using TypeScript Interfaces catches errors during development instead of runtime.",
+        "instructions": "## Task: Define Button Props\\nCreate an interface for a Button component that requires a string `label` and an optional boolean `disabled`.",
+        "starterCode": "interface ButtonProps {\\n    ___: ___;\\n    disabled___: ___;\\n}\\n\\nfunction Button({ label, disabled }: ButtonProps) {\\n    return <button disabled={disabled}>{label}</button>\\n}",
+        "solution": "interface ButtonProps {\\n    label: string;\\n    disabled?: boolean;\\n}\\n\\nfunction Button({ label, disabled }: ButtonProps) {\\n    return <button disabled={disabled}>{label}</button>\\n}",
+        "hint": "Use label: string and disabled?: boolean",
+        "rubric": "Correctly types the required string and optional boolean."
+      },
+      {
+        "title": "Generics in State",
+        "theory": "## Type Inference and Generics\\nSometimes you need to explicitly type state hooks when the initial value is null or empty, using Generics.",
+        "instructions": "## Task: Type useState\\nUse a generic to specify that the state can be a User object or null.",
+        "starterCode": "import { useState } from 'react';\\n\\ntype User = { name: string, age: number };\\n\\n// Specify that user can be User or null\\nconst [user, setUser] = useState<___>(null);",
+        "solution": "import { useState } from 'react';\\n\\ntype User = { name: string, age: number };\\n\\n// Specify that user can be User or null\\nconst [user, setUser] = useState<User | null>(null);",
+        "hint": "Use User | null",
+        "rubric": "Applies the correct union type generic."
+      }
+    ]
+  },
+  "Web Animations": {
+    "aiRubric": "Assess web animation techniques",
+    "lessons": [
+      {
+        "title": "CSS Keyframes",
+        "theory": "## @keyframes\\nKeyframes allow you to control the intermediate steps in a CSS animation sequence.",
+        "instructions": "## Task: Define a Fade-In\\nWrite a keyframe animation that fades opacity from 0 to 1.",
+        "starterCode": "@keyframes fadeIn {\\n  from {\\n    opacity: ___;\\n  }\\n  to {\\n    opacity: ___;\\n  }\\n}\\n\\n.animated-box {\\n  animation: fadeIn 2s ease-in;\\n}",
+        "solution": "@keyframes fadeIn {\\n  from {\\n    opacity: 0;\\n  }\\n  to {\\n    opacity: 1;\\n  }\\n}\\n\\n.animated-box {\\n  animation: fadeIn 2s ease-in;\\n}",
+        "hint": "Use 0 and 1 for opacity.",
+        "rubric": "Correctly defines the start and end opacity."
+      },
+      {
+        "title": "Framer Motion",
+        "theory": "## React Animations\\nFramer Motion is a production-ready motion library for React that simplifies complex animations.",
+        "instructions": "## Task: Animate a Div\\nUse the `motion.div` component to animate a box moving 100px to the right.",
+        "starterCode": "import { motion } from 'framer-motion';\\n\\nexport default function App() {\\n  return (\\n    <motion.div\\n      animate={{ x: ___ }}\\n      transition={{ duration: 0.5 }}\\n    >\\n      Sliding Box\\n    </motion.div>\\n  );\\n}",
+        "solution": "import { motion } from 'framer-motion';\\n\\nexport default function App() {\\n  return (\\n    <motion.div\\n      animate={{ x: 100 }}\\n      transition={{ duration: 0.5 }}\\n    >\\n      Sliding Box\\n    </motion.div>\\n  );\\n}",
+        "hint": "Set x to 100",
+        "rubric": "Uses the correct translation value in the animate prop."
+      }
+    ]
+  },
+  "Frontend Testing": {
+    "aiRubric": "Assess frontend testing strategies",
+    "lessons": [
+      {
+        "title": "React Testing Library",
+        "theory": "## Testing Behavior\\nReact Testing Library encourages testing applications in the way they are used by users, focusing on querying the DOM.",
+        "instructions": "## Task: Assert Element Presence\\nWrite an assertion that checks if an element with the text 'Submit' is in the document.",
+        "starterCode": "import { render, screen } from '@testing-library/react';\\nimport '@testing-library/jest-dom';\\nimport Button from './Button';\\n\\ntest('renders submit button', () => {\\n  render(<Button label=\"Submit\" />);\\n  const buttonElement = screen.getByText(/Submit/i);\\n  expect(buttonElement).___.toBeInTheDocument();\\n});",
+        "solution": "import { render, screen } from '@testing-library/react';\\nimport '@testing-library/jest-dom';\\nimport Button from './Button';\\n\\ntest('renders submit button', () => {\\n  render(<Button label=\"Submit\" />);\\n  const buttonElement = screen.getByText(/Submit/i);\\n  expect(buttonElement).toBeInTheDocument();\\n});",
+        "hint": "Remove the blank space, it just calls toBeInTheDocument()",
+        "rubric": "Correctly invokes toBeInTheDocument assertion."
+      },
+      {
+        "title": "E2E with Cypress",
+        "theory": "## End-to-End Tests\\nCypress runs in the browser and tests the entire application flow, interacting with it exactly like a real user would.",
+        "instructions": "## Task: Visit and Type\\nWrite a Cypress test that visits a page, targets an input field, and types a value.",
+        "starterCode": "describe('Login Flow', () => {\\n  it('can type into email input', () => {\\n    cy.___('/login');\\n    cy.get('input[name=\"email\"]').___('test@example.com');\\n  });\\n});",
+        "solution": "describe('Login Flow', () => {\\n  it('can type into email input', () => {\\n    cy.visit('/login');\\n    cy.get('input[name=\"email\"]').type('test@example.com');\\n  });\\n});",
+        "hint": "Use visit and type.",
+        "rubric": "Correctly uses visit and type commands."
+      }
+    ]
+  },
   "React Native Intro": {
     "aiRubric": "Check logic, syntax, and output for React Native Intro.",
     "lessons": [
@@ -2637,6 +3692,121 @@ export const courseManifest = {
         "solution": "class JSBridge:\n    def __init__(self):\n        self.capacity_per_frame = 5\n        \n    def send_messages(self, num_messages):\n        if num_messages > self.capacity_per_frame:\n            dropped = num_messages - self.capacity_per_frame\n            print(f\"Warning: Bridge overloaded! Dropped {dropped} messages.\")\n            return self.capacity_per_frame\n        return num_messages\n\nbridge = JSBridge()\n\nprint(\"Sending 3 updates (Light load):\")\nprocessed = bridge.send_messages(3)\nprint(f\"Processed: {processed}\\n\")\n\nprint(\"Sending 10 updates (Heavy animation load):\")\nprocessed = bridge.send_messages(10)\nprint(f\"Processed: {processed}\")",
         "hint": "Compare num_messages to self.capacity_per_frame.",
         "rubric": "Bridge successfully processes 3 messages, but warns and drops 5 messages when given 10."
+      }
+    ]
+  },
+  "Flutter Intro": {
+    "aiRubric": "Assess Flutter basics",
+    "lessons": [
+      {
+        "title": "Widgets are Everything",
+        "theory": "## The Flutter Paradigm\\nIn Flutter, everything is a widget. A layout is a tree of widgets, and even structural elements like padding or alignment are themselves widgets.",
+        "instructions": "## Task: Create a Text Widget\\nReturn a simple Text widget with the string 'Hello Flutter' centered on the screen.",
+        "starterCode": "import 'package:flutter/material.dart';\\n\\nWidget buildHello() {\\n  return Center(\\n    child: ___('___'),\\n  );\\n}",
+        "solution": "import 'package:flutter/material.dart';\\n\\nWidget buildHello() {\\n  return Center(\\n    child: Text('Hello Flutter'),\\n  );\\n}",
+        "hint": "Use Text('Hello Flutter')",
+        "rubric": "Correctly instantiates the Text widget with the string."
+      },
+      {
+        "title": "Stateful vs Stateless",
+        "theory": "## Managing State\\n`StatelessWidget` is for static UI, while `StatefulWidget` is for UI that changes over time (like a counter or a form).",
+        "instructions": "## Task: SetState\\nUpdate the counter variable inside the `setState` method to trigger a UI rebuild.",
+        "starterCode": "void incrementCounter() {\\n  setState(() {\\n    _counter ___ 1;\\n  });\\n}",
+        "solution": "void incrementCounter() {\\n  setState(() {\\n    _counter += 1;\\n  });\\n}",
+        "hint": "Use += 1",
+        "rubric": "Correctly increments the counter inside setState."
+      }
+    ]
+  },
+  "State Management in React Native": {
+    "aiRubric": "Assess state management",
+    "lessons": [
+      {
+        "title": "Zustand Setup",
+        "theory": "## Lightweight Global State\\nZustand is a fast, scalable state-management solution for React Native. It uses hooks and avoids boilerplate.",
+        "instructions": "## Task: Create a Store\\nCreate a Zustand store with a `bears` count of 0 and an `increasePopulation` function.",
+        "starterCode": "import { create } from 'zustand'\\n\\nconst useStore = ___((set) => ({\\n  bears: 0,\\n  increasePopulation: () => set((state) => ({ bears: state.bears + ___ })),\\n}))",
+        "solution": "import { create } from 'zustand'\\n\\nconst useStore = create((set) => ({\\n  bears: 0,\\n  increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),\\n}))",
+        "hint": "Use create and add 1",
+        "rubric": "Correctly uses create and increments by 1."
+      },
+      {
+        "title": "Redux Toolkit",
+        "theory": "## Robust State Architecture\\nFor larger apps, Redux Toolkit provides a standardized way to write Redux logic, including 'slices' that bundle reducers and actions.",
+        "instructions": "## Task: Create a Slice\\nDefine a slice named 'counter' with an initial state of 0.",
+        "starterCode": "import { createSlice } from '@reduxjs/toolkit'\\n\\nconst counterSlice = ___({\\n  name: '___',\\n  initialState: { value: 0 },\\n  reducers: {\\n    increment: (state) => { state.value += 1 }\\n  }\\n})",
+        "solution": "import { createSlice } from '@reduxjs/toolkit'\\n\\nconst counterSlice = createSlice({\\n  name: 'counter',\\n  initialState: { value: 0 },\\n  reducers: {\\n    increment: (state) => { state.value += 1 }\\n  }\\n})",
+        "hint": "Use createSlice and name it 'counter'",
+        "rubric": "Correctly invokes createSlice and names it."
+      }
+    ]
+  },
+  "Push Notifications": {
+    "aiRubric": "Assess push notification handling",
+    "lessons": [
+      {
+        "title": "Requesting Permissions",
+        "theory": "## User Consent\\nBefore sending push notifications on iOS and Android (13+), you must explicitly request permission from the user.",
+        "instructions": "## Task: Expo Notifications\\nWrite the code to request permission using Expo's notification module.",
+        "starterCode": "import * as Notifications from 'expo-notifications';\\n\\nasync function requestPermissions() {\\n  const { status } = await Notifications.___();\\n  return status === '___';\\n}",
+        "solution": "import * as Notifications from 'expo-notifications';\\n\\nasync function requestPermissions() {\\n  const { status } = await Notifications.requestPermissionsAsync();\\n  return status === 'granted';\\n}",
+        "hint": "Use requestPermissionsAsync and 'granted'",
+        "rubric": "Requests permissions and checks for 'granted' status."
+      },
+      {
+        "title": "Handling Foreground Messages",
+        "theory": "## In-App Notifications\\nWhen the app is open (foreground), notifications don't show up in the system tray by default. You need an event listener to handle them.",
+        "instructions": "## Task: Notification Listener\\nSet up a listener to console log the notification when received in the foreground.",
+        "starterCode": "import * as Notifications from 'expo-notifications';\\n\\nNotifications.___(\\n  notification => {\\n    console.log('Received:', notification);\\n  }\\n);",
+        "solution": "import * as Notifications from 'expo-notifications';\\n\\nNotifications.addNotificationReceivedListener(\\n  notification => {\\n    console.log('Received:', notification);\\n  }\\n);",
+        "hint": "Use addNotificationReceivedListener",
+        "rubric": "Correctly attaches the notification listener."
+      }
+    ]
+  },
+  "Offline-First Apps": {
+    "aiRubric": "Assess offline-first strategies",
+    "lessons": [
+      {
+        "title": "AsyncStorage / SQLite",
+        "theory": "## Local Persistence\\nOffline-first apps save data locally first, then sync to the cloud. React Native uses AsyncStorage for small data or SQLite for complex relational data.",
+        "instructions": "## Task: Save to AsyncStorage\\nWrite the function to save a string value to AsyncStorage.",
+        "starterCode": "import AsyncStorage from '@react-native-async-storage/async-storage';\\n\\nasync function storeData(value) {\\n  try {\\n    await AsyncStorage.___('@my_key', ___);\\n  } catch (e) {\\n    console.error(e);\\n  }\\n}",
+        "solution": "import AsyncStorage from '@react-native-async-storage/async-storage';\\n\\nasync function storeData(value) {\\n  try {\\n    await AsyncStorage.setItem('@my_key', value);\\n  } catch (e) {\\n    console.error(e);\\n  }\\n}",
+        "hint": "Use setItem and the value",
+        "rubric": "Correctly calls setItem with the key and value."
+      },
+      {
+        "title": "Sync Queues",
+        "theory": "## Conflict Resolution\\nWhen offline, user actions are saved to a local 'Queue'. When the network returns, the app processes the queue and handles server conflicts.",
+        "instructions": "## Task: NetInfo Check\\nUse the NetInfo library to check if the device is connected before attempting a sync.",
+        "starterCode": "import NetInfo from '@react-native-community/netinfo';\\n\\nNetInfo.fetch().then(state => {\\n  if (state.___) {\\n    syncQueueToServer();\\n  }\\n});",
+        "solution": "import NetInfo from '@react-native-community/netinfo';\\n\\nNetInfo.fetch().then(state => {\\n  if (state.isConnected) {\\n    syncQueueToServer();\\n  }\\n});",
+        "hint": "Check the isConnected property",
+        "rubric": "Checks if the state isConnected."
+      }
+    ]
+  },
+  "Mobile CI/CD": {
+    "aiRubric": "Assess mobile CI/CD pipelines",
+    "lessons": [
+      {
+        "title": "Fastlane Basics",
+        "theory": "## Automating Deployments\\nFastlane automates tedious mobile development tasks like generating screenshots, managing provisioning profiles, and releasing to app stores.",
+        "instructions": "## Task: Fastfile Lane\\nDefine a fastlane 'lane' named 'beta' that builds the iOS app and uploads it to TestFlight.",
+        "starterCode": "lane :___ do\\n  build_app(workspace: \"MyApp.xcworkspace\", scheme: \"MyApp\")\\n  upload_to____\\nend",
+        "solution": "lane :beta do\\n  build_app(workspace: \"MyApp.xcworkspace\", scheme: \"MyApp\")\\n  upload_to_testflight\\nend",
+        "hint": "beta and testflight",
+        "rubric": "Defines the beta lane and uploads to testflight."
+      },
+      {
+        "title": "EAS Build (Expo)",
+        "theory": "## Cloud Builds\\nExpo Application Services (EAS) Build allows you to compile native iOS and Android apps in the cloud without needing a Mac or Android Studio.",
+        "instructions": "## Task: EAS Config\\nDefine the eas.json build profile for production to auto-increment the build number.",
+        "starterCode": "{\\n  \"build\": {\\n    \"production\": {\\n      \"autoIncrement\": ___\\n    }\\n  }\\n}",
+        "solution": "{\\n  \"build\": {\\n    \"production\": {\\n      \"autoIncrement\": true\\n    }\\n  }\\n}",
+        "hint": "Set autoIncrement to true",
+        "rubric": "Sets autoIncrement to boolean true."
       }
     ]
   },
@@ -2987,6 +4157,15 @@ export const courseManifest = {
         "solution": "def uppercase(func):\n    def wrapper(*args, **kwargs):\n        result = func(*args, **kwargs)\n        return result.upper()\n    return wrapper\n\ndef add_greeting(func):\n    def wrapper(*args, **kwargs):\n        result = func(*args, **kwargs)\n        return f'Hello! {result}'\n    return wrapper\n\n@uppercase\n@add_greeting\ndef get_name():\n    return 'Mabel'\n\nprint(get_name())",
         "hint": ".upper() for uppercase. Decorators apply bottom to top.",
         "rubric": "Output: HELLO! MABEL (greeting added first, then uppercased)"
+      },
+      {
+        "title": "Timing Decorator",
+        "theory": "## Measuring Execution Time\\nDecorators are functions that modify the behavior of other functions. A common use case is measuring how long a function takes to execute.",
+        "instructions": "## Task: Create a Timer\\n1. Implement a decorator `timer` that prints the time taken by the decorated function.",
+        "starterCode": "import time\\n\\ndef timer(func):\\n    def wrapper(*args, **kwargs):\\n        start = time.time()\\n        result = func(*args, **kwargs)\\n        end = time.time()\\n        print(f'{func.__name__} took {end - start:.4f}s')\\n        return result\\n    return ___\\n\\n@timer\\ndef slow_function():\\n    time.sleep(0.5)\\n    return 'Done'\\n\\nprint(slow_function())",
+        "solution": "import time\\n\\ndef timer(func):\\n    def wrapper(*args, **kwargs):\\n        start = time.time()\\n        result = func(*args, **kwargs)\\n        end = time.time()\\n        print(f'{func.__name__} took {end - start:.4f}s')\\n        return result\\n    return wrapper\\n\\n@timer\\ndef slow_function():\\n    time.sleep(0.5)\\n    return 'Done'\\n\\nprint(slow_function())",
+        "hint": "Return the wrapper function.",
+        "rubric": "Decorator correctly returns wrapper and measures time."
       }
     ]
   },
@@ -3087,6 +4266,80 @@ export const courseManifest = {
         "solution": "import asyncio\nimport random\n\nasync def fetch(url):\n    await asyncio.sleep(0.5)\n    if random.random() < 0.5:\n        raise ConnectionError(f'Timeout: {url}')\n    return f'OK: {url}'\n\nasync def fetch_with_retry(url, retries=3):\n    for attempt in range(1, retries + 1):\n        try:\n            result = await fetch(url)\n            return result\n        except ConnectionError as e:\n            print(f'Attempt {attempt} failed for {url}')\n    return f'FAILED: {url}'\n\nasync def main():\n    urls = ['api.com/users', 'api.com/posts', 'api.com/comments']\n    for url in urls:\n        result = await fetch_with_retry(url)\n        print(result)\n\nasyncio.run(main())",
         "hint": "try/except inside the retry loop. await fetch(url) in the try block.",
         "rubric": "Retries on failure. Each URL either succeeds or reports FAILED after 3 attempts."
+      }
+    ]
+  },
+  "Advanced Python Concurrency": {
+    "title": "Advanced Python Concurrency",
+    "lessons": [
+      {
+        "title": "Asyncio in Depth",
+        "theory": "## Asyncio\\nLearn how the event loop works and how to write efficient asynchronous code in Python.",
+        "instructions": "## Task: Create a Task\\n1. Create an asyncio task for the `fetch_data` coroutine.",
+        "starterCode": "import asyncio\\n\\nasync def fetch_data():\\n    await asyncio.sleep(1)\\n    return 'Data'\\n\\n# Create task here\\ntask = ___",
+        "solution": "import asyncio\\n\\nasync def fetch_data():\\n    await asyncio.sleep(1)\\n    return 'Data'\\n\\ntask = asyncio.create_task(fetch_data())",
+        "hint": "Use asyncio.create_task",
+        "rubric": "Task created."
+      },
+      {
+        "title": "Multiprocessing Pools",
+        "theory": "## Multiprocessing\\nBypass the GIL using the `multiprocessing` module for CPU-bound tasks.",
+        "instructions": "## Task: Create a Pool\\n1. Create a Multiprocessing Pool with 4 workers.",
+        "starterCode": "from multiprocessing import Pool\\n\\npool = ___",
+        "solution": "from multiprocessing import Pool\\n\\npool = Pool(processes=4)",
+        "hint": "Pool(processes=4)",
+        "rubric": "Pool created."
+      }
+    ]
+  },
+  "Python Design Patterns": {
+    "title": "Python Design Patterns",
+    "lessons": [
+      {
+        "title": "The Singleton Pattern",
+        "theory": "## Singleton\\nEnsure a class has only one instance and provide a global point of access to it.",
+        "instructions": "## Task: Implement Singleton\\n1. Implement the `__new__` method to return the existing instance if it exists.",
+        "starterCode": "class Singleton:\\n    _instance = None\\n    def __new__(cls):\\n        ___",
+        "solution": "class Singleton:\\n    _instance = None\\n    def __new__(cls):\\n        if cls._instance is None:\\n            cls._instance = super(Singleton, cls).__new__(cls)\\n        return cls._instance",
+        "hint": "Check if cls._instance is None",
+        "rubric": "Singleton implemented."
+      },
+      {
+        "title": "The Factory Pattern",
+        "theory": "## Factory\\nDefine an interface for creating an object, but let subclasses decide which class to instantiate.",
+        "instructions": "## Task: Create a Factory\\n1. Create a `ShapeFactory` that returns a `Circle` or `Square`.",
+        "starterCode": "class ShapeFactory:\\n    @staticmethod\\n    def get_shape(shape_type):\\n        ___",
+        "solution": "class ShapeFactory:\\n    @staticmethod\\n    def get_shape(shape_type):\\n        if shape_type == 'CIRCLE':\\n            return Circle()\\n        elif shape_type == 'SQUARE':\\n            return Square()\\n        return None",
+        "hint": "Return Circle() or Square() based on string matching",
+        "rubric": "Factory implemented."
+      }
+    ]
+  },
+  "Python Testing Frameworks": {
+    "aiRubric": "Assess testing concepts",
+    "lessons": [
+      {
+        "title": "Pytest Basics",
+        "theory": "## Pytest\nPytest is a popular testing framework that makes it easy to write small tests.",
+        "instructions": "## Task: Write a test\nWrite a test for the `add` function.",
+        "starterCode": "def add(a, b):\n    return a + b\n\ndef test_add():\n    assert add(2, 3) == ___",
+        "solution": "def add(a, b):\n    return a + b\n\ndef test_add():\n    assert add(2, 3) == 5",
+        "hint": "5",
+        "rubric": "Test is correct."
+      }
+    ]
+  },
+  "Python Security Practices": {
+    "aiRubric": "Assess security practices",
+    "lessons": [
+      {
+        "title": "SQL Injection Prevention",
+        "theory": "## Parameterized Queries\nAlways use parameterized queries instead of string concatenation to prevent SQL injection.",
+        "instructions": "## Task: Secure the query\nFix the query to use parameterized inputs.",
+        "starterCode": "username = 'admin'\nquery = f\"SELECT * FROM users WHERE username = '{username}'\" # INSECURE",
+        "solution": "username = 'admin'\nquery = \"SELECT * FROM users WHERE username = ?\" # SECURE",
+        "hint": "Use '?' for parameters.",
+        "rubric": "Query uses parameters."
       }
     ]
   },
@@ -3333,6 +4586,121 @@ export const courseManifest = {
       }
     ]
   },
+  "NoSQL Basics": {
+    "aiRubric": "Assess NoSQL and MongoDB basics",
+    "lessons": [
+      {
+        "title": "Document Databases",
+        "theory": "## JSON-like Storage\\nNoSQL databases like MongoDB store data in flexible, JSON-like documents. Fields can vary from document to document, unlike strict SQL tables.",
+        "instructions": "## Task: Insert Document\\nWrite a MongoDB query to insert a user document with name 'Alice' and age 25 into the 'users' collection.",
+        "starterCode": "db.users.___({ name: '___', age: ___ })",
+        "solution": "db.users.insertOne({ name: 'Alice', age: 25 })",
+        "hint": "Use insertOne",
+        "rubric": "Correctly uses insertOne with the provided fields."
+      },
+      {
+        "title": "Finding Documents",
+        "theory": "## Querying Collections\\nInstead of SELECT, NoSQL databases use methods like `find()` to retrieve documents that match a specific filter object.",
+        "instructions": "## Task: Find Users\\nFind all users in the 'users' collection where the age is greater than 20. Use the `$gt` operator.",
+        "starterCode": "db.users.___({ age: { ___: 20 } })",
+        "solution": "db.users.find({ age: { $gt: 20 } })",
+        "hint": "Use find and $gt",
+        "rubric": "Correctly uses find and the $gt operator."
+      }
+    ]
+  },
+  "Advanced Joins & Window Functions": {
+    "aiRubric": "Assess advanced SQL queries",
+    "lessons": [
+      {
+        "title": "FULL OUTER JOIN",
+        "theory": "## Combining Everything\\nA FULL OUTER JOIN returns all records when there is a match in either the left or the right table records. Unmatched rows will contain NULLs.",
+        "instructions": "## Task: Full Outer Join\\nJoin `employees` and `departments` on `dept_id` using a FULL OUTER JOIN.",
+        "starterCode": "SELECT e.name, d.dept_name \\nFROM employees e\\n___ ___ JOIN departments d \\nON e.dept_id = d.dept_id;",
+        "solution": "SELECT e.name, d.dept_name \\nFROM employees e\\nFULL OUTER JOIN departments d \\nON e.dept_id = d.dept_id;",
+        "hint": "Use FULL OUTER JOIN",
+        "rubric": "Correctly applies FULL OUTER JOIN syntax."
+      },
+      {
+        "title": "Window Functions",
+        "theory": "## OVER Clause\\nWindow functions perform calculations across a set of table rows related to the current row, but unlike GROUP BY, they do not collapse the rows.",
+        "instructions": "## Task: Row Number\\nUse `ROW_NUMBER()` to assign a unique sequential integer to rows, ordered by salary descending.",
+        "starterCode": "SELECT name, salary,\\n  ___() OVER (ORDER BY salary ___) as rank\\nFROM employees;",
+        "solution": "SELECT name, salary,\\n  ROW_NUMBER() OVER (ORDER BY salary DESC) as rank\\nFROM employees;",
+        "hint": "Use ROW_NUMBER() and DESC",
+        "rubric": "Correctly uses ROW_NUMBER and DESC."
+      }
+    ]
+  },
+  "Transactions & ACID": {
+    "aiRubric": "Assess ACID properties and transactions",
+    "lessons": [
+      {
+        "title": "BEGIN and COMMIT",
+        "theory": "## Atomic Operations\\nA transaction ensures that a series of database operations either all succeed (COMMIT) or all fail (ROLLBACK).",
+        "instructions": "## Task: Safe Transfer\\nWrap the two UPDATE statements in a transaction using BEGIN and COMMIT.",
+        "starterCode": "___;\\nUPDATE accounts SET balance = balance - 100 WHERE id = 1;\\nUPDATE accounts SET balance = balance + 100 WHERE id = 2;\\n___;",
+        "solution": "BEGIN;\\nUPDATE accounts SET balance = balance - 100 WHERE id = 1;\\nUPDATE accounts SET balance = balance + 100 WHERE id = 2;\\nCOMMIT;",
+        "hint": "Use BEGIN and COMMIT",
+        "rubric": "Correctly begins and commits the transaction."
+      },
+      {
+        "title": "ROLLBACK",
+        "theory": "## Undoing Mistakes\\nIf something goes wrong during a transaction (or if a condition isn't met), you can issue a ROLLBACK to undo all changes since BEGIN.",
+        "instructions": "## Task: Abort Transaction\\nUndo the transaction changes using the appropriate SQL command.",
+        "starterCode": "BEGIN;\\nDELETE FROM important_table;\\n-- Oh no, wait!\\n___;",
+        "solution": "BEGIN;\\nDELETE FROM important_table;\\n-- Oh no, wait!\\nROLLBACK;",
+        "hint": "Use ROLLBACK",
+        "rubric": "Correctly uses ROLLBACK."
+      }
+    ]
+  },
+  "PostgreSQL Administration": {
+    "aiRubric": "Assess Postgres administration",
+    "lessons": [
+      {
+        "title": "JSONB Columns",
+        "theory": "## Semi-Structured Data\\nPostgreSQL allows you to store and query JSON data efficiently using the JSONB data type, giving you the best of both SQL and NoSQL.",
+        "instructions": "## Task: Query JSONB\\nExtract the 'role' key from the `metadata` JSONB column where the user id is 1.",
+        "starterCode": "SELECT metadata___'role' AS role \\nFROM users \\nWHERE id = 1;",
+        "solution": "SELECT metadata->>'role' AS role \\nFROM users \\nWHERE id = 1;",
+        "hint": "Use the ->> operator",
+        "rubric": "Correctly uses the ->> operator to extract text from JSONB."
+      },
+      {
+        "title": "Roles and Permissions",
+        "theory": "## Database Security\\nPostgreSQL uses roles to manage database access privileges. You can GRANT specific permissions to roles.",
+        "instructions": "## Task: Grant Select\\nGrant SELECT permission on the `reports` table to the `analyst` role.",
+        "starterCode": "___ SELECT ON reports TO ___;",
+        "solution": "GRANT SELECT ON reports TO analyst;",
+        "hint": "Use GRANT and analyst",
+        "rubric": "Correctly grants select on the table to the role."
+      }
+    ]
+  },
+  "Data Warehousing": {
+    "aiRubric": "Assess Data Warehousing concepts",
+    "lessons": [
+      {
+        "title": "Star Schema",
+        "theory": "## Fact and Dimension Tables\\nIn data warehousing, a Star Schema consists of a central Fact table (events/transactions) connected to multiple Dimension tables (context like time, user, product).",
+        "instructions": "## Task: Fact Table Join\\nJoin the `sales_fact` table to the `date_dim` dimension table.",
+        "starterCode": "SELECT d.year, SUM(s.amount) \\nFROM sales_fact s\\nJOIN ___ d ON s.date_id = d.___ \\nGROUP BY d.year;",
+        "solution": "SELECT d.year, SUM(s.amount) \\nFROM sales_fact s\\nJOIN date_dim d ON s.date_id = d.id \\nGROUP BY d.year;",
+        "hint": "Join date_dim on id",
+        "rubric": "Correctly joins the dimension table."
+      },
+      {
+        "title": "Materialized Views",
+        "theory": "## Caching Complex Queries\\nA materialized view saves the result of a complex query physically to the disk, speeding up read access at the cost of requiring periodic refreshes.",
+        "instructions": "## Task: Create Materialized View\\nCreate a materialized view named `daily_sales` from a SELECT query.",
+        "starterCode": "CREATE ___ ___ daily_sales AS \\nSELECT date, sum(amount) FROM sales GROUP BY date;",
+        "solution": "CREATE MATERIALIZED VIEW daily_sales AS \\nSELECT date, sum(amount) FROM sales GROUP BY date;",
+        "hint": "Use MATERIALIZED VIEW",
+        "rubric": "Correctly uses CREATE MATERIALIZED VIEW."
+      }
+    ]
+  },
   "Rust Basics": {
     "aiRubric": "Check logic, syntax, and output for Rust Basics.",
     "lessons": [
@@ -3513,6 +4881,121 @@ export const courseManifest = {
       }
     ]
   },
+  "C++ Fundamentals": {
+    "aiRubric": "Assess C++ fundamentals",
+    "lessons": [
+      {
+        "title": "Pointers and References",
+        "theory": "## Memory Access\\nIn C++, pointers hold the memory address of a variable, while references act as an alias to an existing variable. Both are crucial for systems programming.",
+        "instructions": "## Task: Pass by Reference\\nWrite a function signature that takes an integer reference so the function can modify the original variable.",
+        "starterCode": "void increment(int___ value) {\\n    value++;\\n}",
+        "solution": "void increment(int& value) {\\n    value++;\\n}",
+        "hint": "Use the & operator.",
+        "rubric": "Correctly uses the reference operator &."
+      },
+      {
+        "title": "RAII Paradigm",
+        "theory": "## Resource Acquisition Is Initialization\\nRAII is a C++ programming technique which binds the life cycle of a resource that must be acquired before use to the lifetime of an object.",
+        "instructions": "## Task: Destructor Cleanup\\nImplement a destructor for a `FileHandler` class that prints 'Closing file'.",
+        "starterCode": "class FileHandler {\\npublic:\\n    FileHandler() { cout << \"Opening file\"; }\\n    ___FileHandler() { cout << \"___\"; }\\n};",
+        "solution": "class FileHandler {\\npublic:\\n    FileHandler() { cout << \"Opening file\"; }\\n    ~FileHandler() { cout << \"Closing file\"; }\\n};",
+        "hint": "Use ~ for destructor and print 'Closing file'",
+        "rubric": "Correctly defines the destructor using ~ and prints the required string."
+      }
+    ]
+  },
+  "Multithreading & Mutexes": {
+    "aiRubric": "Assess multithreading concepts",
+    "lessons": [
+      {
+        "title": "Spawning Threads",
+        "theory": "## Concurrent Execution\\nSystems programming often requires doing multiple things at once. In C++ or Rust, you can spawn threads to execute functions concurrently.",
+        "instructions": "## Task: C++ std::thread\\nCreate a thread that runs the `workerFunction`.",
+        "starterCode": "#include <thread>\\n\\nvoid workerFunction() { }\\n\\nint main() {\\n    std::___ t(___);\\n    t.join();\\n    return 0;\\n}",
+        "solution": "#include <thread>\\n\\nvoid workerFunction() { }\\n\\nint main() {\\n    std::thread t(workerFunction);\\n    t.join();\\n    return 0;\\n}",
+        "hint": "Use thread and workerFunction",
+        "rubric": "Correctly instantiates a std::thread with the function."
+      },
+      {
+        "title": "Data Races and Mutexes",
+        "theory": "## Protecting Shared Data\\nWhen multiple threads access the same memory concurrently and at least one is writing, a data race occurs. Mutexes (Mutual Exclusion) prevent this.",
+        "instructions": "## Task: Lock Guard\\nUse `std::lock_guard` to safely lock the mutex inside the critical section.",
+        "starterCode": "#include <mutex>\\nstd::mutex mtx;\\nint counter = 0;\\n\\nvoid increment() {\\n    std::___<std::mutex> lock(___);\\n    counter++;\\n}",
+        "solution": "#include <mutex>\\nstd::mutex mtx;\\nint counter = 0;\\n\\nvoid increment() {\\n    std::lock_guard<std::mutex> lock(mtx);\\n    counter++;\\n}",
+        "hint": "Use lock_guard and mtx",
+        "rubric": "Correctly applies std::lock_guard to the mutex."
+      }
+    ]
+  },
+  "System Calls in C": {
+    "aiRubric": "Assess POSIX syscalls",
+    "lessons": [
+      {
+        "title": "The open() Syscall",
+        "theory": "## Interacting with the Kernel\\nSystem calls are how a program requests a service from the operating system's kernel. The `open()` syscall opens a file descriptor.",
+        "instructions": "## Task: Open for Writing\\nUse the `open()` syscall to open a file 'log.txt' for writing only, creating it if it doesn't exist.",
+        "starterCode": "#include <fcntl.h>\\n\\nint main() {\\n    int fd = open(\"log.txt\", ___ | ___);\\n    return 0;\\n}",
+        "solution": "#include <fcntl.h>\\n\\nint main() {\\n    int fd = open(\"log.txt\", O_WRONLY | O_CREAT);\\n    return 0;\\n}",
+        "hint": "Use O_WRONLY and O_CREAT",
+        "rubric": "Correctly uses the O_WRONLY and O_CREAT flags."
+      },
+      {
+        "title": "Forking Processes",
+        "theory": "## Process Creation\\nThe `fork()` system call creates a new process by duplicating the calling process. The new process is called the child process.",
+        "instructions": "## Task: Detect Child Process\\nWrite the standard check to determine if the current executing code is the child process.",
+        "starterCode": "#include <unistd.h>\\n\\nint main() {\\n    pid_t pid = fork();\\n    if (pid ___ ___) {\\n        // I am the child process\\n    }\\n    return 0;\\n}",
+        "solution": "#include <unistd.h>\\n\\nint main() {\\n    pid_t pid = fork();\\n    if (pid == 0) {\\n        // I am the child process\\n    }\\n    return 0;\\n}",
+        "hint": "Check if pid == 0",
+        "rubric": "Correctly checks if pid equals 0."
+      }
+    ]
+  },
+  "Embedded Systems Basics": {
+    "aiRubric": "Assess embedded systems knowledge",
+    "lessons": [
+      {
+        "title": "Bitwise Operations",
+        "theory": "## Manipulating Registers\\nIn embedded systems, you often need to manipulate individual bits in hardware registers using bitwise operators like AND (&), OR (|), and XOR (^).",
+        "instructions": "## Task: Set a Bit\\nWrite the bitwise operation to set the 3rd bit of an 8-bit register (assuming 0-indexed) without changing other bits.",
+        "starterCode": "unsigned char reg = 0x00;\\n// Set the 3rd bit (bit mask 0x08 or 1 << 3)\\nreg = reg ___ (1 ___ 3);",
+        "solution": "unsigned char reg = 0x00;\\n// Set the 3rd bit (bit mask 0x08 or 1 << 3)\\nreg = reg | (1 << 3);",
+        "hint": "Use | and <<",
+        "rubric": "Correctly uses bitwise OR and left shift to set the bit."
+      },
+      {
+        "title": "Volatile Keyword",
+        "theory": "## Memory Mapped I/O\\nThe `volatile` keyword tells the compiler not to optimize read/write operations for a variable because its value may change outside the program's control (e.g. by hardware).",
+        "instructions": "## Task: Volatile Pointer\\nDeclare a pointer to an integer memory address (0x4000) that should not be optimized.",
+        "starterCode": "___ int *hardware_register = (___ int *)0x4000;",
+        "solution": "volatile int *hardware_register = (volatile int *)0x4000;",
+        "hint": "Use the volatile keyword",
+        "rubric": "Correctly uses the volatile keyword for the pointer."
+      }
+    ]
+  },
+  "Writing Kernel Modules": {
+    "aiRubric": "Assess kernel module basics",
+    "lessons": [
+      {
+        "title": "Module Initialization",
+        "theory": "## Loading Code into the Kernel\\nLinux kernel modules allow you to extend the kernel's capabilities dynamically. Every module needs an initialization function.",
+        "instructions": "## Task: module_init\\nRegister the `hello_init` function as the initialization entry point for the module.",
+        "starterCode": "#include <linux/module.h>\\n\\nstatic int __init hello_init(void) {\\n    return 0;\\n}\\n\\n___(hello_init);",
+        "solution": "#include <linux/module.h>\\n\\nstatic int __init hello_init(void) {\\n    return 0;\\n}\\n\\nmodule_init(hello_init);",
+        "hint": "Use the module_init macro",
+        "rubric": "Correctly invokes the module_init macro."
+      },
+      {
+        "title": "Printing to Kernel Log",
+        "theory": "## printk\\nYou cannot use `printf` inside the Linux kernel because the standard C library is not available. Instead, you use `printk`.",
+        "instructions": "## Task: Kernel Info Log\\nUse `printk` to log an informational message (KERN_INFO).",
+        "starterCode": "#include <linux/kernel.h>\\n\\nvoid log_msg(void) {\\n    ___(___ \"Module loaded successfully\\n\");\\n}",
+        "solution": "#include <linux/kernel.h>\\n\\nvoid log_msg(void) {\\n    printk(KERN_INFO \"Module loaded successfully\\n\");\\n}",
+        "hint": "Use printk and KERN_INFO",
+        "rubric": "Correctly uses printk and the KERN_INFO log level."
+      }
+    ]
+  },
   "Client-Server Model": {
     "aiRubric": "Check logic, syntax, and output for Client-Server Model.",
     "lessons": [
@@ -3654,6 +5137,98 @@ export const courseManifest = {
         "solution": "def select_quality(bandwidth_mbps):\n    if bandwidth_mbps > 10:\n        return \"4K\"\n    elif bandwidth_mbps > 5:\n        return \"1080p\"\n    else:\n        return \"720p\"\n\nnetwork_fluctuations = [15.2, 11.0, 6.5, 2.1, 8.0, 25.0]\n\nfor i, speed in enumerate(network_fluctuations):\n    quality = select_quality(speed)\n    print(f\"Minute {i+1}: Speed={speed:4.1f} Mbps -> Streaming at {quality}\")",
         "hint": "> 10 for 4K. > 5 for 1080p. Else 720p.",
         "rubric": "Resolutions dynamically adapt based on the simulated network speed."
+      }
+    ]
+  },
+  "Load Balancing Basics": {
+    "aiRubric": "Assess load balancing fundamentals",
+    "lessons": [
+      {
+        "title": "Horizontal Scaling",
+        "theory": "## Scaling Out\\nWhen a single server cannot handle the traffic, you scale horizontally by adding more servers. A Load Balancer sits in front of them to distribute the incoming requests.",
+        "instructions": "## Task: Load Balancer Role\\nSelect the primary role of a load balancer from the options.",
+        "starterCode": "# Options:\\n# A. Store database backups\\n# B. Distribute incoming network traffic across multiple servers\\n# C. Compile code faster\\n\\nanswer = '___'",
+        "solution": "# Options:\\n# A. Store database backups\\n# B. Distribute incoming network traffic across multiple servers\\n# C. Compile code faster\\n\\nanswer = 'B'",
+        "hint": "The answer is B",
+        "rubric": "Correctly identifies B as the answer."
+      },
+      {
+        "title": "Round Robin",
+        "theory": "## Traffic Distribution Algorithms\\nRound Robin is the simplest load balancing algorithm. It forwards requests to each server in the pool sequentially.",
+        "instructions": "## Task: Round Robin Logic\\nImplement a simple round-robin function that returns the next server from a list of servers based on the current request count.",
+        "starterCode": "servers = ['ServerA', 'ServerB', 'ServerC']\\n\\ndef get_next_server(request_count):\\n    index = request_count ___ len(servers)\\n    return servers[index]",
+        "solution": "servers = ['ServerA', 'ServerB', 'ServerC']\\n\\ndef get_next_server(request_count):\\n    index = request_count % len(servers)\\n    return servers[index]",
+        "hint": "Use the modulo operator %",
+        "rubric": "Correctly uses the modulo operator for round robin."
+      }
+    ]
+  },
+  "API Gateways": {
+    "aiRubric": "Assess API gateway concepts",
+    "lessons": [
+      {
+        "title": "The Single Entry Point",
+        "theory": "## Facade Pattern for Microservices\\nAn API Gateway acts as a single entry point for a group of microservices. It handles routing, authentication, and SSL termination so individual services don't have to.",
+        "instructions": "## Task: Routing Configuration\\nWrite a mock routing configuration that sends requests from `/users` to the User Service and `/orders` to the Order Service.",
+        "starterCode": "routes = {\\n    '/___': 'http://user-service:8080',\\n    '/___': 'http://order-service:8080'\\n}",
+        "solution": "routes = {\\n    '/users': 'http://user-service:8080',\\n    '/orders': 'http://order-service:8080'\\n}",
+        "hint": "Use users and orders",
+        "rubric": "Correctly maps users and orders."
+      },
+      {
+        "title": "Cross-Cutting Concerns",
+        "theory": "## Centralized Logic\\nInstead of writing authentication code in 50 different microservices, you write it once in the API Gateway.",
+        "instructions": "## Task: Gateway Middleware\\nWrite a simple middleware that checks for an 'Authorization' header before routing the request.",
+        "starterCode": "def api_gateway_handler(request):\\n    if '___' not in request.headers:\\n        return 401 // Unauthorized\\n    return route_request(request)",
+        "solution": "def api_gateway_handler(request):\\n    if 'Authorization' not in request.headers:\\n        return 401 // Unauthorized\\n    return route_request(request)",
+        "hint": "Check for Authorization",
+        "rubric": "Correctly checks for the Authorization header."
+      }
+    ]
+  },
+  "CAP Theorem & Consensus": {
+    "aiRubric": "Assess CAP theorem and distributed consensus",
+    "lessons": [
+      {
+        "title": "The CAP Theorem",
+        "theory": "## Pick Two\\nThe CAP theorem states that a distributed data store can only simultaneously provide two of three guarantees: Consistency, Availability, and Partition Tolerance.",
+        "instructions": "## Task: Define CAP\\nAssign the three guarantees of the CAP theorem.",
+        "starterCode": "C = '___'\\nA = '___'\\nP = '___'",
+        "solution": "C = 'Consistency'\\nA = 'Availability'\\nP = 'Partition Tolerance'",
+        "hint": "Consistency, Availability, Partition Tolerance",
+        "rubric": "Correctly spells out Consistency, Availability, and Partition Tolerance."
+      },
+      {
+        "title": "Consensus Algorithms",
+        "theory": "## Raft and Paxos\\nIn distributed systems, servers must agree on a single state. Algorithms like Raft achieve this by electing a Leader to handle all writes, replicating them to Followers.",
+        "instructions": "## Task: Leader Election\\nIn the Raft algorithm, if a Follower doesn't hear from the Leader within a timeout period, it becomes a ___.",
+        "starterCode": "answer = '___'",
+        "solution": "answer = 'Candidate'",
+        "hint": "It becomes a Candidate",
+        "rubric": "Correctly identifies Candidate."
+      }
+    ]
+  },
+  "Rate Limiting Algorithms": {
+    "aiRubric": "Assess rate limiting knowledge",
+    "lessons": [
+      {
+        "title": "Token Bucket",
+        "theory": "## The Token Bucket Algorithm\\nA bucket holds tokens. Tokens are added at a constant rate. A request costs 1 token. If the bucket is empty, the request is dropped.",
+        "instructions": "## Task: Bucket Logic\\nImplement the check to see if a request should be allowed based on token count.",
+        "starterCode": "def allow_request(tokens):\\n    if tokens ___ 0:\\n        tokens -= 1\\n        return True\\n    return ___",
+        "solution": "def allow_request(tokens):\\n    if tokens > 0:\\n        tokens -= 1\\n        return True\\n    return False",
+        "hint": "Use > and False",
+        "rubric": "Correctly checks if tokens > 0 and returns False."
+      },
+      {
+        "title": "Leaky Bucket",
+        "theory": "## Smoothing Traffic\\nUnlike the Token Bucket which allows bursts of traffic, the Leaky Bucket processes requests at a constant, fixed rate (like water dripping from a hole).",
+        "instructions": "## Task: Identify Algorithm\\nWhich algorithm enforces a strict, constant output rate regardless of bursty input?",
+        "starterCode": "answer = '___ Bucket'",
+        "solution": "answer = 'Leaky Bucket'",
+        "hint": "Leaky Bucket",
+        "rubric": "Correctly identifies Leaky Bucket."
       }
     ]
   },
@@ -3832,20 +5407,6 @@ export const courseManifest = {
         "solution": "class PullRequest:\\n    def __init__(self):\\n        self.approvals = 0\\n        self.failing_tests = 2\\n        \\n    def can_merge(self):\\n        if self.approvals >= 1 and self.failing_tests == 0:\\n            return True\\n        return False\\n\\npr = PullRequest()\\nprint(\"Initial Merge Attempt:\", pr.can_merge())\\n\\n# Fix tests and get approval\\npr.failing_tests = 0\\npr.approvals = 1\\nprint(\"After Fixes Merge Attempt:\", pr.can_merge())",
         "hint": "approvals >= 1, failing_tests == 0",
         "rubric": "can_merge returns False initially, then True."
-      }
-    ]
-  },
-  "GitHub Actions": {
-    "aiRubric": "Check logic, syntax, and output for GitHub Actions.",
-    "lessons": [
-      {
-        "title": "CI/CD Workflows",
-        "theory": "## Automation on Push\\nGitHub Actions allows you to run automated scripts every time an event (like a push or a PR) happens.\\n\\nYou define a workflow in a `.yaml` file inside the `.github/workflows/` directory. It spins up a temporary virtual machine (Runner), checks out your code, and runs your commands (e.g., `npm test`).",
-        "instructions": "## Task: Action Trigger\\n1. Simulate a GitHub Action trigger.\\n2. If the event is 'push' to the branch 'main', execute the deployment script.",
-        "starterCode": "def github_action_workflow(event_type, branch):\\n    print(f\"Event received: {event_type} on {branch}\")\\n    \\n    if event_type == '___' and branch == '___':\\n        print(\"-> TRIGGER: Running deployment pipeline...\")\\n    else:\\n        print(\"-> IGNORE: Conditions not met.\")\\n\\n# A push to a feature branch (should ignore)\\ngithub_action_workflow('push', 'feature/login')\\n\\n# A push to main (should trigger)\\ngithub_action_workflow('push', 'main')",
-        "solution": "def github_action_workflow(event_type, branch):\\n    print(f\"Event received: {event_type} on {branch}\")\\n    \\n    if event_type == 'push' and branch == 'main':\\n        print(\"-> TRIGGER: Running deployment pipeline...\")\\n    else:\\n        print(\"-> IGNORE: Conditions not met.\")\\n\\n# A push to a feature branch (should ignore)\\ngithub_action_workflow('push', 'feature/login')\\n\\n# A push to main (should trigger)\\ngithub_action_workflow('push', 'main')",
-        "hint": "Check for 'push' and 'main'.",
-        "rubric": "Successfully ignores the feature branch and triggers on the main branch push."
       }
     ]
   },
