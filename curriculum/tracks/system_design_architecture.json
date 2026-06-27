@@ -110,13 +110,22 @@
     "aiRubric": "Check logic, syntax, and output for Designing Uber.",
     "lessons": [
       {
-        "title": "Designing Uber - Coming Soon",
-        "theory": "## Designing Uber\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Designing Uber** is under development.",
-        "starterCode": "# Designing Uber - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Designing Uber\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Real-time Location",
+        "theory": "## Tracking Cars\nUber needs to track millions of cars in real-time. How do they do it?\n\n- They use a **Geospatial Database** (like Redis Geo or PostgreSQL with PostGIS).\n- The world is divided into grids (e.g., using Google S2 or Uber H3 libraries).\n- Cars constantly send their location via WebSockets.\n- When a rider requests a car, the system searches the grid for the nearest cars.",
+        "instructions": "## Task: Grid Assignment Simulator\n1. Imagine a city is a 100x100 grid.\n2. Write a function that takes an X, Y coordinate and assigns it to a 10x10 \"Sector\".\n3. E.g., Coordinate (15, 22) belongs to Sector X:1, Y:2.",
+        "starterCode": "def assign_sector(x, y):\n    # Divide by 10 and round down (integer division)\n    sector_x = x ___ 10\n    sector_y = y ___ 10\n    return f\"Sector-{sector_x}-{sector_y}\"\n\ncars = [\n    {'id': 'CarA', 'x': 15, 'y': 22},\n    {'id': 'CarB', 'x': 89, 'y': 95},\n    {'id': 'CarC', 'x': 12, 'y': 28}\n]\n\nfor car in cars:\n    sector = assign_sector(car['x'], car['y'])\n    print(f\"{car['id']} is in {sector}\")",
+        "solution": "def assign_sector(x, y):\n    # Divide by 10 and round down (integer division)\n    sector_x = x // 10\n    sector_y = y // 10\n    return f\"Sector-{sector_x}-{sector_y}\"\n\ncars = [\n    {'id': 'CarA', 'x': 15, 'y': 22},\n    {'id': 'CarB', 'x': 89, 'y': 95},\n    {'id': 'CarC', 'x': 12, 'y': 28}\n]\n\nfor car in cars:\n    sector = assign_sector(car['x'], car['y'])\n    print(f\"{car['id']} is in {sector}\")",
+        "hint": "Use // for integer division in Python.",
+        "rubric": "Cars are mapped to Sector-1-2, Sector-8-9, and Sector-1-2."
+      },
+      {
+        "title": "Matching Algorithm",
+        "theory": "## Finding the Best Driver\nThe closest driver isn't always the best one. The matching algorithm considers:\n\n- **ETA**: Time to reach the rider (factoring in traffic).\n- **Direction**: Is the driver already heading that way?\n- **Driver Ratings**: Maintaining quality.\n\nThis requires heavy computational power, often using machine learning models.",
+        "instructions": "## Task: Simple Matcher\n1. You have a rider at (10, 10).\n2. Calculate the 'Manhattan Distance' to 3 drivers.\n3. Return the ID of the closest driver.",
+        "starterCode": "def get_distance(x1, y1, x2, y2):\n    # Manhattan distance: |x1 - x2| + |y1 - y2|\n    return abs(x1 - x2) + abs(___ - ___)\n\nrider = (10, 10)\ndrivers = {\n    'DriverX': (15, 12),\n    'DriverY': (8, 9),\n    'DriverZ': (20, 20)\n}\n\nbest_driver = None\nmin_dist = float('inf')\n\nfor d_id, coords in drivers.items():\n    dist = get_distance(rider[0], rider[1], coords[0], coords[1])\n    print(f\"{d_id} is {dist} units away\")\n    if dist < ___:\n        ___ = dist\n        ___ = d_id\n\nprint(f\"\\nDispatching: {best_driver}\")",
+        "solution": "def get_distance(x1, y1, x2, y2):\n    # Manhattan distance: |x1 - x2| + |y1 - y2|\n    return abs(x1 - x2) + abs(y1 - y2)\n\nrider = (10, 10)\ndrivers = {\n    'DriverX': (15, 12),\n    'DriverY': (8, 9),\n    'DriverZ': (20, 20)\n}\n\nbest_driver = None\nmin_dist = float('inf')\n\nfor d_id, coords in drivers.items():\n    dist = get_distance(rider[0], rider[1], coords[0], coords[1])\n    print(f\"{d_id} is {dist} units away\")\n    if dist < min_dist:\n        min_dist = dist\n        best_driver = d_id\n\nprint(f\"\\nDispatching: {best_driver}\")",
+        "hint": "abs(y1 - y2). Check if dist < min_dist. Set min_dist and best_driver.",
+        "rubric": "DriverY is chosen because they are 3 units away."
       }
     ]
   },
@@ -124,13 +133,13 @@
     "aiRubric": "Check logic, syntax, and output for Designing Netflix.",
     "lessons": [
       {
-        "title": "Designing Netflix - Coming Soon",
-        "theory": "## Designing Netflix\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Designing Netflix** is under development.",
-        "starterCode": "# Designing Netflix - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Designing Netflix\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Video Streaming",
+        "theory": "## CDNs and Video Encoding\nHow does Netflix stream video to 200 million people without crashing?\n\n1. **Encoding**: They compress original videos into dozens of different resolutions and bitrates.\n2. **CDN (Content Delivery Network)**: Netflix built 'Open Connect'. They put custom servers *inside* your local ISP (like Comcast). When you stream a movie, it's often coming from a server just a few miles away, not across the country.\n3. **Adaptive Bitrate Streaming**: The video player constantly checks your internet speed. If it drops, it seamlessly switches to a lower quality chunk of the video.",
+        "instructions": "## Task: Adaptive Bitrate Simulator\n1. Simulate a video player checking bandwidth.\n2. If bandwidth > 10 Mbps, play 4K.\n3. If bandwidth > 5 Mbps, play 1080p.\n4. Else, play 720p.",
+        "starterCode": "def select_quality(bandwidth_mbps):\n    if bandwidth_mbps > ___:\n        return \"4K\"\n    elif bandwidth_mbps > ___:\n        return \"1080p\"\n    else:\n        return \"___\"\n\nnetwork_fluctuations = [15.2, 11.0, 6.5, 2.1, 8.0, 25.0]\n\nfor i, speed in enumerate(network_fluctuations):\n    quality = select_quality(speed)\n    print(f\"Minute {i+1}: Speed={speed:4.1f} Mbps -> Streaming at {quality}\")",
+        "solution": "def select_quality(bandwidth_mbps):\n    if bandwidth_mbps > 10:\n        return \"4K\"\n    elif bandwidth_mbps > 5:\n        return \"1080p\"\n    else:\n        return \"720p\"\n\nnetwork_fluctuations = [15.2, 11.0, 6.5, 2.1, 8.0, 25.0]\n\nfor i, speed in enumerate(network_fluctuations):\n    quality = select_quality(speed)\n    print(f\"Minute {i+1}: Speed={speed:4.1f} Mbps -> Streaming at {quality}\")",
+        "hint": "> 10 for 4K. > 5 for 1080p. Else 720p.",
+        "rubric": "Resolutions dynamically adapt based on the simulated network speed."
       }
     ]
   }

@@ -85,13 +85,13 @@
     "aiRubric": "Check logic, syntax, and output for Memory Safety.",
     "lessons": [
       {
-        "title": "Memory Safety - Coming Soon",
-        "theory": "## Memory Safety\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Memory Safety** is under development.",
-        "starterCode": "# Memory Safety - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Memory Safety\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Lifetimes",
+        "theory": "## Keeping References Valid\nRust must guarantee that all references are valid (no dangling pointers).\n\nWhen a function takes multiple references, the compiler sometimes needs help knowing how long they live. We use **lifetimes** (annotated with `'a`).\n\n```rust\n// 'a means \"both x and y must live as long as the returned reference\"\nfn longest<'a>(x: &'a str, y: &'a str) -> &'a str {\n    if x.len() > y.len() { x } else { y }\n}\n```",
+        "instructions": "## Task: Add Lifetimes\n1. You have a `get_first` function that takes a reference to a string and returns a reference to its first word.\n2. Since it takes one reference and returns one reference, Rust can usually infer this (Lifetime Elision).\n3. But for this exercise, manually add the explicit `'a` lifetime annotations.",
+        "starterCode": "fn get_first<___>(s: ___ str) -> ___ str {\n    let bytes = s.as_bytes();\n    for (i, &item) in bytes.iter().enumerate() {\n        if item == b' ' {\n            return &s[0..i];\n        }\n    }\n    &s[..]\n}\n\nfn main() {\n    let text = String::from(\"Rust is safe\");\n    let word = get_first(&text);\n    println!(\"First word: {}\", word);\n}",
+        "solution": "fn get_first<'a>(s: &'a str) -> &'a str {\n    let bytes = s.as_bytes();\n    for (i, &item) in bytes.iter().enumerate() {\n        if item == b' ' {\n            return &s[0..i];\n        }\n    }\n    &s[..]\n}\n\nfn main() {\n    let text = String::from(\"Rust is safe\");\n    let word = get_first(&text);\n    println!(\"First word: {}\", word);\n}",
+        "hint": "<'a> in the diamond brackets. &'a str for both types.",
+        "rubric": "Explicit lifetimes applied correctly. Output is 'Rust'."
       }
     ]
   },
@@ -99,13 +99,13 @@
     "aiRubric": "Check logic, syntax, and output for Concurrency.",
     "lessons": [
       {
-        "title": "Concurrency - Coming Soon",
-        "theory": "## Concurrency\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Concurrency** is under development.",
-        "starterCode": "# Concurrency - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Concurrency\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Threads in Rust",
+        "theory": "## Fearless Concurrency\nRust prevents data races at compile time. \n\n```rust\nuse std::thread;\nuse std::time::Duration;\n\nfn main() {\n    let handle = thread::spawn(|| {\n        println!(\"Hello from a thread!\");\n    });\n    \n    handle.join().unwrap(); // Wait for thread to finish\n}\n```",
+        "instructions": "## Task: Spawn a Thread\n1. Use `thread::spawn` to run a closure.\n2. Inside the thread, print numbers 1 to 3.\n3. Call `join()` on the returned handle so the main thread waits.",
+        "starterCode": "use std::___;\nuse std::time::Duration;\n\nfn main() {\n    let handle = thread::___(|| {\n        for i in 1..=3 {\n            println!(\"Thread: {}\", i);\n            thread::sleep(Duration::from_millis(10));\n        }\n    });\n\n    for i in 1..=3 {\n        println!(\"Main: {}\", i);\n        thread::sleep(Duration::from_millis(10));\n    }\n\n    // Wait for the spawned thread\n    handle.___().unwrap();\n}",
+        "solution": "use std::thread;\nuse std::time::Duration;\n\nfn main() {\n    let handle = thread::spawn(|| {\n        for i in 1..=3 {\n            println!(\"Thread: {}\", i);\n            thread::sleep(Duration::from_millis(10));\n        }\n    });\n\n    for i in 1..=3 {\n        println!(\"Main: {}\", i);\n        thread::sleep(Duration::from_millis(10));\n    }\n\n    // Wait for the spawned thread\n    handle.join().unwrap();\n}",
+        "hint": "std::thread. thread::spawn. handle.join().",
+        "rubric": "Thread spawned correctly and joined at the end."
       }
     ]
   },
@@ -127,13 +127,13 @@
     "aiRubric": "Check logic, syntax, and output for Macros.",
     "lessons": [
       {
-        "title": "Macros - Coming Soon",
-        "theory": "## Macros\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Macros** is under development.",
-        "starterCode": "# Macros - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Macros\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Code that writes Code",
+        "theory": "## Metaprogramming\nMacros in Rust (like `println!`, `vec!`) look like functions but end with a `!`. \n\nThey expand into standard Rust code *before* the compiler compiles the program. This allows them to take a variable number of arguments.\n\n```rust\n// Creating a Vector using a macro\nlet v1 = vec![1, 2, 3];\n```",
+        "instructions": "## Task: Use Macros\n1. Use the `vec!` macro to create a vector containing 10, 20, 30.\n2. Use the `format!` macro to combine two strings without printing them.\n3. Use `println!` to print the formatted string.",
+        "starterCode": "fn main() {\n    // Create a vector\n    let numbers = ___![10, 20, 30];\n    \n    // Format a string (like python f-strings, returns a String)\n    let text = ___!(\"The first number is {}\", numbers[0]);\n    \n    // Print it\n    ___!(\"{}\", text);\n}",
+        "solution": "fn main() {\n    // Create a vector\n    let numbers = vec![10, 20, 30];\n    \n    // Format a string (like python f-strings, returns a String)\n    let text = format!(\"The first number is {}\", numbers[0]);\n    \n    // Print it\n    println!(\"{}\", text);\n}",
+        "hint": "vec!, format!, println!",
+        "rubric": "vec, format, and println macros used correctly."
       }
     ]
   },
@@ -141,13 +141,13 @@
     "aiRubric": "Check logic, syntax, and output for Unsafe Rust.",
     "lessons": [
       {
-        "title": "Unsafe Rust - Coming Soon",
-        "theory": "## Unsafe Rust\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Unsafe Rust** is under development.",
-        "starterCode": "# Unsafe Rust - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Unsafe Rust\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "The Unsafe Keyword",
+        "theory": "## Disabling Safety Checks\nSometimes you need to do things the Rust compiler can't verify (like calling C code, or writing a low-level OS driver).\n\nYou can use the `unsafe` block. Inside it, you can:\n- Dereference raw pointers\n- Call unsafe functions\n- Mutate static variables\n\n```rust\nlet mut num = 5;\nlet r1 = &num as *const i32; // Raw pointer\n\nunsafe {\n    println!(\"r1 is: {}\", *r1); // Dereferencing is unsafe\n}\n```",
+        "instructions": "## Task: Dereference a Raw Pointer\n1. You are given a raw pointer to a number.\n2. You must wrap the dereference operation inside an `unsafe` block.\n3. Print the value.",
+        "starterCode": "fn main() {\n    let num = 42;\n    \n    // Create a raw pointer (this is safe)\n    let raw_ptr = &num as *const i32;\n    \n    // Dereferencing it is unsafe!\n    ___ {\n        println!(\"The secret number is: {}\", ___raw_ptr);\n    }\n}",
+        "solution": "fn main() {\n    let num = 42;\n    \n    // Create a raw pointer (this is safe)\n    let raw_ptr = &num as *const i32;\n    \n    // Dereferencing it is unsafe!\n    unsafe {\n        println!(\"The secret number is: {}\", *raw_ptr);\n    }\n}",
+        "hint": "unsafe { }. Use * to dereference.",
+        "rubric": "unsafe block wraps the *raw_ptr dereference."
       }
     ]
   },
