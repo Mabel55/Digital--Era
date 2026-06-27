@@ -145,7 +145,8 @@
       "Zapier Basics",
       "Make.com Workflows",
       "API Connections",
-      "No-Code AI Apps"
+      "No-Code AI Apps",
+      "Automation Architecture"
     ],
     "Intermediate": [
       "Automated Content",
@@ -154,7 +155,9 @@
       "n8n Workflows",
       "Web Scraping & RPA",
       "Document & Audio Pipelines",
-      "AI Support Helpdesks"
+      "AI Support Helpdesks",
+      "Process Mapping",
+      "Human-in-the-Loop Strategy"
     ],
     "Advanced": [
       "Enterprise AI Bots",
@@ -163,7 +166,9 @@
       "Automated Social Media",
       "LLM Automation APIs",
       "RAG Automation Workflows",
-      "AI Lead Generation"
+      "AI Lead Generation",
+      "Cost Analysis of Automation",
+      "Failure States & Fallbacks"
     ]
   },
   "Version Control": {
