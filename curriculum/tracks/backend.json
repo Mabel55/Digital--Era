@@ -3,13 +3,49 @@
     "aiRubric": "Check logic, syntax, and output for HTTP & APIs.",
     "lessons": [
       {
-        "title": "HTTP & APIs - Coming Soon",
-        "theory": "## HTTP & APIs\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **HTTP & APIs** is under development.",
-        "starterCode": "# HTTP & APIs - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# HTTP & APIs\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "What is HTTP?",
+        "theory": "## HTTP Protocol\nHTTP (HyperText Transfer Protocol) is how browsers and servers communicate.\n\n```\nClient (Browser) ---REQUEST---> Server\nClient (Browser) <--RESPONSE--- Server\n```\n\nEvery request has a **method**, a **URL**, **headers**, and optionally a **body**.\n\nCommon methods:\n- `GET` — Read data\n- `POST` — Create data\n- `PUT` — Update data\n- `DELETE` — Remove data",
+        "instructions": "## Task: HTTP Basics\n1. Create a dictionary representing an HTTP request\n2. Include keys: `method`, `url`, `headers`, `body`\n3. Print each part",
+        "starterCode": "request = {\n    'method': '___',\n    'url': '___',\n    'headers': {'Content-Type': '___'},\n    'body': {'name': 'Alice'}\n}\n\nfor key, value in request.items():\n    print(f'{key}: {value}')",
+        "solution": "request = {\n    'method': 'POST',\n    'url': '/api/users',\n    'headers': {'Content-Type': 'application/json'},\n    'body': {'name': 'Alice'}\n}\n\nfor key, value in request.items():\n    print(f'{key}: {value}')",
+        "hint": "POST for creating. application/json for JSON APIs.",
+        "rubric": "Request dict has all 4 keys with proper values."
+      },
+      {
+        "title": "Status Codes",
+        "theory": "## HTTP Status Codes\nServers respond with status codes to indicate what happened.\n\n```\n200 OK           — Success\n201 Created      — New resource created\n400 Bad Request  — Client error\n401 Unauthorized — Not logged in\n404 Not Found    — Resource doesn't exist\n500 Server Error — Something broke on the server\n```\n\n```python\nstatus_codes = {\n    200: 'OK',\n    404: 'Not Found',\n    500: 'Internal Server Error'\n}\n```",
+        "instructions": "## Task: Status Code Handler\n1. Create a function `handle_response(status_code)` that returns a message for each status code\n2. Handle 200, 201, 400, 401, 404, 500\n3. Default to 'Unknown Status' for anything else",
+        "starterCode": "def handle_response(status_code):\n    if status_code == 200:\n        return '___'\n    elif status_code == 201:\n        return '___'\n    elif status_code == 404:\n        return '___'\n    elif status_code == 500:\n        return '___'\n    else:\n        return '___'\n\nfor code in [200, 201, 404, 500, 418]:\n    print(f'{code}: {handle_response(code)}')",
+        "solution": "def handle_response(status_code):\n    if status_code == 200:\n        return 'Success'\n    elif status_code == 201:\n        return 'Created'\n    elif status_code == 404:\n        return 'Not Found'\n    elif status_code == 500:\n        return 'Server Error'\n    else:\n        return 'Unknown Status'\n\nfor code in [200, 201, 404, 500, 418]:\n    print(f'{code}: {handle_response(code)}')",
+        "hint": "Match each code to its standard meaning.",
+        "rubric": "All status codes handled correctly. Unknown returns default."
+      },
+      {
+        "title": "REST API Design",
+        "theory": "## RESTful API Conventions\nREST uses HTTP methods + URL patterns to create clean APIs.\n\n```\nGET    /api/users          — List all users\nGET    /api/users/42       — Get user #42\nPOST   /api/users          — Create a user\nPUT    /api/users/42       — Update user #42\nDELETE /api/users/42       — Delete user #42\n```\n\nResources are **nouns** (users, posts, orders), not verbs.",
+        "instructions": "## Task: Design a REST API\n1. Create a dictionary mapping routes to their descriptions for a 'products' API\n2. Include all 5 CRUD operations\n3. Print each route",
+        "starterCode": "api_routes = {\n    'GET /api/products': '___',\n    'GET /api/products/<id>': '___',\n    'POST /api/products': '___',\n    'PUT /api/products/<id>': '___',\n    'DELETE /api/products/<id>': '___'\n}\n\nfor route, desc in api_routes.items():\n    print(f'{route:35} -> {desc}')",
+        "solution": "api_routes = {\n    'GET /api/products': 'List all products',\n    'GET /api/products/<id>': 'Get a specific product',\n    'POST /api/products': 'Create a new product',\n    'PUT /api/products/<id>': 'Update a product',\n    'DELETE /api/products/<id>': 'Delete a product'\n}\n\nfor route, desc in api_routes.items():\n    print(f'{route:35} -> {desc}')",
+        "hint": "GET reads, POST creates, PUT updates, DELETE removes.",
+        "rubric": "All 5 REST routes defined with correct descriptions."
+      },
+      {
+        "title": "JSON Data Format",
+        "theory": "## JSON: The Language of APIs\nJSON (JavaScript Object Notation) is the standard format for API data.\n\n```python\nimport json\n\n# Python dict to JSON string\ndata = {'name': 'Alice', 'age': 25, 'courses': ['Python', 'SQL']}\njson_str = json.dumps(data, indent=2)\nprint(json_str)\n\n# JSON string to Python dict\nparsed = json.loads(json_str)\nprint(parsed['name'])  # Alice\n```",
+        "instructions": "## Task: API Response Builder\n1. Create a function `build_response(data, status)` that returns a JSON-formatted API response\n2. Include `status`, `data`, and `count` fields\n3. Test with a list of users",
+        "starterCode": "import json\n\ndef build_response(data, status='success'):\n    response = {\n        'status': ___,\n        'count': ___(data) if isinstance(data, list) else 1,\n        'data': ___\n    }\n    return json.dumps(response, indent=2)\n\nusers = [{'name': 'Alice'}, {'name': 'Bob'}]\nprint(build_response(users))",
+        "solution": "import json\n\ndef build_response(data, status='success'):\n    response = {\n        'status': status,\n        'count': len(data) if isinstance(data, list) else 1,\n        'data': data\n    }\n    return json.dumps(response, indent=2)\n\nusers = [{'name': 'Alice'}, {'name': 'Bob'}]\nprint(build_response(users))",
+        "hint": "len() for count. isinstance checks if data is a list.",
+        "rubric": "Response includes status, count, and data. JSON is properly formatted."
+      },
+      {
+        "title": "Making API Requests",
+        "theory": "## The requests Library\nPython's `requests` library makes HTTP calls easy.\n\n```python\nimport requests\n\n# GET request\nresponse = requests.get('https://api.example.com/users')\nprint(response.status_code)  # 200\nprint(response.json())       # Parse JSON\n\n# POST request\ndata = {'name': 'Alice', 'email': 'alice@mail.com'}\nresponse = requests.post('https://api.example.com/users', json=data)\n```\n\nNote: Since we can't make real HTTP requests in this environment, we'll simulate the behavior.",
+        "instructions": "## Task: API Client Simulator\n1. Create a class `MockAPI` that simulates GET and POST\n2. Store data in a list internally\n3. GET returns all items, POST adds a new item\n4. Test both operations",
+        "starterCode": "class MockAPI:\n    def __init__(self):\n        self.data = []\n    \n    def get(self):\n        return {'status': 200, 'data': self.___}\n    \n    def post(self, item):\n        self.data.___(item)\n        return {'status': 201, 'data': item}\n\napi = MockAPI()\nprint(api.post({'name': 'Alice'}))\nprint(api.post({'name': 'Bob'}))\nprint(api.get())",
+        "solution": "class MockAPI:\n    def __init__(self):\n        self.data = []\n    \n    def get(self):\n        return {'status': 200, 'data': self.data}\n    \n    def post(self, item):\n        self.data.append(item)\n        return {'status': 201, 'data': item}\n\napi = MockAPI()\nprint(api.post({'name': 'Alice'}))\nprint(api.post({'name': 'Bob'}))\nprint(api.get())",
+        "hint": "self.data stores items. .append() adds. Return the list for GET.",
+        "rubric": "POST adds items and returns 201. GET returns all items with 200."
       }
     ]
   },
@@ -17,13 +53,49 @@
     "aiRubric": "Check logic, syntax, and output for Node.js Basics.",
     "lessons": [
       {
-        "title": "Node.js Basics - Coming Soon",
-        "theory": "## Node.js Basics\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Node.js Basics** is under development.",
-        "starterCode": "# Node.js Basics - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Node.js Basics\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Console & Variables",
+        "theory": "## Node.js Fundamentals\nNode.js lets you run JavaScript outside the browser.\n\n```javascript\n// Variables\nconst name = 'Digital Era';\nlet count = 0;\n\n// Template literals\nconsole.log(`Welcome to ${name}!`);\n\n// Destructuring\nconst { readFile, writeFile } = require('fs');\n```",
+        "instructions": "## Task: Node.js Variables\n1. Create variables for app name, version, and port\n2. Log a startup message using template literals\n3. Create an object with these values and log it",
+        "starterCode": "const appName = '___';\nconst version = '___';\nconst port = ___;\n\nconsole.log(`${___} v${___} starting on port ${___}`);\n\nconst config = { appName, version, port };\nconsole.log(config);",
+        "solution": "const appName = 'Digital Era';\nconst version = '1.0.0';\nconst port = 3000;\n\nconsole.log(`${appName} v${version} starting on port ${port}`);\n\nconst config = { appName, version, port };\nconsole.log(config);",
+        "hint": "Use template literals with ${}. Object shorthand: { appName } equals { appName: appName }.",
+        "rubric": "Variables declared. Template literal logs correctly. Config object created."
+      },
+      {
+        "title": "Modules & require",
+        "theory": "## Node.js Modules\nNode uses `require()` to import modules and `module.exports` to export.\n\n```javascript\n// math.js\nconst add = (a, b) => a + b;\nconst multiply = (a, b) => a * b;\nmodule.exports = { add, multiply };\n\n// app.js\nconst { add, multiply } = require('./math');\nconsole.log(add(3, 5));  // 8\n```",
+        "instructions": "## Task: Create a Utility Module\n1. Create functions: `capitalize(str)`, `reverse(str)`, `countWords(str)`\n2. Export all three\n3. Import and test them",
+        "starterCode": "// Simulating module pattern\nconst utils = (() => {\n  const capitalize = (str) => str.charAt(0).___() + str.slice(1);\n  const reverse = (str) => str.split('').___().join('');\n  const countWords = (str) => str.split(' ').___()\n  return { capitalize, reverse, countWords };\n})();\n\nconsole.log(utils.capitalize('hello'));\nconsole.log(utils.reverse('hello'));\nconsole.log(utils.countWords('hello world foo'));",
+        "solution": "// Simulating module pattern\nconst utils = (() => {\n  const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);\n  const reverse = (str) => str.split('').reverse().join('');\n  const countWords = (str) => str.split(' ').length;\n  return { capitalize, reverse, countWords };\n})();\n\nconsole.log(utils.capitalize('hello'));\nconsole.log(utils.reverse('hello'));\nconsole.log(utils.countWords('hello world foo'));",
+        "hint": ".toUpperCase() capitalizes. .reverse() reverses arrays. .length counts.",
+        "rubric": "capitalize returns 'Hello'. reverse returns 'olleh'. countWords returns 3."
+      },
+      {
+        "title": "Callbacks & Events",
+        "theory": "## Asynchronous Node.js\nNode.js is event-driven and non-blocking.\n\n```javascript\n// Callback pattern\nfunction fetchData(callback) {\n  setTimeout(() => {\n    callback(null, { name: 'Alice' });\n  }, 1000);\n}\n\nfetchData((err, data) => {\n  if (err) console.error(err);\n  else console.log(data);\n});\n```",
+        "instructions": "## Task: Callback Practice\n1. Create a `processOrder(orderId, callback)` function\n2. Simulate a 1-second delay with setTimeout\n3. Call the callback with the order result\n4. Handle both success and error cases",
+        "starterCode": "function processOrder(orderId, callback) {\n  console.log(`Processing order ${orderId}...`);\n  setTimeout(() => {\n    if (orderId > 0) {\n      ___(null, { id: orderId, status: 'completed' });\n    } else {\n      ___('Invalid order ID');\n    }\n  }, 1000);\n}\n\nprocessOrder(42, (err, result) => {\n  if (___) console.error('Error:', err);\n  else console.log('Success:', result);\n});",
+        "solution": "function processOrder(orderId, callback) {\n  console.log(`Processing order ${orderId}...`);\n  setTimeout(() => {\n    if (orderId > 0) {\n      callback(null, { id: orderId, status: 'completed' });\n    } else {\n      callback('Invalid order ID');\n    }\n  }, 1000);\n}\n\nprocessOrder(42, (err, result) => {\n  if (err) console.error('Error:', err);\n  else console.log('Success:', result);\n});",
+        "hint": "callback(null, data) for success. callback(error) for failure.",
+        "rubric": "Callback pattern used correctly. Success and error paths work."
+      },
+      {
+        "title": "Promises in Node",
+        "theory": "## Promises: Better Async\nPromises replace nested callbacks with cleaner syntax.\n\n```javascript\nfunction fetchUser(id) {\n  return new Promise((resolve, reject) => {\n    if (id > 0) resolve({ id, name: 'Alice' });\n    else reject('Invalid ID');\n  });\n}\n\nfetchUser(1)\n  .then(user => console.log(user))\n  .catch(err => console.error(err));\n```",
+        "instructions": "## Task: Promise Chain\n1. Create `getUser(id)` that returns a Promise\n2. Create `getOrders(userId)` that returns a Promise with mock orders\n3. Chain them: get user, then get their orders\n4. Handle errors",
+        "starterCode": "const getUser = (id) => new Promise((resolve, reject) => {\n  if (id > 0) ___(({ id, name: 'User ' + id }));\n  else ___('User not found');\n});\n\nconst getOrders = (userId) => new Promise((resolve) => {\n  ___([{ orderId: 1, item: 'Laptop' }, { orderId: 2, item: 'Mouse' }]);\n});\n\ngetUser(1)\n  .then(user => { console.log(user); return getOrders(user.id); })\n  .then(orders => console.log('Orders:', orders))\n  .catch(err => console.error(err));",
+        "solution": "const getUser = (id) => new Promise((resolve, reject) => {\n  if (id > 0) resolve({ id, name: 'User ' + id });\n  else reject('User not found');\n});\n\nconst getOrders = (userId) => new Promise((resolve) => {\n  resolve([{ orderId: 1, item: 'Laptop' }, { orderId: 2, item: 'Mouse' }]);\n});\n\ngetUser(1)\n  .then(user => { console.log(user); return getOrders(user.id); })\n  .then(orders => console.log('Orders:', orders))\n  .catch(err => console.error(err));",
+        "hint": "resolve() for success, reject() for errors. Return promise in .then() to chain.",
+        "rubric": "Promise chain works. User fetched, then orders fetched."
+      },
+      {
+        "title": "Async/Await in Node",
+        "theory": "## Async/Await: Modern Async\nThe cleanest way to write asynchronous code.\n\n```javascript\nasync function main() {\n  try {\n    const user = await fetchUser(1);\n    const orders = await fetchOrders(user.id);\n    console.log(user, orders);\n  } catch (err) {\n    console.error(err);\n  }\n}\n```",
+        "instructions": "## Task: Async Data Pipeline\n1. Create async functions to simulate: fetch user, fetch posts, fetch comments\n2. Chain them with await\n3. Print the complete data",
+        "starterCode": "const delay = (ms) => new Promise(r => setTimeout(r, ms));\n\nasync function fetchUser() {\n  ___ delay(100);\n  return { id: 1, name: 'Alice' };\n}\n\nasync function fetchPosts(userId) {\n  ___ delay(100);\n  return [{ id: 1, title: 'Hello World', userId }];\n}\n\nasync function main() {\n  try {\n    const user = ___ fetchUser();\n    const posts = ___ fetchPosts(user.id);\n    console.log('User:', user);\n    console.log('Posts:', posts);\n  } catch (err) {\n    console.error(err);\n  }\n}\n\nmain();",
+        "solution": "const delay = (ms) => new Promise(r => setTimeout(r, ms));\n\nasync function fetchUser() {\n  await delay(100);\n  return { id: 1, name: 'Alice' };\n}\n\nasync function fetchPosts(userId) {\n  await delay(100);\n  return [{ id: 1, title: 'Hello World', userId }];\n}\n\nasync function main() {\n  try {\n    const user = await fetchUser();\n    const posts = await fetchPosts(user.id);\n    console.log('User:', user);\n    console.log('Posts:', posts);\n  } catch (err) {\n    console.error(err);\n  }\n}\n\nmain();",
+        "hint": "await pauses until the Promise resolves. Always use try/catch for errors.",
+        "rubric": "async/await used correctly. Data flows through the pipeline."
       }
     ]
   },
@@ -31,13 +103,49 @@
     "aiRubric": "Check logic, syntax, and output for Express Server.",
     "lessons": [
       {
-        "title": "Express Server - Coming Soon",
-        "theory": "## Express Server\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Express Server** is under development.",
-        "starterCode": "# Express Server - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Express Server\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Basic Express App",
+        "theory": "## Express.js Framework\nExpress is the most popular Node.js web framework.\n\n```javascript\nconst express = require('express');\nconst app = express();\n\napp.get('/', (req, res) => {\n  res.json({ message: 'Hello World!' });\n});\n\napp.listen(3000, () => {\n  console.log('Server running on port 3000');\n});\n```",
+        "instructions": "## Task: Express Routes\n1. Simulate Express routing with a class\n2. Add GET, POST routes\n3. Create a router that matches paths to handlers",
+        "starterCode": "class SimpleRouter {\n  constructor() { this.routes = {}; }\n  \n  get(path, handler) { this.routes[`GET ${path}`] = ___; }\n  post(path, handler) { this.routes[`POST ${path}`] = ___; }\n  \n  handle(method, path) {\n    const key = `${method} ${path}`;\n    if (this.routes[___]) return this.routes[key]();\n    return { status: 404, message: 'Not Found' };\n  }\n}\n\nconst app = new SimpleRouter();\napp.get('/api/users', () => ({ status: 200, data: ['Alice', 'Bob'] }));\napp.post('/api/users', () => ({ status: 201, message: 'User created' }));\n\nconsole.log(app.handle('GET', '/api/users'));\nconsole.log(app.handle('POST', '/api/users'));\nconsole.log(app.handle('GET', '/api/unknown'));",
+        "solution": "class SimpleRouter {\n  constructor() { this.routes = {}; }\n  \n  get(path, handler) { this.routes[`GET ${path}`] = handler; }\n  post(path, handler) { this.routes[`POST ${path}`] = handler; }\n  \n  handle(method, path) {\n    const key = `${method} ${path}`;\n    if (this.routes[key]) return this.routes[key]();\n    return { status: 404, message: 'Not Found' };\n  }\n}\n\nconst app = new SimpleRouter();\napp.get('/api/users', () => ({ status: 200, data: ['Alice', 'Bob'] }));\napp.post('/api/users', () => ({ status: 201, message: 'User created' }));\n\nconsole.log(app.handle('GET', '/api/users'));\nconsole.log(app.handle('POST', '/api/users'));\nconsole.log(app.handle('GET', '/api/unknown'));",
+        "hint": "Store handler function. Use key to look up routes. Return 404 if not found.",
+        "rubric": "Router registers and dispatches routes. 404 for unknown routes."
+      },
+      {
+        "title": "Middleware",
+        "theory": "## Express Middleware\nMiddleware functions process requests before they reach your routes.\n\n```javascript\n// Logger middleware\napp.use((req, res, next) => {\n  console.log(`${req.method} ${req.url}`);\n  next();  // Pass to next middleware/route\n});\n\n// JSON body parser\napp.use(express.json());\n\n// Auth middleware\nconst auth = (req, res, next) => {\n  if (req.headers.token) next();\n  else res.status(401).json({ error: 'Unauthorized' });\n};\n```",
+        "instructions": "## Task: Middleware Pipeline\n1. Create a middleware pipeline simulator\n2. Add a logger middleware\n3. Add an auth middleware\n4. Process a request through the pipeline",
+        "starterCode": "class Pipeline {\n  constructor() { this.middlewares = []; }\n  \n  use(fn) { this.middlewares.___(fn); }\n  \n  process(request) {\n    let index = 0;\n    const next = () => {\n      if (index < this.middlewares.___) {\n        const middleware = this.middlewares[index___];\n        middleware(request, next);\n      }\n    };\n    next();\n    return request;\n  }\n}\n\nconst pipeline = new Pipeline();\npipeline.use((req, next) => { req.logged = true; console.log('Logger:', req.url); next(); });\npipeline.use((req, next) => { req.authenticated = true; next(); });\n\nconst result = pipeline.process({ url: '/api/data', method: 'GET' });\nconsole.log(result);",
+        "solution": "class Pipeline {\n  constructor() { this.middlewares = []; }\n  \n  use(fn) { this.middlewares.push(fn); }\n  \n  process(request) {\n    let index = 0;\n    const next = () => {\n      if (index < this.middlewares.length) {\n        const middleware = this.middlewares[index++];\n        middleware(request, next);\n      }\n    };\n    next();\n    return request;\n  }\n}\n\nconst pipeline = new Pipeline();\npipeline.use((req, next) => { req.logged = true; console.log('Logger:', req.url); next(); });\npipeline.use((req, next) => { req.authenticated = true; next(); });\n\nconst result = pipeline.process({ url: '/api/data', method: 'GET' });\nconsole.log(result);",
+        "hint": ".push() to add. .length to check. index++ to advance.",
+        "rubric": "Pipeline processes both middlewares. Request has logged and authenticated flags."
+      },
+      {
+        "title": "Route Parameters",
+        "theory": "## Dynamic Routes\nExpress supports URL parameters with `:param` syntax.\n\n```javascript\napp.get('/users/:id', (req, res) => {\n  const userId = req.params.id;\n  res.json({ userId });\n});\n\napp.get('/posts/:postId/comments/:commentId', (req, res) => {\n  const { postId, commentId } = req.params;\n});\n```",
+        "instructions": "## Task: Parameter Extraction\n1. Create a function that extracts parameters from URL patterns\n2. Match `/users/42` against pattern `/users/:id`\n3. Return extracted parameters as an object",
+        "starterCode": "function matchRoute(pattern, url) {\n  const patternParts = pattern.split('/');\n  const urlParts = url.split('/');\n  const params = {};\n  \n  if (patternParts.length !== urlParts.___) return null;\n  \n  for (let i = 0; i < patternParts.length; i++) {\n    if (patternParts[i].startsWith('___')) {\n      params[patternParts[i].slice(1)] = urlParts[i];\n    } else if (patternParts[i] !== urlParts[i]) {\n      return null;\n    }\n  }\n  return params;\n}\n\nconsole.log(matchRoute('/users/:id', '/users/42'));\nconsole.log(matchRoute('/posts/:postId/comments/:commentId', '/posts/5/comments/12'));",
+        "solution": "function matchRoute(pattern, url) {\n  const patternParts = pattern.split('/');\n  const urlParts = url.split('/');\n  const params = {};\n  \n  if (patternParts.length !== urlParts.length) return null;\n  \n  for (let i = 0; i < patternParts.length; i++) {\n    if (patternParts[i].startsWith(':')) {\n      params[patternParts[i].slice(1)] = urlParts[i];\n    } else if (patternParts[i] !== urlParts[i]) {\n      return null;\n    }\n  }\n  return params;\n}\n\nconsole.log(matchRoute('/users/:id', '/users/42'));\nconsole.log(matchRoute('/posts/:postId/comments/:commentId', '/posts/5/comments/12'));",
+        "hint": "startsWith(':') detects params. .slice(1) removes the colon.",
+        "rubric": "Returns {id: '42'}. Multi-param extraction works."
+      },
+      {
+        "title": "Error Handling",
+        "theory": "## Express Error Handling\nExpress has a special error-handling middleware pattern.\n\n```javascript\n// Throw errors in routes\napp.get('/users/:id', (req, res) => {\n  const user = findUser(req.params.id);\n  if (!user) throw new Error('User not found');\n  res.json(user);\n});\n\n// Error handler (4 params!)\napp.use((err, req, res, next) => {\n  console.error(err.message);\n  res.status(500).json({ error: err.message });\n});\n```",
+        "instructions": "## Task: Error Handler\n1. Create a function that simulates finding a user by ID\n2. Throw an error if user not found\n3. Wrap in try/catch and return appropriate error responses",
+        "starterCode": "const users = [\n  { id: 1, name: 'Alice' },\n  { id: 2, name: 'Bob' }\n];\n\nfunction findUser(id) {\n  const user = users.find(u => u.id === id);\n  if (!user) {\n    throw new ___(___)\n  }\n  return user;\n}\n\nfunction handleRequest(userId) {\n  try {\n    const user = findUser(userId);\n    return { status: 200, data: user };\n  } ___ (err) {\n    return { status: 404, error: err.___ };\n  }\n}\n\nconsole.log(handleRequest(1));\nconsole.log(handleRequest(99));",
+        "solution": "const users = [\n  { id: 1, name: 'Alice' },\n  { id: 2, name: 'Bob' }\n];\n\nfunction findUser(id) {\n  const user = users.find(u => u.id === id);\n  if (!user) {\n    throw new Error('User not found');\n  }\n  return user;\n}\n\nfunction handleRequest(userId) {\n  try {\n    const user = findUser(userId);\n    return { status: 200, data: user };\n  } catch (err) {\n    return { status: 404, error: err.message };\n  }\n}\n\nconsole.log(handleRequest(1));\nconsole.log(handleRequest(99));",
+        "hint": "throw new Error() to create error. catch(err) to handle. err.message for text.",
+        "rubric": "User 1 returns 200 with data. User 99 returns 404 with error message."
+      },
+      {
+        "title": "CRUD API",
+        "theory": "## Full CRUD API\nCRUD = Create, Read, Update, Delete — the four basic operations.\n\n```javascript\nlet items = [];\nlet nextId = 1;\n\n// Create\napp.post('/items', (req, res) => {\n  const item = { id: nextId++, ...req.body };\n  items.push(item);\n  res.status(201).json(item);\n});\n```",
+        "instructions": "## Task: In-Memory CRUD\n1. Build a complete CRUD system using a class\n2. Implement create, readAll, readOne, update, delete\n3. Test all operations",
+        "starterCode": "class CrudAPI {\n  constructor() { this.items = []; this.nextId = 1; }\n  \n  create(data) {\n    const item = { id: this.nextId___, ...data };\n    this.items.___(item);\n    return item;\n  }\n  readAll() { return this.___; }\n  readOne(id) { return this.items.___(i => i.id === id); }\n  update(id, data) {\n    const item = this.readOne(id);\n    if (item) Object.assign(item, data);\n    return item;\n  }\n  delete(id) {\n    this.items = this.items.___(i => i.id !== id);\n  }\n}\n\nconst api = new CrudAPI();\nconsole.log(api.create({name: 'Laptop', price: 999}));\nconsole.log(api.create({name: 'Mouse', price: 29}));\nconsole.log(api.readAll());\napi.update(1, {price: 899});\nconsole.log(api.readOne(1));\napi.delete(2);\nconsole.log(api.readAll());",
+        "solution": "class CrudAPI {\n  constructor() { this.items = []; this.nextId = 1; }\n  \n  create(data) {\n    const item = { id: this.nextId++, ...data };\n    this.items.push(item);\n    return item;\n  }\n  readAll() { return this.items; }\n  readOne(id) { return this.items.find(i => i.id === id); }\n  update(id, data) {\n    const item = this.readOne(id);\n    if (item) Object.assign(item, data);\n    return item;\n  }\n  delete(id) {\n    this.items = this.items.filter(i => i.id !== id);\n  }\n}\n\nconst api = new CrudAPI();\nconsole.log(api.create({name: 'Laptop', price: 999}));\nconsole.log(api.create({name: 'Mouse', price: 29}));\nconsole.log(api.readAll());\napi.update(1, {price: 899});\nconsole.log(api.readOne(1));\napi.delete(2);\nconsole.log(api.readAll());",
+        "hint": "nextId++ auto-increments. .find() locates. .filter() removes. Object.assign() merges.",
+        "rubric": "All 5 CRUD operations work. Items created, read, updated, deleted."
       }
     ]
   },

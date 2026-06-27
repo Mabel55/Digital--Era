@@ -95,13 +95,11 @@ track_courses = {
 }
 
 def generate_curriculum():
-    curriculum = {}
-    course_manifest = {}
+    os.makedirs(os.path.join("curriculum", "tracks"), exist_ok=True)
     
     for track, levels in track_courses.items():
-        curriculum[track] = {}
+        track_data = {}
         for level, courses in levels.items():
-            curriculum[track][level] = courses
             for course_name in courses:
                 # Generate 5 placeholder lessons for each course
                 lessons = []
@@ -115,18 +113,31 @@ def generate_curriculum():
                         "hint": "Placeholder hint",
                         "rubric": "Code runs successfully"
                     })
-                course_manifest[course_name] = lessons
+                # Add to track data (flat structure by course_name as expected by build_courses)
+                track_data[course_name] = {
+                    "aiRubric": f"Check logic for {course_name}",
+                    "lessons": lessons
+                }
                 
-    js_content = f"export const curriculum = {json.dumps(curriculum, indent=2)};\n\n"
-    js_content += f"export const courseManifest = {json.dumps(course_manifest, indent=2)};\n"
-    
-    target_path = os.path.join("frontend", "src", "data", "courses.js")
-    with open(target_path, "w", encoding="utf-8") as f:
-        f.write(js_content)
-        
-    print(f"Successfully rebuilt curriculum at {target_path}")
-    print(f"Total Tracks: {len(track_courses)}")
-    print(f"Total Courses: {sum(len(c) for track in track_courses.values() for c in track.values())}")
+        # Write to curriculum/tracks/track_name.json
+        safe_filename = track.lower().replace(" ", "_").replace("&", "").replace("__", "_") + ".json"
+        target_path = os.path.join("curriculum", "tracks", safe_filename)
+        with open(target_path, "w", encoding="utf-8") as f:
+            json.dump(track_data, f, indent=2)
+            
+    # Write curriculum/index.json
+    index_curriculum = {}
+    for track, levels in track_courses.items():
+        index_curriculum[track] = {}
+        for level, courses in levels.items():
+            index_curriculum[track][level] = courses
+            
+    with open(os.path.join("curriculum", "index.json"), "w", encoding="utf-8") as f:
+        json.dump(index_curriculum, f, indent=2)
+
+    print(f"Successfully rebuilt all JSON files in curriculum/tracks/ and index.json")
+    # Now run build_courses.py to compile them into courses.js
+    os.system("python build_courses.py")
 
 if __name__ == "__main__":
     generate_curriculum()

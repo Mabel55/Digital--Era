@@ -51,7 +51,7 @@ def enrich_track(file_path):
                 new_theory = enrich_lesson_theory(topic, lesson['title'], lesson['theory'])
                 if new_theory:
                     lesson['theory'] = new_theory
-                time.sleep(3) # Safe rate limiting
+                time.sleep(5) # Safe rate limiting
                 
     with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2)
