@@ -101,7 +101,8 @@
       "Pandas Intro",
       "Data Cleaning",
       "Matplotlib",
-      "Seaborn Visualization"
+      "Seaborn Visualization",
+      "Numpy Basics"
     ],
     "Intermediate": [
       "Statistical Analysis",
@@ -109,14 +110,18 @@
       "Feature Engineering",
       "Cross-Validation",
       "Hyperparameter Tuning",
-      "Unsupervised Learning"
+      "Unsupervised Learning",
+      "Handling Imbalanced Data",
+      "Model Evaluation Metrics"
     ],
     "Advanced": [
       "Time Series",
       "NLP Basics",
       "Advanced ML Models",
       "Ensemble Methods",
-      "Principal Component Analysis (PCA)"
+      "Principal Component Analysis (PCA)",
+      "Deep Learning for Tabular Data",
+      "Recommendation Systems"
     ]
   },
   "AI Engineering": {
