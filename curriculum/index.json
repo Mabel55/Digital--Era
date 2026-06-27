@@ -346,17 +346,21 @@
     "Beginner": [
       "C Syntax",
       "Pointers Basics",
-      "Arrays & Strings"
+      "Arrays & Strings",
+      "Operators & Expressions"
     ],
     "Intermediate": [
       "Dynamic Memory",
       "Structs & Unions",
-      "File Handling"
+      "File Handling",
+      "Strings in C",
+      "Function Pointers"
     ],
     "Advanced": [
       "Data Structures in C",
       "Bit Manipulation",
-      "System Calls"
+      "System Calls",
+      "Socket Programming"
     ]
   },
   "Data Structures & Algorithms": {

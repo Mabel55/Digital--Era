@@ -352,17 +352,21 @@ export const curriculum = {
     "Beginner": [
       "C Syntax",
       "Pointers Basics",
-      "Arrays & Strings"
+      "Arrays & Strings",
+      "Operators & Expressions"
     ],
     "Intermediate": [
       "Dynamic Memory",
       "Structs & Unions",
-      "File Handling"
+      "File Handling",
+      "Strings in C",
+      "Function Pointers"
     ],
     "Advanced": [
       "Data Structures in C",
       "Bit Manipulation",
-      "System Calls"
+      "System Calls",
+      "Socket Programming"
     ]
   },
   "Data Structures & Algorithms": {
@@ -2696,6 +2700,98 @@ export const courseManifest = {
         "solution": "class OperatingSystem:\n    def __init__(self):\n        self.mode = \"USER\"\n        \n    def os_write(self, data):\n        # Switch to Kernel mode\n        print(\"[OS Context Switch -> KERNEL]\")\n        self.mode = \"KERNEL\"\n        \n        print(f\"[Hardware] Writing to disk: {data}\")\n        \n        # Switch back to User mode\n        print(\"[OS Context Switch -> USER]\")\n        self.mode = \"USER\"\n\nos = OperatingSystem()\nprint(\"Initial Mode:\", os.mode)\nos.os_write(\"Hello Disk!\")\nprint(\"Final Mode:\", os.mode)",
         "hint": "Set mode to 'KERNEL', then back to 'USER'.",
         "rubric": "Successfully simulates the context switch to Kernel mode and back."
+      }
+    ]
+  },
+  "Operators & Expressions": {
+    "aiRubric": "Assess basic C operators",
+    "lessons": [
+      {
+        "title": "Arithmetic & Modulo",
+        "theory": "## Math in C\nC supports standard arithmetic operators (`+`, `-`, `*`, `/`). The modulo operator (`%`) gives the remainder of integer division.",
+        "instructions": "## Task: Calculate Remainder\nUse the modulo operator to find the remainder when 10 is divided by 3.",
+        "starterCode": "#include <stdio.h>\n\nint main() {\n    int remainder = 10 ___ 3;\n    printf(\"%d\", remainder);\n    return 0;\n}",
+        "solution": "#include <stdio.h>\n\nint main() {\n    int remainder = 10 % 3;\n    printf(\"%d\", remainder);\n    return 0;\n}",
+        "hint": "Use the % operator",
+        "rubric": "Correctly uses the % operator."
+      },
+      {
+        "title": "Increment & Decrement",
+        "theory": "## Shortcuts\nThe `++` and `--` operators add or subtract 1 from a variable. Be careful with prefix (`++x`) vs postfix (`x++`) notation.",
+        "instructions": "## Task: Postfix Increment\nIncrement the variable `count` by 1 using the postfix operator.",
+        "starterCode": "int count = 5;\n___;",
+        "solution": "int count = 5;\ncount++;",
+        "hint": "Use count++",
+        "rubric": "Uses count++."
+      }
+    ]
+  },
+  "Strings in C": {
+    "aiRubric": "Assess C string manipulation",
+    "lessons": [
+      {
+        "title": "Null-Terminated Arrays",
+        "theory": "## Character Arrays\nIn C, there is no `String` type. A string is just an array of characters ending with a null terminator (`'\\0'`).",
+        "instructions": "## Task: Define a String\nDefine a character array that stores the string \"Hello\" (remember the implicit null terminator).",
+        "starterCode": "char greeting[] = \"___\";",
+        "solution": "char greeting[] = \"Hello\";",
+        "hint": "Hello",
+        "rubric": "Assigns \"Hello\" to greeting."
+      },
+      {
+        "title": "String Functions",
+        "theory": "## string.h\nThe `<string.h>` library provides functions to manipulate strings, such as `strlen` for length and `strcpy` for copying.",
+        "instructions": "## Task: String Length\nUse the standard library function to find the length of the string.",
+        "starterCode": "#include <string.h>\n\nint len = ___(greeting);",
+        "solution": "#include <string.h>\n\nint len = strlen(greeting);",
+        "hint": "Use strlen",
+        "rubric": "Uses strlen()."
+      }
+    ]
+  },
+  "Function Pointers": {
+    "aiRubric": "Assess function pointers",
+    "lessons": [
+      {
+        "title": "Pointers to Code",
+        "theory": "## Storing Functions\nJust as pointers can store the address of a variable, they can store the address of a function, allowing you to pass functions as arguments (callbacks).",
+        "instructions": "## Task: Declare Function Pointer\nDeclare a function pointer named `operation` that takes two `int` parameters and returns an `int`.",
+        "starterCode": "int (___operation)(int, int);",
+        "solution": "int (*operation)(int, int);",
+        "hint": "Use an asterisk inside the parentheses (*operation)",
+        "rubric": "Correctly declares (*operation)."
+      },
+      {
+        "title": "Using Callbacks",
+        "theory": "## Dynamic Execution\nYou can assign a function address to a pointer and then call it.",
+        "instructions": "## Task: Assign and Call\nAssign the `add` function to the pointer and call it.",
+        "starterCode": "operation = ___;\nint result = operation(5, 3);",
+        "solution": "operation = add;\nint result = operation(5, 3);",
+        "hint": "Just use the name of the function: add",
+        "rubric": "Assigns add without parentheses."
+      }
+    ]
+  },
+  "Socket Programming": {
+    "aiRubric": "Assess basic network sockets in C",
+    "lessons": [
+      {
+        "title": "Creating a Socket",
+        "theory": "## The Network Endpoint\nIn Linux, a socket is just a file descriptor. You create one using the `socket()` system call, specifying the domain (IPv4) and type (TCP).",
+        "instructions": "## Task: socket() Call\nCreate a TCP socket using `AF_INET` and `SOCK_STREAM`.",
+        "starterCode": "#include <sys/socket.h>\n\nint server_fd = socket(AF_INET, ___, 0);",
+        "solution": "#include <sys/socket.h>\n\nint server_fd = socket(AF_INET, SOCK_STREAM, 0);",
+        "hint": "Use SOCK_STREAM",
+        "rubric": "Correctly uses SOCK_STREAM."
+      },
+      {
+        "title": "Bind and Listen",
+        "theory": "## Waiting for Connections\nAfter creating a socket, a server must `bind()` it to a port and then `listen()` for incoming client connections.",
+        "instructions": "## Task: Listen Call\nWrite the function call to make the socket listen, allowing a backlog of 3 connections.",
+        "starterCode": "___(server_fd, 3);",
+        "solution": "listen(server_fd, 3);",
+        "hint": "Use listen",
+        "rubric": "Calls listen(server_fd, 3)."
       }
     ]
   },
