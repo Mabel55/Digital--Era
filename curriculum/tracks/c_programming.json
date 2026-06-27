@@ -13,7 +13,7 @@
       },
       {
         "title": "Variables & Types",
-        "theory": "## C Data Types\n\n```c\nint age = 25;           // Integer\nfloat price = 19.99;    // Decimal (single precision)\ndouble pi = 3.14159;    // Decimal (double precision)\nchar grade = 'A';       // Single character\nchar name[] = \"Alice\";  // String (char array)\n```\n\nC is **statically typed** — you must declare the type before using a variable.",
+        "theory": "## C Data Types\n\n```c\nint age = 25;           // Integer\nfloat price = 19.99;    // Decimal (single precision)\ndouble pi = 3.14159;    // Decimal (double precision)\nchar grade = 'A';       // Single character\nchar name[] = \"Alice\";  // String (char array)\n```\n\nC is **statically typed** \u2014 you must declare the type before using a variable.",
         "instructions": "## Task: Variable Declaration\n1. Declare an `int` for year, `float` for temperature, `char` for initial\n2. Print each using the correct format specifier\n3. `%d` for int, `%f` for float, `%c` for char",
         "starterCode": "#include <stdio.h>\n\nint main() {\n    ___ year = 2024;\n    ___ temperature = 36.5;\n    ___ initial = 'M';\n    \n    printf(\"Year: %___\\n\", year);\n    printf(\"Temp: %___\\n\", temperature);\n    printf(\"Initial: %___\\n\", initial);\n    return 0;\n}",
         "solution": "#include <stdio.h>\n\nint main() {\n    int year = 2024;\n    float temperature = 36.5;\n    char initial = 'M';\n    \n    printf(\"Year: %d\\n\", year);\n    printf(\"Temp: %.1f\\n\", temperature);\n    printf(\"Initial: %c\\n\", initial);\n    return 0;\n}",

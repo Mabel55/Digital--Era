@@ -1,7 +1,0 @@
-CAP Theorem
-Merging & Conflicts
-Pull Requests
-GitHub Actions
-Rebasing
-Git Hooks
-Monorepo Management
