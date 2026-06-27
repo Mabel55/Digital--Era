@@ -162,13 +162,13 @@
     "aiRubric": "Check logic, syntax, and output for Dynamic Memory.",
     "lessons": [
       {
-        "title": "Dynamic Memory - Coming Soon",
-        "theory": "## Dynamic Memory\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Dynamic Memory** is under development.",
-        "starterCode": "# Dynamic Memory - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Dynamic Memory\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "malloc and free",
+        "theory": "## Managing RAM\\nIn languages like Python, memory is managed automatically by a Garbage Collector. In C, you must manually ask the OS for memory when you need it, and manually give it back when you're done.\\n\\n- `malloc(size)`: Allocates memory on the 'Heap' and returns a pointer to it.\\n- `free(pointer)`: Releases the memory back to the OS.\\n\\nIf you `malloc` but forget to `free`, you create a **Memory Leak**.",
+        "instructions": "## Task: Memory Leak Simulator\\n1. Simulate allocating and freeing memory.\\n2. If memory is allocated but not freed before the function ends, print a warning.",
+        "starterCode": "def run_c_program():\\n    memory_allocated = False\\n    \\n    # Simulate malloc()\\n    print(\"Allocating 1024 bytes...\")\\n    memory_allocated = ___\\n    \\n    # Do some work\\n    print(\"Processing data...\")\\n    \\n    # Simulate free()\\n    # Uncomment the line below to fix the leak!\\n    # memory_allocated = False\\n    \\n    if memory_allocated:\\n        print(\"\\nFATAL ERROR: Memory Leak Detected! You forgot to free()\")\\n    else:\\n        print(\"\\nSuccess: Memory was properly freed.\")\\n\\nrun_c_program()",
+        "solution": "def run_c_program():\\n    memory_allocated = False\\n    \\n    # Simulate malloc()\\n    print(\"Allocating 1024 bytes...\")\\n    memory_allocated = True\\n    \\n    # Do some work\\n    print(\"Processing data...\")\\n    \\n    # Simulate free()\\n    # Uncomment the line below to fix the leak!\\n    memory_allocated = False\\n    \\n    if memory_allocated:\\n        print(\"\\nFATAL ERROR: Memory Leak Detected! You forgot to free()\")\\n    else:\\n        print(\"\\nSuccess: Memory was properly freed.\")\\n\\nrun_c_program()",
+        "hint": "Set memory_allocated to True for malloc, and False for free.",
+        "rubric": "Code correctly frees the memory, resulting in the Success message."
       }
     ]
   },
@@ -176,13 +176,13 @@
     "aiRubric": "Check logic, syntax, and output for Structs & Unions.",
     "lessons": [
       {
-        "title": "Structs & Unions - Coming Soon",
-        "theory": "## Structs & Unions\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Structs & Unions** is under development.",
-        "starterCode": "# Structs & Unions - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Structs & Unions\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Custom Data Types",
+        "theory": "## Grouping Variables\\nA `struct` in C is like a dictionary or a class without methods. It groups related variables under one name.\\n\\nA `union` is similar, but all variables share the *same* memory location. You can only use one of them at a time, saving memory.\\n\\n```c\\nstruct Player {\\n    int hp;\\n    int score;\\n};\\n```",
+        "instructions": "## Task: Struct Simulator\\n1. Simulate a C struct using a Python class.\\n2. Create a `Player` with `hp` and `score`.\\n3. Decrease the HP by 10 and increase the score by 100.",
+        "starterCode": "class PlayerStruct:\\n    def __init__(self, hp, score):\\n        self.hp = hp\\n        self.score = score\\n\\n# Create player\\np1 = PlayerStruct(___, ___)\\nprint(f\"Start -> HP: {p1.hp}, Score: {p1.score}\")\\n\\n# Take damage\\np1.hp -= ___\\n# Defeat enemy\\np1.score += ___\\n\\nprint(f\"End   -> HP: {p1.hp}, Score: {p1.score}\")",
+        "solution": "class PlayerStruct:\\n    def __init__(self, hp, score):\\n        self.hp = hp\\n        self.score = score\\n\\n# Create player\\np1 = PlayerStruct(100, 0)\\nprint(f\"Start -> HP: {p1.hp}, Score: {p1.score}\")\\n\\n# Take damage\\np1.hp -= 10\\n# Defeat enemy\\np1.score += 100\\n\\nprint(f\"End   -> HP: {p1.hp}, Score: {p1.score}\")",
+        "hint": "Initialize with 100 hp, 0 score. -= 10, += 100.",
+        "rubric": "Player stats update correctly."
       }
     ]
   },
@@ -190,13 +190,13 @@
     "aiRubric": "Check logic, syntax, and output for File Handling.",
     "lessons": [
       {
-        "title": "File Handling - Coming Soon",
-        "theory": "## File Handling\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **File Handling** is under development.",
-        "starterCode": "# File Handling - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# File Handling\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Reading Files in C",
+        "theory": "## fopen and fclose\\nIn C, you use `fopen` to get a file pointer (`FILE *`). You can then read or write to it using `fprintf`, `fscanf`, or `fgets`.\\n\\nJust like `malloc`, if you open a file, you MUST close it with `fclose` or you will leak file descriptors.",
+        "instructions": "## Task: File Lifecycle\\n1. Simulate opening, reading, and closing a file.\\n2. Keep a list of `open_files`.\\n3. When closing, remove the filename from the list.",
+        "starterCode": "open_files = []\\n\\ndef mock_fopen(filename):\\n    print(f\"Opening {filename}...\")\\n    open_files.___(filename)\\n    return f\"FILE_PTR_{filename}\"\\n\\ndef mock_fclose(filename):\\n    if filename in open_files:\\n        print(f\"Closing {filename}...\")\\n        open_files.___(filename)\\n    else:\\n        print(f\"Error: {filename} was not open.\")\\n\\nptr = mock_fopen(\"data.txt\")\\nprint(\"Currently open files:\", open_files)\\n\\nmock_fclose(\"data.txt\")\\nprint(\"Currently open files:\", open_files)",
+        "solution": "open_files = []\\n\\ndef mock_fopen(filename):\\n    print(f\"Opening {filename}...\")\\n    open_files.append(filename)\\n    return f\"FILE_PTR_{filename}\"\\n\\ndef mock_fclose(filename):\\n    if filename in open_files:\\n        print(f\"Closing {filename}...\")\\n        open_files.remove(filename)\\n    else:\\n        print(f\"Error: {filename} was not open.\")\\n\\nptr = mock_fopen(\"data.txt\")\\nprint(\"Currently open files:\", open_files)\\n\\nmock_fclose(\"data.txt\")\\nprint(\"Currently open files:\", open_files)",
+        "hint": "Use append() and remove().",
+        "rubric": "File is successfully added to the list and then removed."
       }
     ]
   },
@@ -204,13 +204,13 @@
     "aiRubric": "Check logic, syntax, and output for Data Structures in C.",
     "lessons": [
       {
-        "title": "Data Structures in C - Coming Soon",
-        "theory": "## Data Structures in C\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Data Structures in C** is under development.",
-        "starterCode": "# Data Structures in C - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Data Structures in C\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Linked Lists",
+        "theory": "## Pointers in Action\\nBecause C arrays have fixed sizes, dynamic lists are often implemented as Linked Lists.\\n\\nEach node contains data and a **pointer** to the next node in memory. This is the foundation of almost all dynamic structures in C (Trees, Graphs, Hash Maps).",
+        "instructions": "## Task: Node Traversal\\n1. Simulate a C linked list in Python.\\n2. Iterate through the list until the `next` pointer is `None` (Null).",
+        "starterCode": "class Node:\\n    def __init__(self, data):\\n        self.data = data\\n        self.next = None\\n\\n# Create nodes\\nhead = Node(10)\\nnode2 = Node(20)\\nnode3 = Node(30)\\n\\n# Link them\\nhead.next = ___\\nnode2.next = ___\\n\\n# Traverse\\ncurrent = head\\nwhile current is not ___:\\n    print(\"Data:\", current.data)\\n    current = current.___ # Move to next node",
+        "solution": "class Node:\\n    def __init__(self, data):\\n        self.data = data\\n        self.next = None\\n\\n# Create nodes\\nhead = Node(10)\\nnode2 = Node(20)\\nnode3 = Node(30)\\n\\n# Link them\\nhead.next = node2\\nnode2.next = node3\\n\\n# Traverse\\ncurrent = head\\nwhile current is not None:\\n    print(\"Data:\", current.data)\\n    current = current.next # Move to next node",
+        "hint": "Link head.next to node2. Loop while current is not None. current = current.next.",
+        "rubric": "Prints 10, 20, 30 by correctly following the next pointers."
       }
     ]
   },
@@ -218,13 +218,13 @@
     "aiRubric": "Check logic, syntax, and output for Bit Manipulation.",
     "lessons": [
       {
-        "title": "Bit Manipulation - Coming Soon",
-        "theory": "## Bit Manipulation\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Bit Manipulation** is under development.",
-        "starterCode": "# Bit Manipulation - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Bit Manipulation\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Bitwise Operators",
+        "theory": "## Talking to the CPU\\nSometimes you need to manipulate the 1s and 0s directly (e.g., writing device drivers or compression algorithms).\\n\\n- `&` (AND): 1 if both bits are 1.\\n- `|` (OR): 1 if either bit is 1.\\n- `^` (XOR): 1 if bits are different.\\n- `<<` (Left Shift): Shifts bits left (multiplies by 2).\\n- `>>` (Right Shift): Shifts bits right (divides by 2).",
+        "instructions": "## Task: Binary Math\\n1. Given a binary number `00000101` (5), use a left shift to multiply it by 2.\\n2. Print the binary representation of the result.",
+        "starterCode": "num = 5 # Binary: 101\\n\\n# Shift left by 1 bit (equivalent to num * 2)\\nshifted = num ___ 1\\n\\nprint(f\"Original: {num} (Binary: {bin(num)})\")\\nprint(f\"Shifted:  {shifted} (Binary: {bin(shifted)})\")",
+        "solution": "num = 5 # Binary: 101\\n\\n# Shift left by 1 bit (equivalent to num * 2)\\nshifted = num << 1\\n\\nprint(f\"Original: {num} (Binary: {bin(num)})\")\\nprint(f\"Shifted:  {shifted} (Binary: {bin(shifted)})\")",
+        "hint": "Use the << operator to left shift.",
+        "rubric": "Correctly shifts 5 to 10 (Binary: 0b1010)."
       }
     ]
   },
@@ -232,13 +232,13 @@
     "aiRubric": "Check logic, syntax, and output for System Calls.",
     "lessons": [
       {
-        "title": "System Calls - Coming Soon",
-        "theory": "## System Calls\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **System Calls** is under development.",
-        "starterCode": "# System Calls - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# System Calls\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Talking to the OS",
+        "theory": "## User Mode vs Kernel Mode\\nYour C program runs in 'User Mode'. It doesn't have permission to talk to the hard drive or network directly.\\n\\nWhen you call `printf`, it eventually makes a **System Call** (like `write()`) to ask the OS Kernel to print to the screen.\\n\\nSwitching between User Mode and Kernel Mode is slow (Context Switching), which is why buffering is important.",
+        "instructions": "## Task: Kernel Boundary Mock\\n1. Simulate a system call boundary.\\n2. A user program calls `os_write()`.\\n3. Ensure it runs in Kernel Mode.",
+        "starterCode": "class OperatingSystem:\\n    def __init__(self):\\n        self.mode = \"USER\"\\n        \\n    def os_write(self, data):\\n        # Switch to Kernel mode\\n        print(\"[OS Context Switch -> KERNEL]\")\\n        self.mode = \"___\"\\n        \\n        print(f\"[Hardware] Writing to disk: {data}\")\\n        \\n        # Switch back to User mode\\n        print(\"[OS Context Switch -> USER]\")\\n        self.mode = \"___\"\\n\\nos = OperatingSystem()\\nprint(\"Initial Mode:\", os.mode)\\nos.os_write(\"Hello Disk!\")\\nprint(\"Final Mode:\", os.mode)",
+        "solution": "class OperatingSystem:\\n    def __init__(self):\\n        self.mode = \"USER\"\\n        \\n    def os_write(self, data):\\n        # Switch to Kernel mode\\n        print(\"[OS Context Switch -> KERNEL]\")\\n        self.mode = \"KERNEL\"\\n        \\n        print(f\"[Hardware] Writing to disk: {data}\")\\n        \\n        # Switch back to User mode\\n        print(\"[OS Context Switch -> USER]\")\\n        self.mode = \"USER\"\\n\\nos = OperatingSystem()\\nprint(\"Initial Mode:\", os.mode)\\nos.os_write(\"Hello Disk!\")\\nprint(\"Final Mode:\", os.mode)",
+        "hint": "Set mode to 'KERNEL', then back to 'USER'.",
+        "rubric": "Successfully simulates the context switch to Kernel mode and back."
       }
     ]
   }

@@ -169,13 +169,13 @@
     "aiRubric": "Check logic, syntax, and output for Network Programming.",
     "lessons": [
       {
-        "title": "Network Programming - Coming Soon",
-        "theory": "## Network Programming\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Network Programming** is under development.",
-        "starterCode": "# Network Programming - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Network Programming\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Sockets",
+        "theory": "## Connecting the World\\nA Socket is an endpoint for sending or receiving data across a computer network.\\n\\nIn C, network programming is very low-level:\\n1. `socket()`: Create the socket.\\n2. `bind()`: Attach it to a port (e.g., 80).\\n3. `listen()`: Wait for incoming connections.\\n4. `accept()`: Accept a specific client connection.\\n5. `recv()` / `send()`: Transfer data.",
+        "instructions": "## Task: Socket Lifecycle Matcher\\n1. Match the socket function to its description.\\n2. Functions: 'bind', 'listen', 'accept'",
+        "starterCode": "socket_funcs = {\\n    'Attach the socket to a specific port number on the machine': '___',\\n    'Tell the OS to start queueing incoming connection requests': '___',\\n    'Pull the next connection off the queue to talk to the client': '___'\\n}\\n\\nfor desc, func in socket_funcs.items():\\n    print(f\"{func:10}: {desc}\")",
+        "solution": "socket_funcs = {\\n    'Attach the socket to a specific port number on the machine': 'bind',\\n    'Tell the OS to start queueing incoming connection requests': 'listen',\\n    'Pull the next connection off the queue to talk to the client': 'accept'\\n}\\n\\nfor desc, func in socket_funcs.items():\\n    print(f\"{func:10}: {desc}\")",
+        "hint": "Attach = bind. Queue = listen. Pull = accept.",
+        "rubric": "Functions mapped correctly."
       }
     ]
   }
