@@ -14,7 +14,8 @@
       "Error Handling",
       "List Comprehensions",
       "Lambda Functions & Map/Filter",
-      "Regular Expressions in Python"
+      "Regular Expressions in Python",
+      "Data Classes & Modern Python Masterclass"
     ],
     "Advanced": [
       "Decorators",
