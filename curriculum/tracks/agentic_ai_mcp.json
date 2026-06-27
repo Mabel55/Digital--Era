@@ -110,13 +110,13 @@
     "aiRubric": "Check logic, syntax, and output for Autonomous Execution.",
     "lessons": [
       {
-        "title": "Autonomous Execution - Coming Soon",
-        "theory": "## Autonomous Execution\n\nThis lesson is currently being developed. Check back soon for full content with interactive exercises!",
-        "instructions": "## Coming Soon\nThis lesson for **Autonomous Execution** is under development.",
-        "starterCode": "# Autonomous Execution - Content coming soon!\nprint('Stay tuned!')",
-        "solution": "# Autonomous Execution\nprint('Stay tuned!')",
-        "hint": "This lesson is coming soon!",
-        "rubric": "Lesson under development."
+        "title": "Letting the AI Drive",
+        "theory": "## Operating in a Loop\\nAn autonomous agent doesn't stop after answering one question. It operates in a loop (like AutoGPT).\\n\\n1. **Think**: \"What should I do next?\"\\n2. **Act**: Use a tool (e.g., search Google).\\n3. **Observe**: Read the search results.\\n4. **Loop**: Go back to step 1 until the final goal is reached.\\n\\n*Danger*: If the loop has no limits, it can rack up huge API bills or get stuck in infinite loops.",
+        "instructions": "## Task: The ReAct Loop\\n1. Simulate an autonomous loop that runs until `goal_reached` is True.\\n2. Add a `max_steps` safeguard to prevent infinite loops.\\n3. The loop should stop after 3 steps, returning 'Timeout' if the goal wasn't reached.",
+        "starterCode": "def autonomous_agent(goal, max_steps=3):\\n    step = 0\\n    goal_reached = False\\n    \\n    while not goal_reached and step < ___:\\n        step += 1\\n        print(f\"Step {step}: Thinking & Acting...\")\\n        \\n        # Simulate finding the answer on step 4 (which is past the limit!)\\n        if step == 4:\\n            goal_reached = True\\n            \\n    if not goal_reached:\\n        return \"Error: ___ reached without solving goal.\"\\n    return \"Success!\"\\n\\nresult = autonomous_agent(\"Find the cure for aging\")\\nprint(result)",
+        "solution": "def autonomous_agent(goal, max_steps=3):\\n    step = 0\\n    goal_reached = False\\n    \\n    while not goal_reached and step < max_steps:\\n        step += 1\\n        print(f\"Step {step}: Thinking & Acting...\")\\n        \\n        # Simulate finding the answer on step 4 (which is past the limit!)\\n        if step == 4:\\n            goal_reached = True\\n            \\n    if not goal_reached:\\n        return \"Error: Timeout reached without solving goal.\"\\n    return \"Success!\"\\n\\nresult = autonomous_agent(\"Find the cure for aging\")\\nprint(result)",
+        "hint": "step < max_steps. Return 'Timeout'.",
+        "rubric": "Loop runs 3 times and returns the Timeout error, successfully preventing an infinite loop."
       }
     ]
   },
@@ -125,10 +125,10 @@
     "lessons": [
       {
         "title": "Evaluating LLM Outputs",
-        "theory": "## How do you test AI?\nStandard unit tests (`assert 2+2 == 4`) don't work for generative AI because the output is slightly different every time.\n\nEvaluation methods:\n1. **Exact Match / Regex**: Check if the output contains a specific keyword or JSON structure.\n2. **Semantic Similarity**: Use embeddings to check if the *meaning* is close to a reference answer.\n3. **LLM-as-a-Judge**: Use a stronger LLM (like GPT-4) to grade the output of a smaller model (like Llama 3) based on a rubric.",
-        "instructions": "## Task: LLM as a Judge\n1. Simulate an LLM judge evaluating a generated response.\n2. If the response contains the word 'sorry' or 'cannot', score it 0 (refusal).\n3. Otherwise, score it 100.",
-        "starterCode": "def llm_judge(generated_text):\n    lower_text = generated_text.___()\n    if 'sorry' in lower_text or 'cannot' in lower_text:\n        return ___\n    return ___\n\nresponse1 = \"I'm sorry, I cannot fulfill that request as it violates safety policies.\"\nresponse2 = \"The capital of France is Paris.\"\n\nprint(f\"Response 1 Score: {llm_judge(response1)}\")\nprint(f\"Response 2 Score: {llm_judge(response2)}\")",
-        "solution": "def llm_judge(generated_text):\n    lower_text = generated_text.lower()\n    if 'sorry' in lower_text or 'cannot' in lower_text:\n        return 0\n    return 100\n\nresponse1 = \"I'm sorry, I cannot fulfill that request as it violates safety policies.\"\nresponse2 = \"The capital of France is Paris.\"\n\nprint(f\"Response 1 Score: {llm_judge(response1)}\")\nprint(f\"Response 2 Score: {llm_judge(response2)}\")",
+        "theory": "## How do you test AI?\\nStandard unit tests (`assert 2+2 == 4`) don't work for generative AI because the output is slightly different every time.\\n\\nEvaluation methods:\\n1. **Exact Match / Regex**: Check if the output contains a specific keyword or JSON structure.\\n2. **Semantic Similarity**: Use embeddings to check if the *meaning* is close to a reference answer.\\n3. **LLM-as-a-Judge**: Use a stronger LLM (like GPT-4) to grade the output of a smaller model (like Llama 3) based on a rubric.",
+        "instructions": "## Task: LLM as a Judge\\n1. Simulate an LLM judge evaluating a generated response.\\n2. If the response contains the word 'sorry' or 'cannot', score it 0 (refusal).\\n3. Otherwise, score it 100.",
+        "starterCode": "def llm_judge(generated_text):\\n    lower_text = generated_text.___()\\n    if 'sorry' in lower_text or 'cannot' in lower_text:\\n        return ___\\n    return ___\\n\\nresponse1 = \"I'm sorry, I cannot fulfill that request as it violates safety policies.\"\\nresponse2 = \"The capital of France is Paris.\"\\n\\nprint(f\"Response 1 Score: {llm_judge(response1)}\")\\nprint(f\"Response 2 Score: {llm_judge(response2)}\")",
+        "solution": "def llm_judge(generated_text):\\n    lower_text = generated_text.lower()\\n    if 'sorry' in lower_text or 'cannot' in lower_text:\\n        return 0\\n    return 100\\n\\nresponse1 = \"I'm sorry, I cannot fulfill that request as it violates safety policies.\"\\nresponse2 = \"The capital of France is Paris.\"\\n\\nprint(f\"Response 1 Score: {llm_judge(response1)}\")\\nprint(f\"Response 2 Score: {llm_judge(response2)}\")",
         "hint": "Convert to lower(). Return 0 for refusal, 100 for success.",
         "rubric": "Response 1 scores 0, Response 2 scores 100."
       }

@@ -1,15 +1,4 @@
-MCP Intro
-ReAct Prompting
-MCP Servers
-Autonomous Execution
-Zapier Basics
-Custom Webhooks
-Enterprise AI Bots
-Voice AI Agents
 Database Integration
-Structs & Interfaces
-Go Web Servers
-Kubernetes Basics
 gRPC
 Service Meshes
 Cloud Operators
