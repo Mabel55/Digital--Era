@@ -160,7 +160,7 @@ const LandingPage = () => {
           <span style={{ fontSize: '18px' }}>🎓</span>
           <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '16px' }}>Digital Era</span>
         </div>
-        <p style={{ color: 'var(--text2)', fontSize: '13px' }}>© 2026 Digital Era Academy. All rights reserved.</p>
+        <p style={{ color: 'var(--text2)', fontSize: '13px' }}>© 2026 Digital Era. Founded by Arua Mabel Chinasa.</p>
       </footer>
     </div>
   );
