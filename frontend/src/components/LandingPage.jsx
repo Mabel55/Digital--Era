@@ -104,6 +104,49 @@ const LandingPage = () => {
             ))}
           </div>
 
+          {/* About & Founder Section */}
+          <div style={{ 
+            marginTop: '100px', width: '100%', padding: '60px 40px',
+            background: 'var(--surface2)', borderRadius: '24px',
+            border: '1px solid var(--border)', display: 'flex', flexDirection: 'column',
+            alignItems: 'center', textAlign: 'center', position: 'relative', overflow: 'hidden'
+          }}>
+            <div style={{
+              position: 'absolute', top: 0, right: 0, width: '300px', height: '300px',
+              background: 'radial-gradient(circle, rgba(0,229,160,0.1), transparent 70%)',
+              pointerEvents: 'none'
+            }}></div>
+            
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '36px', fontWeight: 800, marginBottom: '24px' }}>
+              About <span style={{ color: 'var(--accent)' }}>Digital Era</span>
+            </h2>
+            <p style={{ color: 'var(--text)', fontSize: '18px', maxWidth: '800px', lineHeight: 1.7, marginBottom: '48px' }}>
+              Digital Era was built with a single mission: to bridge the gap between theoretical knowledge and real-world tech skills. We believe that the best way to master AI, Data Science, Product Management, and Coding is by getting your hands dirty and building actual projects.
+            </p>
+
+            <div style={{ 
+              display: 'flex', alignItems: 'center', gap: '32px', textAlign: 'left', 
+              background: 'var(--surface)', padding: '40px', borderRadius: '16px', 
+              border: '1px solid var(--border)', maxWidth: '800px', width: '100%' 
+            }}>
+              <div style={{ 
+                width: '120px', height: '120px', borderRadius: '50%', 
+                background: 'linear-gradient(135deg, var(--accent), #3b82f6)', 
+                flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '48px',
+                boxShadow: '0 10px 30px rgba(0,229,160,0.3)'
+              }}>
+                👩🏽‍💻
+              </div>
+              <div>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 700, marginBottom: '8px' }}>Meet the Founder</h3>
+                <p style={{ color: 'var(--accent)', fontSize: '18px', fontWeight: 700, marginBottom: '16px' }}>Arua Mabel Chinasa</p>
+                <p style={{ color: 'var(--text2)', fontSize: '15px', lineHeight: 1.6 }}>
+                  Arua Mabel Chinasa founded Digital Era to empower the next generation of builders. With a passion for AI, data science, and modern web technologies, she designed this curriculum to provide the ultimate interactive learning experience. Her vision is to make elite tech education accessible, practical, and highly engaging for everyone.
+                </p>
+              </div>
+            </div>
+          </div>
+
         </div>
       </main>
 
