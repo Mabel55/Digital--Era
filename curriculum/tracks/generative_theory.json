@@ -1,0 +1,113 @@
+{
+  "Foundations of Generative AI": {
+    "aiRubric": "Assess foundational knowledge of generative models based on text responses.",
+    "lessons": [
+      {
+        "title": "Discriminative vs. Generative Models",
+        "theory": "## Understanding the Difference\nIn machine learning, models are often categorized as either **discriminative** or **generative**.\n\n### Discriminative Models\nDiscriminative models learn the boundary between classes. They answer the question: *\"Given this input, what label should I assign it?\"* For example, a model that classifies an email as 'Spam' or 'Not Spam'. They learn the conditional probability $P(Y|X)$.\n\n### Generative Models\nGenerative models learn the actual distribution of the data classes. They answer the question: *\"How can I generate new data that looks like the training data?\"* They learn the joint probability $P(X, Y)$ or just $P(X)$. They don't just draw a line between cats and dogs; they learn what a cat *looks* like so they can draw a brand new one.",
+        "instructions": "## Task: Written Response\nIn your own words (or a single word), state whether a model trained to predict 'hotdog' vs 'not hotdog' is a generative or discriminative model.",
+        "starterCode": "Answer: ",
+        "solution": "Answer: discriminative",
+        "hint": "Think about whether it draws a boundary or creates something new.",
+        "rubric": "Correctly identifies the model as discriminative."
+      },
+      {
+        "title": "The Latent Space",
+        "theory": "## Mapping the Unseen\nA key concept in generative AI is the **Latent Space**. \n\nImagine taking every face in the world and compressing all their features (eye color, face shape, hair length) into a mathematical space. In this space, points that are close together represent faces that look similar.\n\nGenerative models (like GANs and VAEs) work by sampling a random point in this highly compressed, multi-dimensional latent space, and then *decoding* or *decompressing* that point into a full image or text.",
+        "instructions": "## Task: Written Response\nDescribe what happens when a generative model decodes a random point from the latent space.",
+        "starterCode": "Answer: ",
+        "solution": "Answer: It decompresses that point into a full image, text, or data sample.",
+        "hint": "It takes the compressed representation and turns it back into human-readable data.",
+        "rubric": "Explains that it generates or decompresses the point into data."
+      }
+    ]
+  },
+  "The Transformer Architecture": {
+    "aiRubric": "Assess understanding of Transformer mechanics.",
+    "lessons": [
+      {
+        "title": "Attention is All You Need",
+        "theory": "## The Paradigm Shift\nBefore 2017, sequence models (like RNNs and LSTMs) processed text word-by-word, sequentially. This made them slow and bad at remembering long-term context.\n\nThe groundbreaking paper *\"Attention is All You Need\"* introduced the **Transformer** architecture. The core innovation was discarding sequential processing entirely and relying solely on the **Self-Attention Mechanism**.",
+        "instructions": "## Task: Written Response\nWhat is the primary mechanism that replaced sequential processing in Transformers?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Self-Attention Mechanism",
+        "hint": "It's in the title of the paper.",
+        "rubric": "Identifies the Self-Attention mechanism."
+      },
+      {
+        "title": "Self-Attention Mechanism",
+        "theory": "## Contextual Understanding\n**Self-Attention** allows a model to look at *every other word* in a sentence at the same time to understand the context of the *current* word.\n\nTake the sentence: *\"The bank of the river was muddy, so I couldn't deposit my money in the bank.\"*\n\nThe word \"bank\" means two different things here. Self-attention allows the model to connect the first \"bank\" with \"river\" and \"muddy\", and the second \"bank\" with \"deposit\" and \"money\". It mathematically calculates an \"attention score\" between every pair of words.",
+        "instructions": "## Task: Written Response\nWhy is self-attention better at understanding context than processing words one-by-one?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Because it allows the model to look at all words simultaneously and calculate relationships between them in parallel.",
+        "hint": "Think about looking at the whole sentence at once vs one word at a time.",
+        "rubric": "Mentions parallel processing or looking at all words simultaneously."
+      }
+    ]
+  },
+  "Large Language Models Deep Dive": {
+    "aiRubric": "Assess deep knowledge of LLMs.",
+    "lessons": [
+      {
+        "title": "Tokenization",
+        "theory": "## Breaking Down Language\nLLMs do not read text like humans do. They read numbers. The first step in processing text is **Tokenization**.\n\nA tokenizer breaks text down into chunks called 'tokens'. A token is not always a full word; it can be a single character, a syllable, or a common subword (like \"ing\" or \"ed\").\n\nRoughly, 1 token ≈ 4 characters in English, or about 3/4 of a word. A 1000-word essay is approximately 1300 tokens.",
+        "instructions": "## Task: Written Response\nWhy isn't a token always equivalent to a single word?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Because a token can be a subword, a single character, or a common syllable, which allows the model to handle unknown words more efficiently.",
+        "hint": "Think about prefixes and suffixes.",
+        "rubric": "Explains that tokens can be subwords or characters."
+      },
+      {
+        "title": "Pre-training vs. Fine-tuning",
+        "theory": "## The Two Phases of LLM Training\nModern LLMs are trained in two distinct phases:\n\n### 1. Pre-training (The 'Reading the Internet' Phase)\nThe model is fed massive amounts of raw text data (trillions of tokens). Its only goal is to predict the *next word*. It learns grammar, facts, and reasoning, but it doesn't know how to follow instructions. This produces a \"Base Model\".\n\n### 2. Fine-tuning (The 'Alignment' Phase)\nThe Base Model is then fine-tuned on specific instructional data (prompt/response pairs). Techniques like RLHF (Reinforcement Learning from Human Feedback) are used to teach the model to act as a helpful, harmless, and honest assistant.",
+        "instructions": "## Task: Written Response\nWhat is the primary goal of the pre-training phase?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: To predict the next word in a sequence based on vast amounts of internet text.",
+        "hint": "It's not about being helpful yet.",
+        "rubric": "Mentions predicting the next word or learning general patterns."
+      }
+    ]
+  },
+  "Diffusion Models & Image Generation": {
+    "aiRubric": "Assess understanding of diffusion models.",
+    "lessons": [
+      {
+        "title": "The Forward and Reverse Process",
+        "theory": "## Destroying and Rebuilding Data\nImage generators like Midjourney, DALL-E 3, and Stable Diffusion rely on **Diffusion Models**.\n\nThe process has two steps:\n1. **Forward Diffusion:** Take a clear image and slowly add Gaussian noise to it over many steps until it is completely unrecognizable static.\n2. **Reverse Diffusion (Denoising):** Train a neural network (usually a U-Net) to reverse this process. It learns to take pure static and subtract the noise step-by-step to recover a clear image.\n\nWhen you generate a new image, the model starts with pure random noise and uses the text prompt to guide the denoising process into a picture.",
+        "instructions": "## Task: Written Response\nDescribe the purpose of Reverse Diffusion.",
+        "starterCode": "Answer: ",
+        "solution": "Answer: To gradually remove noise from static to recover or generate a clear image.",
+        "hint": "Think about what denoising means.",
+        "rubric": "Mentions removing noise or denoising."
+      }
+    ]
+  },
+  "Audio & Video Generative Models": {
+    "aiRubric": "Assess understanding of multimodal generative models.",
+    "lessons": [
+      {
+        "title": "Temporal Consistency in Video",
+        "theory": "## The Hardest Problem in Video AI\nGenerating a single image is relatively solved. Generating a video is vastly more difficult because of **Temporal Consistency**.\n\nIf an AI generates a cat walking across a room frame-by-frame, the cat's fur pattern, the lighting, and the background must stay exactly the same in every single frame. Early video AI suffered from intense \"flickering\" because the model would slightly hallucinate different details in each frame.\n\nModern models (like Sora) solve this by using 'Spacetime Patches'—treating video not as a sequence of flat images, but as a 3D block of data (width, height, and time) that is processed all at once.",
+        "instructions": "## Task: Written Response\nWhy did early video generation models suffer from flickering?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Because they struggled with temporal consistency, hallucinating slightly different details in each individual frame.",
+        "hint": "They couldn't keep things consistent across frames.",
+        "rubric": "Mentions lack of temporal consistency or changing details between frames."
+      }
+    ]
+  },
+  "Future of Generative Models": {
+    "aiRubric": "Assess understanding of future AI trends.",
+    "lessons": [
+      {
+        "title": "Multimodality",
+        "theory": "## Beyond Text\nThe future of Generative AI is **Multimodality**. Early models were unimodal (text-in, text-out, OR image-in, image-out).\n\nModels like GPT-4o and Gemini 1.5 Pro are natively multimodal. They can take text, audio, images, and video as input simultaneously, and output any combination of them. The underlying neural network is trained on all these data types together, allowing it to \"understand\" that the word \"Dog\", a picture of a dog, and the sound of a bark all represent the same conceptual entity.",
+        "instructions": "## Task: Written Response\nWhat does it mean for a model to be natively multimodal?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: It can process and understand multiple types of data (text, audio, images) simultaneously within a single neural network.",
+        "hint": "Think about how it handles different types of inputs.",
+        "rubric": "Mentions handling multiple data types simultaneously."
+      }
+    ]
+  }
+}

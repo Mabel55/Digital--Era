@@ -1,0 +1,44 @@
+{
+  "Cognitive Architectures (Theory)": {
+    "aiRubric": "Assess understanding of AI cognitive architectures.",
+    "lessons": [
+      {
+        "title": "What is a Cognitive Architecture?",
+        "theory": "## The Brain of the Agent\nA cognitive architecture represents the overarching blueprint for how an intelligent agent processes information, learns, reasons, and acts. It defines the flow of information between working memory, long-term memory, and reasoning engines (like an LLM).\n\nExamples include SOAR, ACT-R, and more recently, LLM-based architectures like ReAct or AutoGPT.",
+        "instructions": "## Task: Written Response\nDoes a cognitive architecture define the physical hardware or the software blueprint for an agent?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Software blueprint",
+        "hint": "It's about the flow of information.",
+        "rubric": "Identifies software blueprint."
+      }
+    ]
+  },
+  "Multi-Agent Protocols (Theory)": {
+    "aiRubric": "Assess understanding of how agents communicate.",
+    "lessons": [
+      {
+        "title": "Agent Communication Languages",
+        "theory": "## How Agents Talk\nWhen multiple autonomous agents need to collaborate, they need a protocol to understand each other. This often involves standardized message formats (like JSON) or Agent Communication Languages (ACLs). They need to share their state, intentions, and negotiate tasks.",
+        "instructions": "## Task: Written Response\nWhat is the purpose of an Agent Communication Language (ACL)?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: To provide a standardized protocol for multiple autonomous agents to communicate, share state, and negotiate tasks.",
+        "hint": "Think about how humans use language to collaborate.",
+        "rubric": "Mentions agent communication or collaboration."
+      }
+    ]
+  },
+  "Agentic Design Patterns (Theory)": {
+    "aiRubric": "Assess understanding of agent design patterns.",
+    "lessons": [
+      {
+        "title": "The Reflection Pattern",
+        "theory": "## Thinking About Thinking\nReflection is a powerful design pattern where an agent evaluates its own previous output before presenting a final answer. For example, an agent generates a block of code, then acts as a 'critic' to review its own code for bugs, and finally revises the code based on the critique.",
+        "instructions": "## Task: Written Response\nDescribe the 'Reflection' design pattern in your own words.",
+        "starterCode": "Answer: ",
+        "solution": "Answer: It is when an agent reviews and critiques its own generated output before producing the final result.",
+        "hint": "It involves self-evaluation.",
+        "rubric": "Mentions self-review or critiquing its own output."
+      }
+    ]
+  }
+}

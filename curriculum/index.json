@@ -340,7 +340,10 @@
       "Evaluation",
       "Human in the Loop (HITL)",
       "Agentic Security & Guardrails",
-      "Building MCP Servers Masterclass"
+      "Building MCP Servers Masterclass",
+      "Cognitive Architectures (Theory)",
+      "Multi-Agent Protocols (Theory)",
+      "Agentic Design Patterns (Theory)"
     ]
   },
   "Computer Vision & Deep Learning": {
@@ -426,6 +429,52 @@
       "Dynamic Programming",
       "Tries",
       "Graph Traversal"
+    ]
+  },
+  "UI/UX Design": {
+    "Beginner": [
+      "Color Theory",
+      "Typography Basics",
+      "Wireframing"
+    ],
+    "Intermediate": [
+      "User Research",
+      "Prototyping",
+      "Accessibility Guidelines"
+    ],
+    "Advanced": [
+      "Design Systems",
+      "A/B Testing",
+      "Interaction Design"
+    ]
+  },
+  "Tech Entrepreneurship": {
+    "Beginner": [
+      "Agile & Scrum",
+      "The Product Lifecycle"
+    ],
+    "Intermediate": [
+      "Writing PRDs",
+      "Go-to-Market Strategy"
+    ],
+    "Advanced": [
+      "VC Funding basics",
+      "Scaling a Startup",
+      "Product Analytics"
+    ]
+  },
+  "Generative AI (Theory)": {
+    "Beginner": [
+      "Foundations of Generative AI",
+      "The Transformer Architecture"
+    ],
+    "Intermediate": [
+      "Large Language Models Deep Dive",
+      "Diffusion Models & Image Generation"
+    ],
+    "Advanced": [
+      "Audio & Video Generative Models",
+      "Future of Generative Models"
     ]
   }
 }

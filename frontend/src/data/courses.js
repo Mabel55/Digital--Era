@@ -346,7 +346,10 @@ export const curriculum = {
       "Evaluation",
       "Human in the Loop (HITL)",
       "Agentic Security & Guardrails",
-      "Building MCP Servers Masterclass"
+      "Building MCP Servers Masterclass",
+      "Cognitive Architectures (Theory)",
+      "Multi-Agent Protocols (Theory)",
+      "Agentic Design Patterns (Theory)"
     ]
   },
   "Computer Vision & Deep Learning": {
@@ -433,334 +436,359 @@ export const curriculum = {
       "Tries",
       "Graph Traversal"
     ]
+  },
+  "UI/UX Design": {
+    "Beginner": [
+      "Color Theory",
+      "Typography Basics",
+      "Wireframing"
+    ],
+    "Intermediate": [
+      "User Research",
+      "Prototyping",
+      "Accessibility Guidelines"
+    ],
+    "Advanced": [
+      "Design Systems",
+      "A/B Testing",
+      "Interaction Design"
+    ]
+  },
+  "Tech Entrepreneurship": {
+    "Beginner": [
+      "Agile & Scrum",
+      "The Product Lifecycle"
+    ],
+    "Intermediate": [
+      "Writing PRDs",
+      "Go-to-Market Strategy"
+    ],
+    "Advanced": [
+      "VC Funding basics",
+      "Scaling a Startup",
+      "Product Analytics"
+    ]
+  },
+  "Generative AI (Theory)": {
+    "Beginner": [
+      "Foundations of Generative AI",
+      "The Transformer Architecture"
+    ],
+    "Intermediate": [
+      "Large Language Models Deep Dive",
+      "Diffusion Models & Image Generation"
+    ],
+    "Advanced": [
+      "Audio & Video Generative Models",
+      "Future of Generative Models"
+    ]
   }
 };
 
 export const courseManifest = {
   "Agent Foundations": {
-    "aiRubric": "Check logic, syntax, and output for Agent Foundations.",
+    "aiRubric": "Assess theoretical understanding of Agent Foundations.",
     "lessons": [
       {
         "title": "What is an AI Agent?",
-        "theory": "## Agents vs LLMs\nAn LLM just predicts text. An **Agent** is an LLM given a goal, a working memory, and tools to interact with the world.\n\n```python\n# LLM: Just answers a question\nanswer = llm(\"What is the weather?\")\n# Output: \"I cannot access real-time weather data.\"\n\n# Agent: Uses a tool to find the answer\nagent = Agent(tools=[weather_api])\nanswer = agent.run(\"What is the weather?\")\n# Output: \"It's 72F and sunny in your location.\"\n```",
-        "instructions": "## Task: Define an Agent\n1. Create an `Agent` class with `memory` and `tools` lists\n2. Implement an `add_tool(name)` method\n3. Print the agent's state",
-        "starterCode": "class Agent:\n    def __init__(self, name):\n        self.name = name\n        self.___ = []\n        self.___ = []\n        \n    def add_tool(self, tool_name):\n        self.tools.___(tool_name)\n        print(f\"[{self.name}] Tool added: {tool_name}\")\n        \nagent = Agent(\"DataBot\")\nagent.__(\"calculator\")\nagent.__(\"web_search\")\nprint(f\"Agent {agent.name} has {len(agent.tools)} tools.\")",
-        "solution": "class Agent:\n    def __init__(self, name):\n        self.name = name\n        self.memory = []\n        self.tools = []\n        \n    def add_tool(self, tool_name):\n        self.tools.append(tool_name)\n        print(f\"[{self.name}] Tool added: {tool_name}\")\n        \nagent = Agent(\"DataBot\")\nagent.add_tool(\"calculator\")\nagent.add_tool(\"web_search\")\nprint(f\"Agent {agent.name} has {len(agent.tools)} tools.\")",
-        "hint": "memory and tools are lists. .append() adds to lists.",
-        "rubric": "Agent created, tools added, and printed correctly."
+        "theory": "## Agents vs LLMs\nAn LLM just predicts text. An **Agent** is an LLM given a goal, a working memory, and tools to interact with the world.",
+        "instructions": "## Task: Written Response\nIn your own words, what is the main difference between a standard LLM and an AI Agent?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: An agent has a goal, memory, and can use external tools to interact with the world, whereas a standard LLM only predicts text.",
+        "hint": "Think about what an agent can *do* (like use tools) compared to just talking.",
+        "rubric": "Mentions tools, memory, or taking action."
       }
     ]
   },
   "Tool Calling": {
-    "aiRubric": "Check logic, syntax, and output for Tool Calling.",
+    "aiRubric": "Assess theoretical understanding of Tool Calling.",
     "lessons": [
       {
         "title": "Function Calling",
-        "theory": "## Giving LLMs Tools\nWe describe tools to the LLM using a JSON schema, so it knows what it can call and what arguments to provide.\n\n```json\n{\n  \"name\": \"get_weather\",\n  \"description\": \"Get current weather\",\n  \"parameters\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"location\": {\"type\": \"string\"}\n    }\n  }\n}\n```",
-        "instructions": "## Task: Define a Tool Schema\n1. Create a dictionary representing a tool schema for a `calculator` tool\n2. It should have `name`, `description`, and `parameters`\n3. Parameters should include `operation` (add, subtract) and `numbers` (list of floats)",
-        "starterCode": "import json\n\ntool_schema = {\n    \"name\": \"calculator\",\n    \"description\": \"Perform basic math operations\",\n    \"parameters\": {\n        \"type\": \"___\",\n        \"properties\": {\n            \"operation\": {\n                \"type\": \"___\",\n                \"description\": \"The math operation (add, subtract, multiply, divide)\"\n            },\n            \"numbers\": {\n                \"type\": \"___\",\n                \"items\": {\"type\": \"number\"}\n            }\n        },\n        \"required\": [\"operation\", \"numbers\"]\n    }\n}\n\nprint(json.dumps(tool_schema, indent=2))",
-        "solution": "import json\n\ntool_schema = {\n    \"name\": \"calculator\",\n    \"description\": \"Perform basic math operations\",\n    \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n            \"operation\": {\n                \"type\": \"string\",\n                \"description\": \"The math operation (add, subtract, multiply, divide)\"\n            },\n            \"numbers\": {\n                \"type\": \"array\",\n                \"items\": {\"type\": \"number\"}\n            }\n        },\n        \"required\": [\"operation\", \"numbers\"]\n    }\n}\n\nprint(json.dumps(tool_schema, indent=2))",
-        "hint": "parameters is an 'object'. operation is a 'string'. numbers is an 'array'.",
-        "rubric": "Valid JSON schema printed with object, string, and array types."
+        "theory": "## Giving LLMs Tools\nWe describe tools to the LLM using a JSON schema, so it knows what it can call and what arguments to provide.",
+        "instructions": "## Task: Written Response\nHow does an LLM know what arguments to provide when calling a tool?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: By reading the JSON schema that describes the tool's parameters and requirements.",
+        "hint": "It reads a specific data structure.",
+        "rubric": "Mentions JSON schema or parameter descriptions."
       }
     ]
   },
   "MCP Intro": {
-    "aiRubric": "Check logic, syntax, and output for MCP Intro.",
+    "aiRubric": "Assess theoretical understanding of MCP.",
     "lessons": [
       {
         "title": "Model Context Protocol",
         "theory": "## Connecting AI to Tools\nThe Model Context Protocol (MCP) is an open standard that enables AI models to securely connect to external data sources and tools.\n\nInstead of hardcoding every integration (like Slack, GitHub, Database) directly into an AI, MCP provides a universal bridge. The AI connects to an MCP Server, which handles the specific API calls.",
-        "instructions": "## Task: The Protocol Bridge\n1. Identify the 3 main components of the MCP architecture.\n2. Create a dictionary matching them: 'MCP Client', 'MCP Server', 'External Data Source'.",
-        "starterCode": "mcp_architecture = {\n    'The AI application (like Claude Desktop or an Agent)': '___',\n    'The bridge that translates standard MCP requests into specific API calls': '___',\n    'The actual system (like GitHub or a SQL database)': '___'\n}\n\nfor desc, component in mcp_architecture.items():\n    print(f\"{component:25} -> {desc}\")",
-        "solution": "mcp_architecture = {\n    'The AI application (like Claude Desktop or an Agent)': 'MCP Client',\n    'The bridge that translates standard MCP requests into specific API calls': 'MCP Server',\n    'The actual system (like GitHub or a SQL database)': 'External Data Source'\n}\n\nfor desc, component in mcp_architecture.items():\n    print(f\"{component:25} -> {desc}\")",
-        "hint": "Client is the AI. Server is the bridge. External Data Source is the system.",
-        "rubric": "Architecture components correctly mapped to their descriptions."
+        "instructions": "## Task: Written Response\nWhat is the primary benefit of the Model Context Protocol over hardcoding integrations directly into the AI?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: It provides a universal, standardized bridge so you don't have to write custom code for every single integration.",
+        "hint": "Think about standardization vs custom coding.",
+        "rubric": "Mentions universal bridge, standard protocol, or avoiding hardcoded integrations."
       }
     ]
   },
   "ReAct Prompting": {
-    "aiRubric": "Check logic, syntax, and output for ReAct Prompting.",
+    "aiRubric": "Assess theoretical understanding of ReAct.",
     "lessons": [
       {
         "title": "Reasoning and Acting",
-        "theory": "## Think, Then Act\nReAct (Reasoning and Acting) is a prompting framework that forces the LLM to explain its thought process *before* it takes an action.\n\n`Thought: I need to find the capital of France.`\n`Action: Search[Capital of France]`\n`Observation: Paris is the capital.`\n`Thought: Now I have the answer.`\n`Final Answer: The capital is Paris.`",
-        "instructions": "## Task: ReAct Parser\n1. Write a function that parses a ReAct output string.\n2. Extract the 'Thought' and the 'Action'.",
-        "starterCode": "def parse_react(text):\n    lines = text.split('\n')\n    thought = None\n    action = None\n    \n    for line in lines:\n        if line.startswith('Thought: '):\n            thought = line.split('Thought: ')[___]\n        elif line.startswith('Action: '):\n            action = line.split('Action: ')[___]\n            \n    return thought, action\n\noutput = \"\"\"Thought: I need to check the weather in Tokyo.\nAction: WeatherAPI[Tokyo]\nObservation: 75F and sunny.\"\"\"\n\nt, a = parse_react(output)\nprint(\"Extracted Thought:\", t)\nprint(\"Extracted Action:\", a)",
-        "solution": "def parse_react(text):\n    lines = text.split('\n')\n    thought = None\n    action = None\n    \n    for line in lines:\n        if line.startswith('Thought: '):\n            thought = line.split('Thought: ')[1]\n        elif line.startswith('Action: '):\n            action = line.split('Action: ')[1]\n            \n    return thought, action\n\noutput = \"\"\"Thought: I need to check the weather in Tokyo.\nAction: WeatherAPI[Tokyo]\nObservation: 75F and sunny.\"\"\"\n\nt, a = parse_react(output)\nprint(\"Extracted Thought:\", t)\nprint(\"Extracted Action:\", a)",
-        "hint": "Use index [1] to get the second part of the split string.",
-        "rubric": "Successfully extracts 'I need to check the weather in Tokyo.' and 'WeatherAPI[Tokyo]'."
+        "theory": "## Think, Then Act\nReAct (Reasoning and Acting) is a prompting framework that forces the LLM to explain its thought process *before* it takes an action.",
+        "instructions": "## Task: Written Response\nIn the ReAct framework, what must the LLM do immediately before taking an 'Action'?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: It must generate a 'Thought' explaining its reasoning.",
+        "hint": "Reasoning comes before Acting.",
+        "rubric": "Mentions generating a thought or reasoning."
       }
     ]
   },
   "Memory Systems": {
-    "aiRubric": "Check logic, syntax, and output for Memory Systems.",
+    "aiRubric": "Assess theoretical understanding of Memory.",
     "lessons": [
       {
         "title": "Agent Memory",
         "theory": "## Remembering Context\nAgents need memory to hold conversations. \n\n- **Short-term Memory**: The current chat history (often constrained by the LLM context window).\n- **Long-term Memory**: Saving important facts to a database (often a Vector DB) and retrieving them later.",
-        "instructions": "## Task: Short-Term Chat Buffer\n1. Create a `ChatMemory` class that stores a list of messages.\n2. Implement an `add_message(role, content)` method.\n3. Add a limit so it only keeps the last 3 messages (so we don't overflow the LLM token limit).",
-        "starterCode": "class ChatMemory:\n    def __init__(self, limit=3):\n        self.messages = []\n        self.limit = limit\n        \n    def add_message(self, role, content):\n        self.messages.append({'role': role, 'content': content})\n        # Ensure we don't exceed the limit by keeping only the last N items\n        if len(self.messages) > self.___:\n            self.messages = self.messages[-self.___:]\n            \n    def show(self):\n        for m in self.messages:\n            print(f\"[{m['role'].upper()}] {m['content']}\")\n\nmemory = ChatMemory(limit=2)\nmemory.add_message('user', 'Hi')\nmemory.add_message('assistant', 'Hello, how can I help?')\nmemory.add_message('user', 'What is your name?')\n\n# The first 'user: Hi' message should be forgotten\nmemory.show()",
-        "solution": "class ChatMemory:\n    def __init__(self, limit=3):\n        self.messages = []\n        self.limit = limit\n        \n    def add_message(self, role, content):\n        self.messages.append({'role': role, 'content': content})\n        # Ensure we don't exceed the limit by keeping only the last N items\n        if len(self.messages) > self.limit:\n            self.messages = self.messages[-self.limit:]\n            \n    def show(self):\n        for m in self.messages:\n            print(f\"[{m['role'].upper()}] {m['content']}\")\n\nmemory = ChatMemory(limit=2)\nmemory.add_message('user', 'Hi')\nmemory.add_message('assistant', 'Hello, how can I help?')\nmemory.add_message('user', 'What is your name?')\n\n# The first 'user: Hi' message should be forgotten\nmemory.show()",
-        "hint": "Use self.limit. Python list slicing [-limit:] gets the last N elements.",
-        "rubric": "Memory successfully truncates to the last 2 messages."
+        "instructions": "## Task: Written Response\nWhy do we often use Vector Databases for an agent's long-term memory instead of just feeding the entire history into the prompt?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Because the LLM context window is limited, so we can only feed it the most relevant past information retrieved from the Vector DB.",
+        "hint": "Think about token limits or context windows.",
+        "rubric": "Mentions context limits, token limits, or relevance."
       }
     ]
   },
   "MCP Servers": {
-    "aiRubric": "Check logic, syntax, and output for MCP Servers.",
+    "aiRubric": "Assess theoretical understanding of MCP Servers.",
     "lessons": [
       {
         "title": "Building an MCP Server",
-        "theory": "## Exposing Tools\nAn MCP Server exposes 'Resources', 'Prompts', and 'Tools' to the MCP Client.\n\n- **Resources**: Static data (e.g., read a file).\n- **Prompts**: Reusable prompt templates.\n- **Tools**: Functions the AI can execute (e.g., run a bash command, query a database).",
-        "instructions": "## Task: Tool Definition\n1. Define a mock MCP Tool in JSON format.\n2. The tool is named 'calculator', it takes two 'number' inputs (a and b), and returns a number.",
-        "starterCode": "import json\n\nmock_tool_definition = {\n    \"name\": \"calculator\",\n    \"description\": \"Adds two numbers together.\",\n    \"inputSchema\": {\n        \"type\": \"object\",\n        \"properties\": {\n            \"a\": {\"type\": \"___\"},\n            \"b\": {\"type\": \"___\"}\n        },\n        \"required\": [\"a\", \"b\"]\n    }\n}\n\nprint(json.dumps(mock_tool_definition, indent=2))",
-        "solution": "import json\n\nmock_tool_definition = {\n    \"name\": \"calculator\",\n    \"description\": \"Adds two numbers together.\",\n    \"inputSchema\": {\n        \"type\": \"object\",\n        \"properties\": {\n            \"a\": {\"type\": \"number\"},\n            \"b\": {\"type\": \"number\"}\n        },\n        \"required\": [\"a\", \"b\"]\n    }\n}\n\nprint(json.dumps(mock_tool_definition, indent=2))",
-        "hint": "The type should be 'number'.",
-        "rubric": "Tool schema is correctly defined with 'number' types."
+        "theory": "## Exposing Tools\nAn MCP Server exposes 'Resources', 'Prompts', and 'Tools' to the MCP Client.",
+        "instructions": "## Task: Written Response\nIn the context of an MCP Server, what is the difference between a 'Tool' and a 'Resource'?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: A Tool performs an action or executes a function, while a Resource provides static or dynamic data context.",
+        "hint": "One does something, the other just provides information.",
+        "rubric": "Mentions action vs data."
       }
     ]
   },
   "Swarm Architectures": {
-    "aiRubric": "Check logic, syntax, and output for Swarm Architectures.",
+    "aiRubric": "Assess theoretical understanding of Swarms.",
     "lessons": [
       {
         "title": "Agent Swarms",
-        "theory": "## Decentralized Intelligence\nA 'Swarm' is a massive group of AI agents working together without a strict top-down manager.\n\nLike ants or bees, each agent has simple rules, but together they solve complex problems.\n\n- **Broadcasting**: One agent shouts a problem to the swarm. Whoever is best equipped answers.\n- **Emergence**: Complex solutions emerge from simple local interactions.",
-        "instructions": "## Task: Swarm Broadcast Simulator\n1. You have a swarm of 3 specialized agents.\n2. A user broadcasts a task: \"Translate this text to French\".\n3. Iterate through the agents, check their `specialty`, and if they match 'translation', assign them the task.",
-        "starterCode": "class Agent:\n    def __init__(self, name, specialty):\n        self.name = name\n        self.specialty = specialty\n        \n    def accept_task(self, task):\n        print(f\"{self.name} (Specialty: {self.specialty}) accepted task: {task}\")\n\nswarm = [\n    Agent(\"DataBot\", \"data_cleaning\"),\n    Agent(\"Polyglot\", \"translation\"),\n    Agent(\"Coder\", \"programming\")\n]\n\ntask = \"Translate this text to French\"\ntask_type = \"translation\"\n\nprint(\"Broadcasting task to swarm...\")\nfor agent in swarm:\n    if agent.___ == ___:\n        agent.___(task)\n        break",
-        "solution": "class Agent:\n    def __init__(self, name, specialty):\n        self.name = name\n        self.specialty = specialty\n        \n    def accept_task(self, task):\n        print(f\"{self.name} (Specialty: {self.specialty}) accepted task: {task}\")\n\nswarm = [\n    Agent(\"DataBot\", \"data_cleaning\"),\n    Agent(\"Polyglot\", \"translation\"),\n    Agent(\"Coder\", \"programming\")\n]\n\ntask = \"Translate this text to French\"\ntask_type = \"translation\"\n\nprint(\"Broadcasting task to swarm...\")\nfor agent in swarm:\n    if agent.specialty == task_type:\n        agent.accept_task(task)\n        break",
-        "hint": "Check if agent.specialty == task_type. Call agent.accept_task(task).",
-        "rubric": "Polyglot accepts the task because its specialty matches."
-      },
-      {
-        "title": "Autonomous Execution",
-        "theory": "## Letting the AI Drive\nAn autonomous agent doesn't stop after answering one question. It operates in a loop (like AutoGPT).\n\n1. **Think**: \"What should I do next?\"\n2. **Act**: Use a tool (e.g., search Google).\n3. **Observe**: Read the search results.\n4. **Loop**: Go back to step 1 until the final goal is reached.\n\n*Danger*: If the loop has no limits, it can rack up huge API bills or get stuck in infinite loops.",
-        "instructions": "## Task: The ReAct Loop\n1. Simulate an autonomous loop that runs until `goal_reached` is True.\n2. Add a `max_steps` safeguard to prevent infinite loops.\n3. The loop should stop after 3 steps, returning 'Timeout' if the goal wasn't reached.",
-        "starterCode": "def autonomous_agent(goal, max_steps=3):\n    step = 0\n    goal_reached = False\n    \n    while not goal_reached and step < ___:\n        step += 1\n        print(f\"Step {step}: Thinking & Acting...\")\n        \n        # Simulate finding the answer on step 4 (which is past the limit!)\n        if step == 4:\n            goal_reached = True\n            \n    if not goal_reached:\n        return \"Error: ___ reached without solving goal.\"\n    return \"Success!\"\n\nresult = autonomous_agent(\"Find the cure for aging\")\nprint(result)",
-        "solution": "def autonomous_agent(goal, max_steps=3):\n    step = 0\n    goal_reached = False\n    \n    while not goal_reached and step < max_steps:\n        step += 1\n        print(f\"Step {step}: Thinking & Acting...\")\n        \n        # Simulate finding the answer on step 4 (which is past the limit!)\n        if step == 4:\n            goal_reached = True\n            \n    if not goal_reached:\n        return \"Error: Timeout reached without solving goal.\"\n    return \"Success!\"\n\nresult = autonomous_agent(\"Find the cure for aging\")\nprint(result)",
-        "hint": "step < max_steps. Return 'Timeout'.",
-        "rubric": "Loop runs 3 times and returns the Timeout error, successfully preventing an infinite loop."
+        "theory": "## Decentralized Intelligence\nA 'Swarm' is a massive group of AI agents working together without a strict top-down manager.\n\nLike ants or bees, each agent has simple rules, but together they solve complex problems.",
+        "instructions": "## Task: Written Response\nHow does a task get assigned in a decentralized swarm architecture if there is no top-down manager?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: A task is broadcasted to the swarm, and an agent whose specialty matches the task will accept it.",
+        "hint": "Think about broadcasting.",
+        "rubric": "Mentions broadcasting or agents accepting based on specialty."
       }
     ]
   },
   "Autonomous Execution": {
-    "aiRubric": "Check logic, syntax, and output for Autonomous Execution.",
+    "aiRubric": "Assess theoretical understanding of Autonomous Execution.",
     "lessons": [
       {
         "title": "Letting the AI Drive",
-        "theory": "## Operating in a Loop\nAn autonomous agent doesn't stop after answering one question. It operates in a loop (like AutoGPT).\n\n1. **Think**: \"What should I do next?\"\n2. **Act**: Use a tool (e.g., search Google).\n3. **Observe**: Read the search results.\n4. **Loop**: Go back to step 1 until the final goal is reached.\n\n*Danger*: If the loop has no limits, it can rack up huge API bills or get stuck in infinite loops.",
-        "instructions": "## Task: The ReAct Loop\n1. Simulate an autonomous loop that runs until `goal_reached` is True.\n2. Add a `max_steps` safeguard to prevent infinite loops.\n3. The loop should stop after 3 steps, returning 'Timeout' if the goal wasn't reached.",
-        "starterCode": "def autonomous_agent(goal, max_steps=3):\n    step = 0\n    goal_reached = False\n    \n    while not goal_reached and step < ___:\n        step += 1\n        print(f\"Step {step}: Thinking & Acting...\")\n        \n        # Simulate finding the answer on step 4 (which is past the limit!)\n        if step == 4:\n            goal_reached = True\n            \n    if not goal_reached:\n        return \"Error: ___ reached without solving goal.\"\n    return \"Success!\"\n\nresult = autonomous_agent(\"Find the cure for aging\")\nprint(result)",
-        "solution": "def autonomous_agent(goal, max_steps=3):\n    step = 0\n    goal_reached = False\n    \n    while not goal_reached and step < max_steps:\n        step += 1\n        print(f\"Step {step}: Thinking & Acting...\")\n        \n        # Simulate finding the answer on step 4 (which is past the limit!)\n        if step == 4:\n            goal_reached = True\n            \n    if not goal_reached:\n        return \"Error: Timeout reached without solving goal.\"\n    return \"Success!\"\n\nresult = autonomous_agent(\"Find the cure for aging\")\nprint(result)",
-        "hint": "step < max_steps. Return 'Timeout'.",
-        "rubric": "Loop runs 3 times and returns the Timeout error, successfully preventing an infinite loop."
+        "theory": "## Operating in a Loop\nAn autonomous agent doesn't stop after answering one question. It operates in a loop (like AutoGPT).\n\n1. **Think**: \"What should I do next?\"\n2. **Act**: Use a tool (e.g., search Google).\n3. **Observe**: Read the search results.\n4. **Loop**: Go back to step 1 until the final goal is reached.",
+        "instructions": "## Task: Written Response\nWhat is the primary danger of letting an autonomous agent run in a continuous loop without any safeguards?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: It can get stuck in an infinite loop, racking up huge API costs or performing unintended repetitive actions.",
+        "hint": "Think about infinite loops and costs.",
+        "rubric": "Mentions infinite loops, costs, or API bills."
       }
     ]
   },
   "Evaluation": {
-    "aiRubric": "Check logic, syntax, and output for Evaluation.",
+    "aiRubric": "Assess theoretical understanding of Evaluation.",
     "lessons": [
       {
         "title": "Evaluating LLM Outputs",
-        "theory": "## How do you test AI?\nStandard unit tests (`assert 2+2 == 4`) don't work for generative AI because the output is slightly different every time.\n\nEvaluation methods:\n1. **Exact Match / Regex**: Check if the output contains a specific keyword or JSON structure.\n2. **Semantic Similarity**: Use embeddings to check if the *meaning* is close to a reference answer.\n3. **LLM-as-a-Judge**: Use a stronger LLM (like GPT-4) to grade the output of a smaller model (like Llama 3) based on a rubric.",
-        "instructions": "## Task: LLM as a Judge\n1. Simulate an LLM judge evaluating a generated response.\n2. If the response contains the word 'sorry' or 'cannot', score it 0 (refusal).\n3. Otherwise, score it 100.",
-        "starterCode": "def llm_judge(generated_text):\n    lower_text = generated_text.___()\n    if 'sorry' in lower_text or 'cannot' in lower_text:\n        return ___\n    return ___\n\nresponse1 = \"I'm sorry, I cannot fulfill that request as it violates safety policies.\"\nresponse2 = \"The capital of France is Paris.\"\n\nprint(f\"Response 1 Score: {llm_judge(response1)}\")\nprint(f\"Response 2 Score: {llm_judge(response2)}\")",
-        "solution": "def llm_judge(generated_text):\n    lower_text = generated_text.lower()\n    if 'sorry' in lower_text or 'cannot' in lower_text:\n        return 0\n    return 100\n\nresponse1 = \"I'm sorry, I cannot fulfill that request as it violates safety policies.\"\nresponse2 = \"The capital of France is Paris.\"\n\nprint(f\"Response 1 Score: {llm_judge(response1)}\")\nprint(f\"Response 2 Score: {llm_judge(response2)}\")",
-        "hint": "Convert to lower(). Return 0 for refusal, 100 for success.",
-        "rubric": "Response 1 scores 0, Response 2 scores 100."
+        "theory": "## How do you test AI?\nStandard unit tests (`assert 2+2 == 4`) don't work for generative AI because the output is slightly different every time.",
+        "instructions": "## Task: Written Response\nExplain the 'LLM-as-a-Judge' evaluation method.",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Using a more powerful LLM to review and score the output of another model based on a specific grading rubric.",
+        "hint": "Think about using one AI to grade another.",
+        "rubric": "Mentions using a stronger AI to evaluate or grade another AI."
       }
     ]
   },
   "Prompt Engineering for Agents": {
-    "aiRubric": "Assess prompt engineering for agents",
+    "aiRubric": "Assess theoretical understanding of Prompt Engineering.",
     "lessons": [
       {
         "title": "System Prompts",
         "theory": "## Defining the Persona\nThe System Prompt is the core instruction set for an agent. It defines its persona, rules, and the structure of how it should respond.",
-        "instructions": "## Task: Agent Persona\nWrite a system prompt that tells the agent it is a strict Python code reviewer.",
-        "starterCode": "system_prompt = \"You are a strict ___ code ___. You must only output valid code.\"",
-        "solution": "system_prompt = \"You are a strict Python code reviewer. You must only output valid code.\"",
-        "hint": "Python code reviewer",
-        "rubric": "Correctly sets the prompt to Python code reviewer."
+        "instructions": "## Task: Written Response\nWhat role does the System Prompt play for an AI agent?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: It defines the agent's core persona, behavior rules, and expected response structure.",
+        "hint": "It sets the rules.",
+        "rubric": "Mentions persona, rules, or behavior."
       },
       {
         "title": "Few-Shot Prompting",
         "theory": "## Teaching by Example\nWhen giving instructions isn't enough, providing a few examples (Few-Shot Prompting) drastically improves the agent's accuracy.",
-        "instructions": "## Task: Few-Shot Setup\nProvide the expected output format using a few-shot example.",
-        "starterCode": "prompt = \"\"\"\nExtract the sentiment.\nInput: I love this!\nOutput: Positive\nInput: I hate this.\nOutput: ___\n\"\"\"",
-        "solution": "prompt = \"\"\"\nExtract the sentiment.\nInput: I love this!\nOutput: Positive\nInput: I hate this.\nOutput: Negative\n\"\"\"",
-        "hint": "Negative",
-        "rubric": "Correctly identifies the Negative sentiment."
+        "instructions": "## Task: Written Response\nWhat is Few-Shot Prompting?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Providing the AI with a few examples of the desired input and output to help it understand the pattern.",
+        "hint": "Think about giving examples.",
+        "rubric": "Mentions providing examples."
       }
     ]
   },
   "LangChain & LlamaIndex": {
-    "aiRubric": "Assess orchestration frameworks",
+    "aiRubric": "Assess theoretical understanding of orchestration frameworks.",
     "lessons": [
       {
         "title": "Chains in LangChain",
         "theory": "## Connecting the Pieces\nA 'Chain' in LangChain links a Prompt Template with an LLM. It executes them in sequence.",
-        "instructions": "## Task: Create a LLMChain\nInitialize an LLMChain using a provided prompt and llm.",
-        "starterCode": "from langchain.chains import LLMChain\n\nchain = ___(llm=llm, prompt=prompt)\nresult = chain.run(\"World\")",
-        "solution": "from langchain.chains import LLMChain\n\nchain = LLMChain(llm=llm, prompt=prompt)\nresult = chain.run(\"World\")",
-        "hint": "Use LLMChain",
-        "rubric": "Correctly instantiates the LLMChain."
+        "instructions": "## Task: Written Response\nWhat does a basic Chain in LangChain link together?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: A prompt template and an LLM.",
+        "hint": "Prompt and LLM.",
+        "rubric": "Mentions Prompt Template and LLM."
       },
       {
         "title": "LlamaIndex Routers",
         "theory": "## Query Routing\nLlamaIndex excels at data ingestion. A Router Query Engine can decide whether to search a Vector Store or a SQL Database based on the user's question.",
-        "instructions": "## Task: Router Concept\nIf the user asks 'What is the sum of all sales in 2023?', which tool should the router select?",
-        "starterCode": "# Options: VectorStore, SQLDatabase\nrouter_selection = '___'",
-        "solution": "# Options: VectorStore, SQLDatabase\nrouter_selection = 'SQLDatabase'",
-        "hint": "SQLDatabase is better for aggregations",
-        "rubric": "Selects SQLDatabase."
+        "instructions": "## Task: Written Response\nWhy might a Router Query Engine choose a SQL database over a Vector Store for a specific question?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: If the question requires aggregations (like sums or averages) or exact relational data, SQL is better than semantic search.",
+        "hint": "Think about math or aggregations.",
+        "rubric": "Mentions aggregations, math, or exact data retrieval."
       }
     ]
   },
   "Vector DBs in Agents": {
-    "aiRubric": "Assess vector db usage in agents",
+    "aiRubric": "Assess theoretical understanding of Vector DBs.",
     "lessons": [
       {
         "title": "Semantic Search",
         "theory": "## Beyond Keywords\nVector Databases enable Semantic Search. Instead of looking for exact string matches, they find text that is conceptually similar to the query.",
-        "instructions": "## Task: Embedding Dimension\nOpenAI's `text-embedding-3-small` model creates embeddings of what dimension?",
-        "starterCode": "dimension = ___ // Typically 1536",
-        "solution": "dimension = 1536 // Typically 1536",
-        "hint": "1536",
-        "rubric": "Correctly identifies 1536."
+        "instructions": "## Task: Written Response\nHow does Semantic Search differ from traditional keyword search?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Semantic search looks for conceptual meaning and similarity rather than just matching exact string keywords.",
+        "hint": "Meaning vs exact words.",
+        "rubric": "Mentions meaning, concepts, or semantic similarity."
       },
       {
         "title": "Agent Memory via Vectors",
         "theory": "## Long Term Memory\nAgents can use Vector DBs to store past conversations. When the user asks a question, the agent queries the DB to 'remember' context.",
-        "instructions": "## Task: Query Memory\nWrite the pseudo-code to retrieve the top 2 relevant past interactions.",
-        "starterCode": "past_context = vector_db.search(user_query, top_k=___)",
-        "solution": "past_context = vector_db.search(user_query, top_k=2)",
-        "hint": "Set top_k to 2",
-        "rubric": "Correctly sets top_k to 2."
+        "instructions": "## Task: Written Response\nIn the context of retrieving memory, what does 'top_k' typically refer to?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: The number of most relevant results to retrieve from the database.",
+        "hint": "It's the maximum number of items returned.",
+        "rubric": "Mentions number of results or top items."
       }
     ]
   },
   "Human in the Loop (HITL)": {
-    "aiRubric": "Assess HITL workflows",
+    "aiRubric": "Assess theoretical understanding of HITL.",
     "lessons": [
       {
         "title": "Pausing Execution",
         "theory": "## Safety First\nFor dangerous actions (like executing code, sending emails, or dropping databases), an autonomous agent must pause and wait for a human to approve the action.",
-        "instructions": "## Task: Request Approval\nWrite a simple check that requires human input before calling the destructive function.",
-        "starterCode": "user_input = input(\"Proceed? (y/n): \")\nif user_input == '___':\n    execute_destructive_action()",
-        "solution": "user_input = input(\"Proceed? (y/n): \")\nif user_input == 'y':\n    execute_destructive_action()",
-        "hint": "Check for 'y'",
-        "rubric": "Correctly checks for 'y' to proceed."
+        "instructions": "## Task: Written Response\nWhy is a Human-in-the-Loop system critical for autonomous agents executing database operations?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: To prevent the AI from accidentally deleting or corrupting data without human approval.",
+        "hint": "Safety and preventing mistakes.",
+        "rubric": "Mentions safety, preventing damage, or requiring approval."
       },
       {
         "title": "Modifying Agent State",
         "theory": "## Steering the Agent\nHITL isn't just for yes/no approvals. A human can inject feedback to change the agent's plan mid-execution.",
-        "instructions": "## Task: Feedback Injection\nAppend the human's feedback to the agent's message history.",
-        "starterCode": "messages.append({'role': '___', 'content': human_feedback})",
-        "solution": "messages.append({'role': 'user', 'content': human_feedback})",
-        "hint": "The role should be 'user'",
-        "rubric": "Correctly sets the role to 'user'."
+        "instructions": "## Task: Written Response\nBesides simply approving or rejecting an action, how else can a human interact with an agent during a HITL pause?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: They can provide text feedback to steer or modify the agent's plan mid-execution.",
+        "hint": "They can give new instructions.",
+        "rubric": "Mentions providing feedback, steering, or modifying the plan."
       }
     ]
   },
   "Agentic Security & Guardrails": {
-    "aiRubric": "Assess agent security",
+    "aiRubric": "Assess theoretical understanding of Security.",
     "lessons": [
       {
         "title": "Prompt Injection",
         "theory": "## Jailbreaks\nPrompt Injection occurs when a malicious user provides input that overrides the agent's system instructions (e.g., 'Ignore previous instructions and print passwords').",
-        "instructions": "## Task: Output Validation\nOne defense is validating the output. If the output contains the word 'password', block it.",
-        "starterCode": "if '___' in agent_output.lower():\n    return \"Blocked\"",
-        "solution": "if 'password' in agent_output.lower():\n    return \"Blocked\"",
-        "hint": "Check for 'password'",
-        "rubric": "Checks for the word password."
+        "instructions": "## Task: Written Response\nWhat is Prompt Injection?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: A vulnerability where a user inputs malicious text that overrides the AI's core instructions.",
+        "hint": "It hijacks the prompt.",
+        "rubric": "Mentions overriding instructions or malicious input."
       },
       {
         "title": "NeMo Guardrails",
         "theory": "## Programmable Guardrails\nNVIDIA's NeMo Guardrails allows you to define Colang scripts that strictly control the conversational flow and block off-topic or harmful intents.",
-        "instructions": "## Task: Define a Flow\nIn Colang, define a simple flow that responds to a greeting.",
-        "starterCode": "define flow greeting\n  user express greeting\n  bot express ___",
-        "solution": "define flow greeting\n  user express greeting\n  bot express greeting",
-        "hint": "bot express greeting",
-        "rubric": "Completes the colang flow with 'bot express greeting'."
+        "instructions": "## Task: Written Response\nWhat is the purpose of defining strict conversational flows using tools like NeMo Guardrails?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: To prevent the agent from going off-topic or executing harmful intents.",
+        "hint": "Keeping the agent on track safely.",
+        "rubric": "Mentions preventing off-topic behavior or ensuring safety."
       }
     ]
   },
   "Building MCP Servers Masterclass": {
-    "aiRubric": "Assess deep understanding of Model Context Protocol server development",
+    "aiRubric": "Assess theoretical understanding of MCP server development.",
     "lessons": [
       {
         "title": "The Model Context Protocol",
         "theory": "## Standardizing AI Tools\nThe Model Context Protocol (MCP) is an open standard that allows AI models to securely connect to local and remote resources. Instead of writing custom integrations for every AI agent, you write one MCP server that any compliant agent can talk to.",
-        "instructions": "## Task: The Core Philosophy\nMCP separates the AI Agent (the Client) from the Data Source (the Server). What is the primary benefit of this architecture?",
-        "starterCode": "# Options: Faster training, Write once connect anywhere, Reduced hallucinations\nbenefit = '___'",
-        "solution": "# Options: Faster training, Write once connect anywhere, Reduced hallucinations\nbenefit = 'Write once connect anywhere'",
-        "hint": "Write once connect anywhere",
-        "rubric": "Identifies Write once connect anywhere."
-      },
-      {
-        "title": "Server Architecture & Transports",
-        "theory": "## Stdio vs SSE\nMCP servers can communicate locally via standard input/output (stdio) or remotely via HTTP Server-Sent Events (SSE). Stdio is preferred for local, high-security operations.",
-        "instructions": "## Task: Local Transport\nWhich transport mechanism is generally used when an AI Agent spins up a local MCP server as a subprocess on the same machine?",
-        "starterCode": "# Options: WebSockets, Stdio, REST API\ntransport = '___'",
-        "solution": "# Options: WebSockets, Stdio, REST API\ntransport = 'Stdio'",
-        "hint": "Stdio",
-        "rubric": "Identifies Stdio."
-      },
-      {
-        "title": "Exposing Tools",
-        "theory": "## tools/list\nWhen an AI Agent connects to your MCP Server, it first asks 'What can you do?'. Your server responds to the `tools/list` request with a JSON schema describing every available function.",
-        "instructions": "## Task: Tool Definition\nWhen exposing a 'calculator' tool, you must provide its name, description, and the JSON schema for its ___.",
-        "starterCode": "# Options: inputSchema, outputSchema, errorLogs\nproperty = '___'",
-        "solution": "# Options: inputSchema, outputSchema, errorLogs\nproperty = 'inputSchema'",
-        "hint": "inputSchema",
-        "rubric": "Identifies inputSchema."
-      },
-      {
-        "title": "Handling Tool Calls",
-        "theory": "## tools/call\nWhen the AI Agent decides to use a tool, it sends a `tools/call` request with the tool name and arguments. Your server executes the actual code (e.g., querying a database) and returns the result as text or images.",
-        "instructions": "## Task: Response Format\nWhen returning text from an MCP tool call, the `content` array must contain an object with a type of what?",
-        "starterCode": "response = {\n  content: [ { type: '___', text: 'Result is 42' } ]\n}",
-        "solution": "response = {\n  content: [ { type: 'text', text: 'Result is 42' } ]\n}",
-        "hint": "The type is text",
-        "rubric": "Identifies text."
-      },
-      {
-        "title": "Exposing Resources",
-        "theory": "## resources/list\nUnlike Tools (which perform actions), Resources provide static or dynamic data context to the AI (like 'API Documentation' or 'Current System Logs'). They are accessed via custom URI templates.",
-        "instructions": "## Task: Resource URI\nWhat URI scheme is typically used to expose a custom resource in an MCP server (e.g., `___://logs/system`)?",
-        "starterCode": "uri = '___://logs/system'",
-        "solution": "uri = 'custom://logs/system'",
-        "hint": "file (or a custom scheme, but usually file or specific protocol). Let's accept 'custom' or whatever is specific.",
-        "rubric": "Any URI scheme is acceptable."
-      },
-      {
-        "title": "Exposing Prompts",
-        "theory": "## prompts/list\nMCP Servers can also expose predefined Prompts. This allows the server to dictate exactly how the AI should format its queries when interacting with the server's specific domain.",
-        "instructions": "## Task: Prompt Arguments\nPrompts can accept dynamic arguments. If your prompt is 'Summarize a file', what argument should it require?",
-        "starterCode": "argument_name = '___'",
-        "solution": "argument_name = 'filepath'",
-        "hint": "filepath",
-        "rubric": "Identifies filepath or filename."
+        "instructions": "## Task: Written Response\nExplain the 'Write once, connect anywhere' philosophy in the context of MCP.",
+        "starterCode": "Answer: ",
+        "solution": "Answer: You only need to build one MCP server, and any AI agent that supports the protocol can immediately use its tools and data.",
+        "hint": "You don't need to rebuild for every single AI model.",
+        "rubric": "Mentions building once for all compatible AI agents."
       },
       {
         "title": "Security & Sandboxing",
         "theory": "## Never Trust the Agent\nMCP Servers execute code on behalf of the AI. You must heavily validate all inputs, restrict file system access to specific directories, and never allow raw bash execution without user consent.",
-        "instructions": "## Task: Best Practice\nIf an agent sends `tools/call` to 'delete_file' with `path=\"/etc/passwd\"`, what should the MCP server do?",
-        "starterCode": "# Options: Execute it, Reject due to sandbox violation, Ask the user\naction = '___'",
-        "solution": "# Options: Execute it, Reject due to sandbox violation, Ask the user\naction = 'Reject due to sandbox violation'",
-        "hint": "Reject due to sandbox violation",
-        "rubric": "Identifies Reject due to sandbox violation."
-      },
+        "instructions": "## Task: Written Response\nWhy must an MCP server never trust the input sent from an AI Agent?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Because the AI might hallucinate dangerous commands or be manipulated by a prompt injection attack.",
+        "hint": "Think about prompt injection and hallucinations.",
+        "rubric": "Mentions hallucinations, prompt injections, or dangerous commands."
+      }
+    ]
+  },
+  "Cognitive Architectures (Theory)": {
+    "aiRubric": "Assess understanding of AI cognitive architectures.",
+    "lessons": [
       {
-        "title": "Deploying an MCP Server",
-        "theory": "## Dockerization\nBecause MCP Servers often require specific environments (Python, Node, system dependencies), the best way to distribute them is via Docker containers. The Agent can then run `docker run -i` to communicate via Stdio.",
-        "instructions": "## Task: Interactive Flag\nWhich Docker flag is required to keep Stdin open so the AI agent can communicate with the containerized MCP server?",
-        "starterCode": "flag = '-___'",
-        "solution": "flag = '-i'",
-        "hint": "-i",
-        "rubric": "Identifies -i."
+        "title": "What is a Cognitive Architecture?",
+        "theory": "## The Brain of the Agent\nA cognitive architecture represents the overarching blueprint for how an intelligent agent processes information, learns, reasons, and acts. It defines the flow of information between working memory, long-term memory, and reasoning engines (like an LLM).\n\nExamples include SOAR, ACT-R, and more recently, LLM-based architectures like ReAct or AutoGPT.",
+        "instructions": "## Task: Written Response\nDoes a cognitive architecture define the physical hardware or the software blueprint for an agent?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Software blueprint",
+        "hint": "It's about the flow of information.",
+        "rubric": "Identifies software blueprint."
+      }
+    ]
+  },
+  "Multi-Agent Protocols (Theory)": {
+    "aiRubric": "Assess understanding of how agents communicate.",
+    "lessons": [
+      {
+        "title": "Agent Communication Languages",
+        "theory": "## How Agents Talk\nWhen multiple autonomous agents need to collaborate, they need a protocol to understand each other. This often involves standardized message formats (like JSON) or Agent Communication Languages (ACLs). They need to share their state, intentions, and negotiate tasks.",
+        "instructions": "## Task: Written Response\nWhat is the purpose of an Agent Communication Language (ACL)?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: To provide a standardized protocol for multiple autonomous agents to communicate, share state, and negotiate tasks.",
+        "hint": "Think about how humans use language to collaborate.",
+        "rubric": "Mentions agent communication or collaboration."
+      }
+    ]
+  },
+  "Agentic Design Patterns (Theory)": {
+    "aiRubric": "Assess understanding of agent design patterns.",
+    "lessons": [
+      {
+        "title": "The Reflection Pattern",
+        "theory": "## Thinking About Thinking\nReflection is a powerful design pattern where an agent evaluates its own previous output before presenting a final answer. For example, an agent generates a block of code, then acts as a 'critic' to review its own code for bugs, and finally revises the code based on the critique.",
+        "instructions": "## Task: Written Response\nDescribe the 'Reflection' design pattern in your own words.",
+        "starterCode": "Answer: ",
+        "solution": "Answer: It is when an agent reviews and critiques its own generated output before producing the final result.",
+        "hint": "It involves self-evaluation.",
+        "rubric": "Mentions self-review or critiquing its own output."
       }
     ]
   },
@@ -5124,6 +5152,117 @@ export const courseManifest = {
       }
     ]
   },
+  "Foundations of Generative AI": {
+    "aiRubric": "Assess foundational knowledge of generative models based on text responses.",
+    "lessons": [
+      {
+        "title": "Discriminative vs. Generative Models",
+        "theory": "## Understanding the Difference\nIn machine learning, models are often categorized as either **discriminative** or **generative**.\n\n### Discriminative Models\nDiscriminative models learn the boundary between classes. They answer the question: *\"Given this input, what label should I assign it?\"* For example, a model that classifies an email as 'Spam' or 'Not Spam'. They learn the conditional probability $P(Y|X)$.\n\n### Generative Models\nGenerative models learn the actual distribution of the data classes. They answer the question: *\"How can I generate new data that looks like the training data?\"* They learn the joint probability $P(X, Y)$ or just $P(X)$. They don't just draw a line between cats and dogs; they learn what a cat *looks* like so they can draw a brand new one.",
+        "instructions": "## Task: Written Response\nIn your own words (or a single word), state whether a model trained to predict 'hotdog' vs 'not hotdog' is a generative or discriminative model.",
+        "starterCode": "Answer: ",
+        "solution": "Answer: discriminative",
+        "hint": "Think about whether it draws a boundary or creates something new.",
+        "rubric": "Correctly identifies the model as discriminative."
+      },
+      {
+        "title": "The Latent Space",
+        "theory": "## Mapping the Unseen\nA key concept in generative AI is the **Latent Space**. \n\nImagine taking every face in the world and compressing all their features (eye color, face shape, hair length) into a mathematical space. In this space, points that are close together represent faces that look similar.\n\nGenerative models (like GANs and VAEs) work by sampling a random point in this highly compressed, multi-dimensional latent space, and then *decoding* or *decompressing* that point into a full image or text.",
+        "instructions": "## Task: Written Response\nDescribe what happens when a generative model decodes a random point from the latent space.",
+        "starterCode": "Answer: ",
+        "solution": "Answer: It decompresses that point into a full image, text, or data sample.",
+        "hint": "It takes the compressed representation and turns it back into human-readable data.",
+        "rubric": "Explains that it generates or decompresses the point into data."
+      }
+    ]
+  },
+  "The Transformer Architecture": {
+    "aiRubric": "Assess understanding of Transformer mechanics.",
+    "lessons": [
+      {
+        "title": "Attention is All You Need",
+        "theory": "## The Paradigm Shift\nBefore 2017, sequence models (like RNNs and LSTMs) processed text word-by-word, sequentially. This made them slow and bad at remembering long-term context.\n\nThe groundbreaking paper *\"Attention is All You Need\"* introduced the **Transformer** architecture. The core innovation was discarding sequential processing entirely and relying solely on the **Self-Attention Mechanism**.",
+        "instructions": "## Task: Written Response\nWhat is the primary mechanism that replaced sequential processing in Transformers?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Self-Attention Mechanism",
+        "hint": "It's in the title of the paper.",
+        "rubric": "Identifies the Self-Attention mechanism."
+      },
+      {
+        "title": "Self-Attention Mechanism",
+        "theory": "## Contextual Understanding\n**Self-Attention** allows a model to look at *every other word* in a sentence at the same time to understand the context of the *current* word.\n\nTake the sentence: *\"The bank of the river was muddy, so I couldn't deposit my money in the bank.\"*\n\nThe word \"bank\" means two different things here. Self-attention allows the model to connect the first \"bank\" with \"river\" and \"muddy\", and the second \"bank\" with \"deposit\" and \"money\". It mathematically calculates an \"attention score\" between every pair of words.",
+        "instructions": "## Task: Written Response\nWhy is self-attention better at understanding context than processing words one-by-one?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Because it allows the model to look at all words simultaneously and calculate relationships between them in parallel.",
+        "hint": "Think about looking at the whole sentence at once vs one word at a time.",
+        "rubric": "Mentions parallel processing or looking at all words simultaneously."
+      }
+    ]
+  },
+  "Large Language Models Deep Dive": {
+    "aiRubric": "Assess deep knowledge of LLMs.",
+    "lessons": [
+      {
+        "title": "Tokenization",
+        "theory": "## Breaking Down Language\nLLMs do not read text like humans do. They read numbers. The first step in processing text is **Tokenization**.\n\nA tokenizer breaks text down into chunks called 'tokens'. A token is not always a full word; it can be a single character, a syllable, or a common subword (like \"ing\" or \"ed\").\n\nRoughly, 1 token ≈ 4 characters in English, or about 3/4 of a word. A 1000-word essay is approximately 1300 tokens.",
+        "instructions": "## Task: Written Response\nWhy isn't a token always equivalent to a single word?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Because a token can be a subword, a single character, or a common syllable, which allows the model to handle unknown words more efficiently.",
+        "hint": "Think about prefixes and suffixes.",
+        "rubric": "Explains that tokens can be subwords or characters."
+      },
+      {
+        "title": "Pre-training vs. Fine-tuning",
+        "theory": "## The Two Phases of LLM Training\nModern LLMs are trained in two distinct phases:\n\n### 1. Pre-training (The 'Reading the Internet' Phase)\nThe model is fed massive amounts of raw text data (trillions of tokens). Its only goal is to predict the *next word*. It learns grammar, facts, and reasoning, but it doesn't know how to follow instructions. This produces a \"Base Model\".\n\n### 2. Fine-tuning (The 'Alignment' Phase)\nThe Base Model is then fine-tuned on specific instructional data (prompt/response pairs). Techniques like RLHF (Reinforcement Learning from Human Feedback) are used to teach the model to act as a helpful, harmless, and honest assistant.",
+        "instructions": "## Task: Written Response\nWhat is the primary goal of the pre-training phase?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: To predict the next word in a sequence based on vast amounts of internet text.",
+        "hint": "It's not about being helpful yet.",
+        "rubric": "Mentions predicting the next word or learning general patterns."
+      }
+    ]
+  },
+  "Diffusion Models & Image Generation": {
+    "aiRubric": "Assess understanding of diffusion models.",
+    "lessons": [
+      {
+        "title": "The Forward and Reverse Process",
+        "theory": "## Destroying and Rebuilding Data\nImage generators like Midjourney, DALL-E 3, and Stable Diffusion rely on **Diffusion Models**.\n\nThe process has two steps:\n1. **Forward Diffusion:** Take a clear image and slowly add Gaussian noise to it over many steps until it is completely unrecognizable static.\n2. **Reverse Diffusion (Denoising):** Train a neural network (usually a U-Net) to reverse this process. It learns to take pure static and subtract the noise step-by-step to recover a clear image.\n\nWhen you generate a new image, the model starts with pure random noise and uses the text prompt to guide the denoising process into a picture.",
+        "instructions": "## Task: Written Response\nDescribe the purpose of Reverse Diffusion.",
+        "starterCode": "Answer: ",
+        "solution": "Answer: To gradually remove noise from static to recover or generate a clear image.",
+        "hint": "Think about what denoising means.",
+        "rubric": "Mentions removing noise or denoising."
+      }
+    ]
+  },
+  "Audio & Video Generative Models": {
+    "aiRubric": "Assess understanding of multimodal generative models.",
+    "lessons": [
+      {
+        "title": "Temporal Consistency in Video",
+        "theory": "## The Hardest Problem in Video AI\nGenerating a single image is relatively solved. Generating a video is vastly more difficult because of **Temporal Consistency**.\n\nIf an AI generates a cat walking across a room frame-by-frame, the cat's fur pattern, the lighting, and the background must stay exactly the same in every single frame. Early video AI suffered from intense \"flickering\" because the model would slightly hallucinate different details in each frame.\n\nModern models (like Sora) solve this by using 'Spacetime Patches'—treating video not as a sequence of flat images, but as a 3D block of data (width, height, and time) that is processed all at once.",
+        "instructions": "## Task: Written Response\nWhy did early video generation models suffer from flickering?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Because they struggled with temporal consistency, hallucinating slightly different details in each individual frame.",
+        "hint": "They couldn't keep things consistent across frames.",
+        "rubric": "Mentions lack of temporal consistency or changing details between frames."
+      }
+    ]
+  },
+  "Future of Generative Models": {
+    "aiRubric": "Assess understanding of future AI trends.",
+    "lessons": [
+      {
+        "title": "Multimodality",
+        "theory": "## Beyond Text\nThe future of Generative AI is **Multimodality**. Early models were unimodal (text-in, text-out, OR image-in, image-out).\n\nModels like GPT-4o and Gemini 1.5 Pro are natively multimodal. They can take text, audio, images, and video as input simultaneously, and output any combination of them. The underlying neural network is trained on all these data types together, allowing it to \"understand\" that the word \"Dog\", a picture of a dog, and the sound of a bark all represent the same conceptual entity.",
+        "instructions": "## Task: Written Response\nWhat does it mean for a model to be natively multimodal?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: It can process and understand multiple types of data (text, audio, images) simultaneously within a single neural network.",
+        "hint": "Think about how it handles different types of inputs.",
+        "rubric": "Mentions handling multiple data types simultaneously."
+      }
+    ]
+  },
   "React Native Intro": {
     "aiRubric": "Check logic, syntax, and output for React Native Intro.",
     "lessons": [
@@ -7245,6 +7384,230 @@ export const courseManifest = {
         "solution": "answer = 'Leaky Bucket'",
         "hint": "Leaky Bucket",
         "rubric": "Correctly identifies Leaky Bucket."
+      }
+    ]
+  },
+  "Color Theory": {
+    "aiRubric": "Assess understanding of color theory concepts.",
+    "lessons": [
+      {
+        "title": "Primary, Secondary, and Tertiary Colors",
+        "theory": "## The Color Wheel\nColor theory starts with the color wheel. Primary colors are Red, Blue, and Yellow. Secondary colors are created by mixing primary colors (e.g., Green, Orange, Purple). Tertiary colors are created by mixing a primary and a secondary color.",
+        "instructions": "## Task: Knowledge Check\nWhat do you get when you mix blue and yellow?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Green",
+        "hint": "It's the color of grass.",
+        "rubric": "Identifies green."
+      }
+    ]
+  },
+  "Typography Basics": {
+    "aiRubric": "Assess understanding of typography.",
+    "lessons": [
+      {
+        "title": "Serif vs Sans-Serif",
+        "theory": "## Font Families\nSerif fonts have small decorative lines (serifs) at the ends of characters, like Times New Roman. Sans-serif fonts do not have these lines, like Arial or Helvetica. Sans-serif is generally preferred for modern digital interfaces due to its clean look.",
+        "instructions": "## Task: Classification\nIs 'Helvetica' a serif or sans-serif font?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Sans-serif",
+        "hint": "It lacks the small decorative lines.",
+        "rubric": "Identifies sans-serif."
+      }
+    ]
+  },
+  "Wireframing": {
+    "aiRubric": "Assess understanding of wireframing concepts.",
+    "lessons": [
+      {
+        "title": "Low Fidelity vs High Fidelity",
+        "theory": "## Wireframing\nA wireframe is a visual guide that represents the skeletal framework of a website. Low-fidelity wireframes are quick, rough sketches (often just boxes and lines). High-fidelity wireframes include actual content, specific spacing, and typography.",
+        "instructions": "## Task: Identify Fidelity\nIf you are drawing boxes on a napkin to plan a layout, are you creating a low-fidelity or high-fidelity wireframe?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Low-fidelity",
+        "hint": "It's a rough sketch.",
+        "rubric": "Identifies low-fidelity."
+      }
+    ]
+  },
+  "User Research": {
+    "aiRubric": "Assess understanding of user research.",
+    "lessons": [
+      {
+        "title": "Qualitative vs Quantitative",
+        "theory": "## Types of Research\nUser research is how we understand user needs. Qualitative research involves non-numerical data like interviews and observations to understand *why* users do things. Quantitative research involves numerical data like surveys and analytics to understand *what* users do.",
+        "instructions": "## Task: Method Selection\nIf you want to know exactly how many users clicked a specific button, should you use qualitative or quantitative research?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Quantitative",
+        "hint": "It involves numbers and metrics.",
+        "rubric": "Identifies quantitative."
+      }
+    ]
+  },
+  "Prototyping": {
+    "aiRubric": "Assess understanding of prototyping.",
+    "lessons": [
+      {
+        "title": "Interactive Mockups",
+        "theory": "## Prototyping\nA prototype is an interactive mockup of your product. It allows you to test the user flow and interactions before writing any code. Tools like Figma and InVision are commonly used for this.",
+        "instructions": "## Task: Purpose of Prototyping\nTrue or False: Prototypes are fully functional applications with a working database.",
+        "starterCode": "Answer: ",
+        "solution": "Answer: False",
+        "hint": "They are just mockups.",
+        "rubric": "Identifies False."
+      }
+    ]
+  },
+  "Accessibility Guidelines": {
+    "aiRubric": "Assess understanding of web accessibility.",
+    "lessons": [
+      {
+        "title": "WCAG and Contrast",
+        "theory": "## Web Content Accessibility Guidelines (WCAG)\nAccessibility ensures your product can be used by people with disabilities. A critical aspect is color contrast. Text must have a high enough contrast ratio against its background to be readable by users with visual impairments.",
+        "instructions": "## Task: Alt Text\nWhat HTML attribute is used to provide alternative text for an image, essential for screen readers?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: alt",
+        "hint": "It's three letters.",
+        "rubric": "Identifies alt."
+      }
+    ]
+  },
+  "Design Systems": {
+    "aiRubric": "Assess understanding of design systems.",
+    "lessons": [
+      {
+        "title": "Consistency at Scale",
+        "theory": "## What is a Design System?\nA design system is a collection of reusable components, guided by clear standards, that can be assembled together to build any number of applications. It ensures brand consistency and speeds up development.",
+        "instructions": "## Task: Benefit Check\nDoes a design system increase or decrease development speed over time?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Increase",
+        "hint": "You don't have to build things from scratch.",
+        "rubric": "Identifies increase."
+      }
+    ]
+  },
+  "A/B Testing": {
+    "aiRubric": "Assess understanding of A/B testing.",
+    "lessons": [
+      {
+        "title": "Data-Driven Decisions",
+        "theory": "## A/B Testing\nA/B testing (or split testing) is the process of comparing two versions of a webpage or app against each other to determine which one performs better. Version A is the 'control' and Version B is the 'variant'.",
+        "instructions": "## Task: Identifying the Control\nIn an A/B test, what do we call the original, unchanged version of the page?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Control",
+        "hint": "It starts with a C.",
+        "rubric": "Identifies control."
+      }
+    ]
+  },
+  "Interaction Design": {
+    "aiRubric": "Assess understanding of interaction design.",
+    "lessons": [
+      {
+        "title": "Micro-interactions",
+        "theory": "## Enhancing User Experience\nInteraction design focuses on creating engaging interfaces with logical and thought-out behaviors. Micro-interactions are small, single-purpose events found on devices and in apps (e.g., a 'like' button turning red when clicked).",
+        "instructions": "## Task: Example Recognition\nIs a complex checkout flow considered a micro-interaction?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: False",
+        "hint": "Micro-interactions are single, small events.",
+        "rubric": "Identifies False."
+      }
+    ]
+  },
+  "Agile & Scrum": {
+    "aiRubric": "Assess understanding of agile methodologies.",
+    "lessons": [
+      {
+        "title": "Sprints and Standups",
+        "theory": "## Agile Methodology\nAgile is an iterative approach to project management. Scrum is a specific Agile framework. Work is broken down into short, time-boxed phases called 'Sprints' (usually 1-4 weeks). The team meets daily in a 'Standup' to discuss progress.",
+        "instructions": "## Task: Scrum Roles\nWho is responsible for maximizing the value of the product and managing the Product Backlog in Scrum?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Product Owner",
+        "hint": "They 'own' the product.",
+        "rubric": "Identifies Product Owner."
+      }
+    ]
+  },
+  "The Product Lifecycle": {
+    "aiRubric": "Assess understanding of the product lifecycle.",
+    "lessons": [
+      {
+        "title": "From Idea to Sunsetting",
+        "theory": "## Product Stages\nThe typical software product lifecycle consists of: Ideation, Definition, Prototyping, Development, Testing, Deployment, Maintenance, and eventually Sunsetting (retiring the product).",
+        "instructions": "## Task: Final Stage\nWhat is the term for officially retiring a product and removing it from the market?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Sunsetting",
+        "hint": "It relates to the sun going down.",
+        "rubric": "Identifies Sunsetting."
+      }
+    ]
+  },
+  "Writing PRDs": {
+    "aiRubric": "Assess understanding of PRDs.",
+    "lessons": [
+      {
+        "title": "Product Requirements Documents",
+        "theory": "## What is a PRD?\nA Product Requirements Document (PRD) defines the value and purpose of a product or feature. It outlines *what* needs to be built, *who* it is for, and *why* it matters, without necessarily dictating exactly *how* it should be technically implemented.",
+        "instructions": "## Task: PRD Focus\nDoes a PRD primarily focus on the 'What and Why' or the 'How' (technical implementation)?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: What and Why",
+        "hint": "It defines the requirements, not the code.",
+        "rubric": "Identifies What and Why."
+      }
+    ]
+  },
+  "Go-to-Market Strategy": {
+    "aiRubric": "Assess understanding of GTM strategy.",
+    "lessons": [
+      {
+        "title": "Launching Successfully",
+        "theory": "## GTM Basics\nA Go-To-Market (GTM) strategy is an action plan that specifies how a company will reach its target customers and achieve a competitive advantage. It includes pricing, sales, marketing, and distribution channels.",
+        "instructions": "## Task: GTM Components\nWhich of the following is typically a key component of a GTM strategy: Code Architecture or Pricing Strategy?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Pricing Strategy",
+        "hint": "It's related to the market and sales.",
+        "rubric": "Identifies Pricing Strategy."
+      }
+    ]
+  },
+  "VC Funding basics": {
+    "aiRubric": "Assess understanding of VC funding.",
+    "lessons": [
+      {
+        "title": "Seed to Series A",
+        "theory": "## Startup Funding Rounds\nStartups often raise money in rounds. 'Seed' is the initial capital used to start the business. 'Series A' usually follows when the company has a product and some traction, looking to optimize its user base and product offerings.",
+        "instructions": "## Task: First Round\nWhat is the very first official funding round for a startup typically called?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Seed",
+        "hint": "Like planting a tree.",
+        "rubric": "Identifies Seed."
+      }
+    ]
+  },
+  "Scaling a Startup": {
+    "aiRubric": "Assess understanding of scaling.",
+    "lessons": [
+      {
+        "title": "Product-Market Fit",
+        "theory": "## Finding the Match\nBefore scaling aggressively, a startup must find Product-Market Fit (PMF). PMF means being in a good market with a product that can satisfy that market. Scaling before achieving PMF often leads to failure.",
+        "instructions": "## Task: Prerequisite for Scaling\nWhat is the acronym for the state a startup must achieve before trying to scale rapidly?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: PMF",
+        "hint": "Product-Market Fit.",
+        "rubric": "Identifies PMF."
+      }
+    ]
+  },
+  "Product Analytics": {
+    "aiRubric": "Assess understanding of product analytics.",
+    "lessons": [
+      {
+        "title": "KPIs and Metrics",
+        "theory": "## Measuring Success\nProduct Analytics involves tracking how users engage with your software. Key Performance Indicators (KPIs) are the most important metrics you track (e.g., Daily Active Users - DAU, Churn Rate).",
+        "instructions": "## Task: User Retention\nIf a high percentage of users stop using your product after the first week, do you have a high or low 'Churn Rate'?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: High",
+        "hint": "Churn is the rate of users leaving.",
+        "rubric": "Identifies high."
       }
     ]
   },

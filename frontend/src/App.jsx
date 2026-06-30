@@ -9,6 +9,8 @@ import TeacherDashboard from './components/TeacherDashboard';
 import Assessment from './components/Assessment';
 import Leaderboard from './components/Leaderboard';
 import ProjectWorkspace from './components/ProjectWorkspace';
+import LandingPage from './components/LandingPage';
+import CourseCatalog from './components/CourseCatalog';
 
 const ProtectedRoute = ({ children }) => {
   const { token, loading } = useAuth();
@@ -29,8 +31,10 @@ const App = () => {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/courses" element={<CourseCatalog />} />
           <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/" element={
+          <Route path="/dashboard" element={
             <ProtectedRoute>
               <Dashboard />
             </ProtectedRoute>

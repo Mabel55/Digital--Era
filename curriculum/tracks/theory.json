@@ -1,0 +1,226 @@
+{
+  "Color Theory": {
+    "aiRubric": "Assess understanding of color theory concepts.",
+    "lessons": [
+      {
+        "title": "Primary, Secondary, and Tertiary Colors",
+        "theory": "## The Color Wheel\nColor theory starts with the color wheel. Primary colors are Red, Blue, and Yellow. Secondary colors are created by mixing primary colors (e.g., Green, Orange, Purple). Tertiary colors are created by mixing a primary and a secondary color.",
+        "instructions": "## Task: Knowledge Check\nWhat do you get when you mix blue and yellow?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Green",
+        "hint": "It's the color of grass.",
+        "rubric": "Identifies green."
+      }
+    ]
+  },
+  "Typography Basics": {
+    "aiRubric": "Assess understanding of typography.",
+    "lessons": [
+      {
+        "title": "Serif vs Sans-Serif",
+        "theory": "## Font Families\nSerif fonts have small decorative lines (serifs) at the ends of characters, like Times New Roman. Sans-serif fonts do not have these lines, like Arial or Helvetica. Sans-serif is generally preferred for modern digital interfaces due to its clean look.",
+        "instructions": "## Task: Classification\nIs 'Helvetica' a serif or sans-serif font?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Sans-serif",
+        "hint": "It lacks the small decorative lines.",
+        "rubric": "Identifies sans-serif."
+      }
+    ]
+  },
+  "Wireframing": {
+    "aiRubric": "Assess understanding of wireframing concepts.",
+    "lessons": [
+      {
+        "title": "Low Fidelity vs High Fidelity",
+        "theory": "## Wireframing\nA wireframe is a visual guide that represents the skeletal framework of a website. Low-fidelity wireframes are quick, rough sketches (often just boxes and lines). High-fidelity wireframes include actual content, specific spacing, and typography.",
+        "instructions": "## Task: Identify Fidelity\nIf you are drawing boxes on a napkin to plan a layout, are you creating a low-fidelity or high-fidelity wireframe?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Low-fidelity",
+        "hint": "It's a rough sketch.",
+        "rubric": "Identifies low-fidelity."
+      }
+    ]
+  },
+  "User Research": {
+    "aiRubric": "Assess understanding of user research.",
+    "lessons": [
+      {
+        "title": "Qualitative vs Quantitative",
+        "theory": "## Types of Research\nUser research is how we understand user needs. Qualitative research involves non-numerical data like interviews and observations to understand *why* users do things. Quantitative research involves numerical data like surveys and analytics to understand *what* users do.",
+        "instructions": "## Task: Method Selection\nIf you want to know exactly how many users clicked a specific button, should you use qualitative or quantitative research?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Quantitative",
+        "hint": "It involves numbers and metrics.",
+        "rubric": "Identifies quantitative."
+      }
+    ]
+  },
+  "Prototyping": {
+    "aiRubric": "Assess understanding of prototyping.",
+    "lessons": [
+      {
+        "title": "Interactive Mockups",
+        "theory": "## Prototyping\nA prototype is an interactive mockup of your product. It allows you to test the user flow and interactions before writing any code. Tools like Figma and InVision are commonly used for this.",
+        "instructions": "## Task: Purpose of Prototyping\nTrue or False: Prototypes are fully functional applications with a working database.",
+        "starterCode": "Answer: ",
+        "solution": "Answer: False",
+        "hint": "They are just mockups.",
+        "rubric": "Identifies False."
+      }
+    ]
+  },
+  "Accessibility Guidelines": {
+    "aiRubric": "Assess understanding of web accessibility.",
+    "lessons": [
+      {
+        "title": "WCAG and Contrast",
+        "theory": "## Web Content Accessibility Guidelines (WCAG)\nAccessibility ensures your product can be used by people with disabilities. A critical aspect is color contrast. Text must have a high enough contrast ratio against its background to be readable by users with visual impairments.",
+        "instructions": "## Task: Alt Text\nWhat HTML attribute is used to provide alternative text for an image, essential for screen readers?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: alt",
+        "hint": "It's three letters.",
+        "rubric": "Identifies alt."
+      }
+    ]
+  },
+  "Design Systems": {
+    "aiRubric": "Assess understanding of design systems.",
+    "lessons": [
+      {
+        "title": "Consistency at Scale",
+        "theory": "## What is a Design System?\nA design system is a collection of reusable components, guided by clear standards, that can be assembled together to build any number of applications. It ensures brand consistency and speeds up development.",
+        "instructions": "## Task: Benefit Check\nDoes a design system increase or decrease development speed over time?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Increase",
+        "hint": "You don't have to build things from scratch.",
+        "rubric": "Identifies increase."
+      }
+    ]
+  },
+  "A/B Testing": {
+    "aiRubric": "Assess understanding of A/B testing.",
+    "lessons": [
+      {
+        "title": "Data-Driven Decisions",
+        "theory": "## A/B Testing\nA/B testing (or split testing) is the process of comparing two versions of a webpage or app against each other to determine which one performs better. Version A is the 'control' and Version B is the 'variant'.",
+        "instructions": "## Task: Identifying the Control\nIn an A/B test, what do we call the original, unchanged version of the page?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Control",
+        "hint": "It starts with a C.",
+        "rubric": "Identifies control."
+      }
+    ]
+  },
+  "Interaction Design": {
+    "aiRubric": "Assess understanding of interaction design.",
+    "lessons": [
+      {
+        "title": "Micro-interactions",
+        "theory": "## Enhancing User Experience\nInteraction design focuses on creating engaging interfaces with logical and thought-out behaviors. Micro-interactions are small, single-purpose events found on devices and in apps (e.g., a 'like' button turning red when clicked).",
+        "instructions": "## Task: Example Recognition\nIs a complex checkout flow considered a micro-interaction?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: False",
+        "hint": "Micro-interactions are single, small events.",
+        "rubric": "Identifies False."
+      }
+    ]
+  },
+  "Agile & Scrum": {
+    "aiRubric": "Assess understanding of agile methodologies.",
+    "lessons": [
+      {
+        "title": "Sprints and Standups",
+        "theory": "## Agile Methodology\nAgile is an iterative approach to project management. Scrum is a specific Agile framework. Work is broken down into short, time-boxed phases called 'Sprints' (usually 1-4 weeks). The team meets daily in a 'Standup' to discuss progress.",
+        "instructions": "## Task: Scrum Roles\nWho is responsible for maximizing the value of the product and managing the Product Backlog in Scrum?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Product Owner",
+        "hint": "They 'own' the product.",
+        "rubric": "Identifies Product Owner."
+      }
+    ]
+  },
+  "The Product Lifecycle": {
+    "aiRubric": "Assess understanding of the product lifecycle.",
+    "lessons": [
+      {
+        "title": "From Idea to Sunsetting",
+        "theory": "## Product Stages\nThe typical software product lifecycle consists of: Ideation, Definition, Prototyping, Development, Testing, Deployment, Maintenance, and eventually Sunsetting (retiring the product).",
+        "instructions": "## Task: Final Stage\nWhat is the term for officially retiring a product and removing it from the market?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Sunsetting",
+        "hint": "It relates to the sun going down.",
+        "rubric": "Identifies Sunsetting."
+      }
+    ]
+  },
+  "Writing PRDs": {
+    "aiRubric": "Assess understanding of PRDs.",
+    "lessons": [
+      {
+        "title": "Product Requirements Documents",
+        "theory": "## What is a PRD?\nA Product Requirements Document (PRD) defines the value and purpose of a product or feature. It outlines *what* needs to be built, *who* it is for, and *why* it matters, without necessarily dictating exactly *how* it should be technically implemented.",
+        "instructions": "## Task: PRD Focus\nDoes a PRD primarily focus on the 'What and Why' or the 'How' (technical implementation)?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: What and Why",
+        "hint": "It defines the requirements, not the code.",
+        "rubric": "Identifies What and Why."
+      }
+    ]
+  },
+  "Go-to-Market Strategy": {
+    "aiRubric": "Assess understanding of GTM strategy.",
+    "lessons": [
+      {
+        "title": "Launching Successfully",
+        "theory": "## GTM Basics\nA Go-To-Market (GTM) strategy is an action plan that specifies how a company will reach its target customers and achieve a competitive advantage. It includes pricing, sales, marketing, and distribution channels.",
+        "instructions": "## Task: GTM Components\nWhich of the following is typically a key component of a GTM strategy: Code Architecture or Pricing Strategy?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Pricing Strategy",
+        "hint": "It's related to the market and sales.",
+        "rubric": "Identifies Pricing Strategy."
+      }
+    ]
+  },
+  "VC Funding basics": {
+    "aiRubric": "Assess understanding of VC funding.",
+    "lessons": [
+      {
+        "title": "Seed to Series A",
+        "theory": "## Startup Funding Rounds\nStartups often raise money in rounds. 'Seed' is the initial capital used to start the business. 'Series A' usually follows when the company has a product and some traction, looking to optimize its user base and product offerings.",
+        "instructions": "## Task: First Round\nWhat is the very first official funding round for a startup typically called?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Seed",
+        "hint": "Like planting a tree.",
+        "rubric": "Identifies Seed."
+      }
+    ]
+  },
+  "Scaling a Startup": {
+    "aiRubric": "Assess understanding of scaling.",
+    "lessons": [
+      {
+        "title": "Product-Market Fit",
+        "theory": "## Finding the Match\nBefore scaling aggressively, a startup must find Product-Market Fit (PMF). PMF means being in a good market with a product that can satisfy that market. Scaling before achieving PMF often leads to failure.",
+        "instructions": "## Task: Prerequisite for Scaling\nWhat is the acronym for the state a startup must achieve before trying to scale rapidly?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: PMF",
+        "hint": "Product-Market Fit.",
+        "rubric": "Identifies PMF."
+      }
+    ]
+  },
+  "Product Analytics": {
+    "aiRubric": "Assess understanding of product analytics.",
+    "lessons": [
+      {
+        "title": "KPIs and Metrics",
+        "theory": "## Measuring Success\nProduct Analytics involves tracking how users engage with your software. Key Performance Indicators (KPIs) are the most important metrics you track (e.g., Daily Active Users - DAU, Churn Rate).",
+        "instructions": "## Task: User Retention\nIf a high percentage of users stop using your product after the first week, do you have a high or low 'Churn Rate'?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: High",
+        "hint": "Churn is the rate of users leaving.",
+        "rubric": "Identifies high."
+      }
+    ]
+  }
+}
