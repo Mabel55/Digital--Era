@@ -11,6 +11,8 @@ import Leaderboard from './components/Leaderboard';
 import ProjectWorkspace from './components/ProjectWorkspace';
 import LandingPage from './components/LandingPage';
 import CourseCatalog from './components/CourseCatalog';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
+import OfflineBanner from './components/OfflineBanner';
 
 const ProtectedRoute = ({ children }) => {
   const { token, loading } = useAuth();
@@ -29,6 +31,7 @@ const ProtectedRoute = ({ children }) => {
 const App = () => {
   return (
     <BrowserRouter>
+      <OfflineBanner />
       <AuthProvider>
         <Routes>
           <Route path="/" element={<LandingPage />} />
@@ -73,6 +76,7 @@ const App = () => {
             <Leaderboard isPublic={true} />
           } />
         </Routes>
+        <PWAInstallPrompt />
       </AuthProvider>
     </BrowserRouter>
   );

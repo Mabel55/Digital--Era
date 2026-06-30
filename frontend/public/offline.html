@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Era – Offline</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0d0f14;
+      color: #e8eaf2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    .offline-container {
+      text-align: center;
+      max-width: 480px;
+    }
+    .offline-icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 2rem;
+      background: rgba(19, 22, 30, 0.75);
+      border: 1px solid rgba(37, 42, 58, 0.8);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #e8eaf2, #00e5a0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p {
+      color: #8892aa;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+    .retry-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 2rem;
+      background: linear-gradient(135deg, #00e5a0, #00c98a);
+      color: #0d0f14;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .retry-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 229, 160, 0.3);
+    }
+    .cached-hint {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: rgba(19, 22, 30, 0.75);
+      border: 1px solid rgba(37, 42, 58, 0.8);
+      border-radius: 12px;
+      color: #8892aa;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="offline-container">
+    <div class="offline-icon">📡</div>
+    <h1>You're Offline</h1>
+    <p>
+      It looks like you've lost your internet connection.
+      Some previously visited pages and lessons may still be available from cache.
+    </p>
+    <button class="retry-btn" onclick="window.location.reload()">
+      ↻ Try Again
+    </button>
+    <div class="cached-hint">
+      💡 <strong>Tip:</strong> Pages you've visited before are cached and may still work offline. Try navigating to a previously viewed course or lesson.
+    </div>
+  </div>
+</body>
+</html>
