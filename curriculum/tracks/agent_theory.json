@@ -10,6 +10,15 @@
         "solution": "Answer: Software blueprint",
         "hint": "It's about the flow of information.",
         "rubric": "Identifies software blueprint."
+      },
+      {
+        "title": "The ReAct Architecture In-Depth",
+        "theory": "## Reasoning and Acting\nThe ReAct architecture forces an LLM to explicitly output its reasoning process ('Thought') before outputting a tool call ('Action'). By writing down its thoughts, the LLM is significantly less likely to hallucinate an incorrect tool call. The loop is:\nThought -> Action -> Observation (Tool output) -> Thought -> Action... until reaching a Final Answer.",
+        "instructions": "## Task: The ReAct Loop\nIn the ReAct loop, what immediately follows the 'Action' step?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Observation (reading the tool output).",
+        "hint": "What happens after you use a tool?",
+        "rubric": "Identifies Observation or Tool output."
       }
     ]
   },

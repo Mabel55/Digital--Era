@@ -497,6 +497,15 @@ export const courseManifest = {
         "solution": "Answer: An agent has a goal, memory, and can use external tools to interact with the world, whereas a standard LLM only predicts text.",
         "hint": "Think about what an agent can *do* (like use tools) compared to just talking.",
         "rubric": "Mentions tools, memory, or taking action."
+      },
+      {
+        "title": "The Core Components of an Agent",
+        "theory": "## Brain, Memory, and Tools\nTo understand an AI Agent, break it down into three pillars:\n1. **The Brain (LLM):** The reasoning engine that parses prompts, makes decisions, and generates text.\n2. **Memory:** How the agent retains state. Short-term memory holds the current chat context. Long-term memory stores facts across sessions (often using Vector Databases).\n3. **Tools (Actuators):** Functions the agent can call to interact with the outside world (e.g., searching the web, executing code, querying a database).",
+        "instructions": "## Task: Component Identification\nIf an agent reads an API documentation page and saves the summary so it can remember it next week, which of the three core components is it primarily utilizing to store the summary?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Memory (specifically, long-term memory).",
+        "hint": "It involves retaining state for the future.",
+        "rubric": "Identifies Memory."
       }
     ]
   },
@@ -761,6 +770,15 @@ export const courseManifest = {
         "solution": "Answer: Software blueprint",
         "hint": "It's about the flow of information.",
         "rubric": "Identifies software blueprint."
+      },
+      {
+        "title": "The ReAct Architecture In-Depth",
+        "theory": "## Reasoning and Acting\nThe ReAct architecture forces an LLM to explicitly output its reasoning process ('Thought') before outputting a tool call ('Action'). By writing down its thoughts, the LLM is significantly less likely to hallucinate an incorrect tool call. The loop is:\nThought -> Action -> Observation (Tool output) -> Thought -> Action... until reaching a Final Answer.",
+        "instructions": "## Task: The ReAct Loop\nIn the ReAct loop, what immediately follows the 'Action' step?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Observation (reading the tool output).",
+        "hint": "What happens after you use a tool?",
+        "rubric": "Identifies Observation or Tool output."
       }
     ]
   },
@@ -4700,455 +4718,284 @@ export const courseManifest = {
     ]
   },
   "HTML5 Essentials": {
-    "aiRubric": "Check logic, syntax, and output for HTML5 Essentials.",
+    "aiRubric": "Check theoretical understanding of HTML5 Essentials.",
     "lessons": [
       {
-        "title": "HTML Document Structure",
-        "theory": "## The HTML Skeleton\nEvery webpage starts with a standard structure.\n\n```html\n<!DOCTYPE html>\n<html lang='en'>\n<head>\n  <meta charset='UTF-8'>\n  <title>My Page</title>\n</head>\n<body>\n  <h1>Hello World</h1>\n  <p>This is my first page.</p>\n</body>\n</html>\n```\n\nThe `<head>` contains metadata. The `<body>` contains visible content.",
-        "instructions": "## Task: Profile Page\n1. Create a complete HTML structure\n2. Set the title to 'My Profile'\n3. Add an h1 with your name, a p with your bio, and an unordered list of 3 skills",
-        "starterCode": "<!DOCTYPE ___>\n<html lang='en'>\n<head>\n  <meta charset='UTF-8'>\n  <title>___</title>\n</head>\n<body>\n  <h1>___</h1>\n  <p>___</p>\n  <ul>\n    <li>___</li>\n    <li>___</li>\n    <li>___</li>\n  </ul>\n</body>\n</html>",
-        "solution": "<!DOCTYPE html>\n<html lang='en'>\n<head>\n  <meta charset='UTF-8'>\n  <title>My Profile</title>\n</head>\n<body>\n  <h1>Mabel Chinasa</h1>\n  <p>I am a full-stack developer.</p>\n  <ul>\n    <li>Python</li>\n    <li>React</li>\n    <li>FastAPI</li>\n  </ul>\n</body>\n</html>",
-        "hint": "DOCTYPE html, title in head, h1/p/ul in body.",
-        "rubric": "Valid HTML5 structure with all required elements."
+        "title": "What is HTML?",
+        "theory": "## The Building Blocks of the Web\nHTML defines the structure of a webpage. Let's look at a simple example:\n\n```html\n<h1>Hello World</h1>\n<p>This is a paragraph.</p>\n```\n\n**What this code does:**\n- `<h1>`: This is an 'opening tag' for a Heading 1. It tells the browser to make the text large and bold, like a title.\n- `Hello World`: This is the actual text content that the user will see on the screen.\n- `</h1>`: This is the 'closing tag' (noted by the forward slash `/`). It tells the browser that the heading ends here.\n- `<p>...</p>`: This creates a standard paragraph of text.",
+        "instructions": "## Task: Written Response\nWhat does HTML stand for, and what is its primary purpose on a web page?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: HTML stands for HyperText Markup Language, and its primary purpose is to define the structure and meaning of web content.",
+        "hint": "It defines the skeleton of the page.",
+        "rubric": "Mentions HyperText Markup Language and defining structure."
       },
       {
-        "title": "Links & Images",
-        "theory": "## Hyperlinks and Images\n\n```html\n<a href='https://google.com' target='_blank'>Visit Google</a>\n<img src='photo.jpg' alt='A photo' width='300'>\n```\n\n`target='_blank'` opens in new tab. `alt` is required for accessibility.",
-        "instructions": "## Task: Gallery Page\n1. Create 3 links to your favorite websites\n2. Add an image tag (use any URL)\n3. Make the image a clickable link",
-        "starterCode": "<a href='___'>___</a>\n<a href='___'>___</a>\n<a ___='___' target='_blank'>\n  <img src='___' alt='___' width='300'>\n</a>",
-        "solution": "<a href='https://google.com'>Google</a>\n<a href='https://github.com'>GitHub</a>\n<a href='https://python.org' target='_blank'>\n  <img src='https://via.placeholder.com/300' alt='Placeholder' width='300'>\n</a>",
-        "hint": "Wrap <img> inside <a> to make it clickable.",
-        "rubric": "3 links present. Image is clickable. Alt text provided."
+        "title": "HTML Tags and Elements",
+        "theory": "## Opening and Closing Tags\nAn HTML element is defined by a start tag, some content, and an end tag. For example: `<p>My paragraph</p>`.\nThe `<p>` is the start tag, and `</p>` is the end tag. Some elements, like `<img>`, are empty elements and do not have an end tag.",
+        "instructions": "## Task: Tag Identification\nIdentify the opening tag, the content, and the closing tag in this element: `<h1>Welcome!</h1>`",
+        "starterCode": "Opening tag: \nContent: \nClosing tag: ",
+        "solution": "Opening tag: <h1>\nContent: Welcome!\nClosing tag: </h1>",
+        "hint": "Tags are enclosed in angle brackets.",
+        "rubric": "Correctly identifies <h1>, Welcome!, and </h1>."
       },
       {
-        "title": "Forms & Inputs",
-        "theory": "## HTML Forms\nForms collect user input.\n\n```html\n<form action='/submit' method='POST'>\n  <label for='name'>Name:</label>\n  <input type='text' id='name' name='name' required>\n  <input type='email' id='email' name='email'>\n  <textarea name='message' rows='4'></textarea>\n  <button type='submit'>Send</button>\n</form>\n```",
-        "instructions": "## Task: Registration Form\n1. Create a form with fields: Full Name, Email, Password, Age\n2. Use appropriate input types (text, email, password, number)\n3. Add a submit button",
-        "starterCode": "<form>\n  <label>Name:</label>\n  <input type='___' name='name' required>\n  \n  <label>Email:</label>\n  <input type='___' name='email' required>\n  \n  <label>Password:</label>\n  <input type='___' name='password' required>\n  \n  <label>Age:</label>\n  <input type='___' name='age' min='1' max='120'>\n  \n  <button type='___'>Register</button>\n</form>",
-        "solution": "<form>\n  <label>Name:</label>\n  <input type='text' name='name' required>\n  \n  <label>Email:</label>\n  <input type='email' name='email' required>\n  \n  <label>Password:</label>\n  <input type='password' name='password' required>\n  \n  <label>Age:</label>\n  <input type='number' name='age' min='1' max='120'>\n  \n  <button type='submit'>Register</button>\n</form>",
-        "hint": "text, email, password, number are the input types. submit for the button.",
-        "rubric": "4 inputs with correct types. Submit button present."
-      },
-      {
-        "title": "Semantic HTML",
-        "theory": "## Semantic Tags\nSemantic tags give meaning to your content.\n\n```html\n<header>  — top of page\n<nav>     — navigation links\n<main>    — main content\n<article> — self-contained content\n<aside>   — sidebar\n<footer>  — bottom of page\n<section> — themed grouping\n```\n\nThey improve SEO and accessibility over generic `<div>` tags.",
-        "instructions": "## Task: Blog Layout\n1. Create a header with a nav containing 3 links\n2. A main with an article (heading + 2 paragraphs)\n3. An aside with related links\n4. A footer with copyright",
-        "starterCode": "<___>\n  <h1>My Blog</h1>\n  <___>\n    <a href='/'>Home</a>\n    <a href='/about'>About</a>\n    <a href='/contact'>Contact</a>\n  </___>\n</___>\n\n<___>\n  <___>\n    <h2>My First Post</h2>\n    <p>Welcome to my blog!</p>\n    <p>More content here...</p>\n  </___>\n  <___>\n    <h3>Related Posts</h3>\n    <ul><li>Post 1</li><li>Post 2</li></ul>\n  </___>\n</___>\n\n<___>\n  <p>&copy; 2024 My Blog</p>\n</___>",
-        "solution": "<header>\n  <h1>My Blog</h1>\n  <nav>\n    <a href='/'>Home</a>\n    <a href='/about'>About</a>\n    <a href='/contact'>Contact</a>\n  </nav>\n</header>\n\n<main>\n  <article>\n    <h2>My First Post</h2>\n    <p>Welcome to my blog!</p>\n    <p>More content here...</p>\n  </article>\n  <aside>\n    <h3>Related Posts</h3>\n    <ul><li>Post 1</li><li>Post 2</li></ul>\n  </aside>\n</main>\n\n<footer>\n  <p>&copy; 2024 My Blog</p>\n</footer>",
-        "hint": "header > nav. main > article + aside. footer at bottom.",
-        "rubric": "All 6 semantic tags used correctly."
-      },
-      {
-        "title": "Tables",
-        "theory": "## HTML Tables\n\n```html\n<table>\n  <thead>\n    <tr>\n      <th>Name</th>\n      <th>Score</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Alice</td>\n      <td>95</td>\n    </tr>\n  </tbody>\n</table>\n```\n\n`<thead>` for headers, `<tbody>` for data rows.",
-        "instructions": "## Task: Student Grades Table\n1. Create a table with headers: Name, Math, Science, Average\n2. Add 3 student rows with grades\n3. Use thead and tbody",
-        "starterCode": "<table>\n  <___>\n    <tr>\n      <th>Name</th>\n      <th>Math</th>\n      <th>Science</th>\n      <th>Average</th>\n    </tr>\n  </___>\n  <___>\n    <tr>\n      <td>Alice</td>\n      <td>90</td>\n      <td>85</td>\n      <td>87.5</td>\n    </tr>\n    <tr>\n      <td>___</td>\n      <td>___</td>\n      <td>___</td>\n      <td>___</td>\n    </tr>\n  </___>\n</table>",
-        "solution": "<table>\n  <thead>\n    <tr>\n      <th>Name</th>\n      <th>Math</th>\n      <th>Science</th>\n      <th>Average</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Alice</td>\n      <td>90</td>\n      <td>85</td>\n      <td>87.5</td>\n    </tr>\n    <tr>\n      <td>Bob</td>\n      <td>78</td>\n      <td>82</td>\n      <td>80.0</td>\n    </tr>\n  </tbody>\n</table>",
-        "hint": "thead wraps header row. tbody wraps data rows.",
-        "rubric": "Table has thead/tbody. At least 2 data rows. 4 columns."
+        "title": "Document Structure",
+        "theory": "## The HTML Skeleton\nEvery webpage follows a standard structure:\n\n```html\n<!DOCTYPE html>\n<html>\n<head>\n  <title>My Page</title>\n</head>\n<body>\n  <h1>Welcome!</h1>\n</body>\n</html>\n```\n\n**What this code does:**\n- `<!DOCTYPE html>`: Tells the browser 'This is a modern HTML5 document'.\n- `<html>`: The root container for the entire page.\n- `<head>`: The invisible part of the page. It contains metadata and settings.\n- `<title>`: Sets the name of the tab in your browser (e.g., 'My Page').\n- `<body>`: The visible part of the page. Everything the user actually sees (like the `<h1>`) goes inside here.",
+        "instructions": "## Task: Anatomy of a Webpage\nWhere would you place the `<title>` of a webpage, and where would you place a visible `<p>` paragraph?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: The <title> goes in the <head>, and the <p> goes in the <body>.",
+        "hint": "Visible things go in the body, metadata goes in the head.",
+        "rubric": "Mentions <head> for title and <body> for paragraph."
       }
     ]
   },
   "CSS Styling": {
-    "aiRubric": "Check logic, syntax, and output for CSS Styling.",
+    "aiRubric": "Check theoretical understanding of CSS Styling.",
     "lessons": [
       {
-        "title": "Selectors & Properties",
-        "theory": "## CSS Basics\nCSS styles HTML elements using selectors and properties.\n\n```css\n/* Element selector */\nh1 { color: navy; font-size: 2rem; }\n\n/* Class selector */\n.card { background: #fff; padding: 20px; border-radius: 8px; }\n\n/* ID selector */\n#header { background: linear-gradient(135deg, #667eea, #764ba2); }\n\n/* Descendant */\n.nav a { text-decoration: none; }\n```",
-        "instructions": "## Task: Style a Card\n1. Create a `.card` class with padding, background, border-radius, and box-shadow\n2. Style the card's h2 with a custom color\n3. Style a `.btn` class for a button",
-        "starterCode": ".card {\n  padding: ___px;\n  background: ___;\n  border-radius: ___px;\n  box-shadow: 0 2px 8px rgba(0,0,0,___);\n}\n\n.card h2 {\n  color: ___;\n  margin-bottom: ___px;\n}\n\n.btn {\n  padding: 10px 20px;\n  background: ___;\n  color: white;\n  border: none;\n  border-radius: ___px;\n  cursor: pointer;\n}",
-        "solution": ".card {\n  padding: 24px;\n  background: #ffffff;\n  border-radius: 12px;\n  box-shadow: 0 2px 8px rgba(0,0,0,0.1);\n}\n\n.card h2 {\n  color: #1a1a2e;\n  margin-bottom: 12px;\n}\n\n.btn {\n  padding: 10px 20px;\n  background: #667eea;\n  color: white;\n  border: none;\n  border-radius: 8px;\n  cursor: pointer;\n}",
-        "hint": "Use rgba for shadow opacity. hex codes for colors.",
-        "rubric": "Card has shadow, rounded corners. Button is styled."
+        "title": "What is CSS?",
+        "theory": "## Styling the Web\nCSS makes HTML look good. We use it to change colors, fonts, and layouts.\n\n```css\np {\n  color: blue;\n  font-size: 16px;\n}\n```\n\n**What this code does:**\n- `p`: This is the **Selector**. It tells CSS to target *all* `<p>` (paragraph) tags on the webpage.\n- `{ ... }`: The curly braces contain the styling rules we want to apply.\n- `color: blue;`: Changes the text color to blue. (Notice the colon `:` separates the property and value, and the semicolon `;` ends the rule).\n- `font-size: 16px;`: Changes the size of the text to 16 pixels.",
+        "instructions": "## Task: HTML vs CSS\nBriefly explain the different roles of HTML and CSS in building a webpage.",
+        "starterCode": "Answer: ",
+        "solution": "Answer: HTML provides the structure and content, while CSS provides the visual styling and layout.",
+        "hint": "Structure vs Style.",
+        "rubric": "Mentions HTML for structure and CSS for style."
       },
       {
-        "title": "Flexbox Layout",
-        "theory": "## Flexbox\nFlexbox is the modern way to create layouts.\n\n```css\n.container {\n  display: flex;\n  justify-content: center;  /* horizontal */\n  align-items: center;      /* vertical */\n  gap: 16px;                /* space between items */\n}\n\n.item { flex: 1; }  /* Each item takes equal space */\n```\n\nKey properties: `flex-direction`, `justify-content`, `align-items`, `flex-wrap`, `gap`.",
-        "instructions": "## Task: Navigation Bar\n1. Create a flex container for a navbar\n2. Logo on the left, links on the right\n3. Center items vertically\n4. Add spacing between links",
-        "starterCode": ".navbar {\n  display: ___;\n  justify-content: ___;\n  align-items: ___;\n  padding: 16px 32px;\n  background: #1a1a2e;\n}\n\n.nav-links {\n  display: ___;\n  gap: ___px;\n}\n\n.nav-links a {\n  color: white;\n  text-decoration: ___;\n}",
-        "solution": ".navbar {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 16px 32px;\n  background: #1a1a2e;\n}\n\n.nav-links {\n  display: flex;\n  gap: 24px;\n}\n\n.nav-links a {\n  color: white;\n  text-decoration: none;\n}",
-        "hint": "space-between pushes logo left and links right. center for vertical alignment.",
-        "rubric": "Navbar is flex with space-between. Links are flex with gap."
+        "title": "CSS Selectors",
+        "theory": "## Targeting Elements\nTo style an element, CSS needs to 'select' it first. \n- **Element Selector**: Selects all elements of a type (e.g., `p { color: red; }`).\n- **Class Selector**: Selects elements with a specific class, starting with a dot (e.g., `.my-class { color: blue; }`).\n- **ID Selector**: Selects a unique element with a specific ID, starting with a hash (e.g., `#my-id { color: green; }`).",
+        "instructions": "## Task: Matching Selectors\nWhich selector would you use if you want to style multiple buttons exactly the same way: an Element, Class, or ID selector?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Class selector.",
+        "hint": "IDs must be unique, and elements might be too broad.",
+        "rubric": "Identifies class selector."
       },
       {
-        "title": "CSS Grid",
-        "theory": "## CSS Grid\nGrid is perfect for two-dimensional layouts.\n\n```css\n.grid {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 20px;\n}\n\n/* Span multiple columns */\n.wide { grid-column: span 2; }\n\n/* Responsive */\n@media (max-width: 768px) {\n  .grid {\n    grid-template-columns: 1fr;\n  }\n}\n```",
-        "instructions": "## Task: Photo Gallery Grid\n1. Create a 3-column grid with 20px gap\n2. Make it responsive (1 column on mobile)\n3. Style each grid item as a card",
-        "starterCode": ".gallery {\n  display: ___;\n  grid-template-columns: repeat(___, ___);\n  gap: ___px;\n  padding: 20px;\n}\n\n.gallery-item {\n  background: #f0f0f0;\n  border-radius: 8px;\n  padding: 16px;\n  text-align: center;\n}\n\n@media (max-width: 768px) {\n  .gallery {\n    grid-template-columns: ___;\n  }\n}",
-        "solution": ".gallery {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 20px;\n  padding: 20px;\n}\n\n.gallery-item {\n  background: #f0f0f0;\n  border-radius: 8px;\n  padding: 16px;\n  text-align: center;\n}\n\n@media (max-width: 768px) {\n  .gallery {\n    grid-template-columns: 1fr;\n  }\n}",
-        "hint": "repeat(3, 1fr) for 3 equal columns. 1fr for single column on mobile.",
-        "rubric": "3-column grid. Responsive to 1 column. Items styled as cards."
-      },
-      {
-        "title": "Animations & Transitions",
-        "theory": "## CSS Animations\n\n```css\n/* Transition on hover */\n.btn {\n  transition: all 0.3s ease;\n}\n.btn:hover {\n  transform: translateY(-2px);\n  box-shadow: 0 4px 12px rgba(0,0,0,0.2);\n}\n\n/* Keyframe animation */\n@keyframes fadeIn {\n  from { opacity: 0; transform: translateY(20px); }\n  to { opacity: 1; transform: translateY(0); }\n}\n\n.card {\n  animation: fadeIn 0.5s ease;\n}\n```",
-        "instructions": "## Task: Animated Button\n1. Create a button with a smooth hover transition\n2. On hover: scale up slightly, change background color\n3. Add a pulse keyframe animation",
-        "starterCode": ".btn {\n  padding: 12px 24px;\n  background: #667eea;\n  color: white;\n  border: none;\n  border-radius: 8px;\n  cursor: pointer;\n  transition: all ___s ease;\n}\n\n.btn:hover {\n  transform: scale(___);\n  background: ___;\n}\n\n@keyframes pulse {\n  0% { transform: scale(1); }\n  50% { transform: scale(___); }\n  100% { transform: scale(1); }\n}\n\n.btn-pulse {\n  animation: pulse ___s infinite;\n}",
-        "solution": ".btn {\n  padding: 12px 24px;\n  background: #667eea;\n  color: white;\n  border: none;\n  border-radius: 8px;\n  cursor: pointer;\n  transition: all 0.3s ease;\n}\n\n.btn:hover {\n  transform: scale(1.05);\n  background: #764ba2;\n}\n\n@keyframes pulse {\n  0% { transform: scale(1); }\n  50% { transform: scale(1.05); }\n  100% { transform: scale(1); }\n}\n\n.btn-pulse {\n  animation: pulse 2s infinite;\n}",
-        "hint": "0.3s for transition. scale(1.05) for slight growth. 2s infinite for pulse.",
-        "rubric": "Smooth hover transition. Keyframe pulse animation defined and applied."
-      },
-      {
-        "title": "CSS Variables & Dark Mode",
-        "theory": "## CSS Custom Properties\nVariables make themes and consistency easy.\n\n```css\n:root {\n  --bg: #ffffff;\n  --text: #1a1a2e;\n  --accent: #667eea;\n}\n\n[data-theme='dark'] {\n  --bg: #0f0f23;\n  --text: #e0e0e0;\n  --accent: #00e5a0;\n}\n\nbody {\n  background: var(--bg);\n  color: var(--text);\n}\n\n.btn {\n  background: var(--accent);\n}\n```",
-        "instructions": "## Task: Theme System\n1. Define CSS variables for light mode in `:root`\n2. Define dark mode variables in `[data-theme='dark']`\n3. Use the variables in body and button styles",
-        "starterCode": ":root {\n  --bg: ___;\n  --text: ___;\n  --accent: ___;\n  --surface: ___;\n}\n\n[data-theme='dark'] {\n  --bg: ___;\n  --text: ___;\n  --accent: ___;\n  --surface: ___;\n}\n\nbody {\n  background: var(___);\n  color: var(___);\n}\n\n.card {\n  background: var(___);\n}\n\n.btn {\n  background: var(___);\n}",
-        "solution": ":root {\n  --bg: #ffffff;\n  --text: #1a1a2e;\n  --accent: #667eea;\n  --surface: #f5f5f5;\n}\n\n[data-theme='dark'] {\n  --bg: #0f0f23;\n  --text: #e0e0e0;\n  --accent: #00e5a0;\n  --surface: #1a1a3e;\n}\n\nbody {\n  background: var(--bg);\n  color: var(--text);\n}\n\n.card {\n  background: var(--surface);\n}\n\n.btn {\n  background: var(--accent);\n}",
-        "hint": "Define with --name: value. Use with var(--name).",
-        "rubric": "Variables defined for both themes. Used consistently in styles."
+        "title": "The Box Model",
+        "theory": "## Everything is a Box\nIn CSS, every HTML element is wrapped in a box. The Box Model consists of:\n- **Content**: The text or image itself.\n- **Padding**: Transparent space *inside* the border, pushing content inward.\n- **Border**: A line going around the padding and content.\n- **Margin**: Transparent space *outside* the border, pushing other elements away.",
+        "instructions": "## Task: Box Model Layers\nOrder the box model layers from the innermost (center) to the outermost layer.",
+        "starterCode": "1. (Innermost): \n2. \n3. \n4. (Outermost): ",
+        "solution": "1. (Innermost): Content\n2. Padding\n3. Border\n4. (Outermost): Margin",
+        "hint": "Content is in the middle, margin is on the very outside.",
+        "rubric": "Content, Padding, Border, Margin."
       }
     ]
   },
   "JS Basics": {
-    "aiRubric": "Check logic, syntax, and output for JS Basics.",
+    "aiRubric": "Check theoretical understanding of JS Basics.",
     "lessons": [
       {
-        "title": "Variables & Console",
-        "theory": "## JavaScript Variables\n\n```javascript\n// Modern variable declarations\nconst name = 'Alice';  // Cannot be reassigned\nlet age = 25;          // Can be reassigned\n// var is old-style, avoid it\n\nconsole.log(`Hello, ${name}! Age: ${age}`);\n\n// Data types\nconst num = 42;         // number\nconst text = 'hello';   // string\nconst flag = true;      // boolean\nconst empty = null;     // null\nconst arr = [1, 2, 3];  // array\nconst obj = {x: 1};     // object\n```",
-        "instructions": "## Task: Variable Practice\n1. Declare `name` (const), `age` (let), `isStudent` (const)\n2. Log a greeting using template literals\n3. Change age to age + 1 and log again",
-        "starterCode": "const name = '___';\nlet age = ___;\nconst isStudent = ___;\n\nconsole.log(`Hello, ${___}! You are ${___} years old.`);\n\nage = age + 1;\nconsole.log(`Next year you'll be ${___}`);",
-        "solution": "const name = 'Mabel';\nlet age = 20;\nconst isStudent = true;\n\nconsole.log(`Hello, ${name}! You are ${age} years old.`);\n\nage = age + 1;\nconsole.log(`Next year you'll be ${age}`);",
-        "hint": "const for fixed values, let for changeable. Template literals use backticks.",
-        "rubric": "Variables declared correctly. Template literals used. Age incremented."
+        "title": "What is JavaScript?",
+        "theory": "## Making the Web Interactive\nJavaScript (JS) is a programming language that allows you to implement complex features on web pages. While HTML provides structure and CSS provides style, JavaScript makes pages dynamic (e.g., updating content, animating images, validating forms, communicating with servers).",
+        "instructions": "## Task: The Role of JS\nIf HTML is the noun and CSS is the adjective, what part of speech is JavaScript?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: The verb (action).",
+        "hint": "It makes things DO things.",
+        "rubric": "Mentions verb, action, or behavior."
       },
       {
-        "title": "Functions & Arrow Functions",
-        "theory": "## JavaScript Functions\n\n```javascript\n// Traditional function\nfunction add(a, b) {\n  return a + b;\n}\n\n// Arrow function (modern)\nconst multiply = (a, b) => a * b;\n\n// Arrow with body\nconst greet = (name) => {\n  const msg = `Hello, ${name}!`;\n  return msg;\n};\n\nconsole.log(add(3, 5));      // 8\nconsole.log(multiply(4, 6)); // 24\n```",
-        "instructions": "## Task: Calculator Functions\n1. Create an arrow function `add(a, b)`\n2. Create an arrow function `subtract(a, b)`\n3. Create a `calculate(a, b, operation)` that calls the right function\n4. Test with a few examples",
-        "starterCode": "const add = (a, b) => ___;\nconst subtract = (a, b) => ___;\n\nconst calculate = (a, b, operation) => {\n  return ___(a, b);\n};\n\nconsole.log(calculate(10, 3, ___));\nconsole.log(calculate(10, 3, ___));",
-        "solution": "const add = (a, b) => a + b;\nconst subtract = (a, b) => a - b;\n\nconst calculate = (a, b, operation) => {\n  return operation(a, b);\n};\n\nconsole.log(calculate(10, 3, add));\nconsole.log(calculate(10, 3, subtract));",
-        "hint": "Pass the function itself (without parentheses) as an argument.",
-        "rubric": "Arrow functions defined. Higher-order function works. Output: 13, 7."
+        "title": "Variables: let and const",
+        "theory": "## Storing Information\nVariables act as containers for storing data. In modern JavaScript, we use:\n- `const`: For values that will NEVER change (constants).\n- `let`: For values that can change later on.\n(Avoid using the older `var` keyword).",
+        "instructions": "## Task: Choosing a Variable Type\nIf you are storing a user's birth year, should you use `let` or `const`? What about their current age?",
+        "starterCode": "Birth Year: \nCurrent Age: ",
+        "solution": "Birth Year: const\nCurrent Age: let",
+        "hint": "Birth year never changes, but age changes every year.",
+        "rubric": "Identifies const for birth year and let for age."
       },
       {
-        "title": "Arrays & Methods",
-        "theory": "## Array Methods\n\n```javascript\nconst nums = [1, 2, 3, 4, 5];\n\n// map: transform each element\nconst doubled = nums.map(n => n * 2);  // [2,4,6,8,10]\n\n// filter: keep elements that pass test\nconst evens = nums.filter(n => n % 2 === 0);  // [2,4]\n\n// reduce: accumulate to single value\nconst sum = nums.reduce((acc, n) => acc + n, 0);  // 15\n\n// find: first match\nconst found = nums.find(n => n > 3);  // 4\n```",
-        "instructions": "## Task: Student Data Processing\n1. Given an array of scores, use `.map()` to add 5 bonus points to each\n2. Use `.filter()` to keep only passing scores (>= 60)\n3. Use `.reduce()` to find the total of passing scores",
-        "starterCode": "const scores = [55, 72, 48, 91, 63, 85, 37];\n\nconst boosted = scores.___(s => s + ___);\nconst passing = boosted.___(s => s >= ___);\nconst total = passing.___((acc, s) => acc + s, ___);\n\nconsole.log('Boosted:', boosted);\nconsole.log('Passing:', passing);\nconsole.log('Total:', total);",
-        "solution": "const scores = [55, 72, 48, 91, 63, 85, 37];\n\nconst boosted = scores.map(s => s + 5);\nconst passing = boosted.filter(s => s >= 60);\nconst total = passing.reduce((acc, s) => acc + s, 0);\n\nconsole.log('Boosted:', boosted);\nconsole.log('Passing:', passing);\nconsole.log('Total:', total);",
-        "hint": ".map() transforms, .filter() keeps matches, .reduce() accumulates with initial value 0.",
-        "rubric": "All 3 array methods used correctly. Chain produces correct results."
-      },
-      {
-        "title": "Objects & Destructuring",
-        "theory": "## Objects in JavaScript\n\n```javascript\nconst user = {\n  name: 'Alice',\n  age: 25,\n  skills: ['Python', 'React']\n};\n\n// Destructuring\nconst { name, age, skills } = user;\nconsole.log(name);  // Alice\n\n// Spread operator\nconst updated = { ...user, age: 26, city: 'NYC' };\n\n// Optional chaining\nconsole.log(user.address?.city);  // undefined (no error)\n```",
-        "instructions": "## Task: User Profile\n1. Create a user object with name, email, and scores array\n2. Destructure the properties\n3. Use spread to create an updated copy with a new field\n4. Print both objects",
-        "starterCode": "const user = {\n  name: '___',\n  email: '___',\n  scores: [90, 85, 92]\n};\n\nconst { ___, ___, ___ } = user;\nconsole.log(`${name}: ${email}`);\n\nconst updatedUser = { ...user, role: '___' };\nconsole.log(updatedUser);",
-        "solution": "const user = {\n  name: 'Mabel',\n  email: 'mabel@example.com',\n  scores: [90, 85, 92]\n};\n\nconst { name, email, scores } = user;\nconsole.log(`${name}: ${email}`);\n\nconst updatedUser = { ...user, role: 'admin' };\nconsole.log(updatedUser);",
-        "hint": "Destructure with matching property names. ...spread copies all properties.",
-        "rubric": "Object created. Destructured. Spread creates new object with added field."
-      },
-      {
-        "title": "Promises & Async/Await",
-        "theory": "## Asynchronous JavaScript\n\n```javascript\n// Promise\nconst fetchData = () => {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => resolve('Data loaded!'), 1000);\n  });\n};\n\n// Async/Await (modern approach)\nasync function getData() {\n  try {\n    const result = await fetchData();\n    console.log(result);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\ngetData();\n```",
-        "instructions": "## Task: Simulated API Call\n1. Create a function `fetchUser(id)` that returns a Promise\n2. Resolve with a user object after 1 second\n3. Create an async function that awaits and logs the result",
-        "starterCode": "const fetchUser = (id) => {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      ___({\n        id: id,\n        name: 'User ' + id,\n        email: `user${id}@example.com`\n      });\n    }, 1000);\n  });\n};\n\nasync function main() {\n  const user = ___ fetchUser(1);\n  console.log(user);\n}\n\nmain();",
-        "solution": "const fetchUser = (id) => {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      resolve({\n        id: id,\n        name: 'User ' + id,\n        email: `user${id}@example.com`\n      });\n    }, 1000);\n  });\n};\n\nasync function main() {\n  const user = await fetchUser(1);\n  console.log(user);\n}\n\nmain();",
-        "hint": "resolve() fulfills the promise. await pauses until promise resolves.",
-        "rubric": "Promise created with setTimeout. Async/await used. User object logged."
+        "title": "Functions",
+        "theory": "## Reusable Blocks of Code\nA function is a block of JavaScript code designed to perform a particular task.\n\n```javascript\nfunction addNumbers(a, b) {\n  let sum = a + b;\n  return sum;\n}\n```\n\n**What this code does:**\n- `function`: The keyword that tells JavaScript we are creating a new function.\n- `addNumbers`: The name we decided to give our function so we can call it later.\n- `(a, b)`: These are **parameters** (inputs). When we use this function, we will pass it two numbers, and it will internally refer to them as `a` and `b`.\n- `let sum = a + b;`: We create a new variable named `sum` and store the result of adding `a` and `b` together.\n- `return sum;`: This is the output. The function spits this value back out to whoever called it.",
+        "instructions": "## Task: Function Anatomy\nIn the example `function addNumbers(a, b)`, what do we call `a` and `b`?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Parameters (or arguments / inputs).",
+        "hint": "They are the inputs to the function.",
+        "rubric": "Mentions parameters, arguments, or inputs."
       }
     ]
   },
   "React Fundamentals": {
-    "aiRubric": "Check logic, syntax, and output for React Fundamentals.",
+    "aiRubric": "Check theoretical understanding of React Fundamentals.",
     "lessons": [
       {
         "title": "What is React?",
-        "theory": "## Component-Based UI\nReact is a JavaScript library for building user interfaces. It uses **components** to break complex UIs into small, reusable pieces.\n\n```jsx\n// A functional component\nfunction Welcome(props) {\n  return <h1>Hello, {props.name}</h1>;\n}\n\n// Using the component\nfunction App() {\n  return (\n    <div>\n      <Welcome name=\"Alice\" />\n      <Welcome name=\"Bob\" />\n    </div>\n  );\n}\n```\n\nJSX allows you to write HTML-like syntax inside JavaScript.",
-        "instructions": "## Task: Create a React Component\n1. Define a `ProfileCard` functional component\n2. It should accept `props.username` and `props.bio`\n3. Return a simulated JSX string representing the UI",
-        "starterCode": "function ProfileCard(props) {\n  return `\n    <div class=\"card\">\n      <h2>${___}</h2>\n      <p>${___}</p>\n    </div>\n  `;\n}\n\nfunction App() {\n  const html1 = ProfileCard({ username: \"Coder99\", bio: \"I love React!\" });\n  const html2 = ProfileCard({ username: \"DesignGuru\", bio: \"CSS is my passion.\" });\n  \n  console.log(html1);\n  console.log(html2);\n}\n\nApp();",
-        "solution": "function ProfileCard(props) {\n  return `\n    <div class=\"card\">\n      <h2>${props.username}</h2>\n      <p>${props.bio}</p>\n    </div>\n  `;\n}\n\nfunction App() {\n  const html1 = ProfileCard({ username: \"Coder99\", bio: \"I love React!\" });\n  const html2 = ProfileCard({ username: \"DesignGuru\", bio: \"CSS is my passion.\" });\n  \n  console.log(html1);\n  console.log(html2);\n}\n\nApp();",
-        "hint": "Access props properties using props.propertyName.",
-        "rubric": "ProfileCard generates correct simulated HTML strings using props."
+        "theory": "## Component-Based UI\nReact breaks UIs into small, reusable pieces called components.\n\n```jsx\nfunction Welcome(props) {\n  return <h1>Hello, {props.name}</h1>;\n}\n```\n\n**What this code does:**\n- `function Welcome(props)`: We define a standard JavaScript function. In React, a function that starts with a capital letter is treated as a UI Component. `props` (short for properties) are the inputs passed into this component.\n- `return (...)`: A component must return the UI it wants to draw on the screen.\n- `<h1>...</h1>`: This looks like HTML, but it's actually **JSX**. JSX allows us to write HTML-like syntax directly inside JavaScript.\n- `{props.name}`: The curly braces let us 'escape' back into JavaScript. It takes the `name` variable from the `props` object and injects it directly into the HTML output (e.g., resulting in 'Hello, Alice').",
+        "instructions": "## Task: Component Thinking\nIf you were building a clone of Twitter, name two distinct UI elements that you would turn into reusable React components.",
+        "starterCode": "1. \n2. ",
+        "solution": "1. Tweet Card\n2. Like Button",
+        "hint": "Think about pieces of the UI that appear multiple times.",
+        "rubric": "Mentions two distinct UI pieces (e.g., Tweet, Button, Sidebar, Profile)."
       },
       {
         "title": "State (useState)",
-        "theory": "## Remembering Things\nComponents need to \"remember\" things: current input, whether a modal is open, or a counter value. This is called **state**.\n\n```jsx\nimport { useState } from 'react';\n\nfunction Counter() {\n  // stateVar, setterFunction = useState(initialValue)\n  const [count, setCount] = useState(0);\n\n  return (\n    <button onClick={() => setCount(count + 1)}>\n      Clicked {count} times\n    </button>\n  );\n}\n```\n\nWhen state changes, React re-renders the component automatically!",
-        "instructions": "## Task: State Simulator\n1. Create a `useState` mock function that returns a value and a setter\n2. Use it to simulate a counter component's logic\n3. Call the setter and see the value update",
-        "starterCode": "let internalState;\nfunction mockUseState(initial) {\n  if (internalState === undefined) internalState = initial;\n  \n  const setState = (newValue) => {\n    internalState = ___;\n    console.log(\"Re-rendering with new state:\", internalState);\n  };\n  \n  return [___, ___];\n}\n\n// Simulate component cycle\nlet [count, setCount] = mockUseState(0);\nconsole.log(\"Initial render count:\", count);\n\n// Simulate user clicking a button\nsetCount(count + 1);\n\n// Re-run hook after re-render\n[count, setCount] = mockUseState(0);\nconsole.log(\"Second render count:\", count);",
-        "solution": "let internalState;\nfunction mockUseState(initial) {\n  if (internalState === undefined) internalState = initial;\n  \n  const setState = (newValue) => {\n    internalState = newValue;\n    console.log(\"Re-rendering with new state:\", internalState);\n  };\n  \n  return [internalState, setState];\n}\n\n// Simulate component cycle\nlet [count, setCount] = mockUseState(0);\nconsole.log(\"Initial render count:\", count);\n\n// Simulate user clicking a button\nsetCount(count + 1);\n\n// Re-run hook after re-render\n[count, setCount] = mockUseState(0);\nconsole.log(\"Second render count:\", count);",
-        "hint": "Set internalState to newValue. Return [internalState, setState] array.",
-        "rubric": "State updates to 1. Re-render preserves state value (1, not 0)."
+        "theory": "## Remembering Things\nComponents need to 'remember' things: what the user typed, or a counter value. This memory is called **state**.\n\n```jsx\nimport { useState } from 'react';\n\nfunction Counter() {\n  const [count, setCount] = useState(0);\n  return <button onClick={() => setCount(count + 1)}>Clicked {count}</button>;\n}\n```\n\n**What this code does:**\n- `import { useState }`: We bring in the useState 'hook' from the React library.\n- `useState(0)`: We initialize a new piece of state with a starting value of `0`.\n- `const [count, setCount] = ...`: useState returns two things: the current value (`count`), and a function used to update that value (`setCount`). We use array destructuring to grab them.\n- `onClick={() => setCount(count + 1)}`: When the button is clicked, we call `setCount` and pass it the new value (current count + 1). Crucially, calling `setCount` tells React to **re-render** the component, updating the HTML on the screen automatically!",
+        "instructions": "## Task: Recognizing State\nIf you have a shopping cart icon with a small number indicating how many items are in the cart, should that number be stored in 'state'?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Yes, because it needs to update dynamically as the user adds or removes items.",
+        "hint": "Does the value change while the user interacts with the app?",
+        "rubric": "Mentions Yes and that it updates dynamically."
       }
     ]
   },
   "State Management": {
-    "aiRubric": "Check logic, syntax, and output for State Management.",
+    "aiRubric": "Check theoretical understanding of State Management.",
     "lessons": [
       {
-        "title": "Global State",
-        "theory": "## Prop Drilling vs Global State\nWhen many components need the same data (like the logged-in user), passing it down as props is annoying (\"prop drilling\").\n\nGlobal State solutions (like Redux, Zustand, or React Context) store data outside the components so any component can access it directly.\n\n```javascript\n// Zustand example\nconst useStore = create((set) => ({\n  bears: 0,\n  increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),\n}))\n```",
-        "instructions": "## Task: Simple Global Store\n1. Create a Store class that holds state and listeners\n2. When state updates, call all listeners\n3. This simulates how Redux/Zustand works under the hood",
-        "starterCode": "class Store {\n  constructor(initialState) {\n    this.state = initialState;\n    this.listeners = [];\n  }\n  \n  subscribe(listener) {\n    this.listeners.___(listener);\n  }\n  \n  setState(newState) {\n    this.state = { ...this.state, ...newState };\n    // Notify all listeners\n    this.listeners.forEach(listener => ___(this.state));\n  }\n}\n\nconst store = new Store({ user: null, theme: 'light' });\n\nstore.subscribe((state) => console.log(\"Component A sees:\", state.theme));\nstore.subscribe((state) => console.log(\"Component B sees user:\", state.user));\n\nconsole.log(\"Updating theme...\");\nstore.setState({ theme: 'dark' });\n\nconsole.log(\"Logging in user...\");\nstore.setState({ user: 'Alice' });",
-        "solution": "class Store {\n  constructor(initialState) {\n    this.state = initialState;\n    this.listeners = [];\n  }\n  \n  subscribe(listener) {\n    this.listeners.push(listener);\n  }\n  \n  setState(newState) {\n    this.state = { ...this.state, ...newState };\n    // Notify all listeners\n    this.listeners.forEach(listener => listener(this.state));\n  }\n}\n\nconst store = new Store({ user: null, theme: 'light' });\n\nstore.subscribe((state) => console.log(\"Component A sees:\", state.theme));\nstore.subscribe((state) => console.log(\"Component B sees user:\", state.user));\n\nconsole.log(\"Updating theme...\");\nstore.setState({ theme: 'dark' });\n\nconsole.log(\"Logging in user...\");\nstore.setState({ user: 'Alice' });",
-        "hint": "push() to add listener. listener(this.state) to call it.",
-        "rubric": "Listeners are notified on every state change."
+        "title": "Prop Drilling vs Global State",
+        "theory": "## The Problem with Props\nIn React, data is passed from parent components down to child components using 'props'. But what if a deeply nested child needs data from the very top? Passing data down through 10 layers of components that don't need it is called **prop drilling**.\n**Global State** (using tools like Redux, Zustand, or React Context) solves this by storing data outside the component tree. Any component can 'subscribe' to the global store and access the data directly.",
+        "instructions": "## Task: When to use Global State\nIf you are storing the current logged-in user's profile which is needed by the Header, the Settings Page, and the Checkout Page, should you use local state or global state?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Global state.",
+        "hint": "Many unrelated components need access to it.",
+        "rubric": "Identifies global state."
       }
     ]
   },
   "CSS Grid & Flexbox": {
-    "aiRubric": "Check logic, syntax, and output for CSS Grid & Flexbox.",
+    "aiRubric": "Check theoretical understanding of Layouts.",
     "lessons": [
       {
-        "title": "Modern Layouts",
-        "theory": "## CSS Flexbox\nFlexbox is designed for 1-dimensional layouts (a row OR a column). It makes aligning items incredibly easy.\n\n```css\n.container {\n  display: flex;\n  justify-content: center; /* Horizontally centers */\n  align-items: center;     /* Vertically centers */\n}\n```\n## CSS Grid\nGrid is designed for 2-dimensional layouts (rows AND columns, like a checkerboard).",
-        "instructions": "## Task: Flexbox Align\n1. You have a simulated container with elements.\n2. Match the flexbox property to what it does.",
-        "starterCode": "flex_props = {\n    'Space out elements evenly across the main axis': 'justify-content: ___',\n    'Center elements on the cross axis (vertical if flex-direction is row)': 'align-items: ___',\n    'Stack elements vertically instead of horizontally': 'flex-direction: ___'\n}\n\nfor desc, prop in flex_props.items():\n    print(f\"{prop:30} -> {desc}\")",
-        "solution": "flex_props = {\n    'Space out elements evenly across the main axis': 'justify-content: space-between',\n    'Center elements on the cross axis (vertical if flex-direction is row)': 'align-items: center',\n    'Stack elements vertically instead of horizontally': 'flex-direction: column'\n}\n\nfor desc, prop in flex_props.items():\n    print(f\"{prop:30} -> {desc}\")",
-        "hint": "space-between, center, column.",
-        "rubric": "Properties correctly matched."
+        "title": "Flexbox vs Grid",
+        "theory": "## Modern Layouts\n- **CSS Flexbox:** Designed for 1-dimensional layouts (either a single row OR a single column). It is fantastic for aligning items, distributing space, and centering content.\n- **CSS Grid:** Designed for 2-dimensional layouts (rows AND columns simultaneously, like a checkerboard or a photo gallery).",
+        "instructions": "## Task: Choosing a Layout System\nIf you want to perfectly center a single button vertically and horizontally inside a container, which system is typically easier: Flexbox or Grid?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Flexbox",
+        "hint": "Flexbox is king for simple 1D alignment.",
+        "rubric": "Identifies Flexbox."
       }
     ]
   },
   "Next.js": {
-    "aiRubric": "Check logic, syntax, and output for Next.js.",
+    "aiRubric": "Check theoretical understanding of Next.js.",
     "lessons": [
       {
         "title": "Intro to Next.js",
-        "theory": "## The React Framework\nNext.js is a framework built on top of React. It provides:\n- **Server-Side Rendering (SSR)**: HTML is generated on the server (better for SEO)\n- **Static Site Generation (SSG)**: HTML is generated at build time (super fast)\n- **File-system Routing**: Files in the `pages/` or `app/` directory automatically become routes\n- **API Routes**: Build your backend API directly in Next.js",
-        "instructions": "## Task: Routing in Next.js\n1. Next.js uses file-based routing. Match the file path to its URL route.\n2. Match: `pages/index.js`, `pages/about.js`, `pages/blog/[id].js`\n3. URL patterns: `/`, `/about`, `/blog/123`",
-        "starterCode": "routes = {\n    'pages/index.js': '___',\n    'pages/about.js': '___',\n    'pages/blog/[id].js': '___'\n}\n\nfor file, url in routes.items():\n    print(f\"File: {file} -> URL: {url}\")",
-        "solution": "routes = {\n    'pages/index.js': '/',\n    'pages/about.js': '/about',\n    'pages/blog/[id].js': '/blog/123'\n}\n\nfor file, url in routes.items():\n    print(f\"File: {file} -> URL: {url}\")",
-        "hint": "index.js maps to the root (/). Brackets [id] mean a dynamic route.",
-        "rubric": "Files correctly mapped to their Next.js URLs."
-      },
-      {
-        "title": "Data Fetching",
-        "theory": "## getServerSideProps vs getStaticProps\nNext.js allows you to fetch data before the page loads.\n\n- `getStaticProps`: Fetches data at **build time**. Use for blogs, documentation (doesn't change often).\n- `getServerSideProps`: Fetches data on **every request**. Use for user dashboards, real-time data.\n- `useEffect` (Client-side): Fetches data in the browser after the page loads.",
-        "instructions": "## Task: Choose Data Fetching Method\n1. Recommend a fetching method based on the use case\n2. Use cases: 'public_blog', 'user_dashboard', 'real_time_chat'\n3. Methods: 'getStaticProps', 'getServerSideProps', 'client-side'",
-        "starterCode": "def choose_fetch_method(use_case):\n    if use_case == 'public_blog':\n        return '___'\n    elif use_case == 'user_dashboard':\n        return '___'\n    elif use_case == 'real_time_chat':\n        return '___'\n    else:\n        return 'unknown'\n\ncases = ['public_blog', 'user_dashboard', 'real_time_chat']\nfor c in cases:\n    print(f\"{c}: {choose_fetch_method(c)}\")",
-        "solution": "def choose_fetch_method(use_case):\n    if use_case == 'public_blog':\n        return 'getStaticProps'\n    elif use_case == 'user_dashboard':\n        return 'getServerSideProps'\n    elif use_case == 'real_time_chat':\n        return 'client-side'\n    else:\n        return 'unknown'\n\ncases = ['public_blog', 'user_dashboard', 'real_time_chat']\nfor c in cases:\n    print(f\"{c}: {choose_fetch_method(c)}\")",
-        "hint": "Blog = static. Dashboard = server-side. Chat = client-side.",
-        "rubric": "Methods correctly matched to their use cases."
+        "theory": "## The React Framework for Production\nNext.js provides Server-Side Rendering (SSR).\n\n```javascript\nexport async function getServerSideProps() {\n  const res = await fetch('https://api.example.com/data');\n  const data = await res.json();\n  return { props: { data } };\n}\n```\n\n**What this code does:**\n- `export async function getServerSideProps()`: This is a special Next.js function. If you export this from a page, Next.js will execute this function **on the server** every time a user requests the page.\n- `const res = await fetch(...)`: The server makes an API call to a database or external service to get the necessary data.\n- `return { props: { data } }`: The function passes the fetched data directly into the React component as `props`. This means by the time the React component renders, it already has the data, allowing Next.js to generate the full HTML string and send it to the browser (which is amazing for SEO and load speeds).",
+        "instructions": "## Task: Next.js vs React\nWhy is a Next.js application generally better for Search Engine Optimization (SEO) than a standard React application?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Because Next.js pre-renders the HTML on the server, allowing search engine bots to instantly read the content, unlike standard React which requires executing JavaScript to see the content.",
+        "hint": "Think about what the server sends to the browser.",
+        "rubric": "Mentions Server-Side Rendering, pre-rendering, or sending ready HTML."
       }
     ]
   },
   "Frontend Performance": {
-    "aiRubric": "Check logic, syntax, and output for Frontend Performance.",
+    "aiRubric": "Check theoretical understanding of Frontend Performance.",
     "lessons": [
       {
-        "title": "Lazy Loading",
-        "theory": "## Don't Load Everything at Once\nIf a user visits your homepage, they shouldn't have to download the JavaScript for your settings page or the high-res images at the bottom of the page.\n\n- **Code Splitting**: Breaking your JS bundle into smaller chunks.\n- **Lazy Loading**: Only loading images or components when they enter the viewport (screen).\n\nIn React, you use `React.lazy()` to dynamically import components only when needed.",
-        "instructions": "## Task: Lazy Image Simulator\n1. Simulate a lazy loading image script.\n2. You have a list of images with a boolean `in_viewport`.\n3. If `in_viewport` is True, load the image.",
-        "starterCode": "images = [\n    {'src': 'hero.jpg', 'in_viewport': True},\n    {'src': 'footer.jpg', 'in_viewport': False},\n    {'src': 'ad.png', 'in_viewport': False}\n]\n\ndef handle_scroll(images):\n    for img in images:\n        if img['___'] == ___:\n            print(f\"Downloading {img['src']}...\")\n            # Once loaded, we could set a flag so we don't load it again\n        else:\n            print(f\"Skipping {img['src']} (Not visible yet)\")\n\nhandle_scroll(images)",
-        "solution": "images = [\n    {'src': 'hero.jpg', 'in_viewport': True},\n    {'src': 'footer.jpg', 'in_viewport': False},\n    {'src': 'ad.png', 'in_viewport': False}\n]\n\ndef handle_scroll(images):\n    for img in images:\n        if img['in_viewport'] == True:\n            print(f\"Downloading {img['src']}...\")\n            # Once loaded, we could set a flag so we don't load it again\n        else:\n            print(f\"Skipping {img['src']} (Not visible yet)\")\n\nhandle_scroll(images)",
-        "hint": "Check if img['in_viewport'] == True.",
-        "rubric": "Successfully downloads hero.jpg and skips the rest."
+        "title": "Lazy Loading & Code Splitting",
+        "theory": "## Don't Load Everything at Once\nIf a user visits your homepage, they shouldn't have to download the JavaScript for your 'Account Settings' page, nor should they download the heavy high-resolution images at the very bottom of the page before they scroll down.\n- **Code Splitting**: Breaking your massive JS bundle into smaller chunks that load only when needed.\n- **Lazy Loading**: Only loading images or components when they actually enter the viewport (the visible part of the screen).",
+        "instructions": "## Task: Optimizing Load Times\nWhat is the technique called where you delay the loading of off-screen images until the user scrolls down to them?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Lazy Loading",
+        "hint": "Loading something 'lazily'.",
+        "rubric": "Identifies Lazy Loading."
       }
     ]
   },
   "Web Accessibility": {
-    "aiRubric": "Check logic, syntax, and output for Web Accessibility.",
+    "aiRubric": "Check theoretical understanding of Web Accessibility.",
     "lessons": [
       {
-        "title": "Semantic HTML",
-        "theory": "## Designing for Everyone\nAccessibility (a11y) ensures users with disabilities can use your app. Screen readers rely heavily on **Semantic HTML**.\n\n- Instead of `<div class=\"header\">`, use `<header>`\n- Instead of `<span class=\"button\">`, use `<button>`\n- Use `<nav>`, `<main>`, `<article>`, `<footer>`\n\nThis provides structural meaning to the browser and assistive technologies.",
-        "instructions": "## Task: Semantic Refactor\n1. You are given a string of bad HTML using only `div` tags.\n2. Create a mapped version that replaces the generic tags with semantic ones: `header`, `nav`, `main`, `footer`.",
-        "starterCode": "bad_html = {\n    'div_header': '___',\n    'div_nav': '___',\n    'div_content': '___',\n    'div_footer': '___'\n}\n\nfor bad, good in bad_html.items():\n    print(f\"Replace <{bad}> with semantic <{good}>\")",
-        "solution": "bad_html = {\n    'div_header': 'header',\n    'div_nav': 'nav',\n    'div_content': 'main',\n    'div_footer': 'footer'\n}\n\nfor bad, good in bad_html.items():\n    print(f\"Replace <{bad}> with semantic <{good}>\")",
-        "hint": "Match the class name to the semantic HTML5 tag.",
-        "rubric": "All 4 generic divs matched to their proper HTML5 semantic tags."
-      },
-      {
-        "title": "ARIA Attributes",
-        "theory": "## Accessible Rich Internet Applications\nWhen HTML5 tags aren't enough (e.g., for custom complex widgets), ARIA attributes provide extra context.\n\n- `aria-hidden=\"true\"`: Hides an element from screen readers (e.g., a decorative icon)\n- `aria-label`: Provides a label when there is no visible text (e.g., an icon-only button)\n- `aria-expanded`: Tells if a dropdown is open or closed",
-        "instructions": "## Task: Apply ARIA\n1. Match the use case to the correct ARIA attribute.\n2. Attributes: 'aria-hidden', 'aria-label', 'aria-expanded'",
-        "starterCode": "aria_usage = {\n    'Decorative SVG icon': '___',\n    'Button with only a magnifying glass icon': '___',\n    'Accordion menu that is currently open': '___'\n}\n\nfor usage, attr in aria_usage.items():\n    print(f\"{usage:42} -> {attr}\")",
-        "solution": "aria_usage = {\n    'Decorative SVG icon': 'aria-hidden',\n    'Button with only a magnifying glass icon': 'aria-label',\n    'Accordion menu that is currently open': 'aria-expanded'\n}\n\nfor usage, attr in aria_usage.items():\n    print(f\"{usage:42} -> {attr}\")",
-        "hint": "Hidden for decorative. Label for icon-only. Expanded for open/closed menus.",
-        "rubric": "Use cases correctly matched with their ARIA attributes."
+        "title": "Semantic HTML & Screen Readers",
+        "theory": "## Designing for Everyone\nAccessibility (a11y) ensures users with disabilities can use your app. Users who are blind or visually impaired use software called **Screen Readers** to navigate the web. Screen readers rely heavily on Semantic HTML.\nIf you build a button using a generic `<div>` tag, the screen reader won't know it's clickable. If you use a `<button>` tag, the screen reader announces it as a button and allows the user to click it with their keyboard.",
+        "instructions": "## Task: The Importance of Semantics\nWhy should you use a `<nav>` tag for your navigation links instead of a standard `<div>`?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: So that screen readers and assistive technologies can properly identify it as a navigation landmark.",
+        "hint": "Think about assistive technology.",
+        "rubric": "Mentions screen readers, accessibility, or semantic meaning."
       }
     ]
   },
   "Tailwind CSS Basics": {
-    "aiRubric": "Assess Tailwind styling knowledge",
+    "aiRubric": "Check theoretical understanding of Tailwind CSS.",
     "lessons": [
       {
-        "title": "Utility-First CSS",
-        "theory": "## The Utility Approach\nInstead of writing custom CSS, Tailwind provides low-level utility classes like `flex`, `pt-4`, and `text-center` that let you build designs directly in your markup.",
-        "instructions": "## Task: Apply Tailwind Classes\nStyle a button to have a blue background, white text, padding, and rounded corners.",
-        "starterCode": "<button class=\"___ ___ px-4 py-2 ___\">Click Me</button>",
-        "solution": "<button class=\"bg-blue-500 text-white px-4 py-2 rounded\">Click Me</button>",
-        "hint": "Use bg-blue-500, text-white, and rounded",
-        "rubric": "Correctly applies standard Tailwind classes."
+        "title": "What is Tailwind CSS?",
+        "theory": "## Utility-First CSS\nTailwind is a 'utility-first' CSS framework. Instead of writing custom CSS classes like `.my-card` in a separate file, you build your design directly in your HTML using tiny, single-purpose classes.\nFor example, instead of writing `color: blue; text-align: center;`, you just add the classes `text-blue-500 text-center` directly to the HTML tag.",
+        "instructions": "## Task: The Tailwind Philosophy\nWhat is the main difference between Tailwind CSS and traditional CSS approaches like writing your own style sheets?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Tailwind uses utility classes directly in the HTML to style elements, eliminating the need to write separate custom CSS files.",
+        "hint": "Think about where the styling is actually written.",
+        "rubric": "Mentions utility classes directly in HTML."
       },
       {
-        "title": "Responsive Design",
-        "theory": "## Breakpoint Prefixes\nTailwind makes responsive design easy by prefixing classes with screen sizes, e.g., `md:flex` applies flexbox only on medium screens and larger.",
-        "instructions": "## Task: Responsive Grid\nCreate a grid that is 1 column on mobile, and 3 columns on medium screens.",
-        "starterCode": "<div class=\"grid grid-cols-1 md:___\">\n  <div>Item 1</div>\n  <div>Item 2</div>\n  <div>Item 3</div>\n</div>",
-        "solution": "<div class=\"grid grid-cols-1 md:grid-cols-3\">\n  <div>Item 1</div>\n  <div>Item 2</div>\n  <div>Item 3</div>\n</div>",
-        "hint": "Use md:grid-cols-3",
-        "rubric": "Applies md:grid-cols-3 correctly."
+        "title": "Reading Utility Classes",
+        "theory": "## Deciphering Tailwind\nTailwind classes follow a logical naming convention:\n- `bg-red-500`: Background color red, medium shade (500).\n- `text-white`: Text color white.\n- `p-4`: Padding size 4 on all sides.\n- `mt-2`: Margin-Top size 2.",
+        "instructions": "## Task: Decode the Classes\nWhat do you think the classes `bg-black text-white p-2` will do to a button?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Give it a black background, white text, and a small amount of padding.",
+        "hint": "bg means background, p means padding.",
+        "rubric": "Identifies black background, white text, and padding."
       }
     ]
   },
   "Vue.js Fundamentals": {
-    "aiRubric": "Assess Vue.js concepts",
+    "aiRubric": "Assess theoretical Vue.js concepts.",
     "lessons": [
       {
         "title": "Declarative Rendering",
-        "theory": "## The Template Syntax\nVue uses an HTML-based template syntax that allows you to declaratively bind the rendered DOM to the underlying component instance's data.",
-        "instructions": "## Task: Interpolation\nUse Vue's mustache syntax to render the `message` variable.",
-        "starterCode": "<template>\n  <div>\n    <p>___</p>\n  </div>\n</template>\n\n<script setup>\nimport { ref } from 'vue'\nconst message = ref('Hello Vue!')\n</script>",
-        "solution": "<template>\n  <div>\n    <p>{{ message }}</p>\n  </div>\n</template>\n\n<script setup>\nimport { ref } from 'vue'\nconst message = ref('Hello Vue!')\n</script>",
-        "hint": "Use {{ message }}",
-        "rubric": "Correctly renders the ref using double curly braces."
-      },
-      {
-        "title": "Directives",
-        "theory": "## v-if and v-for\nDirectives are special attributes with the `v-` prefix. `v-if` conditionally renders an element, while `v-for` renders a list of items.",
-        "instructions": "## Task: Rendering a List\nUse `v-for` to render a list of items from an array.",
-        "starterCode": "<template>\n  <ul>\n    <li ___=\"item in items\" :key=\"item.id\">\n      {{ item.name }}\n    </li>\n  </ul>\n</template>\n\n<script setup>\nimport { ref } from 'vue'\nconst items = ref([{id: 1, name: 'Apple'}, {id: 2, name: 'Banana'}])\n</script>",
-        "solution": "<template>\n  <ul>\n    <li v-for=\"item in items\" :key=\"item.id\">\n      {{ item.name }}\n    </li>\n  </ul>\n</template>\n\n<script setup>\nimport { ref } from 'vue'\nconst items = ref([{id: 1, name: 'Apple'}, {id: 2, name: 'Banana'}])\n</script>",
-        "hint": "Use v-for",
-        "rubric": "Correctly applies the v-for directive."
+        "theory": "## The Template Syntax\nUnlike React which uses JSX, Vue uses an HTML-based template syntax. You write standard HTML and use Vue's special syntax to bind data to the template. When the data changes, Vue automatically updates the HTML.",
+        "instructions": "## Task: Framework Comparison\nWhat is the primary difference in how you write UI components in React vs Vue?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: React uses JSX (writing HTML inside JavaScript), while Vue uses HTML templates with special directives.",
+        "hint": "Think about JSX vs HTML templates.",
+        "rubric": "Mentions JSX for React and HTML templates for Vue."
       }
     ]
   },
   "TypeScript for Frontend": {
-    "aiRubric": "Assess TypeScript knowledge in UI",
+    "aiRubric": "Assess theoretical TypeScript knowledge.",
     "lessons": [
       {
-        "title": "Typing Props",
-        "theory": "## Interface Definitions\nWhen building components (e.g. in React), defining the shape of your props using TypeScript Interfaces catches errors during development instead of runtime.",
-        "instructions": "## Task: Define Button Props\nCreate an interface for a Button component that requires a string `label` and an optional boolean `disabled`.",
-        "starterCode": "interface ButtonProps {\n    ___: ___;\n    disabled___: ___;\n}\n\nfunction Button({ label, disabled }: ButtonProps) {\n    return <button disabled={disabled}>{label}</button>\n}",
-        "solution": "interface ButtonProps {\n    label: string;\n    disabled?: boolean;\n}\n\nfunction Button({ label, disabled }: ButtonProps) {\n    return <button disabled={disabled}>{label}</button>\n}",
-        "hint": "Use label: string and disabled?: boolean",
-        "rubric": "Correctly types the required string and optional boolean."
-      },
-      {
-        "title": "Generics in State",
-        "theory": "## Type Inference and Generics\nSometimes you need to explicitly type state hooks when the initial value is null or empty, using Generics.",
-        "instructions": "## Task: Type useState\nUse a generic to specify that the state can be a User object or null.",
-        "starterCode": "import { useState } from 'react';\n\ntype User = { name: string, age: number };\n\n// Specify that user can be User or null\nconst [user, setUser] = useState<___>(null);",
-        "solution": "import { useState } from 'react';\n\ntype User = { name: string, age: number };\n\n// Specify that user can be User or null\nconst [user, setUser] = useState<User | null>(null);",
-        "hint": "Use User | null",
-        "rubric": "Applies the correct union type generic."
+        "title": "Why TypeScript?",
+        "theory": "## Catching Errors Early\nJavaScript is a dynamically typed language, meaning you can pass a string into a function that expects a number, and it won't crash until the code runs in the browser. \nTypeScript adds 'static typing'. You define the exact 'shape' of your data (e.g., this component requires a `title` which is a string, and an `id` which is a number). If you pass the wrong type, TypeScript throws an error *while you are writing the code*, before you even run it.",
+        "instructions": "## Task: The Value of Types\nWhat is the main benefit of using TypeScript over plain JavaScript in a large frontend application?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: It catches type-related errors during development before the code is executed in the browser.",
+        "hint": "When do you find out about errors?",
+        "rubric": "Mentions catching errors early or during development."
       }
     ]
   },
   "Web Animations": {
-    "aiRubric": "Assess web animation techniques",
+    "aiRubric": "Assess theoretical web animation knowledge.",
     "lessons": [
       {
-        "title": "CSS Keyframes",
-        "theory": "## @keyframes\nKeyframes allow you to control the intermediate steps in a CSS animation sequence.",
-        "instructions": "## Task: Define a Fade-In\nWrite a keyframe animation that fades opacity from 0 to 1.",
-        "starterCode": "@keyframes fadeIn {\n  from {\n    opacity: ___;\n  }\n  to {\n    opacity: ___;\n  }\n}\n\n.animated-box {\n  animation: fadeIn 2s ease-in;\n}",
-        "solution": "@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n\n.animated-box {\n  animation: fadeIn 2s ease-in;\n}",
-        "hint": "Use 0 and 1 for opacity.",
-        "rubric": "Correctly defines the start and end opacity."
-      },
-      {
-        "title": "Framer Motion",
-        "theory": "## React Animations\nFramer Motion is a production-ready motion library for React that simplifies complex animations.",
-        "instructions": "## Task: Animate a Div\nUse the `motion.div` component to animate a box moving 100px to the right.",
-        "starterCode": "import { motion } from 'framer-motion';\n\nexport default function App() {\n  return (\n    <motion.div\n      animate={{ x: ___ }}\n      transition={{ duration: 0.5 }}\n    >\n      Sliding Box\n    </motion.div>\n  );\n}",
-        "solution": "import { motion } from 'framer-motion';\n\nexport default function App() {\n  return (\n    <motion.div\n      animate={{ x: 100 }}\n      transition={{ duration: 0.5 }}\n    >\n      Sliding Box\n    </motion.div>\n  );\n}",
-        "hint": "Set x to 100",
-        "rubric": "Uses the correct translation value in the animate prop."
+        "title": "CSS vs JS Animations",
+        "theory": "## Choosing the Right Tool\n- **CSS Animations (Transitions & Keyframes):** Best for simple UI interactions like hovering over a button, simple fading, or loading spinners. They are highly performant because the browser optimizes them.\n- **JavaScript Animations (Framer Motion, GSAP):** Best for complex, sequenced animations, dragging elements, or animations that depend on user scroll position or math calculations.",
+        "instructions": "## Task: Animation Strategy\nIf you want a button's background color to smoothly change when a user hovers over it, should you use a CSS transition or a heavy JavaScript animation library?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: CSS transition.",
+        "hint": "It's a very simple UI interaction.",
+        "rubric": "Identifies CSS transition."
       }
     ]
   },
   "Frontend Testing": {
-    "aiRubric": "Assess frontend testing strategies",
+    "aiRubric": "Assess theoretical frontend testing strategies.",
     "lessons": [
       {
-        "title": "React Testing Library",
-        "theory": "## Testing Behavior\nReact Testing Library encourages testing applications in the way they are used by users, focusing on querying the DOM.",
-        "instructions": "## Task: Assert Element Presence\nWrite an assertion that checks if an element with the text 'Submit' is in the document.",
-        "starterCode": "import { render, screen } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport Button from './Button';\n\ntest('renders submit button', () => {\n  render(<Button label=\"Submit\" />);\n  const buttonElement = screen.getByText(/Submit/i);\n  expect(buttonElement).___.toBeInTheDocument();\n});",
-        "solution": "import { render, screen } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport Button from './Button';\n\ntest('renders submit button', () => {\n  render(<Button label=\"Submit\" />);\n  const buttonElement = screen.getByText(/Submit/i);\n  expect(buttonElement).toBeInTheDocument();\n});",
-        "hint": "Remove the blank space, it just calls toBeInTheDocument()",
-        "rubric": "Correctly invokes toBeInTheDocument assertion."
-      },
-      {
-        "title": "E2E with Cypress",
-        "theory": "## End-to-End Tests\nCypress runs in the browser and tests the entire application flow, interacting with it exactly like a real user would.",
-        "instructions": "## Task: Visit and Type\nWrite a Cypress test that visits a page, targets an input field, and types a value.",
-        "starterCode": "describe('Login Flow', () => {\n  it('can type into email input', () => {\n    cy.___('/login');\n    cy.get('input[name=\"email\"]').___('test@example.com');\n  });\n});",
-        "solution": "describe('Login Flow', () => {\n  it('can type into email input', () => {\n    cy.visit('/login');\n    cy.get('input[name=\"email\"]').type('test@example.com');\n  });\n});",
-        "hint": "Use visit and type.",
-        "rubric": "Correctly uses visit and type commands."
+        "title": "Types of Tests",
+        "theory": "## Ensuring Quality\n- **Unit Tests:** Testing individual, isolated pieces of code (e.g., does this one math function work?).\n- **Component Tests:** Testing a specific UI component (e.g., does this button render and trigger a click event?).\n- **End-to-End (E2E) Tests:** Simulating a real user driving the browser (e.g., Cypress or Playwright). The automated script opens the page, types in the login form, clicks submit, and verifies the dashboard loads.",
+        "instructions": "## Task: Test Selection\nIf you want to automate testing the entire checkout flow of your e-commerce site, from adding an item to the cart to processing payment, which type of test should you write?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: End-to-End (E2E) Test.",
+        "hint": "It covers the entire flow.",
+        "rubric": "Identifies End-to-End or E2E."
       }
     ]
   },
   "React Hooks Masterclass": {
-    "aiRubric": "Assess deep understanding of React Hooks",
+    "aiRubric": "Assess theoretical understanding of React Hooks",
     "lessons": [
       {
-        "title": "useState Basics",
-        "theory": "## Managing Local State\n`useState` allows functional components to hold and update their own local state, triggering a re-render whenever the state setter function is called.",
-        "instructions": "## Task: Initialize State\nUse the `useState` hook to initialize a `count` variable to 0.",
-        "starterCode": "import { useState } from 'react';\n\nfunction Counter() {\n  const [count, ___] = ___(0);\n  return <div>{count}</div>;\n}",
-        "solution": "import { useState } from 'react';\n\nfunction Counter() {\n  const [count, setCount] = useState(0);\n  return <div>{count}</div>;\n}",
-        "hint": "Use setCount and useState",
-        "rubric": "Correctly sets setCount and useState(0)."
-      },
-      {
-        "title": "useEffect and Cleanup",
-        "theory": "## Side Effects\n`useEffect` lets you perform side effects (like data fetching or subscriptions) after a render. Returning a function from inside the effect acts as the 'cleanup' step when the component unmounts.",
-        "instructions": "## Task: Cleanup Function\nReturn the function that clears the interval when the component is unmounted.",
-        "starterCode": "useEffect(() => {\n  const timer = setInterval(() => console.log('Tick'), 1000);\n  ___ () => clearInterval(___);\n}, []);",
-        "solution": "useEffect(() => {\n  const timer = setInterval(() => console.log('Tick'), 1000);\n  return () => clearInterval(timer);\n}, []);",
-        "hint": "Use 'return' and 'timer'",
-        "rubric": "Correctly returns the clearInterval function."
-      },
-      {
-        "title": "useContext",
-        "theory": "## Avoiding Prop Drilling\n`useContext` lets you subscribe to React context without introducing nesting, allowing deeply nested components to access global data (like a User Theme) directly.",
-        "instructions": "## Task: Consume Context\nUse the `useContext` hook to consume the `ThemeContext`.",
-        "starterCode": "import { useContext } from 'react';\nimport { ThemeContext } from './Theme';\n\nfunction Button() {\n  const theme = ___(ThemeContext);\n}",
-        "solution": "import { useContext } from 'react';\nimport { ThemeContext } from './Theme';\n\nfunction Button() {\n  const theme = useContext(ThemeContext);\n}",
-        "hint": "Use useContext",
-        "rubric": "Uses useContext(ThemeContext)."
-      },
-      {
-        "title": "useReducer",
-        "theory": "## Complex State Logic\nWhen state logic is complex or when the next state depends on the previous one, `useReducer` is often preferable to `useState`. It is heavily inspired by Redux.",
-        "instructions": "## Task: Dispatch an Action\nCall the dispatch function with an action object of type 'INCREMENT'.",
-        "starterCode": "function Counter() {\n  const [state, dispatch] = useReducer(reducer, { count: 0 });\n  return <button onClick={() => ___({ type: '___' })}>Add</button>;\n}",
-        "solution": "function Counter() {\n  const [state, dispatch] = useReducer(reducer, { count: 0 });\n  return <button onClick={() => dispatch({ type: 'INCREMENT' })}>Add</button>;\n}",
-        "hint": "Use dispatch and 'INCREMENT'",
-        "rubric": "Calls dispatch with type INCREMENT."
-      },
-      {
-        "title": "useRef for the DOM",
-        "theory": "## Mutable References\n`useRef` returns a mutable ref object whose `.current` property is initialized to the passed argument. It is most commonly used to directly access a DOM element.",
-        "instructions": "## Task: Focus an Input\nAttach the `inputRef` to the input element so the button can focus it.",
-        "starterCode": "function TextInput() {\n  const inputRef = useRef(null);\n  return (\n    <>\n      <input ___={inputRef} />\n      <button onClick={() => inputRef.___.focus()}>Focus</button>\n    </>\n  );\n}",
-        "solution": "function TextInput() {\n  const inputRef = useRef(null);\n  return (\n    <>\n      <input ref={inputRef} />\n      <button onClick={() => inputRef.current.focus()}>Focus</button>\n    </>\n  );\n}",
-        "hint": "Use 'ref' and 'current'",
-        "rubric": "Uses ref attribute and current property."
-      },
-      {
-        "title": "useMemo",
-        "theory": "## Performance Optimization\n`useMemo` returns a memoized *value*. It only recomputes the memoized value when one of its dependencies has changed, preventing expensive calculations on every render.",
-        "instructions": "## Task: Memoize a Calculation\nWrap the expensive calculation in `useMemo` so it only runs when `a` or `b` changes.",
-        "starterCode": "const expensiveResult = ___( () => computeExpensiveValue(a, b), [___, ___] );",
-        "solution": "const expensiveResult = useMemo( () => computeExpensiveValue(a, b), [a, b] );",
-        "hint": "Use useMemo and pass a, b into the dependency array.",
-        "rubric": "Uses useMemo and [a, b]."
-      },
-      {
-        "title": "useCallback",
-        "theory": "## Memoizing Functions\nWhile `useMemo` memoizes a value, `useCallback` returns a memoized *callback function*. This is crucial when passing callbacks to optimized child components that rely on reference equality to prevent unnecessary renders.",
-        "instructions": "## Task: Memoize a Callback\nWrap the click handler in `useCallback` so it isn't recreated on every render.",
-        "starterCode": "const handleClick = ___( () => {\n  console.log('Clicked!', id);\n}, [___] );",
-        "solution": "const handleClick = useCallback( () => {\n  console.log('Clicked!', id);\n}, [id] );",
-        "hint": "Use useCallback and [id]",
-        "rubric": "Uses useCallback and [id]."
-      },
-      {
-        "title": "Custom Hooks",
-        "theory": "## Extracting Logic\nIf you find yourself copying hook logic across components (like tracking window size or fetching data), you can extract it into a Custom Hook (a function starting with 'use').",
-        "instructions": "## Task: Create a Custom Hook\nDefine a custom hook named `useWindowWidth`.",
-        "starterCode": "function ___( ) {\n  const [width, setWidth] = useState(window.innerWidth);\n  // ...\n  return width;\n}",
-        "solution": "function useWindowWidth( ) {\n  const [width, setWidth] = useState(window.innerWidth);\n  // ...\n  return width;\n}",
-        "hint": "Name it useWindowWidth",
-        "rubric": "Names the function useWindowWidth."
+        "title": "Side Effects (useEffect)",
+        "theory": "## Interacting with the Outside World\nThe `useEffect` hook lets you perform side effects.\n\n```javascript\nuseEffect(() => {\n  document.title = `You clicked ${count} times`;\n}, [count]);\n```\n\n**What this code does:**\n- `useEffect(() => { ... })`: We pass a function to `useEffect`. This function represents the 'side effect'—in this case, reaching outside of React to change the actual browser tab title (`document.title`).\n- `, [count])`: This array at the end is the **dependency array**. It tells React: 'Only run this effect function if the `count` variable has changed since the last render'. If you left this array empty (`[]`), the effect would only run once when the component first loads. If you omitted the array entirely, it would run after *every single* render.",
+        "instructions": "## Task: Recognizing Side Effects\nIf you want to fetch a list of products from a database as soon as a page loads, which React Hook would you use?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: useEffect",
+        "hint": "It's an effect on the outside world.",
+        "rubric": "Identifies useEffect."
       }
     ]
   },
@@ -7387,227 +7234,281 @@ export const courseManifest = {
       }
     ]
   },
-  "Color Theory": {
-    "aiRubric": "Assess understanding of color theory concepts.",
-    "lessons": [
-      {
-        "title": "Primary, Secondary, and Tertiary Colors",
-        "theory": "## The Color Wheel\nColor theory starts with the color wheel. Primary colors are Red, Blue, and Yellow. Secondary colors are created by mixing primary colors (e.g., Green, Orange, Purple). Tertiary colors are created by mixing a primary and a secondary color.",
-        "instructions": "## Task: Knowledge Check\nWhat do you get when you mix blue and yellow?",
-        "starterCode": "Answer: ",
-        "solution": "Answer: Green",
-        "hint": "It's the color of grass.",
-        "rubric": "Identifies green."
-      }
-    ]
-  },
-  "Typography Basics": {
-    "aiRubric": "Assess understanding of typography.",
-    "lessons": [
-      {
-        "title": "Serif vs Sans-Serif",
-        "theory": "## Font Families\nSerif fonts have small decorative lines (serifs) at the ends of characters, like Times New Roman. Sans-serif fonts do not have these lines, like Arial or Helvetica. Sans-serif is generally preferred for modern digital interfaces due to its clean look.",
-        "instructions": "## Task: Classification\nIs 'Helvetica' a serif or sans-serif font?",
-        "starterCode": "Answer: ",
-        "solution": "Answer: Sans-serif",
-        "hint": "It lacks the small decorative lines.",
-        "rubric": "Identifies sans-serif."
-      }
-    ]
-  },
-  "Wireframing": {
-    "aiRubric": "Assess understanding of wireframing concepts.",
-    "lessons": [
-      {
-        "title": "Low Fidelity vs High Fidelity",
-        "theory": "## Wireframing\nA wireframe is a visual guide that represents the skeletal framework of a website. Low-fidelity wireframes are quick, rough sketches (often just boxes and lines). High-fidelity wireframes include actual content, specific spacing, and typography.",
-        "instructions": "## Task: Identify Fidelity\nIf you are drawing boxes on a napkin to plan a layout, are you creating a low-fidelity or high-fidelity wireframe?",
-        "starterCode": "Answer: ",
-        "solution": "Answer: Low-fidelity",
-        "hint": "It's a rough sketch.",
-        "rubric": "Identifies low-fidelity."
-      }
-    ]
-  },
-  "User Research": {
-    "aiRubric": "Assess understanding of user research.",
-    "lessons": [
-      {
-        "title": "Qualitative vs Quantitative",
-        "theory": "## Types of Research\nUser research is how we understand user needs. Qualitative research involves non-numerical data like interviews and observations to understand *why* users do things. Quantitative research involves numerical data like surveys and analytics to understand *what* users do.",
-        "instructions": "## Task: Method Selection\nIf you want to know exactly how many users clicked a specific button, should you use qualitative or quantitative research?",
-        "starterCode": "Answer: ",
-        "solution": "Answer: Quantitative",
-        "hint": "It involves numbers and metrics.",
-        "rubric": "Identifies quantitative."
-      }
-    ]
-  },
-  "Prototyping": {
-    "aiRubric": "Assess understanding of prototyping.",
-    "lessons": [
-      {
-        "title": "Interactive Mockups",
-        "theory": "## Prototyping\nA prototype is an interactive mockup of your product. It allows you to test the user flow and interactions before writing any code. Tools like Figma and InVision are commonly used for this.",
-        "instructions": "## Task: Purpose of Prototyping\nTrue or False: Prototypes are fully functional applications with a working database.",
-        "starterCode": "Answer: ",
-        "solution": "Answer: False",
-        "hint": "They are just mockups.",
-        "rubric": "Identifies False."
-      }
-    ]
-  },
-  "Accessibility Guidelines": {
-    "aiRubric": "Assess understanding of web accessibility.",
-    "lessons": [
-      {
-        "title": "WCAG and Contrast",
-        "theory": "## Web Content Accessibility Guidelines (WCAG)\nAccessibility ensures your product can be used by people with disabilities. A critical aspect is color contrast. Text must have a high enough contrast ratio against its background to be readable by users with visual impairments.",
-        "instructions": "## Task: Alt Text\nWhat HTML attribute is used to provide alternative text for an image, essential for screen readers?",
-        "starterCode": "Answer: ",
-        "solution": "Answer: alt",
-        "hint": "It's three letters.",
-        "rubric": "Identifies alt."
-      }
-    ]
-  },
-  "Design Systems": {
-    "aiRubric": "Assess understanding of design systems.",
-    "lessons": [
-      {
-        "title": "Consistency at Scale",
-        "theory": "## What is a Design System?\nA design system is a collection of reusable components, guided by clear standards, that can be assembled together to build any number of applications. It ensures brand consistency and speeds up development.",
-        "instructions": "## Task: Benefit Check\nDoes a design system increase or decrease development speed over time?",
-        "starterCode": "Answer: ",
-        "solution": "Answer: Increase",
-        "hint": "You don't have to build things from scratch.",
-        "rubric": "Identifies increase."
-      }
-    ]
-  },
-  "A/B Testing": {
-    "aiRubric": "Assess understanding of A/B testing.",
-    "lessons": [
-      {
-        "title": "Data-Driven Decisions",
-        "theory": "## A/B Testing\nA/B testing (or split testing) is the process of comparing two versions of a webpage or app against each other to determine which one performs better. Version A is the 'control' and Version B is the 'variant'.",
-        "instructions": "## Task: Identifying the Control\nIn an A/B test, what do we call the original, unchanged version of the page?",
-        "starterCode": "Answer: ",
-        "solution": "Answer: Control",
-        "hint": "It starts with a C.",
-        "rubric": "Identifies control."
-      }
-    ]
-  },
-  "Interaction Design": {
-    "aiRubric": "Assess understanding of interaction design.",
-    "lessons": [
-      {
-        "title": "Micro-interactions",
-        "theory": "## Enhancing User Experience\nInteraction design focuses on creating engaging interfaces with logical and thought-out behaviors. Micro-interactions are small, single-purpose events found on devices and in apps (e.g., a 'like' button turning red when clicked).",
-        "instructions": "## Task: Example Recognition\nIs a complex checkout flow considered a micro-interaction?",
-        "starterCode": "Answer: ",
-        "solution": "Answer: False",
-        "hint": "Micro-interactions are single, small events.",
-        "rubric": "Identifies False."
-      }
-    ]
-  },
   "Agile & Scrum": {
-    "aiRubric": "Assess understanding of agile methodologies.",
+    "aiRubric": "Assess theoretical understanding of Agile and Scrum.",
     "lessons": [
       {
-        "title": "Sprints and Standups",
-        "theory": "## Agile Methodology\nAgile is an iterative approach to project management. Scrum is a specific Agile framework. Work is broken down into short, time-boxed phases called 'Sprints' (usually 1-4 weeks). The team meets daily in a 'Standup' to discuss progress.",
-        "instructions": "## Task: Scrum Roles\nWho is responsible for maximizing the value of the product and managing the Product Backlog in Scrum?",
+        "title": "The Agile Manifesto",
+        "theory": "## Iterative Development\nAgile is a project management methodology that favors iterative development, flexibility, and collaboration over rigid, long-term planning (like the older 'Waterfall' method). Instead of building a massive product in secret for a year, Agile teams build small pieces, release them frequently, and adapt based on feedback.",
+        "instructions": "## Task: Agile vs Waterfall\nWhat is a major risk of using the traditional Waterfall methodology (planning everything up front) compared to Agile?",
         "starterCode": "Answer: ",
-        "solution": "Answer: Product Owner",
-        "hint": "They 'own' the product.",
-        "rubric": "Identifies Product Owner."
+        "solution": "Answer: The market or user needs might change during the long development cycle, resulting in a product nobody wants when it finally launches.",
+        "hint": "What happens if things change after you made the plan?",
+        "rubric": "Mentions lack of flexibility, market changes, or delayed feedback."
+      },
+      {
+        "title": "Scrum Ceremonies",
+        "theory": "## The Scrum Framework\nScrum is a specific implementation of Agile. Work is broken into time-boxed periods called **Sprints** (usually 2 weeks). Key ceremonies include:\n- **Sprint Planning:** Deciding what work to do in the upcoming sprint.\n- **Daily Standup:** A 15-minute daily meeting to share progress and blockers.\n- **Sprint Retrospective:** A meeting at the end of the sprint to discuss what went well and what can be improved.",
+        "instructions": "## Task: Daily Sync\nWhat is the purpose of the Daily Standup in Scrum?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: For the team to quickly sync on progress, share what they are doing, and identify any blockers preventing them from working.",
+        "hint": "It's a quick daily sync.",
+        "rubric": "Mentions syncing progress or identifying blockers."
       }
     ]
   },
   "The Product Lifecycle": {
-    "aiRubric": "Assess understanding of the product lifecycle.",
+    "aiRubric": "Assess theoretical understanding of the product lifecycle.",
     "lessons": [
       {
-        "title": "From Idea to Sunsetting",
-        "theory": "## Product Stages\nThe typical software product lifecycle consists of: Ideation, Definition, Prototyping, Development, Testing, Deployment, Maintenance, and eventually Sunsetting (retiring the product).",
-        "instructions": "## Task: Final Stage\nWhat is the term for officially retiring a product and removing it from the market?",
+        "title": "Stages of a Product",
+        "theory": "## From Idea to Retirement\nThe software product lifecycle includes:\n1. **Ideation & Research:** Finding a problem to solve.\n2. **Definition:** Outlining requirements (PRDs).\n3. **Design & Prototyping:** Creating wireframes and mockups.\n4. **Development:** Engineering the product.\n5. **Launch:** Releasing to the market.\n6. **Maintenance & Iteration:** Fixing bugs and adding features.\n7. **Sunsetting:** Retiring the product when it's no longer viable.",
+        "instructions": "## Task: Lifecycle Stages\nIn which stage do Product Managers write the Product Requirements Document (PRD)?",
         "starterCode": "Answer: ",
-        "solution": "Answer: Sunsetting",
-        "hint": "It relates to the sun going down.",
-        "rubric": "Identifies Sunsetting."
+        "solution": "Answer: Definition",
+        "hint": "It happens before design and development.",
+        "rubric": "Identifies Definition."
       }
     ]
   },
   "Writing PRDs": {
-    "aiRubric": "Assess understanding of PRDs.",
+    "aiRubric": "Assess theoretical understanding of PRDs.",
     "lessons": [
       {
-        "title": "Product Requirements Documents",
-        "theory": "## What is a PRD?\nA Product Requirements Document (PRD) defines the value and purpose of a product or feature. It outlines *what* needs to be built, *who* it is for, and *why* it matters, without necessarily dictating exactly *how* it should be technically implemented.",
-        "instructions": "## Task: PRD Focus\nDoes a PRD primarily focus on the 'What and Why' or the 'How' (technical implementation)?",
+        "title": "What is a PRD?",
+        "theory": "## Defining the 'What' and 'Why'\nA Product Requirements Document (PRD) is the core document written by a Product Manager. It clearly defines the value and purpose of a product or feature. It outlines *what* needs to be built, *who* the target audience is, and *why* it matters.\nCrucially, a PRD should NOT dictate *how* the feature is technically implemented (that's the engineering team's job).",
+        "instructions": "## Task: The Role of a PRD\nIf a PRD includes database schema diagrams and specific API endpoints, what mistake has the Product Manager made?",
         "starterCode": "Answer: ",
-        "solution": "Answer: What and Why",
-        "hint": "It defines the requirements, not the code.",
-        "rubric": "Identifies What and Why."
+        "solution": "Answer: They have dictated the 'how' (technical implementation) rather than focusing on the 'what' and 'why'.",
+        "hint": "Engineers handle the technical details.",
+        "rubric": "Mentions dictating the 'how' or technical implementation."
       }
     ]
   },
   "Go-to-Market Strategy": {
-    "aiRubric": "Assess understanding of GTM strategy.",
+    "aiRubric": "Assess theoretical understanding of Go-to-Market.",
     "lessons": [
       {
-        "title": "Launching Successfully",
-        "theory": "## GTM Basics\nA Go-To-Market (GTM) strategy is an action plan that specifies how a company will reach its target customers and achieve a competitive advantage. It includes pricing, sales, marketing, and distribution channels.",
-        "instructions": "## Task: GTM Components\nWhich of the following is typically a key component of a GTM strategy: Code Architecture or Pricing Strategy?",
+        "title": "Launching to the World",
+        "theory": "## GTM Strategy\nA Go-To-Market (GTM) strategy is the action plan that specifies how a company will reach target customers and achieve competitive advantage. It includes:\n- **Target Audience:** Exactly who are you selling to?\n- **Pricing Strategy:** Freemium, subscription, or one-time fee?\n- **Distribution/Channels:** SEO, paid ads, direct sales, or app stores?\n- **Positioning:** How is your product different from competitors?",
+        "instructions": "## Task: GTM Components\nIf you decide to offer a basic version of your app for free and charge for premium features, which component of the GTM strategy are you defining?",
         "starterCode": "Answer: ",
-        "solution": "Answer: Pricing Strategy",
-        "hint": "It's related to the market and sales.",
-        "rubric": "Identifies Pricing Strategy."
+        "solution": "Answer: Pricing Strategy (specifically, Freemium).",
+        "hint": "It involves money.",
+        "rubric": "Identifies Pricing Strategy or Pricing."
       }
     ]
   },
   "VC Funding basics": {
-    "aiRubric": "Assess understanding of VC funding.",
+    "aiRubric": "Assess theoretical understanding of VC funding.",
     "lessons": [
       {
-        "title": "Seed to Series A",
-        "theory": "## Startup Funding Rounds\nStartups often raise money in rounds. 'Seed' is the initial capital used to start the business. 'Series A' usually follows when the company has a product and some traction, looking to optimize its user base and product offerings.",
-        "instructions": "## Task: First Round\nWhat is the very first official funding round for a startup typically called?",
+        "title": "Funding Rounds",
+        "theory": "## Stages of Investment\nStartups usually raise money in distinct rounds as they grow:\n- **Pre-Seed / Seed:** Initial capital from founders, friends, or angel investors to build an MVP (Minimum Viable Product) and prove the concept.\n- **Series A:** Raised when a startup has a working product, consistent revenue, and needs to optimize its user base and product offerings.\n- **Series B/C/D:** Successive rounds to rapidly scale the business, expand into new markets, or acquire competitors.",
+        "instructions": "## Task: Raising Capital\nIf you have a rough prototype but zero revenue and you need money to hire your first engineer, which funding round are you likely raising?",
         "starterCode": "Answer: ",
-        "solution": "Answer: Seed",
-        "hint": "Like planting a tree.",
-        "rubric": "Identifies Seed."
+        "solution": "Answer: Pre-Seed or Seed",
+        "hint": "It's the very first stage.",
+        "rubric": "Identifies Pre-Seed or Seed."
       }
     ]
   },
   "Scaling a Startup": {
-    "aiRubric": "Assess understanding of scaling.",
+    "aiRubric": "Assess theoretical understanding of scaling.",
     "lessons": [
       {
-        "title": "Product-Market Fit",
-        "theory": "## Finding the Match\nBefore scaling aggressively, a startup must find Product-Market Fit (PMF). PMF means being in a good market with a product that can satisfy that market. Scaling before achieving PMF often leads to failure.",
-        "instructions": "## Task: Prerequisite for Scaling\nWhat is the acronym for the state a startup must achieve before trying to scale rapidly?",
+        "title": "Product-Market Fit (PMF)",
+        "theory": "## The Holy Grail of Startups\nProduct-Market Fit (PMF) means being in a good market with a product that can satisfy that market. You have PMF when customers are buying your product as fast as you can make it, or usage is growing rapidly without massive marketing spend.\n**Rule of Thumb:** Premature scaling (trying to grow massively *before* finding PMF) is the #1 reason startups fail.",
+        "instructions": "## Task: When to Scale\nWhy is premature scaling dangerous for a startup?",
         "starterCode": "Answer: ",
-        "solution": "Answer: PMF",
-        "hint": "Product-Market Fit.",
-        "rubric": "Identifies PMF."
+        "solution": "Answer: Because you are spending money to acquire users for a product that people don't actually want or need, leading to high churn and running out of cash.",
+        "hint": "What happens if you market a bad product?",
+        "rubric": "Mentions wasting money, high churn, or no market demand."
       }
     ]
   },
   "Product Analytics": {
-    "aiRubric": "Assess understanding of product analytics.",
+    "aiRubric": "Assess theoretical understanding of product analytics.",
     "lessons": [
       {
-        "title": "KPIs and Metrics",
-        "theory": "## Measuring Success\nProduct Analytics involves tracking how users engage with your software. Key Performance Indicators (KPIs) are the most important metrics you track (e.g., Daily Active Users - DAU, Churn Rate).",
-        "instructions": "## Task: User Retention\nIf a high percentage of users stop using your product after the first week, do you have a high or low 'Churn Rate'?",
+        "title": "Key Metrics (KPIs)",
+        "theory": "## Measuring Success\nProduct Managers live and die by data. Key Performance Indicators (KPIs) measure the health of the product:\n- **CAC (Customer Acquisition Cost):** How much it costs to get one new paying user.\n- **LTV (Lifetime Value):** How much revenue one user generates over their entire relationship with the company.\n- **Churn Rate:** The percentage of users who cancel or stop using the product in a given timeframe.",
+        "instructions": "## Task: Analytics Health\nFor a healthy, profitable SaaS business, should your LTV be higher or lower than your CAC?",
         "starterCode": "Answer: ",
-        "solution": "Answer: High",
-        "hint": "Churn is the rate of users leaving.",
-        "rubric": "Identifies high."
+        "solution": "Answer: LTV should be significantly higher than CAC.",
+        "hint": "You want to make more money from a user than it costs to acquire them.",
+        "rubric": "Identifies LTV should be higher."
+      }
+    ]
+  },
+  "Color Theory": {
+    "aiRubric": "Assess theoretical understanding of color theory.",
+    "lessons": [
+      {
+        "title": "The Color Wheel",
+        "theory": "## Primary, Secondary, and Tertiary\nThe color wheel is the foundation of color theory. \n- **Primary colors** (Red, Blue, Yellow) cannot be created by mixing other colors.\n- **Secondary colors** (Green, Orange, Purple) are created by mixing primary colors.\n- **Tertiary colors** are created by mixing a primary with a secondary color.",
+        "instructions": "## Task: Color Mixing\nWhat category of color is Orange, and what two primary colors create it?",
+        "starterCode": "Category: \nCreated by: ",
+        "solution": "Category: Secondary\nCreated by: Red and Yellow",
+        "hint": "It's not a primary color.",
+        "rubric": "Identifies Secondary, Red, and Yellow."
+      },
+      {
+        "title": "Color Psychology",
+        "theory": "## Meaning Behind Colors\nColors evoke emotions and convey meaning in UI design:\n- **Blue:** Trust, security, professionalism (often used by banks and tech companies).\n- **Red:** Urgency, passion, danger (often used for destructive actions like 'Delete').\n- **Green:** Success, growth, nature.\n- **Yellow:** Optimism, caution, warmth.",
+        "instructions": "## Task: Choosing a Brand Color\nIf you are designing a banking app that needs to convey trust and security, what primary brand color would you choose and why?",
+        "starterCode": "Color: \nReason: ",
+        "solution": "Color: Blue\nReason: Because blue evokes feelings of trust, security, and professionalism.",
+        "hint": "Think about traditional corporate colors.",
+        "rubric": "Identifies Blue and mentions trust/security."
+      },
+      {
+        "title": "Color Harmonies",
+        "theory": "## Creating Color Palettes\nColor harmonies are pleasing combinations of colors:\n- **Monochromatic:** Different shades and tints of a single base color. Very clean and unified.\n- **Analogous:** Colors next to each other on the color wheel (e.g., blue and green). Serene and comfortable.\n- **Complementary:** Colors opposite each other on the color wheel (e.g., blue and orange). High contrast, great for drawing attention to buttons.",
+        "instructions": "## Task: Highlighting Actions\nWhich color harmony would you use if you want your Call-To-Action (CTA) button to stand out dramatically from the background color?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Complementary",
+        "hint": "You want maximum contrast.",
+        "rubric": "Identifies Complementary."
+      }
+    ]
+  },
+  "Typography Basics": {
+    "aiRubric": "Assess theoretical understanding of typography.",
+    "lessons": [
+      {
+        "title": "Serif vs. Sans-Serif",
+        "theory": "## The Core Font Families\n- **Serif Fonts:** Have small decorative strokes (serifs) at the ends of characters (e.g., Times New Roman, Georgia). Often associated with tradition, print, and formality.\n- **Sans-Serif Fonts:** Do NOT have these strokes (e.g., Arial, Helvetica, Inter). Often associated with modern, clean, and digital interfaces.",
+        "instructions": "## Task: Font Selection\nFor a modern, sleek mobile app interface, which font family is generally preferred: Serif or Sans-Serif?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Sans-Serif",
+        "hint": "It looks cleaner on digital screens.",
+        "rubric": "Identifies Sans-Serif."
+      },
+      {
+        "title": "Hierarchy and Scale",
+        "theory": "## Guiding the Eye\nTypographic hierarchy uses size, weight, and color to guide the user's eye to the most important information first. An H1 (Heading 1) should be significantly larger and bolder than body text. A clear scale (e.g., 16px body, 24px H3, 32px H2, 48px H1) creates visual rhythm.",
+        "instructions": "## Task: Creating Hierarchy\nWithout changing the font family, name two typographic properties you can change to make a heading stand out from the body text.",
+        "starterCode": "1. \n2. ",
+        "solution": "1. Size (make it larger)\n2. Weight (make it bolder)",
+        "hint": "How do you make text look bigger and thicker?",
+        "rubric": "Mentions size, weight, or color."
+      }
+    ]
+  },
+  "Wireframing": {
+    "aiRubric": "Assess theoretical understanding of wireframing.",
+    "lessons": [
+      {
+        "title": "What is a Wireframe?",
+        "theory": "## The Blueprint of a Screen\nA wireframe is a two-dimensional skeletal outline of a webpage or app. It focuses on space allocation, layout, and functionality rather than styling, colors, or graphics. It is the architectural blueprint of UI design.",
+        "instructions": "## Task: Wireframe Purpose\nWhy do designers create wireframes before adding colors and images?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: To focus on layout, structure, and user flow without getting distracted by visual design details.",
+        "hint": "Think about building the foundation of a house.",
+        "rubric": "Mentions layout, structure, or avoiding visual distractions."
+      },
+      {
+        "title": "Fidelity Levels",
+        "theory": "## Low vs. High Fidelity\n- **Low-Fidelity (Lo-Fi):** Quick, rough sketches (often on paper or whiteboards). Uses basic boxes and lines. Great for rapid brainstorming.\n- **High-Fidelity (Hi-Fi):** Detailed, digital designs that look almost exactly like the final product. Includes actual fonts, spacing, and placeholder images.",
+        "instructions": "## Task: Choosing Fidelity\nIf you are in a very early brainstorming meeting trying to figure out the general flow of an app, which fidelity should you use?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Low-Fidelity",
+        "hint": "You need to be fast and rough.",
+        "rubric": "Identifies Low-Fidelity or Lo-Fi."
+      }
+    ]
+  },
+  "User Research": {
+    "aiRubric": "Assess theoretical understanding of user research.",
+    "lessons": [
+      {
+        "title": "Qualitative vs. Quantitative",
+        "theory": "## How We Learn About Users\n- **Qualitative Research:** Helps us understand the *Why*. Focuses on observations, interviews, and open-ended questions. (e.g., 'Why do users get frustrated here?')\n- **Quantitative Research:** Helps us understand the *What* and *How Many*. Focuses on numbers, metrics, surveys, and analytics. (e.g., 'What percentage of users click this button?')",
+        "instructions": "## Task: Research Methods\nIf you want to find out *why* users are abandoning their shopping carts, which type of research should you conduct?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Qualitative Research (like user interviews)",
+        "hint": "You need to understand their reasoning.",
+        "rubric": "Identifies Qualitative."
+      }
+    ]
+  },
+  "Prototyping": {
+    "aiRubric": "Assess theoretical understanding of prototyping.",
+    "lessons": [
+      {
+        "title": "Interactive Mockups",
+        "theory": "## Simulating the Experience\nA prototype is an interactive version of your designs. Using tools like Figma, you can link screens together so that clicking a button takes the user to the next screen. Prototypes allow you to test the user experience (UX) and flow before developers write a single line of code.",
+        "instructions": "## Task: The Value of Prototyping\nWhat is the main benefit of creating a clickable prototype before handing designs off to developers?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: It allows you to test the user flow and catch usability issues early before spending money and time on engineering.",
+        "hint": "Testing before building.",
+        "rubric": "Mentions testing flow, usability, or saving engineering time."
+      }
+    ]
+  },
+  "Accessibility Guidelines": {
+    "aiRubric": "Assess theoretical understanding of accessibility.",
+    "lessons": [
+      {
+        "title": "Introduction to WCAG",
+        "theory": "## Designing for Everyone\nAccessibility (Often abbreviated as 'a11y') ensures that digital products are usable by people with disabilities. The Web Content Accessibility Guidelines (WCAG) are the international standard.\nCore principles state that content must be:\n- Perceivable (e.g., text alternatives for images)\n- Operable (e.g., keyboard navigation)\n- Understandable (e.g., clear language)\n- Robust (e.g., compatible with screen readers)",
+        "instructions": "## Task: Core Principles\nIf a user cannot use a mouse and relies entirely on a keyboard, which WCAG core principle ensures they can still navigate your site?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Operable",
+        "hint": "They need to be able to operate the interface.",
+        "rubric": "Identifies Operable."
+      },
+      {
+        "title": "Color Contrast",
+        "theory": "## Readability Matters\nA very common accessibility failure is poor color contrast. Light gray text on a white background is incredibly hard to read for users with visual impairments (and even for users in bright sunlight). WCAG requires a minimum contrast ratio between text and its background.",
+        "instructions": "## Task: Contrast Check\nWhy is it a bad idea to use yellow text on a white background?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Because the color contrast ratio is too low, making it difficult or impossible for many users to read.",
+        "hint": "Think about how hard it is to see.",
+        "rubric": "Mentions low contrast, readability, or visual impairments."
+      }
+    ]
+  },
+  "Design Systems": {
+    "aiRubric": "Assess theoretical understanding of design systems.",
+    "lessons": [
+      {
+        "title": "What is a Design System?",
+        "theory": "## Consistency at Scale\nA design system is a comprehensive guide and a collection of reusable UI components (buttons, inputs, cards) governed by clear standards. It serves as a 'single source of truth' for both designers and developers, ensuring that every product the company builds looks and feels the same.",
+        "instructions": "## Task: Design System Benefits\nHow does a design system speed up the development process for engineers?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Engineers don't have to build components from scratch; they can just reuse pre-built, standardized components from the system.",
+        "hint": "Reusability is key.",
+        "rubric": "Mentions reusability, not starting from scratch, or consistency."
+      }
+    ]
+  },
+  "A/B Testing": {
+    "aiRubric": "Assess theoretical understanding of A/B testing.",
+    "lessons": [
+      {
+        "title": "Data-Driven Design",
+        "theory": "## Testing Variations\nA/B testing (or split testing) is a method of comparing two versions of a webpage or app against each other to determine which one performs better. \n- **Control (A):** The original version.\n- **Variant (B):** The version with a single change (e.g., a green button instead of a blue button).",
+        "instructions": "## Task: Setting up a Test\nWhy is it important to only change ONE variable (like the button color) when running an A/B test?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: If you change multiple variables at once, you won't know which specific change caused the difference in performance.",
+        "hint": "Isolating the cause.",
+        "rubric": "Mentions knowing which change caused the effect or isolating variables."
+      }
+    ]
+  },
+  "Interaction Design": {
+    "aiRubric": "Assess theoretical understanding of interaction design.",
+    "lessons": [
+      {
+        "title": "Micro-interactions",
+        "theory": "## The Little Details\nMicro-interactions are small, contained moments within a product that do one specific task. Examples include:\n- The 'typing...' indicator in a chat app.\n- A heart icon animating when you like a post.\n- A subtle vibration (haptic feedback) when you toggle a switch.\nThese make the interface feel alive and provide instant feedback to the user.",
+        "instructions": "## Task: Identifying Micro-interactions\nProvide an example of a micro-interaction you experience daily on your smartphone.",
+        "starterCode": "Answer: ",
+        "solution": "Answer: (Accept any valid micro-interaction, such as pull-to-refresh, a 'sent' sound effect, or an animated loading spinner).",
+        "hint": "Think about small animations or feedback you get when doing a simple action.",
+        "rubric": "Identifies a small, specific interaction/animation/feedback."
       }
     ]
   },

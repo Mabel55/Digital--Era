@@ -1,0 +1,173 @@
+{
+  "Color Theory": {
+    "aiRubric": "Assess theoretical understanding of color theory.",
+    "lessons": [
+      {
+        "title": "The Color Wheel",
+        "theory": "## Primary, Secondary, and Tertiary\nThe color wheel is the foundation of color theory. \n- **Primary colors** (Red, Blue, Yellow) cannot be created by mixing other colors.\n- **Secondary colors** (Green, Orange, Purple) are created by mixing primary colors.\n- **Tertiary colors** are created by mixing a primary with a secondary color.",
+        "instructions": "## Task: Color Mixing\nWhat category of color is Orange, and what two primary colors create it?",
+        "starterCode": "Category: \nCreated by: ",
+        "solution": "Category: Secondary\nCreated by: Red and Yellow",
+        "hint": "It's not a primary color.",
+        "rubric": "Identifies Secondary, Red, and Yellow."
+      },
+      {
+        "title": "Color Psychology",
+        "theory": "## Meaning Behind Colors\nColors evoke emotions and convey meaning in UI design:\n- **Blue:** Trust, security, professionalism (often used by banks and tech companies).\n- **Red:** Urgency, passion, danger (often used for destructive actions like 'Delete').\n- **Green:** Success, growth, nature.\n- **Yellow:** Optimism, caution, warmth.",
+        "instructions": "## Task: Choosing a Brand Color\nIf you are designing a banking app that needs to convey trust and security, what primary brand color would you choose and why?",
+        "starterCode": "Color: \nReason: ",
+        "solution": "Color: Blue\nReason: Because blue evokes feelings of trust, security, and professionalism.",
+        "hint": "Think about traditional corporate colors.",
+        "rubric": "Identifies Blue and mentions trust/security."
+      },
+      {
+        "title": "Color Harmonies",
+        "theory": "## Creating Color Palettes\nColor harmonies are pleasing combinations of colors:\n- **Monochromatic:** Different shades and tints of a single base color. Very clean and unified.\n- **Analogous:** Colors next to each other on the color wheel (e.g., blue and green). Serene and comfortable.\n- **Complementary:** Colors opposite each other on the color wheel (e.g., blue and orange). High contrast, great for drawing attention to buttons.",
+        "instructions": "## Task: Highlighting Actions\nWhich color harmony would you use if you want your Call-To-Action (CTA) button to stand out dramatically from the background color?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Complementary",
+        "hint": "You want maximum contrast.",
+        "rubric": "Identifies Complementary."
+      }
+    ]
+  },
+  "Typography Basics": {
+    "aiRubric": "Assess theoretical understanding of typography.",
+    "lessons": [
+      {
+        "title": "Serif vs. Sans-Serif",
+        "theory": "## The Core Font Families\n- **Serif Fonts:** Have small decorative strokes (serifs) at the ends of characters (e.g., Times New Roman, Georgia). Often associated with tradition, print, and formality.\n- **Sans-Serif Fonts:** Do NOT have these strokes (e.g., Arial, Helvetica, Inter). Often associated with modern, clean, and digital interfaces.",
+        "instructions": "## Task: Font Selection\nFor a modern, sleek mobile app interface, which font family is generally preferred: Serif or Sans-Serif?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Sans-Serif",
+        "hint": "It looks cleaner on digital screens.",
+        "rubric": "Identifies Sans-Serif."
+      },
+      {
+        "title": "Hierarchy and Scale",
+        "theory": "## Guiding the Eye\nTypographic hierarchy uses size, weight, and color to guide the user's eye to the most important information first. An H1 (Heading 1) should be significantly larger and bolder than body text. A clear scale (e.g., 16px body, 24px H3, 32px H2, 48px H1) creates visual rhythm.",
+        "instructions": "## Task: Creating Hierarchy\nWithout changing the font family, name two typographic properties you can change to make a heading stand out from the body text.",
+        "starterCode": "1. \n2. ",
+        "solution": "1. Size (make it larger)\n2. Weight (make it bolder)",
+        "hint": "How do you make text look bigger and thicker?",
+        "rubric": "Mentions size, weight, or color."
+      }
+    ]
+  },
+  "Wireframing": {
+    "aiRubric": "Assess theoretical understanding of wireframing.",
+    "lessons": [
+      {
+        "title": "What is a Wireframe?",
+        "theory": "## The Blueprint of a Screen\nA wireframe is a two-dimensional skeletal outline of a webpage or app. It focuses on space allocation, layout, and functionality rather than styling, colors, or graphics. It is the architectural blueprint of UI design.",
+        "instructions": "## Task: Wireframe Purpose\nWhy do designers create wireframes before adding colors and images?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: To focus on layout, structure, and user flow without getting distracted by visual design details.",
+        "hint": "Think about building the foundation of a house.",
+        "rubric": "Mentions layout, structure, or avoiding visual distractions."
+      },
+      {
+        "title": "Fidelity Levels",
+        "theory": "## Low vs. High Fidelity\n- **Low-Fidelity (Lo-Fi):** Quick, rough sketches (often on paper or whiteboards). Uses basic boxes and lines. Great for rapid brainstorming.\n- **High-Fidelity (Hi-Fi):** Detailed, digital designs that look almost exactly like the final product. Includes actual fonts, spacing, and placeholder images.",
+        "instructions": "## Task: Choosing Fidelity\nIf you are in a very early brainstorming meeting trying to figure out the general flow of an app, which fidelity should you use?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Low-Fidelity",
+        "hint": "You need to be fast and rough.",
+        "rubric": "Identifies Low-Fidelity or Lo-Fi."
+      }
+    ]
+  },
+  "User Research": {
+    "aiRubric": "Assess theoretical understanding of user research.",
+    "lessons": [
+      {
+        "title": "Qualitative vs. Quantitative",
+        "theory": "## How We Learn About Users\n- **Qualitative Research:** Helps us understand the *Why*. Focuses on observations, interviews, and open-ended questions. (e.g., 'Why do users get frustrated here?')\n- **Quantitative Research:** Helps us understand the *What* and *How Many*. Focuses on numbers, metrics, surveys, and analytics. (e.g., 'What percentage of users click this button?')",
+        "instructions": "## Task: Research Methods\nIf you want to find out *why* users are abandoning their shopping carts, which type of research should you conduct?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Qualitative Research (like user interviews)",
+        "hint": "You need to understand their reasoning.",
+        "rubric": "Identifies Qualitative."
+      }
+    ]
+  },
+  "Prototyping": {
+    "aiRubric": "Assess theoretical understanding of prototyping.",
+    "lessons": [
+      {
+        "title": "Interactive Mockups",
+        "theory": "## Simulating the Experience\nA prototype is an interactive version of your designs. Using tools like Figma, you can link screens together so that clicking a button takes the user to the next screen. Prototypes allow you to test the user experience (UX) and flow before developers write a single line of code.",
+        "instructions": "## Task: The Value of Prototyping\nWhat is the main benefit of creating a clickable prototype before handing designs off to developers?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: It allows you to test the user flow and catch usability issues early before spending money and time on engineering.",
+        "hint": "Testing before building.",
+        "rubric": "Mentions testing flow, usability, or saving engineering time."
+      }
+    ]
+  },
+  "Accessibility Guidelines": {
+    "aiRubric": "Assess theoretical understanding of accessibility.",
+    "lessons": [
+      {
+        "title": "Introduction to WCAG",
+        "theory": "## Designing for Everyone\nAccessibility (Often abbreviated as 'a11y') ensures that digital products are usable by people with disabilities. The Web Content Accessibility Guidelines (WCAG) are the international standard.\nCore principles state that content must be:\n- Perceivable (e.g., text alternatives for images)\n- Operable (e.g., keyboard navigation)\n- Understandable (e.g., clear language)\n- Robust (e.g., compatible with screen readers)",
+        "instructions": "## Task: Core Principles\nIf a user cannot use a mouse and relies entirely on a keyboard, which WCAG core principle ensures they can still navigate your site?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Operable",
+        "hint": "They need to be able to operate the interface.",
+        "rubric": "Identifies Operable."
+      },
+      {
+        "title": "Color Contrast",
+        "theory": "## Readability Matters\nA very common accessibility failure is poor color contrast. Light gray text on a white background is incredibly hard to read for users with visual impairments (and even for users in bright sunlight). WCAG requires a minimum contrast ratio between text and its background.",
+        "instructions": "## Task: Contrast Check\nWhy is it a bad idea to use yellow text on a white background?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Because the color contrast ratio is too low, making it difficult or impossible for many users to read.",
+        "hint": "Think about how hard it is to see.",
+        "rubric": "Mentions low contrast, readability, or visual impairments."
+      }
+    ]
+  },
+  "Design Systems": {
+    "aiRubric": "Assess theoretical understanding of design systems.",
+    "lessons": [
+      {
+        "title": "What is a Design System?",
+        "theory": "## Consistency at Scale\nA design system is a comprehensive guide and a collection of reusable UI components (buttons, inputs, cards) governed by clear standards. It serves as a 'single source of truth' for both designers and developers, ensuring that every product the company builds looks and feels the same.",
+        "instructions": "## Task: Design System Benefits\nHow does a design system speed up the development process for engineers?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Engineers don't have to build components from scratch; they can just reuse pre-built, standardized components from the system.",
+        "hint": "Reusability is key.",
+        "rubric": "Mentions reusability, not starting from scratch, or consistency."
+      }
+    ]
+  },
+  "A/B Testing": {
+    "aiRubric": "Assess theoretical understanding of A/B testing.",
+    "lessons": [
+      {
+        "title": "Data-Driven Design",
+        "theory": "## Testing Variations\nA/B testing (or split testing) is a method of comparing two versions of a webpage or app against each other to determine which one performs better. \n- **Control (A):** The original version.\n- **Variant (B):** The version with a single change (e.g., a green button instead of a blue button).",
+        "instructions": "## Task: Setting up a Test\nWhy is it important to only change ONE variable (like the button color) when running an A/B test?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: If you change multiple variables at once, you won't know which specific change caused the difference in performance.",
+        "hint": "Isolating the cause.",
+        "rubric": "Mentions knowing which change caused the effect or isolating variables."
+      }
+    ]
+  },
+  "Interaction Design": {
+    "aiRubric": "Assess theoretical understanding of interaction design.",
+    "lessons": [
+      {
+        "title": "Micro-interactions",
+        "theory": "## The Little Details\nMicro-interactions are small, contained moments within a product that do one specific task. Examples include:\n- The 'typing...' indicator in a chat app.\n- A heart icon animating when you like a post.\n- A subtle vibration (haptic feedback) when you toggle a switch.\nThese make the interface feel alive and provide instant feedback to the user.",
+        "instructions": "## Task: Identifying Micro-interactions\nProvide an example of a micro-interaction you experience daily on your smartphone.",
+        "starterCode": "Answer: ",
+        "solution": "Answer: (Accept any valid micro-interaction, such as pull-to-refresh, a 'sent' sound effect, or an animated loading spinner).",
+        "hint": "Think about small animations or feedback you get when doing a simple action.",
+        "rubric": "Identifies a small, specific interaction/animation/feedback."
+      }
+    ]
+  }
+}

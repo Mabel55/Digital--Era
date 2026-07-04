@@ -1,0 +1,109 @@
+{
+  "Agile & Scrum": {
+    "aiRubric": "Assess theoretical understanding of Agile and Scrum.",
+    "lessons": [
+      {
+        "title": "The Agile Manifesto",
+        "theory": "## Iterative Development\nAgile is a project management methodology that favors iterative development, flexibility, and collaboration over rigid, long-term planning (like the older 'Waterfall' method). Instead of building a massive product in secret for a year, Agile teams build small pieces, release them frequently, and adapt based on feedback.",
+        "instructions": "## Task: Agile vs Waterfall\nWhat is a major risk of using the traditional Waterfall methodology (planning everything up front) compared to Agile?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: The market or user needs might change during the long development cycle, resulting in a product nobody wants when it finally launches.",
+        "hint": "What happens if things change after you made the plan?",
+        "rubric": "Mentions lack of flexibility, market changes, or delayed feedback."
+      },
+      {
+        "title": "Scrum Ceremonies",
+        "theory": "## The Scrum Framework\nScrum is a specific implementation of Agile. Work is broken into time-boxed periods called **Sprints** (usually 2 weeks). Key ceremonies include:\n- **Sprint Planning:** Deciding what work to do in the upcoming sprint.\n- **Daily Standup:** A 15-minute daily meeting to share progress and blockers.\n- **Sprint Retrospective:** A meeting at the end of the sprint to discuss what went well and what can be improved.",
+        "instructions": "## Task: Daily Sync\nWhat is the purpose of the Daily Standup in Scrum?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: For the team to quickly sync on progress, share what they are doing, and identify any blockers preventing them from working.",
+        "hint": "It's a quick daily sync.",
+        "rubric": "Mentions syncing progress or identifying blockers."
+      }
+    ]
+  },
+  "The Product Lifecycle": {
+    "aiRubric": "Assess theoretical understanding of the product lifecycle.",
+    "lessons": [
+      {
+        "title": "Stages of a Product",
+        "theory": "## From Idea to Retirement\nThe software product lifecycle includes:\n1. **Ideation & Research:** Finding a problem to solve.\n2. **Definition:** Outlining requirements (PRDs).\n3. **Design & Prototyping:** Creating wireframes and mockups.\n4. **Development:** Engineering the product.\n5. **Launch:** Releasing to the market.\n6. **Maintenance & Iteration:** Fixing bugs and adding features.\n7. **Sunsetting:** Retiring the product when it's no longer viable.",
+        "instructions": "## Task: Lifecycle Stages\nIn which stage do Product Managers write the Product Requirements Document (PRD)?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Definition",
+        "hint": "It happens before design and development.",
+        "rubric": "Identifies Definition."
+      }
+    ]
+  },
+  "Writing PRDs": {
+    "aiRubric": "Assess theoretical understanding of PRDs.",
+    "lessons": [
+      {
+        "title": "What is a PRD?",
+        "theory": "## Defining the 'What' and 'Why'\nA Product Requirements Document (PRD) is the core document written by a Product Manager. It clearly defines the value and purpose of a product or feature. It outlines *what* needs to be built, *who* the target audience is, and *why* it matters.\nCrucially, a PRD should NOT dictate *how* the feature is technically implemented (that's the engineering team's job).",
+        "instructions": "## Task: The Role of a PRD\nIf a PRD includes database schema diagrams and specific API endpoints, what mistake has the Product Manager made?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: They have dictated the 'how' (technical implementation) rather than focusing on the 'what' and 'why'.",
+        "hint": "Engineers handle the technical details.",
+        "rubric": "Mentions dictating the 'how' or technical implementation."
+      }
+    ]
+  },
+  "Go-to-Market Strategy": {
+    "aiRubric": "Assess theoretical understanding of Go-to-Market.",
+    "lessons": [
+      {
+        "title": "Launching to the World",
+        "theory": "## GTM Strategy\nA Go-To-Market (GTM) strategy is the action plan that specifies how a company will reach target customers and achieve competitive advantage. It includes:\n- **Target Audience:** Exactly who are you selling to?\n- **Pricing Strategy:** Freemium, subscription, or one-time fee?\n- **Distribution/Channels:** SEO, paid ads, direct sales, or app stores?\n- **Positioning:** How is your product different from competitors?",
+        "instructions": "## Task: GTM Components\nIf you decide to offer a basic version of your app for free and charge for premium features, which component of the GTM strategy are you defining?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Pricing Strategy (specifically, Freemium).",
+        "hint": "It involves money.",
+        "rubric": "Identifies Pricing Strategy or Pricing."
+      }
+    ]
+  },
+  "VC Funding basics": {
+    "aiRubric": "Assess theoretical understanding of VC funding.",
+    "lessons": [
+      {
+        "title": "Funding Rounds",
+        "theory": "## Stages of Investment\nStartups usually raise money in distinct rounds as they grow:\n- **Pre-Seed / Seed:** Initial capital from founders, friends, or angel investors to build an MVP (Minimum Viable Product) and prove the concept.\n- **Series A:** Raised when a startup has a working product, consistent revenue, and needs to optimize its user base and product offerings.\n- **Series B/C/D:** Successive rounds to rapidly scale the business, expand into new markets, or acquire competitors.",
+        "instructions": "## Task: Raising Capital\nIf you have a rough prototype but zero revenue and you need money to hire your first engineer, which funding round are you likely raising?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Pre-Seed or Seed",
+        "hint": "It's the very first stage.",
+        "rubric": "Identifies Pre-Seed or Seed."
+      }
+    ]
+  },
+  "Scaling a Startup": {
+    "aiRubric": "Assess theoretical understanding of scaling.",
+    "lessons": [
+      {
+        "title": "Product-Market Fit (PMF)",
+        "theory": "## The Holy Grail of Startups\nProduct-Market Fit (PMF) means being in a good market with a product that can satisfy that market. You have PMF when customers are buying your product as fast as you can make it, or usage is growing rapidly without massive marketing spend.\n**Rule of Thumb:** Premature scaling (trying to grow massively *before* finding PMF) is the #1 reason startups fail.",
+        "instructions": "## Task: When to Scale\nWhy is premature scaling dangerous for a startup?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Because you are spending money to acquire users for a product that people don't actually want or need, leading to high churn and running out of cash.",
+        "hint": "What happens if you market a bad product?",
+        "rubric": "Mentions wasting money, high churn, or no market demand."
+      }
+    ]
+  },
+  "Product Analytics": {
+    "aiRubric": "Assess theoretical understanding of product analytics.",
+    "lessons": [
+      {
+        "title": "Key Metrics (KPIs)",
+        "theory": "## Measuring Success\nProduct Managers live and die by data. Key Performance Indicators (KPIs) measure the health of the product:\n- **CAC (Customer Acquisition Cost):** How much it costs to get one new paying user.\n- **LTV (Lifetime Value):** How much revenue one user generates over their entire relationship with the company.\n- **Churn Rate:** The percentage of users who cancel or stop using the product in a given timeframe.",
+        "instructions": "## Task: Analytics Health\nFor a healthy, profitable SaaS business, should your LTV be higher or lower than your CAC?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: LTV should be significantly higher than CAC.",
+        "hint": "You want to make more money from a user than it costs to acquire them.",
+        "rubric": "Identifies LTV should be higher."
+      }
+    ]
+  }
+}

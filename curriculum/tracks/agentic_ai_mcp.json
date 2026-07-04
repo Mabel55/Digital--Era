@@ -10,6 +10,15 @@
         "solution": "Answer: An agent has a goal, memory, and can use external tools to interact with the world, whereas a standard LLM only predicts text.",
         "hint": "Think about what an agent can *do* (like use tools) compared to just talking.",
         "rubric": "Mentions tools, memory, or taking action."
+      },
+      {
+        "title": "The Core Components of an Agent",
+        "theory": "## Brain, Memory, and Tools\nTo understand an AI Agent, break it down into three pillars:\n1. **The Brain (LLM):** The reasoning engine that parses prompts, makes decisions, and generates text.\n2. **Memory:** How the agent retains state. Short-term memory holds the current chat context. Long-term memory stores facts across sessions (often using Vector Databases).\n3. **Tools (Actuators):** Functions the agent can call to interact with the outside world (e.g., searching the web, executing code, querying a database).",
+        "instructions": "## Task: Component Identification\nIf an agent reads an API documentation page and saves the summary so it can remember it next week, which of the three core components is it primarily utilizing to store the summary?",
+        "starterCode": "Answer: ",
+        "solution": "Answer: Memory (specifically, long-term memory).",
+        "hint": "It involves retaining state for the future.",
+        "rubric": "Identifies Memory."
       }
     ]
   },
