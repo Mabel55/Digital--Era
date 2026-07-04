@@ -71,7 +71,13 @@ def ask_gemini(question: str, context_chunks: list[str] = None, chat_history: li
         )
 
     # 1. Start the message array with your system prompt instructions
-    messages = [("system", system_prompt)]
+    
+    # Inject RAG Context if available
+    context_str = ""
+    if context_chunks:
+        context_str = "\n\n--- COURSE MATERIAL CONTEXT ---\nThe following is the exact course material the student is currently learning. Use this to guide your answer:\n" + "\n".join(context_chunks) + "\n-------------------------------\n"
+
+    messages = [("system", system_prompt + context_str)]
 
     # 2. Memory Injection: Loop through PostgreSQL rows and convert them to LangChain tuples
     if chat_history:
