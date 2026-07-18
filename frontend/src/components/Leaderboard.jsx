@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Medal, Trophy, Home, ArrowLeft, Flame, User as UserIcon } from 'lucide-react';
 
 export default function Leaderboard({ isPublic = false }) {
   const [users, setUsers] = useState([]);
@@ -32,11 +33,11 @@ export default function Leaderboard({ isPublic = false }) {
     return {};
   };
 
-  const getRankIcon = (index) => {
-    if (index === 0) return '🏆';
-    if (index === 1) return '🥈';
-    if (index === 2) return '🥉';
-    return `#${index + 1}`;
+  const getRankBadge = (index) => {
+    if (index === 0) return <Medal size={20} color="#fbbf24" />;
+    if (index === 1) return <Medal size={20} color="#9ca3af" />;
+    if (index === 2) return <Medal size={20} color="#b45309" />;
+    return <span style={{ color: 'var(--text-dim)', fontWeight: 600 }}>#{index + 1}</span>;
   };
 
   const podiumStyles = {
@@ -73,10 +74,10 @@ export default function Leaderboard({ isPublic = false }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '48px' }}>
           <button 
              onClick={() => navigate(token && !isPublic ? '/dashboard' : '/')}
-             style={{ padding: '8px 12px', background: 'var(--surface)', borderRadius: '8px', border: '1px solid var(--border)', cursor: 'pointer', color: 'var(--text2)', fontSize: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
+             style={{ padding: '8px 12px', background: 'var(--surface)', borderRadius: '8px', border: '1px solid var(--border)', cursor: 'pointer', color: 'var(--text2)', fontSize: '16px', display: 'flex', alignItems: 'center', gap: '6px', transition: 'all 0.2s' }}
              title="Go Back"
           >
-             {token && !isPublic ? '🏠' : '←'}
+             {token && !isPublic ? <Home size={18} /> : <ArrowLeft size={18} />} {token && !isPublic ? 'Dashboard' : 'Home'}
           </button>
           <div>
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '36px', fontWeight: 800, background: 'linear-gradient(90deg, var(--accent), var(--accent2))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '4px' }}>
@@ -101,13 +102,13 @@ export default function Leaderboard({ isPublic = false }) {
                   <div style={podiumStyles.name('#9ca3af')}>{users[1].full_name || users[1].email?.split('@')[0] || 'User'}</div>
                   <div style={podiumStyles.xp}>{users[1].xp} XP</div>
                   <div style={podiumStyles.podiumBar(160, '#9ca3af')}>
-                    <span style={{ fontSize: '24px' }}>🥈</span>
+                    <span style={{ fontSize: '24px' }}><Medal size={24} color="#9ca3af" /></span>
                   </div>
                 </div>
 
                 {/* 1st place */}
                 <div style={podiumStyles.podiumItem(224, '#eab308')}>
-                  <div style={{ fontSize: '32px', marginBottom: '8px', animation: 'pulse 2s infinite' }}>🏆</div>
+                  <div style={{ fontSize: '32px', marginBottom: '8px', animation: 'pulse 2s infinite' }}><Trophy size={40} color="#eab308" /></div>
                   <div style={{ ...podiumStyles.name('#eab308'), fontSize: '20px' }}>{users[0].full_name || users[0].email?.split('@')[0] || 'User'}</div>
                   <div style={podiumStyles.xp}>{users[0].xp} XP</div>
                   <div style={podiumStyles.podiumBar(224, '#eab308')}>
@@ -120,7 +121,7 @@ export default function Leaderboard({ isPublic = false }) {
                   <div style={podiumStyles.name('#d97706')}>{users[2].full_name || users[2].email?.split('@')[0] || 'User'}</div>
                   <div style={podiumStyles.xp}>{users[2].xp} XP</div>
                   <div style={podiumStyles.podiumBar(128, '#d97706')}>
-                    <span style={{ fontSize: '24px' }}>🥉</span>
+                    <span style={{ fontSize: '24px' }}><Medal size={24} color="#d97706" /></span>
                   </div>
                 </div>
               </div>
@@ -145,12 +146,12 @@ export default function Leaderboard({ isPublic = false }) {
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                     <div style={{ width: '48px', textAlign: 'center', fontSize: index < 3 ? '24px' : '14px', fontWeight: 700, color: 'var(--text2)', fontFamily: 'var(--font-mono)' }}>
-                      {getRankIcon(index)}
+                      {getRankBadge(index)}
                     </div>
                     
                     <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--surface3)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)', flexShrink: 0 }}>
                       <span style={{ fontWeight: 700, fontSize: '16px', color: 'var(--accent)' }}>
-                        {((user.full_name || user.email) || 'U').charAt(0).toUpperCase()}
+                        <UserIcon size={20} />
                       </span>
                     </div>
 
@@ -163,9 +164,9 @@ export default function Leaderboard({ isPublic = false }) {
                           {user.level || 'Novice'}
                         </span>
                         {user.streak > 0 && (
-                          <span style={{ fontSize: '12px', color: 'var(--accent3)', fontWeight: 600 }}>
-                            🔥 {user.streak} day streak
-                          </span>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: 'var(--accent3)', fontWeight: 600 }}>
+                            <Flame size={14} color="var(--accent3)" /> {user.streak} day streak
+                          </div>
                         )}
                       </div>
                     </div>

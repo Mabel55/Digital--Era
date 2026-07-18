@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../AuthContext';
+import { MessageSquare } from 'lucide-react';
 
 const LessonDiscussion = ({ lessonName }) => {
   const { token, user } = useAuth();
@@ -70,7 +71,7 @@ const LessonDiscussion = ({ lessonName }) => {
   return (
     <div style={{ marginTop: '40px', padding: '20px', background: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)' }}>
       <h3 style={{ marginTop: 0, color: 'white', display: 'flex', alignItems: 'center', gap: '8px' }}>
-        💬 Community Discussion
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><MessageSquare size={18} /> Community Discussion</div>
       </h3>
       <p style={{ color: 'var(--text-dim)', fontSize: '14px', marginBottom: '20px' }}>
         Stuck on {lessonName}? Ask a question or help out a fellow student!

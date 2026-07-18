@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
+import { GraduationCap } from 'lucide-react';
 
 const PublicNavbar = () => {
   const { token } = useAuth();
@@ -10,7 +11,7 @@ const PublicNavbar = () => {
     <nav className="dash-nav" style={{ position: 'sticky', top: 0, zIndex: 100, borderBottom: '1px solid var(--border)' }}>
       <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
         <div className="logo-row" style={{ marginBottom: 0 }}>
-          <div className="logo-icon">🎓</div>
+          <div className="logo-icon"><GraduationCap size={24} /></div>
           <div className="logo-text">Digital <span>Era</span></div>
         </div>
       </Link>

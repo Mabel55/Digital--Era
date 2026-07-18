@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { X, Share, PlusSquare, Zap } from 'lucide-react';
 
 const PWAInstallPrompt = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -55,7 +56,7 @@ const PWAInstallPrompt = () => {
     <div style={styles.overlay}>
       <div style={styles.banner}>
         <div style={styles.iconRow}>
-          <div style={styles.appIcon}>⚡</div>
+          <div style={styles.appIcon}><Zap size={24} color="#0d0f14" /></div>
           <div style={styles.textCol}>
             <strong style={styles.title}>Install Digital Era</strong>
             <span style={styles.subtitle}>

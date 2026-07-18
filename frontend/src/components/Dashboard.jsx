@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { curriculum, courseManifest } from '../data/courses';
 import { projectsManifest } from '../data/projects';
 import CertificateModal from './CertificateModal';
+import { GraduationCap, Sun, Moon, Trophy, Flame, Users, Target, Scroll, Rocket, Brain, Wrench, Hammer, BookOpen, Terminal } from 'lucide-react';
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
@@ -115,30 +116,30 @@ const Dashboard = () => {
     <div id="dashboard" className="screen active">
       <nav className="dash-nav">
         <div className="logo-row">
-          <div className="logo-icon">🎓</div>
+          <div className="logo-icon"><GraduationCap size={24} /></div>
           <div className="logo-text">Digital <span>Era</span></div>
         </div>
         <div className="nav-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <button 
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            style={{ padding: '8px 12px', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', fontSize: '16px' }}
+            style={{ padding: '8px 12px', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
             title="Toggle Light/Dark Mode"
           >
-            {theme === 'dark' ? '☀️' : '🌙'}
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
           <button 
             onClick={() => navigate('/leaderboard')}
             style={{ padding: '8px 16px', background: 'var(--surface2)', color: 'var(--accent3)', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}
           >
-            🏆 Leaderboard
+            <Trophy size={16} /> Leaderboard
           </button>
-          <div className="streak-badge">🔥 <span>{user?.streak || 0}</span> day streak</div>
+          <div className="streak-badge"><Flame size={16} color="var(--accent3)" /> <span>{user?.streak || 0}</span> day streak</div>
           {((user?.role || '').toLowerCase() === 'admin' || (user?.role || '').toLowerCase() === 'teacher') && (
             <button 
               onClick={() => navigate('/teacher')}
-              style={{ padding: '8px 16px', background: 'var(--accent)', color: 'black', border: 'none', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold' }}
+              style={{ padding: '8px 16px', background: 'var(--accent)', color: 'black', border: 'none', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}
             >
-              👨‍🏫 Teacher Portal
+              <Users size={16} /> Teacher Portal
             </button>
           )}
           <button 
@@ -189,11 +190,12 @@ const Dashboard = () => {
                   fontSize: '13px',
                   fontWeight: 'bold',
                   cursor: 'pointer',
-                  marginLeft: '10px',
-                  boxShadow: '0 0 10px rgba(245,158,11,0.4)'
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
                 }}
               >
-                🎯 Test Your Skills
+                <Target size={14} /> Test Your Skills
               </button>
             </div>
             <div className="hero-stats">
@@ -212,7 +214,7 @@ const Dashboard = () => {
         {uniqueCompletedCourses.length > 0 && (
           <>
             <div className="section-title">
-              🏆 Your Certificates <span>({uniqueCompletedCourses.length})</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Trophy size={20} color="var(--accent3)" /> Your Certificates <span>({uniqueCompletedCourses.length})</span></div>
             </div>
             <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '40px' }}>
               {uniqueCompletedCourses.map(c => (
@@ -226,7 +228,7 @@ const Dashboard = () => {
                     alignItems: 'center', gap: '8px', fontWeight: 'bold'
                   }}
                 >
-                  📜 {c}
+                  <Scroll size={16} /> {c}
                 </div>
               ))}
             </div>
@@ -234,7 +236,7 @@ const Dashboard = () => {
         )}
 
         <div className="section-title">
-          🚀 Live AI Courses <span>Created by your teachers</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Rocket size={20} color="var(--accent)" /> Live AI Courses</div> <span>Created by your teachers</span>
         </div>
         {dbCoursesLoading ? (
           <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text2)' }}>
@@ -254,7 +256,7 @@ const Dashboard = () => {
               const progressPct = totalLessons > 0 ? (completed / totalLessons) * 100 : 0;
               return (
                 <div key={course.id} className="track-card" onClick={() => startDBCourse(course.id)} style={{ border: '1px solid var(--accent)' }}>
-                  <div className="track-card-icon">🧠</div>
+                  <div className="track-card-icon"><Brain size={32} strokeWidth={1.5} /></div>
                   <div className="track-card-name">{course.title}</div>
                   <div className="track-card-desc">
                     {totalLessons} lessons • {completed} completed
@@ -279,12 +281,12 @@ const Dashboard = () => {
         )}
 
         <div className="section-title">
-          🛠️ Guided Projects <span>Build real-world applications</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Wrench size={20} color="var(--accent)" /> Guided Projects</div> <span>Build real-world applications</span>
         </div>
         <div className="track-grid" style={{ marginBottom: '40px' }}>
           {Object.values(projectsManifest).map(project => (
             <div key={project.id} className="track-card" onClick={() => navigate(`/project/${project.id}`)} style={{ border: '1px solid var(--accent3)' }}>
-              <div className="track-card-icon">🏗️</div>
+              <div className="track-card-icon"><Hammer size={32} strokeWidth={1.5} /></div>
               <div className="track-card-name">{project.title}</div>
               <div className="track-card-desc">{project.description}</div>
               <div className="track-card-meta">
@@ -296,7 +298,7 @@ const Dashboard = () => {
         </div>
 
         <div className="section-title">
-          📚 Learning Path <span>Select your difficulty level</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><BookOpen size={20} color="var(--accent)" /> Learning Path</div> <span>Select your difficulty level</span>
         </div>
 
         <div style={{ display: 'flex', gap: '10px', marginBottom: '24px' }}>
@@ -329,7 +331,7 @@ const Dashboard = () => {
 
             return (
               <div key={courseName} className="track-card" onClick={() => openOverview(courseName)}>
-                <div className="track-card-icon">💻</div>
+                <div className="track-card-icon"><Terminal size={32} strokeWidth={1.5} /></div>
                 <div className="track-card-name">{courseName}</div>
                 <div className="track-card-desc">
                   {totalLessons} lessons • {completed} completed

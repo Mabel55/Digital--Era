@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { WifiOff, Check } from 'lucide-react';
 
 const OfflineBanner = () => {
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
@@ -52,11 +53,17 @@ const OfflineBanner = () => {
       boxShadow: isOffline
         ? '0 4px 20px rgba(239, 68, 68, 0.3)'
         : '0 4px 20px rgba(0, 229, 160, 0.3)',
+      display: 'flex',
+      justifyContent: 'center'
     }}>
       {isOffline ? (
-        <>📡 You're offline — cached content is still available</>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <WifiOff size={16} /> You're offline — cached content is still available
+        </div>
       ) : (
-        <>✓ Back online!</>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Check size={16} /> Back online!
+        </div>
       )}
     </div>
   );

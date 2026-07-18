@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { Trophy, Download, Share2, X } from 'lucide-react';
 
 const CertificateModal = ({ courseName, studentName, onClose }) => {
   const canvasRef = useRef(null);
@@ -92,7 +93,7 @@ const CertificateModal = ({ courseName, studentName, onClose }) => {
     ctx.fill(); ctx.stroke();
     ctx.textAlign = 'center';
     ctx.fillStyle = '#00e5a0'; ctx.font = 'bold 12px sans-serif';
-    ctx.fillText(`⚡ +500 XP Awarded`, 100, H - 46);
+    ctx.fillText(`+500 XP Awarded`, 100, H - 46);
 
     // --- GOLDEN SEAL ---
     const sealX = W / 2;
@@ -194,7 +195,7 @@ const CertificateModal = ({ courseName, studentName, onClose }) => {
         border: '1px solid #1e293b', display: 'flex', flexDirection: 'column', alignItems: 'center',
         boxShadow: '0 20px 50px rgba(0,0,0,0.5)'
       }}>
-        <h2 style={{ color: '#00e5a0', marginTop: 0, marginBottom: '10px' }}>🏆 Certificate Earned!</h2>
+        <h2 style={{ color: '#00e5a0', marginTop: 0, marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}><Trophy size={24} /> Certificate Earned!</h2>
         <p style={{ color: '#94a3b8', marginBottom: '20px' }}>You've successfully completed {courseName}. Download your certificate below.</p>
         
         <canvas 

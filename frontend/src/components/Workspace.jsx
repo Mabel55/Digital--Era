@@ -5,6 +5,7 @@ import Editor from '@monaco-editor/react';
 import { marked } from 'marked';
 import { courseManifest } from '../data/courses';
 import LessonDiscussion from './LessonDiscussion';
+import { ArrowLeft, Play, Terminal, CheckCircle2, XCircle, Bug, Bot, ArrowUp, PartyPopper, Home, RotateCcw } from 'lucide-react';
 
 const Workspace = () => {
   const { courseId } = useParams();
@@ -291,8 +292,8 @@ const Workspace = () => {
     <div id="workspace" className="screen active" style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <div className="ws-topbar">
         <div className="ws-topbar-left">
-          <button className="ws-back-btn" onClick={() => navigate('/dashboard')}>
-            ← Dashboard
+          <button className="ws-back-btn" onClick={() => navigate('/dashboard')} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <ArrowLeft size={16} /> Dashboard
           </button>
           <div className="ws-course-title">{courseName}</div>
           <div className="ws-lesson-nav">
@@ -301,8 +302,8 @@ const Workspace = () => {
         </div>
         <div className="ws-topbar-right">
           {!showStory && lesson.type !== 'quiz' && (
-            <button className="btn-run" onClick={handleRunCode} disabled={isRunning}>
-              ▶ {isRunning ? 'Running...' : 'Run Code'}
+            <button className="btn-run" onClick={handleRunCode} disabled={isRunning} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Play size={16} /> {isRunning ? 'Running...' : 'Run Code'}
             </button>
           )}
           <button className="btn-submit" onClick={() => {
@@ -330,7 +331,7 @@ const Workspace = () => {
               className="btn-submit"
               style={{ width: '100%', padding: '16px', fontSize: '18px', display: 'flex', justifyContent: 'center', gap: '10px' }}
             >
-              💻 I'm Ready to Practice
+              <Terminal size={20} /> I'm Ready to Practice
             </button>
           </div>
         </div>
@@ -401,12 +402,12 @@ const Workspace = () => {
               </button>
               {quizResult && quizResult.startsWith('correct') && (
                 <div style={{ padding: '16px', background: 'rgba(34, 197, 94, 0.1)', color: '#22c55e', borderRadius: '8px', fontWeight: 'bold' }}>
-                  🎉 Correct! {quizResult.includes('xp') && `+10 XP Awarded! You are now level: ${quizResult.split('_')[2]}`}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><CheckCircle2 size={18} /> Correct!</div> {quizResult.includes('xp') && `+10 XP Awarded! You are now level: ${quizResult.split('_')[2]}`}
                 </div>
               )}
               {quizResult === 'incorrect' && (
                 <div style={{ padding: '16px', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', borderRadius: '8px', fontWeight: 'bold' }}>
-                  ❌ Incorrect. Try again!
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><XCircle size={18} /> Incorrect. Try again!</div>
                 </div>
               )}
             </div>
@@ -443,7 +444,7 @@ const Workspace = () => {
                       cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' 
                     }}
                   >
-                    🐛 Fix My Code
+                    <Bug size={14} /> Fix My Code
                   </button>
                 )}
               </div>
@@ -457,7 +458,7 @@ const Workspace = () => {
           {/* Right Panel - AI Chat */}
           <div className="ws-chat">
             <div className="chat-header-bar">
-              <div className="ai-avatar">🤖</div>
+              <div className="ai-avatar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Bot size={24} /></div>
               <div className="ai-info">
                 <div className="ai-name">Mabel Tutor</div>
                 <div className="ai-status"><div className="status-dot"></div> Online</div>
@@ -491,7 +492,7 @@ const Workspace = () => {
                   }
                 }}
               />
-              <button type="submit" className="chat-send-btn">↑</button>
+              <button type="submit" className="chat-send-btn"><ArrowUp size={16} /></button>
             </form>
           </div>
         </div>
@@ -501,7 +502,7 @@ const Workspace = () => {
       {showCelebration && (
         <div className="celebration-overlay" onClick={() => { setShowCelebration(false); navigate('/dashboard'); }}>
           <div className="celebration-card" onClick={e => e.stopPropagation()}>
-            <div className="celebration-emoji">🎉</div>
+            <div className="celebration-emoji"><PartyPopper size={64} color="var(--accent)" /></div>
             <div className="celebration-title">Course Complete!</div>
             <div className="celebration-subtitle">
               Congratulations! You've finished <strong>{courseName}</strong>. Keep the momentum going!
@@ -512,14 +513,14 @@ const Workspace = () => {
                 style={{ padding: '12px 28px', borderRadius: '100px', width: 'auto' }}
                 onClick={() => { setShowCelebration(false); navigate('/dashboard'); }}
               >
-                🏠 Back to Dashboard
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Home size={18} /> Back to Dashboard</div>
               </button>
               <button 
                 className="returning-btn" 
                 style={{ padding: '12px 28px', borderRadius: '100px', width: 'auto' }}
                 onClick={() => { setShowCelebration(false); loadLesson(0); }}
               >
-                🔄 Review Course
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><RotateCcw size={18} /> Review Course</div>
               </button>
             </div>
           </div>

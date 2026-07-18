@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PublicNavbar from './PublicNavbar';
 import { curriculum } from '../data/courses';
+import { Code2, BarChart2, Bot, Palette, Terminal, GraduationCap } from 'lucide-react';
 
 const CourseCatalog = () => {
   const navigate = useNavigate();
@@ -34,11 +35,12 @@ const CourseCatalog = () => {
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
                   <div className="track-card-icon" style={{ fontSize: '36px', margin: 0 }}>
-                    {/* Just some generic icons based on name */}
-                    {categoryName.includes('Python') ? '🐍' : 
-                     categoryName.includes('Data') ? '📊' : 
-                     categoryName.includes('AI') ? '🤖' : 
-                     categoryName.includes('Frontend') ? '🎨' : '💻'}
+                    <div style={{ fontSize: '32px', marginBottom: '16px', color: 'var(--accent)' }}>
+                      {categoryName.includes('Python') ? <Code2 size={32} /> : 
+                       categoryName.includes('Data') ? <BarChart2 size={32} /> : 
+                       categoryName.includes('AI') ? <Bot size={32} /> : 
+                       categoryName.includes('Frontend') ? <Palette size={32} /> : <Terminal size={32} />}
+                    </div>
                   </div>
                   <div style={{ 
                     background: 'var(--surface2)', padding: '4px 10px', 
@@ -80,8 +82,7 @@ const CourseCatalog = () => {
         background: 'var(--surface)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '18px' }}>🎓</span>
-          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '16px' }}>Digital Era</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><GraduationCap size={18} /> Digital Era</span>
         </div>
         <p style={{ color: 'var(--text2)', fontSize: '13px' }}>© 2026 Digital Era Academy. All rights reserved.</p>
       </footer>

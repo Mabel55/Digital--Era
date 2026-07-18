@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PublicNavbar from './PublicNavbar';
+import { Rocket, Zap, Bot, Trophy, User, GraduationCap } from 'lucide-react';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -57,7 +58,7 @@ const LandingPage = () => {
               style={{ padding: '16px 36px', fontSize: '16px', borderRadius: '100px', width: 'auto' }}
               onClick={() => navigate('/onboarding')}
             >
-              Start Coding for Free 🚀
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>Start Coding for Free <Rocket size={20} /></div>
             </button>
             <button 
               className="returning-btn" 
@@ -71,12 +72,12 @@ const LandingPage = () => {
           {/* Feature Highlights Grid */}
           <div className="landing-features-grid">
             {[
-              { icon: '⚡', title: 'Interactive Workspaces', desc: 'Code right in your browser with real-time feedback and terminals.' },
-              { icon: '🤖', title: 'AI Assistant Included', desc: 'Get unstuck immediately with your personal AI coding tutor.' },
-              { icon: '🏆', title: 'Earn Certifications', desc: 'Build a portfolio and earn recognized certificates as you learn.' }
+              { icon: <Zap size={40} strokeWidth={1.5} color="var(--accent)" />, title: 'Interactive Workspaces', desc: 'Code right in your browser with real-time feedback and terminals.' },
+              { icon: <Bot size={40} strokeWidth={1.5} color="var(--accent)" />, title: 'AI Assistant Included', desc: 'Get unstuck immediately with your personal AI coding tutor.' },
+              { icon: <Trophy size={40} strokeWidth={1.5} color="var(--accent)" />, title: 'Earn Certifications', desc: 'Build a portfolio and earn recognized certificates as you learn.' }
             ].map((feat, i) => (
               <div key={i} className="landing-feature-card">
-                <div style={{ fontSize: '32px', marginBottom: '16px' }}>{feat.icon}</div>
+                <div style={{ marginBottom: '16px' }}>{feat.icon}</div>
                 <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>{feat.title}</h3>
                 <p style={{ color: 'var(--text2)', fontSize: '14px', lineHeight: 1.6 }}>{feat.desc}</p>
               </div>
@@ -102,10 +103,10 @@ const LandingPage = () => {
               <div style={{ 
                 width: '120px', height: '120px', borderRadius: '50%', 
                 background: 'linear-gradient(135deg, var(--accent), #3b82f6)', 
-                flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '48px',
+                flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
                 boxShadow: '0 10px 30px rgba(0,229,160,0.3)'
               }}>
-                👩🏽‍💻
+                <User size={64} color="white" />
               </div>
               <div>
                 <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 700, marginBottom: '8px' }}>Meet the Founder</h3>
@@ -123,8 +124,7 @@ const LandingPage = () => {
       {/* Footer */}
       <footer className="landing-footer">
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '18px' }}>🎓</span>
-          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '16px' }}>Digital Era</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><GraduationCap size={18} /> Digital Era</span>
         </div>
         <p style={{ color: 'var(--text2)', fontSize: '13px' }}>© 2026 Digital Era. Founded by Arua Mabel Chinasa.</p>
       </footer>

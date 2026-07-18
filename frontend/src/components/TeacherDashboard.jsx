@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
+import { Users, BookOpen, Flame, CheckCircle2, XCircle } from 'lucide-react';
 
 const TeacherDashboard = () => {
   const { token, user } = useAuth();
@@ -62,22 +63,22 @@ const TeacherDashboard = () => {
       
       if (res.ok) {
         const data = await res.json();
-        setUploadStatus(`✅ Success: ${data.message}`);
+        setUploadStatus(`Success: ${data.message}`);
         setUploadFile(null);
         setCourseTitle('');
       } else {
         const errorData = await res.json();
-        setUploadStatus(`❌ Error: ${errorData.detail || 'Upload failed'}`);
+        setUploadStatus(`Error: ${errorData.detail || 'Upload failed'}`);
       }
     } catch (e) {
-      setUploadStatus(`❌ Error: ${e.message}`);
+      setUploadStatus(`Error: ${e.message}`);
     }
   };
 
   return (
     <div style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto', color: 'var(--text-bright)' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
-        <h1>👨‍🏫 Teacher Portal</h1>
+        <h1 style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><Users size={32} /> Teacher Portal</h1>
         <button 
           onClick={() => navigate('/')}
           style={{ padding: '10px 20px', background: 'var(--surface)', color: 'white', borderRadius: '8px', border: '1px solid var(--border)', cursor: 'pointer' }}
@@ -89,7 +90,7 @@ const TeacherDashboard = () => {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
         {/* PDF Uploader Section */}
         <div style={{ background: 'var(--surface)', padding: '30px', borderRadius: '12px', border: '1px solid var(--border)' }}>
-          <h2 style={{ marginBottom: '20px', color: 'var(--accent)' }}>📚 Upload Course Material</h2>
+          <h2 style={{ marginBottom: '20px', color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '8px' }}><BookOpen size={24} /> Upload Course Material</h2>
           <p style={{ marginBottom: '20px', color: 'var(--text-dim)' }}>Upload a PDF textbook or syllabus. The AI Brain will automatically ingest this document to provide highly context-aware tutoring to your students.</p>
           
           <form onSubmit={handleUpload} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -150,8 +151,8 @@ const TeacherDashboard = () => {
             </button>
             
             {uploadStatus && (
-              <div style={{ marginTop: '16px', padding: '16px', background: uploadStatus.includes('✅') ? 'rgba(34, 197, 94, 0.1)' : 'rgba(56, 189, 248, 0.1)', color: uploadStatus.includes('✅') ? '#22c55e' : 'var(--text-bright)', borderRadius: '8px', fontWeight: 'bold' }}>
-                {uploadStatus}
+              <div style={{ marginTop: '16px', padding: '16px', background: uploadStatus.includes('Success') ? 'rgba(34, 197, 94, 0.1)' : 'rgba(56, 189, 248, 0.1)', color: uploadStatus.includes('Success') ? '#22c55e' : 'var(--text-bright)', borderRadius: '8px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                {uploadStatus.includes('Success') ? <CheckCircle2 size={18} /> : uploadStatus.includes('Error') ? <XCircle size={18} /> : null} {uploadStatus}
               </div>
             )}
           </form>
@@ -159,7 +160,7 @@ const TeacherDashboard = () => {
 
         {/* Student Progress Section */}
         <div style={{ background: 'var(--surface)', padding: '30px', borderRadius: '12px', border: '1px solid var(--border)', overflowY: 'auto', maxHeight: '600px' }}>
-          <h2 style={{ marginBottom: '20px', color: 'var(--accent)' }}>👥 Student Roster & Progress</h2>
+          <h2 style={{ marginBottom: '20px', color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '8px' }}><Users size={24} /> Student Roster & Progress</h2>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {students.length === 0 ? (
@@ -176,7 +177,7 @@ const TeacherDashboard = () => {
                   
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', color: 'var(--text-dim)', marginBottom: '8px' }}>
                     <span>XP: {student.xp || 0}</span>
-                    <span>🔥 {student.streak || 0} Day Streak</span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Flame size={14} color="var(--accent3)" /> {student.streak || 0} Day Streak</span>
                   </div>
 
                   <div style={{ marginTop: '12px', borderTop: '1px solid var(--border)', paddingTop: '12px' }}>

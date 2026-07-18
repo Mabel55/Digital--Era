@@ -4,6 +4,7 @@ import { useAuth } from '../AuthContext';
 import Editor from '@monaco-editor/react';
 import { marked } from 'marked';
 import { projectsManifest } from '../data/projects';
+import { FileText, Play, ArrowLeft } from 'lucide-react';
 
 const ProjectWorkspace = () => {
   const { projectId } = useParams();
@@ -109,7 +110,7 @@ const ProjectWorkspace = () => {
                   display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px'
                 }}
               >
-                📄 {filename}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><FileText size={16} /> {filename}</div>
               </div>
             ))}
           </div>

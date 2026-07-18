@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { GraduationCap, Rocket, ArrowLeft, Sparkles, LogIn, Award, Target } from 'lucide-react';
 
 const Onboarding = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -47,7 +48,7 @@ const Onboarding = () => {
     <div id="onboarding" className="screen active">
       <div className="onboard-card">
         <div className="logo-row">
-          <div className="logo-icon">🎓</div>
+          <div className="logo-icon"><GraduationCap size={24} /></div>
           <div className="logo-text">Digital <span>Era</span></div>
         </div>
         
@@ -110,15 +111,15 @@ const Onboarding = () => {
           {!isLogin && !isForgotPassword && (
             <div className="two-col">
               <div className="field-row">
-                <label className="field-label">Experience Level</label>
+                <label className="field-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Award size={14} /> Experience Level</label>
                 <select value={level} onChange={(e) => setLevel(e.target.value)}>
-                  <option value="Beginner">🟢 Beginner</option>
-                  <option value="Intermediate">🟡 Intermediate</option>
-                  <option value="Advanced">🔴 Advanced</option>
+                  <option value="Beginner">Beginner</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Advanced">Advanced</option>
                 </select>
               </div>
               <div className="field-row">
-                <label className="field-label">Goal</label>
+                <label className="field-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Target size={14} /> Goal</label>
                 <select value={goal} onChange={(e) => setGoal(e.target.value)}>
                   <option value="get a job">Get a Job</option>
                   <option value="build projects">Build Projects</option>
@@ -130,7 +131,7 @@ const Onboarding = () => {
           )}
 
           <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? "Processing..." : (isForgotPassword ? "Reset Password" : (isLogin ? "Login" : "🚀 Initialize My Learning Path"))}
+            {loading ? "Processing..." : (isForgotPassword ? "Reset Password" : (isLogin ? "Login" : <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}><Rocket size={18} /> Initialize My Learning Path</div>))}
           </button>
         </form>
 
@@ -157,7 +158,7 @@ const Onboarding = () => {
             setError(''); 
           }}
         >
-          {isForgotPassword ? "🔙 Back to Login" : (isLogin ? "✨ Create a new account" : "📂 Continue where I left off")}
+          {isForgotPassword ? <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><ArrowLeft size={16} /> Back to Login</div> : (isLogin ? <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><Sparkles size={16} /> Create a new account</div> : <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><LogIn size={16} /> Continue where I left off</div>)}
         </button>
       </div>
     </div>
