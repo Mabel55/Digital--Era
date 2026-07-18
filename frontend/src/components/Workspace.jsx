@@ -292,7 +292,12 @@ const Workspace = () => {
     <div id="workspace" className="screen active" style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <div className="ws-topbar">
         <div className="ws-topbar-left">
-          <button className="ws-back-btn" onClick={() => navigate('/dashboard')} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <button 
+            className="ws-back-btn" 
+            onClick={() => navigate('/dashboard')} 
+            style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+            aria-label="Go back to Dashboard"
+          >
             <ArrowLeft size={16} /> Dashboard
           </button>
           <div className="ws-course-title">{courseName}</div>
@@ -302,7 +307,13 @@ const Workspace = () => {
         </div>
         <div className="ws-topbar-right">
           {!showStory && lesson.type !== 'quiz' && (
-            <button className="btn-run" onClick={handleRunCode} disabled={isRunning} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <button 
+              className="btn-run" 
+              onClick={handleRunCode} 
+              disabled={isRunning} 
+              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+              aria-label="Run Code"
+            >
               <Play size={16} /> {isRunning ? 'Running...' : 'Run Code'}
             </button>
           )}
@@ -327,9 +338,10 @@ const Workspace = () => {
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '32px', color: 'var(--accent)', marginBottom: '24px' }}>{lesson.title}</h1>
             <div className="exercise-body story-body" dangerouslySetInnerHTML={{ __html: marked(lesson.theory || "No theory provided.") }} style={{ fontSize: '16px', lineHeight: '1.8', color: 'var(--text)', marginBottom: '40px' }}></div>
             <button 
-              onClick={() => setShowStory(false)}
+              onClick={() => { setShowStory(false); if(lesson.starterCode) setCode(lesson.starterCode); }}
               className="btn-submit"
               style={{ width: '100%', padding: '16px', fontSize: '18px', display: 'flex', justifyContent: 'center', gap: '10px' }}
+              aria-label="Start Practice"
             >
               <Terminal size={20} /> I'm Ready to Practice
             </button>
@@ -492,7 +504,13 @@ const Workspace = () => {
                   }
                 }}
               />
-              <button type="submit" className="chat-send-btn"><ArrowUp size={16} /></button>
+              <button 
+                type="submit" 
+                className="chat-send-btn"
+                aria-label="Send message to AI Tutor"
+              >
+                <ArrowUp size={16} />
+              </button>
             </form>
           </div>
         </div>
@@ -500,7 +518,13 @@ const Workspace = () => {
 
       {/* Course Completion Celebration */}
       {showCelebration && (
-        <div className="celebration-overlay" onClick={() => { setShowCelebration(false); navigate('/dashboard'); }}>
+        <div 
+          className="celebration-overlay" 
+          onClick={() => { setShowCelebration(false); navigate('/dashboard'); }}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Course Completed Celebration"
+        >
           <div className="celebration-card" onClick={e => e.stopPropagation()}>
             <div className="celebration-emoji"><PartyPopper size={64} color="var(--accent)" /></div>
             <div className="celebration-title">Course Complete!</div>

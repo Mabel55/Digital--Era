@@ -6,11 +6,14 @@ import pandas as pd
 import tempfile
 import shutil
 import os
+from fastapi import Request
+from limiter import limiter
 
 router = APIRouter(tags=["Code Execution"])
 
 @router.post("/run-code/")
-def execute_code(submission: CodeSubmission):
+@limiter.limit("20/minute")
+def execute_code(request: Request, submission: CodeSubmission):
     language = submission.language.lower()
     code = submission.code
     files = submission.files

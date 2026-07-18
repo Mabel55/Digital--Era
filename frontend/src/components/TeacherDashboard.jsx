@@ -82,6 +82,7 @@ const TeacherDashboard = () => {
         <button 
           onClick={() => navigate('/')}
           style={{ padding: '10px 20px', background: 'var(--surface)', color: 'white', borderRadius: '8px', border: '1px solid var(--border)', cursor: 'pointer' }}
+          aria-label="Back to Home"
         >
           ← Back to Dashboard
         </button>
@@ -145,7 +146,10 @@ const TeacherDashboard = () => {
 
             <button 
               type="submit" 
-              style={{ marginTop: '10px', padding: '14px', background: 'var(--accent)', color: 'black', fontWeight: 'bold', fontSize: '16px', borderRadius: '8px', border: 'none', cursor: 'pointer' }}
+              disabled={isUploading || !uploadFile}
+              style={{ marginTop: '10px', padding: '14px', background: 'var(--accent)', color: 'black', fontWeight: 'bold', fontSize: '16px', borderRadius: '8px', border: 'none', cursor: isUploading || !uploadFile ? 'not-allowed' : 'pointer', opacity: isUploading || !uploadFile ? 0.5 : 1 }}
+              aria-label={isUploading ? "Uploading course material" : "Upload Course Material"}
+              aria-busy={isUploading}
             >
               Upload & Train AI
             </button>

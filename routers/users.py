@@ -8,11 +8,14 @@ from auth import hash_password, verify_password, create_access_token, get_curren
 import traceback
 from datetime import datetime, timedelta
 from pydantic import BaseModel
+from fastapi import Request
+from limiter import limiter
 
 router = APIRouter(tags=["Users & Auth"])
 
 @router.post("/signup")
-def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+@limiter.limit("5/minute")
+def register_user(request: Request, user: schemas.UserCreate, db: Session = Depends(get_db)):
     try:
         # 1. Check if the email is already in PostgreSQL
         existing_user = db.query(models.User).filter(models.User.email.ilike(user.email)).first()
@@ -37,7 +40,8 @@ def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail=f"DB_CRASH: {str(e)}")
 
 @router.post("/login")
-def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+@limiter.limit("10/minute")
+def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     try:
         user = db.query(models.User).filter(models.User.email.ilike(form_data.username)).first()
         if not user or not verify_password(form_data.password, user.hashed_password):

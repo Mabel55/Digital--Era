@@ -5,6 +5,9 @@ import os
 from database import engine
 from models import Base
 from sqlalchemy import text
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from limiter import limiter
 
 # 1. Initialize Database & Run Migrations
 Base.metadata.create_all(bind=engine)
@@ -43,6 +46,9 @@ import routers.forum
 
 # 2. Initialize the web server
 app = FastAPI(title="Mabel Academy API", description="Digital Era Backend", version="2.0")
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 from fastapi.middleware.cors import CORSMiddleware
 app.add_middleware(

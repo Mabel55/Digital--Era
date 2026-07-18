@@ -115,15 +115,24 @@ const Dashboard = () => {
   return (
     <div id="dashboard" className="screen active">
       <nav className="dash-nav">
-        <div className="logo-row">
-          <div className="logo-icon"><GraduationCap size={24} /></div>
-          <div className="logo-text">Digital <span>Era</span></div>
-        </div>
+          <div 
+            className="logo-row" 
+            onClick={() => navigate('/')} 
+            role="button" 
+            tabIndex={0} 
+            onKeyDown={(e) => e.key === 'Enter' && navigate('/')}
+            style={{ cursor: 'pointer' }}
+            aria-label="Go to Home"
+          >
+            <div className="logo-icon"><GraduationCap size={24} aria-hidden="true" /></div>
+            <div className="logo-text">Digital <span>Era</span></div>
+          </div>
         <div className="nav-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <button 
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             style={{ padding: '8px 12px', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
             title="Toggle Light/Dark Mode"
+            aria-label="Toggle theme"
           >
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
@@ -172,6 +181,7 @@ const Dashboard = () => {
                   fontWeight: '600',
                   cursor: 'pointer'
                 }}
+                aria-label="Select your learning track"
               >
                 {Object.keys(curriculum).map(trackName => (
                   <option key={trackName} value={trackName}>{trackName}</option>
@@ -221,6 +231,10 @@ const Dashboard = () => {
                 <div 
                   key={c}
                   onClick={() => setCertCourse(c)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === 'Enter' && setCertCourse(c)}
+                  aria-label={`View Certificate for ${c}`}
                   style={{
                     padding: '12px 20px', background: 'rgba(0, 229, 160, 0.08)',
                     border: '1px solid var(--accent)', borderRadius: '12px',
@@ -255,7 +269,16 @@ const Dashboard = () => {
               const completed = getDBCourseProgress(course.title);
               const progressPct = totalLessons > 0 ? (completed / totalLessons) * 100 : 0;
               return (
-                <div key={course.id} className="track-card" onClick={() => startDBCourse(course.id)} style={{ border: '1px solid var(--accent)' }}>
+                <div 
+                  key={course.id} 
+                  className="track-card" 
+                  onClick={() => startDBCourse(course.id)} 
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === 'Enter' && startDBCourse(course.id)}
+                  aria-label={`Live Course: ${course.title}`}
+                  style={{ border: '1px solid var(--accent)' }}
+                >
                   <div className="track-card-icon"><Brain size={32} strokeWidth={1.5} /></div>
                   <div className="track-card-name">{course.title}</div>
                   <div className="track-card-desc">
@@ -285,7 +308,16 @@ const Dashboard = () => {
         </div>
         <div className="track-grid" style={{ marginBottom: '40px' }}>
           {Object.values(projectsManifest).map(project => (
-            <div key={project.id} className="track-card" onClick={() => navigate(`/project/${project.id}`)} style={{ border: '1px solid var(--accent3)' }}>
+            <div 
+              key={project.id} 
+              className="track-card" 
+              onClick={() => navigate(`/project/${project.id}`)} 
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && navigate(`/project/${project.id}`)}
+              aria-label={`Project: ${project.title}`}
+              style={{ border: '1px solid var(--accent3)' }}
+            >
               <div className="track-card-icon"><Hammer size={32} strokeWidth={1.5} /></div>
               <div className="track-card-name">{project.title}</div>
               <div className="track-card-desc">{project.description}</div>
@@ -306,6 +338,7 @@ const Dashboard = () => {
             <button 
               key={lvl}
               onClick={() => setActiveTab(lvl)}
+              aria-pressed={activeTab === lvl}
               style={{
                 padding: '8px 16px',
                 background: activeTab === lvl ? 'var(--accent)' : 'var(--surface)',
@@ -330,7 +363,15 @@ const Dashboard = () => {
             const progressPct = totalLessons > 0 ? (completed / totalLessons) * 100 : 0;
 
             return (
-              <div key={courseName} className="track-card" onClick={() => openOverview(courseName)}>
+              <div 
+                key={courseName} 
+                className="track-card" 
+                onClick={() => openOverview(courseName)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === 'Enter' && openOverview(courseName)}
+                aria-label={`Course: ${courseName}`}
+              >
                 <div className="track-card-icon"><Terminal size={32} strokeWidth={1.5} /></div>
                 <div className="track-card-name">{courseName}</div>
                 <div className="track-card-desc">
@@ -352,11 +393,16 @@ const Dashboard = () => {
       </div>
 
       {overviewCourse && (
-        <div style={{
-          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
-          backgroundColor: 'rgba(0,0,0,0.8)', display: 'flex', 
-          justifyContent: 'center', alignItems: 'center', zIndex: 1000
-        }}>
+        <div 
+          style={{
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
+            backgroundColor: 'rgba(0,0,0,0.8)', display: 'flex', 
+            justifyContent: 'center', alignItems: 'center', zIndex: 1000
+          }}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Course Overview"
+        >
           <div style={{
             background: 'var(--surface)', padding: '30px', borderRadius: '16px',
             width: '100%', maxWidth: '500px', border: '1px solid var(--border)'

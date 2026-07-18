@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './AuthContext';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import OfflineBanner from './components/OfflineBanner';
+import ErrorBoundary from './ErrorBoundary';
+import { Loader2 } from 'lucide-react';
 
 // Lazy-loaded routes for code splitting
 const Onboarding = lazy(() => import('./components/Onboarding'));
@@ -32,10 +34,11 @@ const ProtectedRoute = ({ children }) => {
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <OfflineBanner />
-      <AuthProvider>
-        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', color: 'var(--text2)' }}><div style={{ fontSize: '24px', animation: 'pulse 2s infinite' }}>⏳</div></div>}>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <OfflineBanner />
+        <AuthProvider>
+          <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', color: 'var(--text2)' }}><Loader2 className="spinner" size={32} /></div>}>
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/courses" element={<CourseCatalog />} />
@@ -83,6 +86,7 @@ const App = () => {
         <PWAInstallPrompt />
       </AuthProvider>
     </BrowserRouter>
+    </ErrorBoundary>
   );
 };
 
