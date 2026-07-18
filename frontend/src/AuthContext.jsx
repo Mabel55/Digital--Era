@@ -74,11 +74,11 @@ export const AuthProvider = ({ children }) => {
     await login(email, password);
   };
 
-  const resetPassword = async (email, newPassword) => {
+  const resetPassword = async (email, oldPassword, newPassword) => {
     const res = await fetch('/users/reset-password', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, new_password: newPassword })
+      body: JSON.stringify({ email, old_password: oldPassword, new_password: newPassword })
     });
     
     if (!res.ok) {

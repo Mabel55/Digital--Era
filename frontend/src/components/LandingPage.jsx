@@ -12,7 +12,7 @@ const LandingPage = () => {
       {/* Hero Section */}
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
         
-        {/* Decorative background elements (glassmorphism/glow) */}
+        {/* Decorative background elements */}
         <div style={{ 
           position: 'absolute', top: '-150px', left: '50%', transform: 'translateX(-50%)',
           width: '800px', height: '800px', 
@@ -42,22 +42,16 @@ const LandingPage = () => {
             <span style={{ fontSize: '12px', color: 'var(--text2)' }}>AI-Powered Learning Paths are live!</span>
           </div>
 
-          <h1 style={{ 
-            fontFamily: 'var(--font-display)', fontSize: '64px', fontWeight: 800, 
-            lineHeight: 1.1, marginBottom: '24px', letterSpacing: '-1px'
-          }}>
+          <h1 className="landing-hero-title">
             Master <span style={{ color: 'var(--accent)', textShadow: '0 0 30px var(--accent-glow)' }}>AI & Code</span><br />
             by Building Real Projects.
           </h1>
           
-          <p style={{ 
-            fontSize: '18px', color: 'var(--text2)', maxWidth: '600px', 
-            lineHeight: 1.6, marginBottom: '48px'
-          }}>
+          <p className="landing-hero-subtitle">
             Stop watching tutorials and start typing. Digital Era gives you interactive environments to learn Python, React, Data Science, and AI.
           </p>
           
-          <div style={{ display: 'flex', gap: '20px' }}>
+          <div className="landing-cta-row">
             <button 
               className="btn-primary" 
               style={{ padding: '16px 36px', fontSize: '16px', borderRadius: '100px', width: 'auto' }}
@@ -75,28 +69,13 @@ const LandingPage = () => {
           </div>
 
           {/* Feature Highlights Grid */}
-          <div style={{ 
-            display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', 
-            marginTop: '100px', width: '100%'
-          }}>
+          <div className="landing-features-grid">
             {[
               { icon: '⚡', title: 'Interactive Workspaces', desc: 'Code right in your browser with real-time feedback and terminals.' },
               { icon: '🤖', title: 'AI Assistant Included', desc: 'Get unstuck immediately with your personal AI coding tutor.' },
               { icon: '🏆', title: 'Earn Certifications', desc: 'Build a portfolio and earn recognized certificates as you learn.' }
             ].map((feat, i) => (
-              <div key={i} style={{ 
-                background: 'var(--surface)', padding: '32px', borderRadius: 'var(--radius)',
-                border: '1px solid var(--border)', textAlign: 'left',
-                transition: 'transform 0.3s, box-shadow 0.3s', cursor: 'default'
-              }} onMouseOver={e => {
-                e.currentTarget.style.transform = 'translateY(-5px)';
-                e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
-                e.currentTarget.style.borderColor = 'var(--accent)';
-              }} onMouseOut={e => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
-                e.currentTarget.style.borderColor = 'var(--border)';
-              }}>
+              <div key={i} className="landing-feature-card">
                 <div style={{ fontSize: '32px', marginBottom: '16px' }}>{feat.icon}</div>
                 <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>{feat.title}</h3>
                 <p style={{ color: 'var(--text2)', fontSize: '14px', lineHeight: 1.6 }}>{feat.desc}</p>
@@ -105,12 +84,7 @@ const LandingPage = () => {
           </div>
 
           {/* About & Founder Section */}
-          <div style={{ 
-            marginTop: '100px', width: '100%', padding: '60px 40px',
-            background: 'var(--surface2)', borderRadius: '24px',
-            border: '1px solid var(--border)', display: 'flex', flexDirection: 'column',
-            alignItems: 'center', textAlign: 'center', position: 'relative', overflow: 'hidden'
-          }}>
+          <div className="landing-about-section">
             <div style={{
               position: 'absolute', top: 0, right: 0, width: '300px', height: '300px',
               background: 'radial-gradient(circle, rgba(0,229,160,0.1), transparent 70%)',
@@ -124,11 +98,7 @@ const LandingPage = () => {
               Digital Era was built with a single mission: to bridge the gap between theoretical knowledge and real-world tech skills. We believe that the best way to master AI, Data Science, Product Management, and Coding is by getting your hands dirty and building actual projects.
             </p>
 
-            <div style={{ 
-              display: 'flex', alignItems: 'center', gap: '32px', textAlign: 'left', 
-              background: 'var(--surface)', padding: '40px', borderRadius: '16px', 
-              border: '1px solid var(--border)', maxWidth: '800px', width: '100%' 
-            }}>
+            <div className="landing-founder-card">
               <div style={{ 
                 width: '120px', height: '120px', borderRadius: '50%', 
                 background: 'linear-gradient(135deg, var(--accent), #3b82f6)', 
@@ -151,11 +121,7 @@ const LandingPage = () => {
       </main>
 
       {/* Footer */}
-      <footer style={{ 
-        padding: '32px', borderTop: '1px solid var(--border)', 
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        background: 'var(--surface)'
-      }}>
+      <footer className="landing-footer">
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span style={{ fontSize: '18px' }}>🎓</span>
           <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '16px' }}>Digital Era</span>

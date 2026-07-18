@@ -1,3 +1,4 @@
+import os
 import bcrypt
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
@@ -7,8 +8,10 @@ from sqlalchemy.orm import Session
 from database import get_db
 import models
 
-# 🔑 Setup JWT Token Secrets
-SECRET_KEY = "super_secret_noun_academy_key_change_this_later"
+# 🔑 Setup JWT Token Secrets — loaded from environment variable for security
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-only-fallback-key-change-in-production")
+if SECRET_KEY == "dev-only-fallback-key-change-in-production":
+    print("⚠️  WARNING: Using default SECRET_KEY. Set SECRET_KEY env var in production!")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 
 

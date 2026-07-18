@@ -30,3 +30,10 @@ Thumbs.db
 # 7. Frontend
 frontend/node_modules/
 frontend/dist/
+
+# 8. Video Generator
+ai-video-generator/client_secret.json
+ai-video-generator/cookies.json
+ai-video-generator/temp_cookies.json
+*.mp4
+*.mp3

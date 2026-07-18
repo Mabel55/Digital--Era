@@ -595,3 +595,170 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 .toast.xp { border-color: var(--accent3); }
 
 select option { background: var(--surface2); }
+
+/* ══════════════════════════════════════
+   LANDING PAGE CSS CLASSES
+══════════════════════════════════════ */
+.landing-hero-title {
+  font-family: var(--font-display);
+  font-size: 64px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  letter-spacing: -1px;
+}
+.landing-hero-subtitle {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  line-height: 1.6;
+  margin-bottom: 48px;
+}
+.landing-features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 100px;
+  width: 100%;
+}
+.landing-feature-card {
+  background: var(--surface);
+  padding: 32px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  text-align: left;
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+  cursor: default;
+}
+.landing-feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  border-color: var(--accent);
+}
+.landing-about-section {
+  margin-top: 100px;
+  width: 100%;
+  padding: 60px 40px;
+  background: var(--surface2);
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.landing-founder-card {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  text-align: left;
+  background: var(--surface);
+  padding: 40px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  max-width: 800px;
+  width: 100%;
+}
+.landing-cta-row {
+  display: flex;
+  gap: 20px;
+}
+.landing-footer {
+  padding: 32px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--surface);
+}
+
+/* ══════════════════════════════════════
+   COURSE COMPLETION CELEBRATION
+══════════════════════════════════════ */
+.celebration-overlay {
+  position: fixed; inset: 0; z-index: 2000;
+  background: rgba(0,0,0,0.85); backdrop-filter: blur(12px);
+  display: flex; align-items: center; justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.celebration-card {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: 24px;
+  padding: 60px 48px;
+  text-align: center;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 30px 80px rgba(0,229,160,0.2), 0 0 60px rgba(0,229,160,0.1);
+  animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes scaleIn { from { opacity: 0; transform: scale(0.8) translateY(30px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+.celebration-emoji { font-size: 72px; margin-bottom: 24px; animation: bounce 1s infinite; }
+.celebration-title { font-family: var(--font-display); font-size: 32px; font-weight: 800; color: var(--accent); margin-bottom: 12px; }
+.celebration-subtitle { color: var(--text2); font-size: 16px; line-height: 1.6; margin-bottom: 36px; }
+.celebration-actions { display: flex; gap: 12px; justify-content: center; }
+
+/* ══════════════════════════════════════
+   RESPONSIVE — MOBILE & TABLET
+══════════════════════════════════════ */
+@media (max-width: 1024px) {
+  /* Dashboard nav wraps */
+  .dash-nav {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 16px;
+  }
+  .dash-nav .nav-right {
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  /* Dashboard body */
+  .dash-body { padding: 24px 16px; }
+  .dash-hero { padding: 24px 20px; flex-direction: column; gap: 20px; }
+  .hero-left h2 { font-size: 22px; }
+  .hero-stats { gap: 20px; }
+  .stat-num { font-size: 24px; }
+
+  /* Track grid */
+  .track-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+
+  /* Workspace: stack panels vertically */
+  .ws-layout { flex-direction: column; overflow-y: auto; }
+  .ws-exercise { width: 100%; border-right: none; border-bottom: 1px solid var(--border); max-height: 40vh; }
+  .ws-editor-panel { min-height: 50vh; border-right: none; border-bottom: 1px solid var(--border); }
+  .ws-chat { width: 100%; max-height: 50vh; }
+
+  .ws-topbar { flex-wrap: wrap; height: auto; padding: 8px 12px; gap: 8px; }
+  .ws-topbar-left { flex-wrap: wrap; gap: 8px; }
+  .ws-topbar-right { flex-wrap: wrap; gap: 6px; }
+
+  /* Landing page */
+  .landing-hero-title { font-size: 40px; }
+  .landing-hero-subtitle { font-size: 16px; }
+  .landing-features-grid { grid-template-columns: 1fr; gap: 16px; margin-top: 60px; }
+  .landing-about-section { padding: 40px 20px; margin-top: 60px; }
+  .landing-founder-card { flex-direction: column; text-align: center; padding: 24px; gap: 20px; }
+  .landing-cta-row { flex-direction: column; width: 100%; }
+  .landing-cta-row button { width: 100% !important; }
+  .landing-footer { flex-direction: column; gap: 12px; text-align: center; }
+}
+
+@media (max-width: 640px) {
+  /* Onboarding */
+  .onboard-card { width: 95%; padding: 32px 24px; }
+  .two-col { grid-template-columns: 1fr; }
+
+  /* Dashboard */
+  .dash-nav .logo-row { margin-bottom: 0; }
+  .section-title { font-size: 16px; }
+  .track-grid { grid-template-columns: 1fr; }
+
+  /* Landing */
+  .landing-hero-title { font-size: 32px; }
+  .landing-hero-subtitle { font-size: 14px; margin-bottom: 32px; }
+}

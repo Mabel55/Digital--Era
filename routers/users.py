@@ -164,6 +164,10 @@ def reset_password(payload: schemas.UserResetPassword, db: Session = Depends(get
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
         
+        # Security: Verify old password before allowing reset
+        if not verify_password(payload.old_password, user.hashed_password):
+            raise HTTPException(status_code=400, detail="Current password is incorrect")
+        
         hashed_pw = hash_password(payload.new_password)
         user.hashed_password = hashed_pw
         db.commit()

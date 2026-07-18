@@ -7,6 +7,7 @@ const Onboarding = () => {
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [oldPassword, setOldPassword] = useState('');
   const [name, setName] = useState('');
   const [level, setLevel] = useState('Beginner');
   const [goal, setGoal] = useState('get a job');
@@ -23,9 +24,10 @@ const Onboarding = () => {
     
     try {
       if (isForgotPassword) {
-        await resetPassword(email, password);
+        await resetPassword(email, oldPassword, password);
         setIsForgotPassword(false);
         setIsLogin(true);
+        setOldPassword('');
         setError("Password reset successfully. Please log in with your new password.");
       } else if (isLogin) {
         await login(email, password);
@@ -51,7 +53,7 @@ const Onboarding = () => {
         
         <div className="onboard-title">{isForgotPassword ? "Reset Password" : (isLogin ? "Welcome Back" : "Start Your Coding Journey")}</div>
         <div className="onboard-sub">
-          {isForgotPassword ? "Enter your email and a new password." : (isLogin ? "Log in to continue your personalized learning path." : "Tell us about yourself so we can personalize your learning experience.")}
+          {isForgotPassword ? "Enter your email, current password, and new password." : (isLogin ? "Log in to continue your personalized learning path." : "Tell us about yourself so we can personalize your learning experience.")}
         </div>
 
         {error && <div style={{ color: error.includes("successfully") ? 'var(--success)' : 'var(--danger)', marginBottom: '16px', fontSize: '13px' }}>{error}</div>}
@@ -80,6 +82,19 @@ const Onboarding = () => {
               required
             />
           </div>
+
+          {isForgotPassword && (
+            <div className="field-row">
+              <label className="field-label">Current Password</label>
+              <input 
+                type="password" 
+                placeholder="••••••••"
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
+                required
+              />
+            </div>
+          )}
 
           <div className="field-row">
             <label className="field-label">{isForgotPassword ? "New Password" : "Password"}</label>
@@ -135,6 +150,7 @@ const Onboarding = () => {
             if (isForgotPassword) {
               setIsForgotPassword(false);
               setIsLogin(true);
+              setOldPassword('');
             } else {
               setIsLogin(!isLogin); 
             }

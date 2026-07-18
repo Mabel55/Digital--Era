@@ -47,7 +47,12 @@ app = FastAPI(title="Mabel Academy API", description="Digital Era Backend", vers
 from fastapi.middleware.cors import CORSMiddleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://digital-era.live",
+        "https://www.digital-era.live",
+        "http://localhost:5173",   # Vite dev server
+        "http://127.0.0.1:5173",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

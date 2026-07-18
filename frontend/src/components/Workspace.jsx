@@ -25,6 +25,7 @@ const Workspace = () => {
   const [hasError, setHasError] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const [quizResult, setQuizResult] = useState(null);
+  const [showCelebration, setShowCelebration] = useState(false);
   const [showStory, setShowStory] = useState(true); // Story Mode State
   const [pyodide, setPyodide] = useState(null);
   
@@ -145,12 +146,43 @@ const Workspace = () => {
       // 2. JAVASCRIPT CLIENT-SIDE
       if (lang === 'javascript') {
         try {
-            let logs = [];
-            const originalLog = console.log;
-            console.log = (...args) => { logs.push(args.join(' ')); };
-            new Function(code)();
-            console.log = originalLog;
-            setTerminalOutput(logs.join('\n') || "No output.");
+            // Run JS in a sandboxed iframe to prevent access to parent page
+            const result = await new Promise((resolve, reject) => {
+              const iframe = document.createElement('iframe');
+              iframe.sandbox = 'allow-scripts';
+              iframe.style.display = 'none';
+              document.body.appendChild(iframe);
+
+              const timeout = setTimeout(() => {
+                document.body.removeChild(iframe);
+                reject(new Error('Execution timed out (5s limit)'));
+              }, 5000);
+
+              window.addEventListener('message', function handler(e) {
+                if (e.source === iframe.contentWindow) {
+                  clearTimeout(timeout);
+                  window.removeEventListener('message', handler);
+                  document.body.removeChild(iframe);
+                  if (e.data.error) reject(new Error(e.data.error));
+                  else resolve(e.data.logs || 'No output.');
+                }
+              });
+
+              const sandboxedCode = `
+                <script>
+                  try {
+                    const __logs = [];
+                    const console = { log: (...a) => __logs.push(a.join(' ')), error: (...a) => __logs.push('Error: ' + a.join(' ')), warn: (...a) => __logs.push('Warning: ' + a.join(' ')) };
+                    ${code}
+                    parent.postMessage({ logs: __logs.join('\\n') }, '*');
+                  } catch(e) {
+                    parent.postMessage({ error: e.toString() }, '*');
+                  }
+                <\/script>
+              `;
+              iframe.srcdoc = sandboxedCode;
+            });
+            setTerminalOutput(result || "No output.");
             setTerminalClass('success');
             triggerProgressUpdate();
         } catch (err) {
@@ -259,7 +291,7 @@ const Workspace = () => {
     <div id="workspace" className="screen active" style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <div className="ws-topbar">
         <div className="ws-topbar-left">
-          <button className="ws-back-btn" onClick={() => navigate('/')}>
+          <button className="ws-back-btn" onClick={() => navigate('/dashboard')}>
             ← Dashboard
           </button>
           <div className="ws-course-title">{courseName}</div>
@@ -277,8 +309,7 @@ const Workspace = () => {
             if (currentLessonIdx < manifest.lessons.length - 1) {
               loadLesson(currentLessonIdx + 1);
             } else {
-              alert("Course completed!");
-              navigate('/');
+              setShowCelebration(true);
             }
           }}>
             {currentLessonIdx < manifest.lessons.length - 1 ? 'Next Lesson' : 'Finish Course'}
@@ -462,6 +493,35 @@ const Workspace = () => {
               />
               <button type="submit" className="chat-send-btn">↑</button>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Course Completion Celebration */}
+      {showCelebration && (
+        <div className="celebration-overlay" onClick={() => { setShowCelebration(false); navigate('/dashboard'); }}>
+          <div className="celebration-card" onClick={e => e.stopPropagation()}>
+            <div className="celebration-emoji">🎉</div>
+            <div className="celebration-title">Course Complete!</div>
+            <div className="celebration-subtitle">
+              Congratulations! You've finished <strong>{courseName}</strong>. Keep the momentum going!
+            </div>
+            <div className="celebration-actions">
+              <button 
+                className="btn-primary" 
+                style={{ padding: '12px 28px', borderRadius: '100px', width: 'auto' }}
+                onClick={() => { setShowCelebration(false); navigate('/dashboard'); }}
+              >
+                🏠 Back to Dashboard
+              </button>
+              <button 
+                className="returning-btn" 
+                style={{ padding: '12px 28px', borderRadius: '100px', width: 'auto' }}
+                onClick={() => { setShowCelebration(false); loadLesson(0); }}
+              >
+                🔄 Review Course
+              </button>
+            </div>
           </div>
         </div>
       )}

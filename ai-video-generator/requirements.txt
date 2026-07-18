@@ -1,0 +1,9 @@
+edge-tts
+moviepy
+requests
+python-dotenv
+google-genai
+google-api-python-client
+google-auth-oauthlib
+tiktok-uploader
+playwright
