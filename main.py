@@ -75,6 +75,15 @@ if os.path.isdir("frontend/dist"):
 
 @app.get("/{catchall:path}")
 def serve_frontend(catchall: str):
+    # Serve root-level static files (like sitemap.xml, favicon.svg, robots.txt)
+    # instead of serving the React app for them.
+    valid_extensions = (".xml", ".svg", ".png", ".ico", ".txt", ".webmanifest", ".js")
+    if catchall and any(catchall.endswith(ext) for ext in valid_extensions):
+        file_path = os.path.join("frontend/dist", catchall)
+        # Prevent path traversal vulnerabilities
+        if ".." not in catchall and os.path.isfile(file_path):
+            return FileResponse(file_path)
+
     # Catchall serves the React app, letting React Router handle the URL
     if os.path.exists("frontend/dist/index.html"):
         return FileResponse("frontend/dist/index.html")
