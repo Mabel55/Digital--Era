@@ -1,23 +1,24 @@
 """
-Payments Router — Stripe Integration for Digital Era Subscriptions
-Handles: Checkout creation, webhook processing, subscription status, customer portal
+Payments Router — Paystack Integration for Digital Era Subscriptions
+Handles: Checkout creation, webhook processing, subscription status
 """
 import os
-import stripe
+import hmac
+import hashlib
+import httpx
 from datetime import datetime
-from fastapi import APIRouter, Depends, HTTPException, Request, Header
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from database import get_db
 import models
 import schemas
 from auth import get_current_user
 
-# ─── Stripe Configuration ───
-stripe.api_key = os.getenv("STRIPE_SECRET_KEY", "")
-STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
-STRIPE_PRICE_ID_MONTHLY = os.getenv("STRIPE_PRICE_ID_MONTHLY", "")
-STRIPE_PRICE_ID_YEARLY = os.getenv("STRIPE_PRICE_ID_YEARLY", "")
-FRONTEND_URL = os.getenv("FRONTEND_URL", "https://digital-era.live")
+# ─── Paystack Configuration ───
+PAYSTACK_SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY", "")
+PAYSTACK_PLAN_MONTHLY = os.getenv("PAYSTACK_PLAN_MONTHLY", "")
+PAYSTACK_PLAN_YEARLY = os.getenv("PAYSTACK_PLAN_YEARLY", "")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 
 router = APIRouter(prefix="/payments", tags=["Payments & Subscriptions"])
 
@@ -64,239 +65,132 @@ def get_subscription_status(
     )
 
 
-# ─── 2. Create Stripe Checkout Session ───
+# ─── 2. Create Paystack Checkout Session ───
 @router.post("/create-checkout")
-def create_checkout_session(
+async def create_checkout_session(
     plan: str = "pro_monthly",
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
 ):
-    """Creates a Stripe Checkout session for the user to subscribe."""
-    if not stripe.api_key or stripe.api_key == "sk_test_REPLACE_ME":
+    """Initializes a Paystack transaction for the user to subscribe."""
+    if not PAYSTACK_SECRET_KEY or PAYSTACK_SECRET_KEY == "sk_test_REPLACE_ME":
         raise HTTPException(
             status_code=503,
             detail="Payment system is not configured yet. Please contact support."
         )
 
-    # Pick the correct price ID
     if plan == "pro_yearly":
-        price_id = STRIPE_PRICE_ID_YEARLY
+        plan_code = PAYSTACK_PLAN_YEARLY
+        amount = 999900 # $99.99 in kobo/cents equivalent
     else:
-        price_id = STRIPE_PRICE_ID_MONTHLY
+        plan_code = PAYSTACK_PLAN_MONTHLY
+        amount = 99900 # $9.99 in kobo/cents equivalent
 
-    if not price_id or price_id == "price_REPLACE_ME":
+    if not plan_code or plan_code == "PLN_REPLACE_ME":
         raise HTTPException(status_code=503, detail="Pricing not configured. Contact support.")
 
-    # Get or create the user's subscription record
     sub = get_or_create_subscription(db, current_user)
 
-    try:
-        # Create or reuse Stripe customer
-        if not sub.stripe_customer_id:
-            customer = stripe.Customer.create(
-                email=current_user.email,
-                name=current_user.full_name or "",
-                metadata={"user_id": str(current_user.id)}
-            )
-            sub.stripe_customer_id = customer.id
+    headers = {
+        "Authorization": f"Bearer {PAYSTACK_SECRET_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    payload = {
+        "email": current_user.email,
+        "amount": amount,
+        "plan": plan_code,
+        "callback_url": f"{FRONTEND_URL}/dashboard?payment=success",
+        "metadata": {
+            "user_id": str(current_user.id),
+            "plan": plan
+        }
+    }
+
+    async with httpx.AsyncClient() as client:
+        response = await client.post(
+            "https://api.paystack.co/transaction/initialize",
+            headers=headers,
+            json=payload
+        )
+
+        data = response.json()
+        if not data.get("status"):
+            raise HTTPException(status_code=400, detail=f"Paystack Error: {data.get('message')}")
+        
+        return {
+            "checkout_url": data["data"]["authorization_url"],
+            "reference": data["data"]["reference"]
+        }
+
+
+# ─── 3. Paystack Webhook Handler ───
+@router.post("/webhook")
+async def paystack_webhook(request: Request, db: Session = Depends(get_db)):
+    """Handles Paystack webhook events for subscription lifecycle management."""
+    payload = await request.body()
+    sig_header = request.headers.get("x-paystack-signature", "")
+
+    # Verify signature
+    hash = hmac.new(
+        PAYSTACK_SECRET_KEY.encode('utf-8'),
+        payload,
+        hashlib.sha512
+    ).hexdigest()
+
+    if hash != sig_header:
+        # Check if we're in dev mode bypassing verification
+        if PAYSTACK_SECRET_KEY != "sk_test_REPLACE_ME":
+            raise HTTPException(status_code=400, detail="Invalid signature")
+
+    import json
+    event = json.loads(payload)
+    event_type = event.get("event")
+    data = event.get("data", {})
+
+    if event_type == "subscription.create":
+        customer = data.get("customer", {})
+        customer_code = customer.get("customer_code")
+        email = customer.get("email")
+        
+        user = db.query(models.User).filter(models.User.email == email).first()
+        if user:
+            sub = get_or_create_subscription(db, user)
+            sub.paystack_customer_code = customer_code
+            sub.paystack_subscription_code = data.get("subscription_code")
+            sub.plan = "pro_monthly" if "monthly" in str(data.get("plan", {}).get("name", "")).lower() else "pro_yearly"
+            sub.status = "active"
+            
+            # Add 1 month/year roughly for current_period_end
+            import datetime as dt
+            if "monthly" in sub.plan:
+                sub.current_period_end = dt.datetime.utcnow() + dt.timedelta(days=30)
+            else:
+                sub.current_period_end = dt.datetime.utcnow() + dt.timedelta(days=365)
+                
             db.commit()
 
-        # Create checkout session
-        session = stripe.checkout.Session.create(
-            customer=sub.stripe_customer_id,
-            payment_method_types=["card"],
-            line_items=[{"price": price_id, "quantity": 1}],
-            mode="subscription",
-            success_url=f"{FRONTEND_URL}/dashboard?payment=success",
-            cancel_url=f"{FRONTEND_URL}/pricing?payment=canceled",
-            metadata={
-                "user_id": str(current_user.id),
-                "plan": plan
-            }
-        )
+    elif event_type == "charge.success":
+        # Fallback if subscription.create doesn't trigger immediately, handle initial charge
+        metadata = data.get("metadata", {})
+        user_id = metadata.get("user_id")
+        plan = metadata.get("plan")
+        
+        if user_id:
+            user = db.query(models.User).filter(models.User.id == int(user_id)).first()
+            if user:
+                sub = get_or_create_subscription(db, user)
+                sub.plan = plan or "pro_monthly"
+                sub.status = "active"
+                db.commit()
 
-        return {"checkout_url": session.url, "session_id": session.id}
+    elif event_type in ["subscription.disable", "subscription.not_renew"]:
+        # Handle cancellations
+        sub_code = data.get("subscription_code")
+        if sub_code:
+            sub = db.query(models.Subscription).filter(models.Subscription.paystack_subscription_code == sub_code).first()
+            if sub:
+                sub.status = "canceled"
+                db.commit()
 
-    except stripe.error.StripeError as e:
-        raise HTTPException(status_code=400, detail=f"Stripe Error: {str(e)}")
-
-
-# ─── 3. Stripe Webhook Handler ───
-@router.post("/webhook")
-async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
-    """Handles Stripe webhook events for subscription lifecycle management."""
-    payload = await request.body()
-    sig_header = request.headers.get("stripe-signature", "")
-
-    try:
-        if STRIPE_WEBHOOK_SECRET and STRIPE_WEBHOOK_SECRET != "whsec_REPLACE_ME":
-            event = stripe.Webhook.construct_event(
-                payload, sig_header, STRIPE_WEBHOOK_SECRET
-            )
-        else:
-            # In development, parse without verification
-            import json
-            event = stripe.Event.construct_from(
-                json.loads(payload), stripe.api_key
-            )
-    except ValueError:
-        raise HTTPException(status_code=400, detail="Invalid payload")
-    except stripe.error.SignatureVerificationError:
-        raise HTTPException(status_code=400, detail="Invalid signature")
-
-    event_type = event["type"]
-    data = event["data"]["object"]
-
-    if event_type == "checkout.session.completed":
-        # User just completed checkout — activate their subscription
-        _handle_checkout_completed(db, data)
-
-    elif event_type == "customer.subscription.updated":
-        _handle_subscription_updated(db, data)
-
-    elif event_type == "customer.subscription.deleted":
-        _handle_subscription_deleted(db, data)
-
-    elif event_type == "invoice.payment_failed":
-        _handle_payment_failed(db, data)
-
-    return {"status": "ok"}
-
-
-def _handle_checkout_completed(db: Session, session_data: dict):
-    """Activate subscription after successful checkout."""
-    customer_id = session_data.get("customer")
-    subscription_id = session_data.get("subscription")
-    plan = session_data.get("metadata", {}).get("plan", "pro_monthly")
-
-    sub = db.query(models.Subscription).filter(
-        models.Subscription.stripe_customer_id == customer_id
-    ).first()
-
-    if sub:
-        sub.plan = plan
-        sub.status = "active"
-        sub.stripe_subscription_id = subscription_id
-        sub.updated_at = datetime.utcnow()
-        db.commit()
-        print(f"✅ Subscription activated for customer {customer_id}: {plan}")
-
-
-def _handle_subscription_updated(db: Session, sub_data: dict):
-    """Update subscription status and period dates."""
-    stripe_sub_id = sub_data.get("id")
-    sub = db.query(models.Subscription).filter(
-        models.Subscription.stripe_subscription_id == stripe_sub_id
-    ).first()
-
-    if sub:
-        sub.status = sub_data.get("status", sub.status)
-        period = sub_data.get("current_period_end")
-        if period:
-            sub.current_period_end = datetime.utcfromtimestamp(period)
-        period_start = sub_data.get("current_period_start")
-        if period_start:
-            sub.current_period_start = datetime.utcfromtimestamp(period_start)
-        sub.updated_at = datetime.utcnow()
-        db.commit()
-
-
-def _handle_subscription_deleted(db: Session, sub_data: dict):
-    """Downgrade user to free when subscription is canceled."""
-    stripe_sub_id = sub_data.get("id")
-    sub = db.query(models.Subscription).filter(
-        models.Subscription.stripe_subscription_id == stripe_sub_id
-    ).first()
-
-    if sub:
-        sub.plan = "free"
-        sub.status = "canceled"
-        sub.updated_at = datetime.utcnow()
-        db.commit()
-        print(f"⚠️ Subscription canceled for user {sub.user_id}")
-
-
-def _handle_payment_failed(db: Session, invoice_data: dict):
-    """Mark subscription as past_due when payment fails."""
-    customer_id = invoice_data.get("customer")
-    sub = db.query(models.Subscription).filter(
-        models.Subscription.stripe_customer_id == customer_id
-    ).first()
-
-    if sub:
-        sub.status = "past_due"
-        sub.updated_at = datetime.utcnow()
-        db.commit()
-
-
-# ─── 4. Customer Portal (Manage Subscription) ───
-@router.post("/customer-portal")
-def create_customer_portal(
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)
-):
-    """Creates a Stripe Customer Portal session so users can manage their subscription."""
-    sub = get_or_create_subscription(db, current_user)
-
-    if not sub.stripe_customer_id:
-        raise HTTPException(status_code=400, detail="No active subscription to manage.")
-
-    try:
-        session = stripe.billing_portal.Session.create(
-            customer=sub.stripe_customer_id,
-            return_url=f"{FRONTEND_URL}/dashboard"
-        )
-        return {"portal_url": session.url}
-    except stripe.error.StripeError as e:
-        raise HTTPException(status_code=400, detail=f"Stripe Error: {str(e)}")
-
-
-# ─── 5. Get Available Plans ───
-@router.get("/plans")
-def get_available_plans():
-    """Returns pricing information for the frontend pricing page."""
-    return {
-        "plans": [
-            {
-                "id": "free",
-                "name": "Free",
-                "price": 0,
-                "currency": "usd",
-                "interval": None,
-                "features": [
-                    "3 beginner courses",
-                    "3 AI tutor messages per day",
-                    "Community forum access",
-                    "Basic code editor"
-                ]
-            },
-            {
-                "id": "pro_monthly",
-                "name": "Pro Monthly",
-                "price": 9.99,
-                "currency": "usd",
-                "interval": "month",
-                "features": [
-                    "All courses & learning paths",
-                    "Unlimited AI tutor",
-                    "Downloadable certificates",
-                    "Guided projects",
-                    "Priority support",
-                    "Skill assessments"
-                ]
-            },
-            {
-                "id": "pro_yearly",
-                "name": "Pro Yearly",
-                "price": 79.00,
-                "currency": "usd",
-                "interval": "year",
-                "features": [
-                    "Everything in Pro Monthly",
-                    "Save 34% vs monthly",
-                    "Early access to new courses",
-                    "LinkedIn badge"
-                ]
-            }
-        ]
-    }
+    return {"status": "success"}

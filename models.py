@@ -127,19 +127,16 @@ class ForumComment(Base):
 # ─── MONETIZATION MODELS ───
 
 class Subscription(Base):
-    """Tracks user subscription plans (Free, Pro, Team)."""
     __tablename__ = "subscriptions"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), unique=True, nullable=False)
-    plan = Column(String, default="free")  # "free", "pro_monthly", "pro_yearly"
-    status = Column(String, default="active")  # "active", "canceled", "past_due", "trialing"
-    stripe_customer_id = Column(String, nullable=True, index=True)
-    stripe_subscription_id = Column(String, nullable=True, index=True)
-    current_period_start = Column(DateTime, nullable=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, unique=True)
+    plan = Column(String, default="free")
+    status = Column(String, default="active")
     current_period_end = Column(DateTime, nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    paystack_customer_code = Column(String, nullable=True)
+    paystack_subscription_code = Column(String, nullable=True)
 
     user = relationship("User", back_populates="subscription")
 

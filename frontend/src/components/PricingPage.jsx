@@ -66,18 +66,7 @@ const PricingPage = () => {
   };
 
   const handleManageSubscription = async () => {
-    try {
-      const res = await fetch('/payments/customer-portal', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        window.location.href = data.portal_url;
-      }
-    } catch (e) {
-      alert('Could not open subscription management.');
-    }
+    alert('To manage or cancel your Paystack subscription, please click the "Manage Subscription" link in the receipt email sent to you by Paystack.');
   };
 
   const plans = [
