@@ -17,6 +17,7 @@ const PublicNavbar = () => {
       </Link>
       <div className="nav-right" style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
         <Link to="/courses" style={{ color: 'var(--text)', textDecoration: 'none', fontWeight: 500, fontSize: '14px', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color = 'var(--accent)'} onMouseOut={e => e.target.style.color = 'var(--text)'}>Courses</Link>
+        <Link to="/pricing" style={{ color: 'var(--text)', textDecoration: 'none', fontWeight: 500, fontSize: '14px', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color = 'var(--accent)'} onMouseOut={e => e.target.style.color = 'var(--text)'}>Pricing</Link>
         <Link to="/public-leaderboard" style={{ color: 'var(--text)', textDecoration: 'none', fontWeight: 500, fontSize: '14px', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color = 'var(--accent)'} onMouseOut={e => e.target.style.color = 'var(--text)'}>Leaderboard</Link>
         
         {token ? (

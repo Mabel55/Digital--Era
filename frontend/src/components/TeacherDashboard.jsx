@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
-import { Users, BookOpen, Flame, CheckCircle2, XCircle } from 'lucide-react';
+import { Users, BookOpen, Flame, CheckCircle2, XCircle, DollarSign, Bot, Crown, Activity } from 'lucide-react';
 
 const TeacherDashboard = () => {
   const { token, user } = useAuth();
   const navigate = useNavigate();
   const [students, setStudents] = useState([]);
+  const [metrics, setMetrics] = useState(null);
   const [uploadFile, setUploadFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState('');
   const [courseTitle, setCourseTitle] = useState('');
@@ -22,7 +23,22 @@ const TeacherDashboard = () => {
 
   useEffect(() => {
     fetchStudents();
+    fetchMetrics();
   }, []);
+
+  const fetchMetrics = async () => {
+    try {
+      const res = await fetch('/admin/analytics', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setMetrics(data);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const fetchStudents = async () => {
     try {
@@ -31,7 +47,6 @@ const TeacherDashboard = () => {
       });
       if (res.ok) {
         const data = await res.json();
-        // Filter out admins if you want, or just show everyone
         setStudents(data);
       }
     } catch (e) {
@@ -78,7 +93,7 @@ const TeacherDashboard = () => {
   return (
     <div style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto', color: 'var(--text-bright)' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
-        <h1 style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><Users size={32} /> Teacher Portal</h1>
+        <h1 style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><Activity size={32} /> Admin Dashboard</h1>
         <button 
           onClick={() => navigate('/')}
           style={{ padding: '10px 20px', background: 'var(--surface)', color: 'white', borderRadius: '8px', border: '1px solid var(--border)', cursor: 'pointer' }}
@@ -88,7 +103,28 @@ const TeacherDashboard = () => {
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
+      {metrics && (
+        <div className="admin-metrics-grid">
+          <div className="admin-metric-card">
+            <div className="admin-metric-title"><DollarSign size={16} color="var(--accent)" /> Stripe MRR</div>
+            <div className="admin-metric-value">${metrics.mrr}</div>
+          </div>
+          <div className="admin-metric-card">
+            <div className="admin-metric-title"><Users size={16} color="var(--accent2)" /> Total Users</div>
+            <div className="admin-metric-value">{metrics.total_users}</div>
+          </div>
+          <div className="admin-metric-card">
+            <div className="admin-metric-title"><Crown size={16} color="var(--accent3)" /> Active Pro Users</div>
+            <div className="admin-metric-value">{metrics.active_pro_users}</div>
+          </div>
+          <div className="admin-metric-card">
+            <div className="admin-metric-title"><Bot size={16} color="var(--accent)" /> AI Msgs Today</div>
+            <div className="admin-metric-value">{metrics.ai_messages_today}</div>
+          </div>
+        </div>
+      )}
+
+      <div className="admin-panels-grid">
         {/* PDF Uploader Section */}
         <div style={{ background: 'var(--surface)', padding: '30px', borderRadius: '12px', border: '1px solid var(--border)' }}>
           <h2 style={{ marginBottom: '20px', color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '8px' }}><BookOpen size={24} /> Upload Course Material</h2>

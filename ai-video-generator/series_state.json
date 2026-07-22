@@ -1,0 +1,14 @@
+{
+    "series_title": "The Hollow Protocol",
+    "genre": "Psychological Horror / Dark Mystery",
+    "current_episode": 3,
+    "main_character": {
+        "name": "Detective Elias Thorne",
+        "description": "A weary, 40-year-old male detective with dark circles under his eyes, a scruffy beard, wearing a rumpled grey trench coat and a loose tie. Cinematic moody lighting."
+    },
+    "plot_summary": "Elias has uncovered a disturbing effigy and a pulsating, glowing root beneath the floorboards of the desolate cottage, just as a malevolent entity's whisper confirms his partner found the \"source.\" The floorboards beneath him are now actively splintering and buckling, threatening to plunge him into the darkness below.",
+    "previous_events": [
+        "Episode 1: Elias has just arrived in the perpetually overcast town of Oakhaven, where the sun hasn't been seen in 5 years. He is looking for his missing partner.",
+        "Episode 2: Elias Thorne is frozen in terror, an unseen entity whispering directly behind him in the desolate cottage, revealing a chilling detail about his missing partner's discovery. He must now confront what is lurking in the shadows and beneath the floorboards."
+    ]
+}

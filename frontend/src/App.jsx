@@ -8,6 +8,7 @@ import { Loader2 } from 'lucide-react';
 
 // Lazy-loaded routes for code splitting
 const Onboarding = lazy(() => import('./components/Onboarding'));
+const ResetPassword = lazy(() => import('./components/ResetPassword'));
 const Dashboard = lazy(() => import('./components/Dashboard'));
 const Workspace = lazy(() => import('./components/Workspace'));
 const DBWorkspace = lazy(() => import('./components/DBWorkspace'));
@@ -17,6 +18,7 @@ const Leaderboard = lazy(() => import('./components/Leaderboard'));
 const ProjectWorkspace = lazy(() => import('./components/ProjectWorkspace'));
 const LandingPage = lazy(() => import('./components/LandingPage'));
 const CourseCatalog = lazy(() => import('./components/CourseCatalog'));
+const PricingPage = lazy(() => import('./components/PricingPage'));
 
 const ProtectedRoute = ({ children }) => {
   const { token, loading } = useAuth();
@@ -42,7 +44,9 @@ const App = () => {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/courses" element={<CourseCatalog />} />
+            <Route path="/pricing" element={<PricingPage />} />
             <Route path="/onboarding" element={<Onboarding />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/dashboard" element={
               <ProtectedRoute>
                 <Dashboard />

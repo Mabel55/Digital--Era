@@ -1,8 +1,13 @@
 import React, { useEffect, useRef } from 'react';
-import { Trophy, Download, Share2, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
+import { Trophy, Download, Share2, X, Crown, Lock } from 'lucide-react';
 
 const CertificateModal = ({ courseName, studentName, onClose }) => {
   const canvasRef = useRef(null);
+  const navigate = useNavigate();
+  const { subscription } = useAuth();
+  const isPro = subscription?.is_pro;
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -205,25 +210,36 @@ const CertificateModal = ({ courseName, studentName, onClose }) => {
           style={{ width: '100%', maxWidth: '620px', height: 'auto', borderRadius: '8px', boxShadow: '0 0 20px rgba(0,229,160,0.1)' }} 
         />
         
-        <div style={{ display: 'flex', gap: '15px', marginTop: '25px', width: '100%', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', gap: '15px', marginTop: '25px', width: '100%', justifyContent: 'center', flexWrap: 'wrap' }}>
           <button 
             onClick={onClose}
             style={{ padding: '12px 24px', background: 'transparent', color: '#e2e8f0', border: '1px solid #334155', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
           >
             Close
           </button>
-          <button 
-            onClick={downloadCertificate}
-            style={{ padding: '12px 24px', background: '#00e5a0', color: '#000', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}
-          >
-            ⬇ Download
-          </button>
-          <button 
-            onClick={shareToLinkedIn}
-            style={{ padding: '12px 24px', background: '#0a66c2', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}
-          >
-            Share on LinkedIn
-          </button>
+          {isPro ? (
+            <>
+              <button 
+                onClick={downloadCertificate}
+                style={{ padding: '12px 24px', background: '#00e5a0', color: '#000', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}
+              >
+                ⬇ Download
+              </button>
+              <button 
+                onClick={shareToLinkedIn}
+                style={{ padding: '12px 24px', background: '#0a66c2', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}
+              >
+                Share on LinkedIn
+              </button>
+            </>
+          ) : (
+            <button 
+              onClick={() => { onClose(); navigate('/pricing'); }}
+              style={{ padding: '12px 24px', background: 'linear-gradient(135deg, #00e5a0, #3b82f6)', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}
+            >
+              <Crown size={16} /> Upgrade to Pro to Download
+            </button>
+          )}
         </div>
       </div>
     </div>

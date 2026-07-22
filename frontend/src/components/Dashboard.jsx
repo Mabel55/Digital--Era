@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import { curriculum, courseManifest } from '../data/courses';
 import { projectsManifest } from '../data/projects';
 import CertificateModal from './CertificateModal';
-import { GraduationCap, Sun, Moon, Trophy, Flame, Users, Target, Scroll, Rocket, Brain, Wrench, Hammer, BookOpen, Terminal } from 'lucide-react';
+import { GraduationCap, Sun, Moon, Trophy, Flame, Users, Target, Scroll, Rocket, Brain, Wrench, Hammer, BookOpen, Terminal, Crown, ArrowRight, Star, Zap } from 'lucide-react';
 
 const Dashboard = () => {
-  const { user, logout } = useAuth();
+  const { user, token, logout, subscription } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('Beginner');
   const [overviewCourse, setOverviewCourse] = useState(null);
@@ -142,7 +142,14 @@ const Dashboard = () => {
           >
             <Trophy size={16} /> Leaderboard
           </button>
-          <div className="streak-badge"><Flame size={16} color="var(--accent3)" /> <span>{user?.streak || 0}</span> day streak</div>
+          <div className="streak-badge">
+            <Flame 
+              size={16} 
+              color="var(--accent3)" 
+              style={{ animation: user?.streak > 0 ? 'pulse 2s infinite' : 'none' }} 
+            /> 
+            <span>{user?.streak || 0}</span> day streak
+          </div>
           {((user?.role || '').toLowerCase() === 'admin' || (user?.role || '').toLowerCase() === 'teacher') && (
             <button 
               onClick={() => navigate('/teacher')}
@@ -209,8 +216,10 @@ const Dashboard = () => {
               </button>
             </div>
             <div className="hero-stats">
-              <div className="stat-item">
-                <div className="stat-num">{user?.xp || 0}</div>
+              <div className="stat-item" style={{ animation: 'pulse 2s infinite' }}>
+                <div className="stat-num" style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
+                  <Zap size={24} color="var(--accent)" /> {user?.xp || 0}
+                </div>
                 <div className="stat-label">Total XP</div>
               </div>
               <div className="stat-item">
@@ -218,8 +227,93 @@ const Dashboard = () => {
                 <div className="stat-label">Current Level</div>
               </div>
             </div>
+
+            {/* Badges Section */}
+            <div style={{ display: 'flex', gap: '12px', marginTop: '24px', flexWrap: 'wrap' }}>
+              {user?.streak >= 7 && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '20px', color: 'var(--accent3)', fontSize: '12px', fontWeight: 'bold' }}>
+                  <Flame size={14} /> 7-Day Streak
+                </div>
+              )}
+              {user?.level === 'Master' && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', background: 'rgba(234,179,8,0.1)', border: '1px solid rgba(234,179,8,0.2)', borderRadius: '20px', color: '#eab308', fontSize: '12px', fontWeight: 'bold' }}>
+                  <Star size={14} /> Python Master
+                </div>
+              )}
+              {user?.xp >= 100 && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.2)', borderRadius: '20px', color: 'var(--accent2)', fontSize: '12px', fontWeight: 'bold' }}>
+                  <Trophy size={14} /> Century Club (100+ XP)
+                </div>
+              )}
+            </div>
           </div>
         </div>
+
+        {/* Upgrade Banner for Free Users */}
+        {subscription && !subscription.is_pro && (
+          <div 
+            onClick={() => navigate('/pricing')}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && navigate('/pricing')}
+            style={{
+              background: 'linear-gradient(135deg, rgba(0,229,160,0.08), rgba(59,130,246,0.08))',
+              border: '1px solid var(--accent)',
+              borderRadius: '16px',
+              padding: '20px 28px',
+              marginBottom: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              cursor: 'pointer',
+              transition: 'transform 0.2s, box-shadow 0.2s',
+              flexWrap: 'wrap',
+              gap: '16px'
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(0,229,160,0.15)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div style={{
+                width: '44px', height: '44px', borderRadius: '12px',
+                background: 'rgba(0,229,160,0.15)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center'
+              }}>
+                <Crown size={22} color="var(--accent)" />
+              </div>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: '15px', marginBottom: '4px' }}>Upgrade to Pro</div>
+                <div style={{ color: 'var(--text2)', fontSize: '13px' }}>Unlock all courses, unlimited AI tutor, certificates & more</div>
+              </div>
+            </div>
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: '8px',
+              background: 'var(--accent)', color: '#0d0f14',
+              padding: '10px 20px', borderRadius: '100px',
+              fontWeight: 700, fontSize: '13px', whiteSpace: 'nowrap'
+            }}>
+              See Plans <ArrowRight size={14} />
+            </div>
+          </div>
+        )}
+
+        {/* Pro Badge */}
+        {subscription?.is_pro && (
+          <div style={{
+            background: 'rgba(0,229,160,0.08)',
+            border: '1px solid rgba(0,229,160,0.2)',
+            borderRadius: '12px',
+            padding: '12px 20px',
+            marginBottom: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            fontSize: '13px',
+            color: 'var(--accent)'
+          }}>
+            <Crown size={16} /> <strong>Pro Member</strong> — You have full access to all features
+          </div>
+        )}
 
         {uniqueCompletedCourses.length > 0 && (
           <>

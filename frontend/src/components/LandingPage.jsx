@@ -63,9 +63,9 @@ const LandingPage = () => {
             <button 
               className="returning-btn" 
               style={{ padding: '16px 36px', fontSize: '16px', borderRadius: '100px', width: 'auto', background: 'var(--surface)', color: 'var(--text)' }}
-              onClick={() => navigate('/courses')}
+              onClick={() => navigate('/pricing')}
             >
-              Browse Curriculum
+              View Pricing
             </button>
           </div>
 
@@ -118,6 +118,40 @@ const LandingPage = () => {
             </div>
           </div>
 
+        </div>
+
+        {/* Pricing CTA */}
+        <div style={{
+          textAlign: 'center', padding: '60px 32px', margin: '60px 0',
+          background: 'var(--surface)', border: '1px solid var(--border)',
+          borderRadius: '24px', position: 'relative', overflow: 'hidden'
+        }}>
+          <div style={{
+            position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
+            background: 'linear-gradient(90deg, var(--accent), #3b82f6, var(--accent3))'
+          }}></div>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '32px', fontWeight: 800, marginBottom: '16px' }}>
+            Ready to Go <span style={{ color: 'var(--accent)' }}>Pro</span>?
+          </h2>
+          <p style={{ color: 'var(--text2)', fontSize: '16px', maxWidth: '500px', margin: '0 auto 28px', lineHeight: 1.6 }}>
+            Unlock all courses, unlimited AI tutoring, certificates, and more starting at just $9.99/month.
+          </p>
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button 
+              className="btn-primary" 
+              style={{ padding: '14px 32px', fontSize: '15px', borderRadius: '100px', width: 'auto' }}
+              onClick={() => navigate('/pricing')}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>See Plans & Pricing <Rocket size={18} /></div>
+            </button>
+            <button 
+              className="returning-btn" 
+              style={{ padding: '14px 32px', fontSize: '15px', borderRadius: '100px', width: 'auto', background: 'transparent', color: 'var(--text)', border: '1px solid var(--border)' }}
+              onClick={() => navigate('/courses')}
+            >
+              Browse Free Courses
+            </button>
+          </div>
         </div>
       </main>
 

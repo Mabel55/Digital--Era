@@ -1,7 +1,19 @@
-from datetime import datetime
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, Boolean, DateTime, JSON
+from datetime import datetime, date
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, Boolean, DateTime, JSON, Date, Float
 from database import Base
 from sqlalchemy.orm import relationship
+
+
+# ─── Utility: Consistent XP → Level Calculation ───
+def calculate_level(xp: int) -> str:
+    """Single source of truth for XP-based level calculation."""
+    if xp >= 1000:
+        return "Master"
+    elif xp >= 500:
+        return "Advanced"
+    elif xp >= 100:
+        return "Intermediate"
+    return "Beginner"
 
 
 class Student(Base):
@@ -69,6 +81,10 @@ class User(Base):
     last_login = Column(DateTime, nullable=True)
     progress = Column(JSON, default=dict)
 
+    # Relationship to subscription
+    subscription = relationship("Subscription", back_populates="user", uselist=False)
+    certificates = relationship("Certificate", back_populates="user")
+
 # Add this to the bottom of models.py
 
 class ChatMessage(Base):
@@ -106,4 +122,70 @@ class ForumComment(Base):
     
     thread = relationship("ForumThread", back_populates="comments")
     user = relationship("User")
+
+
+# ─── MONETIZATION MODELS ───
+
+class Subscription(Base):
+    """Tracks user subscription plans (Free, Pro, Team)."""
+    __tablename__ = "subscriptions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), unique=True, nullable=False)
+    plan = Column(String, default="free")  # "free", "pro_monthly", "pro_yearly"
+    status = Column(String, default="active")  # "active", "canceled", "past_due", "trialing"
+    stripe_customer_id = Column(String, nullable=True, index=True)
+    stripe_subscription_id = Column(String, nullable=True, index=True)
+    current_period_start = Column(DateTime, nullable=True)
+    current_period_end = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    user = relationship("User", back_populates="subscription")
+
+    @property
+    def is_pro(self) -> bool:
+        """Check if user has an active Pro subscription."""
+        if self.plan == "free":
+            return False
+        if self.status not in ("active", "trialing"):
+            return False
+        if self.current_period_end and self.current_period_end < datetime.utcnow():
+            return False
+        return True
+
+
+class Certificate(Base):
+    """Stores issued certificates with unique verification codes."""
+    __tablename__ = "certificates"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    course_name = Column(String, nullable=False)
+    verification_code = Column(String, unique=True, index=True, nullable=False)
+    issued_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User", back_populates="certificates")
+
+
+class AIUsage(Base):
+    """Tracks daily AI tutor message usage per user for free-tier limits."""
+    __tablename__ = "ai_usage"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    usage_date = Column(Date, default=date.today, nullable=False)
+    message_count = Column(Integer, default=0)
+
+class PasswordResetToken(Base):
+    """Stores tokens for the forgot password flow."""
+    __tablename__ = "password_reset_tokens"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    token = Column(String, unique=True, index=True, nullable=False)
+    expires_at = Column(DateTime, nullable=False)
+    
+    user = relationship("User")
+
 

@@ -37,9 +37,8 @@ def upload_to_youtube(video_file, title, description, category_id="22", keywords
         youtube = googleapiclient.discovery.build(
             "youtube", "v3", credentials=credentials)
             
-        # Ensure #shorts is in the title for Shorts shelf placement
-        if "#shorts" not in title.lower() and "#short" not in title.lower():
-            title = title + " #shorts"
+        # Video is now 3 minutes long and 16:9, so it is a standard YouTube video.
+        # Removed #shorts tag to prevent algorithm confusion.
         
         request_body = {
             "snippet": {

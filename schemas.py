@@ -60,6 +60,16 @@ class CourseResponse(CourseBase):
     class Config:
         from_attributes = True
 
+# --- SUBSCRIPTION SCHEMAS ---
+class SubscriptionResponse(BaseModel):
+    plan: str = "free"
+    status: str = "active"
+    is_pro: bool = False
+    current_period_end: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
 # --- USER SCHEMAS ---
 class UserBase(BaseModel):
     email: str
@@ -76,6 +86,7 @@ class UserResponse(UserBase):
     level: Optional[str] = "Beginner"
     streak: Optional[int] = 0
     progress: Optional[dict] = {}
+    subscription: Optional[SubscriptionResponse] = None
 
     class Config:
         from_attributes = True
@@ -102,8 +113,15 @@ class ChatMessage(BaseModel):
     message: str
 
 class UserResetPassword(BaseModel):
-    email: str
+    email: EmailStr
     old_password: str
+    new_password: str
+
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+class ResetPasswordTokenRequest(BaseModel):
+    token: str
     new_password: str
 
 # --- FORUM SCHEMAS ---
@@ -138,7 +156,25 @@ class ForumThreadResponse(ForumThreadBase):
     class Config:
         from_attributes = True
 
+# --- CERTIFICATE SCHEMAS ---
+class CertificateResponse(BaseModel):
+    id: int
+    course_name: str
+    verification_code: str
+    issued_at: datetime
+    student_name: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+# --- AI USAGE SCHEMAS ---
+class AIUsageResponse(BaseModel):
+    messages_used: int = 0
+    daily_limit: int = 5
+    is_limited: bool = True
+
 # Rebuild models
 LessonResponse.model_rebuild()
 CourseResponse.model_rebuild()
 ForumThreadResponse.model_rebuild()
+UserResponse.model_rebuild()

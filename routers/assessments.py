@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from database import get_db
 import models
+from models import calculate_level
 from auth import get_current_user
 from ai_brain import ask_gemini
 import json
@@ -49,11 +50,8 @@ def submit_assessment(req: AssessmentSubmitRequest, db: Session = Depends(get_db
     xp_gained = req.score * 15
     
     current_user.xp += xp_gained
-    # Very basic level up logic
-    if current_user.xp > 500:
-        current_user.level = "Intermediate"
-    if current_user.xp > 1500:
-        current_user.level = "Advanced"
+    # Use centralized level calculation for consistency
+    current_user.level = calculate_level(current_user.xp)
         
     db.commit()
     

@@ -10,7 +10,7 @@ import { ArrowLeft, Play, Terminal, CheckCircle2, XCircle, Bug, Bot, ArrowUp, Pa
 const Workspace = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
-  const { token, user } = useAuth();
+  const { token, user, subscription } = useAuth();
   const courseName = decodeURIComponent(courseId);
   const manifest = courseManifest[courseName];
 
@@ -29,6 +29,10 @@ const Workspace = () => {
   const [showCelebration, setShowCelebration] = useState(false);
   const [showStory, setShowStory] = useState(true); // Story Mode State
   const [pyodide, setPyodide] = useState(null);
+  
+  // AI Limits State
+  const [aiUsage, setAiUsage] = useState({ remaining: -1, limit: -1, isLimited: false });
+  const isPro = subscription?.is_pro;
   
   const chatEndRef = useRef(null);
 
@@ -72,6 +76,24 @@ const Workspace = () => {
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
+
+  useEffect(() => {
+    // Fetch initial AI usage limits for free users
+    if (token && !isPro) {
+      fetch('/ai-usage', { headers: { 'Authorization': `Bearer ${token}` } })
+        .then(res => res.json())
+        .then(data => {
+          if (data.is_limited) {
+            setAiUsage({
+              remaining: Math.max(0, data.daily_limit - data.messages_used),
+              limit: data.daily_limit,
+              isLimited: true
+            });
+          }
+        })
+        .catch(e => console.error("Failed to fetch AI usage:", e));
+    }
+  }, [token, isPro]);
 
   const loadLesson = (idx) => {
     setCurrentLessonIdx(idx);
@@ -259,6 +281,11 @@ const Workspace = () => {
     const userMsg = directMessage || chatInput;
     if (!userMsg.trim()) return;
 
+    if (aiUsage.isLimited && aiUsage.remaining <= 0 && !isPro) {
+      setMessages(prev => [...prev, { sender: 'ai', text: "You've used all your free AI tutor messages for today. Upgrade to Pro for unlimited access!" }]);
+      return;
+    }
+
     setMessages(prev => [...prev, { sender: 'user', text: userMsg }]);
     if (!directMessage) setChatInput('');
     setIsTyping(true);
@@ -272,8 +299,24 @@ const Workspace = () => {
         },
         body: JSON.stringify({ message: userMsg, course: courseName })
       });
+      
+      if (res.status === 429) {
+         setMessages(prev => [...prev, { sender: 'ai', text: "You've reached your daily AI limit. Please upgrade to Pro." }]);
+         setAiUsage(prev => ({ ...prev, remaining: 0 }));
+         return;
+      }
+      
       const data = await res.json();
       setMessages(prev => [...prev, { sender: 'ai', text: data.answer || data.response || data.detail || "No response" }]);
+      
+      // Update remaining messages if provided
+      if (data.remaining_messages !== undefined && data.daily_limit !== undefined) {
+        setAiUsage({
+          remaining: Math.max(0, data.remaining_messages),
+          limit: data.daily_limit,
+          isLimited: data.daily_limit > 0
+        });
+      }
     } catch (err) {
       setMessages(prev => [...prev, { sender: 'ai', text: "Sorry, I'm having trouble connecting to my brain right now." }]);
     } finally {
@@ -491,12 +534,35 @@ const Workspace = () => {
               )}
               <div ref={chatEndRef}></div>
             </div>
+            
+            {/* AI Limits Banner */}
+            {aiUsage.isLimited && !isPro && (
+              <div style={{
+                padding: '8px 12px', fontSize: '12px', textAlign: 'center',
+                background: aiUsage.remaining === 0 ? 'rgba(239,68,68,0.1)' : 'rgba(245,158,11,0.1)',
+                color: aiUsage.remaining === 0 ? 'var(--danger)' : 'var(--accent3)',
+                borderTop: '1px solid var(--border)'
+              }}>
+                {aiUsage.remaining === 0 
+                  ? "Daily AI limit reached. Upgrade to Pro for unlimited."
+                  : `${aiUsage.remaining} free AI messages remaining today.`
+                }
+                <span 
+                  onClick={() => navigate('/pricing')} 
+                  style={{ fontWeight: 'bold', marginLeft: '6px', cursor: 'pointer', textDecoration: 'underline' }}
+                >
+                  Upgrade
+                </span>
+              </div>
+            )}
+            
             <form className="chat-input-row" onSubmit={sendChat}>
               <textarea 
                 className="chat-textarea" 
-                placeholder="Ask for help..." 
+                placeholder={aiUsage.isLimited && aiUsage.remaining === 0 && !isPro ? "Limit reached..." : "Ask for help..."} 
                 value={chatInput}
                 onChange={e => setChatInput(e.target.value)}
+                disabled={aiUsage.isLimited && aiUsage.remaining === 0 && !isPro}
                 onKeyDown={e => {
                   if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
@@ -507,6 +573,7 @@ const Workspace = () => {
               <button 
                 type="submit" 
                 className="chat-send-btn"
+                disabled={aiUsage.isLimited && aiUsage.remaining === 0 && !isPro}
                 aria-label="Send message to AI Tutor"
               >
                 <ArrowUp size={16} />

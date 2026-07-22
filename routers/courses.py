@@ -1,3 +1,4 @@
+import os
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
@@ -6,6 +7,13 @@ import schemas
 import json
 from auth import get_current_user
 from ai_brain import ask_gemini
+
+# Load admin emails from environment variable (comma-separated)
+ADMIN_EMAILS = [e.strip().lower() for e in os.getenv("ADMIN_EMAILS", "").split(",") if e.strip()]
+
+def is_admin(user: models.User) -> bool:
+    """Check if user has admin privileges via role or environment-configured email list."""
+    return user.role.lower() == "admin" or user.email.lower() in ADMIN_EMAILS
 
 router = APIRouter(tags=["Courses & Lessons"])
 
@@ -16,7 +24,7 @@ def create_course(
     current_user: models.User = Depends(get_current_user)
 ):
     # 1. Role Check: Only admins can manage structural course assets
-    if current_user.role.lower() != "admin" and current_user.email != "nasaadanna@gmail.com":
+    if not is_admin(current_user):
         raise HTTPException(status_code=403, detail="Not authorized to create courses")
     
     # 2. Database Safety Check: Ensure the chosen teacher user actually exists
@@ -57,7 +65,7 @@ def create_lesson(
     current_user: models.User = Depends(get_current_user)
 ):
     # Role-based check: Only allow admins to create lessons
-    if current_user.role.lower() != "admin" and current_user.email != "nasaadanna@gmail.com":
+    if not is_admin(current_user):
         raise HTTPException(status_code=403, detail="Not authorized to create lessons")
         
     # Verify the target course actually exists
@@ -100,7 +108,7 @@ def update_lesson(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
 ):
-    if current_user.role.lower() != "admin" and current_user.email != "nasaadanna@gmail.com":
+    if not is_admin(current_user):
         raise HTTPException(status_code=403, detail="Not authorized to update lessons")
     
     db_lesson = db.query(models.Lesson).filter(models.Lesson.id == lesson_id).first()
@@ -120,7 +128,7 @@ def delete_lesson(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
 ):
-    if current_user.role.lower() != "admin" and current_user.email != "nasaadanna@gmail.com":
+    if not is_admin(current_user):
         raise HTTPException(status_code=403, detail="Not authorized to delete lessons")
         
     db_lesson = db.query(models.Lesson).filter(models.Lesson.id == lesson_id).first()

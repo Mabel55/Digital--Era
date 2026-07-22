@@ -15,7 +15,7 @@ const Onboarding = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   
-  const { login, signup, resetPassword } = useAuth();
+  const { login, signup } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -25,11 +25,17 @@ const Onboarding = () => {
     
     try {
       if (isForgotPassword) {
-        await resetPassword(email, oldPassword, password);
-        setIsForgotPassword(false);
-        setIsLogin(true);
-        setOldPassword('');
-        setError("Password reset successfully. Please log in with your new password.");
+        const res = await fetch('/users/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          setError(data.message || "If that email exists, a reset link has been sent.");
+        } else {
+          setError(data.detail || "An error occurred.");
+        }
       } else if (isLogin) {
         await login(email, password);
         navigate('/');
@@ -54,10 +60,10 @@ const Onboarding = () => {
         
         <div className="onboard-title">{isForgotPassword ? "Reset Password" : (isLogin ? "Welcome Back" : "Start Your Coding Journey")}</div>
         <div className="onboard-sub">
-          {isForgotPassword ? "Enter your email, current password, and new password." : (isLogin ? "Log in to continue your personalized learning path." : "Tell us about yourself so we can personalize your learning experience.")}
+          {isForgotPassword ? "Enter your email address to receive a password reset link." : (isLogin ? "Log in to continue your personalized learning path." : "Tell us about yourself so we can personalize your learning experience.")}
         </div>
 
-        {error && <div style={{ color: error.includes("successfully") ? 'var(--success)' : 'var(--danger)', marginBottom: '16px', fontSize: '13px' }}>{error}</div>}
+        {error && <div style={{ color: error.includes("link has been sent") ? 'var(--accent)' : 'var(--danger)', marginBottom: '16px', fontSize: '13px', textAlign: 'center' }}>{error}</div>}
 
         <form onSubmit={handleSubmit}>
           {!isLogin && !isForgotPassword && (
@@ -84,29 +90,18 @@ const Onboarding = () => {
             />
           </div>
 
-          {isForgotPassword && (
+          {!isForgotPassword && (
             <div className="field-row">
-              <label className="field-label">Current Password</label>
+              <label className="field-label">Password</label>
               <input 
                 type="password" 
                 placeholder="••••••••"
-                value={oldPassword}
-                onChange={(e) => setOldPassword(e.target.value)}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
           )}
-
-          <div className="field-row">
-            <label className="field-label">{isForgotPassword ? "New Password" : "Password"}</label>
-            <input 
-              type="password" 
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
 
           {!isLogin && !isForgotPassword && (
             <div className="two-col">
@@ -131,7 +126,7 @@ const Onboarding = () => {
           )}
 
           <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? "Processing..." : (isForgotPassword ? "Reset Password" : (isLogin ? "Login" : <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}><Rocket size={18} /> Initialize My Learning Path</div>))}
+            {loading ? "Processing..." : (isForgotPassword ? "Send Reset Link" : (isLogin ? "Login" : <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}><Rocket size={18} /> Initialize My Learning Path</div>))}
           </button>
         </form>
 

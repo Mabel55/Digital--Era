@@ -40,6 +40,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Refresh user data (e.g., after payment, after XP gain)
+  const refreshUser = () => {
+    if (token) {
+      fetchUserProfile(token);
+    }
+  };
+
   const login = async (email, password) => {
     const formData = new URLSearchParams();
     formData.append("username", email);
@@ -91,9 +98,16 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
   };
 
+  // Derive subscription from user data (comes from /users/me which includes subscription)
+  const subscription = user?.subscription || { plan: 'free', is_pro: false, status: 'active' };
+
   return (
-    <AuthContext.Provider value={{ token, user, loading, login, signup, logout, resetPassword }}>
+    <AuthContext.Provider value={{ 
+      token, user, loading, subscription,
+      login, signup, logout, resetPassword, refreshUser 
+    }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
