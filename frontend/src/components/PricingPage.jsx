@@ -377,7 +377,7 @@ const PricingPage = () => {
           background: 'var(--surface)', border: '1px solid var(--border)'
         }}>
           {[
-            { icon: <Shield size={20} />, text: 'Secure payments via Stripe' },
+            { icon: <Shield size={20} />, text: 'Secure payments via Paystack' },
             { icon: <Clock size={20} />, text: 'Cancel anytime, no lock-in' },
             { icon: <Users size={20} />, text: 'Trusted by learners worldwide' },
           ].map((badge, idx) => (
@@ -401,7 +401,7 @@ const PricingPage = () => {
             },
             {
               q: 'What payment methods do you accept?',
-              a: 'We accept all major credit and debit cards (Visa, Mastercard, American Express) through Stripe\'s secure payment platform.'
+              a: 'We accept all major credit and debit cards (Visa, Mastercard, American Express) through Paystack\'s secure payment platform.'
             },
             {
               q: 'Can I cancel my subscription?',

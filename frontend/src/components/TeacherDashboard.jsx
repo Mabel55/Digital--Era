@@ -106,7 +106,7 @@ const TeacherDashboard = () => {
       {metrics && (
         <div className="admin-metrics-grid">
           <div className="admin-metric-card">
-            <div className="admin-metric-title"><DollarSign size={16} color="var(--accent)" /> Stripe MRR</div>
+            <div className="admin-metric-title"><DollarSign size={16} color="var(--accent)" /> Paystack MRR</div>
             <div className="admin-metric-value">${metrics.mrr}</div>
           </div>
           <div className="admin-metric-card">
