@@ -343,59 +343,6 @@ const Dashboard = () => {
           </>
         )}
 
-        <div className="section-title">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Rocket size={20} color="var(--accent)" /> Live AI Courses</div> <span>Created by your teachers</span>
-        </div>
-        {dbCoursesLoading ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text2)' }}>
-            <div style={{ fontSize: '24px', marginBottom: '12px', animation: 'pulse 2s infinite' }}>⏳</div>
-            Loading courses...
-          </div>
-        ) : dbCoursesError ? (
-          <div style={{ padding: '24px', textAlign: 'center', background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: 'var(--radius)', marginBottom: '40px' }}>
-            <p style={{ color: 'var(--danger)', marginBottom: '12px' }}>⚠️ {dbCoursesError}</p>
-            <button onClick={fetchDBCourses} style={{ padding: '8px 20px', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>🔄 Retry</button>
-          </div>
-        ) : dbCourses.length > 0 ? (
-          <div className="track-grid" style={{ marginBottom: '40px' }}>
-            {dbCourses.map(course => {
-              const totalLessons = course.lessons?.length || 0;
-              const completed = getDBCourseProgress(course.title);
-              const progressPct = totalLessons > 0 ? (completed / totalLessons) * 100 : 0;
-              return (
-                <div 
-                  key={course.id} 
-                  className="track-card" 
-                  onClick={() => startDBCourse(course.id)} 
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => e.key === 'Enter' && startDBCourse(course.id)}
-                  aria-label={`Live Course: ${course.title}`}
-                  style={{ border: '1px solid var(--accent)' }}
-                >
-                  <div className="track-card-icon"><Brain size={32} strokeWidth={1.5} /></div>
-                  <div className="track-card-name">{course.title}</div>
-                  <div className="track-card-desc">
-                    {totalLessons} lessons • {completed} completed
-                  </div>
-                  <div className="track-card-meta">
-                    <span className={`track-tag tag-advanced`}>Live</span>
-                  </div>
-                  <div className="track-progress-bar">
-                    <div className="bar-bg">
-                      <div className="bar-fill" style={{ width: `${progressPct}%`, background: 'var(--accent)' }}></div>
-                    </div>
-                    <div className="bar-label">{Math.round(progressPct)}% Complete</div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          <div style={{ padding: '24px', textAlign: 'center', color: 'var(--text3)', marginBottom: '40px' }}>
-            No live courses available yet.
-          </div>
-        )}
 
         <div className="section-title">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Wrench size={20} color="var(--accent)" /> Guided Projects</div> <span>Build real-world applications</span>
