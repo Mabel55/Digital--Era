@@ -12,7 +12,7 @@ const PricingPage = () => {
   const navigate = useNavigate();
   const { token, user } = useAuth();
   const [searchParams] = useSearchParams();
-  const [billingCycle, setBillingCycle] = useState('yearly');
+  const [billingCycle, setBillingCycle] = useState('monthly');
   const [loading, setLoading] = useState(null);
   const [subscription, setSubscription] = useState(null);
 
@@ -168,42 +168,7 @@ const PricingPage = () => {
           </div>
         </div>
 
-        {/* Billing toggle */}
-        <div style={{ 
-          display: 'flex', justifyContent: 'center', marginBottom: '48px', gap: '4px',
-          background: 'var(--surface)', borderRadius: '100px', padding: '4px',
-          width: 'fit-content', margin: '0 auto 48px',
-          border: '1px solid var(--border)'
-        }}>
-          <button
-            onClick={() => setBillingCycle('monthly')}
-            style={{
-              padding: '10px 24px', borderRadius: '100px', border: 'none', cursor: 'pointer',
-              fontWeight: 600, fontSize: '14px', fontFamily: 'inherit', transition: 'all 0.2s',
-              background: billingCycle === 'monthly' ? 'var(--accent)' : 'transparent',
-              color: billingCycle === 'monthly' ? '#0d0f14' : 'var(--text2)'
-            }}
-          >
-            Monthly
-          </button>
-          <button
-            onClick={() => setBillingCycle('yearly')}
-            style={{
-              padding: '10px 24px', borderRadius: '100px', border: 'none', cursor: 'pointer',
-              fontWeight: 600, fontSize: '14px', fontFamily: 'inherit', transition: 'all 0.2s',
-              background: billingCycle === 'yearly' ? 'var(--accent)' : 'transparent',
-              color: billingCycle === 'yearly' ? '#0d0f14' : 'var(--text2)',
-              display: 'flex', alignItems: 'center', gap: '6px'
-            }}
-          >
-            Yearly <span style={{ 
-              background: billingCycle === 'yearly' ? 'rgba(0,0,0,0.2)' : 'rgba(0,229,160,0.15)', 
-              padding: '2px 8px', borderRadius: '100px', fontSize: '11px',
-              color: billingCycle === 'yearly' ? '#0d0f14' : 'var(--accent)',
-              fontWeight: 700
-            }}>Save 34%</span>
-          </button>
-        </div>
+
 
         {/* Plans Grid */}
         <div style={{ 
