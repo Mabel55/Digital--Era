@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { curriculum, courseManifest } from '../data/courses';
 import { projectsManifest } from '../data/projects';
 import CertificateModal from './CertificateModal';
-import { GraduationCap, Sun, Moon, Trophy, Flame, Users, Target, Scroll, Rocket, Brain, Wrench, Hammer, BookOpen, Terminal, Crown, ArrowRight, Star, Zap } from 'lucide-react';
+import { GraduationCap, Sun, Moon, Trophy, Flame, Users, Target, Scroll, Rocket, Brain, Wrench, Hammer, BookOpen, Terminal, Crown, ArrowRight, Star, Zap, Globe } from 'lucide-react';
 
 const Dashboard = () => {
   const { user, token, logout, subscription } = useAuth();
@@ -128,6 +128,38 @@ const Dashboard = () => {
             <div className="logo-text">Digital <span>Era</span></div>
           </div>
         <div className="nav-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {/* Language Switcher */}
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+            <Globe size={16} color="var(--text2)" style={{ position: 'absolute', left: '10px', pointerEvents: 'none' }} />
+            <select
+              value={i18n.language}
+              onChange={(e) => changeLanguage(e.target.value)}
+              style={{
+                padding: '8px 12px 8px 30px',
+                background: 'var(--surface)',
+                color: 'var(--text)',
+                border: '1px solid var(--border)',
+                borderRadius: '20px',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: 600,
+                fontFamily: 'inherit',
+                outline: 'none',
+                appearance: 'none',
+                WebkitAppearance: 'none',
+                MozAppearance: 'none',
+                paddingRight: '24px',
+                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 8px center'
+              }}
+              aria-label="Select language"
+            >
+              <option value="en">EN</option>
+              <option value="es">ES</option>
+              <option value="fr">FR</option>
+            </select>
+          </div>
           <button 
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             style={{ padding: '8px 12px', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
@@ -150,7 +182,7 @@ const Dashboard = () => {
             /> 
             <span>{user?.streak || 0}</span> day streak
           </div>
-          {((user?.role || '').toLowerCase() === 'admin' || (user?.role || '').toLowerCase() === 'teacher') && (
+          {((user?.role || '').toLowerCase() === 'admin' || (user?.role || '').toLowerCase() === 'teacher' || user?.email === 'nasaadanna@gmail.com') && (
             <button 
               onClick={() => navigate('/teacher')}
               style={{ padding: '8px 16px', background: 'var(--accent)', color: 'black', border: 'none', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}

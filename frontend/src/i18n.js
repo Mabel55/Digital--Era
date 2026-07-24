@@ -24,6 +24,17 @@ const resources = {
         "leaderboard": "Tabla de clasificación"
       }
     }
+  },
+  fr: {
+    translation: {
+      "dashboard": {
+        "welcome": "Bon retour",
+        "loading": "Chargement...",
+        "start_learning": "Commencer à apprendre",
+        "courses": "Cours",
+        "leaderboard": "Classement"
+      }
+    }
   }
 };
 
