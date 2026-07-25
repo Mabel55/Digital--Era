@@ -59,7 +59,13 @@ export const AuthProvider = ({ children }) => {
     });
 
     if (!res.ok) {
-      const errData = await res.json();
+      const errorText = await res.text();
+      let errData = {};
+      try {
+        errData = JSON.parse(errorText);
+      } catch (e) {
+        throw new Error(errorText || "Invalid credentials");
+      }
       throw new Error(errData.detail || "Invalid credentials");
     }
     const data = await res.json();
@@ -74,7 +80,13 @@ export const AuthProvider = ({ children }) => {
     });
     
     if (!res.ok) {
-      const errData = await res.json();
+      const errorText = await res.text();
+      let errData = {};
+      try {
+        errData = JSON.parse(errorText);
+      } catch (e) {
+        throw new Error(errorText || "Registration failed");
+      }
       throw new Error(errData.detail || "Registration failed");
     }
     // Automatically login after signup
@@ -89,7 +101,13 @@ export const AuthProvider = ({ children }) => {
     });
     
     if (!res.ok) {
-      const errData = await res.json();
+      const errorText = await res.text();
+      let errData = {};
+      try {
+        errData = JSON.parse(errorText);
+      } catch (e) {
+        throw new Error(errorText || "Reset password failed");
+      }
       throw new Error(errData.detail || "Reset password failed");
     }
   };

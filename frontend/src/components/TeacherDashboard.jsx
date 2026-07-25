@@ -13,6 +13,7 @@ const TeacherDashboard = () => {
   const [courseTitle, setCourseTitle] = useState('');
   const [courseLevel, setCourseLevel] = useState('Beginner');
   const [courseTrack, setCourseTrack] = useState('General');
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     // Basic protection
@@ -62,6 +63,7 @@ const TeacherDashboard = () => {
     }
 
     setUploadStatus('Uploading and training AI Brain... this may take a minute.');
+    setIsUploading(true);
     
     const formData = new FormData();
     formData.append('file', uploadFile);
@@ -87,6 +89,8 @@ const TeacherDashboard = () => {
       }
     } catch (e) {
       setUploadStatus(`Error: ${e.message}`);
+    } finally {
+      setIsUploading(false);
     }
   };
 
