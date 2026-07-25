@@ -80,7 +80,7 @@ const Profile = () => {
                 <User size={40} color="white" />
               </div>
               <div>
-                <h2 style={{ margin: '0 0 4px 0', fontSize: '24px' }}>{user?.full_name || 'Student'}</h2>
+                <h2 style={{ margin: '0 0 4px 0', fontSize: '24px' }}>{user?.full_name || user?.email?.split('@')[0] || 'Student'}</h2>
                 <div style={{ color: 'var(--text2)' }}>{user?.email}</div>
                 <div style={{ display: 'inline-block', marginTop: '8px', padding: '4px 12px', background: 'var(--surface2)', borderRadius: '100px', fontSize: '12px', fontWeight: 'bold', color: 'var(--accent)' }}>
                   Level: {user?.level || 'Beginner'}

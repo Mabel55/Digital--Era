@@ -218,7 +218,7 @@ const Dashboard = () => {
       <div className="dash-body">
         <div className="dash-hero">
           <div className="hero-left">
-            <h2>{t('dashboard.welcome')}, <span>{user?.full_name?.split(' ')[0] || 'Student'}</span>!</h2>
+            <h2>{t('dashboard.welcome')}, <span>{user?.full_name?.split(' ')[0] || user?.email?.split('@')[0] || 'Student'}</span>!</h2>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px', color: 'var(--text-dim)' }}>
               Your current track:
               <select 
@@ -524,7 +524,7 @@ const Dashboard = () => {
       {certCourse && (
         <CertificateModal
           courseName={certCourse}
-          studentName={user?.name || 'Student'}
+          studentName={user?.full_name || user?.email?.split('@')[0] || 'Student'}
           onClose={() => setCertCourse(null)}
         />
       )}
