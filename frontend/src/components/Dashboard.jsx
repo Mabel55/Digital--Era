@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { curriculum, courseManifest } from '../data/courses';
 import { projectsManifest } from '../data/projects';
 import CertificateModal from './CertificateModal';
-import { GraduationCap, Sun, Moon, Trophy, Flame, Users, Target, Scroll, Rocket, Brain, Wrench, Hammer, BookOpen, Terminal, Crown, ArrowRight, Star, Zap, Globe } from 'lucide-react';
+import { GraduationCap, Sun, Moon, Trophy, Flame, Users, User, Target, Scroll, Rocket, Brain, Wrench, Hammer, BookOpen, Terminal, Crown, ArrowRight, Star, Zap, Globe, Menu, X } from 'lucide-react';
 
 const Dashboard = () => {
   const { user, token, logout, subscription } = useAuth();
@@ -14,6 +14,7 @@ const Dashboard = () => {
   const [overviewCourse, setOverviewCourse] = useState(null);
   const [certCourse, setCertCourse] = useState(null);
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t, i18n } = useTranslation();
 
   const changeLanguage = (lng) => {
@@ -127,7 +128,16 @@ const Dashboard = () => {
             <div className="logo-icon"><GraduationCap size={24} aria-hidden="true" /></div>
             <div className="logo-text">Digital <span>Era</span></div>
           </div>
-        <div className="nav-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          
+          <button 
+            className="mobile-menu-btn" 
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle mobile menu"
+          >
+            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+
+        <div className={`nav-right ${isMenuOpen ? 'open' : ''}`} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           {/* Language Switcher */}
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
             <Globe size={16} color="var(--text2)" style={{ position: 'absolute', left: '10px', pointerEvents: 'none' }} />
@@ -187,9 +197,15 @@ const Dashboard = () => {
               onClick={() => navigate('/teacher')}
               style={{ padding: '8px 16px', background: 'var(--accent)', color: 'black', border: 'none', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}
             >
-              <Users size={16} /> Teacher Portal
+              <Users size={16} /> Admin Portal
             </button>
           )}
+          <button 
+            onClick={() => navigate('/profile')}
+            style={{ padding: '8px 16px', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            <User size={16} /> Profile
+          </button>
           <button 
             onClick={handleLogout}
             style={{ padding: '8px 16px', background: 'transparent', color: 'var(--text-dim)', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold' }}

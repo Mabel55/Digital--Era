@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import Editor from '@monaco-editor/react';
 import { marked } from 'marked';
+import DOMPurify from 'dompurify';
 import { projectsManifest } from '../data/projects';
 import { FileText, Play, ArrowLeft } from 'lucide-react';
 
@@ -126,7 +127,7 @@ const ProjectWorkspace = () => {
           
           <div style={{ flex: 2, position: 'relative' }}>
             {determineLanguage(activeFile) === 'markdown' ? (
-              <div style={{ padding: '30px', color: 'white', overflowY: 'auto', height: '100%' }} dangerouslySetInnerHTML={{ __html: marked(files[activeFile] || '') }}></div>
+              <div style={{ padding: '30px', color: 'white', overflowY: 'auto', height: '100%' }} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked(files[activeFile] || '')) }}></div>
             ) : (
               <Editor
                 height="100%"

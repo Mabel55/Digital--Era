@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../AuthContext';
-import { MessageSquare } from 'lucide-react';
+import { MessageSquare, User, ThumbsUp } from 'lucide-react';
 
 const LessonDiscussion = ({ lessonName }) => {
   const { token, user } = useAuth();
   const [threads, setThreads] = useState([]);
   const [newThreadTitle, setNewThreadTitle] = useState('');
   const [newComment, setNewComment] = useState({});
+  const [upvotes, setUpvotes] = useState({});
 
   useEffect(() => {
     if (lessonName) {
@@ -68,6 +69,10 @@ const LessonDiscussion = ({ lessonName }) => {
     }
   };
 
+  const handleUpvote = (commentId) => {
+    setUpvotes(prev => ({ ...prev, [commentId]: (prev[commentId] || 0) + 1 }));
+  };
+
   return (
     <div style={{ marginTop: '40px', padding: '20px', background: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)' }}>
       <h3 style={{ marginTop: 0, color: 'white', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -96,13 +101,29 @@ const LessonDiscussion = ({ lessonName }) => {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {threads.map(thread => (
           <div key={thread.id} style={{ background: 'var(--surface2)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border)' }}>
-            <h4 style={{ margin: '0 0 16px 0', color: 'var(--text)' }}>{thread.title}</h4>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+              <h4 style={{ margin: 0, color: 'var(--text)' }}>{thread.title}</h4>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: 'var(--text3)' }}>
+                <User size={14} /> {thread.author_name || 'Anonymous'}
+              </div>
+            </div>
             
             {/* Comments */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '16px', paddingLeft: '16px', borderLeft: '2px solid var(--border)' }}>
               {thread.comments?.map(c => (
-                <div key={c.id} style={{ color: 'var(--text-dim)', fontSize: '14px', background: 'var(--surface)', padding: '8px 12px', borderRadius: '6px' }}>
-                  {c.content}
+                <div key={c.id} style={{ color: 'var(--text-dim)', fontSize: '14px', background: 'var(--surface)', padding: '12px', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--accent)', fontWeight: 'bold' }}>
+                      <User size={12} /> {c.author_name || 'Anonymous'}
+                    </div>
+                    <button 
+                      onClick={() => handleUpvote(c.id)}
+                      style={{ background: 'transparent', border: 'none', color: 'var(--text3)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px' }}
+                    >
+                      <ThumbsUp size={12} color={upvotes[c.id] ? 'var(--accent)' : 'currentColor'} /> {upvotes[c.id] || 0}
+                    </button>
+                  </div>
+                  <div style={{ color: 'var(--text)' }}>{c.content}</div>
                 </div>
               ))}
             </div>

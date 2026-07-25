@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import Editor from '@monaco-editor/react';
 import { marked } from 'marked';
+import DOMPurify from 'dompurify';
 import { courseManifest } from '../data/courses';
 import LessonDiscussion from './LessonDiscussion';
 import { ArrowLeft, Play, Terminal, CheckCircle2, XCircle, Bug, Bot, ArrowUp, PartyPopper, Home, RotateCcw } from 'lucide-react';
@@ -69,7 +70,7 @@ const Workspace = () => {
       loadLesson(0);
     }
     setMessages([
-      { sender: 'ai', text: `Hi ${user?.name?.split(' ')[0] || 'there'}! I'm your AI Tutor for **${courseName}**. Ask me anything!` }
+      { sender: 'ai', text: `Hi ${user?.full_name?.split(' ')[0] || 'there'}! I'm your AI Tutor for **${courseName}**. Ask me anything!` }
     ]);
   }, [courseName]);
 
@@ -379,7 +380,7 @@ const Workspace = () => {
         <div className="story-mode-container" style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', background: 'var(--bg)', padding: '40px', overflowY: 'auto' }}>
           <div className="story-card" style={{ maxWidth: '800px', width: '100%', background: 'var(--surface)', padding: '60px', borderRadius: '16px', border: '1px solid var(--border)', boxShadow: '0 20px 60px rgba(0,0,0,0.5)', animation: 'slideUp 0.5s ease' }}>
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '32px', color: 'var(--accent)', marginBottom: '24px' }}>{lesson.title}</h1>
-            <div className="exercise-body story-body" dangerouslySetInnerHTML={{ __html: marked(lesson.theory || "No theory provided.") }} style={{ fontSize: '16px', lineHeight: '1.8', color: 'var(--text)', marginBottom: '40px' }}></div>
+            <div className="exercise-body story-body" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked(lesson.theory || "No theory provided.")) }} style={{ fontSize: '16px', lineHeight: '1.8', color: 'var(--text)', marginBottom: '40px' }}></div>
             <button 
               onClick={() => { setShowStory(false); if(lesson.starterCode) setCode(lesson.starterCode); }}
               className="btn-submit"
@@ -401,11 +402,11 @@ const Workspace = () => {
             </div>
             <div className="ex-tab-content">
               <div className="exercise-title">{lesson.title}</div>
-              <div className="exercise-body" dangerouslySetInnerHTML={{ __html: marked(
+              <div className="exercise-body" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked(
                 activeTab === 'theory' ? lesson.theory : 
                 activeTab === 'instructions' ? lesson.instructions : 
                 `### Solution Code\n\n\`\`\`${determineLanguage()}\n` + (lesson.solution || 'No solution provided.') + '\n```'
-              ) }}></div>
+              )) }}></div>
               
               {(activeTab === 'theory' || activeTab === 'solution') && (
                 <button 
@@ -522,7 +523,7 @@ const Workspace = () => {
             <div className="chat-messages">
               {messages.map((msg, i) => (
                 <div key={i} className={`chat-msg ${msg.sender}`}>
-                  <div className="msg-bubble" dangerouslySetInnerHTML={{ __html: marked(msg.text) }}></div>
+                  <div className="msg-bubble" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked(msg.text)) }}></div>
                 </div>
               ))}
               {isTyping && (

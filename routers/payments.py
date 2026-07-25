@@ -49,6 +49,8 @@ def require_pro(db: Session = Depends(get_db), current_user: models.User = Depen
     return current_user
 
 
+from datetime import datetime, timedelta
+
 # ─── 1. Get Subscription Status ───
 @router.get("/subscription", response_model=schemas.SubscriptionResponse)
 def get_subscription_status(
@@ -57,6 +59,31 @@ def get_subscription_status(
 ):
     """Returns the current user's subscription plan and status."""
     sub = get_or_create_subscription(db, current_user)
+    return schemas.SubscriptionResponse(
+        plan=sub.plan,
+        status=sub.status,
+        is_pro=sub.is_pro,
+        current_period_end=sub.current_period_end
+    )
+
+# ─── 1.5 Start Free Trial ───
+@router.post("/start-trial", response_model=schemas.SubscriptionResponse)
+def start_free_trial(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    """Starts a 7-day free trial for the user if they haven't had one."""
+    sub = get_or_create_subscription(db, current_user)
+    
+    if sub.plan != "free" or sub.status == "trialing":
+        raise HTTPException(status_code=400, detail="You are already on a Pro plan or trial.")
+        
+    sub.plan = "pro"
+    sub.status = "trialing"
+    sub.current_period_end = datetime.utcnow() + timedelta(days=7)
+    db.commit()
+    db.refresh(sub)
+    
     return schemas.SubscriptionResponse(
         plan=sub.plan,
         status=sub.status,

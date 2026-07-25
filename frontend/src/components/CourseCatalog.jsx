@@ -6,13 +6,21 @@ import { Code2, BarChart2, Bot, Palette, Terminal, GraduationCap } from 'lucide-
 
 const CourseCatalog = () => {
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const [filterLevel, setFilterLevel] = React.useState('All');
+
+  const filteredCurriculum = Object.entries(curriculum).filter(([categoryName, levels]) => {
+    const matchesSearch = categoryName.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesLevel = filterLevel === 'All' || Object.keys(levels).includes(filterLevel);
+    return matchesSearch && matchesLevel;
+  });
 
   return (
     <div style={{ backgroundColor: 'var(--bg)', minHeight: '100vh', display: 'flex', flexDirection: 'column', overflowX: 'hidden' }}>
       <PublicNavbar />
       
       <main style={{ flex: 1, padding: '60px 32px', maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
-        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '48px', fontWeight: 800, marginBottom: '16px' }}>
             Course <span style={{ color: 'var(--accent)' }}>Catalog</span>
           </h1>
@@ -21,8 +29,49 @@ const CourseCatalog = () => {
           </p>
         </div>
 
+        {/* Search & Filter Bar */}
+        <div style={{ 
+          display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'center', 
+          marginBottom: '40px', background: 'var(--surface)', padding: '20px', 
+          borderRadius: '16px', border: '1px solid var(--border)' 
+        }}>
+          <input 
+            type="text" 
+            placeholder="Search tracks..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ 
+              padding: '12px 20px', borderRadius: '100px', border: '1px solid var(--border)', 
+              background: 'var(--bg)', color: 'var(--text)', width: '100%', maxWidth: '300px'
+            }}
+          />
+          <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}>
+            {['All', 'Beginner', 'Intermediate', 'Advanced'].map(level => (
+              <button 
+                key={level}
+                onClick={() => setFilterLevel(level)}
+                style={{ 
+                  padding: '8px 20px', borderRadius: '100px', cursor: 'pointer',
+                  border: filterLevel === level ? '1px solid var(--accent)' : '1px solid var(--border)',
+                  background: filterLevel === level ? 'rgba(0, 229, 160, 0.1)' : 'var(--bg)',
+                  color: filterLevel === level ? 'var(--accent)' : 'var(--text)',
+                  fontWeight: filterLevel === level ? 'bold' : 'normal',
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                {level}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '24px' }}>
-          {Object.entries(curriculum).map(([categoryName, levels], idx) => {
+          {filteredCurriculum.length === 0 ? (
+            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '60px 0', color: 'var(--text2)' }}>
+              <h3>No courses found matching your criteria.</h3>
+              <button onClick={() => { setSearchTerm(''); setFilterLevel('All'); }} style={{ marginTop: '16px', padding: '8px 16px', background: 'var(--surface2)', border: 'none', color: 'var(--text)', borderRadius: '8px', cursor: 'pointer' }}>Clear Filters</button>
+            </div>
+          ) : filteredCurriculum.map(([categoryName, levels], idx) => {
             // Count total lessons
             const totalLessons = Object.values(levels).flat().length;
 

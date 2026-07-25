@@ -84,6 +84,56 @@ const LandingPage = () => {
             ))}
           </div>
 
+          {/* Social Proof Section */}
+          <div style={{ marginTop: '80px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '40px' }}>
+              <div style={{ display: 'flex', position: 'relative' }}>
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div key={i} style={{ 
+                    width: '32px', height: '32px', borderRadius: '50%', background: 'var(--surface2)', 
+                    border: '2px solid var(--bg)', marginLeft: i > 1 ? '-12px' : '0', zIndex: 6 - i,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center'
+                  }}>
+                    <User size={16} color="var(--text2)" />
+                  </div>
+                ))}
+              </div>
+              <div style={{ color: 'var(--text)', fontWeight: 'bold' }}>
+                Join <span style={{ color: 'var(--accent)' }}>500+</span> students learning to code
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', width: '100%' }}>
+              {[
+                { name: 'Emeka U.', role: 'Frontend Developer', text: '"The interactive React workspace helped me land my first tech job in Lagos. Way better than just watching videos!"' },
+                { name: 'Sarah O.', role: 'Data Analyst', text: '"The AI tutor is incredible. It explains Python concepts perfectly when I get stuck on the data science track."' },
+                { name: 'David I.', role: 'Student', text: '"Earning certificates as I complete courses keeps me motivated. The platform is super easy to use on my phone too."' }
+              ].map((t, i) => (
+                <div key={i} style={{ background: 'var(--surface)', padding: '24px', borderRadius: '16px', border: '1px solid var(--border)', textAlign: 'left' }}>
+                  <div style={{ color: 'var(--accent3)', marginBottom: '12px', display: 'flex', gap: '4px' }}>
+                    {[1,2,3,4,5].map(star => <Star key={star} size={16} fill="currentColor" />)}
+                  </div>
+                  <p style={{ color: 'var(--text)', fontStyle: 'italic', marginBottom: '20px', lineHeight: 1.6 }}>{t.text}</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--surface2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <User size={20} color="var(--text2)" />
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 'bold', color: 'var(--text)' }}>{t.name}</div>
+                      <div style={{ fontSize: '12px', color: 'var(--text2)' }}>{t.role}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <div style={{ display: 'flex', gap: '24px', marginTop: '40px', opacity: 0.6, flexWrap: 'wrap', justifyContent: 'center' }}>
+               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold' }}>✨ Powered by Google Gemini</div>
+               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold' }}>☁️ Deployed on Azure</div>
+               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold' }}>🇳🇬 Made in Nigeria</div>
+            </div>
+          </div>
+
           {/* About & Founder Section */}
           <div className="landing-about-section">
             <div style={{

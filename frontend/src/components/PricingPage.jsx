@@ -65,6 +65,33 @@ const PricingPage = () => {
     }
   };
 
+  const handleStartTrial = async (planId) => {
+    if (!token) {
+      navigate('/onboarding');
+      return;
+    }
+
+    setLoading(planId);
+    try {
+      const res = await fetch(`/payments/start-trial`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (res.ok) {
+        alert("Your 7-day free trial has started! Enjoy Pro features.");
+        fetchSubscription(); // refresh status
+      } else {
+        const err = await res.json();
+        // If they already trialed or are on pro, fallback to upgrade
+        handleUpgrade(planId);
+      }
+    } catch (e) {
+      alert('Connection error. Please try again.');
+      setLoading(null);
+    }
+  };
+
   const handleManageSubscription = async () => {
     alert('To manage or cancel your Paystack subscription, please click the "Manage Subscription" link in the receipt email sent to you by Paystack.');
   };
@@ -272,7 +299,7 @@ const PricingPage = () => {
                   </button>
                 ) : (
                   <button
-                    onClick={() => plan.price === 0 ? navigate('/onboarding') : handleUpgrade(plan.id)}
+                    onClick={() => plan.price === 0 ? navigate('/onboarding') : handleStartTrial(plan.id)}
                     disabled={loading === plan.id}
                     style={{
                       width: '100%', padding: '14px 24px', borderRadius: '12px',
@@ -285,11 +312,11 @@ const PricingPage = () => {
                       opacity: loading === plan.id ? 0.6 : 1
                     }}
                   >
-                    {loading === plan.id ? 'Redirecting to checkout...' : (
+                    {loading === plan.id ? 'Starting trial...' : (
                       plan.price === 0 ? (
                         <><Rocket size={18} /> Get Started Free</>
                       ) : (
-                        <><ArrowRight size={18} /> Upgrade to Pro</>
+                        <><ArrowRight size={18} /> Start 7-Day Free Trial</>
                       )
                     )}
                   </button>

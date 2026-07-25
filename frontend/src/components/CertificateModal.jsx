@@ -188,6 +188,18 @@ const CertificateModal = ({ courseName, studentName, onClose }) => {
     window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
   };
 
+  const shareToTwitter = () => {
+    const url = encodeURIComponent('https://digital-era.live');
+    const text = encodeURIComponent(`I just completed the ${courseName} course on Digital Era! Check it out:`);
+    window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
+  };
+
+  const shareToWhatsApp = () => {
+    const url = encodeURIComponent('https://digital-era.live');
+    const text = encodeURIComponent(`I just completed the ${courseName} course on Digital Era! Check it out: ${url}`);
+    window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+  };
+
   return (
     <div style={{
       position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
@@ -229,9 +241,22 @@ const CertificateModal = ({ courseName, studentName, onClose }) => {
                 onClick={shareToLinkedIn}
                 style={{ padding: '12px 24px', background: '#0a66c2', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}
               >
-                Share on LinkedIn
+                LinkedIn
+              </button>
+              <button 
+                onClick={shareToTwitter}
+                style={{ padding: '12px 24px', background: '#1DA1F2', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}
+              >
+                Twitter
+              </button>
+              <button 
+                onClick={shareToWhatsApp}
+                style={{ padding: '12px 24px', background: '#25D366', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}
+              >
+                WhatsApp
               </button>
             </>
+
           ) : (
             <button 
               onClick={() => { onClose(); navigate('/pricing'); }}

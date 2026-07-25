@@ -744,6 +744,20 @@ select option { background: var(--surface2); }
 /* ══════════════════════════════════════
    RESPONSIVE — MOBILE & TABLET
 ══════════════════════════════════════ */
+
+/* Hamburger menu button — hidden by default */
+.mobile-menu-btn {
+  display: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--text);
+  align-items: center;
+  justify-content: center;
+}
+
 @media (max-width: 1024px) {
   /* Dashboard nav wraps */
   .dash-nav {
@@ -792,6 +806,54 @@ select option { background: var(--surface2); }
   .landing-footer { flex-direction: column; gap: 12px; text-align: center; }
 }
 
+@media (max-width: 768px) {
+  /* Show hamburger, hide nav items by default */
+  .mobile-menu-btn { display: flex; }
+  .dash-nav .nav-right {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+  .dash-nav .nav-right.open {
+    display: flex;
+  }
+  .dash-nav .nav-right button,
+  .dash-nav .nav-right .streak-badge,
+  .dash-nav .nav-right > div {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+  }
+
+  /* Ensure touch-friendly sizing */
+  button, select, input, textarea {
+    min-height: 44px;
+    font-size: 16px; /* Prevents iOS zoom on focus */
+  }
+
+  /* Workspace: full vertical stacking */
+  .ws-layout { height: auto; min-height: 100vh; }
+  .ws-exercise { max-height: none; min-height: 30vh; }
+  .ws-editor-panel { min-height: 40vh; }
+  .ws-chat { max-height: none; min-height: 40vh; }
+
+  /* Story mode smaller padding */
+  .story-card { padding: 30px 20px !important; }
+  .story-card h1 { font-size: 24px !important; }
+
+  /* Leaderboard podium */
+  .leaderboard-podium { flex-direction: column; align-items: center; gap: 16px; }
+
+  /* Chat input */
+  .chat-textarea { font-size: 16px; }
+
+  /* Pricing page */
+  .pricing-grid { grid-template-columns: 1fr !important; }
+}
+
 @media (max-width: 640px) {
   /* Onboarding */
   .onboard-card { width: 95%; padding: 32px 24px; }
@@ -806,6 +868,14 @@ select option { background: var(--surface2); }
   .admin-metrics-grid { grid-template-columns: 1fr; }
 
   /* Landing */
-  .landing-hero-title { font-size: 32px; }
+  .landing-hero-title { font-size: 28px; }
   .landing-hero-subtitle { font-size: 14px; margin-bottom: 32px; }
+
+  /* Workspace full-width code editor */
+  .ws-topbar { padding: 6px 8px; }
+  .ws-topbar .ws-course-title { font-size: 12px; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  
+  /* Forum / Discussion */
+  .discussion-input-row { flex-direction: column; }
+  .discussion-input-row button { width: 100%; }
 }

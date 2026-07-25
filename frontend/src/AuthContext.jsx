@@ -66,11 +66,11 @@ export const AuthProvider = ({ children }) => {
     setToken(data.access_token);
   };
 
-  const signup = async (name, email, password, level, goal) => {
+  const signup = async (name, email, password, level, goal, referralCode = null) => {
     const res = await fetch('/signup', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ full_name: name, email, password, level, goal })
+      body: JSON.stringify({ full_name: name, email, password, level, goal, referral_code: referralCode })
     });
     
     if (!res.ok) {

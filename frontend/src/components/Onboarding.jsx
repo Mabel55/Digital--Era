@@ -12,6 +12,7 @@ const Onboarding = () => {
   const [name, setName] = useState('');
   const [level, setLevel] = useState('Beginner');
   const [goal, setGoal] = useState('get a job');
+  const [referralCode, setReferralCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   
@@ -40,7 +41,7 @@ const Onboarding = () => {
         await login(email, password);
         navigate('/');
       } else {
-        await signup(name, email, password, level, goal);
+        await signup(name, email, password, level, goal, referralCode);
         navigate('/');
       }
     } catch (err) {
@@ -99,6 +100,18 @@ const Onboarding = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+              />
+            </div>
+          )}
+
+          {!isLogin && !isForgotPassword && (
+            <div className="field-row">
+              <label className="field-label">Referral Code (Optional)</label>
+              <input 
+                type="text" 
+                placeholder="Friend's referral code"
+                value={referralCode}
+                onChange={(e) => setReferralCode(e.target.value)}
               />
             </div>
           )}

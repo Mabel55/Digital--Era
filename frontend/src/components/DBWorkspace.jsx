@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import Editor from '@monaco-editor/react';
 import { marked } from 'marked';
+import DOMPurify from 'dompurify';
 
 const DBWorkspace = () => {
   const { courseId } = useParams();
@@ -253,7 +254,7 @@ const DBWorkspace = () => {
         <div className="story-mode-container" style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', background: 'var(--bg)', padding: '40px', overflowY: 'auto' }}>
           <div className="story-card" style={{ maxWidth: '800px', width: '100%', background: 'var(--surface)', padding: '60px', borderRadius: '16px', border: '1px solid var(--border)', boxShadow: '0 20px 60px rgba(0,0,0,0.5)', animation: 'slideUp 0.5s ease' }}>
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '32px', color: 'var(--accent)', marginBottom: '24px' }}>{lesson.title}</h1>
-            <div className="exercise-body story-body" dangerouslySetInnerHTML={{ __html: marked(lesson.content || "No content") }} style={{ fontSize: '16px', lineHeight: '1.8', color: 'var(--text)', marginBottom: '40px' }}></div>
+            <div className="exercise-body story-body" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked(lesson.content || "No content")) }} style={{ fontSize: '16px', lineHeight: '1.8', color: 'var(--text)', marginBottom: '40px' }}></div>
             <button 
               onClick={() => setShowStory(false)}
               className="btn-submit"
@@ -272,7 +273,7 @@ const DBWorkspace = () => {
             </div>
             <div className="ex-tab-content">
               <div className="exercise-title">{lesson.title}</div>
-              <div className="exercise-body" dangerouslySetInnerHTML={{ __html: marked(lesson.content || "No content") }}></div>
+              <div className="exercise-body" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked(lesson.content || "No content")) }}></div>
             </div>
           </div>
 
@@ -318,7 +319,7 @@ const DBWorkspace = () => {
             <div className="chat-messages">
               {messages.map((msg, i) => (
                 <div key={i} className={`chat-msg ${msg.sender}`}>
-                  <div className="msg-bubble" dangerouslySetInnerHTML={{ __html: marked(msg.text) }}></div>
+                  <div className="msg-bubble" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked(msg.text)) }}></div>
                 </div>
               ))}
               {isTyping && (

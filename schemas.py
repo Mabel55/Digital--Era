@@ -78,6 +78,7 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
+    referral_code: Optional[str] = None
 
 class UserResponse(UserBase):
     id: int
@@ -135,6 +136,7 @@ class ForumCommentResponse(ForumCommentBase):
     id: int
     thread_id: int
     user_id: int
+    author_name: Optional[str] = None
     created_at: datetime
 
     class Config:
@@ -150,6 +152,7 @@ class ForumThreadCreate(ForumThreadBase):
 class ForumThreadResponse(ForumThreadBase):
     id: int
     user_id: int
+    author_name: Optional[str] = None
     created_at: datetime
     comments: List[ForumCommentResponse] = []
 

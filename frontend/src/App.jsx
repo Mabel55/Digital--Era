@@ -19,6 +19,7 @@ const ProjectWorkspace = lazy(() => import('./components/ProjectWorkspace'));
 const LandingPage = lazy(() => import('./components/LandingPage'));
 const CourseCatalog = lazy(() => import('./components/CourseCatalog'));
 const PricingPage = lazy(() => import('./components/PricingPage'));
+const Profile = lazy(() => import('./components/Profile'));
 
 const ProtectedRoute = ({ children }) => {
   const { token, loading } = useAuth();
@@ -50,6 +51,11 @@ const App = () => {
             <Route path="/dashboard" element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <Profile />
               </ProtectedRoute>
             } />
             <Route path="/workspace/:courseId" element={

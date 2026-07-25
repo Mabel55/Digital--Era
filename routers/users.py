@@ -37,8 +37,34 @@ def register_user(request: Request, user: schemas.UserCreate, db: Session = Depe
         db.commit()
         db.refresh(new_user)
         
-        # 3. Auto-create a free subscription for the new user
+        # 3. Auto-create a free subscription for the new user (or apply referral)
         _create_free_subscription(db, new_user.id)
+        
+        # 4. Handle Referral Code
+        if hasattr(user, 'referral_code') and user.referral_code:
+            try:
+                referrer_id = int(user.referral_code)
+                referrer_sub = db.query(models.Subscription).filter(models.Subscription.user_id == referrer_id).first()
+                new_user_sub = db.query(models.Subscription).filter(models.Subscription.user_id == new_user.id).first()
+                
+                if referrer_sub and new_user_sub:
+                    now = datetime.utcnow()
+                    # Upgrade referrer
+                    if not referrer_sub.current_period_end or referrer_sub.current_period_end < now:
+                        referrer_sub.current_period_end = now + timedelta(days=30)
+                    else:
+                        referrer_sub.current_period_end += timedelta(days=30)
+                    referrer_sub.plan = "pro"
+                    referrer_sub.status = "trialing"
+                    
+                    # Upgrade new user
+                    new_user_sub.plan = "pro"
+                    new_user_sub.status = "trialing"
+                    new_user_sub.current_period_end = now + timedelta(days=30)
+                    
+                    db.commit()
+            except ValueError:
+                pass # Invalid referral code format, ignore
         
         return {"message": "User created successfully in PostgreSQL!", "email": new_user.email}
     except HTTPException:
@@ -86,7 +112,9 @@ def get_leaderboard(db: Session = Depends(get_db)):
     return db.query(models.User).order_by(models.User.xp.desc()).limit(100).all()
 
 @router.get("/users/", response_model=list[schemas.UserResponse])
-def get_all_users(db: Session = Depends(get_db)):
+def get_all_users(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    if current_user.role.lower() not in ["admin", "teacher"] and current_user.email != "nasaadanna@gmail.com":
+        raise HTTPException(status_code=403, detail="Not authorized")
     return db.query(models.User).all()
 
 @router.post("/users/")
@@ -251,7 +279,8 @@ def send_reset_email(to_email: str, token: str):
         print(f"DEBUG: Missing SMTP credentials. Reset link: http://localhost:5173/reset-password?token={token}")
         return
 
-    reset_link = f"http://localhost:5173/reset-password?token={token}"
+    base_url = os.getenv("BASE_URL", "http://localhost:5173")
+    reset_link = f"{base_url}/reset-password?token={token}"
     
     msg = MIMEMultipart()
     msg['From'] = smtp_username
