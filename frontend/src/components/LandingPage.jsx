@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PublicNavbar from './PublicNavbar';
-import { Rocket, Zap, Bot, Trophy, User, GraduationCap } from 'lucide-react';
+import { Rocket, Zap, Bot, Trophy, User, GraduationCap, Star } from 'lucide-react';
 
 const LandingPage = () => {
   const navigate = useNavigate();
