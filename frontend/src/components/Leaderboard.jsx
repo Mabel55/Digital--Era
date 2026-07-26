@@ -99,7 +99,7 @@ export default function Leaderboard({ isPublic = false }) {
               <div style={podiumStyles.container}>
                 {/* 2nd place */}
                 <div style={podiumStyles.podiumItem(160, '#9ca3af')}>
-                  <div style={podiumStyles.name('#9ca3af')}>{users[1].full_name || users[1].email?.split('@')[0] || 'User'}</div>
+                  <div style={podiumStyles.name('#9ca3af')}>{users[1].full_name || users[1].email?.split('@')?.[0] || 'User'}</div>
                   <div style={podiumStyles.xp}>{users[1].xp} XP</div>
                   <div style={podiumStyles.podiumBar(160, '#9ca3af')}>
                     <span style={{ fontSize: '24px' }}><Medal size={24} color="#9ca3af" /></span>
@@ -109,7 +109,7 @@ export default function Leaderboard({ isPublic = false }) {
                 {/* 1st place */}
                 <div style={podiumStyles.podiumItem(224, '#eab308')}>
                   <div style={{ fontSize: '32px', marginBottom: '8px', animation: 'pulse 2s infinite' }}><Trophy size={40} color="#eab308" /></div>
-                  <div style={{ ...podiumStyles.name('#eab308'), fontSize: '20px' }}>{users[0].full_name || users[0].email?.split('@')[0] || 'User'}</div>
+                  <div style={{ ...podiumStyles.name('#eab308'), fontSize: '20px' }}>{users[0].full_name || users[0].email?.split('@')?.[0] || 'User'}</div>
                   <div style={podiumStyles.xp}>{users[0].xp} XP</div>
                   <div style={podiumStyles.podiumBar(224, '#eab308')}>
                     <span style={{ fontSize: '36px', fontWeight: 900, color: 'white', opacity: 0.8 }}>1</span>
@@ -118,7 +118,7 @@ export default function Leaderboard({ isPublic = false }) {
 
                 {/* 3rd place */}
                 <div style={podiumStyles.podiumItem(128, '#d97706')}>
-                  <div style={podiumStyles.name('#d97706')}>{users[2].full_name || users[2].email?.split('@')[0] || 'User'}</div>
+                  <div style={podiumStyles.name('#d97706')}>{users[2].full_name || users[2].email?.split('@')?.[0] || 'User'}</div>
                   <div style={podiumStyles.xp}>{users[2].xp} XP</div>
                   <div style={podiumStyles.podiumBar(128, '#d97706')}>
                     <span style={{ fontSize: '24px' }}><Medal size={24} color="#d97706" /></span>
@@ -157,7 +157,7 @@ export default function Leaderboard({ isPublic = false }) {
 
                     <div>
                       <div style={{ fontWeight: 700, fontSize: '15px', color: 'var(--text)' }}>
-                        {user.full_name || user.email?.split('@')[0] || 'User'}
+                        {user.full_name || user.email?.split('@')?.[0] || 'User'}
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
                         <span style={{ fontSize: '12px', color: 'var(--text3)', fontWeight: 600, padding: '2px 8px', background: 'var(--surface3)', borderRadius: '4px' }}>

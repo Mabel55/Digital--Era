@@ -76,7 +76,7 @@ const DBWorkspace = () => {
   useEffect(() => {
     if (course) {
       setMessages([
-        { sender: 'ai', text: `Hi ${user?.name?.split(' ')[0] || 'there'}! I'm your AI Tutor for **${course.title}**. Ask me anything!` }
+        { sender: 'ai', text: `Hi ${user?.name?.split(' ')?.[0] || 'there'}! I'm your AI Tutor for **${course.title}**. Ask me anything!` }
       ]);
     }
   }, [course]);

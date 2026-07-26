@@ -70,7 +70,7 @@ const Workspace = () => {
       loadLesson(0);
     }
     setMessages([
-      { sender: 'ai', text: `Hi ${user?.full_name?.split(' ')[0] || 'there'}! I'm your AI Tutor for **${courseName}**. Ask me anything!` }
+      { sender: 'ai', text: `Hi ${user?.full_name?.split(' ')?.[0] || 'there'}! I'm your AI Tutor for **${courseName}**. Ask me anything!` }
     ]);
   }, [courseName]);
 

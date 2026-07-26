@@ -10,7 +10,12 @@ from slowapi.errors import RateLimitExceeded
 from limiter import limiter
 
 # 1. Initialize Database & Run Migrations
-Base.metadata.create_all(bind=engine)
+try:
+    Base.metadata.create_all(bind=engine)
+    print("Database tables created/verified successfully.")
+except Exception as e:
+    print(f"WARNING: Could not connect to database on startup: {e}")
+    print("Server will start anyway. Database-dependent routes will fail until DB is available.")
 
 # Auto-migrate db safely, one column at a time so a single failure doesn't roll back the others
 migrations = [
@@ -25,13 +30,16 @@ migrations = [
     "ALTER TABLE users ADD COLUMN IF NOT EXISTS progress JSON"
 ]
 
-for migration in migrations:
-    try:
-        with engine.begin() as conn:
-            conn.execute(text(migration))
-        print(f"Migration OK: {migration[:60]}")
-    except Exception as e:
-        print(f"Migration SKIPPED: {migration[:60]} -> {e}")
+try:
+    for migration in migrations:
+        try:
+            with engine.begin() as conn:
+                conn.execute(text(migration))
+            print(f"Migration OK: {migration[:60]}")
+        except Exception as e:
+            print(f"Migration SKIPPED: {migration[:60]} -> {e}")
+except Exception as e:
+    print(f"WARNING: Could not run migrations (DB may be unavailable): {e}")
 
 # Import all routers
 import routers.users
