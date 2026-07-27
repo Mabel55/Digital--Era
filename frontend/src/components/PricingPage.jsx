@@ -133,6 +133,21 @@ const PricingPage = () => {
         { text: 'LinkedIn certifications', included: true },
         { text: billingCycle === 'yearly' ? 'Save 34% vs monthly' : 'Cancel anytime', included: true },
       ]
+    },
+    {
+      id: 'enterprise',
+      name: 'Enterprise',
+      price: billingCycle === 'yearly' ? 199 : 24.99,
+      description: 'For teams and organizations',
+      icon: <Users size={28} strokeWidth={1.5} />,
+      color: '#3b82f6',
+      features: [
+        { text: 'Everything in Pro', included: true },
+        { text: 'Custom learning paths', included: true },
+        { text: 'Dedicated Account Manager', included: true },
+        { text: 'SSO & Advanced Security', included: true },
+        { text: 'Team Analytics Dashboard', included: true },
+      ]
     }
   ];
 
@@ -195,9 +210,19 @@ const PricingPage = () => {
           </div>
         </div>
 
-
-
-        {/* Plans Grid */}
+        {/* Billing Toggle */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '48px' }}>
+          <div style={{ display: 'flex', background: 'var(--surface)', padding: '6px', borderRadius: '100px', border: '1px solid var(--border)' }}>
+            <button 
+              onClick={() => setBillingCycle('monthly')}
+              style={{ padding: '10px 24px', borderRadius: '100px', border: 'none', background: billingCycle === 'monthly' ? 'var(--accent)' : 'transparent', color: billingCycle === 'monthly' ? '#000' : 'var(--text2)', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s' }}
+            >Monthly</button>
+            <button 
+              onClick={() => setBillingCycle('yearly')}
+              style={{ padding: '10px 24px', borderRadius: '100px', border: 'none', background: billingCycle === 'yearly' ? 'var(--accent)' : 'transparent', color: billingCycle === 'yearly' ? '#000' : 'var(--text2)', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.2s' }}
+            >Yearly <span style={{ background: billingCycle === 'yearly' ? 'rgba(0,0,0,0.1)' : 'var(--surface2)', color: billingCycle === 'yearly' ? '#000' : 'var(--text)', padding: '4px 10px', borderRadius: '100px', fontSize: '12px' }}>Save 34%</span></button>
+          </div>
+        </div>        {/* Plans Grid */}
         <div style={{ 
           display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
           gap: '24px', maxWidth: '800px', margin: '0 auto 64px' 
@@ -360,6 +385,40 @@ const PricingPage = () => {
               </div>
             );
           })}
+        </div>
+
+        {/* Comparison Table */}
+        <div style={{ maxWidth: '900px', margin: '0 auto 80px', overflowX: 'auto' }}>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 800, textAlign: 'center', marginBottom: '32px' }}>Compare Plans</h2>
+          <div style={{ background: 'var(--surface)', borderRadius: '16px', border: '1px solid var(--border)', overflow: 'hidden' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+              <thead>
+                <tr style={{ borderBottom: '2px solid var(--border)', background: 'var(--surface2)' }}>
+                  <th style={{ padding: '20px', color: 'var(--text2)', fontWeight: 'bold' }}>Feature</th>
+                  <th style={{ padding: '20px', color: 'var(--text)', fontWeight: 'bold', textAlign: 'center' }}>Free</th>
+                  <th style={{ padding: '20px', color: 'var(--accent)', fontWeight: 'bold', textAlign: 'center' }}>Pro</th>
+                  <th style={{ padding: '20px', color: '#3b82f6', fontWeight: 'bold', textAlign: 'center' }}>Enterprise</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { feature: 'Interactive Courses', free: '3 Beginner', pro: 'Unlimited', ent: 'Unlimited + Custom' },
+                  { feature: 'AI Tutor', free: '3 msgs/day', pro: 'Unlimited', ent: 'Unlimited' },
+                  { feature: 'Certificates', free: '-', pro: 'Included', ent: 'Included' },
+                  { feature: 'Community Forum', free: 'Included', pro: 'Included', ent: 'Included' },
+                  { feature: 'Analytics Dashboard', free: '-', pro: 'Personal', ent: 'Team/Org' },
+                  { feature: 'Support', free: 'Community', pro: 'Priority', ent: 'Dedicated Manager' },
+                ].map((row, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'var(--bg)' : 'transparent' }}>
+                    <td style={{ padding: '16px 20px', fontWeight: 500 }}>{row.feature}</td>
+                    <td style={{ padding: '16px 20px', textAlign: 'center', color: row.free === '-' ? 'var(--text3)' : 'var(--text)' }}>{row.free}</td>
+                    <td style={{ padding: '16px 20px', textAlign: 'center', fontWeight: 'bold', color: 'var(--accent)' }}>{row.pro}</td>
+                    <td style={{ padding: '16px 20px', textAlign: 'center', color: '#3b82f6' }}>{row.ent}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         {/* Trust Badges */}

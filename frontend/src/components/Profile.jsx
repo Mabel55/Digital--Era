@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
-import { User, Flame, Trophy, Award, Edit3, ArrowLeft, CheckCircle2, TrendingUp } from 'lucide-react';
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { User, Flame, Trophy, Award, Edit3, ArrowLeft, CheckCircle2, TrendingUp, Target, Calendar } from 'lucide-react';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
 
 const mockChartData = [
   { day: 'Mon', xp: 20 },
@@ -14,6 +14,15 @@ const mockChartData = [
   { day: 'Sun', xp: 150 },
 ];
 
+const mockSkillsData = [
+  { subject: 'Python', A: 120, fullMark: 150 },
+  { subject: 'Data Science', A: 98, fullMark: 150 },
+  { subject: 'SQL', A: 86, fullMark: 150 },
+  { subject: 'Machine Learning', A: 65, fullMark: 150 },
+  { subject: 'Web Dev', A: 85, fullMark: 150 },
+  { subject: 'Git', A: 110, fullMark: 150 },
+];
+
 const Profile = () => {
   const { user, token, refreshUser } = useAuth();
   const navigate = useNavigate();
@@ -23,14 +32,59 @@ const Profile = () => {
   const [goal, setGoal] = useState(user?.goal || 'Build Projects');
   const [level, setLevel] = useState(user?.level || 'Beginner');
   const [successMsg, setSuccessMsg] = useState('');
+  const [activityData, setActivityData] = useState([]);
+  const [completions, setCompletions] = useState([]);
 
-  // Save profile changes (Assuming a PUT /users/me endpoint exists, or we simulate it for now)
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const actRes = await fetch('/users/me/activity?days=30', { headers: { Authorization: `Bearer ${token}` } });
+        if (actRes.ok) {
+           const data = await actRes.json();
+           const formatted = data.map(d => ({
+              day: new Date(d.activity_date).toLocaleDateString('en-US', {weekday: 'short'}),
+              fullDate: d.activity_date,
+              xp: d.xp_earned,
+              lessons: d.lessons_completed
+           }));
+           // Only keep last 7 days for the chart
+           setActivityData(formatted.slice(-7));
+        }
+        
+        const compRes = await fetch('/users/me/completions', { headers: { Authorization: `Bearer ${token}` } });
+        if (compRes.ok) setCompletions(await compRes.json());
+      } catch (e) {
+        console.error("Failed to load profile data", e);
+      }
+    };
+    if (token) fetchProfileData();
+  }, [token]);
+
   const handleSave = async (e) => {
     e.preventDefault();
-    // In a real app we'd call an API here. Since we might not have a PUT /users/me implemented yet,
-    // we will just show a success message to the user.
-    setSuccessMsg('Profile updated successfully! (Mocked)');
-    setTimeout(() => { setSuccessMsg(''); setIsEditing(false); }, 2000);
+    try {
+      const res = await fetch('/users/me', {
+        method: 'PUT',
+        headers: {
+           'Content-Type': 'application/json',
+           'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+           full_name: fullName,
+           goal: goal,
+           preferred_language: 'en'
+        })
+      });
+      if (res.ok) {
+        if (refreshUser) await refreshUser();
+        setSuccessMsg('Profile updated successfully!');
+        setTimeout(() => { setSuccessMsg(''); setIsEditing(false); }, 2000);
+      } else {
+        alert("Failed to update profile.");
+      }
+    } catch (e) {
+      alert("Error saving profile");
+    }
   };
 
   const getBadges = () => {
@@ -178,7 +232,7 @@ const Profile = () => {
               
               <div style={{ height: '300px', width: '100%' }}>
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={mockChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <AreaChart data={activityData.length > 0 ? activityData : mockChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <defs>
                       <linearGradient id="colorXp" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor="var(--accent)" stopOpacity={0.3}/>
@@ -197,24 +251,50 @@ const Profile = () => {
               </div>
             </div>
 
-            <div style={{ background: 'var(--surface)', padding: '32px', borderRadius: '16px', border: '1px solid var(--border)' }}>
-              <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent3)' }}>
-                🎁 Refer a Friend
-              </h3>
-              <p style={{ fontSize: '14px', color: 'var(--text2)', marginBottom: '24px' }}>
-                Invite a friend and you both get a <strong>free month of Pro</strong> when they sign up!
-              </p>
-              <div style={{ background: 'var(--surface2)', border: '1px solid var(--border)', padding: '16px', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontFamily: 'monospace', fontSize: '16px', fontWeight: 'bold' }}>{user?.id || '...'}</span>
-                <button 
-                  onClick={() => {
-                    navigator.clipboard.writeText(user?.id);
-                    alert("Referral code copied!");
-                  }}
-                  style={{ background: 'var(--accent)', color: 'black', border: 'none', padding: '6px 12px', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer', fontSize: '12px' }}
-                >
-                  Copy
-                </button>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              
+              {/* Skills Radar */}
+              <div style={{ background: 'var(--surface)', padding: '32px', borderRadius: '16px', border: '1px solid var(--border)' }}>
+                <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Target size={20} color="var(--accent2)" /> Skill Assessment
+                </h3>
+                <div style={{ height: '220px', width: '100%' }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RadarChart cx="50%" cy="50%" outerRadius="80%" data={mockSkillsData}>
+                      <PolarGrid stroke="var(--border)" />
+                      <PolarAngleAxis dataKey="subject" tick={{ fill: 'var(--text2)', fontSize: 11 }} />
+                      <PolarRadiusAxis angle={30} domain={[0, 150]} tick={false} axisLine={false} />
+                      <Radar name="Skills" dataKey="A" stroke="var(--accent2)" fill="var(--accent2)" fillOpacity={0.5} />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              {/* Certificates */}
+              <div style={{ background: 'var(--surface)', padding: '32px', borderRadius: '16px', border: '1px solid var(--border)' }}>
+                <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <CheckCircle2 size={20} color="var(--accent)" /> Certificates
+                </h3>
+                {completions.length > 0 ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {completions.map(c => (
+                      <div key={c.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: 'var(--surface2)', borderRadius: '8px', border: '1px solid var(--border)' }}>
+                        <div style={{ width: '40px', height: '40px', background: 'rgba(0, 229, 160, 0.1)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <Award size={20} color="var(--accent)" />
+                        </div>
+                        <div>
+                          <div style={{ fontWeight: 'bold', fontSize: '14px' }}>{c.course_name}</div>
+                          <div style={{ fontSize: '12px', color: 'var(--text-dim)' }}>Completed {new Date(c.completed_at).toLocaleDateString()}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p style={{ color: 'var(--text2)', margin: 0, fontSize: '14px', lineHeight: '1.6' }}>
+                    No certificates earned yet. Complete your first course to get certified!
+                  </p>
+                )}
               </div>
             </div>
           </div>

@@ -7,7 +7,11 @@ from sqlalchemy.orm import relationship
 # ─── Utility: Consistent XP → Level Calculation ───
 def calculate_level(xp: int) -> str:
     """Single source of truth for XP-based level calculation."""
-    if xp >= 1000:
+    if xp >= 5000:
+        return "Grandmaster"
+    elif xp >= 2500:
+        return "Expert"
+    elif xp >= 1000:
         return "Master"
     elif xp >= 500:
         return "Advanced"
@@ -45,12 +49,14 @@ class Course(Base):
     description = Column(Text, nullable=True) # Added for LMS
     teacher_id = Column(Integer, ForeignKey("teachers.id"))
 
-    # --- NEW: Level and Track columns ---
+    # --- Level, Track and Duration columns ---
     level = Column(String, default="Beginner") # e.g., "Beginner", "Intermediate", "Advanced"
     track = Column(String, default="General")  # e.g., "Backend", "Data Science", "AI"
+    estimated_hours = Column(Float, default=2.0)  # Estimated hours to complete
 
     # Magic link to the new lessons we are about to create!
     lessons = relationship("Lesson", back_populates="course")
+    reviews = relationship("CourseReview", back_populates="course")
 
 class Lesson(Base):
     __tablename__ = "lessons"
@@ -60,6 +66,7 @@ class Lesson(Base):
     content = Column(Text) # Your markdown notes and AI context go here
     expected_output = Column(Text, nullable=True) # For auto-grading code later
     course_id = Column(Integer, ForeignKey("courses.id"))
+    order_index = Column(Integer, default=0)  # For lesson ordering
 
     # Links back up to your Course table
     course = relationship("Course", back_populates="lessons")
@@ -78,14 +85,32 @@ class User(Base):
     xp = Column(Integer, default=0)
     level = Column(String, default="Beginner")
     streak = Column(Integer, default=0)
+    longest_streak = Column(Integer, default=0)  # Track personal best streak
     last_login = Column(DateTime, nullable=True)
     progress = Column(JSON, default=dict)
+    created_at = Column(DateTime, default=datetime.utcnow)  # Track when users joined
+
+    # Profile fields for international competitiveness
+    avatar_url = Column(String, nullable=True)
+    bio = Column(Text, nullable=True)
+    github_url = Column(String, nullable=True)
+    linkedin_url = Column(String, nullable=True)
+    country = Column(String, nullable=True)
+    preferred_language = Column(String, default="en")
+    goal = Column(String, nullable=True)  # Learning goal
+    weekly_goal_days = Column(Integer, default=5)  # Days per week target
+    last_active_course = Column(String, nullable=True)  # For "Continue Learning"
+    last_active_lesson_idx = Column(Integer, default=0)  # For "Continue Learning"
 
     # Relationship to subscription
     subscription = relationship("Subscription", back_populates="user", uselist=False)
     certificates = relationship("Certificate", back_populates="user")
+    activities = relationship("UserActivity", back_populates="user", cascade="all, delete-orphan")
+    completions = relationship("CourseCompletion", back_populates="user", cascade="all, delete-orphan")
+    notifications = relationship("Notification", back_populates="user", cascade="all, delete-orphan")
+    reviews = relationship("CourseReview", back_populates="user")
+    learning_goals = relationship("LearningGoal", back_populates="user", cascade="all, delete-orphan")
 
-# Add this to the bottom of models.py
 
 class ChatMessage(Base):
     __tablename__ = "chat_messages"
@@ -186,3 +211,130 @@ class PasswordResetToken(Base):
     user = relationship("User")
 
 
+# ─── NEW: ENGAGEMENT & ANALYTICS MODELS ───
+
+class UserActivity(Base):
+    """Tracks daily XP gains for real analytics charts (replaces mock data)."""
+    __tablename__ = "user_activities"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    activity_date = Column(Date, default=date.today, nullable=False)
+    xp_earned = Column(Integer, default=0)
+    lessons_completed = Column(Integer, default=0)
+    challenges_completed = Column(Integer, default=0)
+    time_spent_minutes = Column(Integer, default=0)
+
+    user = relationship("User", back_populates="activities")
+
+
+class CourseCompletion(Base):
+    """Tracks actual course completions with timestamps for certificates."""
+    __tablename__ = "course_completions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    course_name = Column(String, nullable=False, index=True)
+    completed_at = Column(DateTime, default=datetime.utcnow)
+    total_lessons = Column(Integer, default=0)
+    score_percent = Column(Float, default=100.0)
+
+    user = relationship("User", back_populates="completions")
+
+
+class DailyChallenge(Base):
+    """Stores daily coding challenges — DataCamp's #1 retention driver."""
+    __tablename__ = "daily_challenges"
+
+    id = Column(Integer, primary_key=True, index=True)
+    challenge_date = Column(Date, default=date.today, unique=True, index=True)
+    title = Column(String, nullable=False)
+    description = Column(Text, nullable=False)
+    difficulty = Column(String, default="Beginner")  # Beginner, Intermediate, Advanced
+    language = Column(String, default="python")
+    starter_code = Column(Text, nullable=True)
+    solution = Column(Text, nullable=True)
+    hint = Column(Text, nullable=True)
+    test_cases = Column(JSON, nullable=True)  # [{input: "", expected: ""}]
+    xp_reward = Column(Integer, default=25)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class DailyChallengeSubmission(Base):
+    """Tracks user submissions for daily challenges."""
+    __tablename__ = "daily_challenge_submissions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    challenge_id = Column(Integer, ForeignKey("daily_challenges.id", ondelete="CASCADE"), nullable=False)
+    submitted_code = Column(Text, nullable=True)
+    passed = Column(Boolean, default=False)
+    submitted_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User")
+    challenge = relationship("DailyChallenge")
+
+
+class Notification(Base):
+    """In-app notifications for engagement and re-engagement."""
+    __tablename__ = "notifications"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    type = Column(String, nullable=False)  # streak, achievement, course, challenge, system
+    title = Column(String, nullable=False)
+    message = Column(Text, nullable=False)
+    action_url = Column(String, nullable=True)  # e.g., /workspace/PythonFundamentals
+    is_read = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User", back_populates="notifications")
+
+
+class CourseReview(Base):
+    """Course ratings and reviews for social proof."""
+    __tablename__ = "course_reviews"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    course_id = Column(Integer, ForeignKey("courses.id", ondelete="CASCADE"), nullable=True)
+    course_name = Column(String, nullable=False, index=True)  # For static courses
+    rating = Column(Integer, nullable=False)  # 1-5 stars
+    review_text = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User", back_populates="reviews")
+    course = relationship("Course", back_populates="reviews")
+
+
+class LearningGoal(Base):
+    """Weekly/monthly learning goals for commitment tracking."""
+    __tablename__ = "learning_goals"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    week_start = Column(Date, nullable=False)
+    target_days = Column(Integer, default=5)
+    actual_days = Column(Integer, default=0)
+    target_xp = Column(Integer, default=50)
+    actual_xp = Column(Integer, default=0)
+    completed = Column(Boolean, default=False)
+
+    user = relationship("User", back_populates="learning_goals")
+
+
+class AssessmentResult(Base):
+    """Stores assessment history to track improvement over time."""
+    __tablename__ = "assessment_results"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    topic = Column(String, nullable=False, index=True)
+    score = Column(Integer, nullable=False)
+    max_score = Column(Integer, nullable=False)
+    skill_score = Column(Integer, nullable=False)  # Normalized 0-300
+    xp_gained = Column(Integer, default=0)
+    questions_data = Column(JSON, nullable=True)  # Store Q&A for review
+    taken_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User")

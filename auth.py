@@ -13,7 +13,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "dev-only-fallback-key-change-in-production
 if SECRET_KEY == "dev-only-fallback-key-change-in-production":
     print("⚠️  WARNING: Using default SECRET_KEY. Set SECRET_KEY env var in production!")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days (was 60 min — users were getting logged out constantly)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 

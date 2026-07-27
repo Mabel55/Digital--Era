@@ -69,6 +69,19 @@ const LandingPage = () => {
             </button>
           </div>
 
+          {/* Tech Logos */}
+          <div style={{ marginTop: '60px', opacity: 0.6, width: '100%', maxWidth: '800px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '2px', fontWeight: 'bold', marginBottom: '20px' }}>Learn Top Technologies</div>
+            <div style={{ display: 'flex', gap: '40px', flexWrap: 'wrap', justifyContent: 'center', fontSize: '20px', fontWeight: 'bold', fontFamily: 'var(--font-mono)' }}>
+              <span>Python</span>
+              <span>React</span>
+              <span>SQL</span>
+              <span>Docker</span>
+              <span>TensorFlow</span>
+              <span>FastAPI</span>
+            </div>
+          </div>
+
           {/* Feature Highlights Grid */}
           <div className="landing-features-grid">
             {[
@@ -83,7 +96,24 @@ const LandingPage = () => {
               </div>
             ))}
           </div>
-
+          {/* How It Works Section */}
+          <div style={{ marginTop: '100px', width: '100%', textAlign: 'center' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '32px', fontWeight: 800, marginBottom: '40px' }}>How Digital Era Works</h2>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center' }}>
+              {[
+                { step: '1', title: 'Choose Your Track', desc: 'Select from Frontend, Backend, Data Science or AI.' },
+                { step: '2', title: 'Learn by Doing', desc: 'Read concise theory and jump straight into our built-in code editor.' },
+                { step: '3', title: 'Get Instant Feedback', desc: 'Run your code, pass tests, and ask the AI Tutor for hints if stuck.' },
+                { step: '4', title: 'Earn Certificates', desc: 'Complete courses to earn verifiable certificates for your resume.' }
+              ].map((s, i) => (
+                <div key={i} style={{ flex: '1 1 200px', background: 'var(--surface2)', padding: '24px', borderRadius: '16px', border: '1px solid var(--border)' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--accent)', color: 'black', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 'bold', margin: '0 auto 16px' }}>{s.step}</div>
+                  <h3 style={{ fontSize: '18px', marginBottom: '8px' }}>{s.title}</h3>
+                  <p style={{ color: 'var(--text2)', fontSize: '14px', lineHeight: 1.5 }}>{s.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
           {/* Social Proof Section */}
           <div style={{ marginTop: '80px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '40px' }}>
@@ -127,6 +157,21 @@ const LandingPage = () => {
               ))}
             </div>
             
+            <div style={{ display: 'flex', gap: '24px', marginTop: '60px', flexWrap: 'wrap', justifyContent: 'center' }}>
+               <div style={{ background: 'var(--surface2)', padding: '20px 40px', borderRadius: '16px', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                 <div style={{ fontSize: '36px', fontWeight: 'bold', color: 'var(--accent)', fontFamily: 'var(--font-mono)' }}>500+</div>
+                 <div style={{ color: 'var(--text2)', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px' }}>Active Students</div>
+               </div>
+               <div style={{ background: 'var(--surface2)', padding: '20px 40px', borderRadius: '16px', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                 <div style={{ fontSize: '36px', fontWeight: 'bold', color: 'var(--accent2)', fontFamily: 'var(--font-mono)' }}>1,200+</div>
+                 <div style={{ color: 'var(--text2)', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px' }}>Lessons Completed</div>
+               </div>
+               <div style={{ background: 'var(--surface2)', padding: '20px 40px', borderRadius: '16px', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                 <div style={{ fontSize: '36px', fontWeight: 'bold', color: 'var(--accent3)', fontFamily: 'var(--font-mono)' }}>24/7</div>
+                 <div style={{ color: 'var(--text2)', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px' }}>AI Tutoring</div>
+               </div>
+            </div>
+
             <div style={{ display: 'flex', gap: '24px', marginTop: '40px', opacity: 0.6, flexWrap: 'wrap', justifyContent: 'center' }}>
                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold' }}>✨ Powered by Google Gemini</div>
                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold' }}>☁️ Deployed on Azure</div>

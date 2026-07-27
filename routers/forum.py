@@ -19,7 +19,18 @@ def get_lesson_threads(lesson_name: str, db: Session = Depends(database.get_db))
             c.author_name = c.user.full_name if c.user else "Anonymous"
     return threads
 
-# 2. Create a new thread
+# 2. Get global threads
+@router.get("/", response_model=List[schemas.ForumThreadResponse])
+def get_global_threads(db: Session = Depends(database.get_db)):
+    threads = db.query(models.ForumThread).filter(models.ForumThread.lesson_name == "Global").all()
+    # We populate the author_name for the thread and its comments
+    for t in threads:
+        t.author_name = t.user.full_name if t.user else "Anonymous"
+        for c in t.comments:
+            c.author_name = c.user.full_name if c.user else "Anonymous"
+    return threads
+
+# 3. Create a new thread
 @router.post("/", response_model=schemas.ForumThreadResponse)
 def create_thread(thread: schemas.ForumThreadCreate, db: Session = Depends(database.get_db), current_user: models.User = Depends(auth.get_current_user)):
     db_thread = models.ForumThread(

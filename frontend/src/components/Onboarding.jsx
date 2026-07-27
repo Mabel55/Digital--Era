@@ -13,8 +13,21 @@ const Onboarding = () => {
   const [level, setLevel] = useState('Beginner');
   const [goal, setGoal] = useState('get a job');
   const [referralCode, setReferralCode] = useState('');
+  const [tosAgreed, setTosAgreed] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  const getPasswordStrength = (pw) => {
+    if (!pw) return 0;
+    let score = 0;
+    if (pw.length > 7) score++;
+    if (/[A-Z]/.test(pw)) score++;
+    if (/[0-9]/.test(pw)) score++;
+    if (/[^A-Za-z0-9]/.test(pw)) score++;
+    return score;
+  };
+  const strength = getPasswordStrength(password);
+  const strengthColors = ['var(--border)', '#ef4444', '#f59e0b', '#3b82f6', 'var(--accent)'];
   
   const { login, signup } = useAuth();
   const navigate = useNavigate();
@@ -41,6 +54,11 @@ const Onboarding = () => {
         await login(email, password);
         navigate('/');
       } else {
+        if (!tosAgreed) {
+          setError("You must agree to the Terms of Service.");
+          setLoading(false);
+          return;
+        }
         await signup(name, email, password, level, goal, referralCode);
         navigate('/');
       }
@@ -101,6 +119,13 @@ const Onboarding = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+              {!isLogin && password && (
+                <div style={{ marginTop: '8px', display: 'flex', gap: '4px', height: '4px' }}>
+                  {[1, 2, 3, 4].map(i => (
+                    <div key={i} style={{ flex: 1, background: i <= strength ? strengthColors[strength] : 'var(--surface2)', borderRadius: '2px', transition: 'background 0.3s' }}></div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -138,6 +163,21 @@ const Onboarding = () => {
             </div>
           )}
 
+          {!isLogin && !isForgotPassword && (
+            <div className="field-row" style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginTop: '16px' }}>
+              <input 
+                type="checkbox" 
+                id="tos"
+                checked={tosAgreed}
+                onChange={(e) => setTosAgreed(e.target.checked)}
+                style={{ marginTop: '4px', cursor: 'pointer' }}
+              />
+              <label htmlFor="tos" style={{ fontSize: '13px', color: 'var(--text2)', cursor: 'pointer', lineHeight: 1.5 }}>
+                I agree to the <span style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Terms of Service</span> and <span style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Privacy Policy</span>.
+              </label>
+            </div>
+          )}
+
           <button type="submit" className="btn-primary" disabled={loading}>
             {loading ? "Processing..." : (isForgotPassword ? "Send Reset Link" : (isLogin ? "Login" : <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}><Rocket size={18} /> Initialize My Learning Path</div>))}
           </button>
@@ -146,6 +186,21 @@ const Onboarding = () => {
         {isLogin && !isForgotPassword && (
           <div style={{ textAlign: 'center', marginTop: '16px' }}>
             <a href="#" onClick={(e) => { e.preventDefault(); setIsForgotPassword(true); setError(''); }} style={{ color: 'var(--text-muted)', fontSize: '14px', textDecoration: 'none' }}>Forgot Password?</a>
+          </div>
+        )}
+
+        <div className="divider">
+          <hr /><span>{isForgotPassword ? "Or" : (isLogin ? "Or log in with" : "Or sign up with")}</span><hr />
+        </div>
+        
+        {!isForgotPassword && (
+          <div style={{ display: 'flex', gap: '12px', marginBottom: '24px' }}>
+            <button type="button" style={{ flex: 1, padding: '12px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', fontWeight: 'bold' }}>
+              <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" style={{ width: '18px' }} /> Google
+            </button>
+            <button type="button" style={{ flex: 1, padding: '12px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', fontWeight: 'bold' }}>
+               <img src="https://www.svgrepo.com/show/512317/github-142.svg" alt="GitHub" style={{ width: '18px', filter: 'brightness(0) invert(1)' }} /> GitHub
+            </button>
           </div>
         )}
 

@@ -6,7 +6,7 @@ import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 import { courseManifest } from '../data/courses';
 import LessonDiscussion from './LessonDiscussion';
-import { ArrowLeft, Play, Terminal, CheckCircle2, XCircle, Bug, Bot, ArrowUp, PartyPopper, Home, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Play, Terminal, CheckCircle2, XCircle, Bug, Bot, ArrowUp, PartyPopper, Home, RotateCcw, Menu, Lightbulb, RotateCcw as ResetIcon, Clock, ChevronRight } from 'lucide-react';
 
 const Workspace = () => {
   const { courseId } = useParams();
@@ -30,6 +30,9 @@ const Workspace = () => {
   const [showCelebration, setShowCelebration] = useState(false);
   const [showStory, setShowStory] = useState(true); // Story Mode State
   const [pyodide, setPyodide] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [mobileTab, setMobileTab] = useState('exercise'); // 'exercise', 'editor', 'chat' for mobile
+  const [executionTime, setExecutionTime] = useState(0);
   
   // AI Limits State
   const [aiUsage, setAiUsage] = useState({ remaining: -1, limit: -1, isLimited: false });
@@ -96,15 +99,39 @@ const Workspace = () => {
     }
   }, [token, isPro]);
 
+  const getStorageKey = (idx) => `workspace_${courseName}_${idx}`;
+
   const loadLesson = (idx) => {
     setCurrentLessonIdx(idx);
     const lesson = manifest.lessons[idx];
-    setCode(lesson.starterCode || '');
+    
+    // Load from localStorage if exists, otherwise starter code
+    const savedCode = localStorage.getItem(getStorageKey(idx));
+    setCode(savedCode || lesson.starterCode || '');
+    
     setTerminalOutput('');
     setActiveTab('theory');
     setSelectedOption(null);
     setQuizResult(null);
     setShowStory(true); // Always start in story mode for a new lesson
+    setIsSidebarOpen(false); // Close sidebar on navigate
+  };
+
+  const handleCodeChange = (value) => {
+    setCode(value);
+    localStorage.setItem(getStorageKey(currentLessonIdx), value);
+  };
+
+  const handleResetCode = () => {
+    if (window.confirm("Are you sure you want to reset your code to the starting state?")) {
+      const lesson = manifest.lessons[currentLessonIdx];
+      setCode(lesson.starterCode || '');
+      localStorage.removeItem(getStorageKey(currentLessonIdx));
+    }
+  };
+
+  const handleGetHint = () => {
+    sendChat(null, "Can you give me a small hint for this lesson without giving me the full solution?");
   };
 
   const determineLanguage = () => {
@@ -147,6 +174,7 @@ const Workspace = () => {
     setHasError(false);
     
     const lang = determineLanguage();
+    const startTime = performance.now();
 
     try {
       // 1. PYTHON CLIENT-SIDE (PYODIDE)
@@ -246,6 +274,7 @@ const Workspace = () => {
       setHasError(true);
     } finally {
       setIsRunning(false);
+      setExecutionTime(Math.round(performance.now() - startTime));
     }
   };
 
@@ -344,22 +373,45 @@ const Workspace = () => {
           >
             <ArrowLeft size={16} /> Dashboard
           </button>
+          <button 
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            style={{ background: 'transparent', border: '1px solid var(--border)', color: 'var(--text)', padding: '6px', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+            aria-label="Toggle Lesson List"
+          >
+            <Menu size={16} />
+          </button>
           <div className="ws-course-title">{courseName}</div>
-          <div className="ws-lesson-nav">
+          <div className="ws-lesson-nav" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             Lesson {currentLessonIdx + 1} of {manifest.lessons.length}
           </div>
         </div>
         <div className="ws-topbar-right">
           {!showStory && lesson.type !== 'quiz' && (
-            <button 
-              className="btn-run" 
-              onClick={handleRunCode} 
-              disabled={isRunning} 
-              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-              aria-label="Run Code"
-            >
-              <Play size={16} /> {isRunning ? 'Running...' : 'Run Code'}
-            </button>
+            <>
+              <button 
+                onClick={handleGetHint}
+                style={{ background: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b', border: '1px solid rgba(245, 158, 11, 0.3)', padding: '8px 12px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 'bold' }}
+                aria-label="Get Hint"
+              >
+                <Lightbulb size={16} /> Hint
+              </button>
+              <button 
+                onClick={handleResetCode}
+                style={{ background: 'transparent', color: 'var(--text-dim)', border: '1px solid var(--border)', padding: '8px 12px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+                aria-label="Reset Code"
+              >
+                <ResetIcon size={16} /> Reset
+              </button>
+              <button 
+                className="btn-run" 
+                onClick={handleRunCode} 
+                disabled={isRunning} 
+                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+                aria-label="Run Code"
+              >
+                <Play size={16} /> {isRunning ? 'Running...' : 'Run Code'}
+              </button>
+            </>
           )}
           <button className="btn-submit" onClick={() => {
             if (currentLessonIdx < manifest.lessons.length - 1) {
@@ -372,9 +424,56 @@ const Workspace = () => {
           </button>
         </div>
       </div>
+      
+      {/* Mobile Tab Navigation */}
+      {!showStory && (
+        <div className="mobile-tabs" style={{ display: 'none', background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}>
+          {['exercise', 'editor', 'chat'].map(tab => (
+            <div 
+              key={tab} 
+              onClick={() => setMobileTab(tab)}
+              style={{ flex: 1, padding: '12px', textAlign: 'center', fontWeight: 'bold', color: mobileTab === tab ? 'var(--accent)' : 'var(--text-dim)', borderBottom: mobileTab === tab ? '2px solid var(--accent)' : 'none' }}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </div>
+          ))}
+        </div>
+      )}
+
       <div className="progress-strip">
         <div className="progress-strip-fill" style={{ width: `${progressPct}%` }}></div>
       </div>
+
+      {/* Lesson Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div style={{ position: 'absolute', top: '60px', bottom: 0, left: 0, width: '300px', background: 'var(--surface2)', borderRight: '1px solid var(--border)', zIndex: 100, display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '20px', borderBottom: '1px solid var(--border)', fontWeight: 'bold', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            Course Curriculum
+            <button onClick={() => setIsSidebarOpen(false)} style={{ background: 'none', border: 'none', color: 'var(--text)', cursor: 'pointer' }}><XCircle size={20}/></button>
+          </div>
+          <div style={{ overflowY: 'auto', flex: 1 }}>
+            {manifest.lessons.map((lsn, idx) => (
+              <div 
+                key={idx}
+                onClick={() => loadLesson(idx)}
+                style={{ 
+                  padding: '16px 20px', borderBottom: '1px solid var(--border)', 
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px',
+                  background: currentLessonIdx === idx ? 'rgba(0, 229, 160, 0.1)' : 'transparent',
+                  borderLeft: currentLessonIdx === idx ? '3px solid var(--accent)' : '3px solid transparent'
+                }}
+              >
+                <div style={{ background: currentLessonIdx > idx ? 'var(--accent)' : 'var(--surface)', width: '24px', height: '24px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: currentLessonIdx > idx ? 'black' : 'var(--text-dim)', fontSize: '12px', fontWeight: 'bold' }}>
+                  {currentLessonIdx > idx ? <CheckCircle2 size={14} /> : idx + 1}
+                </div>
+                <div style={{ flex: 1, color: currentLessonIdx === idx ? 'var(--accent)' : 'var(--text)' }}>
+                  {lsn.title}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {showStory ? (
         <div className="story-mode-container" style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', background: 'var(--bg)', padding: '40px', overflowY: 'auto' }}>
@@ -394,7 +493,7 @@ const Workspace = () => {
       ) : (
         <div className="ws-layout">
           {/* Left Panel - Exercise */}
-          <div className="ws-exercise">
+          <div className={`ws-exercise ${mobileTab === 'exercise' ? 'mobile-active' : ''}`}>
             <div className="exercise-tabs">
               <div className={`ex-tab ${activeTab === 'theory' ? 'active' : ''}`} onClick={() => setActiveTab('theory')}>Theory</div>
               <div className={`ex-tab ${activeTab === 'instructions' ? 'active' : ''}`} onClick={() => setActiveTab('instructions')}>Instructions</div>
@@ -410,7 +509,10 @@ const Workspace = () => {
               
               {(activeTab === 'theory' || activeTab === 'solution') && (
                 <button 
-                  onClick={() => sendChat(null, `Please give me a detailed technical explanation of this lesson: "${lesson.title}". Explain the concepts and how the code works step-by-step.`)}
+                  onClick={() => {
+                    sendChat(null, `Please give me a detailed technical explanation of this lesson: "${lesson.title}". Explain the concepts and how the code works step-by-step.`);
+                    if(window.innerWidth <= 768) setMobileTab('chat');
+                  }}
                   style={{ 
                     marginTop: '20px', padding: '10px 16px', background: 'var(--surface)', 
                     color: 'var(--accent)', border: '1px solid var(--border)', 
@@ -428,7 +530,7 @@ const Workspace = () => {
 
           {/* Middle Panel - Editor & Terminal OR Quiz */}
           {lesson.type === 'quiz' ? (
-            <div className="ws-quiz-panel" style={{ flex: 1, padding: '40px', background: 'var(--surface)', margin: '20px', borderRadius: '12px', display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto' }}>
+            <div className={`ws-quiz-panel ${mobileTab === 'editor' ? 'mobile-active' : ''}`} style={{ flex: 1, padding: '40px', background: 'var(--surface)', margin: '20px', borderRadius: '12px', display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto' }}>
               <h2 style={{ color: 'var(--text-bright)' }}>{lesson.question}</h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {lesson.options.map((opt, i) => (
@@ -468,7 +570,7 @@ const Workspace = () => {
               )}
             </div>
           ) : (
-            <div className="ws-editor-panel">
+            <div className={`ws-editor-panel ${mobileTab === 'editor' ? 'mobile-active' : ''}`}>
               <div className="editor-toolbar">
               <div className="file-tab"><div className="dot"></div> code.{determineLanguage() === 'javascript' ? 'js' : determineLanguage() === 'sql' ? 'sql' : 'py'}</div>
             </div>
@@ -478,7 +580,7 @@ const Workspace = () => {
                 defaultLanguage={determineLanguage()}
                 theme="vs-dark"
                 value={code}
-                onChange={(value) => setCode(value)}
+                onChange={handleCodeChange}
                 options={{ minimap: { enabled: false }, fontSize: 14 }}
               />
             </div>
@@ -489,6 +591,7 @@ const Workspace = () => {
                   <div className="terminal-dot dot-yellow"></div>
                   <div className="terminal-dot dot-green"></div>
                   <span style={{ marginLeft: '8px' }}>Terminal Output</span>
+                  {executionTime > 0 && <span style={{ marginLeft: '12px', color: 'var(--text-dim)', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={12}/> {executionTime}ms</span>}
                 </div>
                 {hasError && (
                   <button 
@@ -512,7 +615,7 @@ const Workspace = () => {
           )}
 
           {/* Right Panel - AI Chat */}
-          <div className="ws-chat">
+          <div className={`ws-chat ${mobileTab === 'chat' ? 'mobile-active' : ''}`}>
             <div className="chat-header-bar">
               <div className="ai-avatar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Bot size={24} /></div>
               <div className="ai-info">

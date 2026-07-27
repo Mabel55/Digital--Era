@@ -10,7 +10,11 @@ const resources = {
         "loading": "Loading...",
         "start_learning": "Start Learning",
         "courses": "Courses",
-        "leaderboard": "Leaderboard"
+        "leaderboard": "Leaderboard",
+        "profile": "Profile",
+        "settings": "Settings",
+        "logout": "Logout",
+        "search": "Search courses..."
       }
     }
   },
@@ -21,7 +25,11 @@ const resources = {
         "loading": "Cargando...",
         "start_learning": "Empezar a aprender",
         "courses": "Cursos",
-        "leaderboard": "Tabla de clasificación"
+        "leaderboard": "Tabla de clasificación",
+        "profile": "Perfil",
+        "settings": "Ajustes",
+        "logout": "Cerrar sesión",
+        "search": "Buscar cursos..."
       }
     }
   },
@@ -32,7 +40,86 @@ const resources = {
         "loading": "Chargement...",
         "start_learning": "Commencer à apprendre",
         "courses": "Cours",
-        "leaderboard": "Classement"
+        "leaderboard": "Classement",
+        "profile": "Profil",
+        "settings": "Paramètres",
+        "logout": "Déconnexion",
+        "search": "Rechercher des cours..."
+      }
+    }
+  },
+  ig: {
+    translation: {
+      "dashboard": {
+        "welcome": "Nnọọ",
+        "loading": "N'ebunye...",
+        "start_learning": "Malite Ịmụta",
+        "courses": "Ọmụmụ",
+        "leaderboard": "Bọọdụ Ndị Ndú",
+        "profile": "Profaịlụ",
+        "settings": "Ntọala",
+        "logout": "Pụọ",
+        "search": "Chọọ ọmụmụ..."
+      }
+    }
+  },
+  yo: {
+    translation: {
+      "dashboard": {
+        "welcome": "Kaabo pada",
+        "loading": "N gberu...",
+        "start_learning": "Bẹrẹ Ẹkọ",
+        "courses": "Awọn Ẹkọ",
+        "leaderboard": "Igbimọ Aṣaaju",
+        "profile": "Profaili",
+        "settings": "Awọn Eto",
+        "logout": "Jade",
+        "search": "Wa awọn ẹkọ..."
+      }
+    }
+  },
+  ha: {
+    translation: {
+      "dashboard": {
+        "welcome": "Barka da dawowa",
+        "loading": "Ana lodi...",
+        "start_learning": "Fara Koyo",
+        "courses": "Darussa",
+        "leaderboard": "Jadawalin Jagoranci",
+        "profile": "Furofayil",
+        "settings": "Saituna",
+        "logout": "Fita",
+        "search": "Nemo darussa..."
+      }
+    }
+  },
+  sw: {
+    translation: {
+      "dashboard": {
+        "welcome": "Karibu tena",
+        "loading": "Inapakia...",
+        "start_learning": "Anza Kujifunza",
+        "courses": "Kozi",
+        "leaderboard": "Ubao wa Viongozi",
+        "profile": "Wasifu",
+        "settings": "Mipangilio",
+        "logout": "Toka",
+        "search": "Tafuta kozi..."
+      }
+    }
+  },
+  ar: {
+    translation: {
+      "dashboard": {
+        "welcome": "مرحباً بعودتك",
+        "loading": "جاري التحميل...",
+        "start_learning": "ابدأ التعلم",
+        "courses": "الدورات",
+        "leaderboard": "لوحة الصدارة",
+        "profile": "الملف الشخصي",
+        "settings": "الإعدادات",
+        "logout": "تسجيل خروج",
+        "search": "ابحث عن الدورات..."
       }
     }
   }

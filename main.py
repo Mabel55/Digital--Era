@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.gzip import GZipMiddleware
 import os
 from database import engine
 from models import Base
@@ -27,7 +28,23 @@ migrations = [
     "ALTER TABLE users ALTER COLUMN level SET DEFAULT 'Beginner'",
     "ALTER TABLE users ADD COLUMN IF NOT EXISTS streak INTEGER DEFAULT 0",
     "ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login TIMESTAMP",
-    "ALTER TABLE users ADD COLUMN IF NOT EXISTS progress JSON"
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS progress JSON",
+    # New profile fields for international competitiveness
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS longest_streak INTEGER DEFAULT 0",
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT NOW()",
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url VARCHAR",
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS bio TEXT",
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS github_url VARCHAR",
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS linkedin_url VARCHAR",
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS country VARCHAR",
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS preferred_language VARCHAR DEFAULT 'en'",
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS goal VARCHAR",
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS weekly_goal_days INTEGER DEFAULT 5",
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS last_active_course VARCHAR",
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS last_active_lesson_idx INTEGER DEFAULT 0",
+    # Course enhancements
+    "ALTER TABLE courses ADD COLUMN IF NOT EXISTS estimated_hours FLOAT DEFAULT 2.0",
+    "ALTER TABLE lessons ADD COLUMN IF NOT EXISTS order_index INTEGER DEFAULT 0",
 ]
 
 try:
@@ -51,10 +68,14 @@ import routers.execution
 import routers.assessments
 import routers.forum
 import routers.payments
+import routers.daily_challenge
 
 
 # 2. Initialize the web server
-app = FastAPI(title="Mabel Academy API", description="Digital Era Backend", version="2.0")
+app = FastAPI(title="Digital Era API", description="International E-Learning Platform Backend", version="3.0")
+
+# GZIP compression for faster responses
+app.add_middleware(GZipMiddleware, minimum_size=500)
 
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
@@ -83,6 +104,7 @@ app.include_router(routers.execution.router)
 app.include_router(routers.assessments.router)
 app.include_router(routers.forum.router)
 app.include_router(routers.payments.router)
+app.include_router(routers.daily_challenge.router)
 
 # 4. Root / Static File Endpoints
 # Mount the entire React app build directory

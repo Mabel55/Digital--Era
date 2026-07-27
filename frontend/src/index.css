@@ -785,11 +785,25 @@ select option { background: var(--surface2); }
   /* Track grid */
   .track-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
 
-  /* Workspace: stack panels vertically */
-  .ws-layout { flex-direction: column; overflow-y: auto; }
-  .ws-exercise { width: 100%; border-right: none; border-bottom: 1px solid var(--border); max-height: 40vh; }
-  .ws-editor-panel { min-height: 50vh; border-right: none; border-bottom: 1px solid var(--border); }
-  .ws-chat { width: 100%; max-height: 50vh; }
+  /* Workspace: stack panels vertically or use tabs */
+  .mobile-tabs { display: flex !important; }
+  .ws-layout { flex-direction: column; height: 100%; overflow: hidden; }
+  
+  .ws-exercise, .ws-editor-panel, .ws-chat, .ws-quiz-panel {
+    display: none !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: none !important;
+    min-height: 0 !important;
+    border-right: none !important;
+  }
+  
+  .ws-exercise.mobile-active, 
+  .ws-editor-panel.mobile-active, 
+  .ws-chat.mobile-active, 
+  .ws-quiz-panel.mobile-active { 
+    display: flex !important; 
+  }
 
   .ws-topbar { flex-wrap: wrap; height: auto; padding: 8px 12px; gap: 8px; }
   .ws-topbar-left { flex-wrap: wrap; gap: 8px; }
@@ -834,11 +848,8 @@ select option { background: var(--surface2); }
     font-size: 16px; /* Prevents iOS zoom on focus */
   }
 
-  /* Workspace: full vertical stacking */
-  .ws-layout { height: auto; min-height: 100vh; }
-  .ws-exercise { max-height: none; min-height: 30vh; }
-  .ws-editor-panel { min-height: 40vh; }
-  .ws-chat { max-height: none; min-height: 40vh; }
+  /* Workspace height */
+  .ws-layout { height: 100%; min-height: 0; flex: 1; }
 
   /* Story mode smaller padding */
   .story-card { padding: 30px 20px !important; }

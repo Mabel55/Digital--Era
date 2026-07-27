@@ -6,10 +6,18 @@ import models
 import schemas
 from auth import hash_password, verify_password, create_access_token, get_current_user
 import traceback
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from pydantic import BaseModel
 from fastapi import Request
 from limiter import limiter
+import os
+
+# Load admin emails from environment variable (comma-separated)
+ADMIN_EMAILS = [e.strip().lower() for e in os.getenv("ADMIN_EMAILS", "nasaadanna@gmail.com").split(",") if e.strip()]
+
+def _is_admin(user: models.User) -> bool:
+    """Check if user has admin privileges via role or environment-configured email list."""
+    return user.role.lower() in ["admin", "teacher"] or user.email.lower() in ADMIN_EMAILS
 
 
 def _create_free_subscription(db: Session, user_id: int):
@@ -17,6 +25,38 @@ def _create_free_subscription(db: Session, user_id: int):
     sub = models.Subscription(user_id=user_id, plan="free", status="active")
     db.add(sub)
     db.commit()
+
+
+def _track_activity(db: Session, user_id: int, xp: int = 0, lessons: int = 0, challenges: int = 0):
+    """Track daily user activity for real analytics charts."""
+    today = date.today()
+    activity = db.query(models.UserActivity).filter(
+        models.UserActivity.user_id == user_id,
+        models.UserActivity.activity_date == today
+    ).first()
+    
+    if not activity:
+        activity = models.UserActivity(user_id=user_id, activity_date=today)
+        db.add(activity)
+    
+    activity.xp_earned += xp
+    activity.lessons_completed += lessons
+    activity.challenges_completed += challenges
+    db.commit()
+
+
+def _create_notification(db: Session, user_id: int, type: str, title: str, message: str, action_url: str = None):
+    """Create an in-app notification."""
+    notif = models.Notification(
+        user_id=user_id,
+        type=type,
+        title=title,
+        message=message,
+        action_url=action_url
+    )
+    db.add(notif)
+    db.commit()
+
 
 router = APIRouter(tags=["Users & Auth"])
 
@@ -40,7 +80,11 @@ def register_user(request: Request, user: schemas.UserCreate, db: Session = Depe
         # 3. Auto-create a free subscription for the new user (or apply referral)
         _create_free_subscription(db, new_user.id)
         
-        # 4. Handle Referral Code
+        # 4. Create welcome notification
+        _create_notification(db, new_user.id, "system", "Welcome to Digital Era! 🎉", 
+                           "Start your coding journey with our interactive courses.", "/dashboard")
+        
+        # 5. Handle Referral Code
         if hasattr(user, 'referral_code') and user.referral_code:
             try:
                 referrer_id = int(user.referral_code)
@@ -61,6 +105,10 @@ def register_user(request: Request, user: schemas.UserCreate, db: Session = Depe
                     new_user_sub.plan = "pro"
                     new_user_sub.status = "trialing"
                     new_user_sub.current_period_end = now + timedelta(days=30)
+                    
+                    # Notify referrer
+                    _create_notification(db, referrer_id, "achievement", "Referral Bonus! 🎁",
+                                       f"{new_user.full_name or new_user.email} joined using your code. You got 30 days free Pro!", "/profile")
                     
                     db.commit()
             except ValueError:
@@ -88,6 +136,13 @@ def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends(), db
             # If logged in yesterday, increment streak
             if (now.date() - user.last_login.date()).days == 1:
                 user.streak += 1
+                # Track longest streak
+                if user.streak > (user.longest_streak or 0):
+                    user.longest_streak = user.streak
+                # Notify on streak milestones
+                if user.streak in [3, 7, 14, 30, 60, 100]:
+                    _create_notification(db, user.id, "streak", f"🔥 {user.streak}-Day Streak!",
+                                       f"You've been coding for {user.streak} days straight! Keep it up!", "/profile")
             # If missed a day, reset streak
             elif (now.date() - user.last_login.date()).days > 1:
                 user.streak = 1
@@ -108,12 +163,22 @@ def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends(), db
         raise HTTPException(status_code=500, detail=f"LOGIN ERROR: {str(e)}")
 
 @router.get("/leaderboard", response_model=list[schemas.UserResponse])
-def get_leaderboard(db: Session = Depends(get_db)):
-    return db.query(models.User).order_by(models.User.xp.desc()).limit(100).all()
+def get_leaderboard(period: str = "all", db: Session = Depends(get_db)):
+    """Get leaderboard with optional time period filter."""
+    query = db.query(models.User)
+    
+    if period == "week":
+        week_ago = datetime.utcnow() - timedelta(days=7)
+        query = query.filter(models.User.last_login >= week_ago)
+    elif period == "month":
+        month_ago = datetime.utcnow() - timedelta(days=30)
+        query = query.filter(models.User.last_login >= month_ago)
+    
+    return query.order_by(models.User.xp.desc()).limit(100).all()
 
 @router.get("/users/", response_model=list[schemas.UserResponse])
 def get_all_users(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
-    if current_user.role.lower() not in ["admin", "teacher"] and current_user.email != "nasaadanna@gmail.com":
+    if not _is_admin(current_user):
         raise HTTPException(status_code=403, detail="Not authorized")
     return db.query(models.User).all()
 
@@ -155,6 +220,98 @@ def read_users_me(current_user: models.User = Depends(get_current_user), db: Ses
         db.refresh(current_user)
     return current_user
 
+# ─── REAL PROFILE EDIT (replaces the mocked save) ───
+@router.put("/users/me", response_model=schemas.UserResponse)
+def update_profile(
+    payload: schemas.UserProfileUpdate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    """Update user profile — no longer mocked!"""
+    update_data = payload.model_dump(exclude_unset=True)
+    for field, value in update_data.items():
+        if hasattr(current_user, field):
+            setattr(current_user, field, value)
+    db.commit()
+    db.refresh(current_user)
+    return current_user
+
+# ─── REAL ACTIVITY DATA (replaces mock chart) ───
+@router.get("/users/me/activity", response_model=list[schemas.UserActivityResponse])
+def get_user_activity(
+    days: int = 30,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    """Returns real XP activity data for the last N days."""
+    since = date.today() - timedelta(days=days)
+    activities = db.query(models.UserActivity).filter(
+        models.UserActivity.user_id == current_user.id,
+        models.UserActivity.activity_date >= since
+    ).order_by(models.UserActivity.activity_date.asc()).all()
+    return activities
+
+# ─── COURSE COMPLETIONS ───
+@router.get("/users/me/completions", response_model=list[schemas.CourseCompletionResponse])
+def get_user_completions(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    """Returns all completed courses for the user."""
+    return db.query(models.CourseCompletion).filter(
+        models.CourseCompletion.user_id == current_user.id
+    ).order_by(models.CourseCompletion.completed_at.desc()).all()
+
+# ─── NOTIFICATIONS ───
+@router.get("/notifications", response_model=list[schemas.NotificationResponse])
+def get_notifications(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    """Returns user's notifications, newest first."""
+    return db.query(models.Notification).filter(
+        models.Notification.user_id == current_user.id
+    ).order_by(models.Notification.created_at.desc()).limit(50).all()
+
+@router.get("/notifications/unread-count")
+def get_unread_count(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    count = db.query(models.Notification).filter(
+        models.Notification.user_id == current_user.id,
+        models.Notification.is_read == False
+    ).count()
+    return {"count": count}
+
+@router.post("/notifications/read-all")
+def mark_all_read(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    db.query(models.Notification).filter(
+        models.Notification.user_id == current_user.id,
+        models.Notification.is_read == False
+    ).update({"is_read": True})
+    db.commit()
+    return {"message": "All notifications marked as read"}
+
+@router.post("/notifications/{notif_id}/read")
+def mark_read(
+    notif_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    notif = db.query(models.Notification).filter(
+        models.Notification.id == notif_id,
+        models.Notification.user_id == current_user.id
+    ).first()
+    if notif:
+        notif.is_read = True
+        db.commit()
+    return {"message": "Marked as read"}
+
+
 class ProgressUpdate(BaseModel):
     course_name: str
     lesson_index: int | None = None
@@ -191,6 +348,22 @@ def update_progress(payload: ProgressUpdate, db: Session = Depends(get_db), curr
         
         # Use centralized level calculation
         current_user.level = models.calculate_level(current_user.xp)
+        
+        # Track real activity
+        _track_activity(db, current_user.id, xp=xp_to_add, lessons=1)
+        
+        # XP milestone notifications
+        milestones = [100, 250, 500, 1000, 2500, 5000]
+        for milestone in milestones:
+            if current_user.xp >= milestone and (current_user.xp - xp_to_add) < milestone:
+                _create_notification(db, current_user.id, "achievement", 
+                                   f"🏆 {milestone} XP Milestone!", 
+                                   f"You've earned {milestone} XP! You're now level: {current_user.level}", "/profile")
+    
+    # Track "Continue Learning" state
+    current_user.last_active_course = payload.course_name
+    if payload.lesson_index is not None:
+        current_user.last_active_lesson_idx = payload.lesson_index
             
     # Assign progress dict back since SQLAlchemy JSON mutations aren't always tracked
     current_user.progress = progress
@@ -198,6 +371,130 @@ def update_progress(payload: ProgressUpdate, db: Session = Depends(get_db), curr
     db.refresh(current_user)
     
     return current_user
+
+# ─── LEARNING GOALS ───
+@router.get("/users/me/goals", response_model=list[schemas.LearningGoalResponse])
+def get_learning_goals(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    return db.query(models.LearningGoal).filter(
+        models.LearningGoal.user_id == current_user.id
+    ).order_by(models.LearningGoal.week_start.desc()).limit(12).all()
+
+@router.get("/users/me/goals/current", response_model=schemas.LearningGoalResponse)
+def get_current_goal(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    """Get or create this week's learning goal."""
+    today = date.today()
+    week_start = today - timedelta(days=today.weekday())
+    
+    goal = db.query(models.LearningGoal).filter(
+        models.LearningGoal.user_id == current_user.id,
+        models.LearningGoal.week_start == week_start
+    ).first()
+    
+    if not goal:
+        goal = models.LearningGoal(
+            user_id=current_user.id,
+            week_start=week_start,
+            target_days=current_user.weekly_goal_days or 5,
+            target_xp=50
+        )
+        db.add(goal)
+        db.commit()
+        db.refresh(goal)
+    
+    return goal
+
+# ─── SEARCH ───
+@router.get("/search")
+def search_platform(q: str, db: Session = Depends(get_db)):
+    """Search across courses, lessons, and tracks."""
+    if not q or len(q) < 2:
+        return {"results": []}
+    
+    results = []
+    search_term = f"%{q}%"
+    
+    # Search courses in DB
+    courses = db.query(models.Course).filter(
+        models.Course.name.ilike(search_term)
+    ).limit(10).all()
+    
+    for c in courses:
+        results.append({
+            "type": "course",
+            "name": c.name,
+            "description": c.description,
+            "track": c.track,
+            "level": c.level
+        })
+    
+    # Search lessons in DB
+    lessons = db.query(models.Lesson).filter(
+        models.Lesson.title.ilike(search_term)
+    ).limit(10).all()
+    
+    for l in lessons:
+        results.append({
+            "type": "lesson",
+            "name": l.title,
+            "description": l.content[:100] if l.content else None,
+            "track": None,
+            "level": None
+        })
+    
+    return {"results": results}
+
+# ─── COURSE REVIEWS ───
+@router.post("/reviews", response_model=schemas.CourseReviewResponse)
+def create_review(
+    review: schemas.CourseReviewCreate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    # Check if user already reviewed this course
+    existing = db.query(models.CourseReview).filter(
+        models.CourseReview.user_id == current_user.id,
+        models.CourseReview.course_name == review.course_name
+    ).first()
+    
+    if existing:
+        # Update existing review
+        existing.rating = review.rating
+        existing.review_text = review.review_text
+        db.commit()
+        db.refresh(existing)
+        existing.author_name = current_user.full_name
+        return existing
+    
+    db_review = models.CourseReview(
+        user_id=current_user.id,
+        course_name=review.course_name,
+        rating=review.rating,
+        review_text=review.review_text
+    )
+    db.add(db_review)
+    db.commit()
+    db.refresh(db_review)
+    db_review.author_name = current_user.full_name
+    return db_review
+
+@router.get("/reviews/{course_name}", response_model=list[schemas.CourseReviewResponse])
+def get_reviews(course_name: str, db: Session = Depends(get_db)):
+    reviews = db.query(models.CourseReview).filter(
+        models.CourseReview.course_name == course_name
+    ).order_by(models.CourseReview.created_at.desc()).all()
+    
+    for r in reviews:
+        user = db.query(models.User).filter(models.User.id == r.user_id).first()
+        r.author_name = user.full_name if user else "Anonymous"
+    
+    return reviews
+
 
 @router.post("/users/reset-password")
 def reset_password(payload: schemas.UserResetPassword, db: Session = Depends(get_db)):
@@ -223,12 +520,10 @@ def reset_password(payload: schemas.UserResetPassword, db: Session = Depends(get
 
 @router.get("/admin/analytics")
 def get_admin_analytics(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
-    # Check if user is admin
-    if current_user.role.lower() not in ["admin", "teacher"] and current_user.email != "nasaadanna@gmail.com":
+    if not _is_admin(current_user):
         raise HTTPException(status_code=403, detail="Not authorized")
     
     from sqlalchemy import func
-    from datetime import date
     today = date.today()
     
     total_users = db.query(models.User).count()
@@ -254,16 +549,33 @@ def get_admin_analytics(db: Session = Depends(get_db), current_user: models.User
     # Active Pro Users
     active_pro = monthly_subs + yearly_subs
     
+    # New users this week
+    week_ago = datetime.utcnow() - timedelta(days=7)
+    new_users_week = db.query(models.User).filter(
+        models.User.created_at >= week_ago
+    ).count()
+    
+    # Course completions today
+    completions_today = db.query(models.CourseCompletion).filter(
+        models.CourseCompletion.completed_at >= datetime.combine(today, datetime.min.time())
+    ).count()
+    
     return {
         "total_users": total_users,
         "mrr": round(mrr, 2),
         "ai_messages_today": int(ai_msgs_today),
-        "active_pro_users": active_pro
+        "active_pro_users": active_pro,
+        "new_users_week": new_users_week,
+        "completions_today": completions_today
     }
+
+# ─── HEALTH CHECK ───
+@router.get("/health")
+def health_check():
+    return {"status": "healthy", "timestamp": datetime.utcnow().isoformat()}
 
 
 # ─── FORGOT PASSWORD FLOW ───
-import os
 import uuid
 import smtplib
 from email.mime.text import MIMEText
@@ -358,3 +670,4 @@ def reset_password_with_token(payload: schemas.ResetPasswordTokenRequest, db: Se
     db.commit()
     
     return {"message": "Password has been successfully reset."}
+

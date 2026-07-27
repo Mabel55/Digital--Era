@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { curriculum, courseManifest } from '../data/courses';
 import { projectsManifest } from '../data/projects';
 import CertificateModal from './CertificateModal';
-import { GraduationCap, Sun, Moon, Trophy, Flame, Users, User, Target, Scroll, Rocket, Brain, Wrench, Hammer, BookOpen, Terminal, Crown, ArrowRight, Star, Zap, Globe, Menu, X } from 'lucide-react';
+import NotificationCenter from './NotificationCenter';
+import { GraduationCap, Sun, Moon, Trophy, Flame, Users, User, Target, Scroll, Rocket, Brain, Wrench, Hammer, BookOpen, Terminal, Crown, ArrowRight, Star, Zap, Globe, Menu, X, Search, Play, Calendar, MessageSquare, Code2 } from 'lucide-react';
 
 const Dashboard = () => {
   const { user, token, logout, subscription } = useAuth();
@@ -15,6 +16,10 @@ const Dashboard = () => {
   const [certCourse, setCertCourse] = useState(null);
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [dailyChallenge, setDailyChallenge] = useState(null);
+  const [unreadNotifs, setUnreadNotifs] = useState(0);
+  const [learningGoal, setLearningGoal] = useState(null);
   const { t, i18n } = useTranslation();
 
   const changeLanguage = (lng) => {
@@ -65,7 +70,38 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchDBCourses();
-  }, []);
+    if (token) {
+      fetchEngagementData();
+    }
+  }, [token]);
+
+  const fetchEngagementData = async () => {
+    try {
+      // Fetch Daily Challenge
+      const dcRes = await fetch('/daily-challenge/', { headers: { Authorization: `Bearer ${token}` }});
+      if (dcRes.ok) setDailyChallenge(await dcRes.json());
+      
+      // Fetch Unread Notifications Count
+      const notifRes = await fetch('/notifications/unread-count', { headers: { Authorization: `Bearer ${token}` }});
+      if (notifRes.ok) {
+        const data = await notifRes.json();
+        setUnreadNotifs(data.count);
+      }
+      
+      // Fetch Learning Goal
+      const goalRes = await fetch('/users/me/goals/current', { headers: { Authorization: `Bearer ${token}` }});
+      if (goalRes.ok) setLearningGoal(await goalRes.json());
+    } catch (e) {
+      console.error('Failed to fetch engagement data:', e);
+    }
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/courses?search=${encodeURIComponent(searchQuery)}`);
+    }
+  };
 
   const fetchDBCourses = async () => {
     setDbCoursesLoading(true);
@@ -102,8 +138,7 @@ const Dashboard = () => {
           const manifest = courseManifest[courseName];
           if (manifest) {
             const totalLessons = manifest.lessons.length;
-            // Fake 100% completion for testing purposes if it's Python Fundamentals
-            const completed = courseName === 'Python Fundamentals' ? totalLessons : getCourseProgress(courseName);
+            const completed = getCourseProgress(courseName);
             if (totalLessons > 0 && completed === totalLessons) {
               completedCourses.push(courseName);
             }
@@ -138,6 +173,27 @@ const Dashboard = () => {
           </button>
 
         <div className={`nav-right ${isMenuOpen ? 'open' : ''}`} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {/* Search Bar */}
+          <form onSubmit={handleSearch} style={{ position: 'relative', display: 'flex', alignItems: 'center', marginRight: '10px' }}>
+            <Search size={16} color="var(--text-dim)" style={{ position: 'absolute', left: '12px' }} />
+            <input 
+              type="text" 
+              placeholder="Search courses..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                padding: '8px 12px 8px 36px',
+                background: 'var(--surface)',
+                color: 'var(--text)',
+                border: '1px solid var(--border)',
+                borderRadius: '20px',
+                fontSize: '13px',
+                outline: 'none',
+                width: '180px'
+              }}
+            />
+          </form>
+
           {/* Language Switcher */}
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
             <Globe size={16} color="var(--text2)" style={{ position: 'absolute', left: '10px', pointerEvents: 'none' }} />
@@ -178,6 +234,21 @@ const Dashboard = () => {
           >
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
+          
+          <button 
+            onClick={() => navigate('/forum')}
+            style={{ padding: '8px 16px', background: 'var(--surface2)', color: '#3b82f6', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            <MessageSquare size={16} /> Forum
+          </button>
+          
+          <button 
+            onClick={() => navigate('/sandbox')}
+            style={{ padding: '8px 16px', background: 'var(--surface2)', color: 'var(--accent)', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            <Code2 size={16} /> Sandbox
+          </button>
+
           <button 
             onClick={() => navigate('/leaderboard')}
             style={{ padding: '8px 16px', background: 'var(--surface2)', color: 'var(--accent3)', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}
@@ -192,7 +263,14 @@ const Dashboard = () => {
             /> 
             <span>{user?.streak || 0}</span> day streak
           </div>
-          {((user?.role || '').toLowerCase() === 'admin' || (user?.role || '').toLowerCase() === 'teacher' || user?.email === 'nasaadanna@gmail.com') && (
+          
+          <NotificationCenter 
+            notifications={notifications} 
+            markAsRead={markNotificationsRead} 
+            clearAll={clearAllNotifications} 
+          />
+
+          {((user?.role || '').toLowerCase() === 'admin' || (user?.role || '').toLowerCase() === 'teacher') && (
             <button 
               onClick={() => navigate('/teacher')}
               style={{ padding: '8px 16px', background: 'var(--accent)', color: 'black', border: 'none', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}
@@ -295,6 +373,74 @@ const Dashboard = () => {
               )}
             </div>
           </div>
+        </div>
+
+        {/* Engagement Row: Continue Learning, Daily Challenge, Weekly Goal */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '40px' }}>
+          
+          {/* Continue Learning */}
+          {user?.last_active_course && (
+            <div className="track-card" onClick={() => startCourse(user.last_active_course)} style={{ background: 'linear-gradient(145deg, var(--surface), var(--surface2))', border: '1px solid var(--accent)', cursor: 'pointer' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+                <Play size={20} color="var(--accent)" fill="var(--accent)" />
+                <h3 style={{ margin: 0, fontSize: '16px' }}>Continue Learning</h3>
+              </div>
+              <div style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '8px' }}>{user.last_active_course}</div>
+              <div style={{ color: 'var(--text-dim)', fontSize: '14px', marginBottom: '16px' }}>
+                Resume from Lesson {user.last_active_lesson_idx + 1}
+              </div>
+              <div className="track-progress-bar">
+                <div className="bar-bg">
+                  <div className="bar-fill" style={{ width: `${(getCourseProgress(user.last_active_course) / (courseManifest[user.last_active_course]?.lessons.length || 1)) * 100}%` }}></div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Daily Challenge */}
+          {dailyChallenge && (
+            <div className="track-card" onClick={() => navigate('/daily-challenge')} style={{ background: 'linear-gradient(145deg, var(--surface), rgba(59, 130, 246, 0.1))', border: '1px solid var(--accent2)', cursor: 'pointer' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <Calendar size={20} color="var(--accent2)" />
+                  <h3 style={{ margin: 0, fontSize: '16px' }}>Daily Practice</h3>
+                </div>
+                {dailyChallenge.already_completed ? (
+                  <span style={{ fontSize: '12px', background: 'rgba(0,229,160,0.2)', color: 'var(--accent)', padding: '4px 8px', borderRadius: '12px', fontWeight: 'bold' }}>Completed</span>
+                ) : (
+                  <span style={{ fontSize: '12px', background: 'rgba(245,158,11,0.2)', color: '#f59e0b', padding: '4px 8px', borderRadius: '12px', fontWeight: 'bold' }}>Pending</span>
+                )}
+              </div>
+              <div style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '8px' }}>{dailyChallenge.title}</div>
+              <div style={{ color: 'var(--text-dim)', fontSize: '14px', marginBottom: '16px' }}>
+                Earn +{dailyChallenge.xp_reward} XP and extend your streak!
+              </div>
+              <button style={{ width: '100%', padding: '8px', background: dailyChallenge.already_completed ? 'var(--surface2)' : 'var(--accent2)', color: dailyChallenge.already_completed ? 'var(--text-dim)' : '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>
+                {dailyChallenge.already_completed ? 'Review Solution' : 'Solve Challenge'}
+              </button>
+            </div>
+          )}
+
+          {/* Weekly Goal */}
+          {learningGoal && (
+            <div className="track-card" onClick={() => navigate('/profile')} style={{ background: 'linear-gradient(145deg, var(--surface), rgba(245, 158, 11, 0.1))', border: '1px solid var(--accent3)', cursor: 'pointer' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+                <Target size={20} color="var(--accent3)" />
+                <h3 style={{ margin: 0, fontSize: '16px' }}>Weekly Goal</h3>
+              </div>
+              <div style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '8px' }}>
+                {learningGoal.actual_days} / {learningGoal.target_days} Days
+              </div>
+              <div style={{ color: 'var(--text-dim)', fontSize: '14px', marginBottom: '16px' }}>
+                You're on track! Keep learning to hit your goal.
+              </div>
+              <div className="track-progress-bar">
+                <div className="bar-bg">
+                  <div className="bar-fill" style={{ background: 'var(--accent3)', width: `${Math.min(100, (learningGoal.actual_days / learningGoal.target_days) * 100)}%` }}></div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Upgrade Banner for Free Users */}

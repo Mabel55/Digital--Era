@@ -17,7 +17,7 @@ const TeacherDashboard = () => {
 
   useEffect(() => {
     // Basic protection
-    if (user && (user.role || '').toLowerCase() !== 'admin' && (user.role || '').toLowerCase() !== 'teacher' && user.email !== 'nasaadanna@gmail.com') {
+    if (user && (user.role || '').toLowerCase() !== 'admin' && (user.role || '').toLowerCase() !== 'teacher') {
       navigate('/');
     }
   }, [user, navigate]);

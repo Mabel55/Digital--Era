@@ -20,6 +20,10 @@ const LandingPage = lazy(() => import('./components/LandingPage'));
 const CourseCatalog = lazy(() => import('./components/CourseCatalog'));
 const PricingPage = lazy(() => import('./components/PricingPage'));
 const Profile = lazy(() => import('./components/Profile'));
+const DailyChallenge = lazy(() => import('./components/DailyChallenge'));
+const CareerTracks = lazy(() => import('./components/CareerTracks'));
+const Sandbox = lazy(() => import('./components/Sandbox'));
+const Forum = lazy(() => import('./components/Forum'));
 
 const ProtectedRoute = ({ children }) => {
   const { token, loading } = useAuth();
@@ -45,6 +49,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/courses" element={<CourseCatalog />} />
+            <Route path="/career-tracks" element={<CareerTracks />} />
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/reset-password" element={<ResetPassword />} />
@@ -82,6 +87,19 @@ const App = () => {
               <ProtectedRoute>
                 <ProjectWorkspace />
               </ProtectedRoute>
+            } />
+            <Route path="/daily-challenge" element={
+              <ProtectedRoute>
+                <DailyChallenge />
+              </ProtectedRoute>
+            } />
+            <Route path="/sandbox" element={
+              <ProtectedRoute>
+                <Sandbox />
+              </ProtectedRoute>
+            } />
+            <Route path="/forum" element={
+              <Forum />
             } />
             <Route path="/leaderboard" element={
               <ProtectedRoute>

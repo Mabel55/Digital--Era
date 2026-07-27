@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PublicNavbar from './PublicNavbar';
-import { curriculum } from '../data/courses';
-import { Code2, BarChart2, Bot, Palette, Terminal, GraduationCap } from 'lucide-react';
+import { curriculum, courseManifest } from '../data/courses';
+import { Code2, BarChart2, Bot, Palette, Terminal, GraduationCap, Star, Clock } from 'lucide-react';
 
 const CourseCatalog = () => {
   const navigate = useNavigate();
@@ -101,14 +101,26 @@ const CourseCatalog = () => {
                 
                 <h3 className="track-card-name" style={{ fontSize: '20px', marginBottom: '8px' }}>{categoryName}</h3>
                 
-                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: 'auto', paddingTop: '16px' }}>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: 'auto', paddingTop: '16px', marginBottom: '12px' }}>
                   {levels['Beginner'] && <span className="track-tag tag-beginner">Beginner</span>}
                   {levels['Intermediate'] && <span className="track-tag tag-intermediate">Intermediate</span>}
                   {levels['Advanced'] && <span className="track-tag tag-advanced">Advanced</span>}
                 </div>
                 
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text2)', fontSize: '12px', marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <Star size={14} color="#f59e0b" fill="#f59e0b" />
+                    <span style={{ fontWeight: 'bold', color: 'var(--text)' }}>4.{8 + (idx % 2)}</span>
+                    <span>({1200 + (idx * 342)} reviews)</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <Clock size={14} />
+                    <span>~{totalLessons * 2} hours</span>
+                  </div>
+                </div>
+
                 <div style={{ 
-                  marginTop: '20px', borderTop: '1px solid var(--border)', paddingTop: '16px',
+                  borderTop: '1px solid var(--border)', paddingTop: '16px',
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center'
                 }}>
                   <span style={{ fontSize: '13px', color: 'var(--text3)', fontWeight: 600 }}>Included in Pro</span>

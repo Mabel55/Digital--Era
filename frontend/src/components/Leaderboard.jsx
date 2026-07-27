@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Medal, Trophy, Home, ArrowLeft, Flame, User as UserIcon } from 'lucide-react';
+import { Medal, Trophy, Home, ArrowLeft, Flame, User as UserIcon, Filter } from 'lucide-react';
+import { useAuth } from '../AuthContext';
 
 export default function Leaderboard({ isPublic = false }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [period, setPeriod] = useState('all');
+  const [track, setTrack] = useState('All Tracks');
+  
   const navigate = useNavigate();
+  const { user: currentUser } = useAuth();
   
   const token = localStorage.getItem('token');
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
+      setLoading(true);
       try {
-        const response = await fetch('/leaderboard');
+        const response = await fetch(`/leaderboard?period=${period}`);
         if (!response.ok) throw new Error('Failed to fetch leaderboard');
         const data = await response.json();
         setUsers(data);
@@ -24,7 +30,7 @@ export default function Leaderboard({ isPublic = false }) {
     };
 
     fetchLeaderboard();
-  }, []);
+  }, [period, track]);
 
   const getRankStyle = (index) => {
     if (index === 0) return { borderColor: '#eab308', boxShadow: '0 0 20px rgba(234,179,8,0.15)' };
@@ -87,6 +93,32 @@ export default function Leaderboard({ isPublic = false }) {
           </div>
         </div>
 
+        {/* Filters */}
+        <div style={{ display: 'flex', gap: '12px', marginBottom: '32px', flexWrap: 'wrap', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '8px', background: 'var(--surface)', padding: '4px', borderRadius: '8px', border: '1px solid var(--border)' }}>
+            {['week', 'month', 'all'].map(p => (
+              <button 
+                key={p} 
+                onClick={() => setPeriod(p)}
+                style={{
+                  padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', border: 'none', fontWeight: 'bold', textTransform: 'capitalize',
+                  background: period === p ? 'var(--accent)' : 'transparent',
+                  color: period === p ? '#000' : 'var(--text2)'
+                }}
+              >{p === 'all' ? 'All Time' : `This ${p}`}</button>
+            ))}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '8px', background: 'var(--surface)', border: '1px solid var(--border)' }}>
+            <Filter size={16} color="var(--text2)" />
+            <select value={track} onChange={e => setTrack(e.target.value)} style={{ background: 'transparent', border: 'none', color: 'var(--text)', outline: 'none', cursor: 'pointer', fontWeight: 'bold' }}>
+              <option>All Tracks</option>
+              <option>Python Track</option>
+              <option>Data Science Track</option>
+              <option>Frontend Track</option>
+            </select>
+          </div>
+        </div>
+
         {loading ? (
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '250px' }}>
             <div style={{ width: '48px', height: '48px', border: '4px solid var(--border)', borderTopColor: 'var(--accent)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
@@ -135,8 +167,8 @@ export default function Leaderboard({ isPublic = false }) {
                   style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                     padding: '16px 20px', borderRadius: '12px',
-                    border: '1px solid var(--border)',
-                    background: index < 3 ? 'var(--surface2)' : 'var(--surface)',
+                    border: user.id === currentUser?.id ? '2px solid var(--accent)' : '1px solid var(--border)',
+                    background: user.id === currentUser?.id ? 'rgba(0,229,160,0.1)' : index < 3 ? 'var(--surface2)' : 'var(--surface)',
                     transition: 'all 0.2s',
                     cursor: 'default',
                     ...getRankStyle(index)
