@@ -143,14 +143,12 @@ export default defineConfig({
 
         // Offline fallback
         navigateFallback: null,
-        navigateFallbackDenylist: [/^\/api/, /^\/signup/, /^\/login/, /^\/chat/, /^\/ask-ai/, /^\/run-python/],
+        navigateFallbackDenylist: [/^\/api/, /^\/users/, /^\/chat/, /^\/ask-ai/, /^\/run-python/],
       }
     })
   ],
   server: {
     proxy: {
-      '/signup': 'http://127.0.0.1:8000',
-      '/login': 'http://127.0.0.1:8000',
       '/users': 'http://127.0.0.1:8000',
       '/teachers': 'http://127.0.0.1:8000',
       '/run-python': 'http://127.0.0.1:8000',

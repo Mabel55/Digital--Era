@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
     formData.append("username", email);
     formData.append("password", password);
 
-    const res = await fetch('/login', {
+    const res = await fetch('/users/login', {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: formData
@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signup = async (name, email, password, level, goal, referralCode = null) => {
-    const res = await fetch('/signup', {
+    const res = await fetch('/users/signup', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ full_name: name, email, password, level, goal, referral_code: referralCode })

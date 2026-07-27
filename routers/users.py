@@ -58,7 +58,7 @@ def _create_notification(db: Session, user_id: int, type: str, title: str, messa
     db.commit()
 
 
-router = APIRouter(tags=["Users & Auth"])
+router = APIRouter(prefix="/users", tags=["Users & Auth"])
 
 @router.post("/signup")
 @limiter.limit("5/minute")
@@ -176,13 +176,13 @@ def get_leaderboard(period: str = "all", db: Session = Depends(get_db)):
     
     return query.order_by(models.User.xp.desc()).limit(100).all()
 
-@router.get("/users/", response_model=list[schemas.UserResponse])
+@router.get("/", response_model=list[schemas.UserResponse])
 def get_all_users(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     if not _is_admin(current_user):
         raise HTTPException(status_code=403, detail="Not authorized")
     return db.query(models.User).all()
 
-@router.post("/users/")
+@router.post("/")
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     try:
         # Check if user exists
@@ -212,7 +212,7 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         print("BACKEND CRASH:", error_details) 
         raise HTTPException(status_code=500, detail=f"PYTHON ERROR: {str(e)}")
 
-@router.get("/users/me", response_model=schemas.UserResponse)
+@router.get("/me", response_model=schemas.UserResponse)
 def read_users_me(current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
     # Ensure user has a subscription record (handles users created before monetization)
     if not current_user.subscription:
@@ -221,7 +221,7 @@ def read_users_me(current_user: models.User = Depends(get_current_user), db: Ses
     return current_user
 
 # ─── REAL PROFILE EDIT (replaces the mocked save) ───
-@router.put("/users/me", response_model=schemas.UserResponse)
+@router.put("/me", response_model=schemas.UserResponse)
 def update_profile(
     payload: schemas.UserProfileUpdate,
     db: Session = Depends(get_db),
@@ -237,7 +237,7 @@ def update_profile(
     return current_user
 
 # ─── REAL ACTIVITY DATA (replaces mock chart) ───
-@router.get("/users/me/activity", response_model=list[schemas.UserActivityResponse])
+@router.get("/me/activity", response_model=list[schemas.UserActivityResponse])
 def get_user_activity(
     days: int = 30,
     db: Session = Depends(get_db),
@@ -252,7 +252,7 @@ def get_user_activity(
     return activities
 
 # ─── COURSE COMPLETIONS ───
-@router.get("/users/me/completions", response_model=list[schemas.CourseCompletionResponse])
+@router.get("/me/completions", response_model=list[schemas.CourseCompletionResponse])
 def get_user_completions(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
@@ -317,7 +317,7 @@ class ProgressUpdate(BaseModel):
     lesson_index: int | None = None
     lesson_id: int | None = None
 
-@router.post("/users/me/progress", response_model=schemas.UserResponse)
+@router.post("/me/progress", response_model=schemas.UserResponse)
 def update_progress(payload: ProgressUpdate, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     xp_to_add = 10
     
@@ -373,7 +373,7 @@ def update_progress(payload: ProgressUpdate, db: Session = Depends(get_db), curr
     return current_user
 
 # ─── LEARNING GOALS ───
-@router.get("/users/me/goals", response_model=list[schemas.LearningGoalResponse])
+@router.get("/me/goals", response_model=list[schemas.LearningGoalResponse])
 def get_learning_goals(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
@@ -382,7 +382,7 @@ def get_learning_goals(
         models.LearningGoal.user_id == current_user.id
     ).order_by(models.LearningGoal.week_start.desc()).limit(12).all()
 
-@router.get("/users/me/goals/current", response_model=schemas.LearningGoalResponse)
+@router.get("/me/goals/current", response_model=schemas.LearningGoalResponse)
 def get_current_goal(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
@@ -496,7 +496,7 @@ def get_reviews(course_name: str, db: Session = Depends(get_db)):
     return reviews
 
 
-@router.post("/users/reset-password")
+@router.post("/reset-password")
 def reset_password(payload: schemas.UserResetPassword, db: Session = Depends(get_db)):
     try:
         user = db.query(models.User).filter(models.User.email.ilike(payload.email)).first()
@@ -625,7 +625,7 @@ def send_reset_email(to_email: str, token: str):
         print(f"DEBUG Reset link: {reset_link}")
 
 
-@router.post("/users/forgot-password")
+@router.post("/forgot-password")
 def forgot_password(payload: schemas.ForgotPasswordRequest, db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.email.ilike(payload.email)).first()
     if not user:
@@ -647,7 +647,7 @@ def forgot_password(payload: schemas.ForgotPasswordRequest, db: Session = Depend
     send_reset_email(user.email, token)
     return {"message": "If that email exists, a reset link has been sent."}
 
-@router.post("/users/reset-password-with-token")
+@router.post("/reset-password-with-token")
 def reset_password_with_token(payload: schemas.ResetPasswordTokenRequest, db: Session = Depends(get_db)):
     reset_token = db.query(models.PasswordResetToken).filter(
         models.PasswordResetToken.token == payload.token
