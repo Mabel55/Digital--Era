@@ -242,7 +242,7 @@ const LandingPage = () => {
             <button 
               className="returning-btn" 
               style={{ padding: '14px 32px', fontSize: '15px', borderRadius: '100px', width: 'auto', background: 'transparent', color: 'var(--text)', border: '1px solid var(--border)' }}
-              onClick={() => navigate('/courses')}
+              onClick={() => navigate('/catalog')}
             >
               Browse Free Courses
             </button>

@@ -127,7 +127,7 @@ const CareerTracks = () => {
                   </div>
                   
                   <button 
-                    onClick={() => navigate('/courses')}
+                    onClick={() => navigate('/catalog')}
                     style={{ width: '100%', padding: '16px', background: 'var(--accent)', color: '#000', border: 'none', borderRadius: '12px', fontWeight: 'bold', fontSize: '16px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                   >
                     Start Track <ArrowRight size={20} />

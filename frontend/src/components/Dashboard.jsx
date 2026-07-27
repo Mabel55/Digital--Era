@@ -99,7 +99,7 @@ const Dashboard = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/courses?search=${encodeURIComponent(searchQuery)}`);
+      navigate(`/catalog?search=${encodeURIComponent(searchQuery)}`);
     }
   };
 

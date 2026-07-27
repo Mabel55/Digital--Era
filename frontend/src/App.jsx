@@ -48,7 +48,8 @@ const App = () => {
           <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', color: 'var(--text2)' }}><Loader2 className="spinner" size={32} /></div>}>
           <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/courses" element={<CourseCatalog />} />
+            <Route path="/catalog" element={<CourseCatalog />} />
+            <Route path="/community" element={<Forum />} />
             <Route path="/career-tracks" element={<CareerTracks />} />
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/onboarding" element={<Onboarding />} />
@@ -98,9 +99,7 @@ const App = () => {
                 <Sandbox />
               </ProtectedRoute>
             } />
-            <Route path="/forum" element={
-              <Forum />
-            } />
+
             <Route path="/leaderboard" element={
               <ProtectedRoute>
                 <Leaderboard />

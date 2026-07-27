@@ -20,31 +20,31 @@ except Exception as e:
 
 # Auto-migrate db safely, one column at a time so a single failure doesn't roll back the others
 migrations = [
-    "ALTER TABLE users ADD COLUMN IF NOT EXISTS xp INTEGER DEFAULT 0",
-    "ALTER TABLE users ADD COLUMN IF NOT EXISTS level VARCHAR DEFAULT 'Beginner'",
+    "ALTER TABLE users ADD COLUMN xp INTEGER DEFAULT 0",
+    "ALTER TABLE users ADD COLUMN level VARCHAR DEFAULT 'Beginner'",
     # Fix: If level was accidentally created as INTEGER, we must drop the old default first
     "ALTER TABLE users ALTER COLUMN level DROP DEFAULT",
     "ALTER TABLE users ALTER COLUMN level TYPE VARCHAR USING level::varchar",
     "ALTER TABLE users ALTER COLUMN level SET DEFAULT 'Beginner'",
-    "ALTER TABLE users ADD COLUMN IF NOT EXISTS streak INTEGER DEFAULT 0",
-    "ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login TIMESTAMP",
-    "ALTER TABLE users ADD COLUMN IF NOT EXISTS progress JSON",
+    "ALTER TABLE users ADD COLUMN streak INTEGER DEFAULT 0",
+    "ALTER TABLE users ADD COLUMN last_login TIMESTAMP",
+    "ALTER TABLE users ADD COLUMN progress JSON",
     # New profile fields for international competitiveness
-    "ALTER TABLE users ADD COLUMN IF NOT EXISTS longest_streak INTEGER DEFAULT 0",
-    "ALTER TABLE users ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT NOW()",
-    "ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url VARCHAR",
-    "ALTER TABLE users ADD COLUMN IF NOT EXISTS bio TEXT",
-    "ALTER TABLE users ADD COLUMN IF NOT EXISTS github_url VARCHAR",
-    "ALTER TABLE users ADD COLUMN IF NOT EXISTS linkedin_url VARCHAR",
-    "ALTER TABLE users ADD COLUMN IF NOT EXISTS country VARCHAR",
-    "ALTER TABLE users ADD COLUMN IF NOT EXISTS preferred_language VARCHAR DEFAULT 'en'",
-    "ALTER TABLE users ADD COLUMN IF NOT EXISTS goal VARCHAR",
-    "ALTER TABLE users ADD COLUMN IF NOT EXISTS weekly_goal_days INTEGER DEFAULT 5",
-    "ALTER TABLE users ADD COLUMN IF NOT EXISTS last_active_course VARCHAR",
-    "ALTER TABLE users ADD COLUMN IF NOT EXISTS last_active_lesson_idx INTEGER DEFAULT 0",
+    "ALTER TABLE users ADD COLUMN longest_streak INTEGER DEFAULT 0",
+    "ALTER TABLE users ADD COLUMN created_at TIMESTAMP DEFAULT NOW()",
+    "ALTER TABLE users ADD COLUMN avatar_url VARCHAR",
+    "ALTER TABLE users ADD COLUMN bio TEXT",
+    "ALTER TABLE users ADD COLUMN github_url VARCHAR",
+    "ALTER TABLE users ADD COLUMN linkedin_url VARCHAR",
+    "ALTER TABLE users ADD COLUMN country VARCHAR",
+    "ALTER TABLE users ADD COLUMN preferred_language VARCHAR DEFAULT 'en'",
+    "ALTER TABLE users ADD COLUMN goal VARCHAR",
+    "ALTER TABLE users ADD COLUMN weekly_goal_days INTEGER DEFAULT 5",
+    "ALTER TABLE users ADD COLUMN last_active_course VARCHAR",
+    "ALTER TABLE users ADD COLUMN last_active_lesson_idx INTEGER DEFAULT 0",
     # Course enhancements
-    "ALTER TABLE courses ADD COLUMN IF NOT EXISTS estimated_hours FLOAT DEFAULT 2.0",
-    "ALTER TABLE lessons ADD COLUMN IF NOT EXISTS order_index INTEGER DEFAULT 0",
+    "ALTER TABLE courses ADD COLUMN estimated_hours FLOAT DEFAULT 2.0",
+    "ALTER TABLE lessons ADD COLUMN order_index INTEGER DEFAULT 0",
 ]
 
 try:
