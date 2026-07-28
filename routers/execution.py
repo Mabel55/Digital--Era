@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from schemas import CodeSubmission
 import subprocess
 import sqlite3
-import pandas as pd
+import tabulate
 import tempfile
 import shutil
 import os
@@ -111,8 +111,7 @@ def run_sqlite(sql_code: str):
                 if rows:
                     # Format as simple table
                     cols = [description[0] for description in cursor.description]
-                    df = pd.DataFrame(rows, columns=cols)
-                    output_lines.append(df.to_string(index=False))
+                    output_lines.append(tabulate.tabulate(rows, headers=cols, tablefmt="psql"))
                 else:
                     output_lines.append("(0 rows returned)")
             else:
