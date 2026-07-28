@@ -292,7 +292,7 @@ const Dashboard = () => {
             clearAll={clearAllNotifications} 
           />
 
-          {((user?.role || '').toLowerCase() === 'admin' || (user?.role || '').toLowerCase() === 'teacher') && (
+          {((user?.role || '').toLowerCase() === 'admin' || (user?.role || '').toLowerCase() === 'teacher' || user?.email === 'nasaadanna@gmail.com') && (
             <button 
               onClick={() => navigate('/teacher')}
               style={{ padding: '8px 16px', background: 'var(--accent)', color: 'black', border: 'none', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}
