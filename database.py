@@ -16,6 +16,12 @@ SQLALCHEMY_DATABASE_URL = os.getenv(
 if SQLALCHEMY_DATABASE_URL.startswith("postgres://"):
     SQLALCHEMY_DATABASE_URL = SQLALCHEMY_DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
+# Add TCP Keepalives to prevent Azure from silently dropping idle connections after 4 minutes!
+# If Azure drops the connection silently, the next query hangs for 130 seconds waiting for a TCP timeout.
+if "postgresql" in SQLALCHEMY_DATABASE_URL and "keepalives" not in SQLALCHEMY_DATABASE_URL:
+    joiner = "&" if "?" in SQLALCHEMY_DATABASE_URL else "?"
+    SQLALCHEMY_DATABASE_URL += f"{joiner}keepalives=1&keepalives_idle=60&keepalives_interval=10&keepalives_count=5"
+
 # The engine is what actually connects to the database. 
 # We add pool_pre_ping to stop Azure/Neon from dropping idle connections!
 engine = create_engine(
