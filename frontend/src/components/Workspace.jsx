@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
+import { useTranslation } from 'react-i18next';
 import Editor from '@monaco-editor/react';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
@@ -12,10 +13,14 @@ const Workspace = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
   const { token, user, subscription } = useAuth();
+  const { i18n } = useTranslation();
   const courseName = decodeURIComponent(courseId);
   const manifest = courseManifest[courseName];
 
   const [currentLessonIdx, setCurrentLessonIdx] = useState(0);
+  const [translatedTheory, setTranslatedTheory] = useState('');
+  const [translatedInstructions, setTranslatedInstructions] = useState('');
+  const [isTranslating, setIsTranslating] = useState(false);
   const [activeTab, setActiveTab] = useState('theory');
   const [code, setCode] = useState('');
   const [terminalOutput, setTerminalOutput] = useState('');
@@ -39,6 +44,54 @@ const Workspace = () => {
   const isPro = subscription?.is_pro;
   
   const chatEndRef = useRef(null);
+
+  useEffect(() => {
+    const fetchTranslations = async () => {
+      const lesson = manifest?.lessons?.[currentLessonIdx];
+      if (!lesson) return;
+      
+      const lang = i18n.language || 'en';
+      if (lang === 'en' || lang.startsWith('en')) {
+        setTranslatedTheory(lesson.theory);
+        setTranslatedInstructions(lesson.instructions);
+        return;
+      }
+
+      setIsTranslating(true);
+      try {
+        const token = localStorage.getItem('token');
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+        
+        // Translate Theory
+        const theoryRes = await fetch('/translate', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ text: lesson.theory || '', target_language: lang })
+        });
+        const theoryData = await theoryRes.json();
+        setTranslatedTheory(theoryData.translated_text || lesson.theory);
+
+        // Translate Instructions
+        const instRes = await fetch('/translate', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ text: lesson.instructions || '', target_language: lang })
+        });
+        const instData = await instRes.json();
+        setTranslatedInstructions(instData.translated_text || lesson.instructions);
+        
+      } catch (err) {
+        console.error("Translation error", err);
+        setTranslatedTheory(lesson.theory);
+        setTranslatedInstructions(lesson.instructions);
+      } finally {
+        setIsTranslating(false);
+      }
+    };
+
+    fetchTranslations();
+  }, [currentLessonIdx, i18n.language, manifest]);
 
   useEffect(() => {
     const loadPyodideScript = async () => {
@@ -481,7 +534,7 @@ const Workspace = () => {
         <div className="story-mode-container" style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', background: 'var(--bg)', padding: '40px', overflowY: 'auto' }}>
           <div className="story-card" style={{ maxWidth: '800px', width: '100%', background: 'var(--surface)', padding: '60px', borderRadius: '16px', border: '1px solid var(--border)', boxShadow: '0 20px 60px rgba(0,0,0,0.5)', animation: 'slideUp 0.5s ease' }}>
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '32px', color: 'var(--accent)', marginBottom: '24px' }}>{lesson.title}</h1>
-            <div className="exercise-body story-body" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked(lesson.theory || "No theory provided.")) }} style={{ fontSize: '16px', lineHeight: '1.8', color: 'var(--text)', marginBottom: '40px' }}></div>
+            <div className="exercise-body story-body" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked(isTranslating ? "*(Translating into your preferred language...)*" : (translatedTheory || "No theory provided."))) }} style={{ fontSize: '16px', lineHeight: '1.8', color: 'var(--text)', marginBottom: '40px' }}></div>
             <button 
               onClick={() => { setShowStory(false); if(lesson.starterCode) setCode(lesson.starterCode); }}
               className="btn-submit"
@@ -504,8 +557,8 @@ const Workspace = () => {
             <div className="ex-tab-content">
               <div className="exercise-title">{lesson.title}</div>
               <div className="exercise-body" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked(
-                activeTab === 'theory' ? lesson.theory : 
-                activeTab === 'instructions' ? lesson.instructions : 
+                activeTab === 'theory' ? (isTranslating ? "*(Translating into your preferred language...)*" : (translatedTheory || "No theory provided.")) : 
+                activeTab === 'instructions' ? (isTranslating ? "*(Translating into your preferred language...)*" : (translatedInstructions || "No instructions provided.")) : 
                 `### Solution Code\n\n\`\`\`${determineLanguage()}\n` + (lesson.solution || 'No solution provided.') + '\n```'
               )) }}></div>
               

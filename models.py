@@ -338,3 +338,13 @@ class AssessmentResult(Base):
     taken_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User")
+
+class LessonTranslationCache(Base):
+    """Caches AI-generated translations to save cost and increase speed."""
+    __tablename__ = "lesson_translation_cache"
+
+    id = Column(String, primary_key=True, index=True) # Hash of english_text + target_language
+    original_text = Column(Text, nullable=False)
+    target_language = Column(String, nullable=False, index=True)
+    translated_text = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)

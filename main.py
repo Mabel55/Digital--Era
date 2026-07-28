@@ -33,6 +33,7 @@ import routers.assessments
 import routers.forum
 import routers.payments
 import routers.daily_challenge
+import routers.translation
 
 
 # 2. Initialize the web server
@@ -69,6 +70,7 @@ app.include_router(routers.assessments.router)
 app.include_router(routers.forum.router)
 app.include_router(routers.payments.router)
 app.include_router(routers.daily_challenge.router)
+app.include_router(routers.translation.router)
 
 # 4. Root / Static File Endpoints
 # Mount the entire React app build directory
