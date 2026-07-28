@@ -195,7 +195,7 @@ const Dashboard = () => {
             <Search size={16} color="var(--text-dim)" style={{ position: 'absolute', left: '12px' }} />
             <input 
               type="text" 
-              placeholder="Search courses..." 
+              placeholder={t('dashboard.search') || "Search courses, topics..."} 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{
@@ -275,7 +275,7 @@ const Dashboard = () => {
             onClick={() => navigate('/leaderboard')}
             style={{ padding: '8px 16px', background: 'var(--surface2)', color: 'var(--accent3)', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}
           >
-            <Trophy size={16} /> Leaderboard
+            <Trophy size={16} /> {t('dashboard.leaderboard') || 'Leaderboard'}
           </button>
           <div className="streak-badge">
             <Flame 
@@ -310,7 +310,7 @@ const Dashboard = () => {
             onClick={handleLogout}
             style={{ padding: '8px 16px', background: 'transparent', color: 'var(--text-dim)', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold' }}
           >
-            Logout
+            {t('dashboard.logout') || 'Logout'}
           </button>
         </div>
       </nav>
