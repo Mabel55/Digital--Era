@@ -61,7 +61,6 @@ def _create_notification(db: Session, user_id: int, type: str, title: str, messa
 router = APIRouter(prefix="/users", tags=["Users & Auth"])
 
 @router.post("/signup")
-@limiter.limit("5/minute")
 def register_user(request: Request, user: schemas.UserCreate, db: Session = Depends(get_db)):
     try:
         # 1. Check if the email is already in PostgreSQL
@@ -123,7 +122,6 @@ def register_user(request: Request, user: schemas.UserCreate, db: Session = Depe
         raise HTTPException(status_code=400, detail=f"DB_CRASH: {str(e)}")
 
 @router.post("/login")
-@limiter.limit("10/minute")
 def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     try:
         user = db.query(models.User).filter(models.User.email.ilike(form_data.username)).first()
