@@ -82,7 +82,6 @@ def get_ai_usage(
 
 
 @router.post("/chat")
-@limiter.limit("15/minute")
 def chat_with_study_buddy(
     request: Request,
     payload: schemas.ChatRequest, 
@@ -150,8 +149,7 @@ def chat_with_study_buddy(
         raise HTTPException(status_code=500, detail=f"Brain Error: {str(e)}")
 
 @router.post("/ask-ai/")
-@limiter.limit("10/minute")
-def ask_ai_tutor(request: Request, chat: schemas.ChatRequest): 
+def evaluate_user_answer(request: Request, chat: schemas.ChatRequest): 
     try:
         system_prompt = f"""You are Mabel, a senior software engineering instructor at Mabel Academy - a coding school for Nigerian developers.
         You are teaching a {chat.level} student who wants to master {chat.track}.
