@@ -21,7 +21,7 @@ class TranslationResponse(BaseModel):
     target_language: str
     from_cache: bool
 
-@router.post("/", response_model=TranslationResponse)
+@router.post("", response_model=TranslationResponse)
 def translate_text(
     request: TranslationRequest,
     db: Session = Depends(database.get_db),
