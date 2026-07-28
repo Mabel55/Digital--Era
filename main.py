@@ -19,44 +19,8 @@ except Exception as e:
     print("Server will start anyway. Database-dependent routes will fail until DB is available.")
 
 # Auto-migrate db safely, one column at a time so a single failure doesn't roll back the others
-migrations = [
-    "ALTER TABLE users ADD COLUMN xp INTEGER DEFAULT 0",
-    "ALTER TABLE users ADD COLUMN level VARCHAR DEFAULT 'Beginner'",
-    # Fix: If level was accidentally created as INTEGER, we must drop the old default first
-    "ALTER TABLE users ALTER COLUMN level DROP DEFAULT",
-    "ALTER TABLE users ALTER COLUMN level TYPE VARCHAR USING level::varchar",
-    "ALTER TABLE users ALTER COLUMN level SET DEFAULT 'Beginner'",
-    "ALTER TABLE users ADD COLUMN streak INTEGER DEFAULT 0",
-    "ALTER TABLE users ADD COLUMN last_login TIMESTAMP",
-    "ALTER TABLE users ADD COLUMN progress JSON",
-    # New profile fields for international competitiveness
-    "ALTER TABLE users ADD COLUMN longest_streak INTEGER DEFAULT 0",
-    "ALTER TABLE users ADD COLUMN created_at TIMESTAMP DEFAULT NOW()",
-    "ALTER TABLE users ADD COLUMN avatar_url VARCHAR",
-    "ALTER TABLE users ADD COLUMN bio TEXT",
-    "ALTER TABLE users ADD COLUMN github_url VARCHAR",
-    "ALTER TABLE users ADD COLUMN linkedin_url VARCHAR",
-    "ALTER TABLE users ADD COLUMN country VARCHAR",
-    "ALTER TABLE users ADD COLUMN preferred_language VARCHAR DEFAULT 'en'",
-    "ALTER TABLE users ADD COLUMN goal VARCHAR",
-    "ALTER TABLE users ADD COLUMN weekly_goal_days INTEGER DEFAULT 5",
-    "ALTER TABLE users ADD COLUMN last_active_course VARCHAR",
-    "ALTER TABLE users ADD COLUMN last_active_lesson_idx INTEGER DEFAULT 0",
-    # Course enhancements
-    "ALTER TABLE courses ADD COLUMN estimated_hours FLOAT DEFAULT 2.0",
-    "ALTER TABLE lessons ADD COLUMN order_index INTEGER DEFAULT 0",
-]
-
-try:
-    for migration in migrations:
-        try:
-            with engine.begin() as conn:
-                conn.execute(text(migration))
-            print(f"Migration OK: {migration[:60]}")
-        except Exception as e:
-            print(f"Migration SKIPPED: {migration[:60]} -> {e}")
-except Exception as e:
-    print(f"WARNING: Could not run migrations (DB may be unavailable): {e}")
+# MIGRATIONS REMOVED: Running ALTER TABLE on every startup can cause database deadlocks
+# if the container restarts abruptly. All schema updates should be handled offline.
 
 # Import all routers
 import routers.users
