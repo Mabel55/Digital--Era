@@ -19,8 +19,25 @@ const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [dailyChallenge, setDailyChallenge] = useState(null);
   const [unreadNotifs, setUnreadNotifs] = useState(0);
+  const [notifications, setNotifications] = useState([]);
   const [learningGoal, setLearningGoal] = useState(null);
   const { t, i18n } = useTranslation();
+
+  const fetchNotifications = async () => {
+    try {
+      const res = await fetch('/notifications', { headers: { Authorization: `Bearer ${token}` }});
+      if (res.ok) setNotifications(await res.json());
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const markNotificationsRead = () => { setUnreadNotifs(0); };
+  const clearAllNotifications = () => { setNotifications([]); setUnreadNotifs(0); };
+
+  useEffect(() => {
+    if (token) fetchNotifications();
+  }, [token]);
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
