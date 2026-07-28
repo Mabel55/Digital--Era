@@ -241,6 +241,11 @@ const Dashboard = () => {
               <option value="en">EN</option>
               <option value="es">ES</option>
               <option value="fr">FR</option>
+              <option value="ig">IG</option>
+              <option value="yo">YO</option>
+              <option value="ha">HA</option>
+              <option value="sw">SW</option>
+              <option value="ar">AR</option>
             </select>
           </div>
           <button 
@@ -253,7 +258,7 @@ const Dashboard = () => {
           </button>
           
           <button 
-            onClick={() => navigate('/forum')}
+            onClick={() => navigate('/community')}
             style={{ padding: '8px 16px', background: 'var(--surface2)', color: '#3b82f6', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}
           >
             <MessageSquare size={16} /> Forum

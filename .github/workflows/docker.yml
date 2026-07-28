@@ -29,6 +29,6 @@ jobs:
           push: true
           tags: |
             ghcr.io/mabel55/digital--era:latest
-            ghcr.io/mabel55/digital--era:v4
+            ghcr.io/mabel55/digital--era:v5
 
 

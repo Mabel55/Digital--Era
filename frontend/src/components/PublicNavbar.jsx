@@ -54,6 +54,11 @@ const PublicNavbar = () => {
             <option value="en">EN</option>
             <option value="es">ES</option>
             <option value="fr">FR</option>
+            <option value="ig">IG</option>
+            <option value="yo">YO</option>
+            <option value="ha">HA</option>
+            <option value="sw">SW</option>
+            <option value="ar">AR</option>
           </select>
         </div>
 
