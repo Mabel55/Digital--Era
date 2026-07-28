@@ -51,7 +51,9 @@ const Workspace = () => {
         
         script.onload = async () => {
           try {
-            const pyodideInstance = await window.loadPyodide();
+            const pyodideInstance = await window.loadPyodide({
+              indexURL: "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/"
+            });
             pyodideInstance.runPython(`
               import sys
               import io
