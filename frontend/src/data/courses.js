@@ -109,16 +109,21 @@ export const curriculum = {
   },
   "Data Analysis": {
     "Beginner": [
-      "Data Analysis Intro",
-      "SQL Essentials"
+      "Data Analysis & Excel Concepts",
+      "Intro to Databases",
+      "SQL Essentials",
+      "Filtering & Aggregating"
     ],
     "Intermediate": [
       "Advanced SQL Analytics",
-      "Pandas for Analysis"
+      "SQL Window Functions",
+      "Python for Data Analysts",
+      "Pandas Masterclass"
     ],
     "Advanced": [
-      "Data Visualization",
-      "BI & Dashboards (Power BI & Tableau)",
+      "Data Cleaning & Wrangling",
+      "Exploratory Data Analysis & Viz",
+      "BI Dashboards & DAX",
       "Statistical Analysis & A/B Testing"
     ]
   },
@@ -7888,6 +7893,761 @@ export const courseManifest = {
         "solution": "def analyze_ab_test(p_value):\n    if p_value < 0.05:\n        return \"Significant\"\n    else:\n        return \"Not Significant\"\n\nprint(analyze_ab_test(0.02))\nprint(analyze_ab_test(0.15))",
         "hint": "Use < 0.05.",
         "rubric": "Correctly returns Significant if < 0.05."
+      }
+    ]
+  }
+
+,
+  "Data Analysis & Excel Concepts": {
+    "aiRubric": "Check basic concepts.",
+    "lessons": [
+      {
+        "title": "What is Data Analysis?",
+        "theory": "## What is Data Analysis?\n\nThis lesson covers the fundamentals of What is Data Analysis?. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for What is Data Analysis?.",
+        "starterCode": "# Code for What is Data Analysis?\nresult = ___",
+        "solution": "# Code for What is Data Analysis?\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "The Data Lifecycle",
+        "theory": "## The Data Lifecycle\n\nThis lesson covers the fundamentals of The Data Lifecycle. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for The Data Lifecycle.",
+        "starterCode": "# Code for The Data Lifecycle\nresult = ___",
+        "solution": "# Code for The Data Lifecycle\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Rows vs Columns",
+        "theory": "## Rows vs Columns\n\nThis lesson covers the fundamentals of Rows vs Columns. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Rows vs Columns.",
+        "starterCode": "# Code for Rows vs Columns\nresult = ___",
+        "solution": "# Code for Rows vs Columns\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Basic Excel Formulas",
+        "theory": "## Basic Excel Formulas\n\nThis lesson covers the fundamentals of Basic Excel Formulas. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Basic Excel Formulas.",
+        "starterCode": "# Code for Basic Excel Formulas\nresult = ___",
+        "solution": "# Code for Basic Excel Formulas\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Sorting and Filtering Data",
+        "theory": "## Sorting and Filtering Data\n\nThis lesson covers the fundamentals of Sorting and Filtering Data. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Sorting and Filtering Data.",
+        "starterCode": "# Code for Sorting and Filtering Data\nresult = ___",
+        "solution": "# Code for Sorting and Filtering Data\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Pivot Table Concepts",
+        "theory": "## Pivot Table Concepts\n\nThis lesson covers the fundamentals of Pivot Table Concepts. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Pivot Table Concepts.",
+        "starterCode": "# Code for Pivot Table Concepts\nresult = ___",
+        "solution": "# Code for Pivot Table Concepts\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      }
+    ]
+  },
+  "Intro to Databases": {
+    "aiRubric": "Check DB concepts.",
+    "lessons": [
+      {
+        "title": "Relational Databases Explained",
+        "theory": "## Relational Databases Explained\n\nThis lesson covers the fundamentals of Relational Databases Explained. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Relational Databases Explained.",
+        "starterCode": "-- SQL for Relational Databases Explained\nSELECT ___;",
+        "solution": "-- SQL for Relational Databases Explained\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Tables and Schemas",
+        "theory": "## Tables and Schemas\n\nThis lesson covers the fundamentals of Tables and Schemas. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Tables and Schemas.",
+        "starterCode": "-- SQL for Tables and Schemas\nSELECT ___;",
+        "solution": "-- SQL for Tables and Schemas\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Primary Keys",
+        "theory": "## Primary Keys\n\nThis lesson covers the fundamentals of Primary Keys. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Primary Keys.",
+        "starterCode": "-- SQL for Primary Keys\nSELECT ___;",
+        "solution": "-- SQL for Primary Keys\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Foreign Keys",
+        "theory": "## Foreign Keys\n\nThis lesson covers the fundamentals of Foreign Keys. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Foreign Keys.",
+        "starterCode": "-- SQL for Foreign Keys\nSELECT ___;",
+        "solution": "-- SQL for Foreign Keys\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Database Normalization",
+        "theory": "## Database Normalization\n\nThis lesson covers the fundamentals of Database Normalization. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Database Normalization.",
+        "starterCode": "-- SQL for Database Normalization\nSELECT ___;",
+        "solution": "-- SQL for Database Normalization\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      }
+    ]
+  },
+  "SQL Essentials": {
+    "aiRubric": "Check SQL queries.",
+    "lessons": [
+      {
+        "title": "The SELECT Statement",
+        "theory": "## The SELECT Statement\n\nThis lesson covers the fundamentals of The SELECT Statement. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for The SELECT Statement.",
+        "starterCode": "-- SQL for The SELECT Statement\nSELECT ___;",
+        "solution": "-- SQL for The SELECT Statement\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Filtering with WHERE",
+        "theory": "## Filtering with WHERE\n\nThis lesson covers the fundamentals of Filtering with WHERE. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Filtering with WHERE.",
+        "starterCode": "-- SQL for Filtering with WHERE\nSELECT ___;",
+        "solution": "-- SQL for Filtering with WHERE\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Using AND / OR",
+        "theory": "## Using AND / OR\n\nThis lesson covers the fundamentals of Using AND / OR. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Using AND / OR.",
+        "starterCode": "-- SQL for Using AND / OR\nSELECT ___;",
+        "solution": "-- SQL for Using AND / OR\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Sorting with ORDER BY",
+        "theory": "## Sorting with ORDER BY\n\nThis lesson covers the fundamentals of Sorting with ORDER BY. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Sorting with ORDER BY.",
+        "starterCode": "-- SQL for Sorting with ORDER BY\nSELECT ___;",
+        "solution": "-- SQL for Sorting with ORDER BY\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Limiting Results",
+        "theory": "## Limiting Results\n\nThis lesson covers the fundamentals of Limiting Results. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Limiting Results.",
+        "starterCode": "-- SQL for Limiting Results\nSELECT ___;",
+        "solution": "-- SQL for Limiting Results\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Using LIKE for Patterns",
+        "theory": "## Using LIKE for Patterns\n\nThis lesson covers the fundamentals of Using LIKE for Patterns. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Using LIKE for Patterns.",
+        "starterCode": "-- SQL for Using LIKE for Patterns\nSELECT ___;",
+        "solution": "-- SQL for Using LIKE for Patterns\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "The IN Operator",
+        "theory": "## The IN Operator\n\nThis lesson covers the fundamentals of The IN Operator. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for The IN Operator.",
+        "starterCode": "-- SQL for The IN Operator\nSELECT ___;",
+        "solution": "-- SQL for The IN Operator\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Aliasing with AS",
+        "theory": "## Aliasing with AS\n\nThis lesson covers the fundamentals of Aliasing with AS. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Aliasing with AS.",
+        "starterCode": "-- SQL for Aliasing with AS\nSELECT ___;",
+        "solution": "-- SQL for Aliasing with AS\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      }
+    ]
+  },
+  "Filtering & Aggregating": {
+    "aiRubric": "Check SQL aggregations.",
+    "lessons": [
+      {
+        "title": "Counting Rows",
+        "theory": "## Counting Rows\n\nThis lesson covers the fundamentals of Counting Rows. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Counting Rows.",
+        "starterCode": "# Code for Counting Rows\nresult = ___",
+        "solution": "# Code for Counting Rows\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "SUM and AVG",
+        "theory": "## SUM and AVG\n\nThis lesson covers the fundamentals of SUM and AVG. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for SUM and AVG.",
+        "starterCode": "# Code for SUM and AVG\nresult = ___",
+        "solution": "# Code for SUM and AVG\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "MIN and MAX",
+        "theory": "## MIN and MAX\n\nThis lesson covers the fundamentals of MIN and MAX. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for MIN and MAX.",
+        "starterCode": "# Code for MIN and MAX\nresult = ___",
+        "solution": "# Code for MIN and MAX\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Grouping Data (GROUP BY)",
+        "theory": "## Grouping Data (GROUP BY)\n\nThis lesson covers the fundamentals of Grouping Data (GROUP BY). The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Grouping Data (GROUP BY).",
+        "starterCode": "# Code for Grouping Data (GROUP BY)\nresult = ___",
+        "solution": "# Code for Grouping Data (GROUP BY)\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Filtering Groups (HAVING)",
+        "theory": "## Filtering Groups (HAVING)\n\nThis lesson covers the fundamentals of Filtering Groups (HAVING). The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Filtering Groups (HAVING).",
+        "starterCode": "# Code for Filtering Groups (HAVING)\nresult = ___",
+        "solution": "# Code for Filtering Groups (HAVING)\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Basic Subqueries",
+        "theory": "## Basic Subqueries\n\nThis lesson covers the fundamentals of Basic Subqueries. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Basic Subqueries.",
+        "starterCode": "# Code for Basic Subqueries\nresult = ___",
+        "solution": "# Code for Basic Subqueries\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      }
+    ]
+  },
+  "Advanced SQL Analytics": {
+    "aiRubric": "Check advanced SQL logic.",
+    "lessons": [
+      {
+        "title": "INNER JOIN",
+        "theory": "## INNER JOIN\n\nThis lesson covers the fundamentals of INNER JOIN. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for INNER JOIN.",
+        "starterCode": "-- SQL for INNER JOIN\nSELECT ___;",
+        "solution": "-- SQL for INNER JOIN\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "LEFT JOIN",
+        "theory": "## LEFT JOIN\n\nThis lesson covers the fundamentals of LEFT JOIN. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for LEFT JOIN.",
+        "starterCode": "-- SQL for LEFT JOIN\nSELECT ___;",
+        "solution": "-- SQL for LEFT JOIN\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "RIGHT JOIN",
+        "theory": "## RIGHT JOIN\n\nThis lesson covers the fundamentals of RIGHT JOIN. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for RIGHT JOIN.",
+        "starterCode": "-- SQL for RIGHT JOIN\nSELECT ___;",
+        "solution": "-- SQL for RIGHT JOIN\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "FULL OUTER JOIN",
+        "theory": "## FULL OUTER JOIN\n\nThis lesson covers the fundamentals of FULL OUTER JOIN. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for FULL OUTER JOIN.",
+        "starterCode": "-- SQL for FULL OUTER JOIN\nSELECT ___;",
+        "solution": "-- SQL for FULL OUTER JOIN\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "UNION and UNION ALL",
+        "theory": "## UNION and UNION ALL\n\nThis lesson covers the fundamentals of UNION and UNION ALL. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for UNION and UNION ALL.",
+        "starterCode": "-- SQL for UNION and UNION ALL\nSELECT ___;",
+        "solution": "-- SQL for UNION and UNION ALL\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Common Table Expressions (CTEs)",
+        "theory": "## Common Table Expressions (CTEs)\n\nThis lesson covers the fundamentals of Common Table Expressions (CTEs). The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Common Table Expressions (CTEs).",
+        "starterCode": "-- SQL for Common Table Expressions (CTEs)\nSELECT ___;",
+        "solution": "-- SQL for Common Table Expressions (CTEs)\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "The CASE WHEN Statement",
+        "theory": "## The CASE WHEN Statement\n\nThis lesson covers the fundamentals of The CASE WHEN Statement. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for The CASE WHEN Statement.",
+        "starterCode": "-- SQL for The CASE WHEN Statement\nSELECT ___;",
+        "solution": "-- SQL for The CASE WHEN Statement\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      }
+    ]
+  },
+  "SQL Window Functions": {
+    "aiRubric": "Check window function syntax.",
+    "lessons": [
+      {
+        "title": "Introduction to OVER()",
+        "theory": "## Introduction to OVER()\n\nThis lesson covers the fundamentals of Introduction to OVER(). The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Introduction to OVER().",
+        "starterCode": "-- SQL for Introduction to OVER()\nSELECT ___;",
+        "solution": "-- SQL for Introduction to OVER()\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "RANK() vs DENSE_RANK()",
+        "theory": "## RANK() vs DENSE_RANK()\n\nThis lesson covers the fundamentals of RANK() vs DENSE_RANK(). The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for RANK() vs DENSE_RANK().",
+        "starterCode": "-- SQL for RANK() vs DENSE_RANK()\nSELECT ___;",
+        "solution": "-- SQL for RANK() vs DENSE_RANK()\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "ROW_NUMBER()",
+        "theory": "## ROW_NUMBER()\n\nThis lesson covers the fundamentals of ROW_NUMBER(). The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for ROW_NUMBER().",
+        "starterCode": "-- SQL for ROW_NUMBER()\nSELECT ___;",
+        "solution": "-- SQL for ROW_NUMBER()\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "LEAD() Function",
+        "theory": "## LEAD() Function\n\nThis lesson covers the fundamentals of LEAD() Function. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for LEAD() Function.",
+        "starterCode": "-- SQL for LEAD() Function\nSELECT ___;",
+        "solution": "-- SQL for LEAD() Function\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "LAG() Function",
+        "theory": "## LAG() Function\n\nThis lesson covers the fundamentals of LAG() Function. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for LAG() Function.",
+        "starterCode": "-- SQL for LAG() Function\nSELECT ___;",
+        "solution": "-- SQL for LAG() Function\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Running Totals",
+        "theory": "## Running Totals\n\nThis lesson covers the fundamentals of Running Totals. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Running Totals.",
+        "starterCode": "-- SQL for Running Totals\nSELECT ___;",
+        "solution": "-- SQL for Running Totals\nSELECT 1;",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      }
+    ]
+  },
+  "Python for Data Analysts": {
+    "aiRubric": "Check Python logic.",
+    "lessons": [
+      {
+        "title": "Variables and Types",
+        "theory": "## Variables and Types\n\nThis lesson covers the fundamentals of Variables and Types. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Variables and Types.",
+        "starterCode": "# Code for Variables and Types\nresult = ___",
+        "solution": "# Code for Variables and Types\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Lists and Indexing",
+        "theory": "## Lists and Indexing\n\nThis lesson covers the fundamentals of Lists and Indexing. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Lists and Indexing.",
+        "starterCode": "# Code for Lists and Indexing\nresult = ___",
+        "solution": "# Code for Lists and Indexing\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Dictionaries",
+        "theory": "## Dictionaries\n\nThis lesson covers the fundamentals of Dictionaries. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Dictionaries.",
+        "starterCode": "# Code for Dictionaries\nresult = ___",
+        "solution": "# Code for Dictionaries\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "For Loops in Data",
+        "theory": "## For Loops in Data\n\nThis lesson covers the fundamentals of For Loops in Data. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for For Loops in Data.",
+        "starterCode": "# Code for For Loops in Data\nresult = ___",
+        "solution": "# Code for For Loops in Data\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Functions for Reusability",
+        "theory": "## Functions for Reusability\n\nThis lesson covers the fundamentals of Functions for Reusability. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Functions for Reusability.",
+        "starterCode": "# Code for Functions for Reusability\nresult = ___",
+        "solution": "# Code for Functions for Reusability\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "List Comprehensions",
+        "theory": "## List Comprehensions\n\nThis lesson covers the fundamentals of List Comprehensions. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for List Comprehensions.",
+        "starterCode": "# Code for List Comprehensions\nresult = ___",
+        "solution": "# Code for List Comprehensions\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      }
+    ]
+  },
+  "Pandas Masterclass": {
+    "aiRubric": "Check Pandas logic.",
+    "lessons": [
+      {
+        "title": "Importing Pandas",
+        "theory": "## Importing Pandas\n\nThis lesson covers the fundamentals of Importing Pandas. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Importing Pandas.",
+        "starterCode": "# Code for Importing Pandas\nresult = ___",
+        "solution": "# Code for Importing Pandas\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Creating DataFrames",
+        "theory": "## Creating DataFrames\n\nThis lesson covers the fundamentals of Creating DataFrames. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Creating DataFrames.",
+        "starterCode": "# Code for Creating DataFrames\nresult = ___",
+        "solution": "# Code for Creating DataFrames\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Reading CSVs",
+        "theory": "## Reading CSVs\n\nThis lesson covers the fundamentals of Reading CSVs. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Reading CSVs.",
+        "starterCode": "# Code for Reading CSVs\nresult = ___",
+        "solution": "# Code for Reading CSVs\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Selecting Columns",
+        "theory": "## Selecting Columns\n\nThis lesson covers the fundamentals of Selecting Columns. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Selecting Columns.",
+        "starterCode": "# Code for Selecting Columns\nresult = ___",
+        "solution": "# Code for Selecting Columns\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Filtering Rows with loc",
+        "theory": "## Filtering Rows with loc\n\nThis lesson covers the fundamentals of Filtering Rows with loc. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Filtering Rows with loc.",
+        "starterCode": "# Code for Filtering Rows with loc\nresult = ___",
+        "solution": "# Code for Filtering Rows with loc\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Using iloc",
+        "theory": "## Using iloc\n\nThis lesson covers the fundamentals of Using iloc. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Using iloc.",
+        "starterCode": "# Code for Using iloc\nresult = ___",
+        "solution": "# Code for Using iloc\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Merging DataFrames",
+        "theory": "## Merging DataFrames\n\nThis lesson covers the fundamentals of Merging DataFrames. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Merging DataFrames.",
+        "starterCode": "# Code for Merging DataFrames\nresult = ___",
+        "solution": "# Code for Merging DataFrames\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Groupby in Pandas",
+        "theory": "## Groupby in Pandas\n\nThis lesson covers the fundamentals of Groupby in Pandas. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Groupby in Pandas.",
+        "starterCode": "# Code for Groupby in Pandas\nresult = ___",
+        "solution": "# Code for Groupby in Pandas\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      }
+    ]
+  },
+  "Data Cleaning & Wrangling": {
+    "aiRubric": "Check pandas cleaning.",
+    "lessons": [
+      {
+        "title": "Identifying Missing Data",
+        "theory": "## Identifying Missing Data\n\nThis lesson covers the fundamentals of Identifying Missing Data. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Identifying Missing Data.",
+        "starterCode": "# Code for Identifying Missing Data\nresult = ___",
+        "solution": "# Code for Identifying Missing Data\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Dropping NaNs",
+        "theory": "## Dropping NaNs\n\nThis lesson covers the fundamentals of Dropping NaNs. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Dropping NaNs.",
+        "starterCode": "# Code for Dropping NaNs\nresult = ___",
+        "solution": "# Code for Dropping NaNs\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Filling Missing Values",
+        "theory": "## Filling Missing Values\n\nThis lesson covers the fundamentals of Filling Missing Values. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Filling Missing Values.",
+        "starterCode": "# Code for Filling Missing Values\nresult = ___",
+        "solution": "# Code for Filling Missing Values\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Removing Duplicates",
+        "theory": "## Removing Duplicates\n\nThis lesson covers the fundamentals of Removing Duplicates. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Removing Duplicates.",
+        "starterCode": "# Code for Removing Duplicates\nresult = ___",
+        "solution": "# Code for Removing Duplicates\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Converting Data Types",
+        "theory": "## Converting Data Types\n\nThis lesson covers the fundamentals of Converting Data Types. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Converting Data Types.",
+        "starterCode": "# Code for Converting Data Types\nresult = ___",
+        "solution": "# Code for Converting Data Types\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "String Manipulation",
+        "theory": "## String Manipulation\n\nThis lesson covers the fundamentals of String Manipulation. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for String Manipulation.",
+        "starterCode": "# Code for String Manipulation\nresult = ___",
+        "solution": "# Code for String Manipulation\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      }
+    ]
+  },
+  "Exploratory Data Analysis & Viz": {
+    "aiRubric": "Check visualization logic.",
+    "lessons": [
+      {
+        "title": "Identifying Outliers",
+        "theory": "## Identifying Outliers\n\nThis lesson covers the fundamentals of Identifying Outliers. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Identifying Outliers.",
+        "starterCode": "# Code for Identifying Outliers\nresult = ___",
+        "solution": "# Code for Identifying Outliers\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Correlation Matrices",
+        "theory": "## Correlation Matrices\n\nThis lesson covers the fundamentals of Correlation Matrices. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Correlation Matrices.",
+        "starterCode": "# Code for Correlation Matrices\nresult = ___",
+        "solution": "# Code for Correlation Matrices\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Intro to Matplotlib",
+        "theory": "## Intro to Matplotlib\n\nThis lesson covers the fundamentals of Intro to Matplotlib. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Intro to Matplotlib.",
+        "starterCode": "# Code for Intro to Matplotlib\nresult = ___",
+        "solution": "# Code for Intro to Matplotlib\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Bar and Line Charts",
+        "theory": "## Bar and Line Charts\n\nThis lesson covers the fundamentals of Bar and Line Charts. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Bar and Line Charts.",
+        "starterCode": "# Code for Bar and Line Charts\nresult = ___",
+        "solution": "# Code for Bar and Line Charts\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Scatter Plots",
+        "theory": "## Scatter Plots\n\nThis lesson covers the fundamentals of Scatter Plots. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Scatter Plots.",
+        "starterCode": "# Code for Scatter Plots\nresult = ___",
+        "solution": "# Code for Scatter Plots\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Seaborn Heatmaps",
+        "theory": "## Seaborn Heatmaps\n\nThis lesson covers the fundamentals of Seaborn Heatmaps. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Seaborn Heatmaps.",
+        "starterCode": "# Code for Seaborn Heatmaps\nresult = ___",
+        "solution": "# Code for Seaborn Heatmaps\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      }
+    ]
+  },
+  "BI Dashboards & DAX": {
+    "aiRubric": "Check BI string formulas.",
+    "lessons": [
+      {
+        "title": "Tableau: Dimensions vs Measures",
+        "theory": "## Tableau: Dimensions vs Measures\n\nThis lesson covers the fundamentals of Tableau: Dimensions vs Measures. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Tableau: Dimensions vs Measures.",
+        "starterCode": "formula = \"___\"",
+        "solution": "formula = \"SUM(Sales)\"",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Tableau: Calculated Fields",
+        "theory": "## Tableau: Calculated Fields\n\nThis lesson covers the fundamentals of Tableau: Calculated Fields. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Tableau: Calculated Fields.",
+        "starterCode": "formula = \"___\"",
+        "solution": "formula = \"SUM(Sales)\"",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Power BI: Data Modeling",
+        "theory": "## Power BI: Data Modeling\n\nThis lesson covers the fundamentals of Power BI: Data Modeling. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Power BI: Data Modeling.",
+        "starterCode": "formula = \"___\"",
+        "solution": "formula = \"SUM(Sales)\"",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "DAX: Introduction",
+        "theory": "## DAX: Introduction\n\nThis lesson covers the fundamentals of DAX: Introduction. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for DAX: Introduction.",
+        "starterCode": "formula = \"___\"",
+        "solution": "formula = \"SUM(Sales)\"",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "DAX: CALCULATE",
+        "theory": "## DAX: CALCULATE\n\nThis lesson covers the fundamentals of DAX: CALCULATE. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for DAX: CALCULATE.",
+        "starterCode": "formula = \"___\"",
+        "solution": "formula = \"SUM(Sales)\"",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "DAX: SUMX",
+        "theory": "## DAX: SUMX\n\nThis lesson covers the fundamentals of DAX: SUMX. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for DAX: SUMX.",
+        "starterCode": "formula = \"___\"",
+        "solution": "formula = \"SUM(Sales)\"",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "DAX: FILTER",
+        "theory": "## DAX: FILTER\n\nThis lesson covers the fundamentals of DAX: FILTER. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for DAX: FILTER.",
+        "starterCode": "formula = \"___\"",
+        "solution": "formula = \"SUM(Sales)\"",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      }
+    ]
+  },
+  "Statistical Analysis & A/B Testing": {
+    "aiRubric": "Check statistical math.",
+    "lessons": [
+      {
+        "title": "Mean, Median, and Mode",
+        "theory": "## Mean, Median, and Mode\n\nThis lesson covers the fundamentals of Mean, Median, and Mode. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Mean, Median, and Mode.",
+        "starterCode": "# Code for Mean, Median, and Mode\nresult = ___",
+        "solution": "# Code for Mean, Median, and Mode\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Variance and Standard Deviation",
+        "theory": "## Variance and Standard Deviation\n\nThis lesson covers the fundamentals of Variance and Standard Deviation. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Variance and Standard Deviation.",
+        "starterCode": "# Code for Variance and Standard Deviation\nresult = ___",
+        "solution": "# Code for Variance and Standard Deviation\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Normal Distributions",
+        "theory": "## Normal Distributions\n\nThis lesson covers the fundamentals of Normal Distributions. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Normal Distributions.",
+        "starterCode": "# Code for Normal Distributions\nresult = ___",
+        "solution": "# Code for Normal Distributions\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Understanding P-Values",
+        "theory": "## Understanding P-Values\n\nThis lesson covers the fundamentals of Understanding P-Values. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Understanding P-Values.",
+        "starterCode": "# Code for Understanding P-Values\nresult = ___",
+        "solution": "# Code for Understanding P-Values\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "A/B Testing Basics",
+        "theory": "## A/B Testing Basics\n\nThis lesson covers the fundamentals of A/B Testing Basics. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for A/B Testing Basics.",
+        "starterCode": "# Code for A/B Testing Basics\nresult = ___",
+        "solution": "# Code for A/B Testing Basics\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
+      },
+      {
+        "title": "Evaluating an A/B Test",
+        "theory": "## Evaluating an A/B Test\n\nThis lesson covers the fundamentals of Evaluating an A/B Test. The background AI agent will expand this into a comprehensive explanation shortly.",
+        "instructions": "## Task\nComplete the exercise for Evaluating an A/B Test.",
+        "starterCode": "# Code for Evaluating an A/B Test\nresult = ___",
+        "solution": "# Code for Evaluating an A/B Test\nresult = True",
+        "hint": "Read the instructions carefully.",
+        "rubric": "Code executes without errors."
       }
     ]
   }
