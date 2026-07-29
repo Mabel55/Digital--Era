@@ -7747,4 +7747,149 @@ export const courseManifest = {
       }
     ]
   }
+,
+  "Data Analysis Intro": {
+    "aiRubric": "Check logic and SQL queries for Data Analysis Intro.",
+    "lessons": [
+      {
+        "title": "What is Data Analysis?",
+        "theory": "## Introduction to Data Analysis\n\nData Analysis is the process of collecting, cleaning, exploring, and interpreting data to discover meaningful insights that inform business decisions. The typical lifecycle includes:\n1. **Ask:** Define the problem you're trying to solve.\n2. **Prepare:** Collect and store the data.\n3. **Process:** Clean the data (handle missing values, correct data types).\n4. **Analyze:** Look for patterns and trends.\n5. **Share:** Visualize the findings in dashboards or reports.\n6. **Act:** Use the insights to make decisions.\n\nWhile analysts use tools like Excel, PowerBI, and Tableau, the most powerful and scalable tools are **SQL** (to extract data from databases) and **Python** (to perform complex statistical analysis and wrangling). In this track, you will learn to use code to automate and supercharge your data analysis.",
+        "instructions": "## Task: The Analysis Mindset\nIn Python, define a list containing the 6 steps of the data analysis process as strings, in order. Print the list.",
+        "starterCode": "# Define the 6 steps of data analysis\nanalysis_steps = [\n    \"___\",\n    \"___\",\n    \"___\",\n    \"___\",\n    \"___\",\n    \"___\"\n]\nprint(analysis_steps)",
+        "solution": "analysis_steps = [\n    \"Ask\",\n    \"Prepare\",\n    \"Process\",\n    \"Analyze\",\n    \"Share\",\n    \"Act\"\n]\nprint(analysis_steps)",
+        "hint": "The steps are Ask, Prepare, Process, Analyze, Share, Act.",
+        "rubric": "List must contain exactly the 6 steps in order."
+      }
+    ]
+  },
+  "SQL Essentials": {
+    "aiRubric": "Check SQL syntax, filtering, and aggregations.",
+    "lessons": [
+      {
+        "title": "Querying Databases with SQL",
+        "theory": "## The SELECT Statement\n\nSQL (Structured Query Language) is the standard language for communicating with relational databases. A relational database stores data in tables (like spreadsheets). The most fundamental SQL command is the `SELECT` statement, which retrieves data.\n\n```sql\n-- Retrieve all columns from the customers table\nSELECT * FROM customers;\n\n-- Retrieve specific columns\nSELECT name, email FROM customers;\n```\n\nThe `*` symbol is a wildcard that means 'everything'.",
+        "instructions": "## Task: Your First Query\nWrite a SQL query to retrieve the `product_name` and `price` from the `products` table.",
+        "starterCode": "SELECT ___ \nFROM products;",
+        "solution": "SELECT product_name, price FROM products;",
+        "hint": "Specify the columns separated by commas.",
+        "rubric": "Query selects product_name and price from products."
+      },
+      {
+        "title": "Filtering Data (WHERE)",
+        "theory": "## The WHERE Clause\n\nYou rarely want to retrieve millions of rows. The `WHERE` clause filters data based on specific conditions.\n\n```sql\nSELECT name, price \nFROM products \nWHERE price > 50;\n\nSELECT * \nFROM orders \nWHERE status = 'shipped';\n```\n\nYou can combine conditions using `AND` and `OR`.",
+        "instructions": "## Task: Filter High Value Orders\nWrite a SQL query to select all columns from the `orders` table where the `total_amount` is greater than 100 AND the `status` is 'pending'.",
+        "starterCode": "SELECT * FROM orders\nWHERE ___ > 100 ___ ___ = 'pending';",
+        "solution": "SELECT * FROM orders WHERE total_amount > 100 AND status = 'pending';",
+        "hint": "Use AND to combine conditions.",
+        "rubric": "Query filters by total_amount > 100 AND status = pending."
+      },
+      {
+        "title": "Aggregations (GROUP BY)",
+        "theory": "## Summarizing Data\n\nAggregations allow you to summarize data. Common functions include `COUNT()`, `SUM()`, `AVG()`, `MAX()`, and `MIN()`.\nWhen you want to summarize data *per category* (e.g., total sales *per region*), you must use the `GROUP BY` clause.\n\n```sql\n-- Total sales for the entire company\nSELECT SUM(amount) FROM sales;\n\n-- Total sales PER region\nSELECT region, SUM(amount) \nFROM sales \nGROUP BY region;\n```",
+        "instructions": "## Task: Regional Sales\nWrite a SQL query to find the average (`AVG`) `price` for each `category` in the `products` table.",
+        "starterCode": "SELECT ___, AVG(___)\nFROM products\nGROUP BY ___;",
+        "solution": "SELECT category, AVG(price) FROM products GROUP BY category;",
+        "hint": "Select category and AVG(price), then GROUP BY category.",
+        "rubric": "Query calculates AVG(price) grouped by category."
+      }
+    ]
+  },
+  "Advanced SQL Analytics": {
+    "aiRubric": "Check logic for JOINs and Window Functions.",
+    "lessons": [
+      {
+        "title": "Relational Data (JOINs)",
+        "theory": "## Joining Tables\n\nIn a real database, data is split across multiple tables to avoid redundancy. An `orders` table might only store a `customer_id`, not the customer's name. To see the customer's name alongside their order, you must `JOIN` the tables based on the matching ID.\n\n```sql\nSELECT customers.name, orders.total_amount\nFROM customers\nINNER JOIN orders ON customers.id = orders.customer_id;\n```\n\nAn `INNER JOIN` only returns rows that have matches in both tables. A `LEFT JOIN` returns all rows from the left table, even if there is no match on the right.",
+        "instructions": "## Task: Customer Orders\nWrite a SQL query that uses an INNER JOIN to retrieve `users.name` and `purchases.amount` by joining `users` and `purchases` on `users.id = purchases.user_id`.",
+        "starterCode": "SELECT users.name, purchases.amount\nFROM users\n___ JOIN purchases ON ___ = ___;",
+        "solution": "SELECT users.name, purchases.amount FROM users INNER JOIN purchases ON users.id = purchases.user_id;",
+        "hint": "Use INNER JOIN and match users.id to purchases.user_id.",
+        "rubric": "Query uses INNER JOIN correctly."
+      },
+      {
+        "title": "Window Functions",
+        "theory": "## Advanced Analytics with OVER()\n\nWindow functions perform a calculation across a set of table rows that are somehow related to the current row. Unlike `GROUP BY`, which collapses rows into a single summary row, window functions keep the original rows intact.\n\n```sql\n-- Assign a rank to each employee based on their salary within their department\nSELECT \n  name,\n  department,\n  salary,\n  RANK() OVER(PARTITION BY department ORDER BY salary DESC) as dept_rank\nFROM employees;\n```\n`PARTITION BY` acts like `GROUP BY` for the window function, defining the 'window' of rows.",
+        "instructions": "## Task: Top Performers\nUse the `RANK()` window function to rank students based on their `score` in descending order, partitioned by `class_name`.",
+        "starterCode": "SELECT \n  student_name,\n  class_name,\n  score,\n  RANK() ___(PARTITION BY ___ ORDER BY ___ ___) as rank\nFROM scores;",
+        "solution": "SELECT student_name, class_name, score, RANK() OVER(PARTITION BY class_name ORDER BY score DESC) as rank FROM scores;",
+        "hint": "Use OVER(PARTITION BY class_name ORDER BY score DESC).",
+        "rubric": "Query correctly uses RANK() OVER() with partition and order."
+      }
+    ]
+  },
+  "Pandas for Analysis": {
+    "aiRubric": "Check Python Pandas logic.",
+    "lessons": [
+      {
+        "title": "Pandas DataFrames",
+        "theory": "## Python's Spreadsheet\n\nWhile SQL is great for extracting data, Python's `pandas` library is the industry standard for cleaning and transforming it. A `DataFrame` is the core Pandas object\u2014think of it as a programmatic Excel table.\n\n```python\nimport pandas as pd\n\ndata = {'Name': ['Alice', 'Bob'], 'Age': [25, 30]}\ndf = pd.DataFrame(data)\n\n# View first 5 rows\nprint(df.head())\n\n# Get summary statistics\nprint(df.describe())\n```",
+        "instructions": "## Task: Load and Inspect\n1. Import pandas.\n2. Create a DataFrame from the provided dictionary.\n3. Print the shape (number of rows/columns) of the DataFrame using `df.shape`.",
+        "starterCode": "import pandas as pd\n\nsales_data = {'Month': ['Jan', 'Feb', 'Mar'], 'Revenue': [15000, 18000, 21000]}\n# Create DataFrame here\ndf = ___\n\n# Print shape\nprint(___)",
+        "solution": "import pandas as pd\n\nsales_data = {'Month': ['Jan', 'Feb', 'Mar'], 'Revenue': [15000, 18000, 21000]}\ndf = pd.DataFrame(sales_data)\nprint(df.shape)",
+        "hint": "Use pd.DataFrame(sales_data) and print(df.shape).",
+        "rubric": "Creates DataFrame and prints shape."
+      },
+      {
+        "title": "Data Cleaning",
+        "theory": "## Dealing with Dirty Data\n\nReal-world data is messy. It has missing values (`NaN`), duplicates, and incorrect formats. Pandas provides tools to clean this:\n\n```python\n# Drop rows with any missing values\ndf.dropna(inplace=True)\n\n# Fill missing values with a default\ndf.fillna(0, inplace=True)\n\n# Remove duplicate rows\ndf.drop_duplicates(inplace=True)\n```",
+        "instructions": "## Task: Clean the Dataset\nYou have a DataFrame with missing values. Fill all missing values with `0`.",
+        "starterCode": "import pandas as pd\nimport numpy as np\n\ndf = pd.DataFrame({'User': ['A', 'B', 'C'], 'Visits': [10, np.nan, 5]})\n\n# Fill NaN with 0\ndf.___(___, inplace=True)\nprint(df)",
+        "solution": "import pandas as pd\nimport numpy as np\n\ndf = pd.DataFrame({'User': ['A', 'B', 'C'], 'Visits': [10, np.nan, 5]})\n\ndf.fillna(0, inplace=True)\nprint(df)",
+        "hint": "Use df.fillna(0, inplace=True).",
+        "rubric": "Successfully fills missing values with 0."
+      }
+    ]
+  },
+  "Data Visualization": {
+    "aiRubric": "Check Matplotlib/Seaborn logic.",
+    "lessons": [
+      {
+        "title": "Matplotlib Basics",
+        "theory": "## Visualizing Data\n\nNumbers in a table are hard to interpret. Visualizations reveal trends instantly. `matplotlib.pyplot` is Python's standard plotting library.\n\n```python\nimport matplotlib.pyplot as plt\n\nx = [1, 2, 3]\ny = [10, 20, 15]\n\nplt.plot(x, y) # Create a line plot\nplt.title('My Chart')\nplt.xlabel('Time')\nplt.ylabel('Value')\nplt.show() # Display it\n```",
+        "instructions": "## Task: Your First Plot\nCreate a bar chart using `plt.bar(categories, values)`.",
+        "starterCode": "import matplotlib.pyplot as plt\n\ncategories = ['A', 'B', 'C']\nvalues = [50, 75, 30]\n\n# Create bar chart\nplt.___(___, ___)\nplt.title('Category Comparison')\nplt.show()",
+        "solution": "import matplotlib.pyplot as plt\n\ncategories = ['A', 'B', 'C']\nvalues = [50, 75, 30]\n\nplt.bar(categories, values)\nplt.title('Category Comparison')\nplt.show()",
+        "hint": "Use plt.bar().",
+        "rubric": "Uses plt.bar() correctly."
+      }
+    ]
+  },
+  "BI & Dashboards (Power BI & Tableau)": {
+    "aiRubric": "Check DAX and Tableau syntax validation.",
+    "lessons": [
+      {
+        "title": "Tableau: Calculated Fields",
+        "theory": "## Calculated Fields in Tableau\n\nTableau is a powerful drag-and-drop dashboarding tool. However, complex logic requires writing **Calculated Fields**. These are formulas that compute new data based on existing fields.\n\nFor example, to calculate Profit Margin, you write a formula combining two Measures:\n`SUM([Profit]) / SUM([Sales])`\n\nYou can also use IF/THEN logic:\n`IF [Sales] > 1000 THEN 'High' ELSE 'Low' END`",
+        "instructions": "## Task: Tableau Syntax\nWrite a Tableau Calculated Field (as a Python string variable) that calculates `Discount Ratio` by dividing `[Discount]` by `[Sales]`.",
+        "starterCode": "# Write the Tableau formula inside the string\ntableau_formula = \"___\"\nprint(f\"Formula: {tableau_formula}\")",
+        "solution": "tableau_formula = \"[Discount] / [Sales]\"\nprint(f\"Formula: {tableau_formula}\")",
+        "hint": "Divide [Discount] by [Sales].",
+        "rubric": "String contains [Discount] / [Sales]."
+      },
+      {
+        "title": "Power BI: Intro to DAX",
+        "theory": "## Data Analysis Expressions (DAX)\n\nPower BI uses DAX, a formula language, to create custom Measures and calculated columns. It looks similar to Excel formulas but operates on entire tables/columns instead of cells.\n\n`CALCULATE` is the most important DAX function. It modifies the filter context of a calculation.\n```dax\nTotal Sales (USA) = CALCULATE( SUM(Sales[Amount]), Customers[Country] = \"USA\" )\n```",
+        "instructions": "## Task: Writing DAX\nWrite a DAX formula (as a Python string) named `High Value Orders` that calculates the `COUNTROWS(Orders)` where `Orders[Amount] > 1000` using the `CALCULATE` function.",
+        "starterCode": "# Write the exact DAX formula inside the string\ndax_formula = \"CALCULATE( ___(Orders), ___ > 1000 )\"\nprint(f\"DAX: {dax_formula}\")",
+        "solution": "dax_formula = \"CALCULATE( COUNTROWS(Orders), Orders[Amount] > 1000 )\"\nprint(f\"DAX: {dax_formula}\")",
+        "hint": "Use COUNTROWS(Orders) and Orders[Amount] > 1000.",
+        "rubric": "String contains COUNTROWS and Orders[Amount] > 1000 inside CALCULATE."
+      }
+    ]
+  },
+  "Statistical Analysis & A/B Testing": {
+    "aiRubric": "Check python statistics logic.",
+    "lessons": [
+      {
+        "title": "A/B Testing Basics",
+        "theory": "## Statistical Significance\n\nAn A/B Test compares two versions of something (like a webpage) to see which performs better. If Version A gets a 5% click rate and Version B gets 5.2%, is B actually better, or is it just random noise? We use p-values to determine statistical significance. If p < 0.05, we typically conclude the difference is real (significant).",
+        "instructions": "## Task: Analyze P-Value\nWrite a Python function that takes a p-value and returns 'Significant' if it's strictly less than 0.05, and 'Not Significant' otherwise.",
+        "starterCode": "def analyze_ab_test(p_value):\n    if p_value ___ 0.05:\n        return \"___\"\n    else:\n        return \"___\"\n\nprint(analyze_ab_test(0.02))\nprint(analyze_ab_test(0.15))",
+        "solution": "def analyze_ab_test(p_value):\n    if p_value < 0.05:\n        return \"Significant\"\n    else:\n        return \"Not Significant\"\n\nprint(analyze_ab_test(0.02))\nprint(analyze_ab_test(0.15))",
+        "hint": "Use < 0.05.",
+        "rubric": "Correctly returns Significant if < 0.05."
+      }
+    ]
+  }
+
 }; // end courseManifest
