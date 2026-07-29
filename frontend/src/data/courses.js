@@ -107,6 +107,21 @@ export const curriculum = {
       "Data Warehousing"
     ]
   },
+  "Data Analysis": {
+    "Beginner": [
+      "Data Analysis Intro",
+      "SQL Essentials"
+    ],
+    "Intermediate": [
+      "Advanced SQL Analytics",
+      "Pandas for Analysis"
+    ],
+    "Advanced": [
+      "Data Visualization",
+      "BI & Dashboards (Power BI & Tableau)",
+      "Statistical Analysis & A/B Testing"
+    ]
+  },
   "Data Science": {
     "Beginner": [
       "Pandas Intro",
