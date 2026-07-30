@@ -1,13 +1,17 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PublicNavbar from './PublicNavbar';
-import { curriculum, courseManifest } from '../data/courses';
+import { useCurriculum } from '../hooks/useCurriculum';
 import { Code2, BarChart2, Bot, Palette, Terminal, GraduationCap, Star, Clock } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 const CourseCatalog = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = React.useState('');
   const [filterLevel, setFilterLevel] = React.useState('All');
+  
+  const { data, isLoading, error } = useCurriculum();
+  const curriculum = data?.curriculum || {};
 
   const filteredCurriculum = Object.entries(curriculum).filter(([categoryName, levels]) => {
     const matchesSearch = categoryName.toLowerCase().includes(searchTerm.toLowerCase());
@@ -17,6 +21,10 @@ const CourseCatalog = () => {
 
   return (
     <div style={{ backgroundColor: 'var(--bg)', minHeight: '100vh', display: 'flex', flexDirection: 'column', overflowX: 'hidden' }}>
+      <Helmet>
+        <title>Course Catalog | Digital Era Academy</title>
+        <meta name="description" content="Browse our comprehensive curriculum. From beginner basics to advanced AI orchestration, build your skills with interactive, real-world projects." />
+      </Helmet>
       <PublicNavbar />
       
       <main style={{ flex: 1, padding: '60px 32px', maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
@@ -66,7 +74,19 @@ const CourseCatalog = () => {
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '24px' }}>
-          {filteredCurriculum.length === 0 ? (
+          {isLoading ? (
+            Array(6).fill(0).map((_, i) => (
+              <div key={i} style={{ 
+                background: 'var(--surface)', borderRadius: '16px', padding: '24px', 
+                height: '240px', border: '1px solid var(--border)',
+                animation: 'pulse 1.5s infinite', display: 'flex', flexDirection: 'column'
+              }}>
+                <div style={{ background: 'var(--surface2)', height: '48px', width: '48px', borderRadius: '12px', marginBottom: '16px' }}></div>
+                <div style={{ background: 'var(--surface2)', height: '24px', width: '70%', borderRadius: '4px', marginBottom: '16px' }}></div>
+                <div style={{ background: 'var(--surface2)', height: '16px', width: '40%', borderRadius: '4px', marginTop: 'auto' }}></div>
+              </div>
+            ))
+          ) : filteredCurriculum.length === 0 ? (
             <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '60px 0', color: 'var(--text2)' }}>
               <h3>No courses found matching your criteria.</h3>
               <button onClick={() => { setSearchTerm(''); setFilterLevel('All'); }} style={{ marginTop: '16px', padding: '8px 16px', background: 'var(--surface2)', border: 'none', color: 'var(--text)', borderRadius: '8px', cursor: 'pointer' }}>Clear Filters</button>

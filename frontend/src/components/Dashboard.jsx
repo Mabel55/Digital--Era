@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { curriculum, courseManifest } from '../data/courses';
+import { useCurriculum } from '../hooks/useCurriculum';
 import { projectsManifest } from '../data/projects';
 import CertificateModal from './CertificateModal';
 import NotificationCenter from './NotificationCenter';
@@ -11,6 +11,9 @@ import { GraduationCap, Sun, Moon, Trophy, Flame, Users, User, Target, Scroll, R
 const Dashboard = () => {
   const { user, token, logout, subscription } = useAuth();
   const navigate = useNavigate();
+  const { data: curriculumData, isLoading: curriculumLoading } = useCurriculum();
+  const curriculum = curriculumData?.curriculum || {};
+  const courseManifest = curriculumData?.courseManifest || {};
   const [activeTab, setActiveTab] = useState('Beginner');
   const [overviewCourse, setOverviewCourse] = useState(null);
   const [certCourse, setCertCourse] = useState(null);
@@ -316,8 +319,17 @@ const Dashboard = () => {
       </nav>
 
       <div className="dash-body">
-        <div className="dash-hero">
-          <div className="hero-left">
+        {curriculumLoading ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', padding: '24px' }}>
+            <div style={{ height: '200px', background: 'var(--surface)', borderRadius: '16px', animation: 'pulse 1.5s infinite' }}></div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
+              {Array(3).fill(0).map((_, i) => <div key={i} style={{ height: '180px', background: 'var(--surface)', borderRadius: '16px', animation: 'pulse 1.5s infinite' }}></div>)}
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className="dash-hero">
+              <div className="hero-left">
             <h2>{t('dashboard.welcome')}, <span>{user?.full_name?.split(' ')?.[0] || user?.email?.split('@')?.[0] || 'Student'}</span>!</h2>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px', color: 'var(--text-dim)' }}>
               Your current track:
@@ -647,6 +659,8 @@ const Dashboard = () => {
             );
           })}
         </div>
+          </>
+        )}
       </div>
 
       {overviewCourse && (

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Editor from '@monaco-editor/react';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
-import { courseManifest } from '../data/courses';
+import { useCurriculum } from '../hooks/useCurriculum';
 import LessonDiscussion from './LessonDiscussion';
 import { ArrowLeft, Play, Terminal, CheckCircle2, XCircle, Bug, Bot, ArrowUp, PartyPopper, Home, RotateCcw, Menu, Lightbulb, RotateCcw as ResetIcon, Clock, ChevronRight } from 'lucide-react';
 
@@ -15,7 +15,8 @@ const Workspace = () => {
   const { token, user, subscription } = useAuth();
   const { i18n } = useTranslation();
   const courseName = decodeURIComponent(courseId);
-  const manifest = courseManifest[courseName];
+  const { data: curriculumData, isLoading: curriculumLoading } = useCurriculum();
+  const manifest = curriculumData?.courseManifest?.[courseName];
 
   const [currentLessonIdx, setCurrentLessonIdx] = useState(0);
   const [translatedTheory, setTranslatedTheory] = useState('');
@@ -408,6 +409,10 @@ const Workspace = () => {
       setIsTyping(false);
     }
   };
+
+  if (curriculumLoading) {
+    return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', color: 'white', background: 'var(--bg)' }}>Loading Course Data...</div>;
+  }
 
   if (!manifest) {
     return <div style={{color:'white', padding: '20px'}}>Course not found</div>;

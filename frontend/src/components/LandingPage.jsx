@@ -2,12 +2,17 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PublicNavbar from './PublicNavbar';
 import { Rocket, Zap, Bot, Trophy, User, GraduationCap, Star } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 const LandingPage = () => {
   const navigate = useNavigate();
 
   return (
     <div style={{ backgroundColor: 'var(--bg)', minHeight: '100vh', display: 'flex', flexDirection: 'column', overflowX: 'hidden' }}>
+      <Helmet>
+        <title>Digital Era | African Developer Academy</title>
+        <meta name="description" content="Master Python, Data Science, and AI. Built for the next generation of African developers. Learn by doing with our interactive coding environment and AI tutor." />
+      </Helmet>
       <PublicNavbar />
       
       {/* Hero Section */}

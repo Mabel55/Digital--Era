@@ -77,6 +77,24 @@ def ask_gemini(question: str, context_chunks: list[str] = None, chat_history: li
     if context_chunks:
         context_str = "\n\n--- COURSE MATERIAL CONTEXT ---\nThe following is the exact course material the student is currently learning. Use this to guide your answer:\n" + "\n".join(context_chunks) + "\n-------------------------------\n"
 
+    # ── SEMANTIC CACHING LOGIC ──
+    # We only cache standalone questions (no chat history) to ensure context isn't lost.
+    cache_id = None
+    if not chat_history:
+        import hashlib
+        from database import SessionLocal
+        hash_input = f"{system_prompt}|{context_str}|{question}".encode('utf-8')
+        cache_id = hashlib.sha256(hash_input).hexdigest()
+        
+        db = SessionLocal()
+        try:
+            cached = db.query(models.AITutorCache).filter(models.AITutorCache.id == cache_id).first()
+            if cached:
+                print("⚡ Serving AI Tutor response from Semantic Cache! (Cost: $0)")
+                return cached.response
+        finally:
+            db.close()
+
     messages = [("system", system_prompt + context_str)]
 
     # 2. Memory Injection: Loop through PostgreSQL rows and convert them to LangChain tuples
@@ -91,7 +109,22 @@ def ask_gemini(question: str, context_chunks: list[str] = None, chat_history: li
 
     # Invoke the model with the complete historical thread
     response = llm.invoke(messages)
-    return response.content.strip()
+    response_text = response.content.strip()
+
+    # Save to Cache
+    if cache_id:
+        db = SessionLocal()
+        try:
+            new_cache = models.AITutorCache(id=cache_id, question=question, response=response_text)
+            db.add(new_cache)
+            db.commit()
+        except Exception as e:
+            db.rollback()
+            print(f"⚠️ Failed to cache AI response: {e}")
+        finally:
+            db.close()
+
+    return response_text
 
 
 # ── BRAIN STORAGE & META TRACKING ───────────────────────────────────────────

@@ -39,80 +39,90 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { HelmetProvider } from 'react-helmet-async';
+
+// Initialize React Query client
+const queryClient = new QueryClient();
+
 const App = () => {
   return (
     <ErrorBoundary>
-      <BrowserRouter>
-        <OfflineBanner />
-        <AuthProvider>
-          <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', color: 'var(--text2)' }}><Loader2 className="spinner" size={32} /></div>}>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/catalog" element={<CourseCatalog />} />
-            <Route path="/community" element={<Forum />} />
-            <Route path="/career-tracks" element={<CareerTracks />} />
-            <Route path="/pricing" element={<PricingPage />} />
-            <Route path="/onboarding" element={<Onboarding />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/dashboard" element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            } />
-            <Route path="/profile" element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            } />
-            <Route path="/workspace/:courseId" element={
-              <ProtectedRoute>
-                <Workspace />
-              </ProtectedRoute>
-            } />
-            <Route path="/db-workspace/:courseId" element={
-              <ProtectedRoute>
-                <DBWorkspace />
-              </ProtectedRoute>
-            } />
-            <Route path="/teacher" element={
-              <ProtectedRoute>
-                <TeacherDashboard />
-              </ProtectedRoute>
-            } />
-            <Route path="/assessment/:topic" element={
-              <ProtectedRoute>
-                <Assessment />
-              </ProtectedRoute>
-            } />
-            <Route path="/project/:projectId" element={
-              <ProtectedRoute>
-                <ProjectWorkspace />
-              </ProtectedRoute>
-            } />
-            <Route path="/daily-challenge" element={
-              <ProtectedRoute>
-                <DailyChallenge />
-              </ProtectedRoute>
-            } />
-            <Route path="/sandbox" element={
-              <ProtectedRoute>
-                <Sandbox />
-              </ProtectedRoute>
-            } />
+      <HelmetProvider>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <OfflineBanner />
+            <AuthProvider>
+              <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', color: 'var(--text2)' }}><Loader2 className="spinner" size={32} /></div>}>
+              <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/catalog" element={<CourseCatalog />} />
+                <Route path="/community" element={<Forum />} />
+                <Route path="/career-tracks" element={<CareerTracks />} />
+                <Route path="/pricing" element={<PricingPage />} />
+                <Route path="/onboarding" element={<Onboarding />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/dashboard" element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="/profile" element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                } />
+                <Route path="/workspace/:courseId" element={
+                  <ProtectedRoute>
+                    <Workspace />
+                  </ProtectedRoute>
+                } />
+                <Route path="/db-workspace/:courseId" element={
+                  <ProtectedRoute>
+                    <DBWorkspace />
+                  </ProtectedRoute>
+                } />
+                <Route path="/teacher" element={
+                  <ProtectedRoute>
+                    <TeacherDashboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="/assessment/:topic" element={
+                  <ProtectedRoute>
+                    <Assessment />
+                  </ProtectedRoute>
+                } />
+                <Route path="/project/:projectId" element={
+                  <ProtectedRoute>
+                    <ProjectWorkspace />
+                  </ProtectedRoute>
+                } />
+                <Route path="/daily-challenge" element={
+                  <ProtectedRoute>
+                    <DailyChallenge />
+                  </ProtectedRoute>
+                } />
+                <Route path="/sandbox" element={
+                  <ProtectedRoute>
+                    <Sandbox />
+                  </ProtectedRoute>
+                } />
 
-            <Route path="/leaderboard" element={
-              <ProtectedRoute>
-                <Leaderboard />
-              </ProtectedRoute>
-            } />
-            <Route path="/public-leaderboard" element={
-              <Leaderboard isPublic={true} />
-            } />
-          </Routes>
-        </Suspense>
-        <PWAInstallPrompt />
-      </AuthProvider>
-    </BrowserRouter>
+                <Route path="/leaderboard" element={
+                  <ProtectedRoute>
+                    <Leaderboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="/public-leaderboard" element={
+                  <Leaderboard isPublic={true} />
+                } />
+              </Routes>
+            </Suspense>
+            <PWAInstallPrompt />
+          </AuthProvider>
+        </BrowserRouter>
+        </QueryClientProvider>
+      </HelmetProvider>
     </ErrorBoundary>
   );
 };

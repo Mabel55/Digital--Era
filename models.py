@@ -348,3 +348,12 @@ class LessonTranslationCache(Base):
     target_language = Column(String, nullable=False, index=True)
     translated_text = Column(Text, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+class AITutorCache(Base):
+    """Caches AI Tutor questions and responses to lower API costs."""
+    __tablename__ = "ai_tutor_cache"
+
+    id = Column(String, primary_key=True, index=True) # Hash of normalized question + context
+    question = Column(String, index=True)
+    response = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
