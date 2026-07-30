@@ -11,12 +11,12 @@ from slowapi.errors import RateLimitExceeded
 from limiter import limiter
 
 # 1. Initialize Database & Run Migrations
+# Removed Base.metadata.create_all(bind=engine) from startup to prevent Azure deadlocks/timeouts.
+# We now use the /api/admin/setup-db-tables endpoint below to safely run migrations.
 try:
-    Base.metadata.create_all(bind=engine)
-    print("Database tables created/verified successfully.")
+    print("Skipping auto DB setup to prevent deadlocks.")
 except Exception as e:
-    print(f"WARNING: Could not connect to database on startup: {e}")
-    print("Server will start anyway. Database-dependent routes will fail until DB is available.")
+    print(f"WARNING: Exception: {e}")
 
 # Auto-migrate db safely, one column at a time so a single failure doesn't roll back the others
 # MIGRATIONS REMOVED: Running ALTER TABLE on every startup can cause database deadlocks
@@ -69,8 +69,16 @@ app.include_router(routers.execution.router)
 app.include_router(routers.assessments.router)
 app.include_router(routers.forum.router)
 app.include_router(routers.payments.router)
-app.include_router(routers.daily_challenge.router)
 app.include_router(routers.translation.router)
+
+@app.get("/api/admin/setup-db-tables")
+def setup_db_tables():
+    """Manual trigger to create database tables without causing startup deadlocks."""
+    try:
+        Base.metadata.create_all(bind=engine)
+        return {"message": "Database tables created successfully!"}
+    except Exception as e:
+        return {"error": str(e)}
 
 # 4. Root / Static File Endpoints
 # Mount the entire React app build directory
