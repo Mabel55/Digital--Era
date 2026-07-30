@@ -89,7 +89,7 @@ if os.path.isdir("frontend/dist"):
 def serve_frontend(catchall: str):
     # Serve root-level static files (like sitemap.xml, favicon.svg, robots.txt)
     # instead of serving the React app for them.
-    valid_extensions = (".xml", ".svg", ".png", ".ico", ".txt", ".webmanifest", ".js")
+    valid_extensions = (".xml", ".svg", ".png", ".ico", ".txt", ".webmanifest", ".js", ".json")
     if catchall and any(catchall.endswith(ext) for ext in valid_extensions):
         file_path = os.path.join("frontend/dist", catchall)
         # Prevent path traversal vulnerabilities
