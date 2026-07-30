@@ -50,7 +50,7 @@
     "lessons": [
       {
         "title": "Tokenization",
-        "theory": "## Breaking Down Language\nLLMs do not read text like humans do. They read numbers. The first step in processing text is **Tokenization**.\n\nA tokenizer breaks text down into chunks called 'tokens'. A token is not always a full word; it can be a single character, a syllable, or a common subword (like \"ing\" or \"ed\").\n\nRoughly, 1 token ≈ 4 characters in English, or about 3/4 of a word. A 1000-word essay is approximately 1300 tokens.",
+        "theory": "## Breaking Down Language\nLLMs do not read text like humans do. They read numbers. The first step in processing text is **Tokenization**.\n\nA tokenizer breaks text down into chunks called 'tokens'. A token is not always a full word; it can be a single character, a syllable, or a common subword (like \"ing\" or \"ed\").\n\nRoughly, 1 token \u2248 4 characters in English, or about 3/4 of a word. A 1000-word essay is approximately 1300 tokens.",
         "instructions": "## Task: Written Response\nWhy isn't a token always equivalent to a single word?",
         "starterCode": "Answer: ",
         "solution": "Answer: Because a token can be a subword, a single character, or a common syllable, which allows the model to handle unknown words more efficiently.",
@@ -87,7 +87,7 @@
     "lessons": [
       {
         "title": "Temporal Consistency in Video",
-        "theory": "## The Hardest Problem in Video AI\nGenerating a single image is relatively solved. Generating a video is vastly more difficult because of **Temporal Consistency**.\n\nIf an AI generates a cat walking across a room frame-by-frame, the cat's fur pattern, the lighting, and the background must stay exactly the same in every single frame. Early video AI suffered from intense \"flickering\" because the model would slightly hallucinate different details in each frame.\n\nModern models (like Sora) solve this by using 'Spacetime Patches'—treating video not as a sequence of flat images, but as a 3D block of data (width, height, and time) that is processed all at once.",
+        "theory": "## The Hardest Problem in Video AI\nGenerating a single image is relatively solved. Generating a video is vastly more difficult because of **Temporal Consistency**.\n\nIf an AI generates a cat walking across a room frame-by-frame, the cat's fur pattern, the lighting, and the background must stay exactly the same in every single frame. Early video AI suffered from intense \"flickering\" because the model would slightly hallucinate different details in each frame.\n\nModern models (like Sora) solve this by using 'Spacetime Patches'\u2014treating video not as a sequence of flat images, but as a 3D block of data (width, height, and time) that is processed all at once.",
         "instructions": "## Task: Written Response\nWhy did early video generation models suffer from flickering?",
         "starterCode": "Answer: ",
         "solution": "Answer: Because they struggled with temporal consistency, hallucinating slightly different details in each individual frame.",

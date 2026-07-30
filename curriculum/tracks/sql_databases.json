@@ -81,7 +81,7 @@
       },
       {
         "title": "NULL Handling",
-        "theory": "## Working with NULL\nNULL means 'no value' — it's different from 0 or empty string.\n\n```sql\n-- Check for NULL\nSELECT * FROM users WHERE phone IS NULL;\nSELECT * FROM users WHERE phone IS NOT NULL;\n\n-- COALESCE: provide default for NULL\nSELECT name, COALESCE(phone, 'N/A') AS phone\nFROM users;\n\n-- IFNULL (SQLite specific)\nSELECT name, IFNULL(phone, 'Unknown') FROM users;\n```",
+        "theory": "## Working with NULL\nNULL means 'no value' \u2014 it's different from 0 or empty string.\n\n```sql\n-- Check for NULL\nSELECT * FROM users WHERE phone IS NULL;\nSELECT * FROM users WHERE phone IS NOT NULL;\n\n-- COALESCE: provide default for NULL\nSELECT name, COALESCE(phone, 'N/A') AS phone\nFROM users;\n\n-- IFNULL (SQLite specific)\nSELECT name, IFNULL(phone, 'Unknown') FROM users;\n```",
         "instructions": "## Task: Handle Missing Data\n1. Find users without a phone number (NULL)\n2. Find users who DO have a phone\n3. Use COALESCE to show 'No Phone' for NULL values",
         "starterCode": "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, phone TEXT);\nINSERT INTO users VALUES (1,'Alice','555-1234'),(2,'Bob',NULL),(3,'Charlie','555-5678'),(4,'Diana',NULL);\n\nSELECT * FROM users WHERE phone ___ ___;\nSELECT * FROM users WHERE phone ___ ___ ___;\nSELECT name, ___(phone, 'No Phone') AS phone FROM users;",
         "solution": "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, phone TEXT);\nINSERT INTO users VALUES (1,'Alice','555-1234'),(2,'Bob',NULL),(3,'Charlie','555-5678'),(4,'Diana',NULL);\n\nSELECT * FROM users WHERE phone IS NULL;\nSELECT * FROM users WHERE phone IS NOT NULL;\nSELECT name, COALESCE(phone, 'No Phone') AS phone FROM users;",
@@ -135,7 +135,7 @@
         "instructions": "## Task: Org Chart\n1. Create an employees table with a manager_id column\n2. Self-join to show each employee with their manager's name\n3. Use LEFT JOIN so the CEO (no manager) is included",
         "starterCode": "CREATE TABLE employees (id INTEGER PRIMARY KEY, name TEXT, manager_id INTEGER);\nINSERT INTO employees VALUES (1,'CEO',NULL),(2,'VP Engineering',1),(3,'VP Sales',1),(4,'Dev Lead',2),(5,'Engineer',4);\n\nSELECT e.name AS employee, \n       COALESCE(m.name, 'No Manager') AS manager\nFROM employees e\n___ ___ employees m ON e.___ = m.___;",
         "solution": "CREATE TABLE employees (id INTEGER PRIMARY KEY, name TEXT, manager_id INTEGER);\nINSERT INTO employees VALUES (1,'CEO',NULL),(2,'VP Engineering',1),(3,'VP Sales',1),(4,'Dev Lead',2),(5,'Engineer',4);\n\nSELECT e.name AS employee, \n       COALESCE(m.name, 'No Manager') AS manager\nFROM employees e\nLEFT JOIN employees m ON e.manager_id = m.id;",
-        "hint": "LEFT JOIN employees m — alias 'm' for managers. e.manager_id = m.id links them.",
+        "hint": "LEFT JOIN employees m \u2014 alias 'm' for managers. e.manager_id = m.id links them.",
         "rubric": "Self-join works. CEO shows 'No Manager'. All employees listed with their manager."
       },
       {

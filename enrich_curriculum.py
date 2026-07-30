@@ -17,7 +17,7 @@ if not api_key:
     raise ValueError("API key not found in .env")
 
 llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash",
+    model="gemini-2.5-pro",
     api_key=api_key,
     temperature=0.3
 )
@@ -47,6 +47,10 @@ def enrich_track(file_path):
             if "theory" in lesson and lesson["theory"]:
                 if lesson.get("type") == "quiz":
                     continue
+                if len(lesson["theory"]) > 800:
+                    print(f"  Skipping already enriched lesson: {lesson['title']}")
+                    continue
+                    
                 print(f"  Enriching lesson: {lesson['title']}")
                 new_theory = enrich_lesson_theory(topic, lesson['title'], lesson['theory'])
                 if new_theory:

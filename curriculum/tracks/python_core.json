@@ -4,7 +4,7 @@
     "lessons": [
       {
         "title": "Variables & Data Types",
-        "theory": "## Variables in Python\nVariables are containers for storing data. In Python, you don't need to declare a type — Python figures it out automatically.\n\n```python\nname = 'Alice'    # str\nage = 25          # int\nheight = 5.6      # float\nis_student = True # bool\n```\n\nUse `type()` to check a variable's type.\n\n**What this code does:**\n- `name = 'Alice'`: Creates a variable named `name` and assigns the string text 'Alice' to it.\n- `age = 25`: Creates a variable named `age` holding the whole number (integer) 25.\n- `height = 5.6`: Creates a float (decimal number).\n- `is_student = True`: Creates a boolean (True/False) flag.\n- `#`: Everything after a hash is a comment, ignored by the computer.",
+        "theory": "## Variables in Python\nVariables are containers for storing data. In Python, you don't need to declare a type \u2014 Python figures it out automatically.\n\n```python\nname = 'Alice'    # str\nage = 25          # int\nheight = 5.6      # float\nis_student = True # bool\n```\n\nUse `type()` to check a variable's type.\n\n**What this code does:**\n- `name = 'Alice'`: Creates a variable named `name` and assigns the string text 'Alice' to it.\n- `age = 25`: Creates a variable named `age` holding the whole number (integer) 25.\n- `height = 5.6`: Creates a float (decimal number).\n- `is_student = True`: Creates a boolean (True/False) flag.\n- `#`: Everything after a hash is a comment, ignored by the computer.",
         "instructions": "## Task: Personal Info\n1. Create a variable `name` and set it to your name (string)\n2. Create a variable `age` and set it to your age (integer)\n3. Create a variable `gpa` and set it to `3.8` (float)\n4. Print all three variables using an f-string",
         "starterCode": "name = ___\nage = ___\ngpa = ___\nprint(f'My name is {___}, I am {___} years old with a GPA of {___}')",
         "solution": "name = 'Mabel'\nage = 20\ngpa = 3.8\nprint(f'My name is {name}, I am {age} years old with a GPA of {gpa}')",
@@ -73,9 +73,9 @@
       {
         "title": "While Loops",
         "theory": "## While Loops\nWhile loops continue running as long as a condition is True.\n\n```python\ncount = 0\nwhile count < 5:\n    print(f'Count is {count}')\n    count += 1  # Don't forget to increment!\n\n# break exits the loop early\nwhile True:\n    response = input('Type quit to exit: ')\n    if response == 'quit':\n        break\n```\n\n**Warning:** Always make sure your condition will eventually become False, or use `break`.",
-        "instructions": "## Task: Countdown Timer\n1. Set `countdown` to `10`\n2. Use a `while` loop to count down to 1\n3. Print each number\n4. After the loop, print `'Liftoff! 🚀'`",
-        "starterCode": "countdown = ___\n\nwhile countdown ___ 0:\n    print(countdown)\n    countdown ___ 1\n\nprint('Liftoff! 🚀')",
-        "solution": "countdown = 10\n\nwhile countdown > 0:\n    print(countdown)\n    countdown -= 1\n\nprint('Liftoff! 🚀')",
+        "instructions": "## Task: Countdown Timer\n1. Set `countdown` to `10`\n2. Use a `while` loop to count down to 1\n3. Print each number\n4. After the loop, print `'Liftoff! \ud83d\ude80'`",
+        "starterCode": "countdown = ___\n\nwhile countdown ___ 0:\n    print(countdown)\n    countdown ___ 1\n\nprint('Liftoff! \ud83d\ude80')",
+        "solution": "countdown = 10\n\nwhile countdown > 0:\n    print(countdown)\n    countdown -= 1\n\nprint('Liftoff! \ud83d\ude80')",
         "hint": "Start at 10, loop while > 0, decrease by 1 each time with -=",
         "rubric": "Countdown from 10 to 1. Liftoff message prints after loop."
       },
@@ -113,7 +113,7 @@
       },
       {
         "title": "Return Values",
-        "theory": "## Returning Data from Functions\nFunctions can return values using the `return` keyword. They can return multiple values too!\n\n```python\ndef divide(a, b):\n    if b == 0:\n        return None  # Can't divide by zero\n    quotient = a // b\n    remainder = a % b\n    return quotient, remainder  # Returns a tuple\n\nq, r = divide(17, 5)\nprint(f'17 ÷ 5 = {q} remainder {r}')\n```",
+        "theory": "## Returning Data from Functions\nFunctions can return values using the `return` keyword. They can return multiple values too!\n\n```python\ndef divide(a, b):\n    if b == 0:\n        return None  # Can't divide by zero\n    quotient = a // b\n    remainder = a % b\n    return quotient, remainder  # Returns a tuple\n\nq, r = divide(17, 5)\nprint(f'17 \u00f7 5 = {q} remainder {r}')\n```",
         "instructions": "## Task: Min, Max, Average\n1. Create a function `analyze(numbers)` that takes a list\n2. Return three values: the minimum, maximum, and average\n3. Test with `[10, 20, 30, 40, 50]`",
         "starterCode": "def analyze(numbers):\n    minimum = ___(numbers)\n    maximum = ___(numbers)\n    average = ___(numbers) / ___(numbers)\n    return minimum, maximum, average\n\ndata = [10, 20, 30, 40, 50]\nlo, hi, avg = analyze(data)\nprint(f'Min: {lo}, Max: {hi}, Avg: {avg}')",
         "solution": "def analyze(numbers):\n    minimum = min(numbers)\n    maximum = max(numbers)\n    average = sum(numbers) / len(numbers)\n    return minimum, maximum, average\n\ndata = [10, 20, 30, 40, 50]\nlo, hi, avg = analyze(data)\nprint(f'Min: {lo}, Max: {hi}, Avg: {avg}')",
@@ -131,7 +131,7 @@
       },
       {
         "title": "Scope & Global Variables",
-        "theory": "## Variable Scope\nVariables created inside a function are **local** — they only exist inside that function.\n\n```python\nx = 10  # Global variable\n\ndef my_func():\n    x = 20  # Local variable (different from global x)\n    print(f'Inside: {x}')  # 20\n\nmy_func()\nprint(f'Outside: {x}')  # 10 (unchanged)\n\n# Use 'global' keyword to modify global variable\ndef update():\n    global x\n    x = 99\n```",
+        "theory": "## Variable Scope\nVariables created inside a function are **local** \u2014 they only exist inside that function.\n\n```python\nx = 10  # Global variable\n\ndef my_func():\n    x = 20  # Local variable (different from global x)\n    print(f'Inside: {x}')  # 20\n\nmy_func()\nprint(f'Outside: {x}')  # 10 (unchanged)\n\n# Use 'global' keyword to modify global variable\ndef update():\n    global x\n    x = 99\n```",
         "instructions": "## Task: Counter with Scope\n1. Create a global variable `counter = 0`\n2. Create a function `increment()` that increases counter by 1 (use `global`)\n3. Call `increment()` 5 times using a loop\n4. Print the final counter value",
         "starterCode": "counter = ___\n\ndef increment():\n    ___ counter\n    counter ___ 1\n\nfor i in range(___):\n    increment()\n\nprint(f'Counter: {counter}')",
         "solution": "counter = 0\n\ndef increment():\n    global counter\n    counter += 1\n\nfor i in range(5):\n    increment()\n\nprint(f'Counter: {counter}')",
@@ -324,17 +324,17 @@
         "title": "Built-in Decorators",
         "theory": "## Python's Built-in Decorators\n\n```python\nclass Circle:\n    def __init__(self, radius):\n        self._radius = radius\n    \n    @property\n    def radius(self):\n        return self._radius\n    \n    @radius.setter\n    def radius(self, value):\n        if value < 0:\n            raise ValueError('Radius cannot be negative')\n        self._radius = value\n    \n    @property\n    def area(self):\n        return 3.14159 * self._radius ** 2\n\nc = Circle(5)\nprint(c.area)     # 78.5 (accessed like attribute)\nc.radius = 10     # Uses setter\n```",
         "instructions": "## Task: Temperature Class\n1. Create a `Temperature` class storing value in Celsius\n2. Add a `@property celsius` getter\n3. Add a `@celsius.setter` that rejects values below -273.15\n4. Add a `@property fahrenheit` that converts (C * 9/5 + 32)",
-        "starterCode": "class Temperature:\n    def __init__(self, celsius):\n        self._celsius = celsius\n    \n    @property\n    def celsius(self):\n        return self.___\n    \n    @celsius.setter\n    def celsius(self, value):\n        if value < ___:\n            raise ValueError('Below absolute zero!')\n        self.___ = value\n    \n    @property\n    def fahrenheit(self):\n        return self._celsius * ___ + ___\n\nt = Temperature(100)\nprint(f'{t.celsius}°C = {t.fahrenheit}°F')\nt.celsius = 0\nprint(f'{t.celsius}°C = {t.fahrenheit}°F')",
-        "solution": "class Temperature:\n    def __init__(self, celsius):\n        self._celsius = celsius\n    \n    @property\n    def celsius(self):\n        return self._celsius\n    \n    @celsius.setter\n    def celsius(self, value):\n        if value < -273.15:\n            raise ValueError('Below absolute zero!')\n        self._celsius = value\n    \n    @property\n    def fahrenheit(self):\n        return self._celsius * 9/5 + 32\n\nt = Temperature(100)\nprint(f'{t.celsius}°C = {t.fahrenheit}°F')\nt.celsius = 0\nprint(f'{t.celsius}°C = {t.fahrenheit}°F')",
+        "starterCode": "class Temperature:\n    def __init__(self, celsius):\n        self._celsius = celsius\n    \n    @property\n    def celsius(self):\n        return self.___\n    \n    @celsius.setter\n    def celsius(self, value):\n        if value < ___:\n            raise ValueError('Below absolute zero!')\n        self.___ = value\n    \n    @property\n    def fahrenheit(self):\n        return self._celsius * ___ + ___\n\nt = Temperature(100)\nprint(f'{t.celsius}\u00b0C = {t.fahrenheit}\u00b0F')\nt.celsius = 0\nprint(f'{t.celsius}\u00b0C = {t.fahrenheit}\u00b0F')",
+        "solution": "class Temperature:\n    def __init__(self, celsius):\n        self._celsius = celsius\n    \n    @property\n    def celsius(self):\n        return self._celsius\n    \n    @celsius.setter\n    def celsius(self, value):\n        if value < -273.15:\n            raise ValueError('Below absolute zero!')\n        self._celsius = value\n    \n    @property\n    def fahrenheit(self):\n        return self._celsius * 9/5 + 32\n\nt = Temperature(100)\nprint(f'{t.celsius}\u00b0C = {t.fahrenheit}\u00b0F')\nt.celsius = 0\nprint(f'{t.celsius}\u00b0C = {t.fahrenheit}\u00b0F')",
         "hint": "self._celsius for private storage. 9/5 + 32 for Fahrenheit conversion.",
-        "rubric": "Properties work. 100°C = 212°F. 0°C = 32°F."
+        "rubric": "Properties work. 100\u00b0C = 212\u00b0F. 0\u00b0C = 32\u00b0F."
       },
       {
         "title": "functools.wraps",
         "theory": "## Preserving Function Metadata\nDecorators replace the original function, losing its name and docstring. `functools.wraps` fixes this.\n\n```python\nfrom functools import wraps\n\ndef my_decorator(func):\n    @wraps(func)  # Preserves func's metadata\n    def wrapper(*args, **kwargs):\n        return func(*args, **kwargs)\n    return wrapper\n\n@my_decorator\ndef greet():\n    '''Says hello'''\n    print('Hello!')\n\nprint(greet.__name__)  # 'greet' (not 'wrapper')\nprint(greet.__doc__)   # 'Says hello'\n```",
         "instructions": "## Task: Debug Decorator\n1. Create a `@debug` decorator using `@wraps`\n2. It should print function name, args, and return value\n3. Apply to a `multiply(a, b)` function\n4. Verify `__name__` is preserved",
-        "starterCode": "from functools import wraps\n\ndef debug(func):\n    @___(func)\n    def wrapper(*args, **kwargs):\n        print(f'→ {func.___}({args})')\n        result = func(*args, **kwargs)\n        print(f'← {result}')\n        return result\n    return wrapper\n\n@debug\ndef multiply(a, b):\n    '''Multiplies two numbers'''\n    return a * b\n\nprint(multiply(4, 7))\nprint(f'Name: {multiply.___}')\nprint(f'Doc: {multiply.___}')",
-        "solution": "from functools import wraps\n\ndef debug(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        print(f'→ {func.__name__}({args})')\n        result = func(*args, **kwargs)\n        print(f'← {result}')\n        return result\n    return wrapper\n\n@debug\ndef multiply(a, b):\n    '''Multiplies two numbers'''\n    return a * b\n\nprint(multiply(4, 7))\nprint(f'Name: {multiply.__name__}')\nprint(f'Doc: {multiply.__doc__}')",
+        "starterCode": "from functools import wraps\n\ndef debug(func):\n    @___(func)\n    def wrapper(*args, **kwargs):\n        print(f'\u2192 {func.___}({args})')\n        result = func(*args, **kwargs)\n        print(f'\u2190 {result}')\n        return result\n    return wrapper\n\n@debug\ndef multiply(a, b):\n    '''Multiplies two numbers'''\n    return a * b\n\nprint(multiply(4, 7))\nprint(f'Name: {multiply.___}')\nprint(f'Doc: {multiply.___}')",
+        "solution": "from functools import wraps\n\ndef debug(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        print(f'\u2192 {func.__name__}({args})')\n        result = func(*args, **kwargs)\n        print(f'\u2190 {result}')\n        return result\n    return wrapper\n\n@debug\ndef multiply(a, b):\n    '''Multiplies two numbers'''\n    return a * b\n\nprint(multiply(4, 7))\nprint(f'Name: {multiply.__name__}')\nprint(f'Doc: {multiply.__doc__}')",
         "hint": "@wraps(func) preserves __name__ and __doc__.",
         "rubric": "Decorator logs calls. __name__ is 'multiply', not 'wrapper'."
       },
@@ -372,7 +372,7 @@
       },
       {
         "title": "Generator Expressions",
-        "theory": "## Generator Expressions\nLike list comprehensions but with parentheses — they're lazy and memory-efficient.\n\n```python\n# List comprehension (all in memory)\nsquares_list = [x**2 for x in range(1000000)]  # Uses lots of memory\n\n# Generator expression (lazy)\nsquares_gen = (x**2 for x in range(1000000))  # Almost no memory\n\n# Use next() to get values one at a time\nprint(next(squares_gen))  # 0\nprint(next(squares_gen))  # 1\n\n# Or iterate\nfor sq in squares_gen:\n    if sq > 100:\n        break\n    print(sq)\n```",
+        "theory": "## Generator Expressions\nLike list comprehensions but with parentheses \u2014 they're lazy and memory-efficient.\n\n```python\n# List comprehension (all in memory)\nsquares_list = [x**2 for x in range(1000000)]  # Uses lots of memory\n\n# Generator expression (lazy)\nsquares_gen = (x**2 for x in range(1000000))  # Almost no memory\n\n# Use next() to get values one at a time\nprint(next(squares_gen))  # 0\nprint(next(squares_gen))  # 1\n\n# Or iterate\nfor sq in squares_gen:\n    if sq > 100:\n        break\n    print(sq)\n```",
         "instructions": "## Task: Memory-Efficient Sum\n1. Create a generator expression for cubes of numbers 1 to 1000000\n2. Use `sum()` to add them all without creating a list\n3. Print the result",
         "starterCode": "# This would use tons of memory:\n# total = sum([x**3 for x in range(1, 1000001)])\n\n# Generator expression uses almost none:\ntotal = sum(___ for x in range(___, ___))\nprint(f'Sum of cubes: {total}')",
         "solution": "# This would use tons of memory:\n# total = sum([x**3 for x in range(1, 1000001)])\n\n# Generator expression uses almost none:\ntotal = sum(x**3 for x in range(1, 1000001))\nprint(f'Sum of cubes: {total}')",
@@ -426,7 +426,7 @@
         "instructions": "## Task: Concurrent Downloads\n1. Create `download(filename, seconds)` that simulates a download\n2. Use `asyncio.gather` to download 3 files concurrently\n3. Print total time taken",
         "starterCode": "import asyncio\nimport time\n\nasync def download(filename, seconds):\n    print(f'Downloading {filename}...')\n    ___ asyncio.sleep(seconds)\n    print(f'{filename} complete!')\n    return filename\n\nasync def main():\n    start = time.time()\n    results = ___ asyncio.___(\n        download('photo.jpg', 2),\n        download('video.mp4', 3),\n        download('doc.pdf', 1)\n    )\n    elapsed = time.time() - start\n    print(f'All done in {elapsed:.1f}s')\n    print(f'Files: {results}')\n\nasyncio.run(main())",
         "solution": "import asyncio\nimport time\n\nasync def download(filename, seconds):\n    print(f'Downloading {filename}...')\n    await asyncio.sleep(seconds)\n    print(f'{filename} complete!')\n    return filename\n\nasync def main():\n    start = time.time()\n    results = await asyncio.gather(\n        download('photo.jpg', 2),\n        download('video.mp4', 3),\n        download('doc.pdf', 1)\n    )\n    elapsed = time.time() - start\n    print(f'All done in {elapsed:.1f}s')\n    print(f'Files: {results}')\n\nasyncio.run(main())",
-        "hint": "await asyncio.gather() runs all downloads at once. Total time ≈ longest download.",
+        "hint": "await asyncio.gather() runs all downloads at once. Total time \u2248 longest download.",
         "rubric": "All 3 downloads complete. Total time ~3s, not 6s."
       },
       {
@@ -721,7 +721,7 @@
     "lessons": [
       {
         "title": "Classes are Objects",
-        "theory": "## The Class Factory\nIn Python, a class is just an object that creates instances. A Metaclass is the 'class of a class'—it is the factory that creates class objects.",
+        "theory": "## The Class Factory\nIn Python, a class is just an object that creates instances. A Metaclass is the 'class of a class'\u2014it is the factory that creates class objects.",
         "instructions": "## Task: Identify the Base\nWhat is the built-in metaclass that all default Python classes are instances of?",
         "starterCode": "# Options: object, type, class\ndefault_metaclass = '___'",
         "solution": "# Options: object, type, class\ndefault_metaclass = 'type'",

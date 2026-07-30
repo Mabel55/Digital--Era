@@ -31,7 +31,7 @@ const PublicNavbar = () => {
         {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
 
-      <div className={`nav-right ${isMenuOpen ? 'open' : ''}`} style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+      <div className={`nav-right ${isMenuOpen ? 'open' : ''}`}>
         <Link to="/catalog" style={{ color: 'var(--text)', textDecoration: 'none', fontWeight: 500, fontSize: '14px', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color = 'var(--accent)'} onMouseOut={e => e.target.style.color = 'var(--text)'}>Courses</Link>
         <Link to="/pricing" style={{ color: 'var(--text)', textDecoration: 'none', fontWeight: 500, fontSize: '14px', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color = 'var(--accent)'} onMouseOut={e => e.target.style.color = 'var(--text)'}>Pricing</Link>
         <Link to="/public-leaderboard" style={{ color: 'var(--text)', textDecoration: 'none', fontWeight: 500, fontSize: '14px', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color = 'var(--accent)'} onMouseOut={e => e.target.style.color = 'var(--text)'}>Leaderboard</Link>

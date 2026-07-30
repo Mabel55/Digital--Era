@@ -189,7 +189,7 @@ const Dashboard = () => {
             {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
 
-        <div className={`nav-right ${isMenuOpen ? 'open' : ''}`} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div className={`nav-right ${isMenuOpen ? 'open' : ''}`}>
           {/* Search Bar */}
           <form onSubmit={handleSearch} style={{ position: 'relative', display: 'flex', alignItems: 'center', marginRight: '10px' }}>
             <Search size={16} color="var(--text-dim)" style={{ position: 'absolute', left: '12px' }} />
