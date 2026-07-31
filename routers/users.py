@@ -127,6 +127,8 @@ def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends(), db
         user = db.query(models.User).filter(models.User.email.ilike(form_data.username)).first()
         if not user or not verify_password(form_data.password, user.hashed_password):
             raise HTTPException(status_code=400, detail="Incorrect username or password")
+        if not user.is_active:
+            raise HTTPException(status_code=403, detail="Your account has been blocked.")
         
         # Gamification: Streak Calculation
         now = datetime.utcnow()
@@ -500,6 +502,8 @@ def reset_password(payload: schemas.UserResetPassword, db: Session = Depends(get
         user = db.query(models.User).filter(models.User.email.ilike(payload.email)).first()
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
+        if not user.is_active:
+            raise HTTPException(status_code=403, detail="User account is blocked or inactive")
         
         # Security: Verify old password before allowing reset
         if not verify_password(payload.old_password, user.hashed_password):
@@ -566,6 +570,49 @@ def get_admin_analytics(db: Session = Depends(get_db), current_user: models.User
         "new_users_week": new_users_week,
         "completions_today": completions_today
     }
+
+# ─── NEW ADMIN CONTROL ENDPOINTS ───
+
+@router.post("/admin/users/{user_id}/grant-pro")
+def grant_pro_access(user_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    """Grant a user free lifetime Pro access."""
+    if not _is_admin(current_user):
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    user_to_upgrade = db.query(models.User).filter(models.User.id == user_id).first()
+    if not user_to_upgrade:
+        raise HTTPException(status_code=404, detail="User not found")
+        
+    sub = db.query(models.Subscription).filter(models.Subscription.user_id == user_id).first()
+    if not sub:
+        sub = models.Subscription(user_id=user_id)
+        db.add(sub)
+        
+    sub.plan = "pro_lifetime"
+    sub.status = "active"
+    sub.current_period_end = None # Lifetime
+    db.commit()
+    
+    return {"message": f"Successfully granted Pro access to {user_to_upgrade.email}"}
+
+@router.post("/admin/users/{user_id}/toggle-block")
+def toggle_user_block(user_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    """Toggle a user's blocked (is_active) status."""
+    if not _is_admin(current_user):
+        raise HTTPException(status_code=403, detail="Not authorized")
+        
+    user_to_toggle = db.query(models.User).filter(models.User.id == user_id).first()
+    if not user_to_toggle:
+        raise HTTPException(status_code=404, detail="User not found")
+        
+    if user_to_toggle.id == current_user.id:
+        raise HTTPException(status_code=400, detail="You cannot block yourself")
+        
+    user_to_toggle.is_active = not user_to_toggle.is_active
+    db.commit()
+    
+    status_str = "unblocked" if user_to_toggle.is_active else "blocked"
+    return {"message": f"User {user_to_toggle.email} is now {status_str}"}
 
 # ─── HEALTH CHECK ───
 @router.get("/health")

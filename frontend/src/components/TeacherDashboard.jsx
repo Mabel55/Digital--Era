@@ -55,6 +55,43 @@ const TeacherDashboard = () => {
     }
   };
 
+  const handleGrantPro = async (userId) => {
+    if (!window.confirm("Grant this user lifetime Pro access for free?")) return;
+    try {
+      const res = await fetch(`/admin/users/${userId}/grant-pro`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        fetchStudents();
+        fetchMetrics();
+      } else {
+        const err = await res.json();
+        alert(err.detail || "Failed to grant Pro");
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleToggleBlock = async (userId) => {
+    if (!window.confirm("Are you sure you want to toggle the block status of this user?")) return;
+    try {
+      const res = await fetch(`/admin/users/${userId}/toggle-block`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        fetchStudents();
+      } else {
+         const err = await res.json();
+         alert(err.detail || "Failed to toggle block");
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const handleUpload = async (e) => {
     e.preventDefault();
     if (!uploadFile || !courseTitle) {
@@ -213,7 +250,24 @@ const TeacherDashboard = () => {
               students.map(student => (
                 <div key={student.id} style={{ padding: '16px', background: 'var(--bg)', borderRadius: '8px', border: '1px solid var(--border)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                    <div style={{ fontWeight: 'bold', fontSize: '18px' }}>{student.full_name || student.email}</div>
+                    <div>
+                      <div style={{ fontWeight: 'bold', fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        {student.full_name || student.email}
+                        {!student.is_active && (
+                          <span style={{ background: '#ef4444', color: 'white', padding: '2px 6px', borderRadius: '4px', fontSize: '10px' }}>BLOCKED</span>
+                        )}
+                      </div>
+                      <div style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '4px', display: 'flex', gap: '6px' }}>
+                        {student.subscription?.is_pro ? (
+                           <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>PRO TIER</span>
+                        ) : (
+                           <span>Free Tier</span>
+                        )}
+                        {student.subscription?.paystack_customer_code && (
+                           <span style={{ color: '#059669', background: '#d1fae5', padding: '2px 6px', borderRadius: '4px', fontWeight: 'bold' }}>Paystack Customer</span>
+                        )}
+                      </div>
+                    </div>
                     <div style={{ background: 'rgba(56, 189, 248, 0.2)', color: 'var(--accent)', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold' }}>
                       {student.level || 'Beginner'} • Lvl {Math.floor((student.xp || 0) / 100) + 1}
                     </div>
@@ -236,6 +290,23 @@ const TeacherDashboard = () => {
                     ) : (
                       <div style={{ fontSize: '14px', color: 'var(--text-dim)' }}>No active courses yet.</div>
                     )}
+                  </div>
+                  
+                  <div style={{ marginTop: '16px', borderTop: '1px solid var(--border)', paddingTop: '16px', display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                    {!student.subscription?.is_pro && (
+                      <button 
+                        onClick={() => handleGrantPro(student.id)}
+                        style={{ padding: '6px 12px', background: 'var(--surface2)', color: 'var(--accent)', borderRadius: '6px', border: '1px solid var(--border)', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
+                      >
+                        Grant Pro
+                      </button>
+                    )}
+                    <button 
+                      onClick={() => handleToggleBlock(student.id)}
+                      style={{ padding: '6px 12px', background: student.is_active ? 'var(--surface2)' : '#ef4444', color: student.is_active ? '#ef4444' : 'white', borderRadius: '6px', border: '1px solid var(--border)', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
+                    >
+                      {student.is_active ? 'Block User' : 'Unblock User'}
+                    </button>
                   </div>
                 </div>
               ))

@@ -72,6 +72,7 @@ class SubscriptionResponse(BaseModel):
     status: str = "active"
     is_pro: bool = False
     current_period_end: Optional[datetime] = None
+    paystack_customer_code: Optional[str] = None
 
     class Config:
         from_attributes = True
