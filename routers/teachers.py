@@ -6,6 +6,7 @@ import schemas
 import os
 import shutil
 from ai_brain import add_pdf_to_vector_db
+from routers.users import get_current_user, _is_admin
 
 router = APIRouter(prefix="/teachers", tags=["Teachers"])
 
@@ -15,8 +16,11 @@ async def upload_pdf(
     course_title: str = Form(...),
     course_level: str = Form("Beginner"),
     course_track: str = Form("General"),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
 ):
+    if not _is_admin(current_user):
+        raise HTTPException(status_code=403, detail="Not authorized")
     if not file.filename.endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Only PDF files are allowed")
 
@@ -38,7 +42,9 @@ async def upload_pdf(
             os.remove(temp_path)
 
 @router.post("/")
-def create_teacher(teacher: schemas.TeacherCreate, db: Session = Depends(get_db)):
+def create_teacher(teacher: schemas.TeacherCreate, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    if not _is_admin(current_user):
+        raise HTTPException(status_code=403, detail="Not authorized")
     db_teacher = models.Teacher(
         first_name=teacher.first_name,
         last_name=teacher.last_name,
@@ -51,12 +57,16 @@ def create_teacher(teacher: schemas.TeacherCreate, db: Session = Depends(get_db)
     return db_teacher
 
 @router.get("/")
-def get_teachers(db: Session = Depends(get_db)):
+def get_teachers(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    if not _is_admin(current_user):
+        raise HTTPException(status_code=403, detail="Not authorized")
     all_teachers = db.query(models.Teacher).all()
     return all_teachers
 
 @router.put("/{teacher_id}")
-def update_teacher(teacher_id: int, teacher_data: schemas.TeacherUpdate, db: Session = Depends(get_db)):
+def update_teacher(teacher_id: int, teacher_data: schemas.TeacherUpdate, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    if not _is_admin(current_user):
+        raise HTTPException(status_code=403, detail="Not authorized")
     db_teacher = db.query(models.Teacher).filter(models.Teacher.id == teacher_id).first()
     if not db_teacher:
         raise HTTPException(status_code=404, detail="Teacher not found")

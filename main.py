@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.gzip import GZipMiddleware
@@ -9,6 +9,8 @@ from sqlalchemy import text
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from limiter import limiter
+import models
+from routers.users import get_current_user, _is_admin
 
 # 1. Initialize Database & Run Migrations
 # Removed Base.metadata.create_all(bind=engine) from startup to prevent Azure deadlocks/timeouts.
@@ -72,8 +74,11 @@ app.include_router(routers.payments.router)
 app.include_router(routers.translation.router)
 
 @app.get("/api/admin/setup-db-tables")
-def setup_db_tables():
+def setup_db_tables(current_user: models.User = Depends(get_current_user)):
     """Manual trigger to create database tables without causing startup deadlocks."""
+    if not _is_admin(current_user):
+        from fastapi import HTTPException
+        raise HTTPException(status_code=403, detail="Not authorized")
     try:
         Base.metadata.create_all(bind=engine)
         return {"message": "Database tables created successfully!"}
