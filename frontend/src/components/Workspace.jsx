@@ -47,7 +47,6 @@ const Workspace = () => {
   
   const chatEndRef = useRef(null);
   const editorRef = useRef(null);
-  const editorRef = useRef(null);
 
   useEffect(() => {
     const fetchTranslations = async () => {
