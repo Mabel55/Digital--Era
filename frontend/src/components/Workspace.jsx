@@ -35,6 +35,7 @@ const Workspace = () => {
   const [quizResult, setQuizResult] = useState(null);
   const [showCelebration, setShowCelebration] = useState(false);
   const [showStory, setShowStory] = useState(true); // Story Mode State
+  const [showHint, setShowHint] = useState(false);
   const [pyodide, setPyodide] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [mobileTab, setMobileTab] = useState('exercise'); // 'exercise', 'editor', 'chat' for mobile
@@ -45,6 +46,8 @@ const Workspace = () => {
   const isPro = subscription?.is_pro;
   
   const chatEndRef = useRef(null);
+  const editorRef = useRef(null);
+  const editorRef = useRef(null);
 
   useEffect(() => {
     const fetchTranslations = async () => {
@@ -169,6 +172,7 @@ const Workspace = () => {
     setActiveTab('theory');
     setSelectedOption(null);
     setQuizResult(null);
+    setShowHint(false);
     setShowStory(true); // Always start in story mode for a new lesson
     setIsSidebarOpen(false); // Close sidebar on navigate
   };
@@ -187,7 +191,14 @@ const Workspace = () => {
   };
 
   const handleGetHint = () => {
-    sendChat(null, "Can you give me a small hint for this lesson without giving me the full solution?");
+    const lesson = manifest.lessons[currentLessonIdx];
+    if (lesson.hint && !showHint) {
+      setShowHint(true);
+      if (activeTab === 'theory') setActiveTab('instructions');
+    } else {
+      sendChat(null, "I need more help with this lesson. Can you give me another hint?");
+      if(window.innerWidth <= 768) setMobileTab('chat');
+    }
   };
 
   const determineLanguage = () => {
@@ -230,6 +241,16 @@ const Workspace = () => {
     setHasError(false);
     
     const lang = determineLanguage();
+    const lesson = manifest.lessons[currentLessonIdx];
+    let fullCode = code;
+    if (lesson.testCode) {
+      if (lang === 'sql') {
+        fullCode = code + "\n" + lesson.testCode;
+      } else {
+        fullCode = code + "\n\n" + lesson.testCode;
+      }
+    }
+    
     const startTime = performance.now();
 
     try {
@@ -237,7 +258,7 @@ const Workspace = () => {
       if (lang === 'python' && pyodide) {
         try {
           pyodide.runPython("sys.stdout = io.StringIO()");
-          pyodide.runPython(code);
+          pyodide.runPython(fullCode);
           const stdout = pyodide.runPython("sys.stdout.getvalue()");
           setTerminalOutput(stdout || "No output.");
           setTerminalClass('success');
@@ -281,7 +302,7 @@ const Workspace = () => {
                   try {
                     const __logs = [];
                     const console = { log: (...a) => __logs.push(a.join(' ')), error: (...a) => __logs.push('Error: ' + a.join(' ')), warn: (...a) => __logs.push('Warning: ' + a.join(' ')) };
-                    ${code}
+                    ${fullCode}
                     parent.postMessage({ logs: __logs.join('\\n') }, '*');
                   } catch(e) {
                     parent.postMessage({ error: e.toString() }, '*');
@@ -306,7 +327,7 @@ const Workspace = () => {
       const res = await fetch('/run-code/', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code, language: lang })
+        body: JSON.stringify({ code: fullCode, language: lang })
       });
       const data = await res.json();
       
@@ -567,6 +588,15 @@ const Workspace = () => {
                 `### Solution Code\n\n\`\`\`${determineLanguage()}\n` + (lesson.solution || 'No solution provided.') + '\n```'
               )) }}></div>
               
+              {showHint && lesson.hint && activeTab !== 'solution' && (
+                <div style={{ marginTop: '20px', padding: '16px', background: 'rgba(245, 158, 11, 0.1)', borderLeft: '4px solid #f59e0b', borderRadius: '4px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#f59e0b', fontWeight: 'bold', marginBottom: '8px' }}>
+                    <Lightbulb size={18} /> Hint
+                  </div>
+                  <div style={{ color: 'var(--text)' }}>{lesson.hint}</div>
+                </div>
+              )}
+              
               {(activeTab === 'theory' || activeTab === 'solution') && (
                 <button 
                   onClick={() => {
@@ -631,8 +661,14 @@ const Workspace = () => {
             </div>
           ) : (
             <div className={`ws-editor-panel ${mobileTab === 'editor' ? 'mobile-active' : ''}`}>
-              <div className="editor-toolbar">
+              <div className="editor-toolbar" style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 16px', borderBottom: '1px solid var(--border)' }}>
               <div className="file-tab"><div className="dot"></div> code.{determineLanguage() === 'javascript' ? 'js' : determineLanguage() === 'sql' ? 'sql' : 'py'}</div>
+              <button 
+                onClick={() => { if(editorRef.current) editorRef.current.getAction('editor.action.formatDocument').run(); }}
+                style={{ background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer', fontSize: '12px' }}
+              >
+                Format Code
+              </button>
             </div>
             <div style={{ flex: 1, minHeight: 0 }}>
               <Editor
@@ -641,6 +677,7 @@ const Workspace = () => {
                 theme="vs-dark"
                 value={code}
                 onChange={handleCodeChange}
+                onMount={(editor) => editorRef.current = editor}
                 options={{ minimap: { enabled: false }, fontSize: 14 }}
               />
             </div>

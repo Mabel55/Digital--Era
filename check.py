@@ -1,17 +1,17 @@
-import json
+import sys
+text = open('patch_theory_aie.py', encoding='utf-8').read()
+quotes = []
+idx = 0
+while True:
+    idx = text.find('"""', idx)
+    if idx == -1: break
+    quotes.append(idx)
+    idx += 3
 
-with open('frontend/src/data/courses.js', 'r', encoding='utf-8') as f:
-    content = f.read()
-
-courses = ['List Comprehensions', 'Django Web Framework', 'React Fundamentals', 'Pandas & NumPy Basics', 'CSS Styling & Layout']
-
-for c in courses:
-    pos = content.find(f'"{c}"')
-    if pos != -1:
-        print(f"Found: {c}")
-        # print 50 chars around it
-        start = max(0, pos - 20)
-        end = min(len(content), pos + 100)
-        print(repr(content[start:end]))
+print("Total triple quotes:", len(quotes))
+for i in range(0, len(quotes), 2):
+    if i+1 < len(quotes):
+        print(f"String from char {quotes[i]} to {quotes[i+1]}")
     else:
-        print(f"NOT FOUND: {c}")
+        print(f"Unclosed string starting at char {quotes[i]}")
+

@@ -9,7 +9,8 @@
         "starterCode": "name = ___\nage = ___\ngpa = ___\nprint(f'My name is {___}, I am {___} years old with a GPA of {___}')",
         "solution": "name = 'Mabel'\nage = 20\ngpa = 3.8\nprint(f'My name is {name}, I am {age} years old with a GPA of {gpa}')",
         "hint": "Strings need quotes, integers don't. Use the variable names inside the f-string braces.",
-        "rubric": "Three variables created with correct types. f-string prints all three."
+        "rubric": "Three variables created with correct types. f-string prints all three.",
+        "testCode": "\nassert 'name' in locals() and type(name) == str, \"Error: 'name' variable must be a string\"\nassert 'age' in locals() and type(age) == int, \"Error: 'age' variable must be an integer\"\nassert 'gpa' in locals() and type(gpa) == float, \"Error: 'gpa' variable must be a float\"\nprint('\\n✅ Automatic Tests Passed! You can move to the next lesson.')\n"
       },
       {
         "title": "String Operations",
@@ -18,7 +19,8 @@
         "starterCode": "sentence = '___'\nprint(sentence.___())\nprint(sentence.___())\nprint(___(sentence))\nprint(sentence[___:___])",
         "solution": "sentence = 'python is amazing'\nprint(sentence.upper())\nprint(sentence.title())\nprint(len(sentence))\nprint(sentence[0:6])",
         "hint": ".upper() for uppercase, .title() for Title Case. len() returns length. Slicing [0:6] gets first 6 chars.",
-        "rubric": "All 4 string operations produce correct output."
+        "rubric": "All 4 string operations produce correct output.",
+        "testCode": "\nassert 'sentence' in locals(), \"Error: 'sentence' variable missing\"\nassert sentence == 'python is amazing', \"Error: sentence must be 'python is amazing'\"\nprint('\\n✅ Automatic Tests Passed! You can move to the next lesson.')\n"
       },
       {
         "title": "Type Conversion",
@@ -27,7 +29,8 @@
         "starterCode": "num = ___(___)\nnum_float = ___(num)\nnum_str = ___(num_float)\nprint(num, type(num))\nprint(num_float, type(num_float))\nprint(num_str, type(num_str))",
         "solution": "num = int('100')\nnum_float = float(num)\nnum_str = str(num_float)\nprint(num, type(num))\nprint(num_float, type(num_float))\nprint(num_str, type(num_str))",
         "hint": "int() converts to integer, float() to float, str() to string.",
-        "rubric": "Correct type conversions. All three print statements show correct types."
+        "rubric": "Correct type conversions. All three print statements show correct types.",
+        "testCode": "\nassert 'num' in locals() and type(num) == int, \"Error: 'num' must be an int\"\nassert 'num_float' in locals() and type(num_float) == float, \"Error: 'num_float' must be a float\"\nassert 'num_str' in locals() and type(num_str) == str, \"Error: 'num_str' must be a str\"\nprint('\\n✅ Automatic Tests Passed! You can move to the next lesson.')\n"
       },
       {
         "title": "User Input",
