@@ -44,7 +44,18 @@ const Onboarding = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email })
         });
-        const data = await res.json();
+        
+        let data;
+        const text = await res.text();
+        if (text && text.trim().startsWith('<')) {
+           throw new Error("Server error. Please try again later.");
+        }
+        try {
+           data = JSON.parse(text);
+        } catch (e) {
+           throw new Error("An error occurred");
+        }
+        
         if (res.ok) {
           setError(data.message || "If that email exists, a reset link has been sent.");
         } else {

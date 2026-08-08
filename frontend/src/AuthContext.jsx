@@ -64,6 +64,9 @@ export const AuthProvider = ({ children }) => {
       try {
         errData = JSON.parse(errorText);
       } catch (e) {
+        if (errorText && errorText.trim().startsWith('<')) {
+          throw new Error("Server error. Please try again later.");
+        }
         throw new Error(errorText || "Invalid credentials");
       }
       throw new Error(errData.detail || "Invalid credentials");
@@ -85,6 +88,9 @@ export const AuthProvider = ({ children }) => {
       try {
         errData = JSON.parse(errorText);
       } catch (e) {
+        if (errorText && errorText.trim().startsWith('<')) {
+          throw new Error("Server error. Please try again later.");
+        }
         throw new Error(errorText || "Registration failed");
       }
       throw new Error(errData.detail || "Registration failed");
@@ -106,6 +112,9 @@ export const AuthProvider = ({ children }) => {
       try {
         errData = JSON.parse(errorText);
       } catch (e) {
+        if (errorText && errorText.trim().startsWith('<')) {
+          throw new Error("Server error. Please try again later.");
+        }
         throw new Error(errorText || "Reset password failed");
       }
       throw new Error(errData.detail || "Reset password failed");
