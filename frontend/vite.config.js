@@ -151,10 +151,28 @@ export default defineConfig({
     proxy: {
       '/users': 'http://127.0.0.1:8000',
       '/teachers': 'http://127.0.0.1:8000',
+      '/courses': 'http://127.0.0.1:8000',
       '/run-python': 'http://127.0.0.1:8000',
       '/chat': 'http://127.0.0.1:8000',
       '/ask-ai': 'http://127.0.0.1:8000',
       '/admin': 'http://127.0.0.1:8000',
-    }
+      '/daily-challenge': 'http://127.0.0.1:8000',
+      '/notifications': 'http://127.0.0.1:8000',
+      '/leaderboard': 'http://127.0.0.1:8000',
+    },
+    // Serve the large curriculum.json with long-lived cache headers.
+    // The ?v= query param in useCurriculum.js acts as the cache-buster when content changes.
+    headers: {
+      'Cache-Control': 'no-store', // default for other responses
+    },
+    middlewares: [
+      (req, res, next) => {
+        if (req.url && req.url.startsWith('/curriculum.json')) {
+          // Cache for 1 year — the ?v= query param busts it on new deployments
+          res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+        }
+        next();
+      }
+    ]
   }
 })

@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './AuthContext';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
@@ -39,11 +39,15 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/react-query';
 import { HelmetProvider } from 'react-helmet-async';
+import { prefetchCurriculum } from './hooks/useCurriculum';
 
 // Initialize React Query client
 const queryClient = new QueryClient();
+
+// Prefetch curriculum immediately — before auth resolves — so it's ready when Dashboard renders
+prefetchCurriculum(queryClient);
 
 const App = () => {
   return (
