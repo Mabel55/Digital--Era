@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'icons.svg', 'offline.html'],
+      includeAssets: ['favicon.svg', 'icons.svg', 'offline.html', 'mabel-founder.jpg'],
       manifest: {
         name: 'Digital Era – Master AI, Data & Code',
         short_name: 'Digital Era',
@@ -62,7 +62,7 @@ export default defineConfig({
       },
       workbox: {
         // Cache the offline fallback page
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,jpg,jpeg}'],
         
         // Runtime caching strategies
         runtimeCaching: [
