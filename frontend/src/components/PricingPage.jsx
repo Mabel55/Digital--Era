@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
+import { Helmet } from 'react-helmet-async';
 import PublicNavbar from './PublicNavbar';
 import { 
   GraduationCap, Check, Zap, Crown, Rocket, Star, 
@@ -153,6 +154,29 @@ const PricingPage = () => {
 
   return (
     <div style={{ backgroundColor: 'var(--bg)', minHeight: '100vh', display: 'flex', flexDirection: 'column', overflowX: 'hidden' }}>
+      <Helmet>
+        <title>Pricing | Digital Era Academy — Free &amp; Pro Plans</title>
+        <meta name="description" content="Choose the Digital Era plan that fits you. Start free with 3 courses, or go Pro for unlimited AI tutoring, all tracks, and downloadable certificates. Starting at $9.99/month." />
+        <meta name="keywords" content="digital era pricing, online coding course price, learn AI Lagos affordable, Python course Nigeria price" />
+        <link rel="canonical" href="https://digital-era.live/pricing" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://digital-era.live/pricing" />
+        <meta property="og:title" content="Pricing | Digital Era Academy" />
+        <meta property="og:description" content="Free & Pro plans. Unlock all AI, Data Science and Coding courses with Digital Era Pro." />
+        <meta property="og:image" content="https://digital-era.live/og-image.png" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": "Digital Era Pro",
+          "description": "Unlimited AI tutoring, all coding tracks, certificates, and guided projects.",
+          "brand": { "@type": "Brand", "name": "Digital Era" },
+          "offers": [
+            { "@type": "Offer", "name": "Free Plan", "price": "0", "priceCurrency": "USD", "availability": "https://schema.org/InStock" },
+            { "@type": "Offer", "name": "Pro Monthly", "price": "9.99", "priceCurrency": "USD", "availability": "https://schema.org/InStock" },
+            { "@type": "Offer", "name": "Pro Yearly", "price": "79.99", "priceCurrency": "USD", "availability": "https://schema.org/InStock" }
+          ]
+        })}</script>
+      </Helmet>
       <PublicNavbar />
       
       <main style={{ flex: 1, padding: '60px 24px', maxWidth: '1100px', margin: '0 auto', width: '100%' }}>

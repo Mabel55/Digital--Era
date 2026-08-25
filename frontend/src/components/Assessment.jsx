@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
+import { Helmet } from 'react-helmet-async';
 import { CheckCircle2, XCircle, Clock } from 'lucide-react';
 
 const Assessment = () => {
@@ -154,6 +155,10 @@ const Assessment = () => {
   if (showReview) {
     return (
       <div style={{ background: 'var(--bg)', minHeight: '100vh', padding: '40px 24px', color: 'var(--text)' }}>
+        <Helmet>
+          <title>Assessment | Digital Era Academy</title>
+          <meta name="robots" content="noindex, nofollow" />
+        </Helmet>
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
             <h1 style={{ fontSize: '28px', margin: 0 }}>Review Assessment: {topic}</h1>

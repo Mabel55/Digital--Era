@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Medal, Trophy, Home, ArrowLeft, Flame, User as UserIcon, Filter } from 'lucide-react';
 import { useAuth } from '../AuthContext';
 
@@ -71,6 +72,25 @@ export default function Leaderboard({ isPublic = false }) {
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', color: 'var(--text)', overflow: 'hidden', position: 'relative' }}>
+      <Helmet>
+        {isPublic ? (
+          <>
+            <title>Global Leaderboard | Digital Era Academy — Top Coders in Nigeria</title>
+            <meta name="description" content="See the top coding students at Digital Era. Our global leaderboard ranks learners by XP earned through Python, AI, and Data Science courses." />
+            <meta name="keywords" content="coding leaderboard Nigeria, top coders Lagos, digital era rankings, Python XP leaderboard" />
+            <link rel="canonical" href="https://digital-era.live/public-leaderboard" />
+            <meta property="og:title" content="Global Leaderboard | Digital Era Academy" />
+            <meta property="og:description" content="See who's leading the Digital Era coding community. Rankings updated in real-time." />
+            <meta property="og:url" content="https://digital-era.live/public-leaderboard" />
+            <meta property="og:image" content="https://digital-era.live/og-image.png" />
+          </>
+        ) : (
+          <>
+            <title>Leaderboard | Digital Era Academy</title>
+            <meta name="robots" content="noindex, nofollow" />
+          </>
+        )}
+      </Helmet>
       {/* Background glow */}
       <div style={{ position: 'absolute', top: '-10%', left: '-10%', width: '40%', height: '40%', borderRadius: '50%', background: 'rgba(0,229,160,0.05)', filter: 'blur(120px)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', bottom: '-10%', right: '-10%', width: '40%', height: '40%', borderRadius: '50%', background: 'rgba(59,130,246,0.05)', filter: 'blur(120px)', pointerEvents: 'none' }} />

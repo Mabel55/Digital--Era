@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { GraduationCap, Rocket, ArrowLeft, Sparkles, LogIn, Award, Target } from 'lucide-react';
 
 const Onboarding = () => {
@@ -82,6 +83,18 @@ const Onboarding = () => {
 
   return (
     <div id="onboarding" className="screen active">
+      <Helmet>
+        <title>{isLogin ? 'Log In | Digital Era Academy' : 'Enroll Free | Digital Era — Coding School in Lagos'}</title>
+        <meta name="description" content={isLogin
+          ? 'Log in to continue your Digital Era learning journey. Access your courses, XP, and AI tutor.'
+          : 'Enroll free at Digital Era — a coding school in Ikorodu, Lagos. Learn Python, AI and Data Science with hands-on interactive projects.'
+        } />
+        <link rel="canonical" href="https://digital-era.live/onboarding" />
+        <meta property="og:title" content="Enroll at Digital Era | Learn to Code in Lagos" />
+        <meta property="og:description" content="Join Digital Era free. Hands-on coding, AI tutoring and certificates. Founded by Arua Mabel Chinasa in Ikorodu, Lagos." />
+        <meta property="og:url" content="https://digital-era.live/onboarding" />
+        <meta property="og:image" content="https://digital-era.live/og-image.png" />
+      </Helmet>
       <div className="onboard-card">
         <div className="logo-row">
           <div className="logo-icon"><GraduationCap size={24} /></div>

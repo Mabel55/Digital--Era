@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
+import { Helmet } from 'react-helmet-async';
 import { ArrowLeft, Play, CheckCircle2, XCircle, Loader2 } from 'lucide-react';
 import Editor from '@monaco-editor/react';
 import ReactMarkdown from 'react-markdown';
@@ -91,7 +92,11 @@ const DailyChallenge = () => {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: 'var(--bg)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: 'var(--bg)', color: 'var(--text)' }}>
+      <Helmet>
+        <title>Daily Challenge | Digital Era Academy</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       {/* Topbar */}
       <div className="ws-topbar" style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>

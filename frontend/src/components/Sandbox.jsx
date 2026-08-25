@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { ArrowLeft, Play, Terminal, Loader2, Code2 } from 'lucide-react';
 import Editor from '@monaco-editor/react';
 
@@ -49,6 +50,10 @@ const Sandbox = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: 'var(--bg)' }}>
+      <Helmet>
+        <title>Sandbox | Digital Era Academy</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       {/* Topbar */}
       <div className="ws-topbar" style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>

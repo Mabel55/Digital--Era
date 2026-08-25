@@ -1,22 +1,43 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PublicNavbar from './PublicNavbar';
-import { Rocket, Zap, Bot, Trophy, User, GraduationCap, Star } from 'lucide-react';
+import { Rocket, Zap, Bot, Trophy, User, GraduationCap, Star, ArrowRight, Briefcase } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const statsRef = useRef(null);
+  const [statsVisible, setStatsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setStatsVisible(true); observer.disconnect(); } },
+      { threshold: 0.3 }
+    );
+    if (statsRef.current) observer.observe(statsRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div style={{ backgroundColor: 'var(--bg)', minHeight: '100vh', display: 'flex', flexDirection: 'column', overflowX: 'hidden' }}>
       <Helmet>
-        <title>Digital Era | Tech Training Centre in Ikorodu, Lagos | AI, Data & Code</title>
+        <title>Digital Era | Tech Training Centre in Ikorodu, Lagos | AI, Data &amp; Code</title>
         <meta name="description" content="Digital Era is a tech training centre in Ikorodu, Lagos, founded by Arua Mabel Chinasa. Learn Python, Data Science, AI, and Coding with hands-on interactive projects. Enroll today!" />
         <meta name="keywords" content="tech training Lagos, coding school Ikorodu, AI course Lagos, data science Nigeria, Python training Lagos, Digital Era Mabel Chinasa, software development school Lagos" />
         <meta name="geo.region" content="NG-LA" />
         <meta name="geo.placename" content="Ikorodu, Lagos, Nigeria" />
         <meta name="geo.position" content="6.6194;3.5106" />
         <meta name="ICBM" content="6.6194, 3.5106" />
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://digital-era.app" />
+        <meta property="og:title" content="Digital Era | Master AI & Code in Lagos" />
+        <meta property="og:description" content="Hands-on Python, Data Science, AI &amp; Coding school in Ikorodu, Lagos. Interactive projects, AI tutor, and real certificates." />
+        <meta property="og:image" content="/mabel-founder.jpg" />
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Digital Era | Master AI & Code" />
+        <meta name="twitter:description" content="Learn Python, Data Science and AI in Lagos with hands-on interactive projects." />
       </Helmet>
       <PublicNavbar />
       
@@ -43,12 +64,14 @@ const LandingPage = () => {
           position: 'relative', zIndex: 1
         }}>
           
-          <div style={{ 
-            display: 'inline-flex', alignItems: 'center', gap: '8px',
-            padding: '6px 16px', background: 'var(--surface)', border: '1px solid var(--border)',
-            borderRadius: '100px', marginBottom: '32px',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
-          }}>
+          <div
+            className="hero-badge-pulse"
+            style={{ 
+              display: 'inline-flex', alignItems: 'center', gap: '8px',
+              padding: '6px 16px', background: 'var(--surface)', border: '1px solid rgba(0,229,160,0.4)',
+              borderRadius: '100px', marginBottom: '32px',
+            }}
+          >
             <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--accent)' }}>NEW</span>
             <span style={{ fontSize: '12px', color: 'var(--text2)' }}>AI-Powered Learning Paths are live!</span>
           </div>
@@ -73,6 +96,13 @@ const LandingPage = () => {
             <button 
               className="returning-btn" 
               style={{ padding: '16px 36px', fontSize: '16px', borderRadius: '100px', width: 'auto', background: 'var(--surface)', color: 'var(--text)' }}
+              onClick={() => navigate('/careers')}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Briefcase size={18} /> View Careers</div>
+            </button>
+            <button 
+              className="returning-btn" 
+              style={{ padding: '16px 36px', fontSize: '16px', borderRadius: '100px', width: 'auto', background: 'transparent', color: 'var(--text2)', border: '1px solid var(--border)' }}
               onClick={() => navigate('/pricing')}
             >
               View Pricing
@@ -143,7 +173,7 @@ const LandingPage = () => {
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', width: '100%' }}>
+            <div className="testimonials-scroll">
               {[
                 { name: 'Emeka U.', role: 'Frontend Developer', text: '"The interactive React workspace helped me land my first tech job in Lagos. Way better than just watching videos!"' },
                 { name: 'Sarah O.', role: 'Data Analyst', text: '"The AI tutor is incredible. It explains Python concepts perfectly when I get stuck on the data science track."' },
@@ -167,19 +197,32 @@ const LandingPage = () => {
               ))}
             </div>
             
-            <div style={{ display: 'flex', gap: '24px', marginTop: '60px', flexWrap: 'wrap', justifyContent: 'center' }}>
-               <div style={{ background: 'var(--surface2)', padding: '20px 40px', borderRadius: '16px', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                 <div style={{ fontSize: '36px', fontWeight: 'bold', color: 'var(--accent)', fontFamily: 'var(--font-mono)' }}>500+</div>
-                 <div style={{ color: 'var(--text2)', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px' }}>Active Students</div>
-               </div>
-               <div style={{ background: 'var(--surface2)', padding: '20px 40px', borderRadius: '16px', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                 <div style={{ fontSize: '36px', fontWeight: 'bold', color: 'var(--accent2)', fontFamily: 'var(--font-mono)' }}>1,200+</div>
-                 <div style={{ color: 'var(--text2)', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px' }}>Lessons Completed</div>
-               </div>
-               <div style={{ background: 'var(--surface2)', padding: '20px 40px', borderRadius: '16px', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                 <div style={{ fontSize: '36px', fontWeight: 'bold', color: 'var(--accent3)', fontFamily: 'var(--font-mono)' }}>24/7</div>
-                 <div style={{ color: 'var(--text2)', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px' }}>AI Tutoring</div>
-               </div>
+            <div ref={statsRef} style={{ display: 'flex', gap: '24px', marginTop: '60px', flexWrap: 'wrap', justifyContent: 'center' }}>
+               {[
+                 { value: '500+', label: 'Active Students', color: 'var(--accent)' },
+                 { value: '1,200+', label: 'Lessons Completed', color: 'var(--accent2)' },
+                 { value: '24/7', label: 'AI Tutoring', color: 'var(--accent3)' },
+               ].map((stat, i) => (
+                 <div
+                   key={i}
+                   className={statsVisible ? 'stat-count-animate' : ''}
+                   style={{
+                     background: 'var(--surface2)', padding: '20px 40px', borderRadius: '16px',
+                     border: '1px solid var(--border)', display: 'flex', flexDirection: 'column',
+                     alignItems: 'center', animationDelay: `${i * 0.12}s`,
+                     transition: 'border-color 0.3s', cursor: 'default'
+                   }}
+                   onMouseEnter={e => e.currentTarget.style.borderColor = stat.color}
+                   onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+                 >
+                   <div style={{ fontSize: '36px', fontWeight: 'bold', color: stat.color, fontFamily: 'var(--font-mono)' }}>
+                     {stat.value}
+                   </div>
+                   <div style={{ color: 'var(--text2)', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '4px' }}>
+                     {stat.label}
+                   </div>
+                 </div>
+               ))}
             </div>
 
             <div style={{ display: 'flex', gap: '24px', marginTop: '40px', opacity: 0.6, flexWrap: 'wrap', justifyContent: 'center' }}>

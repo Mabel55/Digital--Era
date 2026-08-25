@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../AuthContext';
+import { Helmet } from 'react-helmet-async';
 import PublicNavbar from './PublicNavbar';
 import { MessageSquare, Plus, MessageCircle, ChevronDown, ChevronUp, User, Loader2 } from 'lucide-react';
 
@@ -107,6 +108,17 @@ const Forum = () => {
 
   return (
     <div style={{ background: 'var(--bg)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <Helmet>
+        <title>Community Forum | Digital Era Academy — Ask &amp; Learn Together</title>
+        <meta name="description" content="Join the Digital Era community forum. Ask coding questions, share Python and AI tips, and learn from fellow developers in Nigeria and beyond." />
+        <meta name="keywords" content="coding forum Nigeria, Python help Lagos, developer community Africa, AI questions, Digital Era forum" />
+        <link rel="canonical" href="https://digital-era.live/community" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://digital-era.live/community" />
+        <meta property="og:title" content="Community Forum | Digital Era Academy" />
+        <meta property="og:description" content="Ask questions, share ideas and learn with 500+ students on the Digital Era forum." />
+        <meta property="og:image" content="https://digital-era.live/og-image.png" />
+      </Helmet>
       <PublicNavbar />
       
       <main style={{ flex: 1, padding: '40px 24px', maxWidth: '1000px', margin: '0 auto', width: '100%' }}>

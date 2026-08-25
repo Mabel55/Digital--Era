@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
+import { Helmet } from 'react-helmet-async';
 import { User, Flame, Trophy, Award, Edit3, ArrowLeft, CheckCircle2, TrendingUp, Target, Calendar } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
 
@@ -100,6 +101,10 @@ const Profile = () => {
 
   return (
     <div style={{ backgroundColor: 'var(--bg)', minHeight: '100vh', display: 'flex', flexDirection: 'column', color: 'var(--text)' }}>
+      <Helmet>
+        <title>{user?.full_name ? `${user.full_name}'s Profile | Digital Era` : 'My Profile | Digital Era Academy'}</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       {/* Top Nav */}
       <nav style={{ padding: '16px 24px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center' }}>
         <button onClick={() => navigate('/dashboard')} style={{ background: 'transparent', border: 'none', color: 'var(--text2)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>

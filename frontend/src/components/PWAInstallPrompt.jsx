@@ -7,8 +7,9 @@ const PWAInstallPrompt = () => {
   const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
-    // Check if already installed
-    if (window.matchMedia('(display-mode: standalone)').matches) {
+    // Check if already installed or dismissed recently
+    const dismissed = localStorage.getItem('pwa_prompt_dismissed');
+    if (window.matchMedia('(display-mode: standalone)').matches || dismissed === 'true') {
       setIsInstalled(true);
       return;
     }
@@ -47,6 +48,7 @@ const PWAInstallPrompt = () => {
   };
 
   const handleDismiss = () => {
+    localStorage.setItem('pwa_prompt_dismissed', 'true');
     setShowPrompt(false);
   };
 

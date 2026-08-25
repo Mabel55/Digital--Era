@@ -24,6 +24,7 @@ const DailyChallenge = lazy(() => import('./components/DailyChallenge'));
 const CareerTracks = lazy(() => import('./components/CareerTracks'));
 const Sandbox = lazy(() => import('./components/Sandbox'));
 const Forum = lazy(() => import('./components/Forum'));
+const NotFound = lazy(() => import('./components/NotFound'));
 
 const ProtectedRoute = ({ children }) => {
   const { token, loading } = useAuth();
@@ -63,6 +64,7 @@ const App = () => {
                 <Route path="/catalog" element={<CourseCatalog />} />
                 <Route path="/community" element={<Forum />} />
                 <Route path="/career-tracks" element={<CareerTracks />} />
+                <Route path="/careers" element={<CareerTracks />} />
                 <Route path="/pricing" element={<PricingPage />} />
                 <Route path="/onboarding" element={<Onboarding />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
@@ -120,6 +122,7 @@ const App = () => {
                 <Route path="/public-leaderboard" element={
                   <Leaderboard isPublic={true} />
                 } />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
             <PWAInstallPrompt />

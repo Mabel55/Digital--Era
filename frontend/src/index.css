@@ -38,8 +38,44 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; overflow-x: hidden; overflow-y: auto; }
+html, body { height: 100%; overflow-x: hidden; overflow-y: auto; scroll-behavior: smooth; }
 body { font-family: var(--font-body); background: var(--bg); color: var(--text); font-size: 14px; }
+
+/* ─── ACCESSIBILITY: FOCUS VISIBLE ─── */
+button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ─── REDUCED MOTION ─── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── ANIMATED COUNTER ─── */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideDownFade {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.stat-count-animate {
+  animation: countUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ─── HERO BADGE PULSE ─── */
+@keyframes badgeGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 229, 160, 0); }
+  50%       { box-shadow: 0 0 0 6px rgba(0, 229, 160, 0.18); }
+}
+.hero-badge-pulse { animation: badgeGlow 3s ease-in-out infinite; }
 
 /* ─── SCROLLBARS ─── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -241,12 +277,16 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
   padding: 36px 40px;
   margin-bottom: 36px;
   display: flex; justify-content: space-between; align-items: center;
-  position: relative; overflow: hidden;
+  position: relative;
+  /* NOTE: overflow must NOT be 'hidden' — it clips native <select> dropdowns on mobile */
+  overflow: visible;
 }
 .dash-hero::after {
   content: '';
   position: absolute; right: 0; top: 0; bottom: 0; width: 300px;
   background: radial-gradient(ellipse at right, rgba(0,229,160,0.08), transparent 70%);
+  pointer-events: none; /* Never block touch/click on child elements */
+  border-radius: 14px;
 }
 .hero-left h2 { font-family: var(--font-display); font-size: 28px; font-weight: 700; margin-bottom: 8px; }
 .hero-left h2 span { color: var(--accent); }
@@ -281,6 +321,19 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
+/* Shimmer shine on hover */
+.track-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+  transition: left 0.5s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+.track-card:hover::before { left: 140%; }
+.track-card > * { position: relative; z-index: 1; }
 .track-card:hover { 
   border-color: rgba(0,229,160,0.4); 
   transform: translateY(-5px) scale(1.01); 
@@ -288,6 +341,21 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 }
 .track-card.locked { opacity: 0.5; cursor: not-allowed; }
 .track-card.locked:hover { transform: none; border-color: var(--border); box-shadow: none; }
+
+/* ─── CARD ENTRANCE ANIMATIONS ─── */
+@keyframes cardEntrance {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.card-enter {
+  animation: cardEntrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.card-enter-1 { animation-delay: 0.05s; }
+.card-enter-2 { animation-delay: 0.10s; }
+.card-enter-3 { animation-delay: 0.15s; }
+.card-enter-4 { animation-delay: 0.20s; }
+.card-enter-5 { animation-delay: 0.25s; }
+.card-enter-6 { animation-delay: 0.30s; }
 
 .track-card-icon { font-size: 28px; margin-bottom: 14px; }
 .track-card-name { font-family: var(--font-display); font-size: 16px; font-weight: 700; margin-bottom: 6px; }
@@ -631,11 +699,41 @@ select option { background: var(--surface2); }
   text-align: left;
   transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
   cursor: default;
+  opacity: 0;
+  animation: cardEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+.landing-feature-card:nth-child(1) { animation-delay: 0.1s; }
+.landing-feature-card:nth-child(2) { animation-delay: 0.2s; }
+.landing-feature-card:nth-child(3) { animation-delay: 0.3s; }
 .landing-feature-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   border-color: var(--accent);
+}
+
+/* ─── TESTIMONIAL CAROUSEL (mobile) ─── */
+.testimonials-scroll {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+/* ─── LEVEL TABS SCROLL ROW ─── */
+.level-tabs-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.level-tabs-row::-webkit-scrollbar { display: none; }
+.level-tabs-row button {
+  scroll-snap-align: start;
+  flex-shrink: 0;
 }
 .landing-about-section {
   margin-top: 100px;
@@ -773,10 +871,26 @@ select option { background: var(--surface2); }
 
   /* Dashboard body */
   .dash-body { padding: 24px 16px; }
-  .dash-hero { padding: 24px 20px; flex-direction: column; gap: 20px; }
+  .dash-hero { padding: 24px 20px; flex-direction: column; gap: 20px; overflow: visible; }
   .hero-left h2 { font-size: 22px; }
   .hero-stats { gap: 20px; }
   .stat-num { font-size: 24px; }
+  /* Track selector row */
+  .hero-track-row { flex-wrap: wrap !important; }
+  /* Landing testimonials: horizontal scroll on tablet */
+  .testimonials-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 16px;
+    padding-bottom: 12px;
+  }
+  .testimonials-scroll > div {
+    min-width: 280px;
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
 
   /* Admin Dashboard */
   .admin-metrics-grid { grid-template-columns: repeat(2, 1fr); }
@@ -881,6 +995,9 @@ select option { background: var(--surface2); }
   /* Landing */
   .landing-hero-title { font-size: 28px; }
   .landing-hero-subtitle { font-size: 14px; margin-bottom: 32px; }
+
+  /* Hide decorative hero overlay on small screens for performance */
+  .dash-hero::after { display: none; }
 
   /* Workspace full-width code editor */
   .ws-topbar { padding: 6px 8px; }

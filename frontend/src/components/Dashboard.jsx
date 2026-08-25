@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { useCurriculum } from '../hooks/useCurriculum';
 import { projectsManifest } from '../data/projects';
 import CertificateModal from './CertificateModal';
@@ -63,7 +64,15 @@ const Dashboard = () => {
     return "Python Core";
   };
 
-  const [currentTrack, setCurrentTrack] = useState(() => getTrack());
+  const [currentTrack, setCurrentTrack] = useState(() => {
+    // Restore from localStorage first, fallback to goal-based track
+    return localStorage.getItem('de_selected_track') || getTrack();
+  });
+
+  const handleTrackChange = (trackName) => {
+    setCurrentTrack(trackName);
+    localStorage.setItem('de_selected_track', trackName);
+  };
 
   const handleLogout = () => {
     logout();
@@ -170,6 +179,10 @@ const Dashboard = () => {
 
   return (
     <div id="dashboard" className="screen active">
+      <Helmet>
+        <title>{user?.full_name ? `${user.full_name.split(' ')[0]}'s Dashboard | Digital Era` : 'Dashboard | Digital Era Academy'}</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <nav className="dash-nav">
           <div 
             className="logo-row" 
@@ -329,24 +342,29 @@ const Dashboard = () => {
         ) : (
           <>
             <div className="dash-hero">
-              <div className="hero-left">
+              <div className="hero-left" style={{ position: 'relative', zIndex: 1 }}>
             <h2>{t('dashboard.welcome')}, <span>{user?.full_name?.split(' ')?.[0] || user?.email?.split('@')?.[0] || 'Student'}</span>!</h2>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px', color: 'var(--text-dim)' }}>
-              Your current track:
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px', color: 'var(--text-dim)', flexWrap: 'wrap' }}>
+              <span style={{ whiteSpace: 'nowrap' }}>Your current track:</span>
               <select 
                 value={currentTrack} 
-                onChange={(e) => setCurrentTrack(e.target.value)}
+                onChange={(e) => handleTrackChange(e.target.value)}
                 style={{
-                  padding: '6px 12px',
-                  borderRadius: '6px',
-                  background: 'var(--surface)',
+                  padding: '8px 14px',
+                  borderRadius: '20px',
+                  background: 'var(--surface2)',
                   color: 'var(--accent)',
                   border: '1px solid var(--border)',
                   outline: 'none',
                   fontFamily: 'inherit',
-                  fontSize: '14px',
+                  fontSize: '16px',
                   fontWeight: '600',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  minHeight: '44px',
+                  touchAction: 'manipulation',
+                  WebkitTapHighlightColor: 'transparent',
+                  maxWidth: '220px',
+                  flex: '1 1 auto'
                 }}
                 aria-label="Select your learning track"
               >
@@ -357,8 +375,8 @@ const Dashboard = () => {
               <button 
                 onClick={() => navigate(`/assessment/${encodeURIComponent(currentTrack)}`)}
                 style={{
-                  padding: '6px 12px',
-                  borderRadius: '6px',
+                  padding: '8px 14px',
+                  borderRadius: '20px',
                   background: 'var(--accent3)',
                   color: 'black',
                   border: 'none',
@@ -369,7 +387,10 @@ const Dashboard = () => {
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '6px'
+                  gap: '6px',
+                  minHeight: '44px',
+                  whiteSpace: 'nowrap',
+                  touchAction: 'manipulation'
                 }}
               >
                 <Target size={14} /> Test Your Skills
@@ -602,21 +623,23 @@ const Dashboard = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><BookOpen size={20} color="var(--accent)" /> Learning Path</div> <span>Select your difficulty level</span>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px', marginBottom: '24px' }}>
+        <div className="level-tabs-row">
           {['Beginner', 'Intermediate', 'Advanced'].map(lvl => (
             <button 
               key={lvl}
               onClick={() => setActiveTab(lvl)}
               aria-pressed={activeTab === lvl}
               style={{
-                padding: '8px 16px',
+                padding: '8px 20px',
                 background: activeTab === lvl ? 'var(--accent)' : 'var(--surface)',
                 color: activeTab === lvl ? '#0d0f14' : 'var(--text)',
-                border: '1px solid var(--border)',
+                border: activeTab === lvl ? '1px solid var(--accent)' : '1px solid var(--border)',
                 borderRadius: '20px',
                 cursor: 'pointer',
                 fontWeight: 600,
-                fontSize: '13px'
+                fontSize: '13px',
+                transition: 'all 0.2s',
+                minHeight: '44px'
               }}
             >
               {lvl}
@@ -625,39 +648,78 @@ const Dashboard = () => {
         </div>
 
         <div className="track-grid">
-          {curriculum[currentTrack] && curriculum[currentTrack][activeTab]?.map((courseName, i) => {
-            const manifest = courseManifest[courseName];
-            const totalLessons = manifest ? manifest.lessons.length : 0;
-            const completed = getCourseProgress(courseName);
-            const progressPct = totalLessons > 0 ? (completed / totalLessons) * 100 : 0;
+          {curriculum[currentTrack] && curriculum[currentTrack][activeTab]?.length > 0 ? (
+            curriculum[currentTrack][activeTab].map((courseName, i) => {
+              const manifest = courseManifest[courseName];
+              const totalLessons = manifest ? manifest.lessons.length : 0;
+              const completed = getCourseProgress(courseName);
+              const progressPct = totalLessons > 0 ? (completed / totalLessons) * 100 : 0;
+              const delayClass = `card-enter card-enter-${Math.min(i + 1, 6)}`;
 
-            return (
-              <div 
-                key={courseName} 
-                className="track-card" 
-                onClick={() => openOverview(courseName)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => e.key === 'Enter' && openOverview(courseName)}
-                aria-label={`Course: ${courseName}`}
-              >
-                <div className="track-card-icon"><Terminal size={32} strokeWidth={1.5} /></div>
-                <div className="track-card-name">{courseName}</div>
-                <div className="track-card-desc">
-                  {totalLessons} lessons • {completed} completed
-                </div>
-                <div className="track-card-meta">
-                  <span className={`track-tag tag-${activeTab.toLowerCase()}`}>{activeTab}</span>
-                </div>
-                <div className="track-progress-bar">
-                  <div className="bar-bg">
-                    <div className="bar-fill" style={{ width: `${progressPct}%` }}></div>
+              return (
+                <div 
+                  key={courseName} 
+                  className={`track-card ${delayClass}`}
+                  onClick={() => openOverview(courseName)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === 'Enter' && openOverview(courseName)}
+                  aria-label={`Course: ${courseName}`}
+                >
+                  <div className="track-card-icon"><Terminal size={32} strokeWidth={1.5} /></div>
+                  <div className="track-card-name">{courseName}</div>
+                  <div className="track-card-desc">
+                    {totalLessons} lessons • {completed} completed
                   </div>
-                  <div className="bar-label">{Math.round(progressPct)}% Complete</div>
+                  <div className="track-card-meta">
+                    <span className={`track-tag tag-${activeTab.toLowerCase()}`}>{activeTab}</span>
+                  </div>
+                  <div className="track-progress-bar">
+                    <div className="bar-bg">
+                      <div className="bar-fill" style={{ width: `${progressPct}%` }}></div>
+                    </div>
+                    <div className="bar-label">{Math.round(progressPct)}% Complete</div>
+                  </div>
                 </div>
+              );
+            })
+          ) : (
+            /* Empty state when no courses exist for this track+level */
+            <div style={{
+              gridColumn: '1 / -1',
+              textAlign: 'center',
+              padding: '60px 24px',
+              background: 'var(--surface)',
+              borderRadius: '16px',
+              border: '1px solid var(--border)'
+            }}>
+              <div style={{ fontSize: '48px', marginBottom: '16px' }}>📚</div>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '18px', fontWeight: 700, marginBottom: '8px', color: 'var(--text)' }}>
+                No {activeTab} courses in {currentTrack}
+              </h3>
+              <p style={{ color: 'var(--text2)', fontSize: '14px', marginBottom: '20px' }}>
+                Try a different level or switch your learning track above.
+              </p>
+              <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                {['Beginner', 'Intermediate', 'Advanced']
+                  .filter(l => l !== activeTab && curriculum[currentTrack]?.[l]?.length > 0)
+                  .map(l => (
+                    <button
+                      key={l}
+                      onClick={() => setActiveTab(l)}
+                      style={{
+                        padding: '8px 20px', borderRadius: '20px', cursor: 'pointer',
+                        background: 'var(--accent)', color: '#000',
+                        border: 'none', fontWeight: 'bold', fontSize: '13px'
+                      }}
+                    >
+                      View {l} courses
+                    </button>
+                  ))
+                }
               </div>
-            );
-          })}
+            </div>
+          )}
         </div>
           </>
         )}
