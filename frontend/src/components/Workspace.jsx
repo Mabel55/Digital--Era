@@ -10,7 +10,7 @@ import { useCurriculum } from '../hooks/useCurriculum';
 import LessonDiscussion from './LessonDiscussion';
 import { queueProgressUpdate, saveCode as saveCodeToDB, loadCode as loadCodeFromDB, saveCachedProgress } from '../lib/offlineDB';
 import { useOfflineSync } from '../hooks/useOfflineSync';
-import { ArrowLeft, Play, Terminal, CheckCircle2, XCircle, Bug, Bot, ArrowUp, PartyPopper, Home, RotateCcw, Menu, Lightbulb, RotateCcw as ResetIcon, Clock, ChevronRight, WifiOff, CloudOff, RefreshCw, Code } from 'lucide-react';
+import { ArrowLeft, Play, Terminal, CheckCircle2, XCircle, Bug, Bot, ArrowUp, PartyPopper, Home, RotateCcw, Menu, Lightbulb, RotateCcw as ResetIcon, Clock, ChevronRight, WifiOff, CloudOff, RefreshCw, Code, Sparkles } from 'lucide-react';
 import GitHubExportModal from './GitHubExportModal';
 const Workspace = () => {
   const { courseId } = useParams();
@@ -417,6 +417,12 @@ const Workspace = () => {
     sendChat(null, prompt);
   };
 
+  const handleAIReview = () => {
+    const prompt = `Please review my code and give me feedback on best practices, optimizations, and any potential issues:\n\n\`\`\`${determineLanguage()}\n${code}\n\`\`\``;
+    sendChat(null, prompt);
+    if(window.innerWidth <= 768) setMobileTab('chat');
+  };
+
   const handleQuizSubmit = async () => {
     const lesson = manifest.lessons[currentLessonIdx];
     if (selectedOption === lesson.correctAnswer) {
@@ -579,6 +585,13 @@ const Workspace = () => {
                 aria-label="Reset Code"
               >
                 <ResetIcon size={16} /> Reset
+              </button>
+              <button 
+                onClick={handleAIReview}
+                style={{ background: 'rgba(0, 229, 160, 0.1)', color: 'var(--accent)', border: '1px solid var(--accent)', padding: '8px 12px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 'bold' }}
+                aria-label="AI Code Review"
+              >
+                <Sparkles size={16} /> AI Review
               </button>
               <button 
                 className="btn-run" 
