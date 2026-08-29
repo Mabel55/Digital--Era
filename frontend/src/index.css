@@ -1046,3 +1046,44 @@ select option { background: var(--surface2); }
   .discussion-input-row { flex-direction: column; }
   .discussion-input-row button { width: 100%; }
 }
+
+/* ══════════════════════════════════════
+   GITHUB EXPORT MODAL
+══════════════════════════════════════ */
+.github-modal { max-width: 500px; padding: 32px; text-align: center; }
+.github-icon-wrapper {
+  width: 64px; height: 64px;
+  background: var(--surface2);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.github-instructions {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 16px; border-radius: 8px;
+  text-align: left; margin: 24px 0; font-size: 13px;
+}
+.github-instructions h4 { margin-bottom: 8px; color: var(--accent); }
+.github-instructions ol { margin-left: 20px; color: var(--text2); }
+.github-instructions li { margin-bottom: 4px; }
+.github-instructions a { color: var(--accent2); text-decoration: none; }
+.github-form { text-align: left; }
+.github-form .form-group { margin-bottom: 16px; }
+.github-form label { display: block; margin-bottom: 6px; font-weight: 500; color: var(--text2); font-size: 13px; }
+.github-form input {
+  width: 100%; padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px; color: var(--text);
+  outline: none; transition: 0.2s;
+}
+.github-form input:focus { border-color: var(--accent); }
+.submit-export-btn { width: 100%; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; }
+.github-success-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 0; }
+.github-success-state .success-icon { color: var(--accent); margin-bottom: 16px; }
+.github-success-state h3 { font-size: 20px; margin-bottom: 8px; }
+.github-success-state p { color: var(--text2); margin-bottom: 24px; }
+.view-repo-btn { display: inline-flex; align-items: center; gap: 8px; }

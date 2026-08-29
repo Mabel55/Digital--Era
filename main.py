@@ -37,6 +37,7 @@ import routers.payments
 import routers.daily_challenge
 import routers.translation
 import routers.support
+import routers.github
 
 
 # 2. Initialize the web server
@@ -74,6 +75,7 @@ app.include_router(routers.forum.router)
 app.include_router(routers.payments.router)
 app.include_router(routers.translation.router)
 app.include_router(routers.support.router)
+app.include_router(routers.github.router)
 
 @app.get("/api/admin/setup-db-tables")
 def setup_db_tables(current_user: models.User = Depends(get_current_user)):

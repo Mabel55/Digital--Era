@@ -10,8 +10,8 @@ import { useCurriculum } from '../hooks/useCurriculum';
 import LessonDiscussion from './LessonDiscussion';
 import { queueProgressUpdate, saveCode as saveCodeToDB, loadCode as loadCodeFromDB, saveCachedProgress } from '../lib/offlineDB';
 import { useOfflineSync } from '../hooks/useOfflineSync';
-import { ArrowLeft, Play, Terminal, CheckCircle2, XCircle, Bug, Bot, ArrowUp, PartyPopper, Home, RotateCcw, Menu, Lightbulb, RotateCcw as ResetIcon, Clock, ChevronRight, WifiOff, CloudOff, RefreshCw } from 'lucide-react';
-
+import { ArrowLeft, Play, Terminal, CheckCircle2, XCircle, Bug, Bot, ArrowUp, PartyPopper, Home, RotateCcw, Menu, Lightbulb, RotateCcw as ResetIcon, Clock, ChevronRight, WifiOff, CloudOff, RefreshCw, Github } from 'lucide-react';
+import GitHubExportModal from './GitHubExportModal';
 const Workspace = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
@@ -28,6 +28,7 @@ const Workspace = () => {
   const [isTranslating, setIsTranslating] = useState(false);
   const [activeTab, setActiveTab] = useState('theory');
   const [code, setCode] = useState('');
+  const [showGithubModal, setShowGithubModal] = useState(false);
   const [terminalOutput, setTerminalOutput] = useState('');
   const [terminalClass, setTerminalClass] = useState('');
   const [isRunning, setIsRunning] = useState(false);
@@ -910,10 +911,25 @@ const Workspace = () => {
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><RotateCcw size={18} /> Review Course</div>
               </button>
+              <button 
+                className="btn-primary" 
+                style={{ padding: '12px 28px', borderRadius: '100px', width: 'auto', background: 'var(--surface2)', color: 'var(--text)', border: '1px solid var(--border)' }}
+                onClick={() => { setShowCelebration(false); setShowGithubModal(true); }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Github size={18} /> Push to GitHub</div>
+              </button>
             </div>
           </div>
         </div>
       )}
+
+      <GitHubExportModal 
+        isOpen={showGithubModal} 
+        onClose={() => setShowGithubModal(false)}
+        code={code}
+        language={manifest?.language || (courseName.toLowerCase().includes('python') ? 'python' : 'javascript')}
+        courseName={courseName}
+      />
     </div>
   );
 };
