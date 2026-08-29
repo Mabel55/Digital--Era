@@ -4,6 +4,7 @@ import PublicNavbar from './PublicNavbar';
 import { Rocket, Zap, Bot, Trophy, User, GraduationCap, Star, ArrowRight, Briefcase } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import mabelFounderImg from '../../public/mabel-founder.jpg';
+import CustomerSupportChat from './CustomerSupportChat';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -550,8 +551,12 @@ const LandingPage = () => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><GraduationCap size={18} /> Digital Era</span>
         </div>
-        <p style={{ color: 'var(--text2)', fontSize: '13px' }}>© 2026 Digital Era. Founded by Arua Mabel Chinasa.</p>
+        <p style={{ color: 'var(--text2)', fontSize: '14px', marginTop: '30px' }}>
+          &copy; {new Date().getFullYear()} Digital Era. All rights reserved.
+        </p>
       </footer>
+      
+      <CustomerSupportChat />
     </div>
   );
 };

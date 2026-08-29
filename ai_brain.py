@@ -9,7 +9,7 @@ from database import SessionLocal
 import models
 
 # LangChain & AI Imports
-from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import PyPDFLoader, TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 from langchain_community.vectorstores import FAISS
@@ -27,7 +27,7 @@ def load_embedding_model():
     """
     print("⚡ Loading Google Gemini embedding model...")
     embeddings = GoogleGenerativeAIEmbeddings(
-        model="models/embedding-001",
+        model="models/gemini-embedding-001",
         google_api_key=os.getenv("GEMINI_API_KEY")
     )
     print("✅ Embedding model ready.")
@@ -129,6 +129,7 @@ def ask_gemini(question: str, context_chunks: list[str] = None, chat_history: li
 
 # ── BRAIN STORAGE & META TRACKING ───────────────────────────────────────────
 BRAIN_DIR = "study_buddy_brain"
+SUPPORT_BRAIN_DIR = "support_brain"
 METADATA_FILE = os.path.join(BRAIN_DIR, "brain_meta.json")
 
 def _load_brain_metadata() -> dict:
@@ -309,6 +310,55 @@ def add_pdf_to_vector_db(file_path: str, course_title: str, course_level: str, c
     vector_db.save_local(BRAIN_DIR)
     print("🎉 Success! PDF has been completely ingested with no errors.")
 
+# ── CUSTOMER SUPPORT BRAIN ───────────────────────────────────────────────────
+def build_support_brain():
+    """
+    Reads the support_knowledge.md file and builds a separate FAISS index for customer support.
+    """
+    file_path = "support_knowledge.md"
+    if not os.path.exists(file_path):
+        print(f"⚠️ {file_path} not found. Cannot build support brain.")
+        return
+
+    print("🎧 Building Customer Support AI Brain...")
+    loader = TextLoader(file_path)
+    documents = loader.load()
+
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=600, chunk_overlap=100)
+    chunks = text_splitter.split_documents(documents)
+
+    embedding_model = load_embedding_model()
+    vector_db = FAISS.from_documents(chunks, embedding_model)
+    vector_db.save_local(SUPPORT_BRAIN_DIR)
+    print(f"✅ Support Brain built and saved to {SUPPORT_BRAIN_DIR}/")
+
+def query_support_brain(question: str, top_k: int = 3) -> str:
+    """
+    Queries the customer support FAISS index and returns an answer using Gemini.
+    """
+    if not os.path.exists(os.path.join(SUPPORT_BRAIN_DIR, "index.faiss")):
+        return "I'm currently undergoing maintenance and can't access my knowledge base. Please contact us at +234 703 719 7261."
+
+    embedding_model = load_embedding_model()
+    vector_db = FAISS.load_local(SUPPORT_BRAIN_DIR, embedding_model, allow_dangerous_deserialization=True)
+    
+    results = vector_db.similarity_search(question, k=top_k)
+    if not results:
+        return "I couldn't find an exact answer to that. Please reach out to nasaadanna@gmail.com or WhatsApp +234 703 719 7261."
+
+    context_chunks = [r.page_content for r in results]
+    
+    system_prompt = (
+        "You are the official Customer Support AI for Digital Era, a premium tech training center in Lagos. "
+        "Your job is to answer prospective students' questions accurately, politely, and enthusiastically. "
+        "Use ONLY the context provided to answer the question. If the answer is not in the context, "
+        "apologize and tell them to contact +234 703 719 7261 or nasaadanna@gmail.com. "
+        "Do NOT mention that you are reading from a 'context' or 'document'. "
+        "Keep your answers concise and helpful."
+    )
+    
+    return ask_gemini(question, context_chunks, system_prompt_override=system_prompt)
 
 if __name__ == "__main__":
     build_ai_brain()
+    build_support_brain()
