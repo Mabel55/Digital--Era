@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Github, ExternalLink, Loader, CheckCircle, AlertCircle } from 'lucide-react';
-import api from '../api';
+import { X, Code, ExternalLink, Loader, CheckCircle, AlertCircle } from 'lucide-react';
 
 const GitHubExportModal = ({ isOpen, onClose, code, language, courseName }) => {
   const [token, setToken] = useState('');
@@ -31,18 +30,28 @@ const GitHubExportModal = ({ isOpen, onClose, code, language, courseName }) => {
       // Save token for future use
       localStorage.setItem('github_pat', token);
 
-      const response = await api.post('/github/export', {
-        token,
-        repo_name: repoName,
-        code,
-        language
+      const res = await fetch('/github/export', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          token,
+          repo_name: repoName,
+          code,
+          language
+        })
       });
       
-      setRepoUrl(response.data.url);
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.detail || 'Failed to export to GitHub');
+      }
+      
+      setRepoUrl(data.url);
       setStatus('success');
     } catch (error) {
       setStatus('error');
-      setErrorMessage(error.response?.data?.detail || 'Failed to export to GitHub');
+      setErrorMessage(error.message || 'Failed to export to GitHub');
     }
   };
 
@@ -55,7 +64,7 @@ const GitHubExportModal = ({ isOpen, onClose, code, language, courseName }) => {
         
         <div className="modal-header">
           <div className="github-icon-wrapper">
-            <Github size={28} />
+            <Code size={28} />
           </div>
           <h2>Push to GitHub</h2>
           <p>Export your Capstone project directly to your GitHub portfolio.</p>
@@ -120,7 +129,7 @@ const GitHubExportModal = ({ isOpen, onClose, code, language, courseName }) => {
                 {status === 'loading' ? (
                   <><Loader className="spin" size={18} /> Pushing...</>
                 ) : (
-                  <><Github size={18} /> Create Repository</>
+                  <><Code size={18} /> Create Repository</>
                 )}
               </button>
             </form>

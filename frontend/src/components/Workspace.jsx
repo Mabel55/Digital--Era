@@ -10,7 +10,7 @@ import { useCurriculum } from '../hooks/useCurriculum';
 import LessonDiscussion from './LessonDiscussion';
 import { queueProgressUpdate, saveCode as saveCodeToDB, loadCode as loadCodeFromDB, saveCachedProgress } from '../lib/offlineDB';
 import { useOfflineSync } from '../hooks/useOfflineSync';
-import { ArrowLeft, Play, Terminal, CheckCircle2, XCircle, Bug, Bot, ArrowUp, PartyPopper, Home, RotateCcw, Menu, Lightbulb, RotateCcw as ResetIcon, Clock, ChevronRight, WifiOff, CloudOff, RefreshCw, Github } from 'lucide-react';
+import { ArrowLeft, Play, Terminal, CheckCircle2, XCircle, Bug, Bot, ArrowUp, PartyPopper, Home, RotateCcw, Menu, Lightbulb, RotateCcw as ResetIcon, Clock, ChevronRight, WifiOff, CloudOff, RefreshCw, Code } from 'lucide-react';
 import GitHubExportModal from './GitHubExportModal';
 const Workspace = () => {
   const { courseId } = useParams();
@@ -916,7 +916,7 @@ const Workspace = () => {
                 style={{ padding: '12px 28px', borderRadius: '100px', width: 'auto', background: 'var(--surface2)', color: 'var(--text)', border: '1px solid var(--border)' }}
                 onClick={() => { setShowCelebration(false); setShowGithubModal(true); }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Github size={18} /> Push to GitHub</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Code size={18} /> Push to GitHub</div>
               </button>
             </div>
           </div>
