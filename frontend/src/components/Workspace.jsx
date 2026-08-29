@@ -261,16 +261,18 @@ const Workspace = () => {
             
             if (progressRes.ok) {
                 const userData = await progressRes.json();
-                setTerminalOutput(prev => prev + `\n\n🎉 Lesson Passed! +10 XP Awarded! You are now level: ${userData.level}`);
+                if (userData && userData.level) {
+                    setTerminalOutput(prev => prev + `\n\nLesson Passed! +10 XP Awarded! You are now level: ${userData.level}`);
+                }
             }
         } catch (e) {
             // Server unreachable — progress is safely queued in IndexedDB
-            console.log('[Offline] Server unreachable, progress saved locally. Will sync when online.');
-            setTerminalOutput(prev => prev + `\n\n🎉 Lesson Passed! Progress saved locally — will sync when you're back online.`);
+            console.log('[Offline] Server unreachable, progress saved locally.');
+            setTerminalOutput(prev => prev + `\n\nLesson Passed! Progress saved locally — will sync when you're back online.`);
         }
     } else if (!navigator.onLine) {
         // Fully offline — inform user their progress is safe
-        setTerminalOutput(prev => prev + `\n\n🎉 Lesson Passed! 📴 You're offline — progress saved locally and will sync automatically.`);
+        setTerminalOutput(prev => prev + `\n\nLesson Passed! You're offline — progress saved locally and will sync automatically.`);
     }
   };
 

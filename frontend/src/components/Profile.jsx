@@ -4,6 +4,8 @@ import { useAuth } from '../AuthContext';
 import { Helmet } from 'react-helmet-async';
 import { User, Flame, Trophy, Award, Edit3, ArrowLeft, CheckCircle2, TrendingUp, Target, Calendar } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
+import { FileText, Loader2, X } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 
 const mockChartData = [
   { day: 'Mon', xp: 20 },
@@ -35,6 +37,11 @@ const Profile = () => {
   const [successMsg, setSuccessMsg] = useState('');
   const [activityData, setActivityData] = useState([]);
   const [completions, setCompletions] = useState([]);
+  
+  // Tech Resume state
+  const [isGeneratingResume, setIsGeneratingResume] = useState(false);
+  const [resumeMarkdown, setResumeMarkdown] = useState('');
+  const [showResumeModal, setShowResumeModal] = useState(false);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -85,6 +92,25 @@ const Profile = () => {
       }
     } catch (e) {
       alert("Error saving profile");
+    }
+  };
+
+  const generateResume = async () => {
+    setIsGeneratingResume(true);
+    setShowResumeModal(true);
+    setResumeMarkdown('Generating your professional tech resume with AI...');
+    try {
+      const res = await fetch('/users/me/resume', { headers: { Authorization: `Bearer ${token}` } });
+      if (res.ok) {
+        const data = await res.json();
+        setResumeMarkdown(data.resume_markdown);
+      } else {
+        setResumeMarkdown('Error generating resume. Please try again later.');
+      }
+    } catch (error) {
+      setResumeMarkdown('Error connecting to the server.');
+    } finally {
+      setIsGeneratingResume(false);
     }
   };
 
@@ -278,9 +304,24 @@ const Profile = () => {
 
               {/* Certificates */}
               <div style={{ background: 'var(--surface)', padding: '32px', borderRadius: '16px', border: '1px solid var(--border)' }}>
-                <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <CheckCircle2 size={20} color="var(--accent)" /> Certificates
-                </h3>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                  <h3 style={{ margin: 0, fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <CheckCircle2 size={20} color="var(--accent)" /> Certificates
+                  </h3>
+                  <button 
+                    onClick={generateResume}
+                    disabled={isGeneratingResume}
+                    style={{ 
+                      padding: '8px 12px', background: 'var(--accent)', color: 'black', border: 'none', 
+                      borderRadius: '8px', cursor: isGeneratingResume ? 'default' : 'pointer', 
+                      display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 'bold',
+                      opacity: isGeneratingResume ? 0.7 : 1
+                    }}
+                  >
+                    {isGeneratingResume ? <Loader2 size={14} className="spinner" style={{ animation: 'spin 1s linear infinite' }} /> : <FileText size={14} />}
+                    Generate Resume
+                  </button>
+                </div>
                 {completions.length > 0 ? (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     {completions.map(c => (
@@ -305,6 +346,35 @@ const Profile = () => {
           </div>
         )}
       </div>
+
+      {/* Resume Modal */}
+      {showResumeModal && (
+        <div style={{ 
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
+          background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10000 
+        }}>
+          <div style={{ 
+            background: 'var(--surface)', width: '90%', maxWidth: '800px', height: '80vh', 
+            borderRadius: '16px', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column' 
+          }}>
+            <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h2 style={{ margin: 0, fontSize: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}><FileText size={24} color="var(--accent)" /> Tech Resume</h2>
+              <button onClick={() => setShowResumeModal(false)} style={{ background: 'transparent', border: 'none', color: 'var(--text2)', cursor: 'pointer' }}><X size={24} /></button>
+            </div>
+            <div style={{ padding: '24px', flex: 1, overflowY: 'auto', fontFamily: 'Inter, sans-serif', lineHeight: 1.6 }}>
+              <ReactMarkdown>{resumeMarkdown}</ReactMarkdown>
+            </div>
+            <div style={{ padding: '16px 24px', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'flex-end' }}>
+              <button onClick={() => {
+                  navigator.clipboard.writeText(resumeMarkdown);
+                  alert('Resume Markdown copied to clipboard!');
+              }} style={{ padding: '8px 16px', background: 'var(--surface2)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: '8px', cursor: 'pointer' }}>
+                Copy Markdown
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

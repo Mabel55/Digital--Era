@@ -228,9 +228,9 @@ const LandingPage = () => {
             </div>
 
             <div style={{ display: 'flex', gap: '24px', marginTop: '40px', opacity: 0.6, flexWrap: 'wrap', justifyContent: 'center' }}>
-               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold' }}>✨ Powered by Google Gemini</div>
-               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold' }}>☁️ Deployed on Azure</div>
-               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold' }}>🇳🇬 Made in Nigeria</div>
+               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold' }}>Powered by Google Gemini</div>
+               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold' }}>Deployed on Azure</div>
+               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold' }}>Made in Nigeria</div>
             </div>
           </div>
 

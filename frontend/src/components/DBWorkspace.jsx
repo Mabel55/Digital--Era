@@ -142,7 +142,7 @@ const DBWorkspace = () => {
               
               if (progressRes.ok) {
                 const userData = await progressRes.json();
-                setTerminalOutput(prev => prev + `\n\n🎉 Lesson Passed! +10 XP Awarded! You are now level: ${userData.level}`);
+                setTerminalOutput(prev => prev + `\n\nLesson Passed! +10 XP Awarded! You are now level: ${userData.level}`);
               }
             } catch (e) {
               console.error("Failed to update progress", e);

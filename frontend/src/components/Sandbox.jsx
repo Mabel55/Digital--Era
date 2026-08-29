@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ArrowLeft, Play, Terminal, Loader2, Code2 } from 'lucide-react';
+import { ArrowLeft, Play, Terminal, Loader2, Code2, Sparkles } from 'lucide-react';
 import Editor from '@monaco-editor/react';
+import ReactMarkdown from 'react-markdown';
+import { useAuth } from '../AuthContext';
 
 const Sandbox = () => {
   const navigate = useNavigate();
   const [language, setLanguage] = useState('python');
   const [code, setCode] = useState('# Welcome to the Sandbox!\n# Write and test your code here.\n\nprint("Hello from Digital Era Sandbox!")\n');
   const [output, setOutput] = useState('');
+  const [feedback, setFeedback] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
+  const [isReviewing, setIsReviewing] = useState(false);
+  const { token } = useAuth();
 
   const handleRun = async () => {
     setIsRunning(true);
@@ -33,6 +38,33 @@ const Sandbox = () => {
       setOutput(`Error: ${e.message}`);
     } finally {
       setIsRunning(false);
+    }
+  };
+
+  const handleReviewCode = async () => {
+    setIsReviewing(true);
+    setFeedback('Analyzing your code...');
+    
+    try {
+      const res = await fetch('/review-code/', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` 
+        },
+        body: JSON.stringify({ code, language })
+      });
+      
+      const data = await res.json();
+      if (res.ok) {
+        setFeedback(data.feedback);
+      } else {
+        setFeedback(`Error: ${data.detail}`);
+      }
+    } catch (e) {
+      setFeedback(`Error: ${e.message}`);
+    } finally {
+      setIsReviewing(false);
     }
   };
 
@@ -75,10 +107,18 @@ const Sandbox = () => {
             <option value="sql">SQL (SQLite)</option>
           </select>
           <button 
+            onClick={handleReviewCode}
+            disabled={isReviewing || isRunning}
+            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', background: 'rgba(0, 229, 160, 0.1)', color: 'var(--accent)', border: '1px solid var(--accent)', borderRadius: '8px', fontWeight: 'bold', cursor: (isReviewing || isRunning) ? 'default' : 'pointer', opacity: (isReviewing || isRunning) ? 0.7 : 1 }}
+          >
+            {isReviewing ? <Loader2 size={16} className="spinner" style={{ animation: 'spin 1s linear infinite' }} /> : <Sparkles size={16} />}
+            AI Review
+          </button>
+          <button 
             onClick={handleRun}
-            disabled={isRunning}
+            disabled={isRunning || isReviewing}
             className="btn-run"
-            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', opacity: isRunning ? 0.7 : 1 }}
+            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', opacity: (isRunning || isReviewing) ? 0.7 : 1 }}
           >
             {isRunning ? <Loader2 size={16} className="spinner" style={{ animation: 'spin 1s linear infinite' }} /> : <Play size={16} fill="currentColor" />}
             Run Code
@@ -111,10 +151,21 @@ const Sandbox = () => {
             <Terminal size={16} color="var(--text2)" />
             <span style={{ fontSize: '13px', fontWeight: 'bold', color: 'var(--text)' }}>Terminal</span>
           </div>
-          <div style={{ flex: 1, padding: '16px', overflowY: 'auto' }}>
+          <div style={{ flex: 1, padding: '16px', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
             <pre style={{ margin: 0, fontFamily: 'JetBrains Mono, monospace', fontSize: '14px', color: 'var(--text-bright)', whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
               {output || 'Run your code to see output here.'}
             </pre>
+            
+            {feedback && (
+              <div style={{ marginTop: '20px', padding: '16px', background: 'var(--surface)', borderRadius: '8px', borderLeft: '4px solid var(--accent)' }}>
+                <h4 style={{ margin: '0 0 10px 0', color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Sparkles size={16} /> AI Code Review
+                </h4>
+                <div style={{ color: 'var(--text)', fontSize: '14px', lineHeight: '1.6', fontFamily: 'Inter, sans-serif' }}>
+                  <ReactMarkdown>{feedback}</ReactMarkdown>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

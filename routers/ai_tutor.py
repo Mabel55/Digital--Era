@@ -10,6 +10,12 @@ from datetime import date
 import shutil
 import os
 
+from pydantic import BaseModel
+
+class CodeReviewRequest(BaseModel):
+    code: str
+    language: str
+
 router = APIRouter(tags=["AI Tutor"])
 
 FREE_DAILY_AI_LIMIT = 3
@@ -165,3 +171,42 @@ def evaluate_user_answer(request: Request, chat: schemas.ChatRequest):
         return {"reply": f"System Error: Could not connect to the model. Details: {str(e)}"}
 
 
+@router.post("/review-code/")
+def review_code(
+    payload: CodeReviewRequest,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    """
+    Acts as a Senior Engineer to review student code from the Sandbox.
+    """
+    # Check limits
+    is_allowed, messages_used, daily_limit = _check_ai_limit(db, current_user)
+    if not is_allowed:
+        raise HTTPException(
+            status_code=429,
+            detail="You've used all free AI Code Reviews for today. Upgrade to Pro for unlimited reviews!"
+        )
+
+    try:
+        system_prompt = (
+            f"You are a strict but encouraging Senior Software Engineer at Digital Era Academy reviewing a junior's {payload.language} code. "
+            "Critique their code based on:\n"
+            "1. Best Practices & Idiomatic Syntax\n"
+            "2. Performance & Efficiency\n"
+            "3. Security & Readability\n\n"
+            "Provide a score out of 100 at the very top like this: 'Score: XX/100'. "
+            "Then, provide concise, actionable feedback with code snippets showing how to improve."
+        )
+
+        feedback = ask_gemini(
+            question=f"Please review this {payload.language} code:\n\n{payload.code}",
+            context_chunks=[],
+            system_prompt_override=system_prompt
+        )
+
+        _increment_ai_usage(db, current_user.id)
+        
+        return {"feedback": feedback}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Code Review Failed: {str(e)}")

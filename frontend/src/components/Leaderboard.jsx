@@ -225,7 +225,7 @@ export default function Leaderboard({ isPublic = false }) {
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', background: 'var(--surface3)', borderRadius: '8px', border: '1px solid var(--border)' }}>
-                    <span style={{ color: 'var(--accent)', fontSize: '14px' }}>⭐</span>
+                    <span style={{ color: 'var(--accent)', fontSize: '14px' }}></span>
                     <span style={{ fontSize: '18px', fontWeight: 900, color: 'var(--text)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.5px' }}>{user.xp.toLocaleString()}</span>
                     <span style={{ fontSize: '12px', color: 'var(--accent2)', fontWeight: 700, marginLeft: '2px' }}>XP</span>
                   </div>

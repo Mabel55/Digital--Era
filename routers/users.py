@@ -262,6 +262,50 @@ def get_user_completions(
         models.CourseCompletion.user_id == current_user.id
     ).order_by(models.CourseCompletion.completed_at.desc()).all()
 
+@router.get("/me/resume")
+def generate_tech_resume(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    """Generates an ATS-friendly markdown tech resume using Gemini."""
+    from ai_brain import ask_gemini
+    
+    completions = db.query(models.CourseCompletion).filter(
+        models.CourseCompletion.user_id == current_user.id
+    ).order_by(models.CourseCompletion.completed_at.desc()).all()
+    
+    if not completions:
+        return {"resume_markdown": "# ⚠️ No Courses Completed Yet\n\nComplete at least one course on Digital Era to generate your tech resume!"}
+
+    course_list = "\\n".join([f"- {c.course_name} (Completed on {c.completed_at.strftime('%Y-%m-%d')})" for c in completions])
+    
+    system_prompt = (
+        "You are an expert tech recruiter and resume writer. Based on the user's profile and completed courses, "
+        "generate a highly professional, ATS-friendly markdown resume. Do not include any chatty conversational text, "
+        "ONLY output the raw markdown resume."
+    )
+    
+    user_info = f"""
+    Name: {current_user.full_name or 'Tech Professional'}
+    Email: {current_user.email}
+    Bio: {current_user.bio or 'A passionate tech learner at Digital Era Academy.'}
+    GitHub: {current_user.github_url or 'N/A'}
+    LinkedIn: {current_user.linkedin_url or 'N/A'}
+    Country: {current_user.country or 'N/A'}
+    
+    Completed Digital Era Courses:
+    {course_list}
+    """
+    
+    try:
+        resume_markdown = ask_gemini(
+            question="Please generate a professional Markdown tech resume using the following data:\n" + user_info,
+            system_prompt_override=system_prompt
+        )
+        return {"resume_markdown": resume_markdown}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to generate resume: {str(e)}")
+
 # ─── NOTIFICATIONS ───
 @router.get("/notifications", response_model=list[schemas.NotificationResponse])
 def get_notifications(
