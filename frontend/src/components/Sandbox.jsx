@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ArrowLeft, Play, Terminal, Loader2, Code2, Sparkles } from 'lucide-react';
+import { ArrowLeft, Play, Terminal, Loader2, Code2, Sparkles, MessageSquare } from 'lucide-react';
 import Editor from '@monaco-editor/react';
 import ReactMarkdown from 'react-markdown';
 import { useAuth } from '../AuthContext';
@@ -14,26 +14,104 @@ const Sandbox = () => {
   const [feedback, setFeedback] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
   const [isReviewing, setIsReviewing] = useState(false);
+  const [activeTab, setActiveTab] = useState('terminal'); // 'terminal' | 'review'
   const { token } = useAuth();
+
+  // Pyodide loader for browser-based Python execution
+  const loadPyodideRuntime = useCallback(async () => {
+    if (!window.pyodide) {
+      if (document.getElementById('pyodide-script') && window.loadPyodide) {
+        window.pyodide = await window.loadPyodide({
+          indexURL: "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/"
+        });
+      } else {
+        const script = document.createElement('script');
+        script.src = "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js";
+        script.id = 'pyodide-script';
+        document.head.appendChild(script);
+        await new Promise(resolve => {
+          script.onload = resolve;
+        });
+        window.pyodide = await window.loadPyodide({
+          indexURL: "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/"
+        });
+      }
+    }
+    return window.pyodide;
+  }, []);
 
   const handleRun = async () => {
     setIsRunning(true);
-    setOutput('Running code...');
+    setOutput('Executing...');
+    setActiveTab('terminal'); // Automatically switch to terminal view
     
     try {
-      const res = await fetch('/run-code/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          language,
-          code,
-          files: {},
-          entrypoint: "solution.py"
-        })
-      });
-      
-      const data = await res.json();
-      setOutput(data.output || 'No output.');
+      if (language === 'python') {
+        let pyodideInstance = window.pyodide;
+        if (!pyodideInstance) {
+          setOutput('⚡ Loading Python engine (first run)...');
+          pyodideInstance = await loadPyodideRuntime();
+        }
+        
+        pyodideInstance.runPython("import sys; import io; sys.stdout = io.StringIO()");
+        pyodideInstance.runPython(code);
+        const stdout = pyodideInstance.runPython("sys.stdout.getvalue()");
+        setOutput(stdout || "No output.");
+        
+      } else if (language === 'javascript' || language === 'js') {
+        const result = await new Promise((resolve, reject) => {
+          const iframe = document.createElement('iframe');
+          iframe.sandbox = 'allow-scripts';
+          iframe.style.display = 'none';
+          document.body.appendChild(iframe);
+
+          const timeout = setTimeout(() => {
+            document.body.removeChild(iframe);
+            reject(new Error('Execution timed out (5s limit)'));
+          }, 5000);
+
+          window.addEventListener('message', function handler(e) {
+            if (e.source === iframe.contentWindow) {
+              clearTimeout(timeout);
+              window.removeEventListener('message', handler);
+              document.body.removeChild(iframe);
+              if (e.data.error) reject(new Error(e.data.error));
+              else resolve(e.data.logs || 'No output.');
+            }
+          });
+
+          const sandboxedCode = `
+            <script>
+              try {
+                const __logs = [];
+                const console = { log: (...a) => __logs.push(a.join(' ')), error: (...a) => __logs.push('Error: ' + a.join(' ')), warn: (...a) => __logs.push('Warning: ' + a.join(' ')) };
+                ${code}
+                parent.postMessage({ logs: __logs.join('\\n') }, '*');
+              } catch(e) {
+                parent.postMessage({ error: e.toString() }, '*');
+              }
+            <\/script>
+          `;
+          iframe.srcdoc = sandboxedCode;
+        });
+        setOutput(result || "No output.");
+      } else {
+        // Fallback for SQL
+        const res = await fetch('/run-code/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            language,
+            code,
+            files: {},
+            entrypoint: "solution.py"
+          })
+        });
+        
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || "Server error");
+        setOutput(data.output || 'No output.');
+      }
     } catch (e) {
       setOutput(`Error: ${e.message}`);
     } finally {
@@ -44,6 +122,7 @@ const Sandbox = () => {
   const handleReviewCode = async () => {
     setIsReviewing(true);
     setFeedback('Analyzing your code...');
+    setActiveTab('review'); // Automatically switch to review tab
     
     try {
       const res = await fetch('/review-code/', {
@@ -145,28 +224,58 @@ const Sandbox = () => {
           />
         </div>
 
-        {/* Terminal Area */}
+        {/* Output & AI Review Area */}
         <div style={{ width: '40%', display: 'flex', flexDirection: 'column', background: '#0d1117' }}>
-          <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--surface2)' }}>
-            <Terminal size={16} color="var(--text2)" />
-            <span style={{ fontSize: '13px', fontWeight: 'bold', color: 'var(--text)' }}>Terminal</span>
+          
+          {/* Tabs */}
+          <div style={{ display: 'flex', background: 'var(--surface2)', borderBottom: '1px solid var(--border)' }}>
+            <button 
+              onClick={() => setActiveTab('terminal')}
+              style={{ 
+                flex: 1, padding: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                background: activeTab === 'terminal' ? 'transparent' : 'rgba(0,0,0,0.2)',
+                borderBottom: activeTab === 'terminal' ? '2px solid var(--accent)' : '2px solid transparent',
+                color: activeTab === 'terminal' ? 'var(--text)' : 'var(--text2)',
+                fontWeight: activeTab === 'terminal' ? 'bold' : 'normal',
+                cursor: 'pointer'
+              }}
+            >
+              <Terminal size={16} /> Terminal
+            </button>
+            <button 
+              onClick={() => setActiveTab('review')}
+              style={{ 
+                flex: 1, padding: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                background: activeTab === 'review' ? 'transparent' : 'rgba(0,0,0,0.2)',
+                borderBottom: activeTab === 'review' ? '2px solid var(--accent)' : '2px solid transparent',
+                color: activeTab === 'review' ? 'var(--text)' : 'var(--text2)',
+                fontWeight: activeTab === 'review' ? 'bold' : 'normal',
+                cursor: 'pointer'
+              }}
+            >
+              <Sparkles size={16} /> AI Code Review
+            </button>
           </div>
-          <div style={{ flex: 1, padding: '16px', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
-            <pre style={{ margin: 0, fontFamily: 'JetBrains Mono, monospace', fontSize: '14px', color: 'var(--text-bright)', whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
-              {output || 'Run your code to see output here.'}
-            </pre>
-            
-            {feedback && (
-              <div style={{ marginTop: '20px', padding: '16px', background: 'var(--surface)', borderRadius: '8px', borderLeft: '4px solid var(--accent)' }}>
-                <h4 style={{ margin: '0 0 10px 0', color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Sparkles size={16} /> AI Code Review
-                </h4>
-                <div style={{ color: 'var(--text)', fontSize: '14px', lineHeight: '1.6', fontFamily: 'Inter, sans-serif' }}>
+
+          <div style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
+            {activeTab === 'terminal' ? (
+              <pre style={{ margin: 0, fontFamily: 'JetBrains Mono, monospace', fontSize: '14px', color: 'var(--text-bright)', whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
+                {output || 'Run your code to see output here.'}
+              </pre>
+            ) : (
+              <div style={{ color: 'var(--text)', fontSize: '15px', lineHeight: '1.6', fontFamily: 'Inter, sans-serif' }}>
+                {feedback ? (
                   <ReactMarkdown>{feedback}</ReactMarkdown>
-                </div>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--text2)', marginTop: '40px' }}>
+                    <MessageSquare size={48} style={{ marginBottom: '16px', opacity: 0.5 }} />
+                    <p>Click "AI Review" in the top bar to get instant, AI-powered feedback on your code.</p>
+                  </div>
+                )}
               </div>
             )}
           </div>
+
         </div>
       </div>
     </div>
