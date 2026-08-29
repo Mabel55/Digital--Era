@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import PublicNavbar from './PublicNavbar';
 import { Rocket, Zap, Bot, Trophy, User, GraduationCap, Star, ArrowRight, Briefcase } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
+import mabelFounderImg from '../../public/mabel-founder.jpg';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -254,7 +255,7 @@ const LandingPage = () => {
                 boxShadow: '0 0 0 4px var(--accent), 0 10px 40px rgba(0,229,160,0.35)'
               }}>
                 <img
-                  src="/mabel-founder.jpg"
+                  src={mabelFounderImg}
                   alt="Arua Mabel Chinasa – Founder of Digital Era"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
                 />
