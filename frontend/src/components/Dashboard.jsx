@@ -7,7 +7,10 @@ import { useCurriculum } from '../hooks/useCurriculum';
 import { projectsManifest } from '../data/projects';
 import CertificateModal from './CertificateModal';
 import NotificationCenter from './NotificationCenter';
-import { GraduationCap, Sun, Moon, Trophy, Flame, Users, User, Target, Scroll, Rocket, Brain, Wrench, Hammer, BookOpen, Terminal, Crown, ArrowRight, Star, Zap, Globe, Menu, X, Search, Play, Calendar, MessageSquare, Code2 } from 'lucide-react';
+import DownloadManager from './DownloadManager';
+import DataSaverToggle from './DataSaverToggle';
+import { useOfflineSync } from '../hooks/useOfflineSync';
+import { GraduationCap, Sun, Moon, Trophy, Flame, Users, User, Target, Scroll, Rocket, Brain, Wrench, Hammer, BookOpen, Terminal, Crown, ArrowRight, Star, Zap, Globe, Menu, X, Search, Play, Calendar, MessageSquare, Code2, Download, CloudOff, RefreshCw } from 'lucide-react';
 
 const Dashboard = () => {
   const { user, token, logout, subscription } = useAuth();
@@ -25,7 +28,9 @@ const Dashboard = () => {
   const [unreadNotifs, setUnreadNotifs] = useState(0);
   const [notifications, setNotifications] = useState([]);
   const [learningGoal, setLearningGoal] = useState(null);
+  const [showDownloadManager, setShowDownloadManager] = useState(false);
   const { t, i18n } = useTranslation();
+  const { pendingCount: offlinePendingCount, isSyncing: isOfflineSyncing } = useOfflineSync(token);
 
   const fetchNotifications = async () => {
     try {
@@ -255,6 +260,7 @@ const Dashboard = () => {
               aria-label="Select language"
             >
               <option value="en">EN</option>
+              <option value="pcm">Pidgin</option>
               <option value="es">ES</option>
               <option value="fr">FR</option>
               <option value="ig">IG</option>
@@ -273,6 +279,8 @@ const Dashboard = () => {
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
           
+          <DataSaverToggle compact />
+          
           <button 
             onClick={() => navigate('/community')}
             style={{ padding: '8px 16px', background: 'var(--surface2)', color: '#3b82f6', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}
@@ -285,6 +293,26 @@ const Dashboard = () => {
             style={{ padding: '8px 16px', background: 'var(--surface2)', color: 'var(--accent)', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}
           >
             <Code2 size={16} /> Sandbox
+          </button>
+
+          <button 
+            onClick={() => setShowDownloadManager(true)}
+            style={{ padding: '8px 16px', background: 'var(--surface2)', color: '#f59e0b', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px', position: 'relative' }}
+            title="Download courses for offline learning"
+          >
+            <Download size={16} /> Offline
+            {offlinePendingCount > 0 && (
+              <span style={{
+                position: 'absolute', top: '-4px', right: '-4px',
+                background: isOfflineSyncing ? '#3b82f6' : '#f59e0b',
+                color: 'white', fontSize: '0.65rem', fontWeight: 700,
+                minWidth: '18px', height: '18px', borderRadius: '100px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                padding: '0 4px',
+              }}>
+                {isOfflineSyncing ? <RefreshCw size={10} style={{ animation: 'spin 1s linear infinite' }} /> : offlinePendingCount}
+              </span>
+            )}
           </button>
 
           <button 
@@ -772,6 +800,13 @@ const Dashboard = () => {
           onClose={() => setCertCourse(null)}
         />
       )}
+
+      <DownloadManager
+        isOpen={showDownloadManager}
+        onClose={() => setShowDownloadManager(false)}
+        curriculum={curriculum}
+        courseManifest={courseManifest}
+      />
     </div>
   );
 };

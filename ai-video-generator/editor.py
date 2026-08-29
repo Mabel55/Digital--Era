@@ -16,6 +16,14 @@ def make_video(image_paths, audio_path, vtt_path, output_path):
         print("No image clips provided.")
         return
         
+    # Inject founder picture for the Call to Action if it exists
+    founder_pics = ["founder.jpg", "founder.png", "mabel.jpg", "mabel.png"]
+    for pic in founder_pics:
+        if os.path.exists(pic):
+            print(f"Injecting {pic} as the final Call to Action image...")
+            image_paths.append(pic)
+            break
+            
     duration_per_image = audio.duration / len(image_paths)
     
     clips = []

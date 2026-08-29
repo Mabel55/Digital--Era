@@ -18,47 +18,45 @@ MAX_REWRITE_ATTEMPTS = 3
 MIN_SCORE = 9
 
 def _build_script_prompt(state):
-    """Build the main script generation prompt for the series."""
+    """Build the main script generation prompt for the marketing series."""
     previous_context = "\n".join(state['previous_events']) if state['previous_events'] else "This is the very first episode."
     
     return f"""
-    You are the showrunner and lead writer for a viral, episodic "movie-like" series on YouTube Shorts/Reels/TikTok.
-    The videos are published in horizontal (16:9) format and are 3 MINUTES LONG.
-    Your writing must be gripping, atmospheric, and terrifying. Every sentence must build suspense.
+    You are the lead marketer and educational content creator for "Digital Era", a top-tier tech training centre in Ikorodu, Lagos, Nigeria.
+    The videos are published in horizontal (16:9) format and are 1 MINUTE LONG.
+    Your writing must be highly engaging, educational, and end with a strong Call to Action (CTA) to enroll at Digital Era.
     
     **SERIES INFO:**
     Title: {state['series_title']}
     Genre: {state['genre']}
     Current Episode: {state['current_episode']}
-    Main Character: {state['main_character']['name']}
     
     **STORY CONTEXT:**
-    Previous Events:
+    Previous Topics Covered:
     {previous_context}
     
-    Current Plot Hook (Start here):
+    Current Topic (Start here):
     {state['plot_summary']}
     
     **YOUR TASK:**
-    Write a 3-minute script (approx. 400-450 words) for Episode {state['current_episode']}.
+    Write a 1-minute script (approx. 130-150 words) for Episode {state['current_episode']}.
     It MUST be spoken narration. No stage directions in the script part.
-    End the episode on a massive cliffhanger.
+    End the video with a strong Call to Action to enroll at Digital Era by calling +234 703 719 7261 or visiting digital-era.live.
     
     **STRUCTURE:**
-    1. Hook: Start immediately with action, discovery, or fear based on the current plot hook.
-    2. Body: Build massive tension. Escalate the mystery.
-    3. Cliffhanger: End the episode leaving the viewer desperate for Episode {state['current_episode'] + 1}.
+    1. Hook: Start immediately with a strong question or fact about the current tech topic.
+    2. Body: Explain the concept simply but professionally. Mention how learning this can lead to a great career.
+    3. CTA: Call to action to join Digital Era in Ikorodu, Lagos.
     
     **METADATA TO GENERATE:**
-    - "image_prompts": A list of exactly 18 highly detailed image generation prompts that EXACTLY match the events in the script (approx. one image every 10 seconds).
-      - VERY IMPORTANT: Create a MIX of shots! Some should show environments, some should show specific objects, clues, or monsters, and some should show the character. DO NOT just show the character in every single shot.
-      - When the character IS in the shot, DO NOT use their name. Instead, inject this EXACT description: "{state['main_character']['description']}"
+    - "image_prompts": A list of exactly 6 highly detailed image generation prompts that EXACTLY match the events in the script (approx. one image every 10 seconds).
+      - VERY IMPORTANT: Create a MIX of shots! Some should show modern computer screens with code, some should show diverse tech students in a classroom, and some should show neon green branding (Digital Era's colors).
       - Prompts must be cinematic, photorealistic, 8k resolution, dramatic lighting.
-    - "youtube_title": SEO clickbait title for this episode (e.g., "The Hollow Protocol: Ep {state['current_episode']} - The Shadow in the Woods 😱"). Max 60 chars. DO NOT use the word "shorts" or "#shorts".
-    - "youtube_description": Description for the video with keywords and hashtags. DO NOT include #shorts.
-    - "youtube_tags": List of 8-12 SEO tags. DO NOT include "shorts".
+    - "youtube_title": SEO clickbait title for this episode (e.g., "Why Learn Python in 2024? 🚀 | Digital Era Tech Tips"). Max 60 chars.
+    - "youtube_description": Description for the video with keywords and hashtags. Mention Ikorodu and Lagos.
+    - "youtube_tags": List of 8-12 SEO tags related to the tech topic.
     - "thumbnail_prompt": Dramatic 16:9 thumbnail description for this episode.
-    - "next_plot_summary": A 1-2 sentence summary of what happens next (the cliffhanger state) so the next episode can pick up from there.
+    - "next_plot_summary": A 1-2 sentence summary of what tech topic should be covered next (e.g., "Data Science vs Data Analytics").
     
     Format your response as a JSON object:
     {{
@@ -75,24 +73,24 @@ def _build_script_prompt(state):
 def _build_scoring_prompt(content, state):
     """Build the quality scoring prompt."""
     return f"""
-    You are a ruthless viral content quality analyst. Rate this 3-minute script on 5 dimensions.
+    You are a viral content quality analyst. Rate this 1-minute script on 5 dimensions.
     
     **SCRIPT TO EVALUATE:**
     "{content['script']}"
     
     **SCORING CRITERIA (1-10):**
     1. hook_strength: Does the start immediately grab attention?
-    2. pacing: Is it engaging for a full 3 minutes (400+ words)?
-    3. atmosphere: Does it feel like a cinematic {state['genre']} movie?
-    4. cliffhanger: Is the ending an irresistible cliffhanger?
-    5. prompt_quality: Are there 18 detailed image prompts that include the exact physical description of the character?
+    2. pacing: Is it engaging for a full 1 minute (130+ words)?
+    3. educational_value: Is the tech concept explained clearly?
+    4. call_to_action: Is the CTA to enroll at Digital Era clear and compelling?
+    5. prompt_quality: Are there exactly 6 detailed image prompts related to tech and Digital Era?
     
     Format your response as a JSON object:
     {{
         "hook_strength": <number>,
         "pacing": <number>,
-        "atmosphere": <number>,
-        "cliffhanger": <number>,
+        "educational_value": <number>,
+        "call_to_action": <number>,
         "prompt_quality": <number>,
         "total_score": <sum of all five>,
         "feedback": "specific actionable feedback"
@@ -102,21 +100,20 @@ def _build_scoring_prompt(content, state):
 def _build_rewrite_prompt(script, state, scores, feedback):
     """Build a rewrite prompt."""
     return f"""
-    You are the showrunner for {state['series_title']}. A previous version of Episode {state['current_episode']} scored poorly and needs a COMPLETE rewrite.
+    You are the lead marketer for {state['series_title']}. A previous version of Episode {state['current_episode']} scored poorly and needs a COMPLETE rewrite.
     
     **SCORES:**
     - Hook: {scores.get('hook_strength')}/10
     - Pacing: {scores.get('pacing')}/10
-    - Atmosphere: {scores.get('atmosphere')}/10
-    - Cliffhanger: {scores.get('cliffhanger')}/10
+    - Educational Value: {scores.get('educational_value')}/10
+    - Call to Action: {scores.get('call_to_action')}/10
     - Prompt Quality: {scores.get('prompt_quality')}/10
     
     **FEEDBACK:**
     {feedback}
     
-    Write a COMPLETELY NEW 3-minute script (400-450 words) and 18 image prompts that fixes ALL issues. 
-    Remember to create a MIX of environment, object, and character shots. 
-    When the character is in the shot, use: "{state['main_character']['description']}"
+    Write a COMPLETELY NEW 1-minute script (130-150 words) and 6 image prompts that fixes ALL issues. 
+    Remember to create a MIX of tech-related shots and mention Digital Era in Ikorodu. 
     
     Format your response as a JSON object:
     {{
@@ -200,7 +197,7 @@ def generate_script_and_topic():
         print(f"Total Score: {scores.get('total_score')}/50. Feedback: {scores.get('feedback')[:100]}...")
         attempts.append({"content": content, "scores": scores})
         
-        passed = all(scores.get(m, 0) >= MIN_SCORE for m in ["hook_strength", "pacing", "atmosphere", "cliffhanger", "prompt_quality"])
+        passed = all(scores.get(m, 0) >= MIN_SCORE for m in ["hook_strength", "pacing", "educational_value", "call_to_action", "prompt_quality"])
         if passed:
             print("[OK] All scores >= 9!")
             break

@@ -1,18 +1,22 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
+import { useDataSaver } from '../DataSaverContext';
 import { useTranslation } from 'react-i18next';
 import Editor from '@monaco-editor/react';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 import { useCurriculum } from '../hooks/useCurriculum';
 import LessonDiscussion from './LessonDiscussion';
-import { ArrowLeft, Play, Terminal, CheckCircle2, XCircle, Bug, Bot, ArrowUp, PartyPopper, Home, RotateCcw, Menu, Lightbulb, RotateCcw as ResetIcon, Clock, ChevronRight } from 'lucide-react';
+import { queueProgressUpdate, saveCode as saveCodeToDB, loadCode as loadCodeFromDB, saveCachedProgress } from '../lib/offlineDB';
+import { useOfflineSync } from '../hooks/useOfflineSync';
+import { ArrowLeft, Play, Terminal, CheckCircle2, XCircle, Bug, Bot, ArrowUp, PartyPopper, Home, RotateCcw, Menu, Lightbulb, RotateCcw as ResetIcon, Clock, ChevronRight, WifiOff, CloudOff, RefreshCw } from 'lucide-react';
 
 const Workspace = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
   const { token, user, subscription } = useAuth();
+  const { dataSaver } = useDataSaver();
   const { i18n } = useTranslation();
   const courseName = decodeURIComponent(courseId);
   const { data: curriculumData, isLoading: curriculumLoading } = useCurriculum();
@@ -54,7 +58,8 @@ const Workspace = () => {
       if (!lesson) return;
       
       const lang = i18n.language || 'en';
-      if (lang === 'en' || lang.startsWith('en')) {
+      // ★ Data Saver: skip translation API calls to save data
+      if (lang === 'en' || lang.startsWith('en') || dataSaver) {
         setTranslatedTheory(lesson.theory);
         setTranslatedInstructions(lesson.instructions);
         return;
@@ -94,37 +99,60 @@ const Workspace = () => {
     };
 
     fetchTranslations();
-  }, [currentLessonIdx, i18n.language, manifest]);
+  }, [currentLessonIdx, i18n.language, manifest, dataSaver]);
+
+  // ★ Pyodide loader — extracted so it can be called on-demand in data saver mode
+  const loadPyodideRuntime = useCallback(async () => {
+    if (pyodide) return pyodide; // Already loaded
+    
+    return new Promise((resolve, reject) => {
+      if (document.getElementById('pyodide-script') && window.loadPyodide) {
+        // Script already added, just initialize
+        window.loadPyodide({
+          indexURL: "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/"
+        }).then(instance => {
+          instance.runPython(`import sys\nimport io\nsys.stdout = io.StringIO()`);
+          setPyodide(instance);
+          resolve(instance);
+        }).catch(reject);
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js';
+      script.id = 'pyodide-script';
+      script.async = true;
+      document.body.appendChild(script);
+      
+      script.onload = async () => {
+        try {
+          const pyodideInstance = await window.loadPyodide({
+            indexURL: "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/"
+          });
+          pyodideInstance.runPython(`
+            import sys
+            import io
+            sys.stdout = io.StringIO()
+          `);
+          setPyodide(pyodideInstance);
+          console.log("Pyodide loaded successfully.");
+          resolve(pyodideInstance);
+        } catch (e) {
+          console.error("Pyodide load failed", e);
+          reject(e);
+        }
+      };
+      script.onerror = reject;
+    });
+  }, [pyodide]);
 
   useEffect(() => {
-    const loadPyodideScript = async () => {
-      if (!document.getElementById('pyodide-script')) {
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js';
-        script.id = 'pyodide-script';
-        script.async = true;
-        document.body.appendChild(script);
-        
-        script.onload = async () => {
-          try {
-            const pyodideInstance = await window.loadPyodide({
-              indexURL: "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/"
-            });
-            pyodideInstance.runPython(`
-              import sys
-              import io
-              sys.stdout = io.StringIO()
-            `);
-            setPyodide(pyodideInstance);
-            console.log("Pyodide loaded successfully.");
-          } catch (e) {
-            console.error("Pyodide load failed", e);
-          }
-        };
-      }
-    };
-    loadPyodideScript();
-  }, []);
+    // ★ Data Saver: defer Pyodide loading until user clicks "Run Code"
+    // Normal mode: load immediately for instant execution
+    if (!dataSaver) {
+      loadPyodideRuntime();
+    }
+  }, [dataSaver, loadPyodideRuntime]);
 
   useEffect(() => {
     if (manifest && manifest.lessons.length > 0) {
@@ -208,8 +236,16 @@ const Workspace = () => {
   };
 
   const triggerProgressUpdate = async () => {
+    // ★ OFFLINE-FIRST: Always save progress locally first, then try server
+    try {
+      await queueProgressUpdate(courseName, currentLessonIdx, 10);
+      await saveCachedProgress(courseName, currentLessonIdx + 1);
+    } catch (dbErr) {
+      console.warn('[Offline] IndexedDB save failed:', dbErr);
+    }
+
     const token = localStorage.getItem('token');
-    if (token) {
+    if (token && navigator.onLine) {
         try {
             const progressRes = await fetch('/users/me/progress', {
                 method: 'POST',
@@ -228,8 +264,13 @@ const Workspace = () => {
                 setTerminalOutput(prev => prev + `\n\n🎉 Lesson Passed! +10 XP Awarded! You are now level: ${userData.level}`);
             }
         } catch (e) {
-            console.error("Failed to update progress", e);
+            // Server unreachable — progress is safely queued in IndexedDB
+            console.log('[Offline] Server unreachable, progress saved locally. Will sync when online.');
+            setTerminalOutput(prev => prev + `\n\n🎉 Lesson Passed! Progress saved locally — will sync when you're back online.`);
         }
+    } else if (!navigator.onLine) {
+        // Fully offline — inform user their progress is safe
+        setTerminalOutput(prev => prev + `\n\n🎉 Lesson Passed! 📴 You're offline — progress saved locally and will sync automatically.`);
     }
   };
 
@@ -254,21 +295,35 @@ const Workspace = () => {
 
     try {
       // 1. PYTHON CLIENT-SIDE (PYODIDE)
-      if (lang === 'python' && pyodide) {
-        try {
-          pyodide.runPython("sys.stdout = io.StringIO()");
-          pyodide.runPython(fullCode);
-          const stdout = pyodide.runPython("sys.stdout.getvalue()");
-          setTerminalOutput(stdout || "No output.");
-          setTerminalClass('success');
-          triggerProgressUpdate();
-        } catch (err) {
-          setTerminalOutput(err.toString());
-          setTerminalClass('error');
-          setHasError(true);
+      if (lang === 'python') {
+        // ★ Data Saver: load Pyodide on first run if not yet loaded
+        let pyodideInstance = pyodide;
+        if (!pyodideInstance) {
+          setTerminalOutput('⚡ Loading Python engine (first run)...');
+          try {
+            pyodideInstance = await loadPyodideRuntime();
+          } catch (loadErr) {
+            // Fall through to server-side execution
+            console.warn('Pyodide load failed, falling back to server:', loadErr);
+          }
         }
-        setIsRunning(false);
-        return;
+
+        if (pyodideInstance) {
+          try {
+            pyodideInstance.runPython("sys.stdout = io.StringIO()");
+            pyodideInstance.runPython(fullCode);
+            const stdout = pyodideInstance.runPython("sys.stdout.getvalue()");
+            setTerminalOutput(stdout || "No output.");
+            setTerminalClass('success');
+            triggerProgressUpdate();
+          } catch (err) {
+            setTerminalOutput(err.toString());
+            setTerminalClass('error');
+            setHasError(true);
+          }
+          setIsRunning(false);
+          return;
+        }
       }
       
       // 2. JAVASCRIPT CLIENT-SIDE
@@ -396,6 +451,46 @@ const Workspace = () => {
     if (!directMessage) setChatInput('');
     setIsTyping(true);
 
+    if (!navigator.onLine) {
+      try {
+        // ★ OFFLINE AI TUTOR: Fetch pre-cached FAQs
+        const faqRes = await fetch('/ai-faqs.json');
+        if (faqRes.ok) {
+          const faqData = await faqRes.json();
+          const lowerMsg = userMsg.toLowerCase();
+          
+          let matchedAnswer = null;
+          for (const faq of faqData.faqs) {
+            if (faq.keywords.some(kw => lowerMsg.includes(kw))) {
+              matchedAnswer = faq.answer;
+              break;
+            }
+          }
+          
+          setTimeout(() => {
+            setMessages(prev => [...prev, { 
+              sender: 'ai', 
+              text: matchedAnswer || faqData.fallback 
+            }]);
+            setIsTyping(false);
+          }, 600); // Fake delay for realism
+          return;
+        }
+      } catch (e) {
+        console.warn('Offline FAQ failed', e);
+      }
+      
+      // Fallback if ai-faqs.json fails for some reason
+      setTimeout(() => {
+        setMessages(prev => [...prev, { 
+          sender: 'ai', 
+          text: "📴 You're offline right now. The AI tutor needs an internet connection for complex questions, but you can still read lessons, write code, and run Python locally!" 
+        }]);
+        setIsTyping(false);
+      }, 500);
+      return;
+    }
+
     try {
       const res = await fetch(`/chat`, {
         method: 'POST',
@@ -424,7 +519,7 @@ const Workspace = () => {
         });
       }
     } catch (err) {
-      setMessages(prev => [...prev, { sender: 'ai', text: "Sorry, I'm having trouble connecting to my brain right now." }]);
+      setMessages(prev => [...prev, { sender: 'ai', text: "Sorry, I'm having trouble connecting to my brain right now. Please try again in a moment." }]);
     } finally {
       setIsTyping(false);
     }

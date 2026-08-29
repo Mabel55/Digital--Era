@@ -8,7 +8,8 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'icons.svg', 'offline.html', 'mabel-founder.jpg'],
+      // Precache the curriculum JSON and AI FAQs alongside static assets so they're available offline immediately
+      includeAssets: ['favicon.svg', 'icons.svg', 'offline.html', 'mabel-founder.jpg', 'curriculum.json', 'ai-faqs.json'],
       manifest: {
         name: 'Digital Era – Master AI, Data & Code',
         short_name: 'Digital Era',
@@ -61,11 +62,46 @@ export default defineConfig({
         ]
       },
       workbox: {
-        // Cache the offline fallback page
+        // Precache app shell + curriculum data
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,jpg,jpeg}'],
         
+        // Increase precache size limit for curriculum.json (~2.1MB)
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB
+
         // Runtime caching strategies
         runtimeCaching: [
+          {
+            // ★ CRITICAL: Cache Pyodide runtime from CDN (one-time ~15MB download)
+            // This is what makes Python code execution work offline
+            urlPattern: /^https:\/\/cdn\.jsdelivr\.net\/pyodide\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'pyodide-runtime',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 90 // 90 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          },
+          {
+            // ★ CRITICAL: Cache curriculum.json with StaleWhileRevalidate
+            // Serves cached version instantly, updates in background
+            urlPattern: /\/curriculum\.json/i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'curriculum-cache',
+              expiration: {
+                maxEntries: 5,
+                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          },
           {
             // Cache Google Fonts stylesheets
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -91,6 +127,21 @@ export default defineConfig({
             }
           },
           {
+            // Cache Monaco Editor chunks from CDN
+            urlPattern: /^https:\/\/cdn\.jsdelivr\.net\/npm\/monaco-editor\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'monaco-editor-cache',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 90 // 90 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          },
+          {
             // Cache API calls for course data (read-only endpoints)
             urlPattern: /\/courses\/\d+\/lessons/i,
             handler: 'StaleWhileRevalidate',
@@ -103,7 +154,7 @@ export default defineConfig({
             }
           },
           {
-            // Cache curriculum/course listing data
+            // Cache course listing from backend
             urlPattern: /\/courses\/?$/i,
             handler: 'StaleWhileRevalidate',
             options: {
@@ -111,6 +162,30 @@ export default defineConfig({
               expiration: {
                 maxEntries: 50,
                 maxAgeSeconds: 60 * 60 * 24 // 1 day
+              }
+            }
+          },
+          {
+            // Cache daily challenge data
+            urlPattern: /\/daily-challenge\//i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'daily-challenge-cache',
+              expiration: {
+                maxEntries: 5,
+                maxAgeSeconds: 60 * 60 * 24 // 1 day
+              }
+            }
+          },
+          {
+            // Cache leaderboard data
+            urlPattern: /\/leaderboard/i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'leaderboard-cache',
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 // 1 hour
               }
             }
           },
@@ -127,7 +202,9 @@ export default defineConfig({
             }
           },
           {
-            // Navigation requests – serve cached page or offline fallback
+            // ★ Navigation requests — SPA fallback for offline routing
+            // Uses NetworkFirst with a fast timeout so offline users see
+            // the cached app shell immediately instead of a browser error
             urlPattern: ({ request }) => request.mode === 'navigate',
             handler: 'NetworkFirst',
             options: {
@@ -136,14 +213,32 @@ export default defineConfig({
                 maxEntries: 50,
                 maxAgeSeconds: 60 * 60 * 24 * 7 // 1 week
               },
-              networkTimeoutSeconds: 5
+              networkTimeoutSeconds: 3
             }
           }
         ],
 
-        // Offline fallback
-        navigateFallback: null,
-        navigateFallbackDenylist: [/^\/api/, /^\/users/, /^\/chat/, /^\/ask-ai/, /^\/run-python/],
+        // SPA offline: fallback to index.html so React Router handles all routes
+        navigateFallback: '/index.html',
+        // Don't intercept API endpoints — only navigation (page) requests
+        navigateFallbackDenylist: [
+          /^\/api/,
+          /^\/users/,
+          /^\/chat/,
+          /^\/ask-ai/,
+          /^\/run-code/,
+          /^\/run-python/,
+          /^\/courses/,
+          /^\/notifications/,
+          /^\/leaderboard/,
+          /^\/daily-challenge/,
+          /^\/translate/,
+          /^\/payments/,
+          /^\/teachers/,
+          /^\/admin/,
+          /^\/ai-usage/,
+          /^\/forum/,
+        ],
       }
     })
   ],

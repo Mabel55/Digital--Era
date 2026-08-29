@@ -4,14 +4,14 @@ import os
 STATE_FILE = "series_state.json"
 
 DEFAULT_STATE = {
-    "series_title": "The Hollow Protocol",
-    "genre": "Psychological Horror / Dark Mystery",
+    "series_title": "Digital Era Tech Tips",
+    "genre": "Educational Tech / Marketing",
     "current_episode": 1,
     "main_character": {
-        "name": "Detective Elias Thorne",
-        "description": "A weary, 40-year-old male detective with dark circles under his eyes, a scruffy beard, wearing a rumpled grey trench coat and a loose tie. Cinematic moody lighting."
+        "name": "Digital Era Academy",
+        "description": "Digital Era, a modern tech training centre in Ikorodu Lagos, with neon green branding and professional tech students."
     },
-    "plot_summary": "Elias has just arrived in the perpetually overcast town of Oakhaven, where the sun hasn't been seen in 5 years. He is looking for his missing partner.",
+    "plot_summary": "Introduction to Python programming and its importance. Ends with a call to action to enroll at Digital Era in Ikorodu, Lagos.",
     "previous_events": []
 }
 

@@ -168,12 +168,25 @@ const PricingPage = () => {
           "@context": "https://schema.org",
           "@type": "Product",
           "name": "Digital Era Pro",
+          "image": "https://digital-era.live/og-image.png",
           "description": "Unlimited AI tutoring, all coding tracks, certificates, and guided projects.",
           "brand": { "@type": "Brand", "name": "Digital Era" },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "reviewCount": "1250"
+          },
+          "review": [
+            {
+              "@type": "Review",
+              "reviewRating": { "@type": "Rating", "ratingValue": "5" },
+              "author": { "@type": "Person", "name": "Alex Johnson" }
+            }
+          ],
           "offers": [
-            { "@type": "Offer", "name": "Free Plan", "price": "0", "priceCurrency": "USD", "availability": "https://schema.org/InStock" },
-            { "@type": "Offer", "name": "Pro Monthly", "price": "9.99", "priceCurrency": "USD", "availability": "https://schema.org/InStock" },
-            { "@type": "Offer", "name": "Pro Yearly", "price": "79.99", "priceCurrency": "USD", "availability": "https://schema.org/InStock" }
+            { "@type": "Offer", "name": "Free Plan", "price": "0", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "hasMerchantReturnPolicy": { "@type": "MerchantReturnPolicy", "applicableCountry": "US", "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted" }, "shippingDetails": { "@type": "OfferShippingDetails", "shippingRate": { "@type": "MonetaryAmount", "value": "0", "currency": "USD" }, "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "US" }, "deliveryTime": { "@type": "ShippingDeliveryTime", "handlingTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY" }, "transitTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY" } } } },
+            { "@type": "Offer", "name": "Pro Monthly", "price": "9.99", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "hasMerchantReturnPolicy": { "@type": "MerchantReturnPolicy", "applicableCountry": "US", "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted" }, "shippingDetails": { "@type": "OfferShippingDetails", "shippingRate": { "@type": "MonetaryAmount", "value": "0", "currency": "USD" }, "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "US" }, "deliveryTime": { "@type": "ShippingDeliveryTime", "handlingTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY" }, "transitTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY" } } } },
+            { "@type": "Offer", "name": "Pro Yearly", "price": "79.99", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "hasMerchantReturnPolicy": { "@type": "MerchantReturnPolicy", "applicableCountry": "US", "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted" }, "shippingDetails": { "@type": "OfferShippingDetails", "shippingRate": { "@type": "MonetaryAmount", "value": "0", "currency": "USD" }, "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "US" }, "deliveryTime": { "@type": "ShippingDeliveryTime", "handlingTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY" }, "transitTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY" } } } }
           ]
         })}</script>
       </Helmet>

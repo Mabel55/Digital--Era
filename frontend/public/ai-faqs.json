@@ -1,0 +1,53 @@
+{
+  "faqs": [
+    {
+      "keywords": ["variable", "what is a variable", "variables"],
+      "answer": "A variable is like a container for storing data. Think of it like a labeled box where you can put numbers, text, or other information so you can use it later in your code!"
+    },
+    {
+      "keywords": ["print", "how to print", "output", "display"],
+      "answer": "In Python, you use the `print()` function to display text on the screen. For example: `print(\"Hello, World!\")` will display the text Hello, World!."
+    },
+    {
+      "keywords": ["syntaxerror", "syntax error", "invalid syntax"],
+      "answer": "A SyntaxError means there's a typo in your code. Check for missing quotes around text, missing parentheses `()`, or forgetting a colon `:` at the end of an `if` or `for` statement."
+    },
+    {
+      "keywords": ["indentationerror", "indentation error", "indent"],
+      "answer": "Python uses spaces at the start of a line to know which code belongs together (like inside an `if` statement or a function). Make sure you are using 4 spaces to indent, and that all lines in the same block line up exactly!"
+    },
+    {
+      "keywords": ["nameerror", "name is not defined", "not defined"],
+      "answer": "A NameError happens when Python doesn't recognize a word you used. Usually, this means you misspelled a variable name, or you are trying to use a variable before you assigned anything to it."
+    },
+    {
+      "keywords": ["typeerror", "type error", "can only concatenate"],
+      "answer": "A TypeError happens when you try to do something with the wrong type of data. For example, you can't add a string (text) and an integer (number) together directly. You might need to use `str()` to convert the number to text first!"
+    },
+    {
+      "keywords": ["list", "what is a list", "arrays"],
+      "answer": "A list in Python is a way to store multiple items in a single variable. It's written with square brackets. Example: `my_list = [\"apple\", \"banana\", \"cherry\"]`."
+    },
+    {
+      "keywords": ["loop", "for loop", "while loop", "how to loop"],
+      "answer": "Loops let you repeat code. A `for` loop is great when you know how many times to repeat something (like going through a list). A `while` loop repeats as long as a condition is true."
+    },
+    {
+      "keywords": ["if", "else", "elif", "conditions", "conditional"],
+      "answer": "If statements let your code make decisions. `if` checks a condition. If it's true, it runs the code inside. `elif` (else if) checks another condition. `else` runs if none of the above were true."
+    },
+    {
+      "keywords": ["function", "def", "what is a function"],
+      "answer": "A function is a reusable block of code. You define it using `def my_function():`, and then you can call it whenever you need that code to run by typing `my_function()`."
+    },
+    {
+      "keywords": ["sql", "what is sql", "database"],
+      "answer": "SQL (Structured Query Language) is used to talk to databases. You can use it to SELECT data, INSERT new data, UPDATE existing data, or DELETE data."
+    },
+    {
+      "keywords": ["select", "how to select", "query"],
+      "answer": "The SELECT statement in SQL is used to get data from a database. For example: `SELECT * FROM users;` gets all columns from the users table."
+    }
+  ],
+  "fallback": "I'm currently offline, so I can't connect to my main brain to answer complex questions right now. But I am still here to help with basic concepts, and you can keep doing your lessons and running code! Check your spelling and syntax, that fixes 90% of bugs!"
+}

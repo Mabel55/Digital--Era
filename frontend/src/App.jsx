@@ -1,6 +1,7 @@
 import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './AuthContext';
+import { DataSaverProvider } from './DataSaverContext';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import OfflineBanner from './components/OfflineBanner';
 import ErrorBoundary from './ErrorBoundary';
@@ -53,6 +54,7 @@ prefetchCurriculum(queryClient);
 const App = () => {
   return (
     <ErrorBoundary>
+      <DataSaverProvider>
       <HelmetProvider>
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
@@ -130,6 +132,7 @@ const App = () => {
         </BrowserRouter>
         </QueryClientProvider>
       </HelmetProvider>
+      </DataSaverProvider>
     </ErrorBoundary>
   );
 };

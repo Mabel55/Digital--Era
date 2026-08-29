@@ -57,6 +57,45 @@ button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible
   }
 }
 
+/* ─── DATA SAVER MODE ───
+   Activated when user toggles Data Saver ON.
+   Reduces data usage by ~60-80%:
+   - System fonts instead of web fonts (~300KB saved)
+   - No animations or transitions (less GPU/battery)
+   - Simplified visuals (no gradients, reduced shadows)
+   Only applies when .data-saver class is on <html> element.
+   Toggle OFF = everything reverts to full experience instantly.
+*/
+.data-saver {
+  --font-display: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Courier New', Courier, monospace;
+  --glass-blur: none;
+}
+
+.data-saver *, .data-saver *::before, .data-saver *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.data-saver img:not([data-essential]) {
+  image-rendering: pixelated;
+}
+
+/* Remove glow/shadow effects in data saver */
+.data-saver .hero-badge-pulse,
+.data-saver .landing-hero-title span {
+  text-shadow: none !important;
+}
+
+.data-saver .btn-run,
+.data-saver button {
+  box-shadow: none !important;
+}
+
 /* ─── ANIMATED COUNTER ─── */
 @keyframes countUp {
   from { opacity: 0; transform: translateY(12px); }

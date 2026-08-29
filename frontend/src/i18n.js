@@ -122,6 +122,21 @@ const resources = {
         "search": "ابحث عن الدورات..."
       }
     }
+  },
+  pcm: {
+    translation: {
+      "dashboard": {
+        "welcome": "How far",
+        "loading": "E dey load...",
+        "start_learning": "Make we start learn",
+        "courses": "Lessons",
+        "leaderboard": "Top pipo",
+        "profile": "Your profile",
+        "settings": "Settings",
+        "logout": "Comot",
+        "search": "Find lesson..."
+      }
+    }
   }
 };
 

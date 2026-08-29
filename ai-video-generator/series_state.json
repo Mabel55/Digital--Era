@@ -1,14 +1,14 @@
 {
-    "series_title": "The Hollow Protocol",
-    "genre": "Psychological Horror / Dark Mystery",
+    "series_title": "Digital Era Tech Tips",
+    "genre": "Educational Tech / Marketing",
     "current_episode": 3,
     "main_character": {
-        "name": "Detective Elias Thorne",
-        "description": "A weary, 40-year-old male detective with dark circles under his eyes, a scruffy beard, wearing a rumpled grey trench coat and a loose tie. Cinematic moody lighting."
+        "name": "Digital Era Academy",
+        "description": "Digital Era, a modern tech training centre in Ikorodu Lagos, with neon green branding and professional tech students."
     },
-    "plot_summary": "Elias has uncovered a disturbing effigy and a pulsating, glowing root beneath the floorboards of the desolate cottage, just as a malevolent entity's whisper confirms his partner found the \"source.\" The floorboards beneath him are now actively splintering and buckling, threatening to plunge him into the darkness below.",
+    "plot_summary": "The next episode will explore 'Introduction to Backend Development with Node.js,' demonstrating how to build robust server-side applications and connect them to frontend experiences.",
     "previous_events": [
-        "Episode 1: Elias has just arrived in the perpetually overcast town of Oakhaven, where the sun hasn't been seen in 5 years. He is looking for his missing partner.",
-        "Episode 2: Elias Thorne is frozen in terror, an unseen entity whispering directly behind him in the desolate cottage, revealing a chilling detail about his missing partner's discovery. He must now confront what is lurking in the shadows and beneath the floorboards."
+        "Episode 1: Introduction to Python programming and its importance. Ends with a call to action to enroll at Digital Era in Ikorodu, Lagos.",
+        "Episode 2: Episode 2 will explore \"The A to Z of Web Development with Python,\" showcasing how Python frameworks like Django and Flask are used to build powerful, scalable websites and web applications, with a practical mini-project demonstration."
     ]
 }
