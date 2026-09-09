@@ -163,6 +163,8 @@ class Subscription(Base):
     paystack_customer_code = Column(String, nullable=True)
     paystack_subscription_code = Column(String, nullable=True)
 
+    access_grants = Column(JSON, default=dict) # {"track:Backend": "2026-10-09T00:00:00Z", "course:Python Basics": None}
+
     user = relationship("User", back_populates="subscription")
 
     @property

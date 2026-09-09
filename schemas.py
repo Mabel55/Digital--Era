@@ -73,6 +73,7 @@ class SubscriptionResponse(BaseModel):
     is_pro: bool = False
     current_period_end: Optional[datetime] = None
     paystack_customer_code: Optional[str] = None
+    access_grants: Optional[dict] = {}
 
     class Config:
         from_attributes = True
@@ -140,6 +141,11 @@ class CodeSubmission(BaseModel):
     language: str = "python"
     files: Optional[dict[str, str]] = None
     entrypoint: Optional[str] = "main.py"
+
+class GrantAccessRequest(BaseModel):
+    access_type: str  # "full_pro", "track", "course"
+    target_name: Optional[str] = None
+    duration_months: Optional[int] = None
 
 class ChatMessage(BaseModel):
     message: str

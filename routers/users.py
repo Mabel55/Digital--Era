@@ -618,8 +618,13 @@ def get_admin_analytics(db: Session = Depends(get_db), current_user: models.User
 # ─── NEW ADMIN CONTROL ENDPOINTS ───
 
 @router.post("/admin/users/{user_id}/grant-pro")
-def grant_pro_access(user_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
-    """Grant a user free lifetime Pro access."""
+def grant_pro_access(
+    user_id: int, 
+    payload: schemas.GrantAccessRequest,
+    db: Session = Depends(get_db), 
+    current_user: models.User = Depends(get_current_user)
+):
+    """Grant a user specific access."""
     if not _is_admin(current_user):
         raise HTTPException(status_code=403, detail="Not authorized")
     
@@ -631,13 +636,36 @@ def grant_pro_access(user_id: int, db: Session = Depends(get_db), current_user: 
     if not sub:
         sub = models.Subscription(user_id=user_id)
         db.add(sub)
-        
-    sub.plan = "pro_lifetime"
-    sub.status = "active"
-    sub.current_period_end = None # Lifetime
-    db.commit()
+
+    from dateutil.relativedelta import relativedelta
+    from datetime import datetime
     
-    return {"message": f"Successfully granted Pro access to {user_to_upgrade.email}"}
+    expiration = None
+    if payload.duration_months:
+        expiration = datetime.utcnow() + relativedelta(months=payload.duration_months)
+
+    if payload.access_type == "full_pro":
+        sub.plan = "pro_lifetime" if not payload.duration_months else "pro_monthly"
+        sub.status = "active"
+        sub.current_period_end = expiration
+    else:
+        # It's a course or track
+        if not sub.access_grants:
+            sub.access_grants = {}
+        
+        # We must create a new dict and assign it because SQLAlchemy JSON columns
+        # don't always track in-place mutations automatically without flag_modified
+        new_grants = dict(sub.access_grants)
+        key = f"{payload.access_type}:{payload.target_name}"
+        new_grants[key] = expiration.isoformat() if expiration else None
+        
+        sub.access_grants = new_grants
+        
+        # Note: we don't change sub.plan or sub.current_period_end here
+        # so they don't get "Full Pro" AI perks unless they actually have them.
+        
+    db.commit()
+    return {"message": f"Successfully granted {payload.access_type} access to {user_to_upgrade.email}"}
 
 @router.post("/admin/users/{user_id}/toggle-block")
 def toggle_user_block(user_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):

@@ -10,7 +10,8 @@ import { useCurriculum } from '../hooks/useCurriculum';
 import LessonDiscussion from './LessonDiscussion';
 import { queueProgressUpdate, saveCode as saveCodeToDB, loadCode as loadCodeFromDB, saveCachedProgress } from '../lib/offlineDB';
 import { useOfflineSync } from '../hooks/useOfflineSync';
-import { ArrowLeft, Play, Terminal, CheckCircle2, XCircle, Bug, Bot, ArrowUp, PartyPopper, Home, RotateCcw, Menu, Lightbulb, RotateCcw as ResetIcon, Clock, ChevronRight, WifiOff, CloudOff, RefreshCw, Code, Sparkles } from 'lucide-react';
+import { hasAccess } from '../utils/access';
+import { ArrowLeft, Play, Terminal, CheckCircle2, XCircle, Bug, Bot, ArrowUp, PartyPopper, Home, RotateCcw, Menu, Lightbulb, RotateCcw as ResetIcon, Clock, ChevronRight, WifiOff, CloudOff, RefreshCw, Code, Sparkles, Lock } from 'lucide-react';
 import GitHubExportModal from './GitHubExportModal';
 const Workspace = () => {
   const { courseId } = useParams();
@@ -52,6 +53,11 @@ const Workspace = () => {
   
   const chatEndRef = useRef(null);
   const editorRef = useRef(null);
+
+  // Derive level and track from manifest if available
+  const courseLevel = manifest ? manifest.level || 'Beginner' : 'Beginner';
+  const courseTrack = manifest ? manifest.track || 'General' : 'General';
+  const hasCourseAccess = hasAccess(courseLevel, courseTrack, courseName, subscription);
 
   useEffect(() => {
     const fetchTranslations = async () => {
@@ -540,6 +546,19 @@ const Workspace = () => {
 
   if (!manifest) {
     return <div style={{color:'white', padding: '20px'}}>Course not found</div>;
+  }
+
+  if (!hasCourseAccess) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh', color: 'white', background: 'var(--bg)' }}>
+        <Lock size={64} color="#ef4444" style={{ marginBottom: '20px' }} />
+        <h2 style={{ marginBottom: '10px' }}>Course Locked</h2>
+        <p style={{ color: 'var(--text-dim)', marginBottom: '30px' }}>You need a Pro subscription or a specific access grant to view this course.</p>
+        <button onClick={() => navigate('/pricing')} style={{ padding: '12px 24px', background: 'var(--accent)', color: 'black', borderRadius: '8px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>
+          View Pricing
+        </button>
+      </div>
+    );
   }
 
   const lesson = manifest.lessons[currentLessonIdx];

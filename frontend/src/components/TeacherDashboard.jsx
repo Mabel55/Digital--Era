@@ -15,6 +15,12 @@ const TeacherDashboard = () => {
   const [courseTrack, setCourseTrack] = useState('General');
   const [isUploading, setIsUploading] = useState(false);
 
+  const [grantModalOpen, setGrantModalOpen] = useState(false);
+  const [grantTargetUser, setGrantTargetUser] = useState(null);
+  const [grantAccessType, setGrantAccessType] = useState('full_pro');
+  const [grantTargetName, setGrantTargetName] = useState('');
+  const [grantDurationMonths, setGrantDurationMonths] = useState('');
+
   useEffect(() => {
     // Basic protection
     if (user && (user.role || '').toLowerCase() !== 'admin' && (user.role || '').toLowerCase() !== 'teacher' && user.email !== 'nasaadanna@gmail.com') {
@@ -29,7 +35,7 @@ const TeacherDashboard = () => {
 
   const fetchMetrics = async () => {
     try {
-      const res = await fetch('/admin/analytics', {
+      const res = await fetch('/users/admin/analytics', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
@@ -55,19 +61,39 @@ const TeacherDashboard = () => {
     }
   };
 
-  const handleGrantPro = async (userId) => {
-    if (!window.confirm("Grant this user lifetime Pro access for free?")) return;
+  const openGrantModal = (user) => {
+    setGrantTargetUser(user);
+    setGrantAccessType('full_pro');
+    setGrantTargetName('');
+    setGrantDurationMonths('');
+    setGrantModalOpen(true);
+  };
+
+  const submitGrantPro = async () => {
+    if (!grantTargetUser) return;
     try {
-      const res = await fetch(`/admin/users/${userId}/grant-pro`, {
+      const payload = {
+        access_type: grantAccessType,
+        target_name: grantTargetName || null,
+        duration_months: grantDurationMonths ? parseInt(grantDurationMonths, 10) : null
+      };
+      
+      const res = await fetch(`/users/admin/users/${grantTargetUser.id}/grant-pro`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
       });
       if (res.ok) {
         fetchStudents();
         fetchMetrics();
+        setGrantModalOpen(false);
+        setGrantTargetUser(null);
       } else {
         const err = await res.json();
-        alert(err.detail || "Failed to grant Pro");
+        alert(err.detail || "Failed to grant access");
       }
     } catch (e) {
       console.error(e);
@@ -77,7 +103,7 @@ const TeacherDashboard = () => {
   const handleToggleBlock = async (userId) => {
     if (!window.confirm("Are you sure you want to toggle the block status of this user?")) return;
     try {
-      const res = await fetch(`/admin/users/${userId}/toggle-block`, {
+      const res = await fetch(`/users/admin/users/${userId}/toggle-block`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -293,14 +319,12 @@ const TeacherDashboard = () => {
                   </div>
                   
                   <div style={{ marginTop: '16px', borderTop: '1px solid var(--border)', paddingTop: '16px', display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
-                    {!student.subscription?.is_pro && (
-                      <button 
-                        onClick={() => handleGrantPro(student.id)}
-                        style={{ padding: '6px 12px', background: 'var(--surface2)', color: 'var(--accent)', borderRadius: '6px', border: '1px solid var(--border)', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
-                      >
-                        Grant Pro
-                      </button>
-                    )}
+                    <button 
+                      onClick={() => openGrantModal(student)}
+                      style={{ padding: '6px 12px', background: 'var(--surface2)', color: 'var(--accent)', borderRadius: '6px', border: '1px solid var(--border)', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
+                    >
+                      Grant Access
+                    </button>
                     <button 
                       onClick={() => handleToggleBlock(student.id)}
                       style={{ padding: '6px 12px', background: student.is_active ? 'var(--surface2)' : '#ef4444', color: student.is_active ? '#ef4444' : 'white', borderRadius: '6px', border: '1px solid var(--border)', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
@@ -314,6 +338,59 @@ const TeacherDashboard = () => {
           </div>
         </div>
       </div>
+
+      {grantModalOpen && grantTargetUser && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
+          <div style={{ background: 'var(--surface)', padding: '30px', borderRadius: '16px', width: '100%', maxWidth: '500px', border: '1px solid var(--border)', color: 'var(--text-bright)' }}>
+            <h2 style={{ marginTop: 0 }}>Grant Access to {grantTargetUser.full_name || grantTargetUser.email}</h2>
+            
+            <div style={{ marginBottom: '16px' }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>Access Type</label>
+              <select value={grantAccessType} onChange={(e) => setGrantAccessType(e.target.value)} style={{ width: '100%', padding: '10px', borderRadius: '8px', background: 'var(--bg)', color: 'white', border: '1px solid var(--border)' }}>
+                <option value="full_pro">Full Pro (Unlock Everything)</option>
+                <option value="track">Specific Track</option>
+                <option value="course">Specific Course</option>
+              </select>
+            </div>
+
+            {grantAccessType !== 'full_pro' && (
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>Target Name ({grantAccessType})</label>
+                {grantAccessType === 'track' ? (
+                  <select value={grantTargetName} onChange={(e) => setGrantTargetName(e.target.value)} style={{ width: '100%', padding: '10px', borderRadius: '8px', background: 'var(--bg)', color: 'white', border: '1px solid var(--border)' }}>
+                    <option value="">Select a Track...</option>
+                    <option value="Backend">Backend</option>
+                    <option value="Frontend">Frontend</option>
+                    <option value="Data Science">Data Science</option>
+                    <option value="AI Engineering">AI Engineering</option>
+                    <option value="Python Core">Python Core</option>
+                  </select>
+                ) : (
+                  <input type="text" placeholder="e.g. Intro to Data Science" value={grantTargetName} onChange={(e) => setGrantTargetName(e.target.value)} style={{ width: '100%', padding: '10px', borderRadius: '8px', background: 'var(--bg)', color: 'white', border: '1px solid var(--border)' }} />
+                )}
+              </div>
+            )}
+
+            <div style={{ marginBottom: '24px' }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>Duration</label>
+              <select value={grantDurationMonths} onChange={(e) => setGrantDurationMonths(e.target.value)} style={{ width: '100%', padding: '10px', borderRadius: '8px', background: 'var(--bg)', color: 'white', border: '1px solid var(--border)' }}>
+                <option value="">Lifetime</option>
+                <option value="1">1 Month</option>
+                <option value="2">2 Months</option>
+                <option value="3">3 Months</option>
+                <option value="6">6 Months</option>
+                <option value="12">1 Year</option>
+              </select>
+            </div>
+
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+              <button onClick={() => setGrantModalOpen(false)} style={{ padding: '10px 20px', background: 'transparent', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>Cancel</button>
+              <button onClick={submitGrantPro} disabled={grantAccessType !== 'full_pro' && !grantTargetName} style={{ padding: '10px 20px', background: 'var(--accent)', color: 'black', border: 'none', borderRadius: '8px', cursor: (grantAccessType !== 'full_pro' && !grantTargetName) ? 'not-allowed' : 'pointer', fontWeight: 'bold', opacity: (grantAccessType !== 'full_pro' && !grantTargetName) ? 0.5 : 1 }}>Grant Access</button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

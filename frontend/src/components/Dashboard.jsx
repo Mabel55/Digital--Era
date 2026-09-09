@@ -10,7 +10,8 @@ import NotificationCenter from './NotificationCenter';
 import DownloadManager from './DownloadManager';
 import DataSaverToggle from './DataSaverToggle';
 import { useOfflineSync } from '../hooks/useOfflineSync';
-import { GraduationCap, Sun, Moon, Trophy, Flame, Users, User, Target, Scroll, Rocket, Brain, Wrench, Hammer, BookOpen, Terminal, Crown, ArrowRight, Star, Zap, Globe, Menu, X, Search, Play, Calendar, MessageSquare, Code2, Download, CloudOff, RefreshCw } from 'lucide-react';
+import { hasAccess } from '../utils/access';
+import { GraduationCap, Sun, Moon, Trophy, Flame, Users, User, Target, Scroll, Rocket, Brain, Wrench, Hammer, BookOpen, Terminal, Crown, ArrowRight, Star, Zap, Globe, Menu, X, Search, Play, Calendar, MessageSquare, Code2, Download, CloudOff, RefreshCw, Lock } from 'lucide-react';
 
 const Dashboard = () => {
   const { user, token, logout, subscription } = useAuth();
@@ -683,18 +684,22 @@ const Dashboard = () => {
               const completed = getCourseProgress(courseName);
               const progressPct = totalLessons > 0 ? (completed / totalLessons) * 100 : 0;
               const delayClass = `card-enter card-enter-${Math.min(i + 1, 6)}`;
+              const isLocked = !hasAccess(activeTab, currentTrack, courseName, subscription);
 
               return (
                 <div 
                   key={courseName} 
                   className={`track-card ${delayClass}`}
-                  onClick={() => openOverview(courseName)}
+                  onClick={() => isLocked ? navigate('/pricing') : openOverview(courseName)}
                   role="button"
                   tabIndex={0}
-                  onKeyDown={(e) => e.key === 'Enter' && openOverview(courseName)}
+                  onKeyDown={(e) => e.key === 'Enter' && (isLocked ? navigate('/pricing') : openOverview(courseName))}
                   aria-label={`Course: ${courseName}`}
+                  style={{ opacity: isLocked ? 0.7 : 1 }}
                 >
-                  <div className="track-card-icon"><Terminal size={32} strokeWidth={1.5} /></div>
+                  <div className="track-card-icon">
+                    {isLocked ? <Lock size={32} strokeWidth={1.5} color="#ef4444" /> : <Terminal size={32} strokeWidth={1.5} />}
+                  </div>
                   <div className="track-card-name">{courseName}</div>
                   <div className="track-card-desc">
                     {totalLessons} lessons • {completed} completed
