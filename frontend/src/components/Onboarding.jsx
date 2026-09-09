@@ -64,7 +64,7 @@ const Onboarding = () => {
         }
       } else if (isLogin) {
         await login(email, password);
-        navigate('/');
+        navigate('/dashboard');
       } else {
         if (!tosAgreed) {
           setError("You must agree to the Terms of Service.");
@@ -72,7 +72,7 @@ const Onboarding = () => {
           return;
         }
         await signup(name, email, password, level, goal, referralCode);
-        navigate('/');
+        navigate('/dashboard');
       }
     } catch (err) {
       setError(err.message || "An error occurred");

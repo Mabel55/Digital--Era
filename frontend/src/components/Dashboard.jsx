@@ -11,6 +11,7 @@ import DownloadManager from './DownloadManager';
 import DataSaverToggle from './DataSaverToggle';
 import { useOfflineSync } from '../hooks/useOfflineSync';
 import { hasAccess } from '../utils/access';
+import CourseCard from './dashboard/CourseCard';
 import { GraduationCap, Sun, Moon, Trophy, Flame, Users, User, Target, Scroll, Rocket, Brain, Wrench, Hammer, BookOpen, Terminal, Crown, ArrowRight, Star, Zap, Globe, Menu, X, Search, Play, Calendar, MessageSquare, Code2, Download, CloudOff, RefreshCw, Lock } from 'lucide-react';
 
 const Dashboard = () => {
@@ -282,6 +283,14 @@ const Dashboard = () => {
           
           <DataSaverToggle compact />
           
+          {user && ((user.role || '').toLowerCase() === 'admin' || user.email === 'nasaadanna@gmail.com') && (
+            <button 
+              onClick={() => navigate('/teacher')}
+              style={{ padding: '8px 16px', background: 'var(--surface2)', color: 'var(--accent)', border: '1px solid var(--accent)', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              <Crown size={16} /> Admin Portal
+            </button>
+          )}
           <button 
             onClick={() => navigate('/community')}
             style={{ padding: '8px 16px', background: 'var(--surface2)', color: '#3b82f6', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}
@@ -687,33 +696,17 @@ const Dashboard = () => {
               const isLocked = !hasAccess(activeTab, currentTrack, courseName, subscription);
 
               return (
-                <div 
-                  key={courseName} 
-                  className={`track-card ${delayClass}`}
-                  onClick={() => isLocked ? navigate('/pricing') : openOverview(courseName)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => e.key === 'Enter' && (isLocked ? navigate('/pricing') : openOverview(courseName))}
-                  aria-label={`Course: ${courseName}`}
-                  style={{ opacity: isLocked ? 0.7 : 1 }}
-                >
-                  <div className="track-card-icon">
-                    {isLocked ? <Lock size={32} strokeWidth={1.5} color="#ef4444" /> : <Terminal size={32} strokeWidth={1.5} />}
-                  </div>
-                  <div className="track-card-name">{courseName}</div>
-                  <div className="track-card-desc">
-                    {totalLessons} lessons • {completed} completed
-                  </div>
-                  <div className="track-card-meta">
-                    <span className={`track-tag tag-${activeTab.toLowerCase()}`}>{activeTab}</span>
-                  </div>
-                  <div className="track-progress-bar">
-                    <div className="bar-bg">
-                      <div className="bar-fill" style={{ width: `${progressPct}%` }}></div>
-                    </div>
-                    <div className="bar-label">{Math.round(progressPct)}% Complete</div>
-                  </div>
-                </div>
+                <CourseCard 
+                  key={courseName}
+                  courseName={courseName}
+                  activeTab={activeTab}
+                  currentTrack={currentTrack}
+                  subscription={subscription}
+                  openOverview={openOverview}
+                  delayClass={delayClass}
+                  totalLessons={totalLessons}
+                  completed={completed}
+                />
               );
             })
           ) : (

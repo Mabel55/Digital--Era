@@ -13,6 +13,10 @@ import { useOfflineSync } from '../hooks/useOfflineSync';
 import { hasAccess } from '../utils/access';
 import { ArrowLeft, Play, Terminal, CheckCircle2, XCircle, Bug, Bot, ArrowUp, PartyPopper, Home, RotateCcw, Menu, Lightbulb, RotateCcw as ResetIcon, Clock, ChevronRight, WifiOff, CloudOff, RefreshCw, Code, Sparkles, Lock } from 'lucide-react';
 import GitHubExportModal from './GitHubExportModal';
+import AIChatSidebar from './workspace/AIChatSidebar';
+import CodeEditorArea from './workspace/CodeEditorArea';
+import LessonViewer from './workspace/LessonViewer';
+
 const Workspace = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
@@ -703,213 +707,52 @@ const Workspace = () => {
       ) : (
         <div className="ws-layout">
           {/* Left Panel - Exercise */}
-          <div className={`ws-exercise ${mobileTab === 'exercise' ? 'mobile-active' : ''}`}>
-            <div className="exercise-tabs">
-              <div className={`ex-tab ${activeTab === 'theory' ? 'active' : ''}`} onClick={() => setActiveTab('theory')}>Theory</div>
-              <div className={`ex-tab ${activeTab === 'instructions' ? 'active' : ''}`} onClick={() => setActiveTab('instructions')}>Instructions</div>
-              <div className={`ex-tab ${activeTab === 'solution' ? 'active' : ''}`} onClick={() => setActiveTab('solution')}>Solution</div>
-            </div>
-            <div className="ex-tab-content">
-              <div className="exercise-title">{lesson.title}</div>
-              <div className="exercise-body" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked(
-                activeTab === 'theory' ? (isTranslating ? "*(Translating into your preferred language...)*" : (translatedTheory || "No theory provided.")) : 
-                activeTab === 'instructions' ? (isTranslating ? "*(Translating into your preferred language...)*" : (translatedInstructions || "No instructions provided.")) : 
-                `### Solution Code\n\n\`\`\`${determineLanguage()}\n` + (lesson.solution || 'No solution provided.') + '\n```'
-              )) }}></div>
-              
-              {showHint && lesson.hint && activeTab !== 'solution' && (
-                <div style={{ marginTop: '20px', padding: '16px', background: 'rgba(245, 158, 11, 0.1)', borderLeft: '4px solid #f59e0b', borderRadius: '4px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#f59e0b', fontWeight: 'bold', marginBottom: '8px' }}>
-                    <Lightbulb size={18} /> Hint
-                  </div>
-                  <div style={{ color: 'var(--text)' }}>{lesson.hint}</div>
-                </div>
-              )}
-              
-              {(activeTab === 'theory' || activeTab === 'solution') && (
-                <button 
-                  onClick={() => {
-                    sendChat(null, `Please give me a detailed technical explanation of this lesson: "${lesson.title}". Explain the concepts and how the code works step-by-step.`);
-                    if(window.innerWidth <= 768) setMobileTab('chat');
-                  }}
-                  style={{ 
-                    marginTop: '20px', padding: '10px 16px', background: 'var(--surface)', 
-                    color: 'var(--accent)', border: '1px solid var(--border)', 
-                    borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold',
-                    display: 'flex', alignItems: 'center', gap: '8px'
-                  }}
-                >
-                  Get Detail Explanation
-                </button>
-              )}
-              
-              <LessonDiscussion lessonName={lesson.title} />
-            </div>
-          </div>
+          <LessonViewer 
+            lesson={lesson}
+            mobileTab={mobileTab}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            isTranslating={isTranslating}
+            translatedTheory={translatedTheory}
+            translatedInstructions={translatedInstructions}
+            determineLanguage={determineLanguage}
+            showHint={showHint}
+            sendChat={sendChat}
+            setMobileTab={setMobileTab}
+          />
 
           {/* Middle Panel - Editor & Terminal OR Quiz */}
-          {lesson.type === 'quiz' ? (
-            <div className={`ws-quiz-panel ${mobileTab === 'editor' ? 'mobile-active' : ''}`} style={{ flex: 1, padding: '40px', background: 'var(--surface)', margin: '20px', borderRadius: '12px', display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto' }}>
-              <h2 style={{ color: 'var(--text-bright)' }}>{lesson.question}</h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {lesson.options.map((opt, i) => (
-                  <div 
-                    key={i}
-                    onClick={() => setSelectedOption(i)}
-                    style={{
-                      padding: '16px', borderRadius: '8px', border: `2px solid ${selectedOption === i ? 'var(--accent)' : 'var(--border)'}`,
-                      background: selectedOption === i ? 'rgba(56, 189, 248, 0.1)' : 'transparent',
-                      cursor: 'pointer', color: 'var(--text-bright)', fontSize: '16px', transition: 'all 0.2s'
-                    }}
-                  >
-                    {String.fromCharCode(65 + i)}. {opt}
-                  </div>
-                ))}
-              </div>
-              <button 
-                onClick={handleQuizSubmit}
-                disabled={selectedOption === null}
-                style={{
-                  marginTop: '20px', padding: '14px', background: 'var(--accent)', color: 'black', 
-                  fontWeight: 'bold', fontSize: '16px', borderRadius: '8px', border: 'none', 
-                  cursor: selectedOption === null ? 'not-allowed' : 'pointer', opacity: selectedOption === null ? 0.5 : 1
-                }}
-              >
-                Submit Answer
-              </button>
-              {quizResult && quizResult.startsWith('correct') && (
-                <div style={{ padding: '16px', background: 'rgba(34, 197, 94, 0.1)', color: '#22c55e', borderRadius: '8px', fontWeight: 'bold' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><CheckCircle2 size={18} /> Correct!</div> {quizResult.includes('xp') && `+10 XP Awarded! You are now level: ${quizResult.split('_')[2]}`}
-                </div>
-              )}
-              {quizResult === 'incorrect' && (
-                <div style={{ padding: '16px', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', borderRadius: '8px', fontWeight: 'bold' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><XCircle size={18} /> Incorrect. Try again!</div>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className={`ws-editor-panel ${mobileTab === 'editor' ? 'mobile-active' : ''}`}>
-              <div className="editor-toolbar" style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 16px', borderBottom: '1px solid var(--border)' }}>
-              <div className="file-tab"><div className="dot"></div> code.{determineLanguage() === 'javascript' ? 'js' : determineLanguage() === 'sql' ? 'sql' : 'py'}</div>
-              <button 
-                onClick={() => { if(editorRef.current) editorRef.current.getAction('editor.action.formatDocument').run(); }}
-                style={{ background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer', fontSize: '12px' }}
-              >
-                Format Code
-              </button>
-            </div>
-            <div style={{ flex: 1, minHeight: 0 }}>
-              <Editor
-                height="100%"
-                defaultLanguage={determineLanguage()}
-                theme="vs-dark"
-                value={code}
-                onChange={handleCodeChange}
-                onMount={(editor) => editorRef.current = editor}
-                options={{ minimap: { enabled: false }, fontSize: 14 }}
-              />
-            </div>
-            <div className="terminal-panel">
-              <div className="terminal-header" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div className="terminal-dot dot-red"></div>
-                  <div className="terminal-dot dot-yellow"></div>
-                  <div className="terminal-dot dot-green"></div>
-                  <span style={{ marginLeft: '8px' }}>Terminal Output</span>
-                  {executionTime > 0 && <span style={{ marginLeft: '12px', color: 'var(--text-dim)', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={12}/> {executionTime}ms</span>}
-                </div>
-                {hasError && (
-                  <button 
-                    onClick={handleFixMyCode}
-                    style={{ 
-                      background: 'rgba(239,68,68,0.15)', color: '#ef4444', 
-                      border: '1px solid rgba(239,68,68,0.3)', borderRadius: '4px', 
-                      padding: '3px 10px', fontSize: '11px', fontWeight: 'bold', 
-                      cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' 
-                    }}
-                  >
-                    <Bug size={14} /> Fix My Code
-                  </button>
-                )}
-              </div>
-              <div id="terminal-output" className={terminalClass}>
-                {terminalOutput}
-              </div>
-            </div>
-            </div>
-          )}
+          <CodeEditorArea 
+            lesson={lesson}
+            mobileTab={mobileTab}
+            determineLanguage={determineLanguage}
+            editorRef={editorRef}
+            code={code}
+            handleCodeChange={handleCodeChange}
+            hasError={hasError}
+            handleFixMyCode={handleFixMyCode}
+            terminalClass={terminalClass}
+            terminalOutput={terminalOutput}
+            executionTime={executionTime}
+            selectedOption={selectedOption}
+            setSelectedOption={setSelectedOption}
+            handleQuizSubmit={handleQuizSubmit}
+            quizResult={quizResult}
+          />
 
           {/* Right Panel - AI Chat */}
-          <div className={`ws-chat ${mobileTab === 'chat' ? 'mobile-active' : ''}`}>
-            <div className="chat-header-bar">
-              <div className="ai-avatar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Bot size={24} /></div>
-              <div className="ai-info">
-                <div className="ai-name">Mabel Tutor</div>
-                <div className="ai-status"><div className="status-dot"></div> Online</div>
-              </div>
-            </div>
-            <div className="chat-messages">
-              {messages.map((msg, i) => (
-                <div key={i} className={`chat-msg ${msg.sender}`}>
-                  <div className="msg-bubble" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked(msg.text)) }}></div>
-                </div>
-              ))}
-              {isTyping && (
-                <div className="chat-msg ai">
-                  <div className="msg-bubble typing-indicator">
-                    <span></span><span></span><span></span>
-                  </div>
-                </div>
-              )}
-              <div ref={chatEndRef}></div>
-            </div>
-            
-            {/* AI Limits Banner */}
-            {aiUsage.isLimited && !isPro && (
-              <div style={{
-                padding: '8px 12px', fontSize: '12px', textAlign: 'center',
-                background: aiUsage.remaining === 0 ? 'rgba(239,68,68,0.1)' : 'rgba(245,158,11,0.1)',
-                color: aiUsage.remaining === 0 ? 'var(--danger)' : 'var(--accent3)',
-                borderTop: '1px solid var(--border)'
-              }}>
-                {aiUsage.remaining === 0 
-                  ? "Daily AI limit reached. Upgrade to Pro for unlimited."
-                  : `${aiUsage.remaining} free AI messages remaining today.`
-                }
-                <span 
-                  onClick={() => navigate('/pricing')} 
-                  style={{ fontWeight: 'bold', marginLeft: '6px', cursor: 'pointer', textDecoration: 'underline' }}
-                >
-                  Upgrade
-                </span>
-              </div>
-            )}
-            
-            <form className="chat-input-row" onSubmit={sendChat}>
-              <textarea 
-                className="chat-textarea" 
-                placeholder={aiUsage.isLimited && aiUsage.remaining === 0 && !isPro ? "Limit reached..." : "Ask for help..."} 
-                value={chatInput}
-                onChange={e => setChatInput(e.target.value)}
-                disabled={aiUsage.isLimited && aiUsage.remaining === 0 && !isPro}
-                onKeyDown={e => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendChat();
-                  }
-                }}
-              />
-              <button 
-                type="submit" 
-                className="chat-send-btn"
-                disabled={aiUsage.isLimited && aiUsage.remaining === 0 && !isPro}
-                aria-label="Send message to AI Tutor"
-              >
-                <ArrowUp size={16} />
-              </button>
-            </form>
-          </div>
+          <AIChatSidebar 
+            mobileTab={mobileTab}
+            messages={messages}
+            isTyping={isTyping}
+            chatEndRef={chatEndRef}
+            aiUsage={aiUsage}
+            isPro={isPro}
+            navigate={navigate}
+            chatInput={chatInput}
+            setChatInput={setChatInput}
+            sendChat={sendChat}
+          />
         </div>
       )}
 

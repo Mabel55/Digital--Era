@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PublicNavbar from './PublicNavbar';
+import { useAuth } from '../AuthContext';
 import { Rocket, Zap, Bot, Trophy, User, GraduationCap, Star, ArrowRight, Briefcase } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import mabelFounderImg from '../../public/mabel-founder.jpg';
@@ -8,6 +9,7 @@ import CustomerSupportChat from './CustomerSupportChat';
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const { token } = useAuth();
   const statsRef = useRef(null);
   const [statsVisible, setStatsVisible] = useState(false);
 
@@ -88,13 +90,23 @@ const LandingPage = () => {
           </p>
           
           <div className="landing-cta-row">
-            <button 
-              className="btn-primary" 
-              style={{ padding: '16px 36px', fontSize: '16px', borderRadius: '100px', width: 'auto' }}
-              onClick={() => navigate('/onboarding')}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>Start Coding for Free <Rocket size={20} /></div>
-            </button>
+            {token ? (
+              <button 
+                className="btn-primary" 
+                style={{ padding: '16px 36px', fontSize: '16px', borderRadius: '100px', width: 'auto' }}
+                onClick={() => navigate('/dashboard')}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>Go to Dashboard <ArrowRight size={20} /></div>
+              </button>
+            ) : (
+              <button 
+                className="btn-primary" 
+                style={{ padding: '16px 36px', fontSize: '16px', borderRadius: '100px', width: 'auto' }}
+                onClick={() => navigate('/onboarding')}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>Start Coding for Free <Rocket size={20} /></div>
+              </button>
+            )}
             <button 
               className="returning-btn" 
               style={{ padding: '16px 36px', fontSize: '16px', borderRadius: '100px', width: 'auto', background: 'var(--surface)', color: 'var(--text)' }}
