@@ -34,7 +34,8 @@ const ProtectedRoute = ({ children }) => {
     return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', color: 'white' }}>Loading...</div>;
   }
   
-  if (!token) {
+  // Check both context token AND localStorage (handles race condition after login)
+  if (!token && !localStorage.getItem('token')) {
     return <Navigate to="/onboarding" />;
   }
   
