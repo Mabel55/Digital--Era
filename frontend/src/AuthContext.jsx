@@ -72,6 +72,9 @@ export const AuthProvider = ({ children }) => {
       throw new Error(errData.detail || "Invalid credentials");
     }
     const data = await res.json();
+    // Set localStorage synchronously so ProtectedRoute sees the token
+    // immediately after navigate(), even before React re-renders context
+    localStorage.setItem('token', data.access_token);
     setToken(data.access_token);
   };
 

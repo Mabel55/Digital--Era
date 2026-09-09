@@ -89,6 +89,37 @@ def setup_db_tables(current_user: models.User = Depends(get_current_user)):
     except Exception as e:
         return {"error": str(e)}
 
+@app.get("/api/migrate-db")
+def migrate_db(key: str = ""):
+    """
+    Run safe ALTER TABLE migrations to add missing columns.
+    Secured by a secret key (no auth needed since auth may be broken).
+    Usage: GET /api/migrate-db?key=mabel-digital-era-2026
+    """
+    if key != "mabel-digital-era-2026":
+        from fastapi import HTTPException
+        raise HTTPException(status_code=403, detail="Invalid key")
+    
+    results = []
+    with engine.connect() as conn:
+        # List of (table, column, sql_type, default) migrations to run
+        migrations = [
+            ("subscriptions", "access_grants", "TEXT", "'{}'"),
+        ]
+        for table, column, col_type, default in migrations:
+            try:
+                conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {column} {col_type} DEFAULT {default}"))
+                conn.commit()
+                results.append(f"Added {table}.{column}")
+            except Exception as e:
+                conn.rollback()
+                if "already exists" in str(e).lower() or "duplicate column" in str(e).lower():
+                    results.append(f"{table}.{column} already exists (OK)")
+                else:
+                    results.append(f"Error on {table}.{column}: {str(e)}")
+    
+    return {"message": "Migration complete", "results": results}
+
 # 4. Root / Static File Endpoints
 # Mount the entire React app build directory
 if os.path.isdir("frontend/dist"):
