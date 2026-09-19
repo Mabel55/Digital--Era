@@ -29,12 +29,16 @@ export const AuthProvider = ({ children }) => {
       if (res.ok) {
         const data = await res.json();
         setUser(data);
-      } else {
+      } else if (res.status === 401) {
+        // Only clear token on authentication failure, NOT on server errors (500)
         setToken(null);
+      } else {
+        // Server error (500, etc.) — keep the token, user is still authenticated
+        console.warn(`/users/me returned ${res.status}, keeping session`);
       }
     } catch (err) {
+      // Network error — keep the token, don't log out
       console.error("Failed to fetch user profile:", err);
-      setToken(null);
     } finally {
       setLoading(false);
     }

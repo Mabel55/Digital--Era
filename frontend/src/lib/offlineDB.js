@@ -113,7 +113,7 @@ export async function getUnsyncedProgress() {
     const tx = db.transaction(STORES.PROGRESS_QUEUE, 'readonly');
     const store = tx.objectStore(STORES.PROGRESS_QUEUE);
     const index = store.index('synced');
-    const request = index.getAll(false);
+    const request = index.getAll(IDBKeyRange.only(0));
 
     request.onsuccess = () => { db.close(); resolve(request.result); };
     request.onerror = () => { db.close(); reject(request.error); };
@@ -154,7 +154,7 @@ export async function clearSyncedProgress() {
     const tx = db.transaction(STORES.PROGRESS_QUEUE, 'readwrite');
     const store = tx.objectStore(STORES.PROGRESS_QUEUE);
     const index = store.index('synced');
-    const request = index.openCursor(true);
+    const request = index.openCursor(IDBKeyRange.only(1));
 
     request.onsuccess = (event) => {
       const cursor = event.target.result;
