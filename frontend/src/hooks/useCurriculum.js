@@ -3,7 +3,7 @@ import { cacheCurriculum, getCachedCurriculum } from '../lib/offlineDB';
 
 // Bump this version string when curriculum.json is updated in a new deployment.
 // This allows the browser to cache the file aggressively between deploys.
-const CURRICULUM_VERSION = '4';
+const CURRICULUM_VERSION = '5';
 
 const fetchCurriculum = async () => {
   try {
