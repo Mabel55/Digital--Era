@@ -12,9 +12,11 @@ import models
 from langchain_community.document_loaders import PyPDFLoader, TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
-from langchain_community.vectorstores import FAISS
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
+
+# Phase 3 RAG Service
+from services.rag_service import rag_service
 
 # Load variables from .env file securely
 load_dotenv()
@@ -68,6 +70,9 @@ def ask_gemini(question: str, context_chunks: list[str] = None, chat_history: li
                 "2. BE EXTREMELY CODE-SPECIFIC. Do not give long theoretical essays without backing them up with code. Your primary method of teaching should be through code snippets, code analysis, and syntax breakdowns.\n"
                 "3. NEVER mention 'the database', or 'the lesson'. Do not explain where your information comes from. Just answer the question directly.\n"
                 "4. Maintain a professional, authoritative, yet encouraging tone. Speak like a senior software engineer mentoring a junior developer during a pair-programming session.\n"
+                "5. PHASE 6 REASONING: Before you provide your final response, you MUST think step-by-step. "
+                "Write out your internal reasoning, planning, and validation inside `<think>...</think>` XML tags. "
+                "Only the content outside of these tags will be shown to the user.\n"
         )
 
     # 1. Start the message array with your system prompt instructions
@@ -127,111 +132,57 @@ def ask_gemini(question: str, context_chunks: list[str] = None, chat_history: li
     return response_text
 
 
-# ── BRAIN STORAGE & META TRACKING ───────────────────────────────────────────
-BRAIN_DIR = "study_buddy_brain"
-SUPPORT_BRAIN_DIR = "support_brain"
-METADATA_FILE = os.path.join(BRAIN_DIR, "brain_meta.json")
-
-def _load_brain_metadata() -> dict:
-    if os.path.exists(METADATA_FILE):
-        with open(METADATA_FILE, "r") as f:
-            return json.load(f)
-    return {"last_built": None, "lesson_ids": []}
-
-def _save_brain_metadata(lesson_ids: list):
-    os.makedirs(BRAIN_DIR, exist_ok=True)
-    with open(METADATA_FILE, "w") as f:
-        json.dump({
-            "last_built": datetime.utcnow().isoformat(),
-            "lesson_ids": lesson_ids
-        }, f)
-
-
-# ── MAIN VECTOR INDEX BUILDER ────────────────────────────────────────────────
+# ── MAIN VECTOR INDEX BUILDER (Phase 3 DB-backed) ────────────────────────────
 def build_ai_brain(force_rebuild: bool = False):
     db: Session = SessionLocal()
     try:
-        print("🔍 Step 1: Querying lessons from PostgreSQL database...")
+        print("🔍 Querying lessons from PostgreSQL database...")
         lessons = db.query(models.Lesson).all()
         if not lessons:
             print("⚠️  No database records found. Add lessons through Swagger UI first.")
             return
 
-        meta = _load_brain_metadata()
-        existing_ids = set(meta.get("lesson_ids", []))
-        current_ids = {lesson.id for lesson in lessons}
+        if force_rebuild:
+            print("🗑️ Clearing existing lesson embeddings...")
+            db.execute(models.ContentEmbedding.__table__.delete().where(models.ContentEmbedding.source_type == "lesson"))
+            db.commit()
 
-        if not force_rebuild and os.path.exists(os.path.join(BRAIN_DIR, "index.faiss")):
-            new_lessons = [l for l in lessons if l.id not in existing_ids]
-            if not new_lessons:
-                print("✅ AI Brain vector cache is already up-to-date. Sync skipped.")
-                return
-            lessons_to_process = new_lessons
-            print(f"⚡ Syncing updates: processing {len(new_lessons)} new lesson(s)...")
-            incremental = True
-        else:
-            lessons_to_process = lessons
-            incremental = False
-            print(f"🏗️  Executing full rebuild: processing all {len(lessons)} lesson(s)...")
+        # We keep track of which lessons are already indexed
+        indexed_ids = set()
+        if not force_rebuild:
+            rows = db.query(models.ContentEmbedding.source_id).filter(models.ContentEmbedding.source_type == "lesson").distinct().all()
+            indexed_ids = {r[0] for r in rows}
 
-        print("📦 Step 2: Running text splitters into semantic chunks...")
-        text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=500,
-            chunk_overlap=75,
-            separators=["\n\n", "\n", ". ", " ", ""],
-        )
-        docs_to_embed: list[Document] = []
+        lessons_to_process = [l for l in lessons if l.id not in indexed_ids][:5] # Limit for development
 
+        if not lessons_to_process:
+            print("✅ AI Brain is already up-to-date. Sync skipped.")
+            return
+
+        print(f"⚡ Indexing {len(lessons_to_process)} new lesson(s) into database...")
+
+        total_chunks = 0
         for lesson in lessons_to_process:
             if not lesson.content or not lesson.content.strip():
                 continue
 
-            chunks = text_splitter.split_text(lesson.content)
-            for index, chunk in enumerate(chunks):
-                doc = Document(
-                    page_content=chunk,
-                    metadata={
-                        "lesson_id": lesson.id,
-                        "course_id": lesson.course_id,
-                        "title": lesson.title,
-                        "chunk_index": index,
-                        "total_chunks": len(chunks),
-                    }
-                )
-                docs_to_embed.append(doc)
+            metadata = {
+                "lesson_id": lesson.id,
+                "course_id": lesson.course_id,
+                "title": lesson.title
+            }
+            
+            chunks_indexed = rag_service.index_content(
+                db=db,
+                source_type="lesson",
+                content=lesson.content,
+                source_id=lesson.id,
+                metadata=metadata,
+                chunk_size=500
+            )
+            total_chunks += chunks_indexed
 
-        print(f"✅ Generated {len(docs_to_embed)} vector-ready document objects.")
-
-        print("🤖 Step 3: Initializing active vector model mapping...")
-        embedding_model = load_embedding_model()
-
-        print("🧠 Step 4: Compiling vector coordinates inside FAISS matrix...")
-        if incremental:
-            vector_db = FAISS.load_local(BRAIN_DIR, embedding_model, allow_dangerous_deserialization=True)
-            vector_db.add_documents(docs_to_embed)
-        else:
-            vector_db = FAISS.from_documents(docs_to_embed, embedding_model)
-
-        vector_db.save_local(BRAIN_DIR)
-        _save_brain_metadata(list(current_ids))
-        print(f"✅ AI Brain vector records updated successfully inside '{BRAIN_DIR}/'.")
-
-        print("\n🔎 Running active diagnostic script validation with Gemini 2.5 Flash...")
-        query = "What is Python?"
-        results = vector_db.similarity_search(query, k=3)
-
-        if results:
-            context_chunks = [r.page_content for r in results]
-            source_titles = list({r.metadata["title"] for r in results})
-            print(f"   📖 Sources extracted: {source_titles}")
-
-            try:
-                answer = ask_gemini(query, context_chunks)
-                print(f"\n   🤖 Gemini Diagnostic Response:\n   {answer}")
-            except Exception as e:
-                print(f"   ⚠️  Gemini inference connection skipped ({e}).")
-        else:
-            print("   ⚠️  Diagnostic test query yielded zero structural matches.")
+        print(f"✅ Indexed {total_chunks} lesson chunks successfully.")
 
     finally:
         db.close()
@@ -239,81 +190,67 @@ def build_ai_brain(force_rebuild: bool = False):
 
 # ── ROUTE INTEGRATION INTERFACE (Invoked directly by FastAPI) ───────────────
 def query_ai_brain(question: str, course_id: int = None, top_k: int = 4, student_level: str = "Beginner", student_track: str = "General", specific_course:str = "") -> dict:
-    if not os.path.exists(os.path.join(BRAIN_DIR, "index.faiss")):
-        return {"answer": "AI brain unbuilt.", "sources": [], "raw_chunks": []}
-
-    embedding_model = load_embedding_model()
-    vector_db = FAISS.load_local(BRAIN_DIR, embedding_model, allow_dangerous_deserialization=True)
-
-    fetch_k = top_k * 3 if course_id else top_k
-    results = vector_db.similarity_search(question, k=fetch_k)
-
-    if course_id is not None:
-        results = [r for r in results if r.metadata.get("course_id") == course_id]
-    results = results[:top_k]
-
-    if not results:
-        return {"answer": "No matching concepts found.", "sources": [], "raw_chunks": []}
-
-    context_chunks = [r.page_content for r in results]
-    course_title = results[0].metadata.get("title", "") if results else ""
-
+    db: Session = SessionLocal()
     try:
-        answer = ask_gemini(question, context_chunks, course_title=course_title, student_level=student_level, student_track=student_track, specific_course=specific_course)
-    except Exception as e:
-        answer = f"[Inference Engine Unavailable: {e}]"
+        results = rag_service.retrieve(db, question, top_k=top_k, source_type="lesson", source_id=course_id)
+        
+        if not results:
+            return {"answer": "No matching concepts found.", "sources": [], "raw_chunks": []}
 
-    sources = [
-        {"title": r.metadata.get("title"), "lesson_id": r.metadata.get("lesson_id"), "chunk_index": r.metadata.get("chunk_index")}
-        for r in results
-    ]
+        context_chunks = [r["content"] for r in results]
+        course_title = results[0]["metadata"].get("title", "") if results else ""
 
-    return {"answer": answer, "sources": sources, "raw_chunks": context_chunks}
+        try:
+            answer = ask_gemini(question, context_chunks, course_title=course_title, student_level=student_level, student_track=student_track, specific_course=specific_course)
+        except Exception as e:
+            answer = f"[Inference Engine Unavailable: {e}]"
+
+        sources = [
+            {"title": r["metadata"].get("title"), "lesson_id": r["metadata"].get("lesson_id"), "chunk_index": r["id"]}
+            for r in results
+        ]
+
+        return {"answer": answer, "sources": sources, "raw_chunks": context_chunks}
+    finally:
+        db.close()
 
 
 # ── PDF INGESTION ────────────────────────────────────────────────────────────
 def add_pdf_to_vector_db(file_path: str, course_title: str, course_level: str, course_track: str):
     """
-    Reads a PDF, chops it into readable chunks, and injects it into the FAISS vector database.
+    Reads a PDF, chops it into readable chunks, and injects it into the DB vector database.
     """
     # 1. Load the PDF
     loader = PyPDFLoader(file_path)
     documents = loader.load()
 
-    # 2. Tag every page with the course title, level, and track
-    for doc in documents:
-        doc.metadata["title"] = course_title
-        doc.metadata["level"] = course_level
-        doc.metadata["track"] = course_track
+    # 2. Combine into a single text
+    full_text = "\n\n".join([doc.page_content for doc in documents])
 
-    # 3. Chop into chunks
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-    chunks = text_splitter.split_documents(documents)
+    metadata = {
+        "title": course_title,
+        "level": course_level,
+        "track": course_track,
+        "filename": os.path.basename(file_path)
+    }
 
-    # 4. Load local embedding model (no quota, no API key needed)
-    embeddings = load_embedding_model()
-
-    # 5. Inject into FAISS - no batching/sleep needed (local model)
+    db = SessionLocal()
     try:
-        vector_db = FAISS.load_local(BRAIN_DIR, embeddings, allow_dangerous_deserialization=True)
-        is_new_brain = False
-        print(f"🔄 Found existing {BRAIN_DIR}. Appending new documents...")
-    except Exception:
-        is_new_brain = True
-        print(f"✨ No existing brain found. Creating a fresh {BRAIN_DIR}...")
-
-    if is_new_brain:
-        vector_db = FAISS.from_documents(chunks, embeddings)
-    else:
-        vector_db.add_documents(chunks)
-
-    vector_db.save_local(BRAIN_DIR)
-    print("🎉 Success! PDF has been completely ingested with no errors.")
+        chunks_indexed = rag_service.index_content(
+            db=db,
+            source_type="pdf_document",
+            content=full_text,
+            metadata=metadata,
+            chunk_size=1000
+        )
+        print(f"🎉 Success! PDF has been completely ingested ({chunks_indexed} chunks).")
+    finally:
+        db.close()
 
 # ── CUSTOMER SUPPORT BRAIN ───────────────────────────────────────────────────
 def build_support_brain():
     """
-    Reads the support_knowledge.md file and builds a separate FAISS index for customer support.
+    Reads the support_knowledge.md file and builds a DB index for customer support.
     """
     file_path = "support_knowledge.md"
     if not os.path.exists(file_path):
@@ -321,43 +258,51 @@ def build_support_brain():
         return
 
     print("🎧 Building Customer Support AI Brain...")
-    loader = TextLoader(file_path)
-    documents = loader.load()
+    
+    with open(file_path, "r", encoding="utf-8") as f:
+        content = f.read()
 
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=600, chunk_overlap=100)
-    chunks = text_splitter.split_documents(documents)
-
-    embedding_model = load_embedding_model()
-    vector_db = FAISS.from_documents(chunks, embedding_model)
-    vector_db.save_local(SUPPORT_BRAIN_DIR)
-    print(f"✅ Support Brain built and saved to {SUPPORT_BRAIN_DIR}/")
+    db = SessionLocal()
+    try:
+        print("🗑️ Clearing old support embeddings...")
+        db.execute(models.ContentEmbedding.__table__.delete().where(models.ContentEmbedding.source_type == "support"))
+        db.commit()
+        
+        chunks = rag_service.index_content(
+            db=db,
+            source_type="support",
+            content=content,
+            chunk_size=600
+        )
+        print(f"✅ Support Brain built and saved to Database! ({chunks} chunks)")
+    finally:
+        db.close()
 
 def query_support_brain(question: str, top_k: int = 3) -> str:
     """
-    Queries the customer support FAISS index and returns an answer using Gemini.
+    Queries the customer support DB index and returns an answer using Gemini.
     """
-    if not os.path.exists(os.path.join(SUPPORT_BRAIN_DIR, "index.faiss")):
-        return "I'm currently undergoing maintenance and can't access my knowledge base. Please contact us at +234 703 719 7261."
+    db = SessionLocal()
+    try:
+        results = rag_service.retrieve(db, question, top_k=top_k, source_type="support")
+        
+        if not results:
+            return "I couldn't find an exact answer to that. Please reach out to nasaadanna@gmail.com or WhatsApp +234 703 719 7261."
 
-    embedding_model = load_embedding_model()
-    vector_db = FAISS.load_local(SUPPORT_BRAIN_DIR, embedding_model, allow_dangerous_deserialization=True)
-    
-    results = vector_db.similarity_search(question, k=top_k)
-    if not results:
-        return "I couldn't find an exact answer to that. Please reach out to nasaadanna@gmail.com or WhatsApp +234 703 719 7261."
-
-    context_chunks = [r.page_content for r in results]
-    
-    system_prompt = (
-        "You are the official Customer Support AI for Digital Era, a premium tech training center in Lagos. "
-        "Your job is to answer prospective students' questions accurately, politely, and enthusiastically. "
-        "Use ONLY the context provided to answer the question. If the answer is not in the context, "
-        "apologize and tell them to contact +234 703 719 7261 or nasaadanna@gmail.com. "
-        "Do NOT mention that you are reading from a 'context' or 'document'. "
-        "Keep your answers concise and helpful."
-    )
-    
-    return ask_gemini(question, context_chunks, system_prompt_override=system_prompt)
+        context_chunks = [r["content"] for r in results]
+        
+        system_prompt = (
+            "You are the official Customer Support AI for Digital Era, a premium tech training center in Lagos. "
+            "Your job is to answer prospective students' questions accurately, politely, and enthusiastically. "
+            "Use ONLY the context provided to answer the question. If the answer is not in the context, "
+            "apologize and tell them to contact +234 703 719 7261 or nasaadanna@gmail.com. "
+            "Do NOT mention that you are reading from a 'context' or 'document'. "
+            "Keep your answers concise and helpful."
+        )
+        
+        return ask_gemini(question, context_chunks, system_prompt_override=system_prompt)
+    finally:
+        db.close()
 
 if __name__ == "__main__":
     build_ai_brain()

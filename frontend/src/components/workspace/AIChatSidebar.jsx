@@ -14,20 +14,40 @@ const AIChatSidebar = ({
   chatInput,
   setChatInput,
   sendChat,
+  persona,
+  setPersona,
 }) => {
   return (
     <div className={`ws-chat ${mobileTab === 'chat' ? 'mobile-active' : ''}`}>
       <div className="chat-header-bar">
         <div className="ai-avatar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Bot size={24} /></div>
-        <div className="ai-info">
-          <div className="ai-name">Mabel Tutor</div>
+        <div className="ai-info" style={{ display: 'flex', flexDirection: 'column', gap: '4px', width: '100%' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div className="ai-name">Mabel Tutor</div>
+            <select 
+              value={persona || 'study_buddy'} 
+              onChange={e => setPersona && setPersona(e.target.value)}
+              style={{ background: 'var(--bg-lighter)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: '4px', fontSize: '11px', padding: '2px 4px' }}
+            >
+              <option value="study_buddy">Study Buddy</option>
+              <option value="code_reviewer">Code Reviewer</option>
+            </select>
+          </div>
           <div className="ai-status"><div className="status-dot"></div> Online</div>
         </div>
       </div>
       <div className="chat-messages">
         {messages.map((msg, i) => (
           <div key={i} className={`chat-msg ${msg.sender}`}>
-            <div className="msg-bubble" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked(msg.text)) }}></div>
+            <div className="msg-bubble">
+              {msg.thought_process && (
+                <details style={{ marginBottom: '8px', fontSize: '11px', background: 'rgba(0,0,0,0.1)', padding: '6px', borderRadius: '4px' }}>
+                  <summary style={{ cursor: 'pointer', color: 'var(--text-dim)' }}>Thought Process</summary>
+                  <div style={{ marginTop: '4px', color: 'var(--text-dim)', whiteSpace: 'pre-wrap' }}>{msg.thought_process}</div>
+                </details>
+              )}
+              <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked(msg.text)) }}></div>
+            </div>
           </div>
         ))}
         {isTyping && (

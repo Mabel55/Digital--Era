@@ -359,3 +359,213 @@ class AITutorCache(Base):
     question = Column(String, index=True)
     response = Column(Text, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+
+# ─── DIGITAL ERA AI 2.0 — MEMORY SYSTEM (Phase 2) ───
+
+class EpisodicMemory(Base):
+    """
+    Stores important past interactions and events for each student.
+    Examples: "Student struggled with Python loops 3 times",
+              "Student had a breakthrough understanding recursion".
+    Used by the AI Orchestrator to personalize responses.
+    """
+    __tablename__ = "episodic_memories"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    memory_type = Column(String(50), nullable=False, index=True)  # struggle, breakthrough, misconception, preference, error_pattern
+    topic = Column(String(255), nullable=True, index=True)
+    summary = Column(Text, nullable=False)
+    importance = Column(Float, default=0.5)       # 0.0 to 1.0, for retrieval ranking
+    metadata_json = Column(JSON, default=dict)    # Flexible storage for context (lesson_id, course, error details, etc.)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    last_accessed = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User")
+
+
+class SemanticMemory(Base):
+    """
+    Stores stable facts about the learner and their knowledge.
+    Examples: "Knows Python basics", "Goal: become data scientist",
+              "Prefers code examples over theory".
+    Updated infrequently as the system learns more about the student.
+    """
+    __tablename__ = "semantic_memories"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    fact_type = Column(String(50), nullable=False, index=True)  # skill, strength, weakness, goal, preference, background
+    key = Column(String(255), nullable=False)                    # e.g., "python_loops", "learning_style"
+    value = Column(Text, nullable=False)                         # e.g., "struggles with nested loops", "visual learner"
+    confidence = Column(Float, default=0.5)                      # 0.0 to 1.0, how certain we are
+    updated_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User")
+
+    __table_args__ = (
+        # Each user has at most one fact per (fact_type, key) combination
+        # This is enforced at the DB level to prevent duplicate facts
+        {"sqlite_autoincrement": True},
+    )
+
+
+class StudentSkill(Base):
+    """
+    Tracks individual skill proficiency for each student.
+    Updated after assessments, lesson completions, and AI interactions.
+    Used for adaptive difficulty and prerequisite recommendations.
+    """
+    __tablename__ = "student_skills"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    skill_name = Column(String(255), nullable=False, index=True)   # e.g., "python_loops", "sql_joins", "recursion"
+    proficiency = Column(Float, default=0.0)                        # 0.0 to 1.0
+    assessment_count = Column(Integer, default=0)                   # How many times assessed
+    practice_count = Column(Integer, default=0)                     # How many practice attempts
+    last_assessed = Column(DateTime, nullable=True)
+    last_practiced = Column(DateTime, nullable=True)
+    needs_revision = Column(Boolean, default=False)                 # Flagged for spaced repetition
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User")
+
+    __table_args__ = (
+        {"sqlite_autoincrement": True},
+    )
+
+
+class ProceduralMemory(Base):
+    """
+    Stores useful teaching procedures and explanation strategies
+    that have worked well (or poorly) in the past.
+    Shared across all students — this is how the system learns
+    which approaches are effective for different topics.
+    """
+    __tablename__ = "procedural_memories"
+
+    id = Column(Integer, primary_key=True, index=True)
+    procedure_type = Column(String(100), nullable=False, index=True)  # explanation_strategy, debugging_approach, analogy
+    topic = Column(String(255), nullable=True, index=True)
+    procedure = Column(Text, nullable=False)
+    success_count = Column(Integer, default=0)
+    failure_count = Column(Integer, default=0)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow)
+
+
+class AIInteractionLog(Base):
+    """
+    Structured log of AI interactions for evaluation and learning.
+    This replaces blind chat history with actionable metadata.
+    Stores what the system did, why, and whether it worked.
+    """
+    __tablename__ = "ai_interaction_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    interaction_type = Column(String(50), nullable=False, index=True)  # chat, code_review, assessment, explanation
+    topic = Column(String(255), nullable=True)
+    course_name = Column(String(255), nullable=True)
+    user_message = Column(Text, nullable=False)
+    ai_response = Column(Text, nullable=False)
+    response_quality = Column(String(20), nullable=True)               # pass, fail, unknown (from evaluator)
+    tools_used = Column(JSON, default=list)                            # ["calculator", "code_executor"]
+    context_sources = Column(JSON, default=list)                       # ["lesson:42", "memory:7"]
+    latency_ms = Column(Integer, nullable=True)                        # Response time in milliseconds
+    token_count = Column(Integer, nullable=True)                       # Tokens used
+    metadata_json = Column(JSON, default=dict)                         # Flexible extra data
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User")
+
+
+# ─── DIGITAL ERA AI 2.0 — RAG SYSTEM (Phase 3) ───
+
+class ContentEmbedding(Base):
+    """
+    Stores course content, documentation, and their vector embeddings
+    for Semantic Search (RAG). Replaces the file-based FAISS index.
+    In SQLite, embedding is stored as JSON. In Postgres, it's VECTOR.
+    """
+    __tablename__ = "content_embeddings"
+
+    id = Column(Integer, primary_key=True, index=True)
+    source_type = Column(String(50), nullable=False, index=True) # lesson, documentation, support
+    source_id = Column(Integer, nullable=True)                   # e.g. lesson_id
+    chunk_index = Column(Integer, default=0)
+    content = Column(Text, nullable=False)
+    metadata_json = Column(JSON, default=dict)
+    
+    # Store the vector embedding as a JSON array to ensure 
+    # cross-compatibility between SQLite (dev) and PostgreSQL (prod)
+    embedding = Column(JSON, nullable=True)
+    
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
+# ─── DIGITAL ERA AI 2.0 — TOOL REGISTRY (Phase 5) ───
+
+class ToolInvocationLog(Base):
+    """
+    Audit log of all tools executed by the AI or the user.
+    Ensures accountability for code execution, searches, etc.
+    """
+    __tablename__ = "tool_invocation_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    tool_name = Column(String(100), nullable=False, index=True)
+    input_data = Column(JSON, default=dict)
+    output_data = Column(JSON, default=dict)
+    is_success = Column(Boolean, default=True)
+    error_message = Column(Text, nullable=True)
+    latency_ms = Column(Integer, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User")
+
+
+# ─── DIGITAL ERA AI 2.0 — EVALUATION SYSTEM (Phase 7) ───
+
+class AIEvaluation(Base):
+    """
+    Independent evaluations of AI responses.
+    Used to track correctness, relevance, and safety metrics over time.
+    """
+    __tablename__ = "ai_evaluations"
+
+    id = Column(Integer, primary_key=True, index=True)
+    interaction_id = Column(Integer, ForeignKey("ai_interaction_logs.id", ondelete="CASCADE"), nullable=False, index=True)
+    correctness_score = Column(Float, nullable=True)      # 0.0 to 1.0
+    relevance_score = Column(Float, nullable=True)        # 0.0 to 1.0
+    hallucination_risk = Column(Float, nullable=True)     # 0.0 to 1.0
+    code_validity_score = Column(Float, nullable=True)    # 0.0 to 1.0
+    safety_score = Column(Float, nullable=True)           # 0.0 to 1.0
+    verdict = Column(String(50), nullable=False)          # pass, revise, fail
+    evaluation_metadata = Column(JSON, default=dict)      # Full reasoning
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    interaction = relationship("AIInteractionLog")
+
+
+# ─── DIGITAL ERA AI 2.0 — AUTOMATED LESSON UPDATER (Phase 9) ───
+
+class LessonUpdateProposal(Base):
+    """
+    Stores AI-generated proposals for rewriting lessons that have low performance.
+    Admins can review these proposals in the dashboard.
+    """
+    __tablename__ = "lesson_update_proposals"
+
+    id = Column(Integer, primary_key=True, index=True)
+    lesson_id = Column(Integer, ForeignKey("lessons.id", ondelete="CASCADE"), nullable=False, index=True)
+    reason = Column(Text, nullable=False)                 # Why is this update needed? (e.g. 80% failure rate)
+    original_content = Column(Text, nullable=False)
+    proposed_content = Column(Text, nullable=False)
+    status = Column(String(20), default="pending")        # pending, approved, rejected
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    lesson = relationship("Lesson")

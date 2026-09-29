@@ -7,6 +7,9 @@ from models import calculate_level
 from auth import get_current_user
 from ai_brain import ask_gemini
 import json
+
+# Phase 2: Memory System integration
+from services.student_model_service import StudentModelService
 from typing import Optional
 
 router = APIRouter(prefix="/assessments", tags=["Assessments"])
@@ -67,6 +70,18 @@ def submit_assessment(req: AssessmentSubmitRequest, db: Session = Depends(get_db
     )
     db.add(result)
     db.commit()
+
+    # Phase 2: Update student model with assessment results
+    try:
+        StudentModelService.update_after_assessment(
+            db=db,
+            user_id=current_user.id,
+            topic=req.topic,
+            score=req.score,
+            max_score=req.max_score,
+        )
+    except Exception as mem_err:
+        print(f"[Memory] Non-critical error updating student model from assessment: {mem_err}")
     
     return {
         "skill_score": normalized_score,

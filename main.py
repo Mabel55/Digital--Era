@@ -39,6 +39,12 @@ import routers.translation
 import routers.support
 import routers.github
 
+# AI 2.0 routers (Phase 2+)
+import routers.memory
+import routers.ai_orchestrator
+import routers.tools
+import routers.evaluator
+
 
 # 2. Initialize the web server
 app = FastAPI(title="Digital Era API", description="International E-Learning Platform Backend", version="3.0")
@@ -76,6 +82,12 @@ app.include_router(routers.payments.router)
 app.include_router(routers.translation.router)
 app.include_router(routers.support.router)
 app.include_router(routers.github.router)
+
+# AI 2.0 routers (Phase 2+)
+app.include_router(routers.memory.router)
+app.include_router(routers.ai_orchestrator.router)
+app.include_router(routers.tools.router)
+app.include_router(routers.evaluator.router)
 
 @app.get("/api/admin/setup-db-tables")
 def setup_db_tables(current_user: models.User = Depends(get_current_user)):

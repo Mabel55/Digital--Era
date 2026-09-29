@@ -17,7 +17,6 @@ const TeacherDashboard = lazy(() => import('./components/TeacherDashboard'));
 const Assessment = lazy(() => import('./components/Assessment'));
 const Leaderboard = lazy(() => import('./components/Leaderboard'));
 const ProjectWorkspace = lazy(() => import('./components/ProjectWorkspace'));
-const LandingPage = lazy(() => import('./components/LandingPage'));
 const CourseCatalog = lazy(() => import('./components/CourseCatalog'));
 const PricingPage = lazy(() => import('./components/PricingPage'));
 const Profile = lazy(() => import('./components/Profile'));
@@ -63,7 +62,7 @@ const App = () => {
             <AuthProvider>
               <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', color: 'var(--text2)' }}><Loader2 className="spinner" size={32} /></div>}>
               <Routes>
-                <Route path="/" element={<LandingPage />} />
+                <Route path="/" element={<CourseCatalog />} />
                 <Route path="/catalog" element={<CourseCatalog />} />
                 <Route path="/community" element={<Forum />} />
                 <Route path="/career-tracks" element={<CareerTracks />} />

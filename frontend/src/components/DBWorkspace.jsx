@@ -23,6 +23,7 @@ const DBWorkspace = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [showStory, setShowStory] = useState(true);
+  const [persona, setPersona] = useState('study_buddy');
   
   // AI Limits State
   const [aiUsage, setAiUsage] = useState({ remaining: -1, limit: -1, isLimited: false });
@@ -176,13 +177,13 @@ const DBWorkspace = () => {
     const currentLesson = lessons[currentLessonIdx];
 
     try {
-      const res = await fetch(`/chat`, {
+      const res = await fetch(`/api/v2/ai/chat`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}` 
         },
-        body: JSON.stringify({ message: userMsg, course: course?.title || "", lesson_id: currentLesson?.id })
+        body: JSON.stringify({ message: userMsg, course: course?.title || "", lesson_id: currentLesson?.id, persona: persona })
       });
       
       if (res.status === 429) {
@@ -192,7 +193,11 @@ const DBWorkspace = () => {
       }
       
       const data = await res.json();
-      setMessages(prev => [...prev, { sender: 'ai', text: data.answer || data.response || data.detail || "No response" }]);
+      setMessages(prev => [...prev, { 
+        sender: 'ai', 
+        text: data.answer || data.response || data.detail || "No response",
+        thought_process: data.metadata?.thought_process
+      }]);
       
       // Update remaining messages if provided
       if (data.remaining_messages !== undefined && data.daily_limit !== undefined) {
@@ -311,15 +316,33 @@ const DBWorkspace = () => {
           <div className="ws-chat">
             <div className="chat-header-bar">
               <div className="ai-avatar">🤖</div>
-              <div className="ai-info">
-                <div className="ai-name">Mabel Tutor</div>
+              <div className="ai-info" style={{ display: 'flex', flexDirection: 'column', gap: '4px', width: '100%' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div className="ai-name">Mabel Tutor</div>
+                  <select 
+                    value={persona} 
+                    onChange={e => setPersona(e.target.value)}
+                    style={{ background: 'var(--bg-lighter)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: '4px', fontSize: '11px', padding: '2px 4px', marginRight: '10px' }}
+                  >
+                    <option value="study_buddy">Study Buddy</option>
+                    <option value="code_reviewer">Code Reviewer</option>
+                  </select>
+                </div>
                 <div className="ai-status"><div className="status-dot"></div> Online (Context-Aware)</div>
               </div>
             </div>
             <div className="chat-messages">
               {messages.map((msg, i) => (
                 <div key={i} className={`chat-msg ${msg.sender}`}>
-                  <div className="msg-bubble" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked(msg.text)) }}></div>
+                  <div className="msg-bubble">
+                    {msg.thought_process && (
+                      <details style={{ marginBottom: '8px', fontSize: '11px', background: 'rgba(0,0,0,0.1)', padding: '6px', borderRadius: '4px' }}>
+                        <summary style={{ cursor: 'pointer', color: 'var(--text-dim)' }}>Thought Process</summary>
+                        <div style={{ marginTop: '4px', color: 'var(--text-dim)', whiteSpace: 'pre-wrap' }}>{msg.thought_process}</div>
+                      </details>
+                    )}
+                    <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked(msg.text)) }}></div>
+                  </div>
                 </div>
               ))}
               {isTyping && (

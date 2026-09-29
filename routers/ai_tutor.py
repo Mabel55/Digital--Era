@@ -9,8 +9,13 @@ from limiter import limiter
 from datetime import date
 import shutil
 import os
+import time
 
 from pydantic import BaseModel
+
+# Phase 2: Memory System integration
+from services.memory_service import MemoryService
+from services.student_model_service import StudentModelService
 
 class CodeReviewRequest(BaseModel):
     code: str
@@ -103,6 +108,8 @@ def chat_with_study_buddy(
         )
 
     try:
+        start_time = time.time()
+
         # 1. Fetch all past messages between this student and the AI from PostgreSQL
         past_messages = db.query(models.ChatMessage)\
                           .filter(models.ChatMessage.user_id == current_user.id)\
@@ -114,10 +121,24 @@ def chat_with_study_buddy(
         
         # 3. Fetch lesson context if lesson_id is provided
         context_chunks = []
+        lesson_topic = None
         if getattr(payload, 'lesson_id', None):
             lesson = db.query(models.Lesson).filter(models.Lesson.id == payload.lesson_id).first()
             if lesson:
                 context_chunks.append(f"CURRENT LESSON CONTEXT:\nTitle: {lesson.title}\nContent: {lesson.content}\nExpected Output: {lesson.expected_output or 'N/A'}")
+                lesson_topic = lesson.title
+
+        # 3.5 (Phase 2): Retrieve student memory context
+        # This injects what the AI knows about the student into the context
+        try:
+            student_context = StudentModelService.get_context_for_ai(
+                db, current_user.id, topic=lesson_topic or payload.course
+            )
+            if student_context:
+                context_chunks.append(student_context)
+        except Exception as mem_err:
+            # Memory system failure should never break the chat
+            print(f"[Memory] Non-critical error retrieving student context: {mem_err}")
 
         # 4. Run your LangChain engine passing the database history AND lesson context
         answer = ask_gemini(
@@ -125,6 +146,8 @@ def chat_with_study_buddy(
             context_chunks=context_chunks, 
             chat_history=past_messages
         )
+
+        latency_ms = int((time.time() - start_time) * 1000)
         
         # 5. Save the student's input question to PostgreSQL
         student_msg = models.ChatMessage(user_id=current_user.id, role="user", content=question_text)
@@ -138,6 +161,32 @@ def chat_with_study_buddy(
         _increment_ai_usage(db, current_user.id)
         
         db.commit()
+
+        # 8 (Phase 2): Update student model with this interaction
+        # This analyzes the interaction and records relevant memories
+        try:
+            StudentModelService.update_after_chat(
+                db=db,
+                user_id=current_user.id,
+                topic=lesson_topic or payload.course,
+                course_name=payload.course,
+                user_message=question_text,
+                ai_response=answer,
+            )
+            # Log the structured interaction
+            MemoryService.log_interaction(
+                db=db,
+                user_id=current_user.id,
+                interaction_type="chat",
+                user_message=question_text,
+                ai_response=answer,
+                topic=lesson_topic,
+                course_name=payload.course,
+                latency_ms=latency_ms,
+            )
+        except Exception as mem_err:
+            # Memory system failure should never break the chat
+            print(f"[Memory] Non-critical error updating student model: {mem_err}")
         
         # Calculate remaining messages
         remaining = (daily_limit - messages_used - 1) if daily_limit > 0 else -1

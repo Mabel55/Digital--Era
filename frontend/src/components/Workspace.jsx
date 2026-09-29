@@ -48,6 +48,7 @@ const Workspace = () => {
   const [showHint, setShowHint] = useState(false);
   const [pyodide, setPyodide] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [persona, setPersona] = useState('study_buddy');
   const [mobileTab, setMobileTab] = useState('exercise'); // 'exercise', 'editor', 'chat' for mobile
   const [executionTime, setExecutionTime] = useState(0);
   
@@ -511,13 +512,13 @@ const Workspace = () => {
     }
 
     try {
-      const res = await fetch(`/chat`, {
+      const res = await fetch(`/api/v2/ai/chat`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}` 
         },
-        body: JSON.stringify({ message: userMsg, course: courseName })
+        body: JSON.stringify({ message: userMsg, course: courseName, persona: persona })
       });
       
       if (res.status === 429) {
@@ -527,7 +528,11 @@ const Workspace = () => {
       }
       
       const data = await res.json();
-      setMessages(prev => [...prev, { sender: 'ai', text: data.answer || data.response || data.detail || "No response" }]);
+      setMessages(prev => [...prev, { 
+        sender: 'ai', 
+        text: data.answer || data.response || data.detail || "No response",
+        thought_process: data.metadata?.thought_process
+      }]);
       
       // Update remaining messages if provided
       if (data.remaining_messages !== undefined && data.daily_limit !== undefined) {
@@ -752,6 +757,8 @@ const Workspace = () => {
             chatInput={chatInput}
             setChatInput={setChatInput}
             sendChat={sendChat}
+            persona={persona}
+            setPersona={setPersona}
           />
         </div>
       )}

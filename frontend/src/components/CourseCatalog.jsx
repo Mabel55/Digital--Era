@@ -70,22 +70,23 @@ const CourseCatalog = () => {
       <PublicNavbar />
       
       <main style={{ flex: 1, padding: '60px 32px', maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '60px', marginTop: '20px' }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: '8px',
             padding: '6px 16px', background: 'var(--surface)', border: '1px solid var(--border)',
-            borderRadius: '100px', marginBottom: '24px'
+            borderRadius: '100px', marginBottom: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
           }}>
             <BookOpen size={14} color="var(--accent)" />
             <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--accent)' }}>
-              {Object.keys(curriculum).length || '10'}+ Learning Tracks
+              NEW: AI-Powered Learning Paths are live!
             </span>
           </div>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 800, marginBottom: '16px' }}>
-            Course <span style={{ color: 'var(--accent)' }}>Catalog</span>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(40px, 6vw, 64px)', fontWeight: 800, marginBottom: '24px', letterSpacing: '-0.02em', lineHeight: '1.1' }}>
+            Master <span style={{ color: 'var(--accent)', textShadow: '0 0 40px var(--accent-glow)' }}>AI & Code</span><br />
+            by Building Real Projects.
           </h1>
-          <p style={{ color: 'var(--text2)', fontSize: '16px', maxWidth: '600px', margin: '0 auto', lineHeight: 1.6 }}>
-            Browse our comprehensive curriculum. From beginner basics to advanced AI orchestration, build your skills with interactive, real-world projects.
+          <p style={{ color: 'var(--text2)', fontSize: '18px', maxWidth: '650px', margin: '0 auto', lineHeight: 1.6 }}>
+            Stop watching tutorials and start typing. Digital Era gives you interactive environments to learn Python, React, Data Science, and AI. Pick a track below to begin.
           </p>
         </div>
 
