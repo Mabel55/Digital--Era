@@ -15,6 +15,7 @@ import time
 import json
 import re
 from sqlalchemy.orm import Session
+import models
 
 # Import Phase 2 (Memory), Phase 3 (RAG), and Phase 5 (Tools) services
 from services.memory_service import MemoryService
