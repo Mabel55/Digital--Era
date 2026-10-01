@@ -17,12 +17,6 @@ import re
 from sqlalchemy.orm import Session
 import models
 
-# Import Phase 2 (Memory), Phase 3 (RAG), and Phase 5 (Tools) services
-from services.memory_service import MemoryService
-from services.student_model_service import StudentModelService
-from services.rag_service import rag_service
-from services.tool_registry import ToolRegistry
-
 # Import core LLM
 from ai_brain import ask_gemini
 
@@ -87,49 +81,106 @@ class AIOrchestrator:
             )
 
     @staticmethod
+    def _safe_import_services():
+        """
+        Safely import Phase 2-5 services. If the required tables don't exist,
+        these will be set to None and the orchestrator will gracefully skip those phases.
+        """
+        services = {
+            "memory_service": None,
+            "student_model_service": None,
+            "rag_service": None,
+            "tool_registry": None,
+        }
+        try:
+            from services.memory_service import MemoryService
+            services["memory_service"] = MemoryService
+        except Exception as e:
+            print(f"[Orchestrator] Memory service unavailable: {e}")
+
+        try:
+            from services.student_model_service import StudentModelService
+            services["student_model_service"] = StudentModelService
+        except Exception as e:
+            print(f"[Orchestrator] Student model service unavailable: {e}")
+
+        try:
+            from services.rag_service import rag_service
+            services["rag_service"] = rag_service
+        except Exception as e:
+            print(f"[Orchestrator] RAG service unavailable: {e}")
+
+        try:
+            from services.tool_registry import ToolRegistry
+            services["tool_registry"] = ToolRegistry
+        except Exception as e:
+            print(f"[Orchestrator] Tool registry unavailable: {e}")
+
+        return services
+
+    @staticmethod
     def process_chat(db: Session, request: OrchestratorRequest) -> Tuple[OrchestratorResponse, Optional[models.AIInteractionLog]]:
         """
         The main pipeline for processing a student's chat request.
+        Each phase is wrapped in its own try/except so a failure in one phase
+        (e.g. missing DB tables) doesn't crash the entire pipeline.
         """
         start_time = time.time()
+        services = AIOrchestrator._safe_import_services()
 
         # 1. UNDERSTAND
         # What is the student trying to achieve?
         intent = AIOrchestrator.classify_intent(request.message)
 
-        # 2. MEMORY RETRIEVAL (Phase 2)
+        # 2. MEMORY RETRIEVAL (Phase 2) — Graceful fallback
         # What do we know about this student that might help?
         student_context_str = ""
-        try:
-            student_context = StudentModelService.get_context_for_ai(
-                db, request.user_id, topic=request.course_name
-            )
-            student_context_str = student_context if student_context else ""
-        except Exception as e:
-            print(f"[Orchestrator] Memory retrieval warning: {e}")
+        StudentModelService = services.get("student_model_service")
+        if StudentModelService:
+            try:
+                student_context = StudentModelService.get_context_for_ai(
+                    db, request.user_id, topic=request.course_name
+                )
+                student_context_str = student_context if student_context else ""
+            except Exception as e:
+                print(f"[Orchestrator] Memory retrieval warning (non-fatal): {e}")
 
-        # 3. KNOWLEDGE RETRIEVAL / RAG (Phase 3)
+        # 3. KNOWLEDGE RETRIEVAL / RAG (Phase 3) — Graceful fallback
         # What course materials do we need to answer this?
         rag_context_chunks = []
         sources = []
-        try:
-            # We search the RAG system using the specific lesson if provided, otherwise general course
-            results = rag_service.retrieve(
-                db=db, 
-                query=request.message, 
-                top_k=3, 
-                source_type="lesson", 
-                source_id=request.lesson_id
-            )
-            
-            for r in results:
-                rag_context_chunks.append(r["content"])
-                sources.append({
-                    "title": r["metadata"].get("title"), 
-                    "lesson_id": r["metadata"].get("lesson_id")
-                })
-        except Exception as e:
-            print(f"[Orchestrator] RAG retrieval warning: {e}")
+        rag_svc = services.get("rag_service")
+        if rag_svc:
+            try:
+                results = rag_svc.retrieve(
+                    db=db, 
+                    query=request.message, 
+                    top_k=3, 
+                    source_type="lesson", 
+                    source_id=request.lesson_id
+                )
+                
+                for r in results:
+                    rag_context_chunks.append(r["content"])
+                    sources.append({
+                        "title": r["metadata"].get("title"), 
+                        "lesson_id": r["metadata"].get("lesson_id")
+                    })
+            except Exception as e:
+                print(f"[Orchestrator] RAG retrieval warning (non-fatal): {e}")
+
+        # 3.5 LESSON CONTEXT — Direct lesson lookup as fallback when RAG fails
+        if not rag_context_chunks and request.lesson_id:
+            try:
+                lesson = db.query(models.Lesson).filter(models.Lesson.id == request.lesson_id).first()
+                if lesson and lesson.content:
+                    rag_context_chunks.append(
+                        f"CURRENT LESSON CONTEXT:\nTitle: {lesson.title}\nContent: {lesson.content}\n"
+                        f"Expected Output: {lesson.expected_output or 'N/A'}"
+                    )
+                    sources.append({"title": lesson.title, "lesson_id": lesson.id})
+            except Exception as e:
+                print(f"[Orchestrator] Lesson lookup warning (non-fatal): {e}")
 
         # 4. CONSTRUCT CONTEXT
         # Combine everything for the generator
@@ -146,27 +197,49 @@ class AIOrchestrator:
         if student_context_str:
             final_context.append(student_context_str)
             
-        # Inject Available Tools Schema
-        tools_schema = ToolRegistry.get_available_tools()
-        tools_instruction = (
-            "--- AVAILABLE TOOLS ---\n"
-            f"{json.dumps(tools_schema, indent=2)}\n"
-            "If you need to use a tool (e.g. to test code before answering), output exactly:\n"
-            "<tool_call>{\"tool\": \"tool_name\", \"params\": {\"key\": \"value\"}}</tool_call>\n"
-            "Do not output anything else if you are calling a tool. Wait for the system to return the result."
-            "-----------------------\n"
-        )
-        final_context.append(tools_instruction)
+        # Inject Available Tools Schema — only if tool registry is available
+        ToolRegistry = services.get("tool_registry")
+        if ToolRegistry:
+            try:
+                tools_schema = ToolRegistry.get_available_tools()
+                tools_instruction = (
+                    "--- AVAILABLE TOOLS ---\n"
+                    f"{json.dumps(tools_schema, indent=2)}\n"
+                    "If you need to use a tool (e.g. to test code before answering), output exactly:\n"
+                    "<tool_call>{\"tool\": \"tool_name\", \"params\": {\"key\": \"value\"}}</tool_call>\n"
+                    "Do not output anything else if you are calling a tool. Wait for the system to return the result."
+                    "-----------------------\n"
+                )
+                final_context.append(tools_instruction)
+            except Exception as e:
+                print(f"[Orchestrator] Tool schema injection warning (non-fatal): {e}")
+
+        # 4.5 CHAT HISTORY — Fetch recent messages for conversational continuity
+        chat_history = []
+        try:
+            past_messages = db.query(models.ChatMessage)\
+                .filter(models.ChatMessage.user_id == request.user_id)\
+                .order_by(models.ChatMessage.timestamp.asc())\
+                .limit(20)\
+                .all()
+            chat_history = past_messages
+        except Exception as e:
+            print(f"[Orchestrator] Chat history retrieval warning (non-fatal): {e}")
 
         # 5. EXECUTE (Agentic Loop)
         thought_process = None
         max_iterations = 3
         iteration = 0
         raw_answer = ""
+        answer = ""
         
-        # Mock user object for tool registry permissions
-        from models import User
-        mock_user = db.query(User).filter(User.id == request.user_id).first()
+        # Fetch user for tool permissions
+        mock_user = None
+        if ToolRegistry:
+            try:
+                mock_user = db.query(models.User).filter(models.User.id == request.user_id).first()
+            except Exception:
+                pass
         
         while iteration < max_iterations:
             iteration += 1
@@ -174,7 +247,7 @@ class AIOrchestrator:
                 raw_answer = ask_gemini(
                     question=request.message,
                     context_chunks=final_context,
-                    chat_history=[], 
+                    chat_history=chat_history, 
                     course_title=request.course_name,
                     student_level=request.level,
                     student_track=request.track
@@ -182,7 +255,7 @@ class AIOrchestrator:
                 
                 # Check if the AI wants to call a tool
                 tool_match = re.search(r'<tool_call>(.*?)</tool_call>', raw_answer, re.DOTALL)
-                if tool_match:
+                if tool_match and ToolRegistry and mock_user:
                     tool_json_str = tool_match.group(1).strip()
                     try:
                         tool_req = json.loads(tool_json_str)
@@ -211,37 +284,59 @@ class AIOrchestrator:
                 break # We got a final answer, exit the loop
                     
             except Exception as e:
-                answer = f"I'm currently experiencing a technical issue connecting to my brain. Please try again in a moment. (Error: {e})"
+                print(f"[Orchestrator] Generation error (iteration {iteration}): {e}")
+                answer = f"I'm currently experiencing a technical issue connecting to my brain. Please try again in a moment. (Error: {type(e).__name__})"
                 break
 
         latency = int((time.time() - start_time) * 1000)
 
-        # 6. LEARN (Update Memory)
+        # 6. SAVE CHAT MESSAGES
+        # Save both the user message and AI response to the chat history
+        try:
+            student_msg = models.ChatMessage(user_id=request.user_id, role="user", content=request.message)
+            db.add(student_msg)
+            ai_msg = models.ChatMessage(user_id=request.user_id, role="model", content=answer)
+            db.add(ai_msg)
+            db.commit()
+        except Exception as e:
+            print(f"[Orchestrator] Chat message save warning (non-fatal): {e}")
+            try:
+                db.rollback()
+            except Exception:
+                pass
+
+        # 7. LEARN (Update Memory) — Graceful fallback
         # Analyze what just happened and update the student model
         interaction_log = None
-        try:
-            StudentModelService.update_after_chat(
-                db=db,
-                user_id=request.user_id,
-                topic=request.course_name,
-                course_name=request.course_name,
-                user_message=request.message,
-                ai_response=answer
-            )
-            
-            interaction_log = MemoryService.log_interaction(
-                db=db,
-                user_id=request.user_id,
-                interaction_type="orchestrated_chat",
-                user_message=request.message,
-                ai_response=answer,
-                topic=request.course_name,
-                course_name=request.course_name,
-                latency_ms=latency,
-                metadata={"intent": intent}
-            )
-        except Exception as e:
-            print(f"[Orchestrator] Memory learning warning: {e}")
+        MemoryService = services.get("memory_service")
+        if StudentModelService:
+            try:
+                StudentModelService.update_after_chat(
+                    db=db,
+                    user_id=request.user_id,
+                    topic=request.course_name,
+                    course_name=request.course_name,
+                    user_message=request.message,
+                    ai_response=answer
+                )
+            except Exception as e:
+                print(f"[Orchestrator] Student model update warning (non-fatal): {e}")
+
+        if MemoryService:
+            try:
+                interaction_log = MemoryService.log_interaction(
+                    db=db,
+                    user_id=request.user_id,
+                    interaction_type="orchestrated_chat",
+                    user_message=request.message,
+                    ai_response=answer,
+                    topic=request.course_name,
+                    course_name=request.course_name,
+                    latency_ms=latency,
+                    metadata={"intent": intent}
+                )
+            except Exception as e:
+                print(f"[Orchestrator] Interaction logging warning (non-fatal): {e}")
 
         response = OrchestratorResponse(
             answer=answer,

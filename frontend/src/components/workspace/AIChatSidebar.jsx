@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Bot, ArrowUp } from 'lucide-react';
+import { Bot, ArrowUp, RotateCcw } from 'lucide-react';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 
@@ -16,7 +16,15 @@ const AIChatSidebar = ({
   sendChat,
   persona,
   setPersona,
+  lastFailedMsg,
 }) => {
+  const handleRetry = (e) => {
+    e?.preventDefault();
+    if (lastFailedMsg) {
+      sendChat(null, lastFailedMsg);
+    }
+  };
+
   return (
     <div className={`ws-chat ${mobileTab === 'chat' ? 'mobile-active' : ''}`}>
       <div className="chat-header-bar">
@@ -39,7 +47,7 @@ const AIChatSidebar = ({
       <div className="chat-messages">
         {messages.map((msg, i) => (
           <div key={i} className={`chat-msg ${msg.sender}`}>
-            <div className="msg-bubble">
+            <div className="msg-bubble" style={msg.isError ? { borderLeft: '3px solid var(--danger, #ef4444)' } : {}}>
               {msg.thought_process && (
                 <details style={{ marginBottom: '8px', fontSize: '11px', background: 'rgba(0,0,0,0.1)', padding: '6px', borderRadius: '4px' }}>
                   <summary style={{ cursor: 'pointer', color: 'var(--text-dim)' }}>Thought Process</summary>
@@ -47,6 +55,32 @@ const AIChatSidebar = ({
                 </details>
               )}
               <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked(msg.text)) }}></div>
+              {/* Retry button for error messages */}
+              {msg.isError && lastFailedMsg && i === messages.length - 1 && (
+                <button
+                  onClick={handleRetry}
+                  style={{
+                    marginTop: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '6px 14px',
+                    fontSize: '12px',
+                    fontWeight: 'bold',
+                    color: 'var(--accent)',
+                    background: 'rgba(0, 229, 160, 0.1)',
+                    border: '1px solid rgba(0, 229, 160, 0.3)',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseEnter={e => { e.target.style.background = 'rgba(0, 229, 160, 0.2)'; }}
+                  onMouseLeave={e => { e.target.style.background = 'rgba(0, 229, 160, 0.1)'; }}
+                  aria-label="Retry last message"
+                >
+                  <RotateCcw size={14} /> Try Again
+                </button>
+              )}
             </div>
           </div>
         ))}

@@ -12,6 +12,7 @@ import json
 import models
 from ai_brain import ask_gemini  # We reuse Gemini to evaluate Gemini for now
 
+
 class EvaluatorService:
     """
     Evaluates AI outputs independently from the generator.
@@ -21,7 +22,10 @@ class EvaluatorService:
     def evaluate_interaction(db: Session, interaction_log: models.AIInteractionLog) -> models.AIEvaluation:
         """
         Runs an evaluation on a completed interaction and saves the results.
-        In a production setting, this would be an asynchronous background task.
+        
+        IMPORTANT: When called from a background task, the caller MUST provide
+        a fresh, dedicated DB session (not the request-scoped session from FastAPI).
+        See routers/ai_orchestrator.py::_run_background_evaluation for the pattern.
         """
         user_message = interaction_log.user_message
         ai_response = interaction_log.ai_response
@@ -57,6 +61,8 @@ class EvaluatorService:
             clean_json = eval_result_text.strip()
             if clean_json.startswith("```json"):
                 clean_json = clean_json[7:]
+            if clean_json.startswith("```"):
+                clean_json = clean_json[3:]
             if clean_json.endswith("```"):
                 clean_json = clean_json[:-3]
                 
@@ -84,14 +90,22 @@ class EvaluatorService:
         except Exception as e:
             print(f"[Evaluator] Failed to evaluate interaction {interaction_log.id}: {e}")
             # If evaluation fails, we record a failed evaluation safely
-            evaluation = models.AIEvaluation(
-                interaction_id=interaction_log.id,
-                verdict="error",
-                evaluation_metadata={"error": str(e)}
-            )
-            db.add(evaluation)
-            db.commit()
-            return evaluation
+            try:
+                evaluation = models.AIEvaluation(
+                    interaction_id=interaction_log.id,
+                    verdict="error",
+                    evaluation_metadata={"error": str(e)}
+                )
+                db.add(evaluation)
+                db.commit()
+                return evaluation
+            except Exception as db_err:
+                print(f"[Evaluator] Failed to save error evaluation: {db_err}")
+                try:
+                    db.rollback()
+                except Exception:
+                    pass
+                return None
 
     @staticmethod
     def get_aggregate_metrics(db: Session, limit: int = 100) -> Dict[str, Any]:

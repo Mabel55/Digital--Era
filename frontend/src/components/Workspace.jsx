@@ -41,6 +41,7 @@ const Workspace = () => {
   const [chatInput, setChatInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [lastFailedMsg, setLastFailedMsg] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
   const [quizResult, setQuizResult] = useState(null);
   const [showCelebration, setShowCelebration] = useState(false);
@@ -512,13 +513,19 @@ const Workspace = () => {
     }
 
     try {
+      const currentLesson = manifest?.lessons?.[currentLessonIdx];
       const res = await fetch(`/api/v2/ai/chat`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}` 
         },
-        body: JSON.stringify({ message: userMsg, course: courseName, persona: persona })
+        body: JSON.stringify({ 
+          message: userMsg, 
+          course: courseName, 
+          persona: persona,
+          lesson_id: currentLesson?.id || null
+        })
       });
       
       if (res.status === 429) {
@@ -528,9 +535,19 @@ const Workspace = () => {
       }
       
       const data = await res.json();
+      
+      if (!res.ok) {
+        // Server returned an error (500, etc.) — show it with retry option
+        const errorText = data.detail || "The AI brain encountered an error. Please try again.";
+        setMessages(prev => [...prev, { sender: 'ai', text: errorText, isError: true }]);
+        setLastFailedMsg(userMsg);
+        return;
+      }
+      
+      setLastFailedMsg(null);
       setMessages(prev => [...prev, { 
         sender: 'ai', 
-        text: data.answer || data.response || data.detail || "No response",
+        text: data.answer || data.response || "No response",
         thought_process: data.metadata?.thought_process
       }]);
       
@@ -543,7 +560,8 @@ const Workspace = () => {
         });
       }
     } catch (err) {
-      setMessages(prev => [...prev, { sender: 'ai', text: "Sorry, I'm having trouble connecting to my brain right now. Please try again in a moment." }]);
+      setMessages(prev => [...prev, { sender: 'ai', text: "Sorry, I'm having trouble connecting to my brain right now. Please try again in a moment.", isError: true }]);
+      setLastFailedMsg(userMsg);
     } finally {
       setIsTyping(false);
     }
@@ -759,6 +777,7 @@ const Workspace = () => {
             sendChat={sendChat}
             persona={persona}
             setPersona={setPersona}
+            lastFailedMsg={lastFailedMsg}
           />
         </div>
       )}
