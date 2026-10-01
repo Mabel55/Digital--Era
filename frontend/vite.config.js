@@ -254,6 +254,7 @@ export default defineConfig({
       '/daily-challenge': 'http://127.0.0.1:8000',
       '/notifications': 'http://127.0.0.1:8000',
       '/leaderboard': 'http://127.0.0.1:8000',
+      '/api': 'http://127.0.0.1:8000',
     },
     // Serve the large curriculum.json with long-lived cache headers.
     // The ?v= query param in useCurriculum.js acts as the cache-buster when content changes.
