@@ -113,6 +113,12 @@ def migrate_db(key: str = ""):
         raise HTTPException(status_code=403, detail="Invalid key")
     
     results = []
+    try:
+        Base.metadata.create_all(bind=engine)
+        results.append("Base.metadata.create_all executed successfully (all tables ensured)")
+    except Exception as e:
+        results.append(f"create_all note: {str(e)}")
+
     with engine.connect() as conn:
         # List of (table, column, sql_type, default) migrations to run
         migrations = [

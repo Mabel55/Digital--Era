@@ -32,50 +32,65 @@ def _check_ai_limit(db: Session, user: models.User) -> tuple[bool, int, int]:
     Check if user has hit their daily AI message limit.
     Returns: (is_allowed, messages_used, daily_limit)
     """
-    # 1. Get or create today's usage for the user
-    today = date.today()
-    usage = db.query(models.AIUsage).filter(
-        models.AIUsage.user_id == user.id,
-        models.AIUsage.usage_date == today
-    ).first()
-    
-    if not usage:
-        usage = models.AIUsage(user_id=user.id, usage_date=today, message_count=0)
-        db.add(usage)
-        db.commit()
+    try:
+        # 1. Get or create today's usage for the user
+        today = date.today()
+        usage = db.query(models.AIUsage).filter(
+            models.AIUsage.user_id == user.id,
+            models.AIUsage.usage_date == today
+        ).first()
+        
+        if not usage:
+            usage = models.AIUsage(user_id=user.id, usage_date=today, message_count=0)
+            db.add(usage)
+            db.commit()
 
-    # 2. Check subscription status
-    sub = db.query(models.Subscription).filter(
-        models.Subscription.user_id == user.id
-    ).first()
-    is_pro = sub and sub.is_pro
-    
-    # 3. Enforce limits
-    if is_pro:
-        # Enforce fair usage limit silently (prevent abuse)
-        is_allowed = usage.message_count < PRO_DAILY_AI_LIMIT
-        # Return -1 for the limit so the frontend doesn't show a limit banner
-        return is_allowed, usage.message_count, -1
-    else:
-        # Enforce free tier limits
-        is_allowed = usage.message_count < FREE_DAILY_AI_LIMIT
-        return is_allowed, usage.message_count, FREE_DAILY_AI_LIMIT
+        # 2. Check subscription status
+        sub = db.query(models.Subscription).filter(
+            models.Subscription.user_id == user.id
+        ).first()
+        is_pro = sub and sub.is_pro
+        
+        # 3. Enforce limits
+        if is_pro:
+            # Enforce fair usage limit silently (prevent abuse)
+            is_allowed = usage.message_count < PRO_DAILY_AI_LIMIT
+            # Return -1 for the limit so the frontend doesn't show a limit banner
+            return is_allowed, usage.message_count, -1
+        else:
+            # Enforce free tier limits
+            is_allowed = usage.message_count < FREE_DAILY_AI_LIMIT
+            return is_allowed, usage.message_count, FREE_DAILY_AI_LIMIT
+    except Exception as e:
+        print(f"[AI Limit Warning - Legacy Chat] {e}")
+        try:
+            db.rollback()
+        except Exception:
+            pass
+        return True, 0, FREE_DAILY_AI_LIMIT
 
 
 def _increment_ai_usage(db: Session, user_id: int):
     """Increment today's AI message count for the user."""
-    today = date.today()
-    usage = db.query(models.AIUsage).filter(
-        models.AIUsage.user_id == user_id,
-        models.AIUsage.usage_date == today
-    ).first()
-    
-    if usage:
-        usage.message_count += 1
-    else:
-        usage = models.AIUsage(user_id=user_id, usage_date=today, message_count=1)
-        db.add(usage)
-    db.commit()
+    try:
+        today = date.today()
+        usage = db.query(models.AIUsage).filter(
+            models.AIUsage.user_id == user_id,
+            models.AIUsage.usage_date == today
+        ).first()
+        
+        if usage:
+            usage.message_count += 1
+        else:
+            usage = models.AIUsage(user_id=user_id, usage_date=today, message_count=1)
+            db.add(usage)
+        db.commit()
+    except Exception as e:
+        print(f"[AI Usage Increment Warning - Legacy Chat] {e}")
+        try:
+            db.rollback()
+        except Exception:
+            pass
 
 
 @router.get("/ai-usage", response_model=schemas.AIUsageResponse)
@@ -99,15 +114,15 @@ def chat_with_study_buddy(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
 ):
-    # Check AI usage limits for free users
-    is_allowed, messages_used, daily_limit = _check_ai_limit(db, current_user)
-    if not is_allowed:
-        raise HTTPException(
-            status_code=429,
-            detail=f"You've used all {daily_limit} free AI messages for today. Upgrade to Pro for unlimited access!"
-        )
-
     try:
+        # Check AI usage limits for free users
+        is_allowed, messages_used, daily_limit = _check_ai_limit(db, current_user)
+        if not is_allowed:
+            raise HTTPException(
+                status_code=429,
+                detail=f"You've used all {daily_limit} free AI messages for today. Upgrade to Pro for unlimited access!"
+            )
+
         start_time = time.time()
 
         # 1. Fetch all past messages between this student and the AI from PostgreSQL
@@ -229,15 +244,15 @@ def review_code(
     """
     Acts as a Senior Engineer to review student code from the Sandbox.
     """
-    # Check limits
-    is_allowed, messages_used, daily_limit = _check_ai_limit(db, current_user)
-    if not is_allowed:
-        raise HTTPException(
-            status_code=429,
-            detail="You've used all free AI Code Reviews for today. Upgrade to Pro for unlimited reviews!"
-        )
-
     try:
+        # Check limits
+        is_allowed, messages_used, daily_limit = _check_ai_limit(db, current_user)
+        if not is_allowed:
+            raise HTTPException(
+                status_code=429,
+                detail="You've used all free AI Code Reviews for today. Upgrade to Pro for unlimited reviews!"
+            )
+
         system_prompt = (
             f"You are a strict but encouraging Senior Software Engineer at Digital Era Academy reviewing a junior's {payload.language} code. "
             "Critique their code based on:\n"

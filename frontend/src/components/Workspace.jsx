@@ -679,32 +679,73 @@ const Workspace = () => {
 
     try {
       const currentLesson = manifest?.lessons?.[currentLessonIdx];
-      const res = await fetch(`/api/v2/ai/chat`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` 
-        },
-        body: JSON.stringify({ 
-          message: userMsg, 
-          course: courseName, 
-          persona: persona,
-          lesson_id: currentLesson?.id || null
-        })
-      });
-      
-      if (res.status === 429) {
-         setMessages(prev => [...prev, { sender: 'ai', text: "You've reached your daily AI limit. Please upgrade to Pro." }]);
-         setAiUsage(prev => ({ ...prev, remaining: 0 }));
-         return;
+      let res;
+      let data;
+      try {
+        res = await fetch(`/api/v2/ai/chat`, {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` 
+          },
+          body: JSON.stringify({ 
+            message: userMsg, 
+            course: courseName, 
+            persona: persona,
+            lesson_id: currentLesson?.id || null
+          })
+        });
+        
+        if (res.status === 429) {
+          setMessages(prev => [...prev, { sender: 'ai', text: "You've reached your daily AI limit. Please upgrade to Pro." }]);
+          setAiUsage(prev => ({ ...prev, remaining: 0 }));
+          return;
+        }
+
+        if (res.ok) {
+          data = await res.json().catch(() => null);
+        }
+      } catch (v2Err) {
+        console.warn("AI v2 endpoint fetch failed, falling back to legacy chat:", v2Err);
       }
-      
-      const data = await res.json();
-      
-      if (!res.ok) {
-        // Server returned an error (500, etc.) — show it with retry option
-        const errorText = data.detail || "The AI brain encountered an error. Please try again.";
-        setMessages(prev => [...prev, { sender: 'ai', text: errorText, isError: true }]);
+
+      // If /api/v2/ai/chat wasn't ok or failed, try fallback to /chat
+      if (!data) {
+        try {
+          const fallbackRes = await fetch(`/chat`, {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}` 
+            },
+            body: JSON.stringify({ 
+              message: userMsg, 
+              course: courseName, 
+              persona: persona,
+              lesson_id: currentLesson?.id || null
+            })
+          });
+
+          if (fallbackRes.status === 429) {
+            setMessages(prev => [...prev, { sender: 'ai', text: "You've reached your daily AI limit. Please upgrade to Pro." }]);
+            setAiUsage(prev => ({ ...prev, remaining: 0 }));
+            return;
+          }
+
+          if (fallbackRes.ok) {
+            data = await fallbackRes.json().catch(() => null);
+          }
+        } catch (fbErr) {
+          console.warn("Fallback chat also failed:", fbErr);
+        }
+      }
+
+      if (!data) {
+        setMessages(prev => [...prev, { 
+          sender: 'ai', 
+          text: "Sorry, I'm having trouble connecting to my brain right now. Please try again in a moment.", 
+          isError: true 
+        }]);
         setLastFailedMsg(userMsg);
         return;
       }

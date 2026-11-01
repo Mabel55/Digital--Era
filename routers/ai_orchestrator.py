@@ -39,46 +39,61 @@ def _check_ai_limit_v2(db: Session, user: models.User) -> tuple[bool, int, int]:
     Check if user has hit their daily AI message limit.
     Returns: (is_allowed, messages_used, daily_limit)
     """
-    from datetime import date
-    today = date.today()
-    usage = db.query(models.AIUsage).filter(
-        models.AIUsage.user_id == user.id,
-        models.AIUsage.usage_date == today
-    ).first()
+    try:
+        from datetime import date
+        today = date.today()
+        usage = db.query(models.AIUsage).filter(
+            models.AIUsage.user_id == user.id,
+            models.AIUsage.usage_date == today
+        ).first()
 
-    if not usage:
-        usage = models.AIUsage(user_id=user.id, usage_date=today, message_count=0)
-        db.add(usage)
-        db.commit()
+        if not usage:
+            usage = models.AIUsage(user_id=user.id, usage_date=today, message_count=0)
+            db.add(usage)
+            db.commit()
 
-    sub = db.query(models.Subscription).filter(
-        models.Subscription.user_id == user.id
-    ).first()
-    is_pro = sub and sub.is_pro
+        sub = db.query(models.Subscription).filter(
+            models.Subscription.user_id == user.id
+        ).first()
+        is_pro = sub and sub.is_pro
 
-    if is_pro:
-        is_allowed = usage.message_count < PRO_DAILY_AI_LIMIT
-        return is_allowed, usage.message_count, -1
-    else:
-        is_allowed = usage.message_count < FREE_DAILY_AI_LIMIT
-        return is_allowed, usage.message_count, FREE_DAILY_AI_LIMIT
+        if is_pro:
+            is_allowed = usage.message_count < PRO_DAILY_AI_LIMIT
+            return is_allowed, usage.message_count, -1
+        else:
+            is_allowed = usage.message_count < FREE_DAILY_AI_LIMIT
+            return is_allowed, usage.message_count, FREE_DAILY_AI_LIMIT
+    except Exception as e:
+        print(f"[AI Limit Check Warning] {e}")
+        try:
+            db.rollback()
+        except Exception:
+            pass
+        return True, 0, FREE_DAILY_AI_LIMIT
 
 
 def _increment_ai_usage_v2(db: Session, user_id: int):
     """Increment today's AI message count for the user."""
-    from datetime import date
-    today = date.today()
-    usage = db.query(models.AIUsage).filter(
-        models.AIUsage.user_id == user_id,
-        models.AIUsage.usage_date == today
-    ).first()
+    try:
+        from datetime import date
+        today = date.today()
+        usage = db.query(models.AIUsage).filter(
+            models.AIUsage.user_id == user_id,
+            models.AIUsage.usage_date == today
+        ).first()
 
-    if usage:
-        usage.message_count += 1
-    else:
-        usage = models.AIUsage(user_id=user_id, usage_date=today, message_count=1)
-        db.add(usage)
-    db.commit()
+        if usage:
+            usage.message_count += 1
+        else:
+            usage = models.AIUsage(user_id=user_id, usage_date=today, message_count=1)
+            db.add(usage)
+        db.commit()
+    except Exception as e:
+        print(f"[AI Usage Increment Warning] {e}")
+        try:
+            db.rollback()
+        except Exception:
+            pass
 
 
 def _run_background_evaluation(interaction_log_id: int):
@@ -113,15 +128,14 @@ def chat_orchestrated(
     Uses the new pipeline: Intent -> Memory -> RAG -> Generation -> Learning.
     Phase 7: Evaluates the response in the background.
     """
-    # Check AI usage limits (was missing on V2 endpoint)
-    is_allowed, messages_used, daily_limit = _check_ai_limit_v2(db, current_user)
-    if not is_allowed:
-        raise HTTPException(
-            status_code=429,
-            detail=f"You've used all {daily_limit} free AI messages for today. Upgrade to Pro for unlimited access!"
-        )
-
     try:
+        # Check AI usage limits (graceful fallback if table is missing or transaction is rolling back)
+        is_allowed, messages_used, daily_limit = _check_ai_limit_v2(db, current_user)
+        if not is_allowed:
+            raise HTTPException(
+                status_code=429,
+                detail=f"You've used all {daily_limit} free AI messages for today. Upgrade to Pro for unlimited access!"
+            )
         # Build the orchestrator request
         orch_req = OrchestratorRequest(
             user_id=current_user.id,
