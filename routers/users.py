@@ -686,6 +686,42 @@ def toggle_user_block(user_id: int, db: Session = Depends(get_db), current_user:
     status_str = "unblocked" if user_to_toggle.is_active else "blocked"
     return {"message": f"User {user_to_toggle.email} is now {status_str}"}
 
+@router.get("/")
+@router.get("")
+def get_all_users_for_admin(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    """Return all users with subscription and progress for Admin/Teacher dashboard."""
+    if not _is_admin(current_user):
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    users = db.query(models.User).order_by(models.User.id.desc()).all()
+    result = []
+    for u in users:
+        sub = u.subscription
+        sub_data = None
+        if sub:
+            sub_data = {
+                "id": sub.id,
+                "plan": sub.plan,
+                "status": sub.status,
+                "is_pro": sub.is_pro,
+                "current_period_end": sub.current_period_end.isoformat() if sub.current_period_end else None,
+                "paystack_customer_code": sub.paystack_customer_code,
+                "access_grants": sub.access_grants or {}
+            }
+        result.append({
+            "id": u.id,
+            "email": u.email,
+            "full_name": u.full_name,
+            "role": u.role,
+            "is_active": u.is_active,
+            "xp": u.xp or 0,
+            "level": u.level or "Beginner",
+            "streak": u.streak or 0,
+            "progress": u.progress or {},
+            "subscription": sub_data
+        })
+    return result
+
 # ─── HEALTH CHECK ───
 @router.get("/health")
 def health_check():
