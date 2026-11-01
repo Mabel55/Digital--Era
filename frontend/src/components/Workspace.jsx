@@ -11,7 +11,7 @@ import LessonDiscussion from './LessonDiscussion';
 import { queueProgressUpdate, saveCode as saveCodeToDB, loadCode as loadCodeFromDB, saveCachedProgress } from '../lib/offlineDB';
 import { useOfflineSync } from '../hooks/useOfflineSync';
 import { hasAccess } from '../utils/access';
-import { ArrowLeft, Play, Terminal, CheckCircle2, XCircle, Bug, Bot, ArrowUp, PartyPopper, Home, RotateCcw, Menu, Lightbulb, RotateCcw as ResetIcon, Clock, ChevronRight, WifiOff, CloudOff, RefreshCw, Code, Sparkles, Lock } from 'lucide-react';
+import { ArrowLeft, Play, Terminal, CheckCircle2, XCircle, Bug, Bot, ArrowUp, PartyPopper, Home, RotateCcw, Menu, Lightbulb, RotateCcw as ResetIcon, Clock, ChevronRight, WifiOff, CloudOff, RefreshCw, Code, Sparkles, Lock, Crown } from 'lucide-react';
 import GitHubExportModal from './GitHubExportModal';
 import AIChatSidebar from './workspace/AIChatSidebar';
 import CodeEditorArea from './workspace/CodeEditorArea';
@@ -809,6 +809,16 @@ const Workspace = () => {
           >
             <ArrowLeft size={16} /> Dashboard
           </button>
+          {user && ((user.role || '').toLowerCase() === 'admin' || (user.role || '').toLowerCase() === 'teacher' || (user.email || '').toLowerCase() === 'nasaadanna@gmail.com') && (
+            <button 
+              onClick={() => navigate('/teacher')}
+              style={{ background: 'rgba(56, 189, 248, 0.15)', color: 'var(--accent)', border: '1px solid var(--accent)', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 'bold', fontSize: '13px' }}
+              title="Open Admin Portal"
+              aria-label="Open Admin Portal"
+            >
+              <Crown size={14} /> Admin
+            </button>
+          )}
           <button 
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             style={{ background: 'transparent', border: '1px solid var(--border)', color: 'var(--text)', padding: '6px', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}

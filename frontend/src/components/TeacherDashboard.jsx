@@ -22,8 +22,7 @@ const TeacherDashboard = () => {
   const [grantDurationMonths, setGrantDurationMonths] = useState('');
 
   useEffect(() => {
-    // Basic protection
-    if (user && (user.role || '').toLowerCase() !== 'admin' && (user.role || '').toLowerCase() !== 'teacher' && user.email !== 'nasaadanna@gmail.com') {
+    if (user && (user.role || '').toLowerCase() !== 'admin' && (user.role || '').toLowerCase() !== 'teacher' && (user.email || '').toLowerCase() !== 'nasaadanna@gmail.com') {
       navigate('/');
     }
   }, [user, navigate]);

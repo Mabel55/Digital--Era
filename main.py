@@ -138,6 +138,26 @@ def migrate_db(key: str = ""):
     
     return {"message": "Migration complete", "results": results}
 
+@app.get("/api/admin/promote")
+def promote_admin(email: str = "", key: str = "", db: Session = Depends(get_db)):
+    """
+    Promote an account to admin role using the secure admin key.
+    Usage: GET /api/admin/promote?email=your_email@gmail.com&key=mabel-digital-era-2026
+    """
+    from fastapi import HTTPException
+    if key != "mabel-digital-era-2026":
+        raise HTTPException(status_code=403, detail="Invalid key")
+    if not email:
+        raise HTTPException(status_code=400, detail="Email parameter is required")
+        
+    user = db.query(models.User).filter(models.User.email.ilike(email.strip())).first()
+    if not user:
+        raise HTTPException(status_code=404, detail=f"User '{email}' not found")
+        
+    user.role = "admin"
+    db.commit()
+    return {"message": f"Successfully promoted {user.email} (ID: {user.id}) to admin role!"}
+
 # 4. Root / Static File Endpoints
 # Mount the entire React app build directory
 if os.path.isdir("frontend/dist"):
