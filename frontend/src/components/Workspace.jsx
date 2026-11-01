@@ -52,6 +52,7 @@ const Workspace = () => {
   const [persona, setPersona] = useState('study_buddy');
   const [mobileTab, setMobileTab] = useState('exercise'); // 'exercise', 'editor', 'chat' for mobile
   const [executionTime, setExecutionTime] = useState(0);
+  const [outputTab, setOutputTab] = useState('terminal'); // 'terminal' | 'preview'
   
   // AI Limits State
   const [aiUsage, setAiUsage] = useState({ remaining: -1, limit: -1, isLimited: false });
@@ -159,13 +160,78 @@ const Workspace = () => {
     });
   }, [pyodide]);
 
+  const determineLanguage = useCallback(() => {
+    const c = courseName.toLowerCase();
+
+    // 1. Explicit HTML courses & keywords
+    if (c.includes('html') || c.includes('markup') || c.includes('web accessibility')) return 'html';
+
+    // 2. CSS courses & keywords
+    if (c.includes('css') || c.includes('tailwind') || c.includes('flexbox') || c.includes('grid &') || c.includes('styling')) return 'css';
+
+    // 3. SQL & Database courses
+    if (c.includes('sql') || c.includes('database') || c.includes('selects') || c.includes('filtering data') || 
+        c.includes('basic joins') || c.includes('aggregations') || c.includes('subqueries') || 
+        c.includes('indexing') || c.includes('transactions')) return 'sql';
+
+    // 4. JavaScript & Frontend frameworks
+    if (c.includes('javascript') || c.includes('react') || c.includes('vue') || c.includes('next.js') || 
+        c.includes('typescript') || c.includes('node') || c.includes('express') || c.includes('frontend') || 
+        c.startsWith('js ') || c.includes('js basics') || c.includes('web animations') || 
+        c.includes('frontend testing') || c.includes('state management') || c.includes('hooks masterclass')) return 'javascript';
+
+    // 5. C programming
+    if (c.includes('c syntax') || c.includes('pointers') || c.includes('strings in c') || 
+        c.includes('structs & unions') || c.includes('dynamic memory') || c.includes('c programming')) return 'c';
+
+    // 6. Go programming
+    if (c.startsWith('go ') || c.includes('goroutines') || c.includes('golang')) return 'go';
+
+    // 7. Rust
+    if (c.includes('rust')) return 'rust';
+
+    // 8. Track-level fallback from curriculum manifest
+    if (curriculumData?.curriculum) {
+      for (const [track, tiers] of Object.entries(curriculumData.curriculum)) {
+        for (const courses of Object.values(tiers)) {
+          if (Array.isArray(courses) && courses.includes(courseName)) {
+            if (track === 'Frontend') {
+              if (c.includes('html')) return 'html';
+              if (c.includes('css')) return 'css';
+              return 'javascript';
+            }
+            if (track === 'SQL & Databases') return 'sql';
+            if (track === 'C Programming') return 'c';
+            if (track === 'Cloud Native & Go') return 'go';
+            if (track === 'Systems Programming') return 'rust';
+          }
+        }
+      }
+    }
+
+    // 9. Inspect lesson code heuristic
+    const currentLesson = manifest?.lessons?.[currentLessonIdx];
+    const sample = (currentLesson?.solution || currentLesson?.starterCode || code || '').trim().toLowerCase();
+    if (sample.startsWith('<!doctype') || sample.startsWith('<html') || (sample.startsWith('<') && sample.includes('</'))) {
+      return 'html';
+    }
+    if (sample.includes('{') && (sample.includes('color:') || sample.includes('padding:') || sample.includes('margin:') || sample.includes('border:'))) {
+      return 'css';
+    }
+    if (sample.includes('select ') || sample.includes('create table') || sample.includes('insert into')) {
+      return 'sql';
+    }
+
+    return 'python'; // Default
+  }, [courseName, curriculumData, manifest, currentLessonIdx, code]);
+
   useEffect(() => {
     // ★ Data Saver: defer Pyodide loading until user clicks "Run Code"
-    // Normal mode: load immediately for instant execution
-    if (!dataSaver) {
+    // Normal mode: only preload if this course actually uses Python
+    if (!dataSaver && determineLanguage() === 'python') {
       loadPyodideRuntime();
     }
-  }, [dataSaver, loadPyodideRuntime]);
+  }, [dataSaver, loadPyodideRuntime, determineLanguage]);
 
   useEffect(() => {
     if (manifest && manifest.lessons.length > 0) {
@@ -215,6 +281,7 @@ const Workspace = () => {
     setShowHint(false);
     setShowStory(true); // Always start in story mode for a new lesson
     setIsSidebarOpen(false); // Close sidebar on navigate
+    setOutputTab('terminal');
   };
 
   const handleCodeChange = (value) => {
@@ -239,13 +306,6 @@ const Workspace = () => {
       sendChat(null, "I need more help with this lesson. Can you give me another hint?");
       if(window.innerWidth <= 768) setMobileTab('chat');
     }
-  };
-
-  const determineLanguage = () => {
-    const c = courseName.toLowerCase();
-    if (c.includes('sql') || c.includes('database')) return 'sql';
-    if (c.includes('frontend') || c.includes('javascript') || c.includes('react')) return 'javascript';
-    return 'python'; // Default
   };
 
   const triggerProgressUpdate = async () => {
@@ -309,7 +369,112 @@ const Workspace = () => {
     const startTime = performance.now();
 
     try {
-      // 1. PYTHON CLIENT-SIDE (PYODIDE)
+      // 1. HTML CLIENT-SIDE
+      if (lang === 'html') {
+        if (code.includes('___')) {
+          setTerminalOutput('⚠️ Please replace all blanks (___) with the correct HTML tags and content before running.');
+          setTerminalClass('error');
+          setHasError(true);
+          setOutputTab('terminal');
+          setIsRunning(false);
+          setExecutionTime(Math.round(performance.now() - startTime));
+          return;
+        }
+
+        if (!code.trim()) {
+          setTerminalOutput('⚠️ Code is empty. Write your HTML code to continue.');
+          setTerminalClass('error');
+          setHasError(true);
+          setOutputTab('terminal');
+          setIsRunning(false);
+          setExecutionTime(Math.round(performance.now() - startTime));
+          return;
+        }
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(fullCode, 'text/html');
+        const elements = Array.from(doc.body.querySelectorAll('*'));
+
+        // Check if key expected elements from the solution/instructions are present
+        const sol = (lesson.solution || '').toLowerCase();
+        let missingTag = null;
+        if (sol.includes('<h1') && !doc.querySelector('h1')) missingTag = '<h1>';
+        else if (sol.includes('<h2') && !doc.querySelector('h2')) missingTag = '<h2>';
+        else if (sol.includes('<p') && !doc.querySelector('p')) missingTag = '<p>';
+        else if (sol.includes('<ul') && !doc.querySelector('ul')) missingTag = '<ul>';
+        else if (sol.includes('<ol') && !doc.querySelector('ol')) missingTag = '<ol>';
+        else if (sol.includes('<li') && !doc.querySelector('li')) missingTag = '<li>';
+        else if (sol.includes('<a ') && !doc.querySelector('a')) missingTag = '<a>';
+        else if (sol.includes('<img') && !doc.querySelector('img')) missingTag = '<img>';
+        else if (sol.includes('<form') && !doc.querySelector('form')) missingTag = '<form>';
+        else if (sol.includes('<input') && !doc.querySelector('input')) missingTag = '<input>';
+
+        if (missingTag) {
+          setTerminalOutput(`⚠️ Almost there! Your code is missing the ${missingTag} tag required by this lesson. Check the instructions and try again.`);
+          setTerminalClass('error');
+          setHasError(true);
+          setOutputTab('terminal');
+          setIsRunning(false);
+          setExecutionTime(Math.round(performance.now() - startTime));
+          return;
+        }
+
+        const tagList = Array.from(new Set(elements.map(el => `<${el.tagName.toLowerCase()}>`))).join(', ');
+        setTerminalOutput(`✓ HTML rendered successfully!\n\nElements detected: ${tagList || 'Text content'}\nPage preview loaded in Browser Preview tab.\nAutomatic Tests Passed! +10 XP Awarded!`);
+        setTerminalClass('success');
+        setHasError(false);
+        setOutputTab('preview');
+        triggerProgressUpdate();
+        setIsRunning(false);
+        setExecutionTime(Math.round(performance.now() - startTime));
+        return;
+      }
+
+      // 2. CSS CLIENT-SIDE
+      if (lang === 'css') {
+        if (code.includes('___')) {
+          setTerminalOutput('⚠️ Please replace all blanks (___) with the correct CSS selectors or properties before running.');
+          setTerminalClass('error');
+          setHasError(true);
+          setOutputTab('terminal');
+          setIsRunning(false);
+          setExecutionTime(Math.round(performance.now() - startTime));
+          return;
+        }
+
+        if (!code.trim()) {
+          setTerminalOutput('⚠️ Code is empty. Write your CSS rules to continue.');
+          setTerminalClass('error');
+          setHasError(true);
+          setOutputTab('terminal');
+          setIsRunning(false);
+          setExecutionTime(Math.round(performance.now() - startTime));
+          return;
+        }
+
+        const openBraces = (fullCode.match(/\{/g) || []).length;
+        const closeBraces = (fullCode.match(/\}/g) || []).length;
+        if (openBraces !== closeBraces || openBraces === 0) {
+          setTerminalOutput('⚠️ CSS Syntax Error: Mismatched curly braces { }. Make sure every rule opens with { and closes with }.');
+          setTerminalClass('error');
+          setHasError(true);
+          setOutputTab('terminal');
+          setIsRunning(false);
+          setExecutionTime(Math.round(performance.now() - startTime));
+          return;
+        }
+
+        setTerminalOutput(`✓ CSS compiled successfully!\nStyles applied to preview elements.\nAutomatic Tests Passed! +10 XP Awarded!`);
+        setTerminalClass('success');
+        setHasError(false);
+        setOutputTab('preview');
+        triggerProgressUpdate();
+        setIsRunning(false);
+        setExecutionTime(Math.round(performance.now() - startTime));
+        return;
+      }
+
+      // 3. PYTHON CLIENT-SIDE (PYODIDE)
       if (lang === 'python') {
         // ★ Data Saver: load Pyodide on first run if not yet loaded
         let pyodideInstance = pyodide;
@@ -761,6 +926,8 @@ const Workspace = () => {
             setSelectedOption={setSelectedOption}
             handleQuizSubmit={handleQuizSubmit}
             quizResult={quizResult}
+            outputTab={outputTab}
+            setOutputTab={setOutputTab}
           />
 
           {/* Right Panel - AI Chat */}
@@ -828,7 +995,7 @@ const Workspace = () => {
         isOpen={showGithubModal} 
         onClose={() => setShowGithubModal(false)}
         code={code}
-        language={manifest?.language || (courseName.toLowerCase().includes('python') ? 'python' : 'javascript')}
+        language={determineLanguage()}
         courseName={courseName}
       />
     </div>

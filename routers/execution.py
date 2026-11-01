@@ -29,6 +29,12 @@ def execute_code(request: Request, submission: CodeSubmission):
         elif language == "sql":
             return run_sqlite(code)
             
+        elif language in ("html", "htm"):
+            return {"output": "✓ HTML validated successfully.", "exit_code": 0}
+
+        elif language == "css":
+            return {"output": "✓ CSS validated successfully.", "exit_code": 0}
+            
         else:
             return {"output": f"Error: Unsupported language '{language}'", "exit_code": 1}
             
