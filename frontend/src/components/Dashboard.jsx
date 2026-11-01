@@ -34,6 +34,25 @@ const Dashboard = () => {
   const { t, i18n } = useTranslation();
   const { pendingCount: offlinePendingCount, isSyncing: isOfflineSyncing } = useOfflineSync(token);
 
+  const tokenEmail = (() => {
+    try {
+      if (!token) return null;
+      const parts = token.split('.');
+      if (parts.length >= 2) return JSON.parse(atob(parts[1])).sub;
+    } catch (e) { return null; }
+    return null;
+  })();
+
+  const currentEmail = (user?.email || tokenEmail || localStorage.getItem('user_email') || '').trim().toLowerCase();
+
+  const isAdmin = Boolean(
+    (user && (
+      (user.role || '').trim().toLowerCase() === 'admin' ||
+      (user.role || '').trim().toLowerCase() === 'teacher'
+    )) ||
+    currentEmail === 'nasaadanna@gmail.com'
+  );
+
   const fetchNotifications = async () => {
     try {
       const res = await fetch('/notifications', { headers: { Authorization: `Bearer ${token}` }});
@@ -283,10 +302,11 @@ const Dashboard = () => {
           
           <DataSaverToggle compact />
           
-          {user && ((user.role || '').toLowerCase() === 'admin' || user.email === 'nasaadanna@gmail.com') && (
+          {isAdmin && (
             <button 
               onClick={() => navigate('/teacher')}
-              style={{ padding: '8px 16px', background: 'var(--surface2)', color: 'var(--accent)', border: '1px solid var(--accent)', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}
+              style={{ padding: '8px 16px', background: 'linear-gradient(135deg, #00e5a0, #00bcd4)', color: '#0d0f14', border: 'none', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px', boxShadow: '0 2px 10px rgba(0,229,160,0.3)', whiteSpace: 'nowrap' }}
+              title="Open Admin Portal"
             >
               <Crown size={16} /> Admin Portal
             </button>
@@ -345,15 +365,6 @@ const Dashboard = () => {
             markAsRead={markNotificationsRead} 
             clearAll={clearAllNotifications} 
           />
-
-          {((user?.role || '').toLowerCase() === 'admin' || (user?.role || '').toLowerCase() === 'teacher' || user?.email === 'nasaadanna@gmail.com') && (
-            <button 
-              onClick={() => navigate('/teacher')}
-              style={{ padding: '8px 16px', background: 'var(--accent)', color: 'black', border: 'none', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}
-            >
-              <Users size={16} /> Admin Portal
-            </button>
-          )}
           <button 
             onClick={() => navigate('/profile')}
             style={{ padding: '8px 16px', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}
@@ -381,7 +392,7 @@ const Dashboard = () => {
           <>
             <div className="dash-hero">
               <div className="hero-left" style={{ position: 'relative', zIndex: 1 }}>
-            <h2>{t('dashboard.welcome')}, <span>{user?.full_name?.split(' ')?.[0] || user?.email?.split('@')?.[0] || 'Student'}</span>!</h2>
+            <h2>{t('dashboard.welcome')}, <span>{user?.full_name?.split(' ')?.[0] || currentEmail?.split('@')?.[0] || 'Student'}</span>!</h2>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px', color: 'var(--text-dim)', flexWrap: 'wrap' }}>
               <span style={{ whiteSpace: 'nowrap' }}>Your current track:</span>
               <select 
@@ -433,6 +444,33 @@ const Dashboard = () => {
               >
                 <Target size={14} /> Test Your Skills
               </button>
+              {isAdmin && (
+                <button 
+                  onClick={() => navigate('/teacher')}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '20px',
+                    background: 'linear-gradient(135deg, #00e5a0, #00bcd4)',
+                    color: '#0d0f14',
+                    border: 'none',
+                    fontFamily: 'inherit',
+                    fontSize: '13px',
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    minHeight: '44px',
+                    whiteSpace: 'nowrap',
+                    boxShadow: '0 4px 12px rgba(0, 229, 160, 0.4)',
+                    touchAction: 'manipulation'
+                  }}
+                  id="hero-admin-btn"
+                  title="Open Admin & Teacher Dashboard"
+                >
+                  <Crown size={15} /> Admin Portal
+                </button>
+              )}
             </div>
             <div className="hero-stats">
               <div className="stat-item" style={{ animation: 'pulse 2s infinite' }}>
@@ -467,6 +505,55 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+
+        {/* Administrator Portal Quick Card */}
+        {isAdmin && (
+          <div 
+            onClick={() => navigate('/teacher')}
+            style={{
+              background: 'linear-gradient(135deg, rgba(0, 229, 160, 0.15), rgba(59, 130, 246, 0.15))',
+              border: '2px solid var(--accent)',
+              borderRadius: '16px',
+              padding: '20px 28px',
+              marginTop: '24px',
+              marginBottom: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              cursor: 'pointer',
+              boxShadow: '0 8px 30px rgba(0, 229, 160, 0.25)',
+              flexWrap: 'wrap',
+              gap: '16px'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div style={{
+                width: '48px', height: '48px', borderRadius: '12px',
+                background: 'var(--accent)', color: '#0d0f14',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                flexShrink: 0
+              }}>
+                <Crown size={28} />
+              </div>
+              <div>
+                <div style={{ fontWeight: 800, fontSize: '18px', color: 'var(--accent)', marginBottom: '4px' }}>
+                  👑 Administrator Portal
+                </div>
+                <div style={{ color: 'var(--text-bright)', fontSize: '14px' }}>
+                  Upload Course PDFs & Textbooks • Manage Students • Grant Pro Access (Lifetime / Monthly)
+                </div>
+              </div>
+            </div>
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: '8px',
+              background: 'var(--accent)', color: '#0d0f14',
+              padding: '12px 24px', borderRadius: '100px',
+              fontWeight: 800, fontSize: '14px', whiteSpace: 'nowrap'
+            }}>
+              Open Admin Portal →
+            </div>
+          </div>
+        )}
 
         {/* Engagement Row: Continue Learning, Daily Challenge, Weekly Goal */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '40px' }}>

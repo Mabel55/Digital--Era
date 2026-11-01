@@ -93,7 +93,7 @@ const PublicNavbar = () => {
           </select>
         </div>
 
-        {user && ((user.role || '').toLowerCase() === 'admin' || user.email === 'nasaadanna@gmail.com') && (
+        {user && ((user.role || '').toLowerCase() === 'admin' || (user.email || '').trim().toLowerCase() === 'nasaadanna@gmail.com') && (
           <Link to="/teacher" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 'bold', fontSize: '14px' }}>Admin Portal</Link>
         )}
         {token ? (

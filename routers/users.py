@@ -150,6 +150,8 @@ def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends(), db
             user.streak = 1
         
         user.last_login = now
+        if user.email and user.email.strip().lower() in ADMIN_EMAILS and user.role != "admin":
+            user.role = "admin"
         db.commit()
         
         access_token = create_access_token(data={"sub": user.email})
@@ -214,11 +216,24 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
 @router.get("/me", response_model=schemas.UserResponse)
 def read_users_me(current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
-    # Ensure user has a subscription record (handles users created before monetization)
-    if not current_user.subscription:
-        _create_free_subscription(db, current_user.id)
-        db.refresh(current_user)
-    return current_user
+    try:
+        # Ensure user has a subscription record (handles users created before monetization)
+        if not current_user.subscription:
+            try:
+                _create_free_subscription(db, current_user.id)
+            except Exception as e:
+                db.rollback()
+                print(f"[Warning] Failed to auto-create subscription: {e}")
+
+        # Auto-promote designated admin emails to admin role
+        if current_user.email and current_user.email.strip().lower() in ADMIN_EMAILS and current_user.role != "admin":
+            current_user.role = "admin"
+            db.commit()
+            db.refresh(current_user)
+        return current_user
+    except Exception as e:
+        print(f"[Error in read_users_me]: {e}")
+        return current_user
 
 # ─── REAL PROFILE EDIT (replaces the mocked save) ───
 @router.put("/me", response_model=schemas.UserResponse)

@@ -21,11 +21,22 @@ const TeacherDashboard = () => {
   const [grantTargetName, setGrantTargetName] = useState('');
   const [grantDurationMonths, setGrantDurationMonths] = useState('');
 
+  const tokenEmail = (() => {
+    try {
+      if (!token) return null;
+      const parts = token.split('.');
+      if (parts.length >= 2) return JSON.parse(atob(parts[1])).sub;
+    } catch (e) { return null; }
+    return null;
+  })();
+
+  const currentEmail = (user?.email || tokenEmail || localStorage.getItem('user_email') || '').trim().toLowerCase();
+
   useEffect(() => {
-    if (user && (user.role || '').toLowerCase() !== 'admin' && (user.role || '').toLowerCase() !== 'teacher' && (user.email || '').toLowerCase() !== 'nasaadanna@gmail.com') {
+    if (user && (user.role || '').toLowerCase() !== 'admin' && (user.role || '').toLowerCase() !== 'teacher' && currentEmail !== 'nasaadanna@gmail.com') {
       navigate('/');
     }
-  }, [user, navigate]);
+  }, [user, currentEmail, navigate]);
 
   useEffect(() => {
     fetchStudents();

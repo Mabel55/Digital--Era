@@ -21,14 +21,44 @@ export const AuthProvider = ({ children }) => {
     }
   }, [token]);
 
+  const decodeTokenEmail = (jwtToken) => {
+    try {
+      if (!jwtToken) return null;
+      const parts = jwtToken.split('.');
+      if (parts.length >= 2) {
+        const payload = JSON.parse(atob(parts[1]));
+        return payload.sub || null;
+      }
+    } catch (e) {
+      return null;
+    }
+    return null;
+  };
+
   const fetchUserProfile = async (authToken) => {
+    // Immediate fallback from JWT token payload so user is never null
+    const tokenEmail = decodeTokenEmail(authToken);
+    if (tokenEmail) {
+      localStorage.setItem('user_email', tokenEmail);
+      setUser(prev => prev || { 
+        email: tokenEmail, 
+        role: tokenEmail.trim().toLowerCase() === 'nasaadanna@gmail.com' ? 'admin' : 'student' 
+      });
+    }
+
     try {
       const res = await fetch('/users/me', {
         headers: { 'Authorization': `Bearer ${authToken}` }
       });
       if (res.ok) {
         const data = await res.json();
+        if (data.email && data.email.trim().toLowerCase() === 'nasaadanna@gmail.com') {
+          data.role = 'admin';
+        }
         setUser(data);
+        if (data.email) {
+          localStorage.setItem('user_email', data.email);
+        }
       } else if (res.status === 401) {
         // Only clear token on authentication failure, NOT on server errors (500)
         setToken(null);
