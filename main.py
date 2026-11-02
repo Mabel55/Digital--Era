@@ -1,9 +1,10 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.gzip import GZipMiddleware
 import os
-from database import engine
+from sqlalchemy.orm import Session
+from database import engine, get_db
 from models import Base
 from sqlalchemy import text
 from slowapi import _rate_limit_exceeded_handler
@@ -93,7 +94,6 @@ app.include_router(routers.evaluator.router)
 def setup_db_tables(current_user: models.User = Depends(get_current_user)):
     """Manual trigger to create database tables without causing startup deadlocks."""
     if not _is_admin(current_user):
-        from fastapi import HTTPException
         raise HTTPException(status_code=403, detail="Not authorized")
     try:
         Base.metadata.create_all(bind=engine)
@@ -109,7 +109,6 @@ def migrate_db(key: str = ""):
     Usage: GET /api/migrate-db?key=mabel-digital-era-2026
     """
     if key != "mabel-digital-era-2026":
-        from fastapi import HTTPException
         raise HTTPException(status_code=403, detail="Invalid key")
     
     results = []
@@ -144,7 +143,6 @@ def promote_admin(email: str = "", key: str = "", db: Session = Depends(get_db))
     Promote an account to admin role using the secure admin key.
     Usage: GET /api/admin/promote?email=your_email@gmail.com&key=mabel-digital-era-2026
     """
-    from fastapi import HTTPException
     if key != "mabel-digital-era-2026":
         raise HTTPException(status_code=403, detail="Invalid key")
     if not email:
