@@ -170,13 +170,21 @@ class Subscription(Base):
     @property
     def is_pro(self) -> bool:
         """Check if user has an active Pro subscription."""
-        if self.plan == "free":
+        try:
+            if not self.plan or self.plan == "free":
+                return False
+            if self.status not in ("active", "trialing"):
+                return False
+            if self.current_period_end:
+                now = datetime.utcnow()
+                if getattr(self.current_period_end, "tzinfo", None) is not None:
+                    from datetime import timezone
+                    now = datetime.now(timezone.utc)
+                if self.current_period_end < now:
+                    return False
+            return True
+        except Exception:
             return False
-        if self.status not in ("active", "trialing"):
-            return False
-        if self.current_period_end and self.current_period_end < datetime.utcnow():
-            return False
-        return True
 
 
 class Certificate(Base):

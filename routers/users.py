@@ -708,34 +708,83 @@ def get_all_users_for_admin(db: Session = Depends(get_db), current_user: models.
     if not _is_admin(current_user):
         raise HTTPException(status_code=403, detail="Not authorized")
     
-    users = db.query(models.User).order_by(models.User.id.desc()).all()
-    result = []
-    for u in users:
-        sub = u.subscription
-        sub_data = None
-        if sub:
-            sub_data = {
-                "id": sub.id,
-                "plan": sub.plan,
-                "status": sub.status,
-                "is_pro": sub.is_pro,
-                "current_period_end": sub.current_period_end.isoformat() if sub.current_period_end else None,
-                "paystack_customer_code": sub.paystack_customer_code,
-                "access_grants": sub.access_grants or {}
-            }
-        result.append({
-            "id": u.id,
-            "email": u.email,
-            "full_name": u.full_name,
-            "role": u.role,
-            "is_active": u.is_active,
-            "xp": u.xp or 0,
-            "level": u.level or "Beginner",
-            "streak": u.streak or 0,
-            "progress": u.progress or {},
-            "subscription": sub_data
-        })
-    return result
+    try:
+        users = db.query(models.User).order_by(models.User.id.desc()).all()
+        result = []
+        import json
+        for u in users:
+            try:
+                sub = u.subscription
+                sub_data = None
+                if sub:
+                    grants = sub.access_grants or {}
+                    if isinstance(grants, str):
+                        try:
+                            grants = json.loads(grants)
+                        except Exception:
+                            grants = {}
+
+                    is_pro_val = False
+                    try:
+                        is_pro_val = bool(sub.is_pro)
+                    except Exception:
+                        pass
+
+                    cpe = None
+                    if sub.current_period_end:
+                        try:
+                            cpe = sub.current_period_end.isoformat()
+                        except Exception:
+                            cpe = str(sub.current_period_end)
+
+                    sub_data = {
+                        "id": sub.id,
+                        "plan": sub.plan or "free",
+                        "status": sub.status or "active",
+                        "is_pro": is_pro_val,
+                        "current_period_end": cpe,
+                        "paystack_customer_code": sub.paystack_customer_code,
+                        "access_grants": grants if isinstance(grants, dict) else {}
+                    }
+
+                prog = u.progress or {}
+                if isinstance(prog, str):
+                    try:
+                        prog = json.loads(prog)
+                    except Exception:
+                        prog = {}
+
+                result.append({
+                    "id": u.id,
+                    "email": u.email or "",
+                    "full_name": u.full_name or u.email or "Student",
+                    "role": u.role or "student",
+                    "is_active": True if u.is_active is None else u.is_active,
+                    "xp": u.xp or 0,
+                    "level": u.level or "Beginner",
+                    "streak": u.streak or 0,
+                    "progress": prog if isinstance(prog, dict) else {},
+                    "subscription": sub_data
+                })
+            except Exception as user_err:
+                print(f"[Warning] Error serializing user {getattr(u, 'id', 'unknown')}: {user_err}")
+                result.append({
+                    "id": getattr(u, 'id', 0),
+                    "email": getattr(u, 'email', '') or "Unknown",
+                    "full_name": getattr(u, 'full_name', '') or getattr(u, 'email', 'Unknown'),
+                    "role": getattr(u, 'role', 'student'),
+                    "is_active": getattr(u, 'is_active', True),
+                    "xp": getattr(u, 'xp', 0) or 0,
+                    "level": getattr(u, 'level', 'Beginner') or 'Beginner',
+                    "streak": getattr(u, 'streak', 0) or 0,
+                    "progress": {},
+                    "subscription": None
+                })
+        return result
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Failed to fetch student roster: {str(e)}")
 
 # ─── HEALTH CHECK ───
 @router.get("/health")

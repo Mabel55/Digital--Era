@@ -7,6 +7,8 @@ const TeacherDashboard = () => {
   const { token, user } = useAuth();
   const navigate = useNavigate();
   const [students, setStudents] = useState([]);
+  const [loadingStudents, setLoadingStudents] = useState(true);
+  const [studentsError, setStudentsError] = useState(null);
   const [metrics, setMetrics] = useState(null);
   const [uploadFile, setUploadFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState('');
@@ -41,12 +43,14 @@ const TeacherDashboard = () => {
   useEffect(() => {
     fetchStudents();
     fetchMetrics();
-  }, []);
+  }, [token]);
 
   const fetchMetrics = async () => {
+    const activeToken = token || localStorage.getItem('token');
+    if (!activeToken) return;
     try {
       const res = await fetch('/users/admin/analytics', {
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { 'Authorization': `Bearer ${activeToken}` }
       });
       if (res.ok) {
         const data = await res.json();
@@ -58,16 +62,26 @@ const TeacherDashboard = () => {
   };
 
   const fetchStudents = async () => {
+    const activeToken = token || localStorage.getItem('token');
+    if (!activeToken) return;
+    setLoadingStudents(true);
+    setStudentsError(null);
     try {
       const res = await fetch('/users/', {
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { 'Authorization': `Bearer ${activeToken}` }
       });
       if (res.ok) {
         const data = await res.json();
-        setStudents(data);
+        setStudents(Array.isArray(data) ? data : []);
+      } else {
+        const err = await res.json().catch(() => ({}));
+        setStudentsError(err.detail || `Server returned error (${res.status})`);
       }
     } catch (e) {
       console.error(e);
+      setStudentsError(e.message || 'Failed to connect to server');
+    } finally {
+      setLoadingStudents(false);
     }
   };
 
@@ -280,8 +294,22 @@ const TeacherDashboard = () => {
           <h2 style={{ marginBottom: '20px', color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '8px' }}><Users size={24} /> Student Roster & Progress</h2>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {students.length === 0 ? (
-              <div style={{ color: 'var(--text-dim)' }}>Loading students...</div>
+            {loadingStudents ? (
+              <div style={{ color: 'var(--text-dim)', display: 'flex', alignItems: 'center', gap: '8px', padding: '20px 0' }}>
+                <Activity size={18} style={{ animation: 'spin 1.5s linear infinite' }} /> Loading student roster...
+              </div>
+            ) : studentsError ? (
+              <div style={{ padding: '16px', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid #ef4444', borderRadius: '8px', color: '#fca5a5' }}>
+                <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>⚠️ Failed to load students: {studentsError}</div>
+                <button 
+                  onClick={fetchStudents}
+                  style={{ padding: '6px 14px', background: 'var(--surface2)', color: 'white', borderRadius: '6px', border: '1px solid var(--border)', cursor: 'pointer', fontSize: '12px' }}
+                >
+                  Retry Loading
+                </button>
+              </div>
+            ) : students.length === 0 ? (
+              <div style={{ color: 'var(--text-dim)', padding: '20px 0' }}>No registered students found.</div>
             ) : (
               students.map(student => (
                 <div key={student.id} style={{ padding: '16px', background: 'var(--bg)', borderRadius: '8px', border: '1px solid var(--border)' }}>
@@ -316,11 +344,13 @@ const TeacherDashboard = () => {
 
                   <div style={{ marginTop: '12px', borderTop: '1px solid var(--border)', paddingTop: '12px' }}>
                     <div style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--text-dim)', marginBottom: '8px', textTransform: 'uppercase' }}>Course Progress</div>
-                    {student.progress && Object.keys(student.progress).length > 0 ? (
+                    {student.progress && typeof student.progress === 'object' && Object.keys(student.progress).length > 0 ? (
                       Object.keys(student.progress).map(course => (
                         <div key={course} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '4px' }}>
                           <span>{course}</span>
-                          <span style={{ color: 'var(--accent)' }}>{student.progress[course].completed_lessons} lessons</span>
+                          <span style={{ color: 'var(--accent)' }}>
+                            {typeof student.progress[course] === 'object' ? (student.progress[course]?.completed_lessons ?? 0) : student.progress[course]} lessons
+                          </span>
                         </div>
                       ))
                     ) : (
