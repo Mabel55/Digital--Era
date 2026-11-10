@@ -147,6 +147,12 @@ class GrantAccessRequest(BaseModel):
     target_name: Optional[str] = None
     duration_months: Optional[int] = None
 
+class GrantAccessByEmailRequest(BaseModel):
+    email: str
+    access_type: str = "full_pro"  # "full_pro", "track", "course"
+    target_name: Optional[str] = None
+    duration_months: Optional[int] = None
+
 class ChatMessage(BaseModel):
     message: str
 

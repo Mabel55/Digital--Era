@@ -1,270 +1,251 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
-import { Trophy, Download, Share2, X, Crown, Lock } from 'lucide-react';
+import { Trophy, Download, Share2, X, Crown, CheckCircle2 } from 'lucide-react';
 
 const CertificateModal = ({ courseName, studentName, onClose }) => {
   const canvasRef = useRef(null);
   const navigate = useNavigate();
-  const { subscription } = useAuth();
+  const { user, subscription } = useAuth();
   const isPro = subscription?.is_pro;
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [copiedLink, setCopiedLink] = useState(false);
+
+  // Clean and format course name automatically
+  const formatCourseName = (raw) => {
+    if (!raw) return 'Technology Certification';
+    let str = raw;
+    try {
+      str = decodeURIComponent(raw);
+    } catch (e) {}
+    if (str.includes('_') || (str.includes('-') && !str.includes(' - '))) {
+      return str.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    }
+    return str.trim();
+  };
+
+  // Derive the student's full name from sign-up data
+  const displayName = (studentName || user?.full_name || user?.email?.split('@')?.[0] || 'Digital Era Student').trim();
+  const displayCourse = formatCourseName(courseName);
+
+  // Deterministic certificate number based on student and course
+  const getCertNumber = (name, course) => {
+    let hash = 0;
+    const str = `${name}-${course}-digital-era-cac-9882413`;
+    for (let i = 0; i < str.length; i++) {
+      hash = ((hash << 5) - hash) + str.charCodeAt(i);
+      hash |= 0;
+    }
+    const positiveHash = Math.abs(hash).toString().padStart(5, '0').slice(0, 5);
+    const year = new Date().getFullYear();
+    return `DE-${year}-9882413-${positiveHash}`;
+  };
+
+  const certNumber = getCertNumber(displayName, displayCourse);
 
   useEffect(() => {
-    if (!canvasRef.current) return;
-    drawCertificate(courseName, studentName || 'Student', canvasRef.current);
-  }, [courseName, studentName]);
-
-  const drawCertificate = (course, student, canvas) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    const W = 620, H = 440;
-    ctx.clearRect(0, 0, W, H);
+    const W = 2246;
+    const H = 1588;
 
-    // Background
-    const bgGrad = ctx.createLinearGradient(0, 0, W, H);
-    bgGrad.addColorStop(0, '#0a0d15'); 
-    bgGrad.addColorStop(1, '#111827');
-    ctx.fillStyle = bgGrad; 
-    ctx.fillRect(0, 0, W, H);
+    canvas.width = W;
+    canvas.height = H;
 
-    // Border
-    ctx.strokeStyle = '#00e5a0'; ctx.lineWidth = 2;
-    ctx.strokeRect(16, 16, W - 32, H - 32);
-    ctx.strokeStyle = 'rgba(0,229,160,0.2)'; ctx.lineWidth = 1;
-    ctx.strokeRect(22, 22, W - 44, H - 44);
+    // Load the official Digital Era certificate template
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = '/certificate-template.png';
 
-    // Corner decorations
-    const corners = [[22,22],[W-22,22],[22,H-22],[W-22,H-22]];
-    corners.forEach(([x, y]) => {
-      ctx.fillStyle = '#00e5a0';
-      ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI*2); ctx.fill();
-    });
+    const renderTextOnTemplate = () => {
+      // 1. Draw student name (Center X: 1122, line Y: 720, text baseline centered around Y: 650)
+      ctx.fillStyle = '#0f2b5c'; // Official Digital Era Deep Navy
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
 
-    // Top accent line
-    const lineGrad = ctx.createLinearGradient(50, 0, W-50, 0);
-    lineGrad.addColorStop(0, 'transparent'); lineGrad.addColorStop(0.5, '#00e5a0'); lineGrad.addColorStop(1, 'transparent');
-    ctx.fillStyle = lineGrad; ctx.fillRect(50, 55, W - 100, 1);
+      let nameFontSize = 74;
+      ctx.font = `bold ${nameFontSize}px "Cinzel", "Times New Roman", "Playfair Display", Georgia, serif`;
+      while (ctx.measureText(displayName).width > 1050 && nameFontSize > 34) {
+        nameFontSize -= 3;
+        ctx.font = `bold ${nameFontSize}px "Cinzel", "Times New Roman", "Playfair Display", Georgia, serif`;
+      }
+      ctx.fillText(displayName, 1122, 650);
 
-    // Academy name
-    ctx.fillStyle = '#00e5a0';
-    ctx.font = 'bold 13px sans-serif';
-    ctx.textAlign = 'center'; 
-    ctx.letterSpacing = '4px';
-    ctx.fillText('DIGITAL ERA', W/2, 88);
+      // 2. Draw course name (Center X: 1122, line Y: 886, text baseline centered around Y: 830)
+      ctx.fillStyle = '#1c3d94'; // Deep Royal Blue
+      let courseFontSize = 52;
+      ctx.font = `bold ${courseFontSize}px "Segoe UI", Arial, sans-serif`;
+      while (ctx.measureText(displayCourse).width > 1050 && courseFontSize > 28) {
+        courseFontSize -= 3;
+        ctx.font = `bold ${courseFontSize}px "Segoe UI", Arial, sans-serif`;
+      }
+      ctx.fillText(displayCourse, 1122, 830);
 
-    // Certificate of Completion
-    ctx.fillStyle = 'rgba(255,255,255,0.15)';
-    ctx.font = '11px sans-serif';
-    ctx.fillText('CERTIFICATE OF COMPLETION', W/2, 112);
+      // 3. Draw Date (Center X: 480, line Y: 1414, text baseline centered around Y: 1375)
+      const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      ctx.fillStyle = '#1e293b'; // Charcoal
+      ctx.font = '600 36px "Segoe UI", Arial, sans-serif';
+      ctx.fillText(dateStr, 480, 1375);
 
-    // Decorative line
-    ctx.fillStyle = lineGrad; ctx.fillRect(80, 124, W - 160, 1);
+      // 4. Draw Footer: Cert Number + CAC Reg No + Website (Center X: 1060, Y: 1495)
+      ctx.fillStyle = '#475569'; // Slate
+      ctx.font = '500 28px "Segoe UI", Arial, sans-serif';
+      const footerText = `Certificate No. ${certNumber}   ·   CAC Reg. No. 9882413   ·   digital-era.live`;
+      ctx.fillText(footerText, 1060, 1495);
 
-    // "This certifies that"
-    ctx.fillStyle = '#6b7a99'; ctx.font = '14px sans-serif';
-    ctx.fillText('This certifies that', W/2, 165);
+      setImageLoaded(true);
+    };
 
-    // Student name
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 36px sans-serif';
-    ctx.fillText(student, W/2, 218);
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0, W, H);
+      renderTextOnTemplate();
+    };
 
-    // Underline
-    const nameWidth = ctx.measureText(student).width;
-    const lineGrad2 = ctx.createLinearGradient(W/2 - nameWidth/2, 0, W/2 + nameWidth/2, 0);
-    lineGrad2.addColorStop(0, 'transparent'); lineGrad2.addColorStop(0.5, '#00e5a0'); lineGrad2.addColorStop(1, 'transparent');
-    ctx.fillStyle = lineGrad2; ctx.fillRect(W/2 - nameWidth/2, 226, nameWidth, 1);
+    img.onerror = () => {
+      // Fallback in case template image takes time to load: draw clean canvas
+      ctx.fillStyle = '#F7FAFF';
+      ctx.fillRect(0, 0, W, H);
 
-    // "has successfully completed"
-    ctx.fillStyle = '#6b7a99'; ctx.font = '14px sans-serif';
-    ctx.fillText('has successfully completed', W/2, 258);
+      ctx.strokeStyle = '#0f2b5c';
+      ctx.lineWidth = 8;
+      ctx.strokeRect(60, 60, W - 120, H - 120);
 
-    // Course name
-    ctx.fillStyle = '#00e5a0'; ctx.font = 'bold 22px sans-serif';
-    ctx.fillText(course, W/2, 296);
+      ctx.fillStyle = '#0f2b5c';
+      ctx.font = 'bold 50px "Segoe UI", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('DIGITAL ERA TECH TRAINING & HUB', W / 2, 200);
 
-    // Date
-    const dateStr = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-    ctx.fillStyle = '#4a5268'; ctx.font = '12px sans-serif';
-    ctx.fillText(`Issued on ${dateStr}`, W/2, 328);
+      ctx.font = 'bold 80px "Times New Roman", serif';
+      ctx.fillText('CERTIFICATE OF COMPLETION', W / 2, 340);
 
-    // Bottom strip
-    const botGrad = ctx.createLinearGradient(0, H-50, 0, H-30);
-    botGrad.addColorStop(0, 'transparent'); botGrad.addColorStop(1, 'rgba(0,229,160,0.06)');
-    ctx.fillStyle = botGrad; ctx.fillRect(0, H-50, W, 50);
-
-    // XP badge (Move to left)
-    ctx.fillStyle = 'rgba(0,229,160,0.1)'; ctx.strokeStyle = 'rgba(0,229,160,0.3)'; ctx.lineWidth = 1;
-    roundRect(ctx, 40, H - 65, 120, 28, 14);
-    ctx.fill(); ctx.stroke();
-    ctx.textAlign = 'center';
-    ctx.fillStyle = '#00e5a0'; ctx.font = 'bold 12px sans-serif';
-    ctx.fillText(`+500 XP Awarded`, 100, H - 46);
-
-    // --- GOLDEN SEAL ---
-    const sealX = W / 2;
-    const sealY = H - 65;
-    
-    // Ribbon tails
-    ctx.fillStyle = '#b71c1c';
-    ctx.beginPath();
-    ctx.moveTo(sealX - 15, sealY);
-    ctx.lineTo(sealX - 25, sealY + 40);
-    ctx.lineTo(sealX - 10, sealY + 30);
-    ctx.lineTo(sealX + 10, sealY + 30);
-    ctx.lineTo(sealX + 25, sealY + 40);
-    ctx.lineTo(sealX + 15, sealY);
-    ctx.fill();
-
-    // Gold circle
-    const goldGrad = ctx.createRadialGradient(sealX, sealY, 5, sealX, sealY, 25);
-    goldGrad.addColorStop(0, '#ffe55c');
-    goldGrad.addColorStop(1, '#d4af37');
-    ctx.fillStyle = goldGrad;
-    ctx.beginPath();
-    ctx.arc(sealX, sealY, 25, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = '#b8860b';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // Inner gold details
-    ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([2, 2]);
-    ctx.beginPath();
-    ctx.arc(sealX, sealY, 20, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.setLineDash([]); // reset
-
-    ctx.fillStyle = '#fff';
-    ctx.font = 'bold 10px serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('OFFICIAL', sealX, sealY - 2);
-    ctx.fillText('SEAL', sealX, sealY + 8);
-
-    // --- INSTRUCTOR SIGNATURE BLOCK ---
-    ctx.textAlign = 'right';
-
-    ctx.fillStyle = '#ffffff'; 
-    // Use a cursive font for a realistic signature
-    ctx.font = 'normal 32px "Brush Script MT", "Cedarville Cursive", cursive';
-    ctx.fillText('Arua Mabel Chinasa', W - 50, H - 85);
-
-    ctx.strokeStyle = 'rgba(0, 229, 160, 0.5)';
-    ctx.lineWidth = 1;
-    ctx.beginPath(); 
-    ctx.moveTo(W - 260, H - 75);
-    ctx.lineTo(W - 40, H - 75);
-    ctx.stroke();
-
-    ctx.fillStyle = '#6b7a99'; 
-    ctx.font = '12px sans-serif';
-    ctx.fillText('Lead AI & Backend Engineer', W - 50, H - 60);
-
-    ctx.textAlign = 'center';
-  };
-
-  const roundRect = (ctx, x, y, w, h, r) => {
-    ctx.beginPath(); ctx.moveTo(x+r, y);
-    ctx.lineTo(x+w-r, y); ctx.quadraticCurveTo(x+w, y, x+w, y+r);
-    ctx.lineTo(x+w, y+h-r); ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
-    ctx.lineTo(x+r, y+h); ctx.quadraticCurveTo(x, y+h, x, y+h-r);
-    ctx.lineTo(x, y+r); ctx.quadraticCurveTo(x, y, x+r, y);
-    ctx.closePath();
-  };
+      renderTextOnTemplate();
+    };
+  }, [displayName, displayCourse, certNumber]);
 
   const downloadCertificate = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const link = document.createElement('a');
-    link.download = `Digital_Era_Certificate_${(studentName||'Student').replace(/ /g, '_')}.png`;
-    link.href = canvas.toDataURL('image/png');
+    const safeStudent = displayName.replace(/[^a-zA-Z0-9]/g, '_');
+    const safeCourse = displayCourse.replace(/[^a-zA-Z0-9]/g, '_');
+    link.download = `Digital_Era_Certificate_${safeStudent}_${safeCourse}.png`;
+    link.href = canvas.toDataURL('image/png', 1.0);
     link.click();
   };
 
+  const copyVerifyLink = () => {
+    const url = `https://digital-era.live/verify?cert=${encodeURIComponent(certNumber)}`;
+    navigator.clipboard.writeText(url);
+    setCopiedLink(true);
+    setTimeout(() => setCopiedLink(false), 3000);
+  };
+
   const shareToLinkedIn = () => {
-    // In production, this should point to a specific certificate verification page
-    const url = encodeURIComponent('https://digital-era.live'); 
+    const url = encodeURIComponent('https://digital-era.live');
     window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
   };
 
   const shareToTwitter = () => {
     const url = encodeURIComponent('https://digital-era.live');
-    const text = encodeURIComponent(`I just completed the ${courseName} course on Digital Era! Check it out:`);
+    const text = encodeURIComponent(`I just completed ${displayCourse} at Digital Era Tech Training & Hub! Check out my accredited certificate:`);
     window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
   };
 
   const shareToWhatsApp = () => {
     const url = encodeURIComponent('https://digital-era.live');
-    const text = encodeURIComponent(`I just completed the ${courseName} course on Digital Era! Check it out: ${url}`);
+    const text = encodeURIComponent(`I just completed ${displayCourse} at Digital Era Tech Training & Hub (CAC Reg. No. 9882413)! Check it out: ${url}`);
     window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
   };
 
   return (
     <div style={{
       position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
-      backgroundColor: 'rgba(0,0,0,0.85)', display: 'flex', 
+      backgroundColor: 'rgba(5, 10, 20, 0.88)', display: 'flex', 
       justifyContent: 'center', alignItems: 'center', zIndex: 9999,
-      backdropFilter: 'blur(10px)'
+      backdropFilter: 'blur(12px)', padding: '20px', overflowY: 'auto'
     }}>
       <div style={{
-        background: '#0a0d15', padding: '30px', borderRadius: '16px',
+        background: '#0d131f', padding: '32px', borderRadius: '20px',
         border: '1px solid #1e293b', display: 'flex', flexDirection: 'column', alignItems: 'center',
-        boxShadow: '0 20px 50px rgba(0,0,0,0.5)'
+        boxShadow: '0 25px 70px rgba(0,0,0,0.7)', maxWidth: '920px', width: '100%', maxHeight: '95vh', overflowY: 'auto'
       }}>
-        <h2 style={{ color: '#00e5a0', marginTop: 0, marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}><Trophy size={24} /> Certificate Earned!</h2>
-        <p style={{ color: '#94a3b8', marginBottom: '20px' }}>You've successfully completed {courseName}. Download your certificate below.</p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginBottom: '16px' }}>
+          <h2 style={{ color: 'var(--accent, #00e5a0)', margin: 0, display: 'flex', alignItems: 'center', gap: '10px', fontSize: '22px' }}>
+            <Trophy size={26} color="var(--accent, #00e5a0)" /> Official Certificate of Completion
+          </h2>
+          <button 
+            onClick={onClose} 
+            style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
+            aria-label="Close"
+          >
+            <X size={24} />
+          </button>
+        </div>
+
+        <p style={{ color: '#94a3b8', margin: '0 0 20px 0', fontSize: '14px', textAlign: 'center', width: '100%' }}>
+          Accredited by <strong>Digital Era Tech Training & Hub</strong> (CAC Reg. No. 9882413). Issued to <strong>{displayName}</strong>.
+        </p>
         
-        <canvas 
-          ref={canvasRef} 
-          width={620} 
-          height={440} 
-          style={{ width: '100%', maxWidth: '620px', height: 'auto', borderRadius: '8px', boxShadow: '0 0 20px rgba(0,229,160,0.1)' }} 
-        />
+        {/* Certificate Canvas Preview */}
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'center', position: 'relative', background: '#070b14', borderRadius: '12px', padding: '12px', border: '1px solid #1f2937' }}>
+          <canvas 
+            ref={canvasRef} 
+            width={2246} 
+            height={1588} 
+            style={{ width: '100%', maxWidth: '820px', height: 'auto', borderRadius: '8px', boxShadow: '0 10px 30px rgba(0,0,0,0.6)', display: 'block' }} 
+          />
+        </div>
         
-        <div style={{ display: 'flex', gap: '15px', marginTop: '25px', width: '100%', justifyContent: 'center', flexWrap: 'wrap' }}>
+        {/* Actions bar */}
+        <div style={{ display: 'flex', gap: '12px', marginTop: '24px', width: '100%', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <button 
+            onClick={downloadCertificate}
+            style={{ 
+              padding: '12px 28px', background: 'linear-gradient(135deg, #00e5a0, #00bcd4)', 
+              color: '#0d0f14', border: 'none', borderRadius: '10px', cursor: 'pointer', 
+              fontWeight: 'bold', fontSize: '15px', display: 'flex', alignItems: 'center', gap: '8px',
+              boxShadow: '0 4px 15px rgba(0, 229, 160, 0.3)'
+            }}
+          >
+            <Download size={18} /> Download HD Certificate
+          </button>
+
+          <button 
+            onClick={copyVerifyLink}
+            style={{ padding: '12px 20px', background: 'var(--surface2, #1f2937)', color: '#e2e8f0', border: '1px solid #374151', borderRadius: '10px', cursor: 'pointer', fontWeight: '600', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            {copiedLink ? <CheckCircle2 size={16} color="var(--accent)" /> : <Share2 size={16} />}
+            {copiedLink ? 'Link Copied!' : 'Copy Verification Link'}
+          </button>
+
+          <button 
+            onClick={shareToLinkedIn}
+            style={{ padding: '12px 20px', background: '#0a66c2', color: '#fff', border: 'none', borderRadius: '10px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            LinkedIn
+          </button>
+
+          <button 
+            onClick={shareToWhatsApp}
+            style={{ padding: '12px 20px', background: '#25D366', color: '#fff', border: 'none', borderRadius: '10px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            WhatsApp
+          </button>
+
+          <button 
+            onClick={shareToTwitter}
+            style={{ padding: '12px 20px', background: '#1e293b', color: '#cbd5e1', border: '1px solid #334155', borderRadius: '10px', cursor: 'pointer', fontWeight: '600', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            X / Twitter
+          </button>
+
           <button 
             onClick={onClose}
-            style={{ padding: '12px 24px', background: 'transparent', color: '#e2e8f0', border: '1px solid #334155', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
+            style={{ padding: '12px 24px', background: 'transparent', color: '#94a3b8', border: '1px solid #334155', borderRadius: '10px', cursor: 'pointer', fontWeight: '600', fontSize: '14px' }}
           >
             Close
           </button>
-          {isPro ? (
-            <>
-              <button 
-                onClick={downloadCertificate}
-                style={{ padding: '12px 24px', background: '#00e5a0', color: '#000', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}
-              >
-                ⬇ Download
-              </button>
-              <button 
-                onClick={shareToLinkedIn}
-                style={{ padding: '12px 24px', background: '#0a66c2', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}
-              >
-                LinkedIn
-              </button>
-              <button 
-                onClick={shareToTwitter}
-                style={{ padding: '12px 24px', background: '#1DA1F2', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}
-              >
-                Twitter
-              </button>
-              <button 
-                onClick={shareToWhatsApp}
-                style={{ padding: '12px 24px', background: '#25D366', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}
-              >
-                WhatsApp
-              </button>
-            </>
-
-          ) : (
-            <button 
-              onClick={() => { onClose(); navigate('/pricing'); }}
-              style={{ padding: '12px 24px', background: 'linear-gradient(135deg, #00e5a0, #3b82f6)', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}
-            >
-              <Crown size={16} /> Upgrade to Pro to Download
-            </button>
-          )}
         </div>
       </div>
     </div>

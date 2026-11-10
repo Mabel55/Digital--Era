@@ -194,13 +194,34 @@ const Dashboard = () => {
           if (manifest) {
             const totalLessons = manifest.lessons.length;
             const completed = getCourseProgress(courseName);
-            if (totalLessons > 0 && completed === totalLessons) {
+            if (totalLessons > 0 && completed >= totalLessons) {
               completedCourses.push(courseName);
             }
           }
         });
       });
     });
+
+    // Also include any course explicitly marked completed in user progress
+    if (user?.progress && typeof user.progress === 'object') {
+      Object.keys(user.progress).forEach(cName => {
+        if (user.progress[cName]?.is_completed) {
+          completedCourses.push(cName);
+        }
+      });
+    }
+
+    // Include completed database courses
+    if (Array.isArray(dbCourses)) {
+      dbCourses.forEach(c => {
+        const total = c.lesson_count || c.lessons?.length || 0;
+        const done = getDBCourseProgress(c.title);
+        if (total > 0 && done >= total) {
+          completedCourses.push(c.title);
+        }
+      });
+    }
+
     const uniqueCompletedCourses = [...new Set(completedCourses)];
 
   return (
@@ -567,7 +588,7 @@ const Dashboard = () => {
               </div>
               <div style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '8px' }}>{user.last_active_course}</div>
               <div style={{ color: 'var(--text-dim)', fontSize: '14px', marginBottom: '16px' }}>
-                Resume from Lesson {user.last_active_lesson_idx + 1}
+                Resume from Lesson {(user.last_active_lesson_idx ?? (user.progress?.[user.last_active_course]?.completed_lessons || 0)) + 1}
               </div>
               <div className="track-progress-bar">
                 <div className="bar-bg">
@@ -855,10 +876,28 @@ const Dashboard = () => {
           }}>
             <h2 style={{ marginTop: 0, color: 'white' }}>{overviewCourse}</h2>
             <p style={{ color: 'var(--text-dim)', marginBottom: '20px' }}>What you will learn in this course:</p>
-            <ul style={{ color: 'var(--text)', paddingLeft: '20px', marginBottom: '30px', lineHeight: '1.6' }}>
-              {courseManifest[overviewCourse]?.lessons.map((lesson, idx) => (
-                <li key={idx}><strong>{lesson.title}</strong></li>
-              ))}
+            <ul style={{ color: 'var(--text)', paddingLeft: '20px', marginBottom: '30px', lineHeight: '1.8' }}>
+              {courseManifest[overviewCourse]?.lessons.map((lesson, idx) => {
+                const isLessonFree = activeTab === 'Beginner' && idx < 3;
+                return (
+                  <li key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: '8px', marginBottom: '4px' }}>
+                    <span><strong>{idx + 1}.</strong> {lesson.title}</span>
+                    {!subscription?.is_pro && activeTab === 'Beginner' && (
+                      <span style={{ 
+                        fontSize: '10px', 
+                        fontWeight: 'bold',
+                        padding: '2px 8px', 
+                        borderRadius: '10px',
+                        background: isLessonFree ? 'rgba(0, 229, 160, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                        color: isLessonFree ? 'var(--accent)' : '#ef4444',
+                        border: `1px solid ${isLessonFree ? 'rgba(0, 229, 160, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`
+                      }}>
+                        {isLessonFree ? 'FREE' : 'PRO'}
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
               <button 

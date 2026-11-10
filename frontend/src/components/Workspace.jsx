@@ -8,11 +8,12 @@ import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 import { useCurriculum } from '../hooks/useCurriculum';
 import LessonDiscussion from './LessonDiscussion';
-import { queueProgressUpdate, saveCode as saveCodeToDB, loadCode as loadCodeFromDB, saveCachedProgress } from '../lib/offlineDB';
+import { queueProgressUpdate, saveCode as saveCodeToDB, loadCode as loadCodeFromDB, saveCachedProgress, getCachedProgress } from '../lib/offlineDB';
 import { useOfflineSync } from '../hooks/useOfflineSync';
-import { hasAccess } from '../utils/access';
-import { ArrowLeft, Play, Terminal, CheckCircle2, XCircle, Bug, Bot, ArrowUp, PartyPopper, Home, RotateCcw, Menu, Lightbulb, RotateCcw as ResetIcon, Clock, ChevronRight, WifiOff, CloudOff, RefreshCw, Code, Sparkles, Lock, Crown } from 'lucide-react';
+import { hasAccess, hasLessonAccess } from '../utils/access';
+import { ArrowLeft, Play, Terminal, CheckCircle2, XCircle, Bug, Bot, ArrowUp, PartyPopper, Home, RotateCcw, Menu, Lightbulb, RotateCcw as ResetIcon, Clock, ChevronRight, WifiOff, CloudOff, RefreshCw, Code, Sparkles, Lock, Crown, Trophy } from 'lucide-react';
 import GitHubExportModal from './GitHubExportModal';
+import CertificateModal from './CertificateModal';
 import AIChatSidebar from './workspace/AIChatSidebar';
 import CodeEditorArea from './workspace/CodeEditorArea';
 import LessonViewer from './workspace/LessonViewer';
@@ -20,7 +21,7 @@ import LessonViewer from './workspace/LessonViewer';
 const Workspace = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
-  const { token, user, subscription } = useAuth();
+  const { token, user, subscription, refreshUser } = useAuth();
   const { dataSaver } = useDataSaver();
   const { i18n } = useTranslation();
   const courseName = decodeURIComponent(courseId);
@@ -45,6 +46,7 @@ const Workspace = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [quizResult, setQuizResult] = useState(null);
   const [showCelebration, setShowCelebration] = useState(false);
+  const [showCertModal, setShowCertModal] = useState(false);
   const [showStory, setShowStory] = useState(true); // Story Mode State
   const [showHint, setShowHint] = useState(false);
   const [pyodide, setPyodide] = useState(null);
@@ -233,14 +235,50 @@ const Workspace = () => {
     }
   }, [dataSaver, loadPyodideRuntime, determineLanguage]);
 
+  const hasLoadedLessonRef = useRef(false);
+
   useEffect(() => {
-    if (manifest && manifest.lessons.length > 0) {
-      loadLesson(0);
+    hasLoadedLessonRef.current = false;
+  }, [courseName]);
+
+  useEffect(() => {
+    if (!manifest || manifest.lessons.length === 0) return;
+
+    // Check localStorage first for instant synchronous resume
+    const localSaved = localStorage.getItem(`de_last_lesson_${courseName}`);
+    const localIdx = localSaved !== null ? parseInt(localSaved, 10) : 0;
+    
+    // Server progress from user profile
+    const serverProgress = user?.progress?.[courseName]?.completed_lessons;
+    
+    // Determine the highest known completed/saved lesson
+    let targetIdx = localIdx;
+    if (typeof serverProgress === 'number' && serverProgress > targetIdx) {
+      targetIdx = serverProgress;
     }
+    
+    targetIdx = Math.min(Math.max(0, targetIdx), manifest.lessons.length - 1);
+
+    if (!hasLoadedLessonRef.current) {
+      hasLoadedLessonRef.current = true;
+      loadLesson(targetIdx);
+
+      // Also check IndexedDB cache asynchronously as fallback
+      getCachedProgress(courseName).then(cached => {
+        if (cached && typeof cached.completedLessons === 'number' && cached.completedLessons > targetIdx) {
+          const cachedIdx = Math.min(cached.completedLessons, manifest.lessons.length - 1);
+          loadLesson(cachedIdx);
+        }
+      }).catch(() => {});
+    } else if (typeof serverProgress === 'number' && serverProgress > currentLessonIdx) {
+      // If user profile finishes loading with higher progress than current lesson, jump forward
+      loadLesson(Math.min(serverProgress, manifest.lessons.length - 1));
+    }
+    
     setMessages([
       { sender: 'ai', text: `Hi ${user?.full_name?.split(' ')?.[0] || 'there'}! I'm your AI Tutor for **${courseName}**. Ask me anything!` }
     ]);
-  }, [courseName]);
+  }, [courseName, manifest, user?.progress]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -268,6 +306,9 @@ const Workspace = () => {
 
   const loadLesson = (idx) => {
     setCurrentLessonIdx(idx);
+    try {
+      localStorage.setItem(`de_last_lesson_${courseName}`, idx.toString());
+    } catch (e) {}
     const lesson = manifest.lessons[idx];
     
     // Load from localStorage if exists, otherwise starter code
@@ -311,6 +352,7 @@ const Workspace = () => {
   const triggerProgressUpdate = async () => {
     // ★ OFFLINE-FIRST: Always save progress locally first, then try server
     try {
+      localStorage.setItem(`de_last_lesson_${courseName}`, (currentLessonIdx + 1).toString());
       await queueProgressUpdate(courseName, currentLessonIdx, 10);
       await saveCachedProgress(courseName, currentLessonIdx + 1);
     } catch (dbErr) {
@@ -320,6 +362,7 @@ const Workspace = () => {
     const token = localStorage.getItem('token');
     if (token && navigator.onLine) {
         try {
+            const isLastLesson = manifest?.lessons && currentLessonIdx >= manifest.lessons.length - 1;
             const progressRes = await fetch('/users/me/progress', {
                 method: 'POST',
                 headers: { 
@@ -328,7 +371,9 @@ const Workspace = () => {
                 },
                 body: JSON.stringify({ 
                 course_name: courseName, 
-                lesson_index: currentLessonIdx 
+                lesson_index: currentLessonIdx,
+                total_lessons: manifest?.lessons?.length || 1,
+                is_completed: isLastLesson
                 })
             });
             
@@ -337,6 +382,7 @@ const Workspace = () => {
                 if (userData && userData.level) {
                     setTerminalOutput(prev => prev + `\n\nLesson Passed! +10 XP Awarded! You are now level: ${userData.level}`);
                 }
+                if (isLastLesson && refreshUser) refreshUser();
             }
         } catch (e) {
             // Server unreachable — progress is safely queued in IndexedDB
@@ -607,14 +653,21 @@ const Workspace = () => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
+          const isLastLesson = manifest?.lessons && currentLessonIdx >= manifest.lessons.length - 1;
           const progressRes = await fetch('/users/me/progress', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-            body: JSON.stringify({ course_name: courseName, lesson_index: currentLessonIdx })
+            body: JSON.stringify({ 
+              course_name: courseName, 
+              lesson_index: currentLessonIdx,
+              total_lessons: manifest?.lessons?.length || 1,
+              is_completed: isLastLesson
+            })
           });
           if (progressRes.ok) {
             const userData = await progressRes.json();
             setQuizResult(`correct_xp_${userData.level}`);
+            if (isLastLesson && refreshUser) refreshUser();
           }
         } catch (e) { console.error(e); }
       }
@@ -623,10 +676,40 @@ const Workspace = () => {
     }
   };
 
+  const handleFinishCourse = async () => {
+    const activeToken = token || localStorage.getItem('token');
+    if (activeToken) {
+      try {
+        await fetch('/users/me/complete-course', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${activeToken}`
+          },
+          body: JSON.stringify({
+            course_name: courseName,
+            total_lessons: manifest?.lessons?.length || (currentLessonIdx + 1)
+          })
+        });
+        if (refreshUser) refreshUser();
+      } catch (e) {
+        console.error("Failed to record course completion:", e);
+      }
+    }
+    setShowCelebration(true);
+  };
+
   const sendChat = async (e, directMessage = null) => {
     e?.preventDefault();
     const userMsg = directMessage || chatInput;
     if (!userMsg.trim()) return;
+
+    const authToken = token || localStorage.getItem('token');
+    if (!authToken) {
+      setMessages(prev => [...prev, { sender: 'ai', text: "Please log in to use the AI tutor. Create a free account to get started!" }]);
+      setIsTyping(false);
+      return;
+    }
 
     if (aiUsage.isLimited && aiUsage.remaining <= 0 && !isPro) {
       setMessages(prev => [...prev, { sender: 'ai', text: "You've used all your free AI tutor messages for today. Upgrade to Pro for unlimited access!" }]);
@@ -686,7 +769,7 @@ const Workspace = () => {
           method: 'POST',
           headers: { 
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` 
+            'Authorization': `Bearer ${token || localStorage.getItem('token')}` 
           },
           body: JSON.stringify({ 
             message: userMsg, 
@@ -716,7 +799,7 @@ const Workspace = () => {
             method: 'POST',
             headers: { 
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}` 
+              'Authorization': `Bearer ${token || localStorage.getItem('token')}` 
             },
             body: JSON.stringify({ 
               message: userMsg, 
@@ -796,6 +879,7 @@ const Workspace = () => {
 
   const lesson = manifest.lessons[currentLessonIdx];
   const progressPct = ((currentLessonIdx + 1) / manifest.lessons.length) * 100;
+  const hasCurrentLessonAccess = hasLessonAccess(currentLessonIdx, courseLevel, courseTrack, courseName, subscription);
 
   return (
     <div id="workspace" className="screen active" style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -832,7 +916,7 @@ const Workspace = () => {
           </div>
         </div>
         <div className="ws-topbar-right">
-          {!showStory && lesson.type !== 'quiz' && (
+          {!showStory && lesson.type !== 'quiz' && hasCurrentLessonAccess && (
             <>
               <button 
                 onClick={handleGetHint}
@@ -866,15 +950,25 @@ const Workspace = () => {
               </button>
             </>
           )}
-          <button className="btn-submit" onClick={() => {
-            if (currentLessonIdx < manifest.lessons.length - 1) {
-              loadLesson(currentLessonIdx + 1);
-            } else {
-              setShowCelebration(true);
-            }
-          }}>
-            {currentLessonIdx < manifest.lessons.length - 1 ? 'Next Lesson' : 'Finish Course'}
-          </button>
+          {hasCurrentLessonAccess ? (
+            <button className="btn-submit" onClick={() => {
+              if (currentLessonIdx < manifest.lessons.length - 1) {
+                loadLesson(currentLessonIdx + 1);
+              } else {
+                handleFinishCourse();
+              }
+            }}>
+              {currentLessonIdx < manifest.lessons.length - 1 ? 'Next Lesson' : 'Finish Course'}
+            </button>
+          ) : (
+            <button 
+              className="btn-submit" 
+              onClick={() => navigate('/pricing')}
+              style={{ background: 'linear-gradient(135deg, #00e5a0, #00bcd4)', color: '#0d0f14', display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              <Crown size={16} /> Unlock with Pro
+            </button>
+          )}
         </div>
       </div>
       
@@ -917,10 +1011,11 @@ const Workspace = () => {
                 }}
               >
                 <div style={{ background: currentLessonIdx > idx ? 'var(--accent)' : 'var(--surface)', width: '24px', height: '24px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: currentLessonIdx > idx ? 'black' : 'var(--text-dim)', fontSize: '12px', fontWeight: 'bold' }}>
-                  {currentLessonIdx > idx ? <CheckCircle2 size={14} /> : idx + 1}
+                  {currentLessonIdx > idx ? <CheckCircle2 size={14} /> : !hasLessonAccess(idx, courseLevel, courseTrack, courseName, subscription) ? <Lock size={12} color="#ef4444" /> : idx + 1}
                 </div>
                 <div style={{ flex: 1, color: currentLessonIdx === idx ? 'var(--accent)' : 'var(--text)' }}>
                   {lsn.title}
+                  {!hasLessonAccess(idx, courseLevel, courseTrack, courseName, subscription) && <span style={{ fontSize: '10px', color: '#ef4444', marginLeft: '6px' }}>PRO</span>}
                 </div>
               </div>
             ))}
@@ -928,7 +1023,22 @@ const Workspace = () => {
         </div>
       )}
 
-      {showStory ? (
+      {!hasCurrentLessonAccess ? (
+        <div className="story-mode-container" style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', background: 'var(--bg)', padding: '40px', overflowY: 'auto' }}>
+          <div className="story-card" style={{ maxWidth: '600px', width: '100%', background: 'var(--surface)', padding: '60px', borderRadius: '16px', border: '1px solid #ef4444', boxShadow: '0 20px 60px rgba(0,0,0,0.5)', textAlign: 'center' }}>
+            <Lock size={64} color="#ef4444" style={{ marginBottom: '24px' }} />
+            <h2 style={{ color: 'white', marginBottom: '12px' }}>Lesson {currentLessonIdx + 1} is Locked</h2>
+            <p style={{ color: 'var(--text-dim)', marginBottom: '8px' }}>The first 3 lessons of every beginner course are free.</p>
+            <p style={{ color: 'var(--text-dim)', marginBottom: '32px' }}>Upgrade to Pro to unlock all lessons, intermediate & advanced courses, and unlimited AI tutor access.</p>
+            <button onClick={() => navigate('/pricing')} style={{ padding: '14px 28px', background: 'linear-gradient(135deg, #00e5a0, #00bcd4)', color: '#0d0f14', borderRadius: '8px', border: 'none', fontWeight: 'bold', cursor: 'pointer', fontSize: '16px', marginBottom: '16px', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              <Crown size={18} /> Upgrade to Pro
+            </button>
+            <button onClick={() => { if (currentLessonIdx > 0) loadLesson(currentLessonIdx - 1); }} style={{ padding: '10px 20px', background: 'transparent', color: 'var(--text-dim)', border: '1px solid var(--border)', borderRadius: '8px', cursor: 'pointer', width: '100%' }}>
+              Go Back to Previous Lesson
+            </button>
+          </div>
+        </div>
+      ) : showStory ? (
         <div className="story-mode-container" style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', background: 'var(--bg)', padding: '40px', overflowY: 'auto' }}>
           <div className="story-card" style={{ maxWidth: '800px', width: '100%', background: 'var(--surface)', padding: '60px', borderRadius: '16px', border: '1px solid var(--border)', boxShadow: '0 20px 60px rgba(0,0,0,0.5)', animation: 'slideUp 0.5s ease' }}>
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '32px', color: 'var(--accent)', marginBottom: '24px' }}>{lesson.title}</h1>
@@ -1018,6 +1128,13 @@ const Workspace = () => {
             <div className="celebration-actions">
               <button 
                 className="btn-primary" 
+                style={{ padding: '12px 28px', borderRadius: '100px', width: 'auto', background: 'linear-gradient(135deg, #00e5a0, #00bcd4)', color: '#0d0f14', fontWeight: 'bold' }}
+                onClick={() => { setShowCelebration(false); setShowCertModal(true); }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Trophy size={18} /> View Certificate</div>
+              </button>
+              <button 
+                className="btn-primary" 
                 style={{ padding: '12px 28px', borderRadius: '100px', width: 'auto' }}
                 onClick={() => { setShowCelebration(false); navigate('/dashboard'); }}
               >
@@ -1040,6 +1157,14 @@ const Workspace = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {showCertModal && (
+        <CertificateModal
+          courseName={courseName}
+          studentName={user?.full_name}
+          onClose={() => setShowCertModal(false)}
+        />
       )}
 
       <GitHubExportModal 

@@ -24,7 +24,7 @@ class CodeReviewRequest(BaseModel):
 router = APIRouter(tags=["AI Tutor"])
 
 FREE_DAILY_AI_LIMIT = 3
-PRO_DAILY_AI_LIMIT = 30
+PRO_DAILY_AI_LIMIT = 100
 
 
 def _check_ai_limit(db: Session, user: models.User) -> tuple[bool, int, int]:

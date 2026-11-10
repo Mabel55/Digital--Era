@@ -24,7 +24,7 @@ from services.evaluator_service import EvaluatorService
 router = APIRouter(prefix="/api/v2/ai", tags=["AI 2.0 — Orchestrator"])
 
 FREE_DAILY_AI_LIMIT = 3
-PRO_DAILY_AI_LIMIT = 30
+PRO_DAILY_AI_LIMIT = 100
 
 
 class ChatV2Request(BaseModel):

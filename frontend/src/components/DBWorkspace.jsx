@@ -4,11 +4,13 @@ import { useAuth } from '../AuthContext';
 import Editor from '@monaco-editor/react';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
+import { Lock, Crown, Trophy, PartyPopper, Home, RotateCcw } from 'lucide-react';
+import CertificateModal from './CertificateModal';
 
 const DBWorkspace = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
-  const { token, user, subscription } = useAuth();
+  const { token, user, subscription, refreshUser } = useAuth();
   
   const [course, setCourse] = useState(null);
   const [lessons, setLessons] = useState([]);
@@ -24,6 +26,8 @@ const DBWorkspace = () => {
   const [hasError, setHasError] = useState(false);
   const [showStory, setShowStory] = useState(true);
   const [persona, setPersona] = useState('study_buddy');
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [showCertModal, setShowCertModal] = useState(false);
   
   // AI Limits State
   const [aiUsage, setAiUsage] = useState({ remaining: -1, limit: -1, isLimited: false });
@@ -47,7 +51,10 @@ const DBWorkspace = () => {
           const lData = await lRes.json();
           setLessons(lData);
           if (lData.length > 0) {
-            loadLesson(0, lData);
+            const localSaved = localStorage.getItem(`de_last_db_lesson_${courseId}`);
+            const localIdx = localSaved !== null ? parseInt(localSaved, 10) : 0;
+            const targetIdx = Math.min(Math.max(0, localIdx), lData.length - 1);
+            loadLesson(targetIdx, lData);
           }
         }
       }
@@ -58,8 +65,9 @@ const DBWorkspace = () => {
 
   useEffect(() => {
     // Fetch initial AI usage limits for free users
-    if (token && !isPro) {
-      fetch('/ai-usage', { headers: { 'Authorization': `Bearer ${token}` } })
+    const activeToken = token || localStorage.getItem('token');
+    if (activeToken && !isPro) {
+      fetch('/ai-usage', { headers: { 'Authorization': `Bearer ${activeToken}` } })
         .then(res => res.json())
         .then(data => {
           if (data.is_limited) {
@@ -77,7 +85,7 @@ const DBWorkspace = () => {
   useEffect(() => {
     if (course) {
       setMessages([
-        { sender: 'ai', text: `Hi ${user?.name?.split(' ')?.[0] || 'there'}! I'm your AI Tutor for **${course.title}**. Ask me anything!` }
+        { sender: 'ai', text: `Hi ${user?.full_name?.split(' ')?.[0] || 'there'}! I'm your AI Tutor for **${course.title}**. Ask me anything!` }
       ]);
     }
   }, [course]);
@@ -88,6 +96,9 @@ const DBWorkspace = () => {
 
   const loadLesson = (idx, lessonList = lessons) => {
     setCurrentLessonIdx(idx);
+    try {
+      localStorage.setItem(`de_last_db_lesson_${courseId}`, idx.toString());
+    } catch (e) {}
     const lesson = lessonList[idx];
     if (!lesson) return;
     setCode('# Write your code here\n');
@@ -105,12 +116,13 @@ const DBWorkspace = () => {
     const lesson = lessons[currentLessonIdx];
     if (!lesson) return;
     
+    const activeToken = token || localStorage.getItem('token');
     try {
       const res = await fetch(`/lessons/${lesson.id}/submit`, {
         method: "POST",
         headers: { 
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}` 
+            "Authorization": `Bearer ${activeToken}` 
         },
         body: JSON.stringify({ code })
       });
@@ -127,23 +139,27 @@ const DBWorkspace = () => {
         setHasError(codeHasError);
         
         if (!codeHasError) {
-          if (token) {
+          if (activeToken) {
             try {
+              const isLastLesson = currentLessonIdx >= lessons.length - 1;
               const progressRes = await fetch('/users/me/progress', {
                 method: 'POST',
                 headers: { 
                   'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${token}` 
+                  'Authorization': `Bearer ${activeToken}` 
                 },
                 body: JSON.stringify({ 
                   course_name: course.title, 
-                  lesson_id: lesson.id
+                  lesson_id: lesson.id,
+                  total_lessons: lessons.length,
+                  is_completed: isLastLesson
                 })
               });
               
               if (progressRes.ok) {
                 const userData = await progressRes.json();
                 setTerminalOutput(prev => prev + `\n\nLesson Passed! +10 XP Awarded! You are now level: ${userData.level}`);
+                if (isLastLesson && refreshUser) refreshUser();
               }
             } catch (e) {
               console.error("Failed to update progress", e);
@@ -158,6 +174,29 @@ const DBWorkspace = () => {
     } finally {
       setIsRunning(false);
     }
+  };
+
+  const handleFinishCourse = async () => {
+    const activeToken = token || localStorage.getItem('token');
+    if (activeToken) {
+      try {
+        await fetch('/users/me/complete-course', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${activeToken}`
+          },
+          body: JSON.stringify({
+            course_name: course?.title || `Course #${courseId}`,
+            total_lessons: lessons.length
+          })
+        });
+        if (refreshUser) refreshUser();
+      } catch (e) {
+        console.error("Failed to complete course", e);
+      }
+    }
+    setShowCelebration(true);
   };
 
   const sendChat = async (e, directMessage = null) => {
@@ -175,13 +214,14 @@ const DBWorkspace = () => {
     setIsTyping(true);
     
     const currentLesson = lessons[currentLessonIdx];
+    const activeToken = token || localStorage.getItem('token');
 
     try {
       const res = await fetch(`/api/v2/ai/chat`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` 
+          'Authorization': `Bearer ${activeToken}` 
         },
         body: JSON.stringify({ message: userMsg, course: course?.title || "", lesson_id: currentLesson?.id, persona: persona })
       });
@@ -220,6 +260,8 @@ const DBWorkspace = () => {
 
   const lesson = lessons[currentLessonIdx];
   const progressPct = ((currentLessonIdx + 1) / lessons.length) * 100;
+  const courseLevel = course.level || 'Beginner';
+  const hasCurrentLessonAccess = isPro || (courseLevel === 'Beginner' ? currentLessonIdx < 3 : false);
 
   return (
     <div id="workspace" className="screen active" style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -234,28 +276,63 @@ const DBWorkspace = () => {
           </div>
         </div>
         <div className="ws-topbar-right">
-          {!showStory && (
+          {!showStory && hasCurrentLessonAccess && (
             <button className="btn-run" onClick={handleRunCode} disabled={isRunning}>
               ▶ {isRunning ? 'Evaluating...' : 'AI Auto-Grade'}
             </button>
           )}
-          <button className="btn-submit" onClick={() => {
-            if (currentLessonIdx < lessons.length - 1) {
-              loadLesson(currentLessonIdx + 1);
-            } else {
-              alert("Course completed!");
-              navigate('/');
-            }
-          }}>
-            {currentLessonIdx < lessons.length - 1 ? 'Next Lesson' : 'Finish Course'}
-          </button>
+          {hasCurrentLessonAccess ? (
+            <button className="btn-submit" onClick={() => {
+              if (currentLessonIdx < lessons.length - 1) {
+                loadLesson(currentLessonIdx + 1);
+              } else {
+                handleFinishCourse();
+              }
+            }}>
+              {currentLessonIdx < lessons.length - 1 ? 'Next Lesson' : 'Finish Course'}
+            </button>
+          ) : (
+            <button 
+              className="btn-submit" 
+              onClick={() => navigate('/pricing')}
+              style={{ background: 'linear-gradient(135deg, #00e5a0, #00bcd4)', color: '#0d0f14', display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              <Crown size={16} /> Unlock with Pro
+            </button>
+          )}
         </div>
       </div>
       <div className="progress-strip">
         <div className="progress-strip-fill" style={{ width: `${progressPct}%` }}></div>
       </div>
 
-      {showStory ? (
+      {!hasCurrentLessonAccess ? (
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px', background: 'var(--bg)' }}>
+          <div style={{ maxWidth: '540px', width: '100%', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '16px', padding: '40px', textAlign: 'center', boxShadow: '0 20px 60px rgba(0,0,0,0.5)' }}>
+            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(239, 68, 68, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+              <Lock size={32} color="var(--accent)" />
+            </div>
+            <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '12px' }}>This Lesson is Locked</h2>
+            <p style={{ color: 'var(--text-dim)', fontSize: '15px', lineHeight: '1.6', marginBottom: '24px' }}>
+              The first 3 lessons of Beginner courses are free. Upgrade to Digital Era Pro to unlock the full course, interactive practice, auto-grading, and earn your verified certificate.
+            </p>
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+              <button 
+                onClick={() => navigate('/pricing')}
+                style={{ padding: '12px 28px', background: 'linear-gradient(135deg, #00e5a0, #00bcd4)', color: '#0d0f14', fontWeight: 'bold', border: 'none', borderRadius: '100px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
+              >
+                <Crown size={18} /> View Pro Plans
+              </button>
+              <button 
+                onClick={() => loadLesson(0)}
+                style={{ padding: '12px 24px', background: 'transparent', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: '100px', cursor: 'pointer' }}
+              >
+                Review Free Lessons
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : showStory ? (
         <div className="story-mode-container" style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', background: 'var(--bg)', padding: '40px', overflowY: 'auto' }}>
           <div className="story-card" style={{ maxWidth: '800px', width: '100%', background: 'var(--surface)', padding: '60px', borderRadius: '16px', border: '1px solid var(--border)', boxShadow: '0 20px 60px rgba(0,0,0,0.5)', animation: 'slideUp 0.5s ease' }}>
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '32px', color: 'var(--accent)', marginBottom: '24px' }}>{lesson.title}</h1>
@@ -400,6 +477,56 @@ const DBWorkspace = () => {
             </form>
           </div>
         </div>
+      )}
+
+      {/* Course Completion Celebration */}
+      {showCelebration && (
+        <div 
+          className="celebration-overlay" 
+          onClick={() => { setShowCelebration(false); navigate('/'); }}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Course Completed Celebration"
+        >
+          <div className="celebration-card" onClick={e => e.stopPropagation()}>
+            <div className="celebration-emoji"><PartyPopper size={64} color="var(--accent)" /></div>
+            <div className="celebration-title">Course Complete!</div>
+            <div className="celebration-subtitle">
+              Congratulations! You've finished <strong>{course.title}</strong>. Keep the momentum going!
+            </div>
+            <div className="celebration-actions">
+              <button 
+                className="btn-primary" 
+                style={{ padding: '12px 28px', borderRadius: '100px', width: 'auto', background: 'linear-gradient(135deg, #00e5a0, #00bcd4)', color: '#0d0f14', fontWeight: 'bold' }}
+                onClick={() => { setShowCelebration(false); setShowCertModal(true); }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Trophy size={18} /> View Certificate</div>
+              </button>
+              <button 
+                className="btn-primary" 
+                style={{ padding: '12px 28px', borderRadius: '100px', width: 'auto' }}
+                onClick={() => { setShowCelebration(false); navigate('/'); }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Home size={18} /> Back to Dashboard</div>
+              </button>
+              <button 
+                className="returning-btn" 
+                style={{ padding: '12px 28px', borderRadius: '100px', width: 'auto' }}
+                onClick={() => { setShowCelebration(false); loadLesson(0); }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><RotateCcw size={18} /> Review Course</div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showCertModal && (
+        <CertificateModal
+          courseName={course.title}
+          studentName={user?.full_name}
+          onClose={() => setShowCertModal(false)}
+        />
       )}
     </div>
   );

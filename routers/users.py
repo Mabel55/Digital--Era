@@ -267,15 +267,104 @@ def get_user_activity(
     return activities
 
 # ─── COURSE COMPLETIONS ───
+class CompleteCourseRequest(BaseModel):
+    course_name: str
+    total_lessons: int | None = 1
+    score_percent: float | None = 100.0
+
 @router.get("/me/completions", response_model=list[schemas.CourseCompletionResponse])
 def get_user_completions(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
 ):
-    """Returns all completed courses for the user."""
+    """Returns all completed courses for the user, syncing any completed courses from progress."""
+    # Ensure any course marked completed in progress dictionary is in CourseCompletion
+    if current_user.progress and isinstance(current_user.progress, dict):
+        for c_name, c_data in current_user.progress.items():
+            if isinstance(c_data, dict) and c_data.get("is_completed"):
+                existing = db.query(models.CourseCompletion).filter(
+                    models.CourseCompletion.user_id == current_user.id,
+                    models.CourseCompletion.course_name == c_name
+                ).first()
+                if not existing:
+                    new_comp = models.CourseCompletion(
+                        user_id=current_user.id,
+                        course_name=c_name,
+                        total_lessons=c_data.get("completed_lessons", 1),
+                        score_percent=100.0
+                    )
+                    db.add(new_comp)
+        try:
+            db.commit()
+        except Exception:
+            db.rollback()
+
     return db.query(models.CourseCompletion).filter(
         models.CourseCompletion.user_id == current_user.id
     ).order_by(models.CourseCompletion.completed_at.desc()).all()
+
+@router.post("/me/complete-course")
+def record_course_completion(
+    payload: CompleteCourseRequest,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    """Marks a course as completed, records official CourseCompletion, and awards completion XP."""
+    existing = db.query(models.CourseCompletion).filter(
+        models.CourseCompletion.user_id == current_user.id,
+        models.CourseCompletion.course_name == payload.course_name
+    ).first()
+
+    xp_awarded = 0
+    if not existing:
+        new_comp = models.CourseCompletion(
+            user_id=current_user.id,
+            course_name=payload.course_name,
+            total_lessons=payload.total_lessons or 1,
+            score_percent=payload.score_percent or 100.0
+        )
+        db.add(new_comp)
+        
+        # Award completion bonus XP
+        xp_awarded = 50
+        current_user.xp += xp_awarded
+        current_user.level = models.calculate_level(current_user.xp)
+        
+        # Create completion notification
+        _create_notification(
+            db,
+            current_user.id,
+            "certificate",
+            f"🎓 Certificate Earned: {payload.course_name}",
+            "Congratulations! You completed the course. View and download your official certificate anytime.",
+            "/profile"
+        )
+        _track_activity(db, current_user.id, xp=xp_awarded, lessons=0)
+
+    # Sync into user.progress
+    progress = dict(current_user.progress) if current_user.progress else {}
+    if payload.course_name not in progress:
+        progress[payload.course_name] = {"completed_lessons": payload.total_lessons or 1, "is_completed": True}
+    else:
+        progress[payload.course_name]["is_completed"] = True
+        if payload.total_lessons:
+            progress[payload.course_name]["completed_lessons"] = max(
+                progress[payload.course_name].get("completed_lessons", 0),
+                payload.total_lessons
+            )
+    current_user.progress = progress
+
+    db.commit()
+    db.refresh(current_user)
+
+    return {
+        "status": "success",
+        "course_name": payload.course_name,
+        "is_new_completion": existing is None,
+        "xp_awarded": xp_awarded,
+        "total_xp": current_user.xp,
+        "level": current_user.level
+    }
 
 @router.get("/me/resume")
 def generate_tech_resume(
@@ -375,6 +464,8 @@ class ProgressUpdate(BaseModel):
     course_name: str
     lesson_index: int | None = None
     lesson_id: int | None = None
+    total_lessons: int | None = None
+    is_completed: bool | None = None
 
 @router.post("/me/progress", response_model=schemas.UserResponse)
 def update_progress(payload: ProgressUpdate, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
@@ -401,6 +492,35 @@ def update_progress(payload: ProgressUpdate, db: Session = Depends(get_db), curr
             completed_ids.append(payload.lesson_id)
             progress[payload.course_name]["completed_lesson_ids"] = completed_ids
             awarded_xp = True
+            
+    # Auto-detect completion
+    is_course_finished = payload.is_completed or (
+        payload.total_lessons is not None and 
+        payload.lesson_index is not None and 
+        (payload.lesson_index + 1) >= payload.total_lessons
+    )
+    if is_course_finished:
+        progress[payload.course_name]["is_completed"] = True
+        existing_comp = db.query(models.CourseCompletion).filter(
+            models.CourseCompletion.user_id == current_user.id,
+            models.CourseCompletion.course_name == payload.course_name
+        ).first()
+        if not existing_comp:
+            new_comp = models.CourseCompletion(
+                user_id=current_user.id,
+                course_name=payload.course_name,
+                total_lessons=payload.total_lessons or (payload.lesson_index + 1 if payload.lesson_index is not None else 1),
+                score_percent=100.0
+            )
+            db.add(new_comp)
+            _create_notification(
+                db,
+                current_user.id,
+                "certificate",
+                f"🎓 Certificate Earned: {payload.course_name}",
+                "Congratulations! You completed the course and unlocked your official certificate.",
+                "/profile"
+            )
             
     if awarded_xp:
         current_user.xp += xp_to_add
@@ -678,6 +798,52 @@ def grant_pro_access(
         
         # Note: we don't change sub.plan or sub.current_period_end here
         # so they don't get "Full Pro" AI perks unless they actually have them.
+        
+    db.commit()
+    return {"message": f"Successfully granted {payload.access_type} access to {user_to_upgrade.email}"}
+
+@router.post("/admin/grant-pro-by-email")
+def grant_pro_access_by_email(
+    payload: schemas.GrantAccessByEmailRequest,
+    db: Session = Depends(get_db), 
+    current_user: models.User = Depends(get_current_user)
+):
+    """Grant a user specific access by email address."""
+    if not _is_admin(current_user):
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    clean_email = (payload.email or "").strip().lower()
+    if not clean_email:
+        raise HTTPException(status_code=400, detail="Email is required")
+        
+    user_to_upgrade = db.query(models.User).filter(models.User.email.ilike(clean_email)).first()
+    if not user_to_upgrade:
+        raise HTTPException(status_code=404, detail=f"User with email '{clean_email}' not found. Please ask them to register first.")
+        
+    sub = db.query(models.Subscription).filter(models.Subscription.user_id == user_to_upgrade.id).first()
+    if not sub:
+        sub = models.Subscription(user_id=user_to_upgrade.id)
+        db.add(sub)
+
+    from dateutil.relativedelta import relativedelta
+    from datetime import datetime
+    
+    expiration = None
+    if payload.duration_months:
+        expiration = datetime.utcnow() + relativedelta(months=payload.duration_months)
+
+    if payload.access_type == "full_pro":
+        sub.plan = "pro_lifetime" if not payload.duration_months else "pro_monthly"
+        sub.status = "active"
+        sub.current_period_end = expiration
+    else:
+        if not sub.access_grants:
+            sub.access_grants = {}
+        
+        new_grants = dict(sub.access_grants)
+        key = f"{payload.access_type}:{payload.target_name}"
+        new_grants[key] = expiration.isoformat() if expiration else None
+        sub.access_grants = new_grants
         
     db.commit()
     return {"message": f"Successfully granted {payload.access_type} access to {user_to_upgrade.email}"}

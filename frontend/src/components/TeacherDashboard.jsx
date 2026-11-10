@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
-import { Users, BookOpen, Flame, CheckCircle2, XCircle, DollarSign, Bot, Crown, Activity } from 'lucide-react';
+import { Users, BookOpen, Flame, CheckCircle2, XCircle, DollarSign, Bot, Crown, Activity, Search, PlusCircle, Check } from 'lucide-react';
 
 const TeacherDashboard = () => {
   const { token, user } = useAuth();
@@ -17,11 +17,17 @@ const TeacherDashboard = () => {
   const [courseTrack, setCourseTrack] = useState('General');
   const [isUploading, setIsUploading] = useState(false);
 
+  const [studentSearch, setStudentSearch] = useState('');
+  const [grantNotification, setGrantNotification] = useState('');
+
   const [grantModalOpen, setGrantModalOpen] = useState(false);
   const [grantTargetUser, setGrantTargetUser] = useState(null);
   const [grantAccessType, setGrantAccessType] = useState('full_pro');
   const [grantTargetName, setGrantTargetName] = useState('');
   const [grantDurationMonths, setGrantDurationMonths] = useState('');
+
+  const [emailGrantModalOpen, setEmailGrantModalOpen] = useState(false);
+  const [grantEmail, setGrantEmail] = useState('');
 
   const tokenEmail = (() => {
     try {
@@ -93,8 +99,17 @@ const TeacherDashboard = () => {
     setGrantModalOpen(true);
   };
 
+  const openEmailGrantModal = () => {
+    setGrantEmail('');
+    setGrantAccessType('full_pro');
+    setGrantTargetName('');
+    setGrantDurationMonths('');
+    setEmailGrantModalOpen(true);
+  };
+
   const submitGrantPro = async () => {
     if (!grantTargetUser) return;
+    const activeToken = token || localStorage.getItem('token');
     try {
       const payload = {
         access_type: grantAccessType,
@@ -105,36 +120,76 @@ const TeacherDashboard = () => {
       const res = await fetch(`/users/admin/users/${grantTargetUser.id}/grant-pro`, {
         method: 'POST',
         headers: { 
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${activeToken}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(payload)
       });
       if (res.ok) {
+        setGrantNotification(`Access granted to ${grantTargetUser.email}!`);
         fetchStudents();
         fetchMetrics();
         setGrantModalOpen(false);
         setGrantTargetUser(null);
+        setTimeout(() => setGrantNotification(''), 5000);
       } else {
-        const err = await res.json();
+        const err = await res.json().catch(() => ({}));
         alert(err.detail || "Failed to grant access");
       }
     } catch (e) {
       console.error(e);
+      alert("Network error while granting access");
+    }
+  };
+
+  const submitGrantProByEmail = async () => {
+    if (!grantEmail.trim()) return;
+    const activeToken = token || localStorage.getItem('token');
+    try {
+      const payload = {
+        email: grantEmail.trim(),
+        access_type: grantAccessType,
+        target_name: grantTargetName || null,
+        duration_months: grantDurationMonths ? parseInt(grantDurationMonths, 10) : null
+      };
+      
+      const res = await fetch('/users/admin/grant-pro-by-email', {
+        method: 'POST',
+        headers: { 
+          'Authorization': `Bearer ${activeToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        setGrantNotification(data.message || `Granted access to ${grantEmail}!`);
+        fetchStudents();
+        fetchMetrics();
+        setEmailGrantModalOpen(false);
+        setGrantEmail('');
+        setTimeout(() => setGrantNotification(''), 5000);
+      } else {
+        alert(data.detail || "Failed to grant access");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Network error granting access");
     }
   };
 
   const handleToggleBlock = async (userId) => {
     if (!window.confirm("Are you sure you want to toggle the block status of this user?")) return;
+    const activeToken = token || localStorage.getItem('token');
     try {
       const res = await fetch(`/users/admin/users/${userId}/toggle-block`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { 'Authorization': `Bearer ${activeToken}` }
       });
       if (res.ok) {
         fetchStudents();
       } else {
-         const err = await res.json();
+         const err = await res.json().catch(() => ({}));
          alert(err.detail || "Failed to toggle block");
       }
     } catch (e) {
@@ -158,10 +213,11 @@ const TeacherDashboard = () => {
     formData.append('course_level', courseLevel);
     formData.append('course_track', courseTrack);
 
+    const activeToken = token || localStorage.getItem('token');
     try {
       const res = await fetch('/teachers/upload-pdf/', {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` }, // if endpoint is protected
+        headers: { 'Authorization': `Bearer ${activeToken}` },
         body: formData
       });
       
@@ -171,7 +227,7 @@ const TeacherDashboard = () => {
         setUploadFile(null);
         setCourseTitle('');
       } else {
-        const errorData = await res.json();
+        const errorData = await res.json().catch(() => ({}));
         setUploadStatus(`Error: ${errorData.detail || 'Upload failed'}`);
       }
     } catch (e) {
@@ -181,39 +237,72 @@ const TeacherDashboard = () => {
     }
   };
 
+  const filteredStudents = students.filter(student => {
+    if (!studentSearch.trim()) return true;
+    const q = studentSearch.toLowerCase();
+    const nameMatch = (student.full_name || '').toLowerCase().includes(q);
+    const emailMatch = (student.email || '').toLowerCase().includes(q);
+    return nameMatch || emailMatch;
+  });
+
+  const proCount = students.filter(s => s.subscription?.is_pro).length;
+  const freeCount = students.length - proCount;
+
   return (
     <div style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto', color: 'var(--text-bright)' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
-        <h1 style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><Activity size={32} /> Admin Dashboard</h1>
-        <button 
-          onClick={() => navigate('/')}
-          style={{ padding: '10px 20px', background: 'var(--surface)', color: 'white', borderRadius: '8px', border: '1px solid var(--border)', cursor: 'pointer' }}
-          aria-label="Back to Home"
-        >
-          ← Back to Dashboard
-        </button>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', flexWrap: 'wrap', gap: '16px' }}>
+        <div>
+          <h1 style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: 0 }}><Activity size={32} color="var(--accent)" /> Admin Dashboard</h1>
+          <p style={{ margin: '6px 0 0 0', color: 'var(--text-dim)', fontSize: '14px' }}>
+            Manage platform students, grant Pro access, upload course PDFs, and track live analytics.
+          </p>
+        </div>
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <button 
+            onClick={openEmailGrantModal}
+            style={{ padding: '10px 18px', background: 'linear-gradient(135deg, #00e5a0, #00bcd4)', color: '#0d0f14', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            <Crown size={16} /> Grant Pro by Email
+          </button>
+          <button 
+            onClick={() => navigate('/')}
+            style={{ padding: '10px 20px', background: 'var(--surface)', color: 'white', borderRadius: '8px', border: '1px solid var(--border)', cursor: 'pointer' }}
+            aria-label="Back to Home"
+          >
+            ← Back to Dashboard
+          </button>
+        </div>
       </div>
 
-      {metrics && (
-        <div className="admin-metrics-grid">
-          <div className="admin-metric-card">
-            <div className="admin-metric-title"><DollarSign size={16} color="var(--accent)" /> Paystack MRR</div>
-            <div className="admin-metric-value">${metrics.mrr}</div>
-          </div>
-          <div className="admin-metric-card">
-            <div className="admin-metric-title"><Users size={16} color="var(--accent2)" /> Total Users</div>
-            <div className="admin-metric-value">{metrics.total_users}</div>
-          </div>
-          <div className="admin-metric-card">
-            <div className="admin-metric-title"><Crown size={16} color="var(--accent3)" /> Active Pro Users</div>
-            <div className="admin-metric-value">{metrics.active_pro_users}</div>
-          </div>
-          <div className="admin-metric-card">
-            <div className="admin-metric-title"><Bot size={16} color="var(--accent)" /> AI Msgs Today</div>
-            <div className="admin-metric-value">{metrics.ai_messages_today}</div>
-          </div>
+      {grantNotification && (
+        <div style={{ padding: '14px 20px', background: 'rgba(0, 229, 160, 0.15)', border: '1px solid var(--accent)', borderRadius: '10px', color: 'var(--accent)', fontWeight: 'bold', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <CheckCircle2 size={18} /> {grantNotification}
         </div>
       )}
+
+      {/* Analytics & Student Count Metrics Cards */}
+      <div className="admin-metrics-grid" style={{ marginBottom: '32px' }}>
+        <div className="admin-metric-card">
+          <div className="admin-metric-title"><Users size={16} color="var(--accent2)" /> Total Registered Students</div>
+          <div className="admin-metric-value">{students.length || metrics?.total_users || 0}</div>
+        </div>
+        <div className="admin-metric-card">
+          <div className="admin-metric-title"><Crown size={16} color="var(--accent)" /> Active Pro Students</div>
+          <div className="admin-metric-value">{proCount || metrics?.active_pro_users || 0}</div>
+        </div>
+        <div className="admin-metric-card">
+          <div className="admin-metric-title"><Users size={16} color="var(--accent3)" /> Free Tier Students</div>
+          <div className="admin-metric-value">{freeCount}</div>
+        </div>
+        <div className="admin-metric-card">
+          <div className="admin-metric-title"><Bot size={16} color="var(--accent)" /> AI Queries Today</div>
+          <div className="admin-metric-value">{metrics?.ai_messages_today ?? 0}</div>
+        </div>
+        <div className="admin-metric-card">
+          <div className="admin-metric-title"><DollarSign size={16} color="var(--accent)" /> Paystack MRR</div>
+          <div className="admin-metric-value">${metrics?.mrr ?? '0.00'}</div>
+        </div>
+      </div>
 
       <div className="admin-panels-grid">
         {/* PDF Uploader Section */}
@@ -290,8 +379,30 @@ const TeacherDashboard = () => {
         </div>
 
         {/* Student Progress Section */}
-        <div style={{ background: 'var(--surface)', padding: '30px', borderRadius: '12px', border: '1px solid var(--border)', overflowY: 'auto', maxHeight: '600px' }}>
-          <h2 style={{ marginBottom: '20px', color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '8px' }}><Users size={24} /> Student Roster & Progress</h2>
+        <div style={{ background: 'var(--surface)', padding: '30px', borderRadius: '12px', border: '1px solid var(--border)', overflowY: 'auto', maxHeight: '680px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
+            <h2 style={{ margin: 0, color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '20px' }}>
+              <Users size={22} /> Student Roster ({students.length} Total)
+            </h2>
+            <button 
+              onClick={openEmailGrantModal}
+              style={{ padding: '6px 12px', background: 'rgba(0, 229, 160, 0.15)', color: 'var(--accent)', border: '1px solid var(--accent)', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              <Crown size={14} /> Grant Pro
+            </button>
+          </div>
+
+          {/* Search bar */}
+          <div style={{ position: 'relative', marginBottom: '20px' }}>
+            <Search size={16} color="var(--text-dim)" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
+            <input 
+              type="text"
+              placeholder="Search students by name or email..."
+              value={studentSearch}
+              onChange={(e) => setStudentSearch(e.target.value)}
+              style={{ width: '100%', padding: '10px 12px 10px 36px', background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: '8px', color: 'white', fontSize: '13px', outline: 'none' }}
+            />
+          </div>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {loadingStudents ? (
@@ -308,27 +419,32 @@ const TeacherDashboard = () => {
                   Retry Loading
                 </button>
               </div>
-            ) : students.length === 0 ? (
-              <div style={{ color: 'var(--text-dim)', padding: '20px 0' }}>No registered students found.</div>
+            ) : filteredStudents.length === 0 ? (
+              <div style={{ color: 'var(--text-dim)', padding: '20px 0', textAlign: 'center' }}>
+                {studentSearch ? `No students matching "${studentSearch}"` : 'No registered students found.'}
+              </div>
             ) : (
-              students.map(student => (
+              filteredStudents.map(student => (
                 <div key={student.id} style={{ padding: '16px', background: 'var(--bg)', borderRadius: '8px', border: '1px solid var(--border)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
                     <div>
-                      <div style={{ fontWeight: 'bold', fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <div style={{ fontWeight: 'bold', fontSize: '17px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                         {student.full_name || student.email}
                         {!student.is_active && (
                           <span style={{ background: '#ef4444', color: 'white', padding: '2px 6px', borderRadius: '4px', fontSize: '10px' }}>BLOCKED</span>
                         )}
                       </div>
-                      <div style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '4px', display: 'flex', gap: '6px' }}>
+                      <div style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '4px', display: 'flex', gap: '8px', alignItems: 'center' }}>
+                        <span>{student.email}</span>
                         {student.subscription?.is_pro ? (
-                           <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>PRO TIER</span>
+                           <span style={{ color: 'var(--accent)', background: 'rgba(0, 229, 160, 0.1)', border: '1px solid rgba(0, 229, 160, 0.3)', padding: '1px 8px', borderRadius: '12px', fontWeight: 'bold', fontSize: '11px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                             <Crown size={12} /> PRO TIER
+                           </span>
                         ) : (
-                           <span>Free Tier</span>
+                           <span style={{ color: 'var(--text-dim)', background: 'var(--surface)', padding: '1px 8px', borderRadius: '12px', fontSize: '11px' }}>Free Tier</span>
                         )}
                         {student.subscription?.paystack_customer_code && (
-                           <span style={{ color: '#059669', background: '#d1fae5', padding: '2px 6px', borderRadius: '4px', fontWeight: 'bold' }}>Paystack Customer</span>
+                           <span style={{ color: '#059669', background: '#d1fae5', padding: '1px 6px', borderRadius: '4px', fontWeight: 'bold', fontSize: '11px' }}>Paystack</span>
                         )}
                       </div>
                     </div>
@@ -337,16 +453,16 @@ const TeacherDashboard = () => {
                     </div>
                   </div>
                   
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', color: 'var(--text-dim)', marginBottom: '8px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: 'var(--text-dim)', marginBottom: '8px' }}>
                     <span>XP: {student.xp || 0}</span>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Flame size={14} color="var(--accent3)" /> {student.streak || 0} Day Streak</span>
                   </div>
 
                   <div style={{ marginTop: '12px', borderTop: '1px solid var(--border)', paddingTop: '12px' }}>
-                    <div style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--text-dim)', marginBottom: '8px', textTransform: 'uppercase' }}>Course Progress</div>
+                    <div style={{ fontSize: '11px', fontWeight: 'bold', color: 'var(--text-dim)', marginBottom: '6px', textTransform: 'uppercase' }}>Course Progress</div>
                     {student.progress && typeof student.progress === 'object' && Object.keys(student.progress).length > 0 ? (
                       Object.keys(student.progress).map(course => (
-                        <div key={course} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '4px' }}>
+                        <div key={course} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: '3px' }}>
                           <span>{course}</span>
                           <span style={{ color: 'var(--accent)' }}>
                             {typeof student.progress[course] === 'object' ? (student.progress[course]?.completed_lessons ?? 0) : student.progress[course]} lessons
@@ -354,16 +470,16 @@ const TeacherDashboard = () => {
                         </div>
                       ))
                     ) : (
-                      <div style={{ fontSize: '14px', color: 'var(--text-dim)' }}>No active courses yet.</div>
+                      <div style={{ fontSize: '13px', color: 'var(--text-dim)' }}>No active courses yet.</div>
                     )}
                   </div>
                   
-                  <div style={{ marginTop: '16px', borderTop: '1px solid var(--border)', paddingTop: '16px', display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                  <div style={{ marginTop: '14px', borderTop: '1px solid var(--border)', paddingTop: '14px', display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
                     <button 
                       onClick={() => openGrantModal(student)}
-                      style={{ padding: '6px 12px', background: 'var(--surface2)', color: 'var(--accent)', borderRadius: '6px', border: '1px solid var(--border)', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
+                      style={{ padding: '6px 14px', background: 'rgba(0, 229, 160, 0.15)', color: 'var(--accent)', border: '1px solid var(--accent)', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px' }}
                     >
-                      Grant Access
+                      <Crown size={12} /> Grant Access
                     </button>
                     <button 
                       onClick={() => handleToggleBlock(student.id)}
@@ -379,10 +495,14 @@ const TeacherDashboard = () => {
         </div>
       </div>
 
+      {/* Modal: Grant Access to Specific User */}
       {grantModalOpen && grantTargetUser && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
           <div style={{ background: 'var(--surface)', padding: '30px', borderRadius: '16px', width: '100%', maxWidth: '500px', border: '1px solid var(--border)', color: 'var(--text-bright)' }}>
-            <h2 style={{ marginTop: 0 }}>Grant Access to {grantTargetUser.full_name || grantTargetUser.email}</h2>
+            <h2 style={{ marginTop: 0, display: 'flex', alignItems: 'center', gap: '8px' }}><Crown size={22} color="var(--accent)" /> Grant Access</h2>
+            <p style={{ color: 'var(--text-dim)', marginBottom: '20px' }}>
+              Student: <strong>{grantTargetUser.full_name || grantTargetUser.email}</strong> ({grantTargetUser.email})
+            </p>
             
             <div style={{ marginBottom: '16px' }}>
               <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>Access Type</label>
@@ -414,7 +534,7 @@ const TeacherDashboard = () => {
             <div style={{ marginBottom: '24px' }}>
               <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>Duration</label>
               <select value={grantDurationMonths} onChange={(e) => setGrantDurationMonths(e.target.value)} style={{ width: '100%', padding: '10px', borderRadius: '8px', background: 'var(--bg)', color: 'white', border: '1px solid var(--border)' }}>
-                <option value="">Lifetime</option>
+                <option value="">Lifetime (No Expiration)</option>
                 <option value="1">1 Month</option>
                 <option value="2">2 Months</option>
                 <option value="3">3 Months</option>
@@ -425,7 +545,76 @@ const TeacherDashboard = () => {
 
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
               <button onClick={() => setGrantModalOpen(false)} style={{ padding: '10px 20px', background: 'transparent', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>Cancel</button>
-              <button onClick={submitGrantPro} disabled={grantAccessType !== 'full_pro' && !grantTargetName} style={{ padding: '10px 20px', background: 'var(--accent)', color: 'black', border: 'none', borderRadius: '8px', cursor: (grantAccessType !== 'full_pro' && !grantTargetName) ? 'not-allowed' : 'pointer', fontWeight: 'bold', opacity: (grantAccessType !== 'full_pro' && !grantTargetName) ? 0.5 : 1 }}>Grant Access</button>
+              <button onClick={submitGrantPro} disabled={grantAccessType !== 'full_pro' && !grantTargetName} style={{ padding: '10px 20px', background: 'var(--accent)', color: 'black', border: 'none', borderRadius: '8px', cursor: (grantAccessType !== 'full_pro' && !grantTargetName) ? 'not-allowed' : 'pointer', fontWeight: 'bold', opacity: (grantAccessType !== 'full_pro' && !grantTargetName) ? 0.5 : 1 }}>
+                Confirm & Grant Access
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Grant Access by Email Directly */}
+      {emailGrantModalOpen && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
+          <div style={{ background: 'var(--surface)', padding: '30px', borderRadius: '16px', width: '100%', maxWidth: '500px', border: '1px solid var(--border)', color: 'var(--text-bright)' }}>
+            <h2 style={{ marginTop: 0, display: 'flex', alignItems: 'center', gap: '8px' }}><Crown size={22} color="var(--accent)" /> Quick Grant Pro by Email</h2>
+            <p style={{ color: 'var(--text-dim)', marginBottom: '20px' }}>Enter the student's registered email address to grant them Pro access.</p>
+
+            <div style={{ marginBottom: '16px' }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>Student Email Address</label>
+              <input 
+                type="email" 
+                placeholder="student@example.com"
+                value={grantEmail} 
+                onChange={(e) => setGrantEmail(e.target.value)} 
+                style={{ width: '100%', padding: '12px', borderRadius: '8px', background: 'var(--bg)', color: 'white', border: '1px solid var(--border)', fontSize: '14px' }} 
+              />
+            </div>
+            
+            <div style={{ marginBottom: '16px' }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>Access Type</label>
+              <select value={grantAccessType} onChange={(e) => setGrantAccessType(e.target.value)} style={{ width: '100%', padding: '10px', borderRadius: '8px', background: 'var(--bg)', color: 'white', border: '1px solid var(--border)' }}>
+                <option value="full_pro">Full Pro (Unlock Everything)</option>
+                <option value="track">Specific Track</option>
+                <option value="course">Specific Course</option>
+              </select>
+            </div>
+
+            {grantAccessType !== 'full_pro' && (
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>Target Name ({grantAccessType})</label>
+                {grantAccessType === 'track' ? (
+                  <select value={grantTargetName} onChange={(e) => setGrantTargetName(e.target.value)} style={{ width: '100%', padding: '10px', borderRadius: '8px', background: 'var(--bg)', color: 'white', border: '1px solid var(--border)' }}>
+                    <option value="">Select a Track...</option>
+                    <option value="Backend">Backend</option>
+                    <option value="Frontend">Frontend</option>
+                    <option value="Data Science">Data Science</option>
+                    <option value="AI Engineering">AI Engineering</option>
+                    <option value="Python Core">Python Core</option>
+                  </select>
+                ) : (
+                  <input type="text" placeholder="e.g. Intro to Data Science" value={grantTargetName} onChange={(e) => setGrantTargetName(e.target.value)} style={{ width: '100%', padding: '10px', borderRadius: '8px', background: 'var(--bg)', color: 'white', border: '1px solid var(--border)' }} />
+                )}
+              </div>
+            )}
+
+            <div style={{ marginBottom: '24px' }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>Duration</label>
+              <select value={grantDurationMonths} onChange={(e) => setGrantDurationMonths(e.target.value)} style={{ width: '100%', padding: '10px', borderRadius: '8px', background: 'var(--bg)', color: 'white', border: '1px solid var(--border)' }}>
+                <option value="">Lifetime (No Expiration)</option>
+                <option value="1">1 Month</option>
+                <option value="2">2 Months</option>
+                <option value="3">3 Months</option>
+                <option value="6">6 Months</option>
+                <option value="12">1 Year</option>
+              </select>
+            </div>
+
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+              <button onClick={() => setEmailGrantModalOpen(false)} style={{ padding: '10px 20px', background: 'transparent', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>Cancel</button>
+              <button onClick={submitGrantProByEmail} disabled={!grantEmail.trim() || (grantAccessType !== 'full_pro' && !grantTargetName)} style={{ padding: '10px 20px', background: 'linear-gradient(135deg, #00e5a0, #00bcd4)', color: '#0d0f14', border: 'none', borderRadius: '8px', cursor: (!grantEmail.trim() || (grantAccessType !== 'full_pro' && !grantTargetName)) ? 'not-allowed' : 'pointer', fontWeight: 'bold', opacity: (!grantEmail.trim() || (grantAccessType !== 'full_pro' && !grantTargetName)) ? 0.5 : 1 }}>
+                Grant Pro to Email
+              </button>
             </div>
           </div>
         </div>

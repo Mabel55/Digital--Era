@@ -6,6 +6,7 @@ import { User, Flame, Trophy, Award, Edit3, ArrowLeft, CheckCircle2, TrendingUp,
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
 import { FileText, Loader2, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import CertificateModal from './CertificateModal';
 
 const mockChartData = [
   { day: 'Mon', xp: 20 },
@@ -42,6 +43,7 @@ const Profile = () => {
   const [isGeneratingResume, setIsGeneratingResume] = useState(false);
   const [resumeMarkdown, setResumeMarkdown] = useState('');
   const [showResumeModal, setShowResumeModal] = useState(false);
+  const [selectedCertCourse, setSelectedCertCourse] = useState(null);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -325,14 +327,27 @@ const Profile = () => {
                 {completions.length > 0 ? (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     {completions.map(c => (
-                      <div key={c.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: 'var(--surface2)', borderRadius: '8px', border: '1px solid var(--border)' }}>
-                        <div style={{ width: '40px', height: '40px', background: 'rgba(0, 229, 160, 0.1)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <Award size={20} color="var(--accent)" />
+                      <div key={c.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', padding: '12px 16px', background: 'var(--surface2)', borderRadius: '10px', border: '1px solid var(--border)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <div style={{ width: '40px', height: '40px', background: 'rgba(0, 229, 160, 0.1)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Award size={20} color="var(--accent)" />
+                          </div>
+                          <div>
+                            <div style={{ fontWeight: 'bold', fontSize: '14px' }}>{c.course_name}</div>
+                            <div style={{ fontSize: '12px', color: 'var(--text-dim)' }}>Completed {new Date(c.completed_at).toLocaleDateString()}</div>
+                          </div>
                         </div>
-                        <div>
-                          <div style={{ fontWeight: 'bold', fontSize: '14px' }}>{c.course_name}</div>
-                          <div style={{ fontSize: '12px', color: 'var(--text-dim)' }}>Completed {new Date(c.completed_at).toLocaleDateString()}</div>
-                        </div>
+                        <button
+                          onClick={() => setSelectedCertCourse(c.course_name)}
+                          style={{
+                            padding: '6px 14px', background: 'rgba(0, 229, 160, 0.12)',
+                            color: 'var(--accent)', border: '1px solid var(--accent)',
+                            borderRadius: '20px', cursor: 'pointer', fontSize: '12px',
+                            fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px'
+                          }}
+                        >
+                          <Trophy size={14} /> View Certificate
+                        </button>
                       </div>
                     ))}
                   </div>
@@ -374,6 +389,14 @@ const Profile = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {selectedCertCourse && (
+        <CertificateModal
+          courseName={selectedCertCourse}
+          studentName={user?.full_name}
+          onClose={() => setSelectedCertCourse(null)}
+        />
       )}
     </div>
   );
