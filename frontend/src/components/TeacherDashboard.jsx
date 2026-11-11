@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
-import { Users, BookOpen, Flame, CheckCircle2, XCircle, DollarSign, Bot, Crown, Activity, Search, PlusCircle, Check } from 'lucide-react';
+import { Users, BookOpen, Flame, CheckCircle2, XCircle, DollarSign, Bot, Crown, Activity, Search, PlusCircle, Check, Sparkles } from 'lucide-react';
 
 const TeacherDashboard = () => {
   const { token, user } = useAuth();
@@ -133,11 +133,34 @@ const TeacherDashboard = () => {
       const data = await res.json().catch(() => ({}));
       if (res.ok) {
         setGrantNotification(data.message || `Access granted to ${grantTargetUser.email}!`);
+        const months = grantDurationMonths ? parseInt(grantDurationMonths, 10) : null;
+        const expDate = months ? new Date(Date.now() + months * 30 * 24 * 3600 * 1000).toISOString() : null;
+        const isFullPro = grantAccessType === 'full_pro';
+        const grantKey = isFullPro ? null : `${grantAccessType}:${grantTargetName}`;
+
+        setStudents(prev => prev.map(s => {
+          if (s.id === grantTargetUser.id) {
+            const currentGrants = s.subscription?.access_grants || {};
+            const updatedGrants = grantKey ? { ...currentGrants, [grantKey]: expDate } : currentGrants;
+            return {
+              ...s,
+              subscription: {
+                ...(s.subscription || {}),
+                plan: isFullPro ? (months ? 'pro_monthly' : 'pro_lifetime') : (s.subscription?.plan || 'free'),
+                is_pro: isFullPro ? true : Boolean(s.subscription?.is_pro),
+                has_grants: true,
+                access_grants: updatedGrants
+              }
+            };
+          }
+          return s;
+        }));
+
         fetchStudents();
         fetchMetrics();
         setGrantModalOpen(false);
         setGrantTargetUser(null);
-        setTimeout(() => setGrantNotification(''), 5000);
+        setTimeout(() => setGrantNotification(''), 6000);
       } else {
         let errorMsg = "Failed to grant access";
         if (typeof data.detail === 'string') {
@@ -177,11 +200,35 @@ const TeacherDashboard = () => {
       const data = await res.json().catch(() => ({}));
       if (res.ok) {
         setGrantNotification(data.message || `Granted access to ${grantEmail}!`);
+        const cleanE = grantEmail.trim().toLowerCase();
+        const months = grantDurationMonths ? parseInt(grantDurationMonths, 10) : null;
+        const expDate = months ? new Date(Date.now() + months * 30 * 24 * 3600 * 1000).toISOString() : null;
+        const isFullPro = grantAccessType === 'full_pro';
+        const grantKey = isFullPro ? null : `${grantAccessType}:${grantTargetName}`;
+
+        setStudents(prev => prev.map(s => {
+          if (s.email?.toLowerCase() === cleanE) {
+            const currentGrants = s.subscription?.access_grants || {};
+            const updatedGrants = grantKey ? { ...currentGrants, [grantKey]: expDate } : currentGrants;
+            return {
+              ...s,
+              subscription: {
+                ...(s.subscription || {}),
+                plan: isFullPro ? (months ? 'pro_monthly' : 'pro_lifetime') : (s.subscription?.plan || 'free'),
+                is_pro: isFullPro ? true : Boolean(s.subscription?.is_pro),
+                has_grants: true,
+                access_grants: updatedGrants
+              }
+            };
+          }
+          return s;
+        }));
+
         fetchStudents();
         fetchMetrics();
         setEmailGrantModalOpen(false);
         setGrantEmail('');
-        setTimeout(() => setGrantNotification(''), 5000);
+        setTimeout(() => setGrantNotification(''), 6000);
       } else {
         let errorMsg = "Failed to grant access";
         if (typeof data.detail === 'string') {
@@ -266,7 +313,18 @@ const TeacherDashboard = () => {
     return nameMatch || emailMatch;
   });
 
-  const proCount = students.filter(s => s.subscription?.is_pro).length;
+  const hasActiveAccess = (s) => {
+    if (s.subscription?.is_pro) return true;
+    if (s.subscription?.has_grants) return true;
+    const grants = s.subscription?.access_grants;
+    if (grants && typeof grants === 'object' && Object.keys(grants).length > 0) {
+      const now = new Date();
+      return Object.values(grants).some(exp => exp === null || exp === undefined || new Date(exp) > now);
+    }
+    return false;
+  };
+
+  const proCount = students.filter(hasActiveAccess).length;
   const freeCount = students.length - proCount;
 
   return (
@@ -455,15 +513,41 @@ const TeacherDashboard = () => {
                           <span style={{ background: '#ef4444', color: 'white', padding: '2px 6px', borderRadius: '4px', fontSize: '10px' }}>BLOCKED</span>
                         )}
                       </div>
-                      <div style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '4px', display: 'flex', gap: '8px', alignItems: 'center' }}>
+                      <div style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '4px', display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
                         <span>{student.email}</span>
                         {student.subscription?.is_pro ? (
                            <span style={{ color: 'var(--accent)', background: 'rgba(0, 229, 160, 0.1)', border: '1px solid rgba(0, 229, 160, 0.3)', padding: '1px 8px', borderRadius: '12px', fontWeight: 'bold', fontSize: '11px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                              <Crown size={12} /> PRO TIER
                            </span>
                         ) : (
-                           <span style={{ color: 'var(--text-dim)', background: 'var(--surface)', padding: '1px 8px', borderRadius: '12px', fontSize: '11px' }}>Free Tier</span>
+                           (!student.subscription?.access_grants || Object.keys(student.subscription.access_grants).length === 0) ? (
+                             <span style={{ color: 'var(--text-dim)', background: 'var(--surface)', padding: '1px 8px', borderRadius: '12px', fontSize: '11px' }}>Free Tier</span>
+                           ) : null
                         )}
+                        {student.subscription?.access_grants && typeof student.subscription.access_grants === 'object' && Object.entries(student.subscription.access_grants).map(([grantKey, expiry]) => {
+                          const isExpired = expiry && new Date(expiry) <= new Date();
+                          const expiryText = !expiry ? 'Lifetime' : isExpired ? 'Expired' : `until ${new Date(expiry).toLocaleDateString()}`;
+                          return (
+                            <span 
+                              key={grantKey} 
+                              style={{
+                                color: isExpired ? '#f87171' : '#38bdf8',
+                                background: isExpired ? 'rgba(239, 68, 68, 0.1)' : 'rgba(56, 189, 248, 0.15)',
+                                border: `1px solid ${isExpired ? 'rgba(239, 68, 68, 0.3)' : 'rgba(56, 189, 248, 0.4)'}`,
+                                padding: '1px 8px',
+                                borderRadius: '12px',
+                                fontWeight: 'bold',
+                                fontSize: '11px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '4px'
+                              }}
+                              title={`Grant: ${grantKey} (${expiryText})`}
+                            >
+                              <Sparkles size={11} /> {grantKey.toUpperCase()} ({expiryText})
+                            </span>
+                          );
+                        })}
                         {student.subscription?.paystack_customer_code && (
                            <span style={{ color: '#059669', background: '#d1fae5', padding: '1px 6px', borderRadius: '4px', fontWeight: 'bold', fontSize: '11px' }}>Paystack</span>
                         )}

@@ -186,6 +186,37 @@ class Subscription(Base):
         except Exception:
             return False
 
+    @property
+    def has_grants(self) -> bool:
+        """Check if user has any active track or course grants."""
+        try:
+            grants = self.access_grants
+            if not grants:
+                return False
+            if isinstance(grants, str):
+                import json
+                grants = json.loads(grants)
+            if not isinstance(grants, dict) or not grants:
+                return False
+            now = datetime.utcnow()
+            for k, exp in grants.items():
+                if exp is None:
+                    return True
+                try:
+                    exp_dt = datetime.fromisoformat(str(exp).replace("Z", "+00:00"))
+                    if exp_dt.tzinfo is not None:
+                        from datetime import timezone
+                        now_utc = datetime.now(timezone.utc)
+                        if exp_dt > now_utc:
+                            return True
+                    elif exp_dt > now:
+                        return True
+                except Exception:
+                    return True
+            return False
+        except Exception:
+            return False
+
 
 class Certificate(Base):
     """Stores issued certificates with unique verification codes."""

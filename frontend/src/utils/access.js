@@ -1,3 +1,37 @@
+function parseGrants(subscription) {
+  if (!subscription) return {};
+  let grants = subscription.access_grants || {};
+  if (typeof grants === 'string') {
+    try {
+      grants = JSON.parse(grants);
+    } catch {
+      grants = {};
+    }
+  }
+  return typeof grants === 'object' && grants !== null ? grants : {};
+}
+
+function checkGrantMatch(grants, type, targetName) {
+  if (!grants || !targetName) return false;
+  const now = new Date();
+  const cleanTarget = targetName.trim().toLowerCase();
+  const cleanType = type.trim().toLowerCase();
+
+  for (const [key, expiry] of Object.entries(grants)) {
+    const parts = key.split(':');
+    if (parts.length < 2) continue;
+    const gType = parts[0].trim().toLowerCase();
+    const gName = parts.slice(1).join(':').trim().toLowerCase();
+
+    if (gType === cleanType && gName === cleanTarget) {
+      if (expiry === null || expiry === undefined || new Date(expiry) > now) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 /**
  * Checks if a user has access to a specific course.
  * 
@@ -22,26 +56,9 @@ export function hasAccess(level, trackName, courseName, subscription) {
     return true;
   }
 
-  // Check specific access grants
-  const grants = subscription.access_grants || {};
-  
-  const now = new Date();
-  
-  // Check course grant
-  const courseGrant = grants[`course:${courseName}`];
-  if (courseGrant !== undefined) {
-    if (courseGrant === null || new Date(courseGrant) > now) {
-      return true;
-    }
-  }
-
-  // Check track grant
-  const trackGrant = grants[`track:${trackName}`];
-  if (trackGrant !== undefined) {
-    if (trackGrant === null || new Date(trackGrant) > now) {
-      return true;
-    }
-  }
+  const grants = parseGrants(subscription);
+  if (checkGrantMatch(grants, 'course', courseName)) return true;
+  if (checkGrantMatch(grants, 'track', trackName)) return true;
 
   return false;
 }
@@ -72,23 +89,9 @@ export function hasLessonAccess(lessonIdx, level, trackName, courseName, subscri
     return true;
   }
 
-  // Check specific access grants
-  const grants = subscription.access_grants || {};
-  const now = new Date();
-
-  const courseGrant = grants[`course:${courseName}`];
-  if (courseGrant !== undefined) {
-    if (courseGrant === null || new Date(courseGrant) > now) {
-      return true;
-    }
-  }
-
-  const trackGrant = grants[`track:${trackName}`];
-  if (trackGrant !== undefined) {
-    if (trackGrant === null || new Date(trackGrant) > now) {
-      return true;
-    }
-  }
+  const grants = parseGrants(subscription);
+  if (checkGrantMatch(grants, 'course', courseName)) return true;
+  if (checkGrantMatch(grants, 'track', trackName)) return true;
 
   return false;
 }

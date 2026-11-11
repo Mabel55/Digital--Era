@@ -771,6 +771,7 @@ def grant_pro_access(
         db.add(sub)
         db.flush()
 
+    from sqlalchemy.orm.attributes import flag_modified
     from dateutil.relativedelta import relativedelta
     from datetime import datetime
     
@@ -802,14 +803,26 @@ def grant_pro_access(
         key = f"{payload.access_type}:{payload.target_name}"
         new_grants[key] = expiration.isoformat() if expiration else None
         sub.access_grants = new_grants
+        sub.status = "active"
+        flag_modified(sub, "access_grants")
 
     try:
         db.commit()
+        db.refresh(sub)
     except Exception as commit_err:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Database commit error: {str(commit_err)}")
 
-    return {"message": f"Successfully granted {payload.access_type} access to {user_to_upgrade.email}"}
+    return {
+        "message": f"Successfully granted {payload.access_type} access to {user_to_upgrade.email}",
+        "user_id": user_to_upgrade.id,
+        "access_type": payload.access_type,
+        "target_name": payload.target_name,
+        "plan": sub.plan,
+        "is_pro": sub.is_pro,
+        "has_grants": sub.has_grants,
+        "access_grants": sub.access_grants
+    }
 
 @router.post("/admin/grant-pro-by-email")
 def grant_pro_access_by_email(
@@ -835,6 +848,7 @@ def grant_pro_access_by_email(
         db.add(sub)
         db.flush()
 
+    from sqlalchemy.orm.attributes import flag_modified
     from dateutil.relativedelta import relativedelta
     from datetime import datetime
     
@@ -865,14 +879,26 @@ def grant_pro_access_by_email(
         key = f"{payload.access_type}:{payload.target_name}"
         new_grants[key] = expiration.isoformat() if expiration else None
         sub.access_grants = new_grants
+        sub.status = "active"
+        flag_modified(sub, "access_grants")
 
     try:
         db.commit()
+        db.refresh(sub)
     except Exception as commit_err:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Database commit error: {str(commit_err)}")
 
-    return {"message": f"Successfully granted {payload.access_type} access to {user_to_upgrade.email}"}
+    return {
+        "message": f"Successfully granted {payload.access_type} access to {user_to_upgrade.email}",
+        "user_id": user_to_upgrade.id,
+        "access_type": payload.access_type,
+        "target_name": payload.target_name,
+        "plan": sub.plan,
+        "is_pro": sub.is_pro,
+        "has_grants": sub.has_grants,
+        "access_grants": sub.access_grants
+    }
 
 @router.post("/admin/users/{user_id}/toggle-block")
 def toggle_user_block(user_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
@@ -916,18 +942,59 @@ def get_all_users_for_admin(db: Session = Depends(get_db), current_user: models.
         except Exception:
             db.rollback()
             try:
-                # Raw SQL fallback using core columns guaranteed to exist
+                # Raw SQL fallback joining subscriptions so subscription and grants are never lost
                 from sqlalchemy import text
-                rows = db.execute(text("SELECT id, email, full_name, role, is_active, xp, level, streak, progress FROM users ORDER BY id DESC")).fetchall()
+                import json
+                try:
+                    rows = db.execute(text("""
+                        SELECT u.id, u.email, u.full_name, u.role, u.is_active, u.xp, u.level, u.streak, u.progress,
+                               s.id AS sub_id, s.plan AS sub_plan, s.status AS sub_status, s.current_period_end AS sub_cpe,
+                               s.paystack_customer_code AS sub_pcc, s.access_grants AS sub_grants
+                        FROM users u
+                        LEFT JOIN subscriptions s ON s.user_id = u.id
+                        ORDER BY u.id DESC
+                    """)).fetchall()
+                except Exception:
+                    # Fallback if subscriptions table join fails
+                    rows = db.execute(text("SELECT id, email, full_name, role, is_active, xp, level, streak, progress FROM users ORDER BY id DESC")).fetchall()
+
                 fallback_result = []
                 for r in rows:
                     prog = r[8] or {}
                     if isinstance(prog, str):
                         try:
-                            import json
                             prog = json.loads(prog)
                         except Exception:
                             prog = {}
+
+                    sub_dict = None
+                    if len(r) > 9 and r[9] is not None:
+                        sub_grants = r[14] if len(r) > 14 else {}
+                        if isinstance(sub_grants, str):
+                            try:
+                                sub_grants = json.loads(sub_grants)
+                            except Exception:
+                                sub_grants = {}
+                        if not isinstance(sub_grants, dict):
+                            sub_grants = {}
+
+                        sub_plan = r[10] or "free"
+                        sub_status = r[11] or "active"
+                        sub_cpe = r[12]
+                        is_pro = (sub_plan != "free" and sub_status in ("active", "trialing"))
+                        has_grants = len(sub_grants) > 0
+
+                        sub_dict = {
+                            "id": r[9],
+                            "plan": sub_plan,
+                            "status": sub_status,
+                            "is_pro": is_pro,
+                            "has_grants": has_grants,
+                            "current_period_end": sub_cpe.isoformat() if hasattr(sub_cpe, 'isoformat') else str(sub_cpe) if sub_cpe else None,
+                            "paystack_customer_code": r[13],
+                            "access_grants": sub_grants
+                        }
+
                     fallback_result.append({
                         "id": r[0],
                         "email": r[1] or "",
@@ -938,7 +1005,7 @@ def get_all_users_for_admin(db: Session = Depends(get_db), current_user: models.
                         "level": r[6] or "Beginner",
                         "streak": r[7] or 0,
                         "progress": prog if isinstance(prog, dict) else {},
-                        "subscription": None
+                        "subscription": sub_dict
                     })
                 return fallback_result
             except Exception as final_err:
@@ -965,6 +1032,12 @@ def get_all_users_for_admin(db: Session = Depends(get_db), current_user: models.
                 except Exception:
                     pass
 
+                has_grants_val = False
+                try:
+                    has_grants_val = bool(sub.has_grants)
+                except Exception:
+                    pass
+
                 cpe = None
                 if getattr(sub, 'current_period_end', None):
                     try:
@@ -977,6 +1050,7 @@ def get_all_users_for_admin(db: Session = Depends(get_db), current_user: models.
                     "plan": getattr(sub, 'plan', 'free') or "free",
                     "status": getattr(sub, 'status', 'active') or "active",
                     "is_pro": is_pro_val,
+                    "has_grants": has_grants_val,
                     "current_period_end": cpe,
                     "paystack_customer_code": getattr(sub, 'paystack_customer_code', None),
                     "access_grants": grants if isinstance(grants, dict) else {}

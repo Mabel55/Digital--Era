@@ -23,16 +23,49 @@ def safe_init_db():
         # Self-heal missing columns on existing tables
         insp = inspect(engine)
         tables = insp.get_table_names()
-        if 'users' in tables:
-            cols = [c['name'] for c in insp.get_columns('users')]
-            with engine.connect() as conn:
-                if 'created_at' not in cols:
-                    try:
-                        conn.execute(text("ALTER TABLE users ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP"))
-                        conn.commit()
-                        print("[Migration] Added created_at to users table.")
-                    except Exception as col_err:
-                        print(f"[Migration Info] created_at check: {col_err}")
+        with engine.connect() as conn:
+            if 'users' in tables:
+                cols = [c['name'] for c in insp.get_columns('users')]
+                user_migrations = [
+                    ('created_at', 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP'),
+                    ('longest_streak', 'INTEGER DEFAULT 0'),
+                    ('weekly_goal_days', 'INTEGER DEFAULT 5'),
+                    ('last_active_course', 'VARCHAR'),
+                    ('last_active_lesson_idx', 'INTEGER DEFAULT 0'),
+                    ('avatar_url', 'VARCHAR'),
+                    ('bio', 'TEXT'),
+                    ('github_url', 'VARCHAR'),
+                    ('linkedin_url', 'VARCHAR'),
+                    ('country', 'VARCHAR'),
+                    ('preferred_language', "VARCHAR DEFAULT 'en'"),
+                    ('goal', 'VARCHAR')
+                ]
+                for col_name, col_def in user_migrations:
+                    if col_name not in cols:
+                        try:
+                            conn.execute(text(f"ALTER TABLE users ADD COLUMN {col_name} {col_def}"))
+                            conn.commit()
+                            print(f"[Migration] Added users.{col_name}")
+                        except Exception as col_err:
+                            conn.rollback()
+                            print(f"[Migration Info] users.{col_name}: {col_err}")
+
+            if 'subscriptions' in tables:
+                sub_cols = [c['name'] for c in insp.get_columns('subscriptions')]
+                sub_migrations = [
+                    ('access_grants', "TEXT DEFAULT '{}'"),
+                    ('paystack_customer_code', 'VARCHAR'),
+                    ('paystack_subscription_code', 'VARCHAR')
+                ]
+                for col_name, col_def in sub_migrations:
+                    if col_name not in sub_cols:
+                        try:
+                            conn.execute(text(f"ALTER TABLE subscriptions ADD COLUMN {col_name} {col_def}"))
+                            conn.commit()
+                            print(f"[Migration] Added subscriptions.{col_name}")
+                        except Exception as sub_err:
+                            conn.rollback()
+                            print(f"[Migration Info] subscriptions.{col_name}: {sub_err}")
     except Exception as e:
         print(f"[Safe DB Init Info] {e}")
 

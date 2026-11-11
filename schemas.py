@@ -71,6 +71,7 @@ class SubscriptionResponse(BaseModel):
     plan: str = "free"
     status: str = "active"
     is_pro: bool = False
+    has_grants: Optional[bool] = False
     current_period_end: Optional[datetime] = None
     paystack_customer_code: Optional[str] = None
     access_grants: Optional[dict] = {}
