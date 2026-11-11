@@ -130,16 +130,24 @@ const TeacherDashboard = () => {
         },
         body: JSON.stringify(payload)
       });
+      const data = await res.json().catch(() => ({}));
       if (res.ok) {
-        setGrantNotification(`Access granted to ${grantTargetUser.email}!`);
+        setGrantNotification(data.message || `Access granted to ${grantTargetUser.email}!`);
         fetchStudents();
         fetchMetrics();
         setGrantModalOpen(false);
         setGrantTargetUser(null);
         setTimeout(() => setGrantNotification(''), 5000);
       } else {
-        const err = await res.json().catch(() => ({}));
-        alert(err.detail || "Failed to grant access");
+        let errorMsg = "Failed to grant access";
+        if (typeof data.detail === 'string') {
+          errorMsg = data.detail;
+        } else if (Array.isArray(data.detail) && data.detail.length > 0) {
+          errorMsg = data.detail.map(d => d.msg || d.message || JSON.stringify(d)).join(', ');
+        } else if (data.message) {
+          errorMsg = data.message;
+        }
+        alert(errorMsg);
       }
     } catch (e) {
       console.error(e);
@@ -175,7 +183,15 @@ const TeacherDashboard = () => {
         setGrantEmail('');
         setTimeout(() => setGrantNotification(''), 5000);
       } else {
-        alert(data.detail || "Failed to grant access");
+        let errorMsg = "Failed to grant access";
+        if (typeof data.detail === 'string') {
+          errorMsg = data.detail;
+        } else if (Array.isArray(data.detail) && data.detail.length > 0) {
+          errorMsg = data.detail.map(d => d.msg || d.message || JSON.stringify(d)).join(', ');
+        } else if (data.message) {
+          errorMsg = data.message;
+        }
+        alert(errorMsg);
       }
     } catch (e) {
       console.error(e);

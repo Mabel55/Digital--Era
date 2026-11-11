@@ -17,7 +17,11 @@ ADMIN_EMAILS = [e.strip().lower() for e in os.getenv("ADMIN_EMAILS", "nasaadanna
 
 def _is_admin(user: models.User) -> bool:
     """Check if user has admin privileges via role or environment-configured email list."""
-    return user.role.lower() in ["admin", "teacher"] or user.email.lower() in ADMIN_EMAILS
+    if not user:
+        return False
+    role = (getattr(user, "role", None) or "").strip().lower()
+    email = (getattr(user, "email", None) or "").strip().lower()
+    return role in ["admin", "teacher"] or email in ADMIN_EMAILS
 
 
 def _create_free_subscription(db: Session, user_id: int):
@@ -763,8 +767,9 @@ def grant_pro_access(
         
     sub = db.query(models.Subscription).filter(models.Subscription.user_id == user_id).first()
     if not sub:
-        sub = models.Subscription(user_id=user_id)
+        sub = models.Subscription(user_id=user_id, plan="free", status="active", access_grants={})
         db.add(sub)
+        db.flush()
 
     from dateutil.relativedelta import relativedelta
     from datetime import datetime
@@ -778,22 +783,32 @@ def grant_pro_access(
         sub.status = "active"
         sub.current_period_end = expiration
     else:
-        # It's a course or track
-        if not sub.access_grants:
-            sub.access_grants = {}
+        # Validate target name for track/course
+        if payload.access_type in ["track", "course"] and not payload.target_name:
+            raise HTTPException(status_code=400, detail=f"Please specify a target {payload.access_type} name.")
+
+        import json
+        raw_grants = getattr(sub, 'access_grants', None)
+        if isinstance(raw_grants, str):
+            try:
+                new_grants = json.loads(raw_grants)
+            except Exception:
+                new_grants = {}
+        elif isinstance(raw_grants, dict):
+            new_grants = dict(raw_grants)
+        else:
+            new_grants = {}
         
-        # We must create a new dict and assign it because SQLAlchemy JSON columns
-        # don't always track in-place mutations automatically without flag_modified
-        new_grants = dict(sub.access_grants)
         key = f"{payload.access_type}:{payload.target_name}"
         new_grants[key] = expiration.isoformat() if expiration else None
-        
         sub.access_grants = new_grants
-        
-        # Note: we don't change sub.plan or sub.current_period_end here
-        # so they don't get "Full Pro" AI perks unless they actually have them.
-        
-    db.commit()
+
+    try:
+        db.commit()
+    except Exception as commit_err:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Database commit error: {str(commit_err)}")
+
     return {"message": f"Successfully granted {payload.access_type} access to {user_to_upgrade.email}"}
 
 @router.post("/admin/grant-pro-by-email")
@@ -816,8 +831,9 @@ def grant_pro_access_by_email(
         
     sub = db.query(models.Subscription).filter(models.Subscription.user_id == user_to_upgrade.id).first()
     if not sub:
-        sub = models.Subscription(user_id=user_to_upgrade.id)
+        sub = models.Subscription(user_id=user_to_upgrade.id, plan="free", status="active", access_grants={})
         db.add(sub)
+        db.flush()
 
     from dateutil.relativedelta import relativedelta
     from datetime import datetime
@@ -831,15 +847,31 @@ def grant_pro_access_by_email(
         sub.status = "active"
         sub.current_period_end = expiration
     else:
-        if not sub.access_grants:
-            sub.access_grants = {}
-        
-        new_grants = dict(sub.access_grants)
+        if payload.access_type in ["track", "course"] and not payload.target_name:
+            raise HTTPException(status_code=400, detail=f"Please specify a target {payload.access_type} name.")
+
+        import json
+        raw_grants = getattr(sub, 'access_grants', None)
+        if isinstance(raw_grants, str):
+            try:
+                new_grants = json.loads(raw_grants)
+            except Exception:
+                new_grants = {}
+        elif isinstance(raw_grants, dict):
+            new_grants = dict(raw_grants)
+        else:
+            new_grants = {}
+
         key = f"{payload.access_type}:{payload.target_name}"
         new_grants[key] = expiration.isoformat() if expiration else None
         sub.access_grants = new_grants
-        
-    db.commit()
+
+    try:
+        db.commit()
+    except Exception as commit_err:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Database commit error: {str(commit_err)}")
+
     return {"message": f"Successfully granted {payload.access_type} access to {user_to_upgrade.email}"}
 
 @router.post("/admin/users/{user_id}/toggle-block")
