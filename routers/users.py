@@ -178,12 +178,6 @@ def get_leaderboard(period: str = "all", db: Session = Depends(get_db)):
     
     return query.order_by(models.User.xp.desc()).limit(100).all()
 
-@router.get("/", response_model=list[schemas.UserResponse])
-def get_all_users(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
-    if not _is_admin(current_user):
-        raise HTTPException(status_code=403, detail="Not authorized")
-    return db.query(models.User).all()
-
 @router.post("/")
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     try:
@@ -867,6 +861,7 @@ def toggle_user_block(user_id: int, db: Session = Depends(get_db), current_user:
     status_str = "unblocked" if user_to_toggle.is_active else "blocked"
     return {"message": f"User {user_to_toggle.email} is now {status_str}"}
 
+@router.get("/admin/all-students")
 @router.get("/")
 @router.get("")
 def get_all_users_for_admin(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
@@ -874,83 +869,121 @@ def get_all_users_for_admin(db: Session = Depends(get_db), current_user: models.
     if not _is_admin(current_user):
         raise HTTPException(status_code=403, detail="Not authorized")
     
+    users = []
     try:
         users = db.query(models.User).order_by(models.User.id.desc()).all()
-        result = []
-        import json
-        for u in users:
+    except Exception as query_err:
+        print(f"[Warning] ORM query for users failed: {query_err}. Attempting self-heal and fallback.")
+        try:
+            db.rollback()
+            # Attempt to add created_at if missing
+            from sqlalchemy import text
+            db.execute(text("ALTER TABLE users ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP"))
+            db.commit()
+            users = db.query(models.User).order_by(models.User.id.desc()).all()
+        except Exception:
+            db.rollback()
             try:
-                sub = u.subscription
-                sub_data = None
-                if sub:
-                    grants = sub.access_grants or {}
-                    if isinstance(grants, str):
+                # Raw SQL fallback using core columns guaranteed to exist
+                from sqlalchemy import text
+                rows = db.execute(text("SELECT id, email, full_name, role, is_active, xp, level, streak, progress FROM users ORDER BY id DESC")).fetchall()
+                fallback_result = []
+                for r in rows:
+                    prog = r[8] or {}
+                    if isinstance(prog, str):
                         try:
-                            grants = json.loads(grants)
+                            import json
+                            prog = json.loads(prog)
                         except Exception:
-                            grants = {}
+                            prog = {}
+                    fallback_result.append({
+                        "id": r[0],
+                        "email": r[1] or "",
+                        "full_name": r[2] or r[1] or "Student",
+                        "role": r[3] or "student",
+                        "is_active": True if r[4] is None else bool(r[4]),
+                        "xp": r[5] or 0,
+                        "level": r[6] or "Beginner",
+                        "streak": r[7] or 0,
+                        "progress": prog if isinstance(prog, dict) else {},
+                        "subscription": None
+                    })
+                return fallback_result
+            except Exception as final_err:
+                print(f"[Error] Fallback query failed: {final_err}")
+                return []
 
-                    is_pro_val = False
+    result = []
+    import json
+    for u in users:
+        try:
+            sub = getattr(u, 'subscription', None)
+            sub_data = None
+            if sub:
+                grants = getattr(sub, 'access_grants', None) or {}
+                if isinstance(grants, str):
                     try:
-                        is_pro_val = bool(sub.is_pro)
+                        grants = json.loads(grants)
                     except Exception:
-                        pass
+                        grants = {}
 
-                    cpe = None
-                    if sub.current_period_end:
-                        try:
-                            cpe = sub.current_period_end.isoformat()
-                        except Exception:
-                            cpe = str(sub.current_period_end)
+                is_pro_val = False
+                try:
+                    is_pro_val = bool(sub.is_pro)
+                except Exception:
+                    pass
 
-                    sub_data = {
-                        "id": sub.id,
-                        "plan": sub.plan or "free",
-                        "status": sub.status or "active",
-                        "is_pro": is_pro_val,
-                        "current_period_end": cpe,
-                        "paystack_customer_code": sub.paystack_customer_code,
-                        "access_grants": grants if isinstance(grants, dict) else {}
-                    }
-
-                prog = u.progress or {}
-                if isinstance(prog, str):
+                cpe = None
+                if getattr(sub, 'current_period_end', None):
                     try:
-                        prog = json.loads(prog)
+                        cpe = sub.current_period_end.isoformat()
                     except Exception:
-                        prog = {}
+                        cpe = str(sub.current_period_end)
 
-                result.append({
-                    "id": u.id,
-                    "email": u.email or "",
-                    "full_name": u.full_name or u.email or "Student",
-                    "role": u.role or "student",
-                    "is_active": True if u.is_active is None else u.is_active,
-                    "xp": u.xp or 0,
-                    "level": u.level or "Beginner",
-                    "streak": u.streak or 0,
-                    "progress": prog if isinstance(prog, dict) else {},
-                    "subscription": sub_data
-                })
-            except Exception as user_err:
-                print(f"[Warning] Error serializing user {getattr(u, 'id', 'unknown')}: {user_err}")
-                result.append({
-                    "id": getattr(u, 'id', 0),
-                    "email": getattr(u, 'email', '') or "Unknown",
-                    "full_name": getattr(u, 'full_name', '') or getattr(u, 'email', 'Unknown'),
-                    "role": getattr(u, 'role', 'student'),
-                    "is_active": getattr(u, 'is_active', True),
-                    "xp": getattr(u, 'xp', 0) or 0,
-                    "level": getattr(u, 'level', 'Beginner') or 'Beginner',
-                    "streak": getattr(u, 'streak', 0) or 0,
-                    "progress": {},
-                    "subscription": None
-                })
-        return result
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail=f"Failed to fetch student roster: {str(e)}")
+                sub_data = {
+                    "id": getattr(sub, 'id', 0),
+                    "plan": getattr(sub, 'plan', 'free') or "free",
+                    "status": getattr(sub, 'status', 'active') or "active",
+                    "is_pro": is_pro_val,
+                    "current_period_end": cpe,
+                    "paystack_customer_code": getattr(sub, 'paystack_customer_code', None),
+                    "access_grants": grants if isinstance(grants, dict) else {}
+                }
+
+            prog = getattr(u, 'progress', None) or {}
+            if isinstance(prog, str):
+                try:
+                    prog = json.loads(prog)
+                except Exception:
+                    prog = {}
+
+            result.append({
+                "id": getattr(u, 'id', 0),
+                "email": getattr(u, 'email', '') or "",
+                "full_name": getattr(u, 'full_name', '') or getattr(u, 'email', 'Student') or "Student",
+                "role": getattr(u, 'role', 'student') or "student",
+                "is_active": True if getattr(u, 'is_active', None) is None else bool(u.is_active),
+                "xp": getattr(u, 'xp', 0) or 0,
+                "level": getattr(u, 'level', 'Beginner') or "Beginner",
+                "streak": getattr(u, 'streak', 0) or 0,
+                "progress": prog if isinstance(prog, dict) else {},
+                "subscription": sub_data
+            })
+        except Exception as user_err:
+            print(f"[Warning] Error serializing user {getattr(u, 'id', 'unknown')}: {user_err}")
+            result.append({
+                "id": getattr(u, 'id', 0),
+                "email": getattr(u, 'email', '') or "Unknown",
+                "full_name": getattr(u, 'full_name', '') or getattr(u, 'email', 'Unknown'),
+                "role": getattr(u, 'role', 'student'),
+                "is_active": getattr(u, 'is_active', True),
+                "xp": getattr(u, 'xp', 0) or 0,
+                "level": getattr(u, 'level', 'Beginner') or 'Beginner',
+                "streak": getattr(u, 'streak', 0) or 0,
+                "progress": {},
+                "subscription": None
+            })
+    return result
 
 # ─── HEALTH CHECK ───
 @router.get("/health")

@@ -73,9 +73,14 @@ const TeacherDashboard = () => {
     setLoadingStudents(true);
     setStudentsError(null);
     try {
-      const res = await fetch('/users/', {
+      let res = await fetch('/users/admin/all-students', {
         headers: { 'Authorization': `Bearer ${activeToken}` }
       });
+      if (!res.ok) {
+        res = await fetch('/users/', {
+          headers: { 'Authorization': `Bearer ${activeToken}` }
+        });
+      }
       if (res.ok) {
         const data = await res.json();
         setStudents(Array.isArray(data) ? data : []);

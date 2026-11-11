@@ -40,6 +40,11 @@ def _check_ai_limit_v2(db: Session, user: models.User) -> tuple[bool, int, int]:
     Returns: (is_allowed, messages_used, daily_limit)
     """
     try:
+        # Admins and teachers have unlimited access
+        from routers.users import _is_admin
+        if _is_admin(user):
+            return True, 0, -1
+
         from datetime import date
         today = date.today()
         usage = db.query(models.AIUsage).filter(

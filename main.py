@@ -13,17 +13,30 @@ from limiter import limiter
 import models
 from routers.users import get_current_user, _is_admin
 
-# 1. Initialize Database & Run Migrations
-# Removed Base.metadata.create_all(bind=engine) from startup to prevent Azure deadlocks/timeouts.
-# We now use the /api/admin/setup-db-tables endpoint below to safely run migrations.
-try:
-    print("Skipping auto DB setup to prevent deadlocks.")
-except Exception as e:
-    print(f"WARNING: Exception: {e}")
+# 1. Initialize Database & Run Safe Non-Blocking Migrations
+def safe_init_db():
+    try:
+        from sqlalchemy import inspect, text
+        # Create missing tables (e.g. course_completions, daily_challenges)
+        Base.metadata.create_all(bind=engine)
+        
+        # Self-heal missing columns on existing tables
+        insp = inspect(engine)
+        tables = insp.get_table_names()
+        if 'users' in tables:
+            cols = [c['name'] for c in insp.get_columns('users')]
+            with engine.connect() as conn:
+                if 'created_at' not in cols:
+                    try:
+                        conn.execute(text("ALTER TABLE users ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP"))
+                        conn.commit()
+                        print("[Migration] Added created_at to users table.")
+                    except Exception as col_err:
+                        print(f"[Migration Info] created_at check: {col_err}")
+    except Exception as e:
+        print(f"[Safe DB Init Info] {e}")
 
-# Auto-migrate db safely, one column at a time so a single failure doesn't roll back the others
-# MIGRATIONS REMOVED: Running ALTER TABLE on every startup can cause database deadlocks
-# if the container restarts abruptly. All schema updates should be handled offline.
+safe_init_db()
 
 # Import all routers
 import routers.users

@@ -57,8 +57,9 @@ const Workspace = () => {
   const [outputTab, setOutputTab] = useState('terminal'); // 'terminal' | 'preview'
   
   // AI Limits State
+  const isUserAdmin = user?.role === 'admin' || user?.role === 'teacher' || (user?.email && user.email.toLowerCase() === 'nasaadanna@gmail.com');
+  const isPro = Boolean(subscription?.is_pro) || isUserAdmin;
   const [aiUsage, setAiUsage] = useState({ remaining: -1, limit: -1, isLimited: false });
-  const isPro = subscription?.is_pro;
   
   const chatEndRef = useRef(null);
   const editorRef = useRef(null);
@@ -285,17 +286,24 @@ const Workspace = () => {
   }, [messages, isTyping]);
 
   useEffect(() => {
-    // Fetch initial AI usage limits for free users
-    if (token && !isPro) {
-      fetch('/ai-usage', { headers: { 'Authorization': `Bearer ${token}` } })
+    // Pro and Admin users have unlimited AI Tutor access — never show limit banner
+    if (isPro) {
+      setAiUsage({ remaining: -1, limit: -1, isLimited: false });
+      return;
+    }
+    const activeToken = token || localStorage.getItem('token');
+    if (activeToken && !isPro) {
+      fetch('/ai-usage', { headers: { 'Authorization': `Bearer ${activeToken}` } })
         .then(res => res.json())
         .then(data => {
-          if (data.is_limited) {
+          if (data && data.is_limited) {
             setAiUsage({
               remaining: Math.max(0, data.daily_limit - data.messages_used),
               limit: data.daily_limit,
               isLimited: true
             });
+          } else {
+            setAiUsage({ remaining: -1, limit: -1, isLimited: false });
           }
         })
         .catch(e => console.error("Failed to fetch AI usage:", e));

@@ -33,7 +33,12 @@ def _check_ai_limit(db: Session, user: models.User) -> tuple[bool, int, int]:
     Returns: (is_allowed, messages_used, daily_limit)
     """
     try:
-        # 1. Get or create today's usage for the user
+        # 1. Admins and teachers have unlimited access
+        from routers.users import _is_admin
+        if _is_admin(user):
+            return True, 0, -1
+
+        # 2. Get or create today's usage for the user
         today = date.today()
         usage = db.query(models.AIUsage).filter(
             models.AIUsage.user_id == user.id,
@@ -45,13 +50,13 @@ def _check_ai_limit(db: Session, user: models.User) -> tuple[bool, int, int]:
             db.add(usage)
             db.commit()
 
-        # 2. Check subscription status
+        # 3. Check subscription status
         sub = db.query(models.Subscription).filter(
             models.Subscription.user_id == user.id
         ).first()
         is_pro = sub and sub.is_pro
         
-        # 3. Enforce limits
+        # 4. Enforce limits
         if is_pro:
             # Enforce fair usage limit silently (prevent abuse)
             is_allowed = usage.message_count < PRO_DAILY_AI_LIMIT

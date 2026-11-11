@@ -163,7 +163,16 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Derive subscription from user data (comes from /users/me which includes subscription)
-  const subscription = user?.subscription || { plan: 'free', is_pro: false, status: 'active' };
+  // Admins and teachers automatically inherit full Pro capabilities
+  const isUserAdmin = user?.role === 'admin' || user?.role === 'teacher' || (user?.email && user.email.trim().toLowerCase() === 'nasaadanna@gmail.com');
+  const subscription = user?.subscription ? {
+    ...user.subscription,
+    is_pro: isUserAdmin ? true : Boolean(user.subscription.is_pro)
+  } : { 
+    plan: isUserAdmin ? 'admin_pro' : 'free', 
+    is_pro: isUserAdmin, 
+    status: 'active' 
+  };
 
   return (
     <AuthContext.Provider value={{ 
